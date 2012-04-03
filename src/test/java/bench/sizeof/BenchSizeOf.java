@@ -1,3 +1,10 @@
+/**
+ * Copyright (C) 2011-2012 Barchart, Inc. <http://www.barchart.com/>
+ *
+ * All rights reserved. Licensed under the OSI BSD License.
+ *
+ * http://www.opensource.org/licenses/bsd-license.php
+ */
 package bench.sizeof;
 
 import java.util.concurrent.locks.ReentrantLock;
@@ -22,7 +29,7 @@ public class BenchSizeOf {
 
 		log.info("0: class    {}", object.getClass().getName());
 		log.info("1: JavaSize {}",
-				com.barchart.util.test.size.JavaSize.of(object));
+				com.barchart.util.bench.size.JavaSize.of(object));
 		log.info("2: SizeOf   {}", SizeOf.deepSizeOf(object));
 		log.info("\n");
 

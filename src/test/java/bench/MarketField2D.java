@@ -1,26 +1,33 @@
+/**
+ * Copyright (C) 2011-2012 Barchart, Inc. <http://www.barchart.com/>
+ *
+ * All rights reserved. Licensed under the OSI BSD License.
+ *
+ * http://www.opensource.org/licenses/bsd-license.php
+ */
 package bench;
 
+import static com.barchart.feed.base.provider.instrument.provider.InstrumentConst.*;
+import static com.barchart.feed.base.provider.market.provider.MarketConst.*;
 import static com.barchart.util.values.provider.ValueConst.*;
-import static com.ddfplus.feed.common.instrument.provider.InstrumentConst.*;
-import static com.ddfplus.feed.common.market.provider.MarketConst.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.barchart.feed.base.api.instrument.values.MarketInstrument;
+import com.barchart.feed.base.api.market.values.Market;
+import com.barchart.feed.base.api.market.values.MarketBar;
+import com.barchart.feed.base.api.market.values.MarketBook;
+import com.barchart.feed.base.api.market.values.MarketBookTop;
+import com.barchart.feed.base.api.market.values.MarketCuvol;
+import com.barchart.feed.base.api.market.values.MarketTrade;
 import com.barchart.util.anno.NotMutable;
+import com.barchart.util.collections.BitSetEnum;
 import com.barchart.util.enums.ParamEnumBase2D;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
 import com.barchart.util.values.api.TimeValue;
 import com.barchart.util.values.api.Value;
-import com.ddfplus.feed.api.instrument.values.MarketInstrument;
-import com.ddfplus.feed.api.market.values.Market;
-import com.ddfplus.feed.api.market.values.MarketBar;
-import com.ddfplus.feed.api.market.values.MarketBook;
-import com.ddfplus.feed.api.market.values.MarketBookTop;
-import com.ddfplus.feed.api.market.values.MarketCuvol;
-import com.ddfplus.feed.api.market.values.MarketTrade;
-import com.ddfplus.feed.common.util.collections.BitSetEnum;
 
 @NotMutable
 public class MarketField2D<V extends Value<V>> extends

@@ -1,9 +1,16 @@
+/**
+ * Copyright (C) 2011-2012 Barchart, Inc. <http://www.barchart.com/>
+ *
+ * All rights reserved. Licensed under the OSI BSD License.
+ *
+ * http://www.opensource.org/licenses/bsd-license.php
+ */
 package bench.bits;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.ddfplus.feed.common.util.time.StopWatch;
+import com.barchart.util.bench.time.StopWatch;
 
 public class BitCount {
 
@@ -39,8 +46,8 @@ public class BitCount {
 		timer.stop();
 
 		log.info("bitCount :: {}", a);
-		log.info("bitCount :: {}", timer.nanoString());
-		log.info("bitCount :: {}", timer.nanoTime() / COUNT);
+		log.info("bitCount :: {}", timer.toStringPretty());
+		log.info("bitCount :: {}", timer.getDiff() / COUNT);
 
 	}
 
@@ -61,12 +68,12 @@ public class BitCount {
 		timer.stop();
 
 		log.info("bitCount :: {}", a);
-		log.info("bitCount :: {}", timer.nanoString());
-		log.info("bitCount :: {}", timer.nanoTime() / COUNT);
+		log.info("bitCount :: {}", timer.toStringPretty());
+		log.info("bitCount :: {}", timer.getDiff() / COUNT);
 
 	}
 
-	public static void main(String[] args) {
+	public static void main(final String[] args) {
 
 		log.info("###");
 		test1();

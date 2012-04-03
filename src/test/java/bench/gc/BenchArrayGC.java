@@ -1,11 +1,18 @@
+/**
+ * Copyright (C) 2011-2012 Barchart, Inc. <http://www.barchart.com/>
+ *
+ * All rights reserved. Licensed under the OSI BSD License.
+ *
+ * http://www.opensource.org/licenses/bsd-license.php
+ */
 package bench.gc;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.barchart.util.bench.time.StopWatch;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.provider.ValueBuilder;
-import com.ddfplus.feed.common.util.time.StopWatch;
 
 public class BenchArrayGC {
 
@@ -20,7 +27,7 @@ public class BenchArrayGC {
 
 	static final StopWatch timer = new StopWatch();
 
-	public static void main(String[] args) throws Exception {
+	public static void main(final String[] args) throws Exception {
 
 		test();
 		test();
@@ -53,7 +60,7 @@ public class BenchArrayGC {
 		System.gc();
 		timer.stopNow();
 
-		log.info("{}", timer.nanoTime() / COUNT / SIZE);
+		log.info("{}", timer.getDiff() / COUNT / SIZE);
 
 	}
 
