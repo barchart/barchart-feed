@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) 2011-2012 Barchart, Inc. <http://www.barchart.com/>
+
+    All rights reserved. Licensed under the OSI BSD License.
+
+    http://www.opensource.org/licenses/bsd-license.php
+
+-->
+<project name="${project.name}">
+
+  <skin>
+  	<groupId>org.apache.maven.skins</groupId>
+    <artifactId>maven-fluido-skin</artifactId>
+    <version>1.1</version>
+  </skin>
+
+  <custom>
+    <fluidoSkin>
+      <gitHub>
+        <projectId>barchart/barchart-feed-base</projectId>
+        <ribbonOrientation>left</ribbonOrientation>
+        <ribbonColor>orange</ribbonColor>
+      </gitHub>
+    </fluidoSkin>
+  </custom>
+    
+  <bannerLeft>
+    <name>${project.name}</name>
+    <href>${project.url}</href>
+  </bannerLeft>
+  
+  <bannerRight>
+    <name>${project.description}</name>
+  </bannerRight>
+
+  <body>
+
+	<links>
+      <item name="Summary" href="" />
+    </links>
+      
+    <menu name="Main">
+      <item name="About" href="./index.html"/>
+	  <item name="Plugin Goals" href="./plugin-info.html"/>
+    </menu>
+    
+    <menu name="Examples">
+      <item name="Image Build" href="https://github.com/barchart/"/>
+    </menu>
+        
+    <menu ref="reports"/>
+        
+  </body>
+
+</project>
