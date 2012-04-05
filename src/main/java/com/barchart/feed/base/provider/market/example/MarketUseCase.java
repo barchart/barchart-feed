@@ -16,7 +16,6 @@ import com.barchart.feed.base.api.market.MarketTaker;
 import com.barchart.feed.base.api.market.enums.MarketBookSide;
 import com.barchart.feed.base.api.market.enums.MarketEvent;
 import com.barchart.feed.base.api.market.enums.MarketField;
-import com.barchart.feed.base.api.market.enums.MarketTradeField;
 import com.barchart.feed.base.api.market.provider.MarketMakerProvider;
 import com.barchart.feed.base.api.market.values.Market;
 import com.barchart.feed.base.api.market.values.MarketBar;
@@ -37,7 +36,7 @@ abstract class MarketUseCase {
 
 	{
 		// new message came from transport
-		MarketMessage message = null; // say, BidAsk
+		final MarketMessage message = null; // say, BidAsk
 
 		maker.make(message);// update market and fire events
 
@@ -65,28 +64,28 @@ abstract class MarketUseCase {
 
 		@SuppressWarnings("deprecation")
 		@Override
-		public void onMarketEvent(MarketEvent event,
-				MarketInstrument instrument, Market market) {
+		public void onMarketEvent(final MarketEvent event,
+				final MarketInstrument instrument, final Market market) {
 
-			MarketBar bar = market.get(BAR_CURRENT);
+			final MarketBar bar = market.get(BAR_CURRENT);
 
-			PriceValue priceHigh = bar.get(HIGH);
-			float high = priceHigh.asFloat();
+			final PriceValue priceHigh = bar.get(HIGH);
+			// float high = priceHigh.asFloat();
 
-			PriceValue priceLast = bar.get(CLOSE);
-			float last = priceLast.asFloat();
+			final PriceValue priceLast = bar.get(CLOSE);
+			// float last = priceLast.asFloat();
 
-			float low = bar.get(LOW).asFloat();
+			// float low = bar.get(LOW).asFloat();
 
-			int volume = bar.get(VOLUME).asInt();
+			final int volume = bar.get(VOLUME).asInt();
 
-			MarketBook book = market.get(BOOK);
-			MarketBookEntry[] bookBids = book.entries(MarketBookSide.BID);
+			final MarketBook book = market.get(BOOK);
+			final MarketBookEntry[] bookBids = book.entries(MarketBookSide.BID);
 
-			MarketCuvol cumVol = market.get(CUVOL);
-			PriceValue priveFirst = cumVol.priceFirst();
-			PriceValue priceStep = cumVol.priceStep();
-			SizeValue[] cumVolEntires = cumVol.entries();
+			final MarketCuvol cumVol = market.get(CUVOL);
+			final PriceValue priveFirst = cumVol.priceFirst();
+			final PriceValue priceStep = cumVol.priceStep();
+			final SizeValue[] cumVolEntires = cumVol.entries();
 
 		}
 
@@ -120,8 +119,8 @@ abstract class MarketUseCase {
 
 		@SuppressWarnings("deprecation")
 		@Override
-		public void onMarketEvent(MarketEvent event,
-				MarketInstrument instrument, MarketBar bar) {
+		public void onMarketEvent(final MarketEvent event,
+				final MarketInstrument instrument, final MarketBar bar) {
 
 			switch (event) {
 			case MARKET_OPENED:
@@ -130,7 +129,7 @@ abstract class MarketUseCase {
 				break;
 			}
 
-			float high = bar.get(HIGH).asFloat();
+			// final float high = bar.get(HIGH).asFloat();
 
 		}
 
@@ -163,16 +162,16 @@ abstract class MarketUseCase {
 		}
 
 		@Override
-		public void onMarketEvent(MarketEvent event,
-				MarketInstrument instrument, MarketTrade trade) {
+		public void onMarketEvent(final MarketEvent event,
+				final MarketInstrument instrument, final MarketTrade trade) {
 
 			switch (event) {
 			case NEW_TRADE:
 				//
 			}
 
-			@SuppressWarnings("deprecation")
-			float price = trade.get(MarketTradeField.PRICE).asFloat();
+			// @SuppressWarnings("deprecation")
+			// final float price = trade.get(MarketTradeField.PRICE).asFloat();
 
 		}
 
