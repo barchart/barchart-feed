@@ -6,7 +6,11 @@
 # http://www.opensource.org/licenses/bsd-license.php
 #
 
-#.project
+# keep top level
+!/.project
+
+# drop all below
+.project
 .classpath
 .settings/
 
