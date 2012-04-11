@@ -23,7 +23,7 @@
 
 		<!-- MAIN -->
 		<barchartUtilVersion>2.0.3-SNAPSHOT</barchartUtilVersion>
-
+	
 	</properties>
 
 	<dependencies>
