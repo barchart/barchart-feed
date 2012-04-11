@@ -26,7 +26,6 @@ import com.barchart.feed.base.api.market.MarketTaker;
 import com.barchart.feed.base.api.market.enums.MarketBookSide;
 import com.barchart.feed.base.api.market.enums.MarketEvent;
 import com.barchart.feed.base.api.market.enums.MarketField;
-import com.barchart.feed.base.api.market.enums.MarketTradeField;
 import com.barchart.feed.base.api.market.provider.MarketMakerProvider;
 import com.barchart.feed.base.api.market.values.Market;
 import com.barchart.feed.base.api.market.values.MarketBar;
@@ -37,7 +36,7 @@ import com.barchart.feed.base.api.market.values.MarketTrade;
 import com.barchart.feed.base.api.message.MarketMessage;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
-import com.barchart.util.values.util.ValUtil;
+import com.barchart.util.values.util.ValueUtil;
 
 abstract class MarketUseCase {
 
@@ -82,12 +81,13 @@ abstract class MarketUseCase {
 			final MarketBar bar = market.get(BAR_CURRENT);
 
 			final PriceValue priceHigh = bar.get(HIGH);
-			final float high = ValUtil.asFloat(priceHigh);
+
+			final float high = ValueUtil.asFloat(priceHigh);
 
 			final PriceValue priceLast = bar.get(CLOSE);
-			final float last = ValUtil.asFloat(priceLast);
+			final float last = ValueUtil.asFloat(priceLast);
 
-			final float low = ValUtil.asFloat(bar.get(LOW));
+			final float low = ValueUtil.asFloat(bar.get(LOW));
 
 			final int volume = bar.get(VOLUME).asInt();
 
@@ -141,7 +141,7 @@ abstract class MarketUseCase {
 				break;
 			}
 
-			final float high = ValUtil.asFloat(bar.get(HIGH));
+			final float high = ValueUtil.asFloat(bar.get(HIGH));
 
 		}
 
@@ -181,9 +181,6 @@ abstract class MarketUseCase {
 			case NEW_TRADE:
 				//
 			}
-
-			final float price = ValUtil.asFloat(trade
-					.get(MarketTradeField.PRICE));
 
 		}
 
