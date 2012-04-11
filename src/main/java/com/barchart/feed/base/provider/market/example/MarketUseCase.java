@@ -7,15 +7,26 @@
  */
 package com.barchart.feed.base.provider.market.example;
 
-import static com.barchart.feed.base.api.market.enums.MarketBarField.*;
-import static com.barchart.feed.base.api.market.enums.MarketEvent.*;
-import static com.barchart.feed.base.api.market.enums.MarketField.*;
+import static com.barchart.feed.base.api.market.enums.MarketBarField.CLOSE;
+import static com.barchart.feed.base.api.market.enums.MarketBarField.HIGH;
+import static com.barchart.feed.base.api.market.enums.MarketBarField.LOW;
+import static com.barchart.feed.base.api.market.enums.MarketBarField.VOLUME;
+import static com.barchart.feed.base.api.market.enums.MarketEvent.MARKET_OPENED;
+import static com.barchart.feed.base.api.market.enums.MarketEvent.MARKET_UPDATED;
+import static com.barchart.feed.base.api.market.enums.MarketEvent.NEW_HIGH;
+import static com.barchart.feed.base.api.market.enums.MarketEvent.NEW_TRADE;
+import static com.barchart.feed.base.api.market.enums.MarketField.BAR_CURRENT;
+import static com.barchart.feed.base.api.market.enums.MarketField.BOOK;
+import static com.barchart.feed.base.api.market.enums.MarketField.CUVOL;
+import static com.barchart.feed.base.api.market.enums.MarketField.MARKET;
+import static com.barchart.feed.base.api.market.enums.MarketField.TRADE;
 
 import com.barchart.feed.base.api.instrument.values.MarketInstrument;
 import com.barchart.feed.base.api.market.MarketTaker;
 import com.barchart.feed.base.api.market.enums.MarketBookSide;
 import com.barchart.feed.base.api.market.enums.MarketEvent;
 import com.barchart.feed.base.api.market.enums.MarketField;
+import com.barchart.feed.base.api.market.enums.MarketTradeField;
 import com.barchart.feed.base.api.market.provider.MarketMakerProvider;
 import com.barchart.feed.base.api.market.values.Market;
 import com.barchart.feed.base.api.market.values.MarketBar;
@@ -171,7 +182,6 @@ abstract class MarketUseCase {
 				//
 			}
 
-			@SuppressWarnings("deprecation")
 			final float price = ValUtil.asFloat(trade
 					.get(MarketTradeField.PRICE));
 
