@@ -1,0 +1,23 @@
+<!--
+
+    Copyright (C) 2011-2012 Barchart, Inc. <http://www.barchart.com/>
+
+    All rights reserved. Licensed under the OSI BSD License.
+
+    http://www.opensource.org/licenses/bsd-license.php
+
+-->
+<project default="switch" basedir="./..">
+
+	<echo message="basedir : ${basedir}" />
+
+	<target name="switch">
+
+		<move todir="${basedir}" includeemptydirs="false">
+			<fileset dir="${basedir}" includes="**/maven-barchart.md" />
+			<mapper type="regexp" from="(.*)maven-barchart.md" to="\1maven-central.md" />
+		</move>
+
+	</target>
+
+</project>
