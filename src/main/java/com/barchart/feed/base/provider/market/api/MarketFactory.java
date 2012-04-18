@@ -5,10 +5,11 @@
  *
  * http://www.opensource.org/licenses/bsd-license.php
  */
-package com.barchart.feed.base.provider.market.provider;
+package com.barchart.feed.base.provider.market.api;
 
+import com.barchart.feed.base.provider.market.provider.MarketDo;
 
-interface MarketFactory {
+public interface MarketFactory {
 
 	MarketDo newMarket();
 

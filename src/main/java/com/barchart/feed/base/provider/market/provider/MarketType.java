@@ -7,6 +7,7 @@
  */
 package com.barchart.feed.base.provider.market.provider;
 
+import com.barchart.feed.base.provider.market.api.MarketFactory;
 import com.barchart.util.anno.NotYetImplemented;
 
 public enum MarketType implements MarketFactory {
