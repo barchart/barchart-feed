@@ -7,8 +7,9 @@
  */
 package com.barchart.feed.base.provider.market.provider;
 
-import static com.barchart.feed.base.api.market.enums.MarketBookSide.*;
-import static com.barchart.feed.base.provider.market.provider.MarketConst.*;
+import static com.barchart.feed.base.api.market.enums.MarketBookSide.ASK;
+import static com.barchart.feed.base.api.market.enums.MarketBookSide.BID;
+import static com.barchart.feed.base.provider.market.provider.MarketConst.NULL_BOOK_ENTRY;
 
 import java.util.Collection;
 import java.util.Comparator;
@@ -18,6 +19,7 @@ import com.barchart.feed.base.api.market.enums.MarketBookSide;
 import com.barchart.feed.base.api.market.enums.MarketBookType;
 import com.barchart.feed.base.api.market.values.MarketBook;
 import com.barchart.feed.base.api.market.values.MarketBookEntry;
+import com.barchart.feed.base.provider.market.api.MarketDoBookEntry;
 import com.barchart.util.anno.Mutable;
 import com.barchart.util.anno.ThreadSafe;
 import com.barchart.util.values.api.PriceValue;
@@ -28,7 +30,8 @@ import com.barchart.util.values.provider.ValueFreezer;
 
 @Mutable
 @ThreadSafe(rule = "use in runSafe() only")
-final class VarBookDDF extends ValueFreezer<MarketBook> implements MarketDoBook {
+public final class VarBookDDF extends ValueFreezer<MarketBook> implements
+		MarketDoBook {
 
 	@SuppressWarnings("serial")
 	private static class EntryMap extends TreeMap<PriceValue, MarketBookEntry> {

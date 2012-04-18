@@ -7,7 +7,8 @@
  */
 package com.barchart.feed.base.provider.market.provider;
 
-import static com.barchart.feed.base.api.market.enums.MarketBookSide.*;
+import static com.barchart.feed.base.api.market.enums.MarketBookSide.ASK;
+import static com.barchart.feed.base.api.market.enums.MarketBookSide.BID;
 
 import com.barchart.feed.base.api.market.enums.MarketBookSide;
 import com.barchart.feed.base.api.market.values.MarketBookEntry;
@@ -17,7 +18,7 @@ import com.barchart.util.values.api.TimeValue;
 import com.barchart.util.values.provider.ValueFreezer;
 
 @ProxyTo({ VarBook.class })
-final class VarBookTopDDF extends ValueFreezer<MarketBookTop> implements
+public final class VarBookTopDDF extends ValueFreezer<MarketBookTop> implements
 		MarketBookTop {
 
 	private final VarBookDDF book;

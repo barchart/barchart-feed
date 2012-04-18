@@ -7,8 +7,10 @@
  */
 package com.barchart.feed.base.provider.market.provider;
 
-import static com.barchart.util.values.provider.ValueBuilder.*;
-import static org.junit.Assert.*;
+import static com.barchart.util.values.provider.ValueBuilder.newText;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.After;
 import org.junit.Before;
@@ -38,7 +40,7 @@ public class TestMakerBase {
 	@Test
 	public void testRegisterMarketTaker() {
 
-		final MockMaker maker = new MockMaker(MarketType.DDF);
+		final MockMaker maker = new MockMaker(new MockMarketFactory());
 
 		final MarketInstrument inst;
 
@@ -199,7 +201,7 @@ public class TestMakerBase {
 	@Test
 	public void testRegisterMarketInstrument() {
 
-		final MockMaker maker = new MockMaker(MarketType.DDF);
+		final MockMaker maker = new MockMaker(new MockMarketFactory());
 
 		MarketInstrument inst;
 

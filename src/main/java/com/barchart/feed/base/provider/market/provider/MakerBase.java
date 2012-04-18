@@ -24,6 +24,7 @@ import com.barchart.feed.base.api.market.enums.MarketField;
 import com.barchart.feed.base.api.market.provider.MarketMakerProvider;
 import com.barchart.feed.base.api.market.provider.MarketRegListener;
 import com.barchart.feed.base.api.message.MarketMessage;
+import com.barchart.feed.base.provider.market.api.MarketFactory;
 import com.barchart.util.anno.ThreadSafe;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.Value;
@@ -34,7 +35,7 @@ public abstract class MakerBase<Message extends MarketMessage> implements
 
 	protected final Logger log = LoggerFactory.getLogger(getClass());
 
-	protected final MarketType factory;
+	protected final MarketFactory factory;
 
 	private final ConcurrentMap<MarketInstrument, MarketDo> marketMap = //
 	new ConcurrentHashMap<MarketInstrument, MarketDo>();
@@ -62,7 +63,7 @@ public abstract class MakerBase<Message extends MarketMessage> implements
 		return takerMap.containsKey(taker);
 	}
 
-	protected MakerBase(final MarketType factory) {
+	protected MakerBase(final MarketFactory factory) {
 		this.factory = factory;
 	}
 
@@ -375,6 +376,11 @@ public abstract class MakerBase<Message extends MarketMessage> implements
 		for (final MarketDo market : marketMap.values()) {
 			notifyRegListeners(market);
 		}
+	}
+
+	@Override
+	public void appendMarketProvider(final MarketFactory marketFactory) {
+
 	}
 
 }

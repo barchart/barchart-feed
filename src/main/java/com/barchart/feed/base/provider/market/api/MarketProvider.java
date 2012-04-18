@@ -5,6 +5,7 @@ package com.barchart.feed.base.provider.market.api;
 
 import com.barchart.feed.base.provider.market.provider.MarketDo;
 
+
 /**
  * A hamfisted way of injecting the application specific implementation MarketDo
  * type into the MarketMakerProvider.
@@ -14,6 +15,6 @@ import com.barchart.feed.base.provider.market.provider.MarketDo;
  */
 public interface MarketProvider {
 
-	public MarketFactory makeFactory(MarketDo market);
+	public MarketFactory makeFactory(final Class<? extends MarketDo> clazz);
 
 }

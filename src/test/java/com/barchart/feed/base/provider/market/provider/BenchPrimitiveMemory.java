@@ -13,10 +13,6 @@ import java.util.concurrent.locks.ReentrantLock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.feed.base.provider.market.provider.DefBookEntry;
-import com.barchart.feed.base.provider.market.provider.DefMarket;
-import com.barchart.feed.base.provider.market.provider.VarMarket;
-import com.barchart.feed.base.provider.market.provider.VarMarketDDF;
 import com.barchart.util.bench.size.JavaSize;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
@@ -62,7 +58,7 @@ public class BenchPrimitiveMemory {
 		log.info("ReentrantLock {}", JavaSize.of(new ReentrantLock()));
 		log.info("Object {}", JavaSize.of(new Object()));
 		log.info("DefMarket {}", JavaSize.of(new DefMarket()));
-		log.info("VarMarketL1 {}", JavaSize.of(new VarMarketDDF()));
+		log.info("VarMarketL1 {}", JavaSize.of(new MockVarMarket()));
 
 		log.info("BenchClassByte {}", JavaSize.of(new BenchClassByte()));
 		log.info("BenchClassInt {}", JavaSize.of(new BenchClassInt()));
@@ -88,7 +84,7 @@ public class BenchPrimitiveMemory {
 			lockArray[k] = new ReentrantLock();
 			objectArray[k] = new Object();
 			marketArray[k] = new DefMarket();
-			marketArray2[k] = new VarMarketDDF();
+			marketArray2[k] = new MockVarMarket();
 
 			benchByte[k] = new BenchClassByte();
 			benchInt[k] = new BenchClassInt();

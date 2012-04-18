@@ -8,6 +8,7 @@
 package com.barchart.feed.base.provider.market.provider;
 
 
+
 interface MarketSafeRunner<Result, Param> {
 
 	Result runSafe(MarketDo market, Param param);

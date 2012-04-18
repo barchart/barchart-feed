@@ -10,9 +10,10 @@ package com.barchart.feed.base.provider.market.provider;
 import com.barchart.feed.base.api.market.enums.MarketBookSide;
 import com.barchart.feed.base.api.market.values.MarketBook;
 import com.barchart.feed.base.api.market.values.MarketBookEntry;
+import com.barchart.feed.base.provider.market.api.MarketDoBookEntry;
 import com.barchart.util.values.api.TimeValue;
 
-interface MarketDoBook extends MarketBook {
+public interface MarketDoBook extends MarketBook {
 
 	UniBookResult setEntry(MarketDoBookEntry entry);
 

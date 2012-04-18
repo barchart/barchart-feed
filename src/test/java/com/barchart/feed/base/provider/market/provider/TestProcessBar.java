@@ -7,12 +7,25 @@
  */
 package com.barchart.feed.base.provider.market.provider;
 
-import static com.barchart.feed.base.api.market.enums.MarketBarField.*;
-import static com.barchart.feed.base.api.market.enums.MarketBarType.*;
-import static com.barchart.feed.base.api.market.enums.MarketField.*;
-import static com.barchart.feed.base.api.market.enums.MarketTradeField.*;
-import static com.barchart.util.values.provider.ValueBuilder.*;
-import static org.junit.Assert.*;
+import static com.barchart.feed.base.api.market.enums.MarketBarField.BAR_TIME;
+import static com.barchart.feed.base.api.market.enums.MarketBarField.VOLUME;
+import static com.barchart.feed.base.api.market.enums.MarketBarType.CURRENT_NET;
+import static com.barchart.feed.base.api.market.enums.MarketBarType.CURRENT_PIT;
+import static com.barchart.feed.base.api.market.enums.MarketField.BAR_CURRENT;
+import static com.barchart.feed.base.api.market.enums.MarketField.BAR_CURRENT_NET;
+import static com.barchart.feed.base.api.market.enums.MarketField.BAR_CURRENT_PIT;
+import static com.barchart.feed.base.api.market.enums.MarketField.MARKET;
+import static com.barchart.feed.base.api.market.enums.MarketField.TRADE;
+import static com.barchart.feed.base.api.market.enums.MarketTradeField.PRICE;
+import static com.barchart.feed.base.api.market.enums.MarketTradeField.SIZE;
+import static com.barchart.feed.base.api.market.enums.MarketTradeField.TRADE_TIME;
+import static com.barchart.util.values.provider.ValueBuilder.newPrice;
+import static com.barchart.util.values.provider.ValueBuilder.newSize;
+import static com.barchart.util.values.provider.ValueBuilder.newText;
+import static com.barchart.util.values.provider.ValueBuilder.newTime;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.After;
 import org.junit.Before;
@@ -27,7 +40,6 @@ import com.barchart.feed.base.api.market.values.MarketBar;
 import com.barchart.feed.base.api.market.values.MarketTrade;
 import com.barchart.feed.base.mock.MockMsgTrade;
 import com.barchart.feed.base.provider.instrument.provider.MockService;
-import com.barchart.feed.base.provider.market.provider.MarketType;
 
 public class TestProcessBar {
 
@@ -52,7 +64,7 @@ public class TestProcessBar {
 		MarketBar bar;
 		MarketTrade trade;
 
-		final MockMaker maker = new MockMaker(MarketType.DDF);
+		final MockMaker maker = new MockMaker(new MockMarketFactory());
 
 		MarketInstrument inst;
 

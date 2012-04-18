@@ -14,6 +14,7 @@ import static com.barchart.util.values.provider.ValueBuilder.*;
 import com.barchart.feed.base.api.market.enums.MarketBookAction;
 import com.barchart.feed.base.api.market.enums.MarketBookSide;
 import com.barchart.feed.base.api.market.enums.MarketBookType;
+import com.barchart.feed.base.provider.market.api.MarketDoBookEntry;
 import com.barchart.util.anno.NotThreadSafe;
 import com.barchart.util.collections.ScadecRingBufferBase;
 import com.barchart.util.math.MathExtra;

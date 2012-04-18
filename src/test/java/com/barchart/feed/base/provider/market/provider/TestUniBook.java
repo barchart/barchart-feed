@@ -19,6 +19,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.barchart.feed.base.provider.market.api.MarketDoBookEntry;
 import com.barchart.util.bench.size.JavaSize;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;

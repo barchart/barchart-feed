@@ -7,7 +7,7 @@
  */
 package com.barchart.feed.base.provider.market.provider;
 
-enum UniBookResult {
+public enum UniBookResult {
 
 	/** update processed on top */
 	TOP, //

@@ -7,8 +7,17 @@
  */
 package com.barchart.feed.base.provider.market.provider;
 
-import static com.barchart.feed.base.api.instrument.enums.InstrumentField.*;
-import static com.barchart.feed.base.api.market.enums.MarketField.*;
+import static com.barchart.feed.base.api.instrument.enums.InstrumentField.BOOK_TYPE;
+import static com.barchart.feed.base.api.instrument.enums.InstrumentField.PRICE_STEP;
+import static com.barchart.feed.base.api.market.enums.MarketField.BOOK;
+import static com.barchart.feed.base.api.market.enums.MarketField.BOOK_LAST;
+import static com.barchart.feed.base.api.market.enums.MarketField.BOOK_TOP;
+import static com.barchart.feed.base.api.market.enums.MarketField.CUVOL;
+import static com.barchart.feed.base.api.market.enums.MarketField.CUVOL_LAST;
+import static com.barchart.feed.base.api.market.enums.MarketField.INSTRUMENT;
+import static com.barchart.feed.base.api.market.enums.MarketField.MARKET;
+import static com.barchart.feed.base.api.market.enums.MarketField.STATE;
+import static com.barchart.feed.base.api.market.enums.MarketField.TRADE;
 
 import java.util.List;
 import java.util.Set;
@@ -39,7 +48,7 @@ import com.barchart.util.values.provider.ValueBuilder;
  */
 @Mutable
 @ThreadSafe(rule = "must use runSafe()")
-abstract class VarMarket extends DefMarket implements MarketDo {
+public abstract class VarMarket extends DefMarket implements MarketDo {
 
 	// @SuppressWarnings("unused")
 	private static final Logger log = LoggerFactory.getLogger(VarMarket.class);

@@ -9,6 +9,7 @@ package com.barchart.feed.base.provider.market.api;
 
 import com.barchart.feed.base.provider.market.provider.MarketDo;
 
+
 public interface MarketFactory {
 
 	MarketDo newMarket();

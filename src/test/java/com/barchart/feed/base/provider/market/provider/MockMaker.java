@@ -15,7 +15,7 @@ import com.barchart.feed.base.mock.MockMessage;
 import com.barchart.feed.base.mock.MockMessageVisitor;
 import com.barchart.feed.base.mock.MockMsgBook;
 import com.barchart.feed.base.mock.MockMsgTrade;
-import com.barchart.feed.base.provider.market.api.MarketProvider;
+import com.barchart.feed.base.provider.market.api.MarketFactory;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
 import com.barchart.util.values.api.TimeValue;
@@ -23,7 +23,7 @@ import com.barchart.util.values.api.TimeValue;
 public class MockMaker extends MakerBase<MockMessage> implements
 		MockMessageVisitor<Void, MarketDo> {
 
-	public MockMaker(final MarketType factory) {
+	public MockMaker(final MarketFactory factory) {
 		super(factory);
 	}
 
@@ -63,19 +63,6 @@ public class MockMaker extends MakerBase<MockMessage> implements
 		market.setBookUpdate(entry, time);
 
 		return null;
-
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.barchart.feed.base.api.market.provider.MarketMakerProvider#
-	 * appendMarketProvider
-	 * (com.barchart.feed.base.provider.market.api.MarketProvider)
-	 */
-	@Override
-	public void appendMarketProvider(final MarketProvider marketProvider) {
-		// TODO Auto-generated method stub
 
 	}
 

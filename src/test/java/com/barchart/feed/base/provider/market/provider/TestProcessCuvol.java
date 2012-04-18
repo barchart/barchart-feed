@@ -7,10 +7,17 @@
  */
 package com.barchart.feed.base.provider.market.provider;
 
-import static com.barchart.feed.base.api.market.enums.MarketBarType.*;
-import static com.barchart.feed.base.api.market.enums.MarketField.*;
-import static com.barchart.util.values.provider.ValueBuilder.*;
-import static org.junit.Assert.*;
+import static com.barchart.feed.base.api.market.enums.MarketBarType.CURRENT;
+import static com.barchart.feed.base.api.market.enums.MarketBarType.CURRENT_NET;
+import static com.barchart.feed.base.api.market.enums.MarketBarType.CURRENT_PIT;
+import static com.barchart.feed.base.api.market.enums.MarketField.CUVOL;
+import static com.barchart.feed.base.api.market.enums.MarketField.CUVOL_LAST;
+import static com.barchart.feed.base.api.market.enums.MarketField.MARKET;
+import static com.barchart.util.values.provider.ValueBuilder.newPrice;
+import static com.barchart.util.values.provider.ValueBuilder.newSize;
+import static com.barchart.util.values.provider.ValueBuilder.newText;
+import static com.barchart.util.values.provider.ValueBuilder.newTime;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.After;
 import org.junit.Before;
@@ -25,7 +32,6 @@ import com.barchart.feed.base.api.market.values.MarketCuvol;
 import com.barchart.feed.base.api.market.values.MarketCuvolEntry;
 import com.barchart.feed.base.mock.MockMsgTrade;
 import com.barchart.feed.base.provider.instrument.provider.MockService;
-import com.barchart.feed.base.provider.market.provider.MarketType;
 import com.barchart.util.values.api.SizeValue;
 
 public class TestProcessCuvol {
@@ -47,9 +53,9 @@ public class TestProcessCuvol {
 	@Test
 	public void testTakerMarket() {
 
-		MockMaker maker = new MockMaker(MarketType.DDF);
+		final MockMaker maker = new MockMaker(new MockMarketFactory());
 
-		MarketInstrument inst = service.lookup(newText("3"));
+		final MarketInstrument inst = service.lookup(newText("3"));
 
 		maker.register(inst);
 		assertEquals(maker.marketCount(), 1);
