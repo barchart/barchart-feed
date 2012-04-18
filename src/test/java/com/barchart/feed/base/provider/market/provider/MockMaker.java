@@ -15,10 +15,7 @@ import com.barchart.feed.base.mock.MockMessage;
 import com.barchart.feed.base.mock.MockMessageVisitor;
 import com.barchart.feed.base.mock.MockMsgBook;
 import com.barchart.feed.base.mock.MockMsgTrade;
-import com.barchart.feed.base.provider.market.provider.DefBookEntry;
-import com.barchart.feed.base.provider.market.provider.MakerBase;
-import com.barchart.feed.base.provider.market.provider.MarketDo;
-import com.barchart.feed.base.provider.market.provider.MarketType;
+import com.barchart.feed.base.provider.market.api.MarketProvider;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
 import com.barchart.util.values.api.TimeValue;
@@ -26,7 +23,7 @@ import com.barchart.util.values.api.TimeValue;
 public class MockMaker extends MakerBase<MockMessage> implements
 		MockMessageVisitor<Void, MarketDo> {
 
-	public MockMaker(MarketType factory) {
+	public MockMaker(final MarketType factory) {
 		super(factory);
 	}
 
@@ -38,10 +35,10 @@ public class MockMaker extends MakerBase<MockMessage> implements
 	@Override
 	public Void visit(final MockMsgTrade message, final MarketDo market) {
 
-		MarketBarType type = message.type;
-		PriceValue price = message.price;
-		SizeValue size = message.size;
-		TimeValue time = message.time;
+		final MarketBarType type = message.type;
+		final PriceValue price = message.price;
+		final SizeValue size = message.size;
+		final TimeValue time = message.time;
 
 		market.setTrade(type, price, size, time);
 
@@ -52,19 +49,33 @@ public class MockMaker extends MakerBase<MockMessage> implements
 	@Override
 	public Void visit(final MockMsgBook message, final MarketDo market) {
 
-		MarketBookAction act = message.act;
-		MarketBookSide side = message.side;
-		MarketBookType type = message.type;
-		int place = message.place;
-		PriceValue price = message.price;
-		SizeValue size = message.size;
-		TimeValue time = message.time;
+		final MarketBookAction act = message.act;
+		final MarketBookSide side = message.side;
+		final MarketBookType type = message.type;
+		final int place = message.place;
+		final PriceValue price = message.price;
+		final SizeValue size = message.size;
+		final TimeValue time = message.time;
 
-		DefBookEntry entry = new DefBookEntry(act, side, type, place, price, size);
+		final DefBookEntry entry = new DefBookEntry(act, side, type, place,
+				price, size);
 
 		market.setBookUpdate(entry, time);
 
 		return null;
+
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.barchart.feed.base.api.market.provider.MarketMakerProvider#
+	 * appendMarketProvider
+	 * (com.barchart.feed.base.provider.market.api.MarketProvider)
+	 */
+	@Override
+	public void appendMarketProvider(final MarketProvider marketProvider) {
+		// TODO Auto-generated method stub
 
 	}
 

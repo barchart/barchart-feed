@@ -10,6 +10,7 @@ package com.barchart.feed.base.api.market.provider;
 import com.barchart.feed.base.api.market.MarketMaker;
 import com.barchart.feed.base.api.market.enums.MarketField;
 import com.barchart.feed.base.api.message.MarketMessage;
+import com.barchart.feed.base.provider.market.api.MarketProvider;
 import com.barchart.util.anno.NotMutable;
 import com.barchart.util.anno.NotYetImplemented;
 import com.barchart.util.anno.ThreadSafe;
@@ -53,5 +54,7 @@ public interface MarketMakerProvider<Message extends MarketMessage> extends
 	void notifyRegListeners();
 
 	//
+
+	void appendMarketProvider(MarketProvider marketProvider);
 
 }
