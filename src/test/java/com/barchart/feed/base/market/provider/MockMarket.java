@@ -19,10 +19,10 @@ import static com.barchart.feed.base.market.enums.MarketEvent.NEW_VOLUME;
 import static com.barchart.feed.base.market.enums.MarketField.BOOK;
 import static com.barchart.feed.base.market.enums.MarketField.INSTRUMENT;
 import static com.barchart.feed.base.market.enums.MarketField.MARKET_TIME;
-import static com.barchart.feed.base.market.enums.MarketTradeField.PRICE;
-import static com.barchart.feed.base.market.enums.MarketTradeField.SIZE;
-import static com.barchart.feed.base.market.enums.MarketTradeField.TRADE_TIME;
-import static com.barchart.feed.base.market.enums.MarketTradeField.TYPE;
+import static com.barchart.feed.base.trade.enums.MarketTradeField.PRICE;
+import static com.barchart.feed.base.trade.enums.MarketTradeField.SIZE;
+import static com.barchart.feed.base.trade.enums.MarketTradeField.TRADE_TIME;
+import static com.barchart.feed.base.trade.enums.MarketTradeField.TYPE;
 
 import com.barchart.feed.base.bar.api.MarketDoBar;
 import com.barchart.feed.base.bar.enums.MarketBarType;

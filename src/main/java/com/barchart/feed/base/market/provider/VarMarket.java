@@ -60,7 +60,7 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 
 	private RegCenter reg;
 
-	protected VarMarket() {
+	public VarMarket() {
 
 		/** set self reference */
 		set(MARKET, this);

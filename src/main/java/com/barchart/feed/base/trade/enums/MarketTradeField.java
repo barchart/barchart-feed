@@ -5,7 +5,7 @@
  *
  * http://www.opensource.org/licenses/bsd-license.php
  */
-package com.barchart.feed.base.market.enums;
+package com.barchart.feed.base.trade.enums;
 
 import static com.barchart.feed.base.bar.enums.MarketBarType.*;
 import static com.barchart.util.values.provider.ValueConst.*;

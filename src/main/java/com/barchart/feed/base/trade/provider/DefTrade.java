@@ -7,7 +7,7 @@
  */
 package com.barchart.feed.base.trade.provider;
 
-import com.barchart.feed.base.market.enums.MarketTradeField;
+import com.barchart.feed.base.trade.enums.MarketTradeField;
 import com.barchart.util.values.api.Value;
 
 class DefTrade extends NulTrade {
