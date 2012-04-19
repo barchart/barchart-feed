@@ -5,7 +5,7 @@
  *
  * http://www.opensource.org/licenses/bsd-license.php
  */
-package com.barchart.feed.base.message;
+package com.barchart.feed.base.market.api;
 
 import com.barchart.feed.base.instrument.values.MarketInstrument;
 
