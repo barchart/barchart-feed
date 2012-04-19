@@ -41,6 +41,7 @@ import com.barchart.util.values.util.ValueUtil;
 abstract class MarketUseCase {
 
 	//
+	//
 
 	// provider instance
 	final MarketMakerProvider<MarketMessage> maker = null;
