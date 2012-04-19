@@ -7,9 +7,21 @@
  */
 package com.barchart.feed.base.instrument.enums;
 
-import static com.barchart.feed.base.instrument.enums.MarketDisplay.Base.*;
-import static com.barchart.feed.base.instrument.enums.MarketDisplay.Exponent.*;
-import static java.lang.Math.*;
+import static com.barchart.feed.base.instrument.enums.MarketDisplay.Base.BINARY;
+import static com.barchart.feed.base.instrument.enums.MarketDisplay.Base.DECIMAL;
+import static com.barchart.feed.base.instrument.enums.MarketDisplay.Exponent.N01;
+import static com.barchart.feed.base.instrument.enums.MarketDisplay.Exponent.N02;
+import static com.barchart.feed.base.instrument.enums.MarketDisplay.Exponent.N03;
+import static com.barchart.feed.base.instrument.enums.MarketDisplay.Exponent.N04;
+import static com.barchart.feed.base.instrument.enums.MarketDisplay.Exponent.N05;
+import static com.barchart.feed.base.instrument.enums.MarketDisplay.Exponent.N06;
+import static com.barchart.feed.base.instrument.enums.MarketDisplay.Exponent.N07;
+import static com.barchart.feed.base.instrument.enums.MarketDisplay.Exponent.N08;
+import static com.barchart.feed.base.instrument.enums.MarketDisplay.Exponent.N09;
+import static com.barchart.feed.base.instrument.enums.MarketDisplay.Exponent.Z00;
+import static java.lang.Math.abs;
+import static java.lang.Math.log10;
+import static java.lang.Math.pow;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
@@ -118,13 +130,7 @@ public enum MarketDisplay {
 
 	}
 
-	// public static final long priceWhole(/* local */PriceValue price) {
-	// if (price == null) {
-	// price = ValueConst.NULL_PRICE;
-	// }
-	// return priceWhole(price.mantissa(), price.exponent());
-	// }
-	static long priceFraction(/* local */PriceValue price,
+	public static long priceFraction(/* local */PriceValue price,
 	/* local */Fraction frac) {
 
 		if (price == null) {
@@ -140,7 +146,7 @@ public enum MarketDisplay {
 	}
 
 	// note: can overflow
-	static final long priceWhole(/* local */long mantissa, /* local */
+	public static final long priceWhole(/* local */long mantissa, /* local */
 			int exponent, final Fraction frac) {
 
 		final int scale = frac.decimalExponent;
@@ -160,7 +166,7 @@ public enum MarketDisplay {
 	}
 
 	// note: can overflow
-	static final long priceFraction(/* local */long mantissa, /* local */
+	public static final long priceFraction(/* local */long mantissa, /* local */
 			int exponent, /* local */Fraction frac) {
 
 		if (frac == null) {
@@ -197,19 +203,14 @@ public enum MarketDisplay {
 
 	}
 
-	// public static final String priceWholeText(long mantissa, int exponent) {
-	// final long value = priceWhole(mantissa, exponent);
-	// return String.format("%,d", value);
-	// }
-
-	static final String priceWholeText(/* local */PriceValue price) {
+	public static final String priceWholeText(/* local */PriceValue price) {
 		if (price == null) {
 			price = ValueConst.NULL_PRICE;
 		}
 		return ""; // priceWholeText(price.mantissa(), price.exponent());
 	}
 
-	static final String priceFractionText(
+	public static final String priceFractionText(
 	/* local */PriceValue price,
 	/* local */Fraction frac) {
 

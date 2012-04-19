@@ -7,9 +7,9 @@
  */
 package com.barchart.feed.base.market;
 
-import static com.barchart.feed.base.market.enums.MarketBarType.CURRENT;
-import static com.barchart.feed.base.market.enums.MarketBarType.CURRENT_NET;
-import static com.barchart.feed.base.market.enums.MarketBarType.CURRENT_PIT;
+import static com.barchart.feed.base.bar.enums.MarketBarType.CURRENT;
+import static com.barchart.feed.base.bar.enums.MarketBarType.CURRENT_NET;
+import static com.barchart.feed.base.bar.enums.MarketBarType.CURRENT_PIT;
 import static com.barchart.feed.base.market.enums.MarketField.CUVOL;
 import static com.barchart.feed.base.market.enums.MarketField.CUVOL_LAST;
 import static com.barchart.feed.base.market.enums.MarketField.MARKET;
@@ -18,6 +18,7 @@ import static com.barchart.util.values.provider.ValueBuilder.newSize;
 import static com.barchart.util.values.provider.ValueBuilder.newText;
 import static com.barchart.util.values.provider.ValueBuilder.newTime;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.After;
 import org.junit.Before;
@@ -25,13 +26,13 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.barchart.feed.base.cuvol.api.MarketCuvol;
+import com.barchart.feed.base.cuvol.api.MarketCuvolEntry;
 import com.barchart.feed.base.instrument.MockService;
 import com.barchart.feed.base.instrument.api.DefinitionService;
 import com.barchart.feed.base.instrument.values.MarketInstrument;
+import com.barchart.feed.base.market.api.Market;
 import com.barchart.feed.base.market.api.MarketTaker;
-import com.barchart.feed.base.market.values.Market;
-import com.barchart.feed.base.market.values.MarketCuvol;
-import com.barchart.feed.base.market.values.MarketCuvolEntry;
 import com.barchart.feed.base.message.MockMsgTrade;
 import com.barchart.util.values.api.SizeValue;
 
@@ -62,7 +63,7 @@ public class TestProcessCuvol {
 
 		final MarketTaker<Market> tempTaker = new MockTaker<Market>(insts);
 
-		maker.register(tempTaker);
+		assertTrue(maker.register(tempTaker));
 		assertEquals(maker.marketCount(), 1);
 
 		//
@@ -88,7 +89,6 @@ public class TestProcessCuvol {
 		market = maker.take(inst, MARKET);
 
 		cuvol = market.get(CUVOL);
-		// log.info("cuvol \n{}\n", cuvol);
 
 		entries = cuvol.entries();
 		assertEquals(entries.length, 1);
@@ -114,7 +114,6 @@ public class TestProcessCuvol {
 		market = maker.take(inst, MARKET);
 		cuvol = market.get(CUVOL);
 		entries = cuvol.entries();
-		// log.info("cuvol \n{}\n", cuvol);
 
 		assertEquals(entries.length, 1);
 		assertEquals(entries[0], newSize(20));
@@ -135,8 +134,6 @@ public class TestProcessCuvol {
 		cuvol = market.get(CUVOL);
 		entries = cuvol.entries();
 
-		// log.info("cuvol \n{}\n", cuvol);
-
 		assertEquals(entries.length, 4);
 		assertEquals(entries[0], newSize(20));
 		assertEquals(entries[1], newSize(0));
@@ -156,8 +153,6 @@ public class TestProcessCuvol {
 		market = maker.take(inst, MARKET);
 		cuvol = market.get(CUVOL);
 		entries = cuvol.entries();
-
-		// log.info("cuvol \n{}\n", cuvol);
 
 		assertEquals(entries.length, 4);
 		assertEquals(entries[0], newSize(20));

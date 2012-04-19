@@ -12,15 +12,23 @@ import static com.barchart.util.values.provider.ValueConst.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.feed.base.market.values.Market;
-import com.barchart.feed.base.market.values.MarketBar;
-import com.barchart.feed.base.market.values.MarketBook;
-import com.barchart.feed.base.market.values.MarketBookEntry;
-import com.barchart.feed.base.market.values.MarketBookTop;
-import com.barchart.feed.base.market.values.MarketCuvol;
-import com.barchart.feed.base.market.values.MarketCuvolEntry;
-import com.barchart.feed.base.market.values.MarketState;
-import com.barchart.feed.base.market.values.MarketTrade;
+import com.barchart.feed.base.bar.api.MarketBar;
+import com.barchart.feed.base.bar.provider.NulBar;
+import com.barchart.feed.base.book.api.MarketBook;
+import com.barchart.feed.base.book.api.MarketBookEntry;
+import com.barchart.feed.base.book.api.MarketBookTop;
+import com.barchart.feed.base.book.provider.DefBook;
+import com.barchart.feed.base.book.provider.DefBookEntry;
+import com.barchart.feed.base.book.provider.DefBookTop;
+import com.barchart.feed.base.cuvol.api.MarketCuvol;
+import com.barchart.feed.base.cuvol.api.MarketCuvolEntry;
+import com.barchart.feed.base.cuvol.provider.DefCuvolEntry;
+import com.barchart.feed.base.cuvol.provider.NulCuvol;
+import com.barchart.feed.base.market.api.Market;
+import com.barchart.feed.base.state.api.MarketState;
+import com.barchart.feed.base.state.provider.DefState;
+import com.barchart.feed.base.trade.api.MarketTrade;
+import com.barchart.feed.base.trade.provider.NulTrade;
 import com.barchart.util.values.api.SizeValue;
 
 public final class MarketConst {

@@ -10,8 +10,8 @@ package com.barchart.feed.base.market;
 import com.barchart.feed.base.instrument.MockService;
 import com.barchart.feed.base.instrument.api.DefinitionService;
 import com.barchart.feed.base.instrument.values.MarketInstrument;
+import com.barchart.feed.base.market.api.Market;
 import com.barchart.feed.base.market.api.MarketTaker;
-import com.barchart.feed.base.market.values.Market;
 import com.barchart.util.values.api.TextValue;
 import com.barchart.util.values.provider.ValueBuilder;
 

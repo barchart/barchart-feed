@@ -7,10 +7,10 @@
  */
 package com.barchart.feed.base.market;
 
-import static com.barchart.feed.base.market.enums.MarketBarField.BAR_TIME;
-import static com.barchart.feed.base.market.enums.MarketBarField.VOLUME;
-import static com.barchart.feed.base.market.enums.MarketBarType.CURRENT_NET;
-import static com.barchart.feed.base.market.enums.MarketBarType.CURRENT_PIT;
+import static com.barchart.feed.base.bar.enums.MarketBarField.BAR_TIME;
+import static com.barchart.feed.base.bar.enums.MarketBarField.VOLUME;
+import static com.barchart.feed.base.bar.enums.MarketBarType.CURRENT_NET;
+import static com.barchart.feed.base.bar.enums.MarketBarType.CURRENT_PIT;
 import static com.barchart.feed.base.market.enums.MarketField.BAR_CURRENT;
 import static com.barchart.feed.base.market.enums.MarketField.BAR_CURRENT_NET;
 import static com.barchart.feed.base.market.enums.MarketField.BAR_CURRENT_PIT;
@@ -33,14 +33,14 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.barchart.feed.base.bar.api.MarketBar;
 import com.barchart.feed.base.instrument.MockService;
 import com.barchart.feed.base.instrument.api.DefinitionService;
 import com.barchart.feed.base.instrument.values.MarketInstrument;
+import com.barchart.feed.base.market.api.Market;
 import com.barchart.feed.base.market.api.MarketTaker;
-import com.barchart.feed.base.market.values.Market;
-import com.barchart.feed.base.market.values.MarketBar;
-import com.barchart.feed.base.market.values.MarketTrade;
 import com.barchart.feed.base.message.MockMsgTrade;
+import com.barchart.feed.base.trade.api.MarketTrade;
 
 public class TestProcessBar {
 

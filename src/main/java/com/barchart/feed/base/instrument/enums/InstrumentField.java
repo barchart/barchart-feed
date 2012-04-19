@@ -11,8 +11,8 @@ import static com.barchart.feed.base.instrument.enums.MarketDisplay.Fraction.*;
 import static com.barchart.feed.base.instrument.provider.InstrumentConst.*;
 import static com.barchart.util.values.provider.ValueConst.*;
 
+import com.barchart.feed.base.book.enums.MarketBookType;
 import com.barchart.feed.base.instrument.enums.MarketDisplay.Fraction;
-import com.barchart.feed.base.market.enums.MarketBookType;
 import com.barchart.util.anno.NotMutable;
 import com.barchart.util.collections.BitSetEnum;
 import com.barchart.util.enums.DictEnum;

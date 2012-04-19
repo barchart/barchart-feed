@@ -7,12 +7,12 @@
  */
 package com.barchart.feed.base.market;
 
+import com.barchart.feed.base.bar.enums.MarketBarType;
+import com.barchart.feed.base.book.enums.MarketBookAction;
+import com.barchart.feed.base.book.enums.MarketBookSide;
+import com.barchart.feed.base.book.enums.MarketBookType;
+import com.barchart.feed.base.book.provider.DefBookEntry;
 import com.barchart.feed.base.market.api.MarketFactory;
-import com.barchart.feed.base.market.enums.MarketBarType;
-import com.barchart.feed.base.market.enums.MarketBookAction;
-import com.barchart.feed.base.market.enums.MarketBookSide;
-import com.barchart.feed.base.market.enums.MarketBookType;
-import com.barchart.feed.base.market.provider.DefBookEntry;
 import com.barchart.feed.base.market.provider.MakerBase;
 import com.barchart.feed.base.market.provider.MarketDo;
 import com.barchart.feed.base.message.MockMessage;

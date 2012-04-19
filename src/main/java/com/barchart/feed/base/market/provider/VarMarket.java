@@ -7,11 +7,7 @@
  */
 package com.barchart.feed.base.market.provider;
 
-import static com.barchart.feed.base.instrument.enums.InstrumentField.BOOK_TYPE;
 import static com.barchart.feed.base.instrument.enums.InstrumentField.PRICE_STEP;
-import static com.barchart.feed.base.market.enums.MarketField.BOOK;
-import static com.barchart.feed.base.market.enums.MarketField.BOOK_LAST;
-import static com.barchart.feed.base.market.enums.MarketField.BOOK_TOP;
 import static com.barchart.feed.base.market.enums.MarketField.CUVOL;
 import static com.barchart.feed.base.market.enums.MarketField.CUVOL_LAST;
 import static com.barchart.feed.base.market.enums.MarketField.INSTRUMENT;
@@ -25,17 +21,24 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.barchart.feed.base.bar.api.MarketBar;
+import com.barchart.feed.base.bar.api.MarketDoBar;
+import com.barchart.feed.base.bar.provider.VarBar;
+import com.barchart.feed.base.book.api.MarketBook;
+import com.barchart.feed.base.cuvol.api.MarketCuvol;
+import com.barchart.feed.base.cuvol.api.MarketDoCuvol;
+import com.barchart.feed.base.cuvol.provider.VarCuvol;
+import com.barchart.feed.base.cuvol.provider.VarCuvolLast;
 import com.barchart.feed.base.instrument.enums.InstrumentField;
 import com.barchart.feed.base.instrument.values.MarketInstrument;
-import com.barchart.feed.base.market.enums.MarketBookType;
+import com.barchart.feed.base.market.api.Market;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.base.market.enums.MarketField;
-import com.barchart.feed.base.market.values.Market;
-import com.barchart.feed.base.market.values.MarketBar;
-import com.barchart.feed.base.market.values.MarketBook;
-import com.barchart.feed.base.market.values.MarketCuvol;
-import com.barchart.feed.base.market.values.MarketState;
-import com.barchart.feed.base.market.values.MarketTrade;
+import com.barchart.feed.base.state.api.MarketState;
+import com.barchart.feed.base.state.provider.VarState;
+import com.barchart.feed.base.trade.api.MarketDoTrade;
+import com.barchart.feed.base.trade.api.MarketTrade;
+import com.barchart.feed.base.trade.provider.VarTrade;
 import com.barchart.util.anno.Mutable;
 import com.barchart.util.anno.ThreadSafe;
 import com.barchart.util.values.api.PriceValue;
@@ -284,34 +287,33 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 			.newSize(MarketBook.ENTRY_LIMIT);
 
 	// XXX make final
-	protected MarketDoBook loadBook() {
-
-		MarketBook book = get(BOOK);
-
-		if (book.isFrozen()) {
-
-			final MarketInstrument inst = get(INSTRUMENT);
-
-			final MarketBookType type = inst.get(BOOK_TYPE);
-			final SizeValue size = LIMIT; // inst.get(BOOK_SIZE);
-			final PriceValue step = inst.get(PRICE_STEP);
-
-			final VarBook varBook = new VarBook(type, size, step);
-
-			final VarBookLast varBookLast = new VarBookLast(varBook);
-			final VarBookTop varBookTop = new VarBookTop(varBook);
-
-			set(BOOK, varBook);
-			set(BOOK_LAST, varBookLast);
-			set(BOOK_TOP, varBookTop);
-
-			book = varBook;
-
-		}
-
-		return (MarketDoBook) book;
-
-	}
+	// protected MarketDoBook loadBook() {
+	//
+	// MarketBook book = get(BOOK);
+	//
+	// if (book.isFrozen()) {
+	//
+	// final MarketInstrument inst = get(INSTRUMENT);
+	//
+	// final MarketBookType type = inst.get(BOOK_TYPE);
+	// final SizeValue size = LIMIT; // inst.get(BOOK_SIZE);
+	// final PriceValue step = inst.get(PRICE_STEP);
+	//
+	// final VarBook varBook = new VarBook(type, size, step);
+	// final VarBookLast varBookLast = new VarBookLast(varBook);
+	// final VarBookTop varBookTop = new VarBookTop(varBook);
+	//
+	// set(BOOK, varBook);
+	// set(BOOK_LAST, varBookLast);
+	// set(BOOK_TOP, varBookTop);
+	//
+	// book = varBook;
+	//
+	// }
+	//
+	// return (MarketDoBook) book;
+	//
+	// }
 
 	protected final boolean isValidPrice(final PriceValue price) {
 

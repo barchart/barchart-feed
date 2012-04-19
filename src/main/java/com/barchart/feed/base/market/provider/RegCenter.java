@@ -11,9 +11,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import com.barchart.feed.base.market.api.Market;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.base.market.enums.MarketField;
-import com.barchart.feed.base.market.values.Market;
 import com.barchart.util.anno.NotThreadSafe;
 import com.barchart.util.thread.Runner;
 import com.barchart.util.values.api.Value;

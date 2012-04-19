@@ -7,13 +7,13 @@
  */
 package com.barchart.feed.base.market;
 
-import static com.barchart.feed.base.market.enums.MarketBarField.VOLUME;
-import static com.barchart.feed.base.market.enums.MarketBarType.CURRENT_NET;
-import static com.barchart.feed.base.market.enums.MarketBookAction.MODIFY;
-import static com.barchart.feed.base.market.enums.MarketBookAction.REMOVE;
-import static com.barchart.feed.base.market.enums.MarketBookSide.ASK;
-import static com.barchart.feed.base.market.enums.MarketBookSide.BID;
-import static com.barchart.feed.base.market.enums.MarketBookType.DEFAULT;
+import static com.barchart.feed.base.bar.enums.MarketBarField.VOLUME;
+import static com.barchart.feed.base.bar.enums.MarketBarType.CURRENT_NET;
+import static com.barchart.feed.base.book.enums.MarketBookAction.MODIFY;
+import static com.barchart.feed.base.book.enums.MarketBookAction.REMOVE;
+import static com.barchart.feed.base.book.enums.MarketBookSide.ASK;
+import static com.barchart.feed.base.book.enums.MarketBookSide.BID;
+import static com.barchart.feed.base.book.enums.MarketBookType.DEFAULT;
 import static com.barchart.feed.base.market.enums.MarketEvent.NEW_BOOK_TOP;
 import static com.barchart.feed.base.market.enums.MarketEvent.NEW_BOOK_UPDATE;
 import static com.barchart.feed.base.market.enums.MarketField.BAR_CURRENT;
@@ -37,20 +37,20 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.barchart.feed.base.bar.api.MarketBar;
+import com.barchart.feed.base.book.api.MarketBook;
+import com.barchart.feed.base.book.api.MarketBookEntry;
+import com.barchart.feed.base.book.api.MarketBookTop;
 import com.barchart.feed.base.instrument.MockService;
 import com.barchart.feed.base.instrument.api.DefinitionService;
 import com.barchart.feed.base.instrument.values.MarketInstrument;
+import com.barchart.feed.base.market.api.Market;
 import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.base.market.enums.MarketField;
-import com.barchart.feed.base.market.values.Market;
-import com.barchart.feed.base.market.values.MarketBar;
-import com.barchart.feed.base.market.values.MarketBook;
-import com.barchart.feed.base.market.values.MarketBookEntry;
-import com.barchart.feed.base.market.values.MarketBookTop;
-import com.barchart.feed.base.market.values.MarketTrade;
 import com.barchart.feed.base.message.MockMsgBook;
 import com.barchart.feed.base.message.MockMsgTrade;
+import com.barchart.feed.base.trade.api.MarketTrade;
 import com.barchart.util.values.api.SizeValue;
 
 public class TestProcessBook {

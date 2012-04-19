@@ -3,13 +3,13 @@
  */
 package com.barchart.feed.base.market;
 
+import com.barchart.feed.base.bar.api.MarketDoBar;
+import com.barchart.feed.base.bar.enums.MarketBarType;
+import com.barchart.feed.base.book.api.MarketDoBookEntry;
+import com.barchart.feed.base.cuvol.api.MarketDoCuvolEntry;
 import com.barchart.feed.base.instrument.values.MarketInstrument;
-import com.barchart.feed.base.market.api.MarketDoBookEntry;
-import com.barchart.feed.base.market.enums.MarketBarType;
-import com.barchart.feed.base.market.enums.MarketStateEntry;
-import com.barchart.feed.base.market.provider.MarketDoBar;
-import com.barchart.feed.base.market.provider.MarketDoCuvolEntry;
 import com.barchart.feed.base.market.provider.VarMarket;
+import com.barchart.feed.base.state.enums.MarketStateEntry;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
 import com.barchart.util.values.api.TimeValue;

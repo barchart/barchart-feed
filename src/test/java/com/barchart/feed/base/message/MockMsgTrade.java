@@ -7,8 +7,8 @@
  */
 package com.barchart.feed.base.message;
 
+import com.barchart.feed.base.bar.enums.MarketBarType;
 import com.barchart.feed.base.instrument.values.MarketInstrument;
-import com.barchart.feed.base.market.enums.MarketBarType;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
 import com.barchart.util.values.api.TimeValue;

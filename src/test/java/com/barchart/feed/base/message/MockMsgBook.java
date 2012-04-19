@@ -7,10 +7,10 @@
  */
 package com.barchart.feed.base.message;
 
+import com.barchart.feed.base.book.enums.MarketBookAction;
+import com.barchart.feed.base.book.enums.MarketBookSide;
+import com.barchart.feed.base.book.enums.MarketBookType;
 import com.barchart.feed.base.instrument.values.MarketInstrument;
-import com.barchart.feed.base.market.enums.MarketBookAction;
-import com.barchart.feed.base.market.enums.MarketBookSide;
-import com.barchart.feed.base.market.enums.MarketBookType;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
 import com.barchart.util.values.api.TimeValue;

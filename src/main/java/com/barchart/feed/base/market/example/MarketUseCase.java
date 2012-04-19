@@ -7,10 +7,10 @@
  */
 package com.barchart.feed.base.market.example;
 
-import static com.barchart.feed.base.market.enums.MarketBarField.CLOSE;
-import static com.barchart.feed.base.market.enums.MarketBarField.HIGH;
-import static com.barchart.feed.base.market.enums.MarketBarField.LOW;
-import static com.barchart.feed.base.market.enums.MarketBarField.VOLUME;
+import static com.barchart.feed.base.bar.enums.MarketBarField.CLOSE;
+import static com.barchart.feed.base.bar.enums.MarketBarField.HIGH;
+import static com.barchart.feed.base.bar.enums.MarketBarField.LOW;
+import static com.barchart.feed.base.bar.enums.MarketBarField.VOLUME;
 import static com.barchart.feed.base.market.enums.MarketEvent.MARKET_OPENED;
 import static com.barchart.feed.base.market.enums.MarketEvent.MARKET_UPDATED;
 import static com.barchart.feed.base.market.enums.MarketEvent.NEW_HIGH;
@@ -21,19 +21,19 @@ import static com.barchart.feed.base.market.enums.MarketField.CUVOL;
 import static com.barchart.feed.base.market.enums.MarketField.MARKET;
 import static com.barchart.feed.base.market.enums.MarketField.TRADE;
 
+import com.barchart.feed.base.bar.api.MarketBar;
+import com.barchart.feed.base.book.api.MarketBook;
+import com.barchart.feed.base.book.api.MarketBookEntry;
+import com.barchart.feed.base.book.enums.MarketBookSide;
+import com.barchart.feed.base.cuvol.api.MarketCuvol;
 import com.barchart.feed.base.instrument.values.MarketInstrument;
+import com.barchart.feed.base.market.api.Market;
 import com.barchart.feed.base.market.api.MarketMakerProvider;
 import com.barchart.feed.base.market.api.MarketTaker;
-import com.barchart.feed.base.market.enums.MarketBookSide;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.base.market.enums.MarketField;
-import com.barchart.feed.base.market.values.Market;
-import com.barchart.feed.base.market.values.MarketBar;
-import com.barchart.feed.base.market.values.MarketBook;
-import com.barchart.feed.base.market.values.MarketBookEntry;
-import com.barchart.feed.base.market.values.MarketCuvol;
-import com.barchart.feed.base.market.values.MarketTrade;
-import com.barchart.feed.base.message.api.MarketMessage;
+import com.barchart.feed.base.message.MarketMessage;
+import com.barchart.feed.base.trade.api.MarketTrade;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
 import com.barchart.util.values.util.ValueUtil;

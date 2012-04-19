@@ -7,8 +7,8 @@
  */
 package com.barchart.feed.base.market.provider;
 
+import com.barchart.feed.base.market.api.Market;
 import com.barchart.feed.base.market.enums.MarketField;
-import com.barchart.feed.base.market.values.Market;
 import com.barchart.util.anno.NotMutable;
 import com.barchart.util.values.api.Value;
 import com.barchart.util.values.provider.ValueFreezer;

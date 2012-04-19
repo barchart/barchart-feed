@@ -7,9 +7,10 @@
  */
 package com.barchart.feed.base.market.enums;
 
-import static com.barchart.feed.base.market.enums.MarketBarType.*;
+import static com.barchart.feed.base.bar.enums.MarketBarType.*;
 import static com.barchart.util.values.provider.ValueConst.*;
 
+import com.barchart.feed.base.bar.enums.MarketBarType;
 import com.barchart.util.anno.NotMutable;
 import com.barchart.util.collections.BitSetEnum;
 import com.barchart.util.enums.DictEnum;
