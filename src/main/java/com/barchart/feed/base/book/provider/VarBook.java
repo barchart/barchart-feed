@@ -34,11 +34,11 @@ import com.barchart.util.values.provider.ValueBuilder;
  */
 @Mutable
 @ThreadSafe(rule = "use in runSafe() only")
-final class VarBook extends UniBook<MarketBook> implements MarketDoBook {
+public final class VarBook extends UniBook<MarketBook> implements MarketDoBook {
 
 	private long millisUTC;
 
-	VarBook(final MarketBookType type, final SizeValue size,
+	public VarBook(final MarketBookType type, final SizeValue size,
 			final PriceValue step) {
 		super(type, size, step);
 	}
