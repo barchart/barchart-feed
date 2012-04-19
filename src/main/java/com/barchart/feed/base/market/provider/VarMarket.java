@@ -32,6 +32,8 @@ import com.barchart.feed.base.cuvol.provider.VarCuvolLast;
 import com.barchart.feed.base.instrument.enums.InstrumentField;
 import com.barchart.feed.base.instrument.values.MarketInstrument;
 import com.barchart.feed.base.market.api.Market;
+import com.barchart.feed.base.market.api.MarketDo;
+import com.barchart.feed.base.market.api.MarketSafeRunner;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.feed.base.state.api.MarketState;

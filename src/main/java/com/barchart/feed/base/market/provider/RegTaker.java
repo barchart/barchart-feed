@@ -7,7 +7,7 @@
  */
 package com.barchart.feed.base.market.provider;
 
-import static com.barchart.feed.base.market.enums.MarketField.*;
+import static com.barchart.feed.base.market.enums.MarketField.INSTRUMENT;
 
 import java.util.List;
 
@@ -26,7 +26,7 @@ import com.barchart.util.values.api.Value;
 
 @NotMutable
 @ThreadSafe
-class RegTaker<V extends Value<V>> implements RunnerLoop<MarketEvent> {
+public class RegTaker<V extends Value<V>> implements RunnerLoop<MarketEvent> {
 
 	private static final Logger log = LoggerFactory.getLogger(RegTaker.class);
 
@@ -38,7 +38,7 @@ class RegTaker<V extends Value<V>> implements RunnerLoop<MarketEvent> {
 
 	private final MarketInstrument[] instruments;
 
-	RegTaker(final MarketTaker<V> taker) {
+	public RegTaker(final MarketTaker<V> taker) {
 
 		this.taker = taker;
 

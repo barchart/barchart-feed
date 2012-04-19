@@ -5,7 +5,7 @@
  *
  * http://www.opensource.org/licenses/bsd-license.php
  */
-package com.barchart.feed.base.market.provider;
+package com.barchart.feed.base.market.api;
 
 import java.util.List;
 import java.util.Set;
@@ -16,9 +16,9 @@ import com.barchart.feed.base.bar.enums.MarketBarType;
 import com.barchart.feed.base.book.api.MarketDoBookEntry;
 import com.barchart.feed.base.cuvol.api.MarketDoCuvolEntry;
 import com.barchart.feed.base.instrument.values.MarketInstrument;
-import com.barchart.feed.base.market.api.Market;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.base.market.enums.MarketField;
+import com.barchart.feed.base.market.provider.RegTaker;
 import com.barchart.feed.base.state.enums.MarketStateEntry;
 import com.barchart.util.anno.Mutable;
 import com.barchart.util.values.api.PriceValue;
@@ -73,7 +73,7 @@ public interface MarketDo extends Market {
 	/* RUN SAFE */
 
 	/** run task inside exclusive market context */
-	<Result, Param> Result runSafe(MarketSafeRunner<Result, Param> task,
+	public <Result, Param> Result runSafe(MarketSafeRunner<Result, Param> task,
 			Param param);
 
 	//

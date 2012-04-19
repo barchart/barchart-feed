@@ -3,6 +3,7 @@
  */
 package com.barchart.feed.base.market.provider;
 
+import com.barchart.feed.base.market.api.MarketDo;
 import com.barchart.feed.base.market.api.MarketFactory;
 import com.barchart.feed.base.market.api.MarketProvider;
 

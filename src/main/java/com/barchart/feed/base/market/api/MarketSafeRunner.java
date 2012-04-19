@@ -5,11 +5,10 @@
  *
  * http://www.opensource.org/licenses/bsd-license.php
  */
-package com.barchart.feed.base.market.provider;
+package com.barchart.feed.base.market.api;
 
 
-
-interface MarketSafeRunner<Result, Param> {
+public interface MarketSafeRunner<Result, Param> {
 
 	Result runSafe(MarketDo market, Param param);
 
