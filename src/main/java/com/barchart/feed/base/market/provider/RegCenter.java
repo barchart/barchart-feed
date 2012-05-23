@@ -126,16 +126,6 @@ class RegCenter {
 		// overlap current with registered
 		eventSet.bitMaskAnd(eventTakerMap.bitSet());
 
-		// System.out.println("RealFireEvents in RegCenter");
-
-		if (eventSet.isEmpty()) {
-			System.out.println("eventSet isEmpty = true, firing no events");
-			// return;
-		}
-
-		// assert fieldValueMap.isEmpty();
-
-		// see run() below
 		eventSet.runLoop(eventTask, null);
 
 		eventSet.clear();
@@ -156,8 +146,6 @@ class RegCenter {
 			new Runner<Void, RegTaker<?>>() {
 				@Override
 				public Void run(final RegTaker<?> regTaker) {
-
-					// System.out.println("running on RegCenter Runner()");
 
 					regTaker.fire(RegCenter.this, event);
 

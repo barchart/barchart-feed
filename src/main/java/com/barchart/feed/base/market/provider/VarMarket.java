@@ -288,6 +288,8 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 	protected final static SizeValue LIMIT = ValueBuilder
 			.newSize(MarketBook.ENTRY_LIMIT);
 
+	// This method is not used by any members of it's package, do we need it?
+	//
 	// XXX make final
 	// protected MarketDoBook loadBook() {
 	//
