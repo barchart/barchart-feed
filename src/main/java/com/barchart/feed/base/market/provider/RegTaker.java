@@ -81,7 +81,7 @@ public class RegTaker<V extends Value<V>> implements RunnerLoop<MarketEvent> {
 		return instruments;
 	}
 
-	public final Set<MarketInstrument> instrumentCopy() {
+	public final Set<MarketInstrument> cloneInstruments() {
 		final Set<MarketInstrument> insts = new HashSet<MarketInstrument>();
 
 		for (final MarketInstrument inst : instruments) {
@@ -89,6 +89,16 @@ public class RegTaker<V extends Value<V>> implements RunnerLoop<MarketEvent> {
 		}
 
 		return Collections.unmodifiableSet(insts);
+	}
+
+	public final Set<MarketEvent> cloneEvents() {
+		final Set<MarketEvent> events = new HashSet<MarketEvent>();
+
+		for (final MarketEvent event : events) {
+			events.add(event);
+		}
+
+		return Collections.unmodifiableSet(events);
 	}
 
 	public static final boolean isValid(final MarketTaker<?> taker) {
