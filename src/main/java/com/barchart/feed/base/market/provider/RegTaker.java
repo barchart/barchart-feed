@@ -9,10 +9,7 @@ package com.barchart.feed.base.market.provider;
 
 import static com.barchart.feed.base.market.enums.MarketField.INSTRUMENT;
 
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -79,26 +76,6 @@ public class RegTaker<V extends Value<V>> implements RunnerLoop<MarketEvent> {
 
 	final MarketInstrument[] instruments() {
 		return instruments;
-	}
-
-	public final Set<MarketInstrument> cloneInstruments() {
-		final Set<MarketInstrument> insts = new HashSet<MarketInstrument>();
-
-		for (final MarketInstrument inst : instruments) {
-			insts.add(inst.freeze());
-		}
-
-		return Collections.unmodifiableSet(insts);
-	}
-
-	public final Set<MarketEvent> cloneEvents() {
-		final Set<MarketEvent> events = new HashSet<MarketEvent>();
-
-		for (final MarketEvent event : events) {
-			events.add(event);
-		}
-
-		return Collections.unmodifiableSet(events);
 	}
 
 	public static final boolean isValid(final MarketTaker<?> taker) {
