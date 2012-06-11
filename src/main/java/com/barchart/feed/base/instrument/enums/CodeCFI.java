@@ -34,6 +34,7 @@ public enum CodeCFI implements Value<CodeCFI> {
 
 	EQUITY_SHARES("ESXXXX"), //
 	EQUITY_OTHER("EMXXXX"), //
+	EQUITY_UNITTRUST("EUXXXX"), //
 
 	EQUITY("EXXXXX"), //
 
