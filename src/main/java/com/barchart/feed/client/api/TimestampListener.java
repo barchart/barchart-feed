@@ -6,7 +6,8 @@ package com.barchart.feed.client.api;
 import com.barchart.util.values.api.TimeValue;
 
 /**
- * @author g-litchfield
+ * Provides a callback method which will fire when the feed receives a time
+ * stamp message from a data source.
  * 
  */
 public interface TimestampListener {
