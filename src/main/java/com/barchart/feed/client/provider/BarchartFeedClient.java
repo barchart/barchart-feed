@@ -38,8 +38,8 @@ import com.barchart.feed.ddf.message.api.DDF_MarketBase;
 import com.barchart.util.values.api.Value;
 
 /**
- * @author g-litchfield
- *
+ * Single access point for Barchart feed services.
+ * 
  */
 public class BarchartFeedClient {
 
@@ -321,5 +321,4 @@ public class BarchartFeedClient {
 		return maker.take(instrument, field);
 	}
 
-	
 }
