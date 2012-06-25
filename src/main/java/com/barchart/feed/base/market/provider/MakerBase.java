@@ -143,17 +143,17 @@ public abstract class MakerBase<Message extends MarketMessage> implements
 			}
 
 			final MarketDo market = marketMap.get(instrument);
+			//
+			// if (!market.hasRegTakers()) {
+			// market.runSafe(safeRegister, regTaker);
+			//
+			// notifyRegListeners(market);
+			//
+			// } else if (!market.regList().contains(regTaker)) {
+			market.runSafe(safeRegister, regTaker);
 
-			if (!market.hasRegTakers()) {
-				market.runSafe(safeRegister, regTaker);
-
-				notifyRegListeners(market);
-
-			} else if (!market.regList().contains(regTaker)) {
-				market.runSafe(safeRegister, regTaker);
-
-				notifyRegListeners(market);
-			}
+			notifyRegListeners(market);
+			// }
 
 		}
 
