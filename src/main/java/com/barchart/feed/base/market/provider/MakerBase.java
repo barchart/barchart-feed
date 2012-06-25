@@ -144,7 +144,12 @@ public abstract class MakerBase<Message extends MarketMessage> implements
 
 			final MarketDo market = marketMap.get(instrument);
 
-			if (!market.regList().contains(regTaker)) {
+			if (!market.hasRegTakers()) {
+				market.runSafe(safeRegister, regTaker);
+
+				notifyRegListeners(market);
+
+			} else if (!market.regList().contains(regTaker)) {
 				market.runSafe(safeRegister, regTaker);
 
 				notifyRegListeners(market);
@@ -156,7 +161,8 @@ public abstract class MakerBase<Message extends MarketMessage> implements
 		for (final Entry<MarketInstrument, MarketDo> inst : marketMap
 				.entrySet()) {
 			/* If the Market has the updated taker */
-			if (inst.getValue().regList().contains(regTaker)) {
+			if (inst.getValue().hasRegTakers()
+					&& inst.getValue().regList().contains(regTaker)) {
 
 				/* Determine if the instrument is sill required by the taker */
 				boolean remove = true;
