@@ -27,6 +27,11 @@ public interface MarketMaker {
 	 */
 	<V extends Value<V>> boolean unregister(MarketTaker<V> taker);
 
+	/**
+	 * update an already registered taker
+	 */
+	<V extends Value<V>> boolean update(MarketTaker<V> taker);
+
 	//
 
 	int marketCount();
