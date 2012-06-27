@@ -7,8 +7,9 @@
  */
 package com.barchart.feed.base.market.provider;
 
-import static com.barchart.feed.base.market.enums.MarketField.INSTRUMENT;
+import static com.barchart.feed.base.market.enums.MarketField.*;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -19,28 +20,34 @@ import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.util.anno.NotMutable;
-import com.barchart.util.anno.ThreadSafe;
+import com.barchart.util.anno.NotThreadSafe;
 import com.barchart.util.thread.Runner;
 import com.barchart.util.thread.RunnerLoop;
 import com.barchart.util.values.api.Value;
 
 @NotMutable
-@ThreadSafe
+@NotThreadSafe
 public class RegTaker<V extends Value<V>> implements RunnerLoop<MarketEvent> {
 
 	private static final Logger log = LoggerFactory.getLogger(RegTaker.class);
 
 	private final MarketTaker<V> taker;
 
-	private final MarketField<V> field;
+	private MarketField<V> field;
 
-	private final EventSet eventSet;
+	private EventSet eventSet;
 
-	private final MarketInstrument[] instruments;
+	private MarketInstrument[] instruments;
 
 	public RegTaker(final MarketTaker<V> taker) {
 
 		this.taker = taker;
+
+		bind();
+
+	}
+
+	final void bind() {
 
 		this.field = taker.bindField();
 
@@ -108,6 +115,27 @@ public class RegTaker<V extends Value<V>> implements RunnerLoop<MarketEvent> {
 
 		return true;
 
+	}
+
+	final MarketField<V> getField() {
+		return field;
+	}
+
+	@Override
+	public String toString() {
+
+		final StringBuilder text = new StringBuilder(128);
+
+		text.append("filed = ");
+		text.append(getField().name());
+
+		// text.append("events = ");
+		// text.append(eventSet);
+
+		text.append("instruments = ");
+		text.append(Arrays.toString(getInstruments()));
+
+		return text.toString();
 	}
 
 }

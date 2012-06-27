@@ -20,6 +20,7 @@ import com.barchart.feed.base.instrument.values.MarketInstrument;
 import com.barchart.feed.base.market.MockMaker;
 import com.barchart.feed.base.market.MockMarketFactory;
 import com.barchart.feed.base.market.api.Market;
+import com.barchart.feed.base.market.api.MarketDo;
 import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.base.market.enums.MarketField;
@@ -30,7 +31,9 @@ public class TestMakerBaseUpdate {
 
 	@Before
 	public void setUp() throws Exception {
+
 		service = new MockDefinitionService();
+
 	}
 
 	@After
@@ -39,6 +42,8 @@ public class TestMakerBaseUpdate {
 
 	private MarketInstrument[] instArray;
 
+	private MarketField<?> field;
+
 	@Test
 	public void testRegisterMarketTaker() {
 
@@ -46,25 +51,28 @@ public class TestMakerBaseUpdate {
 
 		final MarketInstrument inst1 = service.lookup(newText("1"));
 
-		maker.register(inst1);
-		assertEquals(maker.marketCount(), 1);
+		// maker.register(inst1);
+		// assertEquals(maker.marketCount(), 1);
 
 		final MarketInstrument inst2 = service.lookup(newText("2"));
 
-		maker.register(inst2);
-		assertEquals(maker.marketCount(), 2);
+		// maker.register(inst2);
+		// assertEquals(maker.marketCount(), 2);
 
-		instArray = new MarketInstrument[] { inst1, inst2 };
+		final MarketInstrument inst3 = service.lookup(newText("3"));
 
-		final MarketTaker<Market> taker = new MarketTaker<Market>() {
+		//
+
+		final MarketTaker<?> taker = new MarketTaker<Market>() {
 			@Override
 			public MarketEvent[] bindEvents() {
 				return MarketEvent.values();
 			}
 
+			@SuppressWarnings("unchecked")
 			@Override
 			public MarketField<Market> bindField() {
-				return MarketField.MARKET;
+				return (MarketField<Market>) field;
 			}
 
 			@Override
@@ -78,17 +86,48 @@ public class TestMakerBaseUpdate {
 			}
 		};
 
+		field = MarketField.BAR_CURRENT;
+		instArray = new MarketInstrument[] { inst1, inst2 };
+
 		// original registration
 		assertTrue(maker.register(taker));
+
+		final RegTaker<?> regTaker = maker.getRegTaker(taker);
 
 		// following registration
 		assertFalse(maker.register(taker));
 
-		final RegTaker<?> regTaker = maker.getRegTaker(taker);
+		final MarketDo market = maker.getMarket(inst2);
 
-		final MarketInstrument[] regInstArary = regTaker.getInstruments();
+		// final List<RegTaker<?>> regList = market.regList();
 
-		assertArrayEquals(instArray, regInstArary);
+		//
+
+		assertTrue(maker.isRegistered(inst1));
+		assertTrue(maker.isRegistered(inst2));
+		assertEquals(maker.marketCount(), 2);
+
+		assertEquals(field, regTaker.getField());
+		assertArrayEquals(instArray, regTaker.getInstruments());
+
+		//
+
+		field = MarketField.BAR_PREVIOUS;
+		instArray = new MarketInstrument[] { inst2, inst3 };
+
+		maker.update(taker);
+
+		assertTrue(maker.isRegistered(inst2));
+		assertTrue(maker.isRegistered(inst3));
+		assertEquals(maker.marketCount(), 2);
+
+		assertEquals(field, regTaker.getField());
+		assertArrayEquals(instArray, regTaker.getInstruments());
+
+		//
+
+		maker.unregister(taker);
+		assertEquals(maker.marketCount(), 0);
 
 	}
 
