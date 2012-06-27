@@ -41,13 +41,13 @@ public abstract class MakerBase<Message extends MarketMessage> implements
 	protected final MarketFactory factory;
 
 	private final ConcurrentMap<MarketInstrument, MarketDo> marketMap = //
-			new ConcurrentHashMap<MarketInstrument, MarketDo>();
+	new ConcurrentHashMap<MarketInstrument, MarketDo>();
 
 	private final ConcurrentMap<MarketTaker<?>, RegTaker<?>> takerMap = //
-			new ConcurrentHashMap<MarketTaker<?>, RegTaker<?>>();
+	new ConcurrentHashMap<MarketTaker<?>, RegTaker<?>>();
 
 	private final CopyOnWriteArrayList<MarketRegListener> listenerList = //
-			new CopyOnWriteArrayList<MarketRegListener>();
+	new CopyOnWriteArrayList<MarketRegListener>();
 
 	// ########################
 
@@ -132,67 +132,72 @@ public abstract class MakerBase<Message extends MarketMessage> implements
 		}
 
 		/* Check each instrument in updated taker, make sure subscribed */
-		for (final MarketInstrument instrument : regTaker.instruments()) {
+		for (final MarketInstrument takerInst : regTaker.instruments()) {
 
-			if (!isValid(instrument)) {
+			if (!isValid(takerInst)) {
 				continue;
 			}
 
-			if (!isRegistered(instrument)) {
-				register(instrument);
+			if (!isRegistered(takerInst)) {
+				register(takerInst);
 			}
 
-			final MarketDo market = marketMap.get(instrument);
-			//
+			final MarketDo market = marketMap.get(takerInst);
+
 			// if (!market.hasRegTakers()) {
 			// market.runSafe(safeRegister, regTaker);
 			//
 			// notifyRegListeners(market);
 			//
 			// } else if (!market.regList().contains(regTaker)) {
+
 			market.runSafe(safeRegister, regTaker);
 
 			notifyRegListeners(market);
+
 			// }
 
 		}
 
 		/* Check for removal */
-		for (final Entry<MarketInstrument, MarketDo> inst : marketMap
+		for (final Entry<MarketInstrument, MarketDo> entry : marketMap
 				.entrySet()) {
+
+			final MarketInstrument inst = entry.getKey();
+			final MarketDo market = entry.getValue();
+
 			/* If the Market has the updated taker */
-			if (inst.getValue().hasRegTakers()
-					&& inst.getValue().regList().contains(regTaker)) {
+			if (market.hasRegTakers() && market.regList().contains(regTaker)) {
 
 				/* Determine if the instrument is sill required by the taker */
-				boolean remove = true;
-				for (final MarketInstrument instrument : regTaker.instruments()) {
+				boolean mustRemove = true;
 
-					if (inst.getKey().equals(instrument)) {
-						remove = false;
+				for (final MarketInstrument takerInst : regTaker.instruments()) {
+					if (inst.equals(takerInst)) {
+						mustRemove = false;
 					}
-
 				}
 
 				/* If not, then remove */
-				if (remove) {
-					inst.getValue().regRemove(regTaker);
+				if (mustRemove) {
+					market.regRemove(regTaker);
 				}
+
 			}
+
 		}
 
 		return true;
 	}
 
 	private final MarketSafeRunner<Void, RegTaker<?>> safeRegister = //
-			new MarketSafeRunner<Void, RegTaker<?>>() {
-				@Override
-				public Void runSafe(final MarketDo market,
-						final RegTaker<?> regTaker) {
-					market.regAdd(regTaker);
-					return null;
-				}
-			};
+	new MarketSafeRunner<Void, RegTaker<?>>() {
+		@Override
+		public Void runSafe(final MarketDo market, final RegTaker<?> regTaker) {
+			market.regAdd(regTaker);
+			return null;
+		}
+	};
 
 	@Override
 	public synchronized final <V extends Value<V>> boolean unregister(
@@ -233,14 +238,13 @@ public abstract class MakerBase<Message extends MarketMessage> implements
 	}
 
 	private final MarketSafeRunner<Void, RegTaker<?>> safeUnregister = //
-			new MarketSafeRunner<Void, RegTaker<?>>() {
-				@Override
-				public Void runSafe(final MarketDo market,
-						final RegTaker<?> regTaker) {
-					market.regRemove(regTaker);
-					return null;
-				}
-			};
+	new MarketSafeRunner<Void, RegTaker<?>>() {
+		@Override
+		public Void runSafe(final MarketDo market, final RegTaker<?> regTaker) {
+			market.regRemove(regTaker);
+			return null;
+		}
+	};
 
 	// ########################
 
@@ -264,15 +268,14 @@ public abstract class MakerBase<Message extends MarketMessage> implements
 	}
 
 	private final MarketSafeRunner<Void, Message> safeMake = //
-			new MarketSafeRunner<Void, Message>() {
-				@Override
-				public Void
-						runSafe(final MarketDo market, final Message message) {
-					make(message, market);
-					market.fireEvents();
-					return null;
-				}
-			};
+	new MarketSafeRunner<Void, Message>() {
+		@Override
+		public Void runSafe(final MarketDo market, final Message message) {
+			make(message, market);
+			market.fireEvents();
+			return null;
+		}
+	};
 
 	protected abstract void make(Message message, MarketDo market);
 
@@ -294,13 +297,13 @@ public abstract class MakerBase<Message extends MarketMessage> implements
 	}
 
 	private final MarketSafeRunner<Value<?>, MarketField<?>> safeTake = //
-			new MarketSafeRunner<Value<?>, MarketField<?>>() {
-				@Override
-				public Value<?> runSafe(final MarketDo market,
-						final MarketField<?> field) {
-					return market.get(field).freeze();
-				}
-			};
+	new MarketSafeRunner<Value<?>, MarketField<?>>() {
+		@Override
+		public Value<?> runSafe(final MarketDo market,
+				final MarketField<?> field) {
+			return market.get(field).freeze();
+		}
+	};
 
 	// ########################
 
