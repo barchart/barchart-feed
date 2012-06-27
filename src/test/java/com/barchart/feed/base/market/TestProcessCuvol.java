@@ -28,7 +28,7 @@ import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.base.cuvol.api.MarketCuvol;
 import com.barchart.feed.base.cuvol.api.MarketCuvolEntry;
-import com.barchart.feed.base.instrument.MockService;
+import com.barchart.feed.base.instrument.MockDefinitionService;
 import com.barchart.feed.base.instrument.api.DefinitionService;
 import com.barchart.feed.base.instrument.values.MarketInstrument;
 import com.barchart.feed.base.market.api.Market;
@@ -45,7 +45,7 @@ public class TestProcessCuvol {
 
 	@Before
 	public void setUp() throws Exception {
-		service = new MockService();
+		service = new MockDefinitionService();
 	}
 
 	@After

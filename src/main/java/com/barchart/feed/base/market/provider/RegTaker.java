@@ -74,7 +74,7 @@ public class RegTaker<V extends Value<V>> implements RunnerLoop<MarketEvent> {
 
 	}
 
-	final MarketInstrument[] instruments() {
+	final MarketInstrument[] getInstruments() {
 		return instruments;
 	}
 

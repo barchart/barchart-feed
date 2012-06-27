@@ -16,7 +16,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.barchart.feed.base.instrument.MockService;
+import com.barchart.feed.base.instrument.MockDefinitionService;
 import com.barchart.feed.base.instrument.api.DefinitionService;
 import com.barchart.feed.base.instrument.values.MarketInstrument;
 import com.barchart.feed.base.market.MockMaker;
@@ -32,7 +32,7 @@ public class TestMakerBase {
 
 	@Before
 	public void setUp() throws Exception {
-		service = new MockService();
+		service = new MockDefinitionService();
 	}
 
 	@After

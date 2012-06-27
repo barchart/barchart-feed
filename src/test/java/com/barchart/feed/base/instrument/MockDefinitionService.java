@@ -21,12 +21,12 @@ import com.barchart.feed.base.instrument.provider.VarInstrument;
 import com.barchart.feed.base.instrument.values.MarketInstrument;
 import com.barchart.util.values.api.TextValue;
 
-public class MockService implements DefinitionService {
+public class MockDefinitionService implements DefinitionService<MarketInstrument> {
 
 	public final Map<TextValue, MarketInstrument> map = //
 	new ConcurrentHashMap<TextValue, MarketInstrument>();
 
-	public MockService() {
+	public MockDefinitionService() {
 
 		MarketDoInstrument inst;
 		TextValue id;

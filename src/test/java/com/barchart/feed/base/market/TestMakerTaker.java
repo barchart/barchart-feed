@@ -26,7 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.base.bar.api.MarketBar;
-import com.barchart.feed.base.instrument.MockService;
+import com.barchart.feed.base.instrument.MockDefinitionService;
 import com.barchart.feed.base.instrument.api.DefinitionService;
 import com.barchart.feed.base.instrument.values.MarketInstrument;
 import com.barchart.feed.base.market.api.Market;
@@ -45,7 +45,7 @@ public class TestMakerTaker {
 
 	@Before
 	public void setUp() throws Exception {
-		service = new MockService();
+		service = new MockDefinitionService();
 	}
 
 	@After

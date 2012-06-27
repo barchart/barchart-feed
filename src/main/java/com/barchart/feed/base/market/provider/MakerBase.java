@@ -91,7 +91,7 @@ public abstract class MakerBase<Message extends MarketMessage> implements
 		}
 
 		if (wasAdded) {
-			for (final MarketInstrument instrument : regTaker.instruments()) {
+			for (final MarketInstrument instrument : regTaker.getInstruments()) {
 
 				if (!isValid(instrument)) {
 					continue;
@@ -132,7 +132,7 @@ public abstract class MakerBase<Message extends MarketMessage> implements
 		}
 
 		/* Check each instrument in updated taker, make sure subscribed */
-		for (final MarketInstrument takerInst : regTaker.instruments()) {
+		for (final MarketInstrument takerInst : regTaker.getInstruments()) {
 
 			if (!isValid(takerInst)) {
 				continue;
@@ -172,7 +172,7 @@ public abstract class MakerBase<Message extends MarketMessage> implements
 				/* Determine if the instrument is sill required by the taker */
 				boolean mustRemove = true;
 
-				for (final MarketInstrument takerInst : regTaker.instruments()) {
+				for (final MarketInstrument takerInst : regTaker.getInstruments()) {
 					if (inst.equals(takerInst)) {
 						mustRemove = false;
 					}
@@ -212,7 +212,7 @@ public abstract class MakerBase<Message extends MarketMessage> implements
 		final boolean wasRemoved = regTaker != null;
 
 		if (wasRemoved) {
-			for (final MarketInstrument instrument : regTaker.instruments()) {
+			for (final MarketInstrument instrument : regTaker.getInstruments()) {
 
 				if (!isValid(instrument)) {
 					continue;
@@ -458,6 +458,10 @@ public abstract class MakerBase<Message extends MarketMessage> implements
 	@Override
 	public void appendMarketProvider(final MarketFactory marketFactory) {
 
+	}
+
+	protected RegTaker<?> getRegTaker(final MarketTaker<?> taker) {
+		return takerMap.get(taker);
 	}
 
 }

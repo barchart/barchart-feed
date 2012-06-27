@@ -41,7 +41,7 @@ import com.barchart.feed.base.bar.api.MarketBar;
 import com.barchart.feed.base.book.api.MarketBook;
 import com.barchart.feed.base.book.api.MarketBookEntry;
 import com.barchart.feed.base.book.api.MarketBookTop;
-import com.barchart.feed.base.instrument.MockService;
+import com.barchart.feed.base.instrument.MockDefinitionService;
 import com.barchart.feed.base.instrument.api.DefinitionService;
 import com.barchart.feed.base.instrument.values.MarketInstrument;
 import com.barchart.feed.base.market.api.Market;
@@ -62,7 +62,7 @@ public class TestProcessBook {
 
 	@Before
 	public void setUp() throws Exception {
-		service = new MockService();
+		service = new MockDefinitionService();
 	}
 
 	@After
