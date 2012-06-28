@@ -7,13 +7,8 @@
  */
 package com.barchart.feed.base.market.provider;
 
-import static com.barchart.feed.base.instrument.enums.InstrumentField.PRICE_STEP;
-import static com.barchart.feed.base.market.enums.MarketField.CUVOL;
-import static com.barchart.feed.base.market.enums.MarketField.CUVOL_LAST;
-import static com.barchart.feed.base.market.enums.MarketField.INSTRUMENT;
-import static com.barchart.feed.base.market.enums.MarketField.MARKET;
-import static com.barchart.feed.base.market.enums.MarketField.STATE;
-import static com.barchart.feed.base.market.enums.MarketField.TRADE;
+import static com.barchart.feed.base.instrument.enums.InstrumentField.*;
+import static com.barchart.feed.base.market.enums.MarketField.*;
 
 import java.util.List;
 import java.util.Set;
@@ -122,6 +117,22 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 		}
 
 		reg.regRemove(regTaker);
+
+		if (reg.isEmptyRegs()) {
+			reg = null;
+		}
+
+	}
+
+	@Override
+	public final void regUpdate(final RegTaker<?> regTaker) {
+
+		if (reg == null) {
+			assert false : "unexpected";
+			return;
+		}
+
+		reg.regUpdate(regTaker);
 
 		if (reg.isEmptyRegs()) {
 			reg = null;
@@ -353,7 +364,7 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 		if (reg == null) {
 			return RegTakerList.EMPTY;
 		} else {
-			return reg.regsTakerList();
+			return reg.getRegTakerList();
 		}
 
 	}
@@ -366,7 +377,7 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 		if (reg == null) {
 			return EventSet.EMPTY;
 		} else {
-			return reg.regEventSet();
+			return reg.getRegEventSet();
 		}
 
 	}

@@ -22,7 +22,7 @@
 	<properties>
 
 		<!-- MAIN -->
-		<barchartUtilVersion>2.0.2</barchartUtilVersion>
+		<barchartUtilVersion>2.0.4-SNAPSHOT</barchartUtilVersion>
 	
 	</properties>
 

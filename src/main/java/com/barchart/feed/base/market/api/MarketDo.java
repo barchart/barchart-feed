@@ -36,6 +36,8 @@ public interface MarketDo extends Market {
 
 	void regRemove(RegTaker<?> regTaker);
 
+	void regUpdate(RegTaker<?> regTaker);
+
 	boolean hasRegTakers();
 
 	List<RegTaker<?>> regList();

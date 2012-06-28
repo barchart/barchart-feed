@@ -7,9 +7,12 @@
  */
 package com.barchart.feed.base.market.provider;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.base.market.api.Market;
 import com.barchart.feed.base.market.enums.MarketEvent;
@@ -21,16 +24,18 @@ import com.barchart.util.values.api.Value;
 @NotThreadSafe
 class RegCenter {
 
-	// parent market
+	static final Logger log = LoggerFactory.getLogger(RegCenter.class);
+
+	/** parent market */
 	private final Market market;
 
-	// current events
+	/** current events collector */
 	private final EventSet eventSet = new EventSet();
 
-	// registered event takers
+	/** registered takers for event */
 	private final EventMap<RegTakerList> eventTakerMap = new EventMap<RegTakerList>();
 
-	// field-value cache during event fire
+	/** field-value cache during event fire */
 	private final FieldMap<Value<?>> fieldValueMap = new FieldMap<Value<?>>();
 
 	@SuppressWarnings("unchecked")
@@ -56,9 +61,6 @@ class RegCenter {
 	}
 
 	final void eventsAdd(final MarketEvent event) {
-
-		// System.out.println("Adding Event of " + event);
-
 		eventSet.add(event);
 	}
 
@@ -75,10 +77,9 @@ class RegCenter {
 
 				RegTakerList list = eventTakerMap.get(event);
 
-				while (list == null) {
+				if (list == null) {
 					list = new RegTakerList();
 					eventTakerMap.put(event, list);
-					list = eventTakerMap.get(event);
 				}
 
 				list.add(regTaker);
@@ -117,13 +118,71 @@ class RegCenter {
 
 	}
 
-	final void regsClear() {
+	final void regUpdate(final RegTaker<?> regTaker) {
+
+		/** past snapshot */
+		final EventSet pastEvents = new EventSet();
+		pastEvents.bitSet(regTaker.getEvents().bitSet());
+
+		/** next snapshot */
+		final EventSet nextEvents = new EventSet(//
+				regTaker.getTaker().bindEvents());
+
+		final Runner<Void, MarketEvent> task = //
+		new Runner<Void, MarketEvent>() {
+			@Override
+			final public Void run(final MarketEvent event) {
+
+				final boolean isPast = pastEvents.contains(event);
+				final boolean isNext = nextEvents.contains(event);
+
+				// log.debug("isPast : {} ; isNext : {}", isPast, isNext);
+
+				final boolean mustNotChange = !(isPast ^ isNext);
+
+				if (mustNotChange) {
+					return null;
+				}
+
+				RegTakerList list = eventTakerMap.get(event);
+
+				final boolean mustAdd = !isPast && isNext;
+
+				if (mustAdd) {
+					if (list == null) {
+						list = new RegTakerList();
+						eventTakerMap.put(event, list);
+					}
+					list.add(regTaker);
+				} else {
+					if (list != null) {
+						list.remove(regTaker);
+						if (list.isEmpty()) {
+							eventTakerMap.remove(event);
+						}
+					}
+				}
+
+				return null;
+
+			}
+		};
+
+		/** remote past */
+		pastEvents.runLoop(task, null);
+
+		/** add next */
+		nextEvents.runLoop(task, null);
+
+	}
+
+	final void regClear() {
 		eventTakerMap.clear();
 	}
 
 	final void fireEvents() {
 
-		// overlap current with registered
+		/** overlap current with registered */
 		eventSet.bitMaskAnd(eventTakerMap.bitSet());
 
 		eventSet.runLoop(eventTask, null);
@@ -169,9 +228,9 @@ class RegCenter {
 		return eventTakerMap.isEmpty();
 	}
 
-	final List<RegTaker<?>> regsTakerList() {
+	final List<RegTaker<?>> getRegTakerList() {
 
-		final List<RegTaker<?>> result = new LinkedList<RegTaker<?>>();
+		final List<RegTaker<?>> result = new ArrayList<RegTaker<?>>();
 
 		for (final RegTakerList list : eventTakerMap.values()) {
 			result.addAll(list);
@@ -181,7 +240,7 @@ class RegCenter {
 
 	}
 
-	final Set<MarketEvent> regEventSet() {
+	final Set<MarketEvent> getRegEventSet() {
 		return eventTakerMap.keySet();
 	}
 
