@@ -11,6 +11,7 @@ import com.barchart.feed.base.instrument.values.MarketInstrument;
 import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.util.values.api.Value;
 
+/** market consumer interface */
 public interface MarketMaker {
 
 	boolean isRegistered(MarketTaker<?> taker);
@@ -47,6 +48,6 @@ public interface MarketMaker {
 	 * @return NULL_VALUE if market is not present
 	 */
 	<S extends MarketInstrument, V extends Value<V>> V //
-			take(S instrument, MarketField<V> field);
+	take(S instrument, MarketField<V> field);
 
 }

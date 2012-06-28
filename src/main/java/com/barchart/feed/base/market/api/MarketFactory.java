@@ -7,8 +7,6 @@
  */
 package com.barchart.feed.base.market.api;
 
-
-
 public interface MarketFactory {
 
 	MarketDo newMarket();

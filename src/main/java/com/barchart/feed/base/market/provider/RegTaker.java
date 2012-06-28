@@ -33,11 +33,11 @@ public class RegTaker<V extends Value<V>> implements RunnerLoop<MarketEvent> {
 
 	private final MarketTaker<V> taker;
 
-	private MarketField<V> field;
+	private volatile MarketField<V> field;
 
-	private EventSet eventSet;
+	private volatile EventSet eventSet;
 
-	private MarketInstrument[] instruments;
+	private volatile MarketInstrument[] instruments;
 
 	public RegTaker(final MarketTaker<V> taker) {
 
@@ -67,8 +67,6 @@ public class RegTaker<V extends Value<V>> implements RunnerLoop<MarketEvent> {
 
 		final V value = regCenter.cache(field);
 
-		// System.out.println("RegTaker Fire : " + event + " inst" + inst);
-
 		taker.onMarketEvent(event, inst, value);
 
 	}
@@ -79,6 +77,14 @@ public class RegTaker<V extends Value<V>> implements RunnerLoop<MarketEvent> {
 
 		eventSet.runLoop(task, list);
 
+	}
+
+	final EventSet getEvents() {
+		return eventSet;
+	}
+
+	final MarketField<V> getField() {
+		return field;
 	}
 
 	final MarketInstrument[] getInstruments() {
@@ -115,10 +121,6 @@ public class RegTaker<V extends Value<V>> implements RunnerLoop<MarketEvent> {
 
 		return true;
 
-	}
-
-	final MarketField<V> getField() {
-		return field;
 	}
 
 	@Override
