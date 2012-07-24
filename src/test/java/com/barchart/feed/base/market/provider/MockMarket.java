@@ -5,6 +5,7 @@ package com.barchart.feed.base.market.provider;
 
 import static com.barchart.feed.base.bar.enums.MarketBarField.BAR_TIME;
 import static com.barchart.feed.base.bar.enums.MarketBarField.CLOSE;
+import static com.barchart.feed.base.bar.enums.MarketBarField.TRADE_DATE;
 import static com.barchart.feed.base.bar.enums.MarketBarField.VOLUME;
 import static com.barchart.feed.base.bar.enums.MarketBarType.CURRENT;
 import static com.barchart.feed.base.market.enums.MarketEvent.MARKET_UPDATED;
@@ -20,6 +21,7 @@ import static com.barchart.feed.base.market.enums.MarketField.BOOK;
 import static com.barchart.feed.base.market.enums.MarketField.INSTRUMENT;
 import static com.barchart.feed.base.market.enums.MarketField.MARKET_TIME;
 import static com.barchart.feed.base.trade.enums.MarketTradeField.PRICE;
+import static com.barchart.feed.base.trade.enums.MarketTradeField.SESSION_DATE;
 import static com.barchart.feed.base.trade.enums.MarketTradeField.SIZE;
 import static com.barchart.feed.base.trade.enums.MarketTradeField.TRADE_TIME;
 import static com.barchart.feed.base.trade.enums.MarketTradeField.TYPE;
@@ -169,12 +171,13 @@ public class MockMarket extends VarMarket {
 
 	@Override
 	public void setTrade(final MarketBarType type, final PriceValue price,
-			final SizeValue size, final TimeValue time) {
+			final SizeValue size, final TimeValue time, final TimeValue date) {
 
 		assert type != null;
 		assert price != null;
 		assert size != null;
 		assert time != null;
+		assert date != null;
 
 		final MarketDoTrade trade = loadTrade();
 
@@ -182,8 +185,9 @@ public class MockMarket extends VarMarket {
 		trade.set(PRICE, price);
 		trade.set(SIZE, size);
 		trade.set(TRADE_TIME, time);
+		trade.set(SESSION_DATE, date);
 
-		applyTradeToBar(CURRENT, price, size, time);
+		applyTradeToBar(CURRENT, price, size, time, date);
 
 		makeCuvol(price, size);
 
@@ -210,7 +214,8 @@ public class MockMarket extends VarMarket {
 	}
 
 	private final void applyTradeToBar(final MarketBarType type,
-			final PriceValue price, final SizeValue size, final TimeValue time) {
+			final PriceValue price, final SizeValue size, final TimeValue time,
+			final TimeValue date) {
 
 		final MarketDoBar bar = loadBar(type.field);
 
@@ -230,6 +235,7 @@ public class MockMarket extends VarMarket {
 		// ### time
 
 		bar.set(BAR_TIME, time);
+		bar.set(TRADE_DATE, date);
 
 	}
 

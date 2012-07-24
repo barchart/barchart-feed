@@ -127,7 +127,7 @@ public class MockVarMarket extends VarMarket {
 	 */
 	@Override
 	public void setTrade(final MarketBarType type, final PriceValue price,
-			final SizeValue size, final TimeValue time) {
+			final SizeValue size, final TimeValue time, final TimeValue date) {
 		// TODO Auto-generated method stub
 
 	}

@@ -15,13 +15,13 @@ import com.barchart.util.values.api.TimeValue;
 
 public class MockMsgTrade extends MockMessage {
 
-	public MockMsgTrade(MarketInstrument inst) {
+	public MockMsgTrade(final MarketInstrument inst) {
 		super(inst);
 	}
 
 	@Override
 	public <Result, Param> Result accept(
-			MockMessageVisitor<Result, Param> visitor, Param param) {
+			final MockMessageVisitor<Result, Param> visitor, final Param param) {
 		return visitor.visit(this, param);
 	}
 
@@ -32,5 +32,7 @@ public class MockMsgTrade extends MockMessage {
 	public SizeValue size;
 
 	public TimeValue time;
+
+	public TimeValue date;
 
 }

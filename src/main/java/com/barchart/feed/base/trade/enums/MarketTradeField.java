@@ -7,8 +7,10 @@
  */
 package com.barchart.feed.base.trade.enums;
 
-import static com.barchart.feed.base.bar.enums.MarketBarType.*;
-import static com.barchart.util.values.provider.ValueConst.*;
+import static com.barchart.feed.base.bar.enums.MarketBarType.NULL_BAR_TYPE;
+import static com.barchart.util.values.provider.ValueConst.NULL_PRICE;
+import static com.barchart.util.values.provider.ValueConst.NULL_SIZE;
+import static com.barchart.util.values.provider.ValueConst.NULL_TIME;
 
 import com.barchart.feed.base.bar.enums.MarketBarType;
 import com.barchart.util.anno.NotMutable;
@@ -39,6 +41,9 @@ public final class MarketTradeField<V extends Value<V>> extends
 	/** last trade time */
 	public static final MarketTradeField<TimeValue> TRADE_TIME = NEW(NULL_TIME);
 
+	/** last trade day/session */
+	public static final MarketTradeField<TimeValue> SESSION_DATE = NEW(NULL_TIME);
+
 	// ##################################
 
 	public static int size() {
@@ -66,7 +71,8 @@ public final class MarketTradeField<V extends Value<V>> extends
 		mask = ONE << ordinal();
 	}
 
-	private static <X extends Value<X>> MarketTradeField<X> NEW(X defaultValue) {
+	private static <X extends Value<X>> MarketTradeField<X> NEW(
+			final X defaultValue) {
 		return new MarketTradeField<X>(defaultValue);
 	}
 

@@ -42,8 +42,9 @@ public class MockMaker extends MakerBase<MockMessage> implements
 		final PriceValue price = message.price;
 		final SizeValue size = message.size;
 		final TimeValue time = message.time;
+		final TimeValue date = message.date;
 
-		market.setTrade(type, price, size, time);
+		market.setTrade(type, price, size, time, date);
 
 		return null;
 

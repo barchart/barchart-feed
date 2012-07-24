@@ -66,7 +66,7 @@ public interface MarketDo extends Market {
 
 	/**  */
 	void setTrade(MarketBarType type, PriceValue price, SizeValue size,
-			TimeValue time);
+			TimeValue time, TimeValue date);
 
 	//
 
