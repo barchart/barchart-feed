@@ -95,6 +95,7 @@ public class TestProcessBar {
 		msgTrade.price = newPrice(1230, -1);
 		msgTrade.size = newSize(17);
 		msgTrade.time = newTime(345679);
+		msgTrade.date = newTime(345670);
 
 		maker.make(msgTrade);
 		market = maker.take(inst, MARKET);
@@ -130,6 +131,7 @@ public class TestProcessBar {
 		msgTrade.price = newPrice(1230, -1);
 		msgTrade.size = newSize(13);
 		msgTrade.time = newTime(345678); // past trade
+		msgTrade.date = newTime(345670); // past trade
 
 		maker.make(msgTrade);
 
@@ -145,6 +147,7 @@ public class TestProcessBar {
 		msgTrade.price = newPrice(1240, -1);
 		msgTrade.size = newSize(13);
 		msgTrade.time = newTime(345680); // next trade
+		msgTrade.date = newTime(345670); // next trade
 
 		maker.make(msgTrade);
 		market = maker.take(inst, MARKET); // updated market
@@ -176,6 +179,7 @@ public class TestProcessBar {
 		msgTrade.price = newPrice(1200, -1);
 		msgTrade.size = newSize(111);
 		msgTrade.time = newTime(345700);
+		msgTrade.date = newTime(345670); // next trade
 
 		maker.make(msgTrade);
 		market = maker.take(inst, MARKET); // updated market

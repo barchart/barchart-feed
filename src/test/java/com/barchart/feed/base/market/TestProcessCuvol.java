@@ -81,6 +81,7 @@ public class TestProcessCuvol {
 		msgTrade.price = newPrice(100000, -3);
 		msgTrade.size = newSize(10);
 		msgTrade.time = newTime(0);
+		msgTrade.date = newTime(0);
 
 		maker.make(msgTrade);
 
@@ -106,6 +107,7 @@ public class TestProcessCuvol {
 		msgTrade.price = newPrice(100000, -3);
 		msgTrade.size = newSize(10);
 		msgTrade.time = newTime(0);
+		msgTrade.date = newTime(0);
 
 		maker.make(msgTrade);
 
@@ -125,6 +127,7 @@ public class TestProcessCuvol {
 		msgTrade.price = newPrice(100375, -3);
 		msgTrade.size = newSize(7);
 		msgTrade.time = newTime(0);
+		msgTrade.date = newTime(0);
 
 		maker.make(msgTrade);
 
@@ -145,6 +148,7 @@ public class TestProcessCuvol {
 		msgTrade.price = newPrice(100375, -3);
 		msgTrade.size = newSize(13);
 		msgTrade.time = newTime(0);
+		msgTrade.date = newTime(0);
 
 		maker.make(msgTrade);
 

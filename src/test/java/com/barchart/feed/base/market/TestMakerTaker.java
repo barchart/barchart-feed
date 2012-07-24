@@ -126,6 +126,7 @@ public class TestMakerTaker {
 		msgTrade.price = newPrice(100, 0);
 		msgTrade.size = newSize(10);
 		msgTrade.time = newTime(0);
+		msgTrade.date = newTime(0);
 
 		maker.make(msgTrade);
 
@@ -207,6 +208,7 @@ public class TestMakerTaker {
 		msgTrade.price = newPrice(100, 0);
 		msgTrade.size = newSize(17);
 		msgTrade.time = newTime(0);
+		msgTrade.date = newTime(0);
 
 		maker.make(msgTrade);
 
