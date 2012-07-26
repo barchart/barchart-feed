@@ -21,7 +21,6 @@ import static com.barchart.feed.base.market.enums.MarketField.BOOK;
 import static com.barchart.feed.base.market.enums.MarketField.INSTRUMENT;
 import static com.barchart.feed.base.market.enums.MarketField.MARKET_TIME;
 import static com.barchart.feed.base.trade.enums.MarketTradeField.PRICE;
-import static com.barchart.feed.base.trade.enums.MarketTradeField.SESSION_DATE;
 import static com.barchart.feed.base.trade.enums.MarketTradeField.SIZE;
 import static com.barchart.feed.base.trade.enums.MarketTradeField.TRADE_TIME;
 import static com.barchart.feed.base.trade.enums.MarketTradeField.TYPE;
@@ -38,6 +37,10 @@ import com.barchart.feed.base.instrument.values.MarketInstrument;
 import com.barchart.feed.base.state.api.MarketState;
 import com.barchart.feed.base.state.enums.MarketStateEntry;
 import com.barchart.feed.base.trade.api.MarketDoTrade;
+import com.barchart.feed.base.trade.enums.MarketTradeField;
+import com.barchart.feed.base.trade.enums.MarketTradeSequencing;
+import com.barchart.feed.base.trade.enums.MarketTradeSession;
+import com.barchart.feed.base.trade.enums.MarketTradeType;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
 import com.barchart.util.values.api.TimeValue;
@@ -170,7 +173,9 @@ public class MockMarket extends VarMarket {
 	}
 
 	@Override
-	public void setTrade(final MarketBarType type, final PriceValue price,
+	public void setTrade(final MarketTradeType type,
+			final MarketTradeSession session,
+			final MarketTradeSequencing sequencing, final PriceValue price,
 			final SizeValue size, final TimeValue time, final TimeValue date) {
 
 		assert type != null;
@@ -185,7 +190,7 @@ public class MockMarket extends VarMarket {
 		trade.set(PRICE, price);
 		trade.set(SIZE, size);
 		trade.set(TRADE_TIME, time);
-		trade.set(SESSION_DATE, date);
+		trade.set(MarketTradeField.TRADE_DATE, date);
 
 		applyTradeToBar(CURRENT, price, size, time, date);
 

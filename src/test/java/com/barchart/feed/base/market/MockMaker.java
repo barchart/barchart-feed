@@ -7,7 +7,6 @@
  */
 package com.barchart.feed.base.market;
 
-import com.barchart.feed.base.bar.enums.MarketBarType;
 import com.barchart.feed.base.book.enums.MarketBookAction;
 import com.barchart.feed.base.book.enums.MarketBookSide;
 import com.barchart.feed.base.book.enums.MarketBookType;
@@ -19,6 +18,9 @@ import com.barchart.feed.base.message.MockMessage;
 import com.barchart.feed.base.message.MockMessageVisitor;
 import com.barchart.feed.base.message.MockMsgBook;
 import com.barchart.feed.base.message.MockMsgTrade;
+import com.barchart.feed.base.trade.enums.MarketTradeSequencing;
+import com.barchart.feed.base.trade.enums.MarketTradeSession;
+import com.barchart.feed.base.trade.enums.MarketTradeType;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
 import com.barchart.util.values.api.TimeValue;
@@ -38,13 +40,15 @@ public class MockMaker extends MakerBase<MockMessage> implements
 	@Override
 	public Void visit(final MockMsgTrade message, final MarketDo market) {
 
-		final MarketBarType type = message.type;
+		final MarketTradeType type = message.type;
+		final MarketTradeSession session = message.session;
+		final MarketTradeSequencing sequencing = message.sequencing;
 		final PriceValue price = message.price;
 		final SizeValue size = message.size;
 		final TimeValue time = message.time;
 		final TimeValue date = message.date;
 
-		market.setTrade(type, price, size, time, date);
+		market.setTrade(type, session, sequencing, price, size, time, date);
 
 		return null;
 

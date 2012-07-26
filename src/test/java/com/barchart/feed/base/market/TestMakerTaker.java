@@ -8,8 +8,10 @@
 package com.barchart.feed.base.market;
 
 import static com.barchart.feed.base.bar.enums.MarketBarField.VOLUME;
-import static com.barchart.feed.base.bar.enums.MarketBarType.CURRENT_NET;
 import static com.barchart.feed.base.market.enums.MarketField.BAR_CURRENT;
+import static com.barchart.feed.base.trade.enums.MarketTradeSequencing.NORMAL;
+import static com.barchart.feed.base.trade.enums.MarketTradeSession.DEFAULT;
+import static com.barchart.feed.base.trade.enums.MarketTradeType.FUTURE_ELECTRONIC;
 import static com.barchart.util.values.provider.ValueBuilder.newPrice;
 import static com.barchart.util.values.provider.ValueBuilder.newSize;
 import static com.barchart.util.values.provider.ValueBuilder.newText;
@@ -122,7 +124,9 @@ public class TestMakerTaker {
 		//
 
 		final MockMsgTrade msgTrade = new MockMsgTrade(inst);
-		msgTrade.type = CURRENT_NET;
+		msgTrade.type = FUTURE_ELECTRONIC;
+		msgTrade.session = DEFAULT;
+		msgTrade.sequencing = NORMAL;
 		msgTrade.price = newPrice(100, 0);
 		msgTrade.size = newSize(10);
 		msgTrade.time = newTime(0);
@@ -204,7 +208,9 @@ public class TestMakerTaker {
 		//
 
 		final MockMsgTrade msgTrade = new MockMsgTrade(inst);
-		msgTrade.type = CURRENT_NET;
+		msgTrade.type = FUTURE_ELECTRONIC;
+		msgTrade.session = DEFAULT;
+		msgTrade.sequencing = NORMAL;
 		msgTrade.price = newPrice(100, 0);
 		msgTrade.size = newSize(17);
 		msgTrade.time = newTime(0);

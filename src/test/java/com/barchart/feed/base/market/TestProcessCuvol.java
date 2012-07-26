@@ -7,12 +7,13 @@
  */
 package com.barchart.feed.base.market;
 
-import static com.barchart.feed.base.bar.enums.MarketBarType.CURRENT;
-import static com.barchart.feed.base.bar.enums.MarketBarType.CURRENT_NET;
-import static com.barchart.feed.base.bar.enums.MarketBarType.CURRENT_PIT;
 import static com.barchart.feed.base.market.enums.MarketField.CUVOL;
 import static com.barchart.feed.base.market.enums.MarketField.CUVOL_LAST;
 import static com.barchart.feed.base.market.enums.MarketField.MARKET;
+import static com.barchart.feed.base.trade.enums.MarketTradeSequencing.NORMAL;
+import static com.barchart.feed.base.trade.enums.MarketTradeSession.DEFAULT;
+import static com.barchart.feed.base.trade.enums.MarketTradeType.FUTURE_ELECTRONIC;
+import static com.barchart.feed.base.trade.enums.MarketTradeType.FUTURE_PIT;
 import static com.barchart.util.values.provider.ValueBuilder.newPrice;
 import static com.barchart.util.values.provider.ValueBuilder.newSize;
 import static com.barchart.util.values.provider.ValueBuilder.newText;
@@ -77,7 +78,9 @@ public class TestProcessCuvol {
 		//
 
 		msgTrade = new MockMsgTrade(inst);
-		msgTrade.type = CURRENT_NET;
+		msgTrade.type = FUTURE_ELECTRONIC;
+		msgTrade.session = DEFAULT;
+		msgTrade.sequencing = NORMAL;
 		msgTrade.price = newPrice(100000, -3);
 		msgTrade.size = newSize(10);
 		msgTrade.time = newTime(0);
@@ -103,7 +106,9 @@ public class TestProcessCuvol {
 		//
 
 		msgTrade = new MockMsgTrade(inst);
-		msgTrade.type = CURRENT_PIT;
+		msgTrade.type = FUTURE_PIT;
+		msgTrade.session = DEFAULT;
+		msgTrade.sequencing = NORMAL;
 		msgTrade.price = newPrice(100000, -3);
 		msgTrade.size = newSize(10);
 		msgTrade.time = newTime(0);
@@ -123,7 +128,9 @@ public class TestProcessCuvol {
 		//
 
 		msgTrade = new MockMsgTrade(inst);
-		msgTrade.type = CURRENT_PIT;
+		msgTrade.type = FUTURE_PIT;
+		msgTrade.session = DEFAULT;
+		msgTrade.sequencing = NORMAL;
 		msgTrade.price = newPrice(100375, -3);
 		msgTrade.size = newSize(7);
 		msgTrade.time = newTime(0);
@@ -144,7 +151,9 @@ public class TestProcessCuvol {
 		assertEquals(entries[3], newSize(7));
 
 		msgTrade = new MockMsgTrade(inst);
-		msgTrade.type = CURRENT;
+		msgTrade.type = FUTURE_ELECTRONIC;
+		msgTrade.session = DEFAULT;
+		msgTrade.sequencing = NORMAL;
 		msgTrade.price = newPrice(100375, -3);
 		msgTrade.size = newSize(13);
 		msgTrade.time = newTime(0);

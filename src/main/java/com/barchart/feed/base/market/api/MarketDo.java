@@ -20,6 +20,9 @@ import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.feed.base.market.provider.RegTaker;
 import com.barchart.feed.base.state.enums.MarketStateEntry;
+import com.barchart.feed.base.trade.enums.MarketTradeSequencing;
+import com.barchart.feed.base.trade.enums.MarketTradeSession;
+import com.barchart.feed.base.trade.enums.MarketTradeType;
 import com.barchart.util.anno.Mutable;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
@@ -65,7 +68,8 @@ public interface MarketDo extends Market {
 	void setBar(MarketBarType type, MarketDoBar bar);
 
 	/**  */
-	void setTrade(MarketBarType type, PriceValue price, SizeValue size,
+	void setTrade(MarketTradeType type, MarketTradeSession session,
+			MarketTradeSequencing sequencing, PriceValue price, SizeValue size,
 			TimeValue time, TimeValue date);
 
 	//

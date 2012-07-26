@@ -9,8 +9,6 @@ package com.barchart.feed.base.market;
 
 import static com.barchart.feed.base.bar.enums.MarketBarField.BAR_TIME;
 import static com.barchart.feed.base.bar.enums.MarketBarField.VOLUME;
-import static com.barchart.feed.base.bar.enums.MarketBarType.CURRENT_NET;
-import static com.barchart.feed.base.bar.enums.MarketBarType.CURRENT_PIT;
 import static com.barchart.feed.base.market.enums.MarketField.BAR_CURRENT;
 import static com.barchart.feed.base.market.enums.MarketField.BAR_CURRENT_NET;
 import static com.barchart.feed.base.market.enums.MarketField.BAR_CURRENT_PIT;
@@ -19,6 +17,10 @@ import static com.barchart.feed.base.market.enums.MarketField.TRADE;
 import static com.barchart.feed.base.trade.enums.MarketTradeField.PRICE;
 import static com.barchart.feed.base.trade.enums.MarketTradeField.SIZE;
 import static com.barchart.feed.base.trade.enums.MarketTradeField.TRADE_TIME;
+import static com.barchart.feed.base.trade.enums.MarketTradeSequencing.NORMAL;
+import static com.barchart.feed.base.trade.enums.MarketTradeSession.DEFAULT;
+import static com.barchart.feed.base.trade.enums.MarketTradeType.FUTURE_ELECTRONIC;
+import static com.barchart.feed.base.trade.enums.MarketTradeType.FUTURE_PIT;
 import static com.barchart.util.values.provider.ValueBuilder.newPrice;
 import static com.barchart.util.values.provider.ValueBuilder.newSize;
 import static com.barchart.util.values.provider.ValueBuilder.newText;
@@ -91,7 +93,9 @@ public class TestProcessBar {
 
 		//
 
-		msgTrade.type = CURRENT_NET;
+		msgTrade.type = FUTURE_ELECTRONIC;
+		msgTrade.session = DEFAULT;
+		msgTrade.sequencing = NORMAL;
 		msgTrade.price = newPrice(1230, -1);
 		msgTrade.size = newSize(17);
 		msgTrade.time = newTime(345679);
@@ -127,7 +131,9 @@ public class TestProcessBar {
 
 		//
 
-		msgTrade.type = CURRENT_PIT;
+		msgTrade.type = FUTURE_PIT;
+		msgTrade.session = DEFAULT;
+		msgTrade.sequencing = NORMAL;
 		msgTrade.price = newPrice(1230, -1);
 		msgTrade.size = newSize(13);
 		msgTrade.time = newTime(345678); // past trade
@@ -143,7 +149,9 @@ public class TestProcessBar {
 
 		//
 
-		msgTrade.type = CURRENT_PIT;
+		msgTrade.type = FUTURE_PIT;
+		msgTrade.session = DEFAULT;
+		msgTrade.sequencing = NORMAL;
 		msgTrade.price = newPrice(1240, -1);
 		msgTrade.size = newSize(13);
 		msgTrade.time = newTime(345680); // next trade
@@ -175,7 +183,9 @@ public class TestProcessBar {
 
 		//
 
-		msgTrade.type = CURRENT_NET;
+		msgTrade.type = FUTURE_ELECTRONIC;
+		msgTrade.session = DEFAULT;
+		msgTrade.sequencing = NORMAL;
 		msgTrade.price = newPrice(1200, -1);
 		msgTrade.size = newSize(111);
 		msgTrade.time = newTime(345700);

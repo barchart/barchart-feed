@@ -10,6 +10,9 @@ import com.barchart.feed.base.cuvol.api.MarketDoCuvolEntry;
 import com.barchart.feed.base.instrument.values.MarketInstrument;
 import com.barchart.feed.base.market.provider.VarMarket;
 import com.barchart.feed.base.state.enums.MarketStateEntry;
+import com.barchart.feed.base.trade.enums.MarketTradeSequencing;
+import com.barchart.feed.base.trade.enums.MarketTradeSession;
+import com.barchart.feed.base.trade.enums.MarketTradeType;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
 import com.barchart.util.values.api.TimeValue;
@@ -126,7 +129,9 @@ public class MockVarMarket extends VarMarket {
 	 * com.barchart.util.values.api.TimeValue)
 	 */
 	@Override
-	public void setTrade(final MarketBarType type, final PriceValue price,
+	public void setTrade(final MarketTradeType type,
+			final MarketTradeSession session,
+			final MarketTradeSequencing sequencing, final PriceValue price,
 			final SizeValue size, final TimeValue time, final TimeValue date) {
 		// TODO Auto-generated method stub
 
