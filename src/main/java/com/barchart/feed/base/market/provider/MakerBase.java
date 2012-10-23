@@ -273,6 +273,11 @@ public abstract class MakerBase<Message extends MarketMessage> implements
 
 				final MarketDo market = marketMap.get(inst);
 
+				if(market==null){
+					log.error("can get MarketDo for " + inst.get(InstrumentField.ID).toString());
+					continue;
+				}
+				
 				market.runSafe(safeUnregister, regTaker);
 
 				if (!market.hasRegTakers()) {
