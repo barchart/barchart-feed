@@ -100,21 +100,13 @@ public class VarCuvolMap extends NulCuvolMap implements MarketDoCuvolMap {
 		
 		final Map<PriceValue, SizeValue> frozen = new HashMap<PriceValue, SizeValue>();
 		
-		for(final Entry<PriceValue, SizeValue> e : offGridMap.entrySet()) {
-			frozen.put(e.getKey().freeze(), e.getValue().freeze());
-		}
-		
-		final SizeValue[] entries = entries();
-
-		for (int k = 0; k < entries.length; k++) {
-			SizeValue volume = entries[k];
-			if (volume == null) {
-				volume = ValueConst.NULL_SIZE;
+		if(offGridMap != null) {	
+			for(final Entry<PriceValue, SizeValue> e : offGridMap.entrySet()) {
+				frozen.put(e.getKey().freeze(), e.getValue().freeze());
 			}
-			entries[k] = volume.freeze();
 		}
 		
-		return new DefCuvolMap(frozen, entries, priceFirst(), priceStep());
+		return new DefCuvolMap(frozen, map, priceFirst(), priceStep());
 		
 	}
 
