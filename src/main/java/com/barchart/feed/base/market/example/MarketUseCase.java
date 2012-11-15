@@ -11,7 +11,7 @@ import static com.barchart.feed.base.bar.enums.MarketBarField.CLOSE;
 import static com.barchart.feed.base.bar.enums.MarketBarField.HIGH;
 import static com.barchart.feed.base.bar.enums.MarketBarField.LOW;
 import static com.barchart.feed.base.bar.enums.MarketBarField.VOLUME;
-import static com.barchart.feed.base.market.enums.MarketEvent.MARKET_OPENED;
+import static com.barchart.feed.base.market.enums.MarketEvent.MARKET_STATUS_OPENED;
 import static com.barchart.feed.base.market.enums.MarketEvent.MARKET_UPDATED;
 import static com.barchart.feed.base.market.enums.MarketEvent.NEW_HIGH;
 import static com.barchart.feed.base.market.enums.MarketEvent.NEW_TRADE;
@@ -98,7 +98,7 @@ abstract class MarketUseCase {
 			final MarketCuvol cumVol = market.get(CUVOL);
 			final PriceValue priveFirst = cumVol.priceFirst();
 			final PriceValue priceStep = cumVol.priceStep();
-			final SizeValue[] cumVolEntires = cumVol.entries();
+			final SizeValue[] cumVolEntries = cumVol.entries();
 
 		}
 
@@ -122,7 +122,7 @@ abstract class MarketUseCase {
 
 		@Override
 		public MarketEvent[] bindEvents() {
-			return new MarketEvent[] { MARKET_OPENED, NEW_HIGH };
+			return new MarketEvent[] { MARKET_STATUS_OPENED, NEW_HIGH };
 		}
 
 		@Override
@@ -136,7 +136,7 @@ abstract class MarketUseCase {
 				final MarketInstrument instrument, final MarketBar bar) {
 
 			switch (event) {
-			case MARKET_OPENED:
+			case MARKET_STATUS_OPENED:
 				break;
 			case NEW_HIGH:
 				break;
@@ -161,7 +161,7 @@ abstract class MarketUseCase {
 
 		@Override
 		public MarketEvent[] bindEvents() {
-			return new MarketEvent[] { MARKET_OPENED, NEW_TRADE };
+			return new MarketEvent[] { MARKET_STATUS_OPENED, NEW_TRADE };
 		}
 
 		@Override

@@ -48,7 +48,7 @@ public class TestEventSet {
 	@Test
 	public void testIterator2() {
 		final EventSet eventSet = new EventSet();
-		eventSet.add(MARKET_CLOSED);
+		eventSet.add(MARKET_STATUS_CLOSED);
 		int count = 0;
 		for (final MarketEvent event : eventSet) {
 			count++;
@@ -60,7 +60,7 @@ public class TestEventSet {
 	@Test
 	public void testIterator3() {
 		final EventSet eventSet = new EventSet();
-		eventSet.add(MARKET_CLOSED);
+		eventSet.add(MARKET_STATUS_CLOSED);
 		eventSet.clear();
 		int count = 0;
 		for (final MarketEvent event : eventSet) {

@@ -22,6 +22,8 @@ import com.barchart.feed.base.book.provider.DefBookEntry;
 import com.barchart.feed.base.book.provider.DefBookTop;
 import com.barchart.feed.base.cuvol.api.MarketCuvol;
 import com.barchart.feed.base.cuvol.api.MarketCuvolEntry;
+import com.barchart.feed.base.cuvol.map.api.MarketCuvolMap;
+import com.barchart.feed.base.cuvol.map.provider.NulCuvolMap;
 import com.barchart.feed.base.cuvol.provider.DefCuvolEntry;
 import com.barchart.feed.base.cuvol.provider.NulCuvol;
 import com.barchart.feed.base.market.api.Market;
@@ -42,6 +44,8 @@ public final class MarketConst {
 	public static final MarketCuvol NULL_CUVOL = //
 	new NulCuvol().freeze();
 
+	public static final MarketCuvolMap NULL_CUVOL_MAP = //
+	new NulCuvolMap().freeze();
 	//
 
 	public static final MarketTrade NULL_TRADE = //

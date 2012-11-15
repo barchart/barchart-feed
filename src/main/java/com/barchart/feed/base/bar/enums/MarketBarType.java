@@ -9,13 +9,9 @@ package com.barchart.feed.base.bar.enums;
 
 import static com.barchart.feed.base.market.enums.MarketEvent.NEW_BAR_CURRENT;
 import static com.barchart.feed.base.market.enums.MarketEvent.NEW_BAR_CURRENT_EXT;
-import static com.barchart.feed.base.market.enums.MarketEvent.NEW_BAR_CURRENT_NET;
-import static com.barchart.feed.base.market.enums.MarketEvent.NEW_BAR_CURRENT_PIT;
 import static com.barchart.feed.base.market.enums.MarketEvent.NEW_BAR_PREVIOUS;
 import static com.barchart.feed.base.market.enums.MarketField.BAR_CURRENT;
 import static com.barchart.feed.base.market.enums.MarketField.BAR_CURRENT_EXT;
-import static com.barchart.feed.base.market.enums.MarketField.BAR_CURRENT_NET;
-import static com.barchart.feed.base.market.enums.MarketField.BAR_CURRENT_PIT;
 import static com.barchart.feed.base.market.enums.MarketField.BAR_PREVIOUS;
 
 import com.barchart.feed.base.bar.api.MarketBar;
@@ -34,23 +30,12 @@ public enum MarketBarType implements Value<MarketBarType> {
 	NULL_BAR_TYPE(BAR_CURRENT, NEW_BAR_CURRENT),
 
 	/* current */
-
-	/** combo = net + pit */
 	CURRENT(BAR_CURRENT, NEW_BAR_CURRENT),
-
-	/** electronic */
-	@Deprecated
-	CURRENT_NET(BAR_CURRENT_NET, NEW_BAR_CURRENT_NET), //
-
-	/** manual/pit */
-	@Deprecated
-	CURRENT_PIT(BAR_CURRENT_PIT, NEW_BAR_CURRENT_PIT), //
 
 	/** extra, such as form-t */
 	CURRENT_EXT(BAR_CURRENT_EXT, NEW_BAR_CURRENT_EXT), //
 
 	/* previous */
-
 	PREVIOUS(BAR_PREVIOUS, NEW_BAR_PREVIOUS), // combo
 
 	;

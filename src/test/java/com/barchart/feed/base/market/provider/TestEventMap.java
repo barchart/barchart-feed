@@ -36,10 +36,10 @@ public class TestEventMap {
 		final EventMap<Integer> enumMap = new EventMap<Integer>();
 		assertTrue(enumMap.isEmpty());
 
-		enumMap.put(MarketEvent.MARKET_CLOSED, 123);
+		enumMap.put(MarketEvent.MARKET_STATUS_CLOSED, 123);
 		assertFalse(enumMap.isEmpty());
 
-		final int value = enumMap.get(MarketEvent.MARKET_CLOSED);
+		final int value = enumMap.get(MarketEvent.MARKET_STATUS_CLOSED);
 		assertEquals(value, 123);
 
 		final AtomicInteger count = new AtomicInteger(0);
@@ -49,7 +49,7 @@ public class TestEventMap {
 
 			@Override
 			public Void run(final Entry<MarketEvent, Integer> entry) {
-				assertEquals(entry.getKey(), MarketEvent.MARKET_CLOSED);
+				assertEquals(entry.getKey(), MarketEvent.MARKET_STATUS_CLOSED);
 				assertEquals(entry.getValue(), new Integer(123));
 				count.incrementAndGet();
 				return null;
@@ -61,7 +61,7 @@ public class TestEventMap {
 
 		assertEquals(count.get(), 1);
 
-		final int removed = enumMap.remove(MarketEvent.MARKET_CLOSED);
+		final int removed = enumMap.remove(MarketEvent.MARKET_STATUS_CLOSED);
 		assertEquals(removed, 123);
 		assertTrue(enumMap.isEmpty());
 

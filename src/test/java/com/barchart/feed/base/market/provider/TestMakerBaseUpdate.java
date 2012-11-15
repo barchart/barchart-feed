@@ -114,8 +114,8 @@ public class TestMakerBaseUpdate {
 
 		//
 
-		final MarketEvent event1 = MarketEvent.MARKET_CLOSED;
-		final MarketEvent event2 = MarketEvent.MARKET_OPENED;
+		final MarketEvent event1 = MarketEvent.MARKET_STATUS_CLOSED;
+		final MarketEvent event2 = MarketEvent.MARKET_STATUS_OPENED;
 
 		//
 

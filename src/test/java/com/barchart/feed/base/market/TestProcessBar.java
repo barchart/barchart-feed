@@ -10,8 +10,6 @@ package com.barchart.feed.base.market;
 import static com.barchart.feed.base.bar.enums.MarketBarField.BAR_TIME;
 import static com.barchart.feed.base.bar.enums.MarketBarField.VOLUME;
 import static com.barchart.feed.base.market.enums.MarketField.BAR_CURRENT;
-import static com.barchart.feed.base.market.enums.MarketField.BAR_CURRENT_NET;
-import static com.barchart.feed.base.market.enums.MarketField.BAR_CURRENT_PIT;
 import static com.barchart.feed.base.market.enums.MarketField.MARKET;
 import static com.barchart.feed.base.market.enums.MarketField.TRADE;
 import static com.barchart.feed.base.trade.enums.MarketTradeField.PRICE;
@@ -123,14 +121,6 @@ public class TestProcessBar {
 
 		//
 
-		bar = market.get(BAR_CURRENT_NET);
-		// assertEquals(bar.get(VOLUME), newSize(17));
-		// assertEquals(bar.get(HIGH), newPrice(123000, -3));
-		// assertEquals(bar.get(LOW), newPrice(123, 0));
-		// assertEquals(bar.get(BAR_TIME), newTime(345679));
-
-		//
-
 		msgTrade.type = FUTURE_PIT;
 		msgTrade.session = DEFAULT;
 		msgTrade.sequencing = NORMAL;
@@ -140,12 +130,6 @@ public class TestProcessBar {
 		msgTrade.date = newTime(345670); // past trade
 
 		maker.make(msgTrade);
-
-		bar = market.get(BAR_CURRENT_NET);
-		// assertEquals(bar.get(VOLUME), newSize(17));
-		// assertEquals(bar.get(HIGH), newPrice(123000, -3));
-		// assertEquals(bar.get(LOW), newPrice(123, 0));
-		// assertEquals(bar.get(BAR_TIME), newTime(345679));
 
 		//
 
@@ -159,20 +143,6 @@ public class TestProcessBar {
 
 		maker.make(msgTrade);
 		market = maker.take(inst, MARKET); // updated market
-
-		bar = market.get(BAR_CURRENT_PIT);
-		// assertFalse(bar.isNull());
-		// assertEquals(bar.get(VOLUME), newSize(13));
-		// assertEquals(bar.get(HIGH), newPrice(124000, -3));
-		// assertEquals(bar.get(LOW), newPrice(124, 0));
-		// assertEquals(bar.get(BAR_TIME), newTime(345680));
-
-		bar = market.get(BAR_CURRENT_NET);
-		// assertFalse(bar.isNull());
-		// assertEquals(bar.get(VOLUME), newSize(17));
-		// assertEquals(bar.get(HIGH), newPrice(123000, -3));
-		// assertEquals(bar.get(LOW), newPrice(123, 0));
-		// assertEquals(bar.get(BAR_TIME), newTime(345679));
 
 		bar = market.get(BAR_CURRENT);
 		assertFalse(bar.isNull());
@@ -201,14 +171,6 @@ public class TestProcessBar {
 		// assertEquals(bar.get(HIGH), newPrice(124000, -3));
 		// assertEquals(bar.get(LOW), newPrice(1200, -1));
 		// assertEquals(bar.get(BAR_TIME), newTime(345700));
-
-		// no change
-		bar = market.get(BAR_CURRENT_PIT);
-		// assertFalse(bar.isNull());
-		// assertEquals(bar.get(VOLUME), newSize(13));
-		// assertEquals(bar.get(HIGH), newPrice(124000, -3));
-		// assertEquals(bar.get(LOW), newPrice(124, 0));
-		// assertEquals(bar.get(BAR_TIME), newTime(345680));
 
 		//
 

@@ -5,17 +5,19 @@
  *
  * http://www.opensource.org/licenses/bsd-license.php
  */
-package com.barchart.feed.base.cuvol.api;
+package com.barchart.feed.base.cuvol.map.api;
 
 import com.barchart.util.anno.NotMutable;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
 import com.barchart.util.values.api.Value;
 
-/** price & size ladder for cumulative volume */
 @NotMutable
-public interface MarketCuvol extends Value<MarketCuvol> {
+public interface MarketCuvolMap extends Value<MarketCuvolMap> {
 
+	/** returns the cumulative volume for the price level */
+	SizeValue getCuvol(PriceValue price);
+	
 	/** first non empty level in the price ladder */
 	PriceValue priceFirst();
 
@@ -24,5 +26,5 @@ public interface MarketCuvol extends Value<MarketCuvol> {
 
 	/** array of sizes at the appropriate price level; */
 	SizeValue[] entries();
-
+	
 }

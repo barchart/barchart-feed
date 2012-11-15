@@ -63,12 +63,6 @@ public final class MarketField<V extends Value<V>> extends
 	/** current or default or combo = electronic + manual */
 	public static final MarketField<MarketBar> BAR_CURRENT = NEW(NULL_BAR);
 
-	/** electronic TODO remove */
-	public static final MarketField<MarketBar> BAR_CURRENT_NET = NEW(NULL_BAR);
-
-	/** manual / pit TODO remove */
-	public static final MarketField<MarketBar> BAR_CURRENT_PIT = NEW(NULL_BAR);
-
 	/** extra / stocks form t */
 	public static final MarketField<MarketBar> BAR_CURRENT_EXT = NEW(NULL_BAR);
 

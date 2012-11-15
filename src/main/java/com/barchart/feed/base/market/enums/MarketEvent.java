@@ -27,26 +27,19 @@ public enum MarketEvent implements BitSetEnum<MarketEvent> {
 
 	MARKET_STATUS_CHANGED, //
 
-	MARKET_OPENED, //
-	MARKET_CLOSED, //
+	MARKET_STATUS_OPENED, //
+	MARKET_STATUS_CLOSED, //
 
 	//
 
-	NEW_TRADE_NET, //
-	NEW_TRADE_PIT, //
-	NEW_TRADE, // combo
+	NEW_TRADE, // 
 
 	//
 
 	// snapshots
-	NEW_BAR_CURRENT_NET, //
-	NEW_BAR_CURRENT_PIT, //
 	NEW_BAR_CURRENT_EXT, //
-	NEW_BAR_CURRENT, // combo
-
-	// NEW_BAR_PREVIOUS_NET, //
-	// NEW_BAR_PREVIOUS_PIT, //
-	NEW_BAR_PREVIOUS, // combo
+	NEW_BAR_CURRENT, // 
+	NEW_BAR_PREVIOUS, // 
 
 	//
 
@@ -69,7 +62,7 @@ public enum MarketEvent implements BitSetEnum<MarketEvent> {
 
 	//
 
-	// all combo
+	// 
 	NEW_CUVOL_SNAPSHOT, //
 	NEW_CUVOL_UPDATE, //
 
