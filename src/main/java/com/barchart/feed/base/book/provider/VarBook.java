@@ -25,13 +25,6 @@ import com.barchart.util.values.api.SizeValue;
 import com.barchart.util.values.api.TimeValue;
 import com.barchart.util.values.provider.ValueBuilder;
 
-/**
- * What is this for? DDF3 used the VarBookDDF, which is independent of this.
- * 
- * 
- * @author g-litchfield
- * 
- */
 @Mutable
 @ThreadSafe(rule = "use in runSafe() only")
 public final class VarBook extends UniBook<MarketBook> implements MarketDoBook {

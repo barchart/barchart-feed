@@ -81,6 +81,7 @@ public class DefCuvolMap extends NulCuvolMap {
 	
 	private boolean onGrid(final PriceValue price) {
 		
+		//Do without double
 		final double result = ValueUtil.asDouble(price) / ValueUtil.asDouble(priceStep);
 		
 		final long resLong = Math.round(result);

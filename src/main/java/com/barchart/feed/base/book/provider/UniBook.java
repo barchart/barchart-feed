@@ -30,13 +30,6 @@ import com.barchart.util.values.api.SizeValue;
 import com.barchart.util.values.api.Value;
 import com.barchart.util.values.provider.ValueFreezer;
 
-/**
- * This is not actually a book, it's a market. Should be renamed.
- * 
- * @author g-litchfield
- * 
- * @param <V>
- */
 @NotThreadSafe
 // javaSize this = 8(obj) + 1(size) + 4(keyRef) + 4(bidsRef) + 4(asksRef) = 24
 // javaSize deep = 136 * 2(asks+bids) + 24 (key) = 296

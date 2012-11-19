@@ -22,22 +22,22 @@ import com.barchart.util.values.api.Value;
 @NotMutable
 public interface MarketTaker<V extends Value<V>> {
 
-	/** specify value type that will be provided in the {@link #onMarketEvent} */
+	/** Specify value type that will be provided in the {@link #onMarketEvent} */
 	@UsedOnce
 	MarketField<V> bindField();
 
-	/** specify list of events this taker will subscribe to */
+	/** Specify list of events this taker will subscribe to */
 	@UsedOnce
 	MarketEvent[] bindEvents();
 
-	/** specify list of markets this taker will subscribe to */
+	/** Specify list of markets this taker will subscribe to */
 	@UsedOnce
 	MarketInstrument[] bindInstruments();
 
 	//
 
 	/**
-	 * event handler method that will receive subscribed events for subscribed
+	 * Event handler method that will receive subscribed events for subscribed
 	 * markets; returned values are frozen and disconnected from live market
 	 */
 	@EventListener(MarketEvent.class)

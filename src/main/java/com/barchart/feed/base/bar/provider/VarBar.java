@@ -7,9 +7,6 @@
  */
 package com.barchart.feed.base.bar.provider;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.barchart.feed.base.bar.api.MarketDoBar;
 import com.barchart.feed.base.bar.enums.MarketBarField;
 import com.barchart.util.anno.Mutable;
@@ -20,21 +17,9 @@ import com.barchart.util.values.api.Value;
 @ThreadSafe
 public final class VarBar extends DefBar implements MarketDoBar {
 
-	private static final Logger log = LoggerFactory.getLogger(VarBar.class);
-
-	// public VarBar(PriceValue open, PriceValue high, PriceValue low,
-	// PriceValue close, PriceValue settle, SizeValue volume,
-	// SizeValue interest, TimeValue time) {
-	// this();
-	// set(OPEN, open);
-	// set(HIGH, high);
-	// set(LOW, low);
-	// set(CLOSE, close);
-	// set(SETTLE, settle);
-	// set(VOLUME, volume);
-	// set(INTEREST, interest);
-	// set(TIME, time);
-	// }
+//	VarBar() {
+//		
+//	}
 
 	@Override
 	public final <V extends Value<V>> void set(final MarketBarField<V> field,
@@ -71,8 +56,6 @@ public final class VarBar extends DefBar implements MarketDoBar {
 			target[k] = value.freeze();
 
 		}
-
-		// log.debug("bar={} ", bar);
 
 		return that;
 
