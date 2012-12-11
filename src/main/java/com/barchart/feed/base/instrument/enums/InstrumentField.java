@@ -7,8 +7,8 @@
  */
 package com.barchart.feed.base.instrument.enums;
 
+import static com.barchart.feed.base.instrument.api.InstrumentConst.*;
 import static com.barchart.feed.base.instrument.enums.MarketDisplay.Fraction.*;
-import static com.barchart.feed.base.instrument.provider.InstrumentConst.*;
 import static com.barchart.util.values.provider.ValueConst.*;
 
 import com.barchart.feed.base.book.enums.MarketBookType;

@@ -7,7 +7,7 @@
  */
 package com.barchart.feed.base.market;
 
-import static com.barchart.feed.base.market.provider.MarketConst.*;
+import static com.barchart.feed.base.provider.MarketConst.*;
 import static com.barchart.util.values.provider.ValueConst.*;
 import static java.lang.System.*;
 import static org.junit.Assert.*;

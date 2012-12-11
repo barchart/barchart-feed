@@ -26,7 +26,7 @@ import org.junit.Test;
 import com.barchart.feed.base.instrument.enums.InstrumentField;
 import com.barchart.feed.base.instrument.enums.MarketDisplay;
 import com.barchart.feed.base.instrument.enums.MarketDisplay.Fraction;
-import com.barchart.feed.base.instrument.provider.VarInstrument;
+import com.barchart.feed.base.provider.VarInstrument;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.TimeValue;
 import com.barchart.util.values.provider.ValueBuilder;

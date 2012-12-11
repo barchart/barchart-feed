@@ -5,10 +5,9 @@
  *
  * http://www.opensource.org/licenses/bsd-license.php
  */
-package com.barchart.feed.base.cuvol.map.provider;
+package com.barchart.feed.base.provider;
 
-import com.barchart.feed.base.cuvol.map.api.MarketCuvolMap;
-import com.barchart.feed.base.provider.MarketConst;
+import com.barchart.feed.base.cuvol.api.MarketCuvol;
 import com.barchart.util.anno.NotMutable;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
@@ -16,12 +15,7 @@ import com.barchart.util.values.provider.ValueConst;
 import com.barchart.util.values.provider.ValueFreezer;
 
 @NotMutable
-public class NulCuvolMap extends ValueFreezer<MarketCuvolMap> implements MarketCuvolMap {
-
-	@Override
-	public SizeValue getCuvol(PriceValue price) {
-		return ValueConst.NULL_SIZE;
-	}
+public class NulCuvol extends ValueFreezer<MarketCuvol> implements MarketCuvol {
 
 	@Override
 	public PriceValue priceFirst() {
@@ -60,10 +54,10 @@ public class NulCuvolMap extends ValueFreezer<MarketCuvolMap> implements MarketC
 		return text.toString();
 
 	}
-	
+
 	@Override
 	public final boolean isNull() {
-		return this == MarketConst.NULL_CUVOL_MAP;
+		return this == MarketConst.NULL_CUVOL;
 	}
-	
+
 }

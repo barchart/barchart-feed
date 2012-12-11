@@ -16,7 +16,7 @@ import org.junit.Test;
 import com.barchart.feed.base.book.enums.MarketBookAction;
 import com.barchart.feed.base.book.enums.MarketBookSide;
 import com.barchart.feed.base.book.enums.MarketBookType;
-import com.barchart.feed.base.book.provider.DefBookEntry;
+import com.barchart.feed.base.provider.DefBookEntry;
 import com.barchart.util.bench.size.JavaSize;
 import com.barchart.util.values.provider.ValueConst;
 

@@ -8,8 +8,8 @@ import java.util.TreeMap;
 
 import com.barchart.feed.base.cuvol.api.MarketCuvolEntry;
 import com.barchart.feed.base.cuvol.map.api.MarketDoCuvolMap;
-import com.barchart.feed.base.cuvol.provider.DefCuvolEntry;
-import com.barchart.feed.base.market.provider.MarketConst;
+import com.barchart.feed.base.provider.DefCuvolEntry;
+import com.barchart.feed.base.provider.MarketConst;
 import com.barchart.util.anno.Mutable;
 import com.barchart.util.anno.NotThreadSafe;
 import com.barchart.util.collections.PriceArrayMap;

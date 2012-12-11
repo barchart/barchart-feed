@@ -14,11 +14,11 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.barchart.feed.base.instrument.api.DefinitionService;
+import com.barchart.feed.base.instrument.api.InstrumentConst;
 import com.barchart.feed.base.instrument.enums.MarketDisplay.Fraction;
-import com.barchart.feed.base.instrument.provider.InstrumentConst;
-import com.barchart.feed.base.instrument.provider.MarketDoInstrument;
-import com.barchart.feed.base.instrument.provider.VarInstrument;
 import com.barchart.feed.base.instrument.values.MarketInstrument;
+import com.barchart.feed.base.provider.MarketDoInstrument;
+import com.barchart.feed.base.provider.VarInstrument;
 import com.barchart.util.values.api.TextValue;
 
 public class MockDefinitionService implements DefinitionService<MarketInstrument> {
