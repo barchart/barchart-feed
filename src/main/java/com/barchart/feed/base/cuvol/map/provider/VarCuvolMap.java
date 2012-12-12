@@ -13,6 +13,7 @@ import com.barchart.feed.base.provider.MarketConst;
 import com.barchart.util.anno.Mutable;
 import com.barchart.util.anno.NotThreadSafe;
 import com.barchart.util.collections.PriceArrayMap;
+import com.barchart.util.values.api.DecimalValue;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
 import com.barchart.util.values.provider.ValueBuilder;
@@ -31,10 +32,12 @@ public class VarCuvolMap extends NulCuvolMap implements MarketDoCuvolMap {
 	private final PriceArrayMap<SizeValue> map;
 	
 	private final PriceValue priceStep;
+	private final DecimalValue decPriceStep;
 	private PriceValue priceLast;
 	
 	public VarCuvolMap(final PriceValue priceStep) {
 		this.priceStep = priceStep;
+		decPriceStep = ValueBuilder.newDecimal(priceStep.mantissa(), priceStep.exponent());
 		this.map = new PriceArrayMap<SizeValue>(priceStep);
 	}
 	
@@ -155,21 +158,17 @@ public class VarCuvolMap extends NulCuvolMap implements MarketDoCuvolMap {
 
 	private boolean onGrid(final PriceValue price) {
 		
-		final double result = ValueUtil.asDouble(price) / ValueUtil.asDouble(priceStep);
-		
-		final long resLong = Math.round(result);
-		
-		if(Math.abs(result - resLong) < EPSILON) {
+		if(price.div(decPriceStep).norm().exponent() >= 0) {
 			return true;
+		} else {
+			return false;
 		}
-		
-		return false;
 		
 	}
 	
 	public static void main(final String[] args) {
 		
-		PriceValue priceStep = ValueBuilder.newPrice(.25);
+		DecimalValue priceStep = ValueBuilder.newDecimal(25, -2);
 		
 		PriceValue test1 = ValueBuilder.newPrice(1000);
 		PriceValue test2 = ValueBuilder.newPrice(100);
@@ -177,7 +176,7 @@ public class VarCuvolMap extends NulCuvolMap implements MarketDoCuvolMap {
 		PriceValue test4 = ValueBuilder.newPrice(1);
 		PriceValue test5 = ValueBuilder.newPrice(.5);
 		PriceValue test6 = ValueBuilder.newPrice(.25);
-		PriceValue test7 = ValueBuilder.newPrice(100.1);
+		PriceValue test7 = ValueBuilder.newPrice(10000.1);
 		PriceValue test8 = ValueBuilder.newPrice(1.26);
 		PriceValue test9 = ValueBuilder.newPrice(1.0001);
 		PriceValue test10 = ValueBuilder.newPrice(1.000005);
@@ -195,17 +194,13 @@ public class VarCuvolMap extends NulCuvolMap implements MarketDoCuvolMap {
 		
 	}
 	
-	private static boolean onGrid(final PriceValue price, final PriceValue priceStep) {
+	private static boolean onGrid(final PriceValue price, final DecimalValue priceStep) {
 		
-		final double result = ValueUtil.asDouble(price) / ValueUtil.asDouble(priceStep);
-		
-		final long resLong = Math.round(result);
-		
-		if(Math.abs(result - resLong) < EPSILON) {
+		if(price.div(priceStep).norm().exponent() >= 0) {
 			return true;
+		} else {
+			return false;
 		}
-		
-		return false;
 		
 	}
 	
