@@ -42,10 +42,10 @@ public abstract class MakerBase<Message extends MarketMessage> implements
 
 	protected final MarketFactory factory;
 
-	private final ConcurrentMap<MarketInstrument, MarketDo> marketMap = //
+	final ConcurrentMap<MarketInstrument, MarketDo> marketMap = //
 	new ConcurrentHashMap<MarketInstrument, MarketDo>();
 
-	private final ConcurrentMap<MarketTaker<?>, RegTaker<?>> takerMap = //
+	final ConcurrentMap<MarketTaker<?>, RegTaker<?>> takerMap = //
 	new ConcurrentHashMap<MarketTaker<?>, RegTaker<?>>();
 
 	private final CopyOnWriteArrayList<MarketRegListener> listenerList = //
@@ -314,7 +314,7 @@ public abstract class MakerBase<Message extends MarketMessage> implements
 	// ########################
 	
 	@Override
-	public final void make(final Message message) {
+	public void make(final Message message) {
 
 		final MarketInstrument instrument = message.getInstrument();
 
