@@ -114,7 +114,7 @@ public class RegTaker<V extends Value<V>> implements RunnerLoop<MarketEvent> {
 
 		final MarketInstrument[] insts = taker.bindInstruments();
 
-		if (insts == null || insts.length == 0) {
+		if (insts == null) { // Removed size check
 			log.debug("invalid : bindInstruments()");
 			return false;
 		}

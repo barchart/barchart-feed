@@ -19,6 +19,8 @@ import org.slf4j.LoggerFactory;
 import com.barchart.feed.base.bar.api.MarketBar;
 import com.barchart.feed.base.bar.api.MarketDoBar;
 import com.barchart.feed.base.book.api.MarketBook;
+import com.barchart.feed.base.book.api.MarketDoBook;
+import com.barchart.feed.base.book.enums.MarketBookType;
 import com.barchart.feed.base.cuvol.api.MarketCuvol;
 import com.barchart.feed.base.cuvol.api.MarketDoCuvol;
 import com.barchart.feed.base.instrument.enums.InstrumentField;
@@ -48,7 +50,8 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 	// @SuppressWarnings("unused")
 	private static final Logger log = LoggerFactory.getLogger(VarMarket.class);
 
-	private RegCenter reg;
+	// HACK
+	RegCenter reg = new RegCenter(this);
 
 	public VarMarket() {
 
@@ -65,8 +68,6 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 		final RegCenter reg = this.reg;
 
 		if (reg == null) {
-
-			// System.out.println("Reg is nulll");
 
 			// there are no takers
 			return;
@@ -154,8 +155,6 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 
 	//
 
-	// protected static final int marketIndex = MARKET.ordinal();
-	// private final static int marketItems = MarketField.size() - 1;
 
 	/** do not set self reference on freeze */
 	@Override
@@ -294,36 +293,34 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 	protected final static SizeValue LIMIT = ValueBuilder
 			.newSize(MarketBook.ENTRY_LIMIT);
 
-	// This method is not used by any members of it's package, do we need it?
-	//
 	// XXX make final
-	// protected MarketDoBook loadBook() {
-	//
-	// MarketBook book = get(BOOK);
-	//
-	// if (book.isFrozen()) {
-	//
-	// final MarketInstrument inst = get(INSTRUMENT);
-	//
-	// final MarketBookType type = inst.get(BOOK_TYPE);
-	// final SizeValue size = LIMIT; // inst.get(BOOK_SIZE);
-	// final PriceValue step = inst.get(PRICE_STEP);
-	//
-	// final VarBook varBook = new VarBook(type, size, step);
-	// final VarBookLast varBookLast = new VarBookLast(varBook);
-	// final VarBookTop varBookTop = new VarBookTop(varBook);
-	//
-	// set(BOOK, varBook);
-	// set(BOOK_LAST, varBookLast);
-	// set(BOOK_TOP, varBookTop);
-	//
-	// book = varBook;
-	//
-	// }
-	//
-	// return (MarketDoBook) book;
-	//
-	// }
+	 protected MarketDoBook loadBook() {
+	
+		 MarketBook book = get(BOOK);
+		
+		 if (book.isFrozen()) {
+		
+		 final MarketInstrument inst = get(INSTRUMENT);
+		
+		 final MarketBookType type = inst.get(BOOK_TYPE);
+		 final SizeValue size = LIMIT; // inst.get(BOOK_SIZE);
+		 final PriceValue step = inst.get(PRICE_STEP);
+		
+		 final VarBook varBook = new VarBook(type, size, step);
+		 final VarBookLast varBookLast = new VarBookLast(varBook);
+		 final VarBookTop varBookTop = new VarBookTop(varBook);
+		
+		 set(BOOK, varBook);
+		 set(BOOK_LAST, varBookLast);
+		 set(BOOK_TOP, varBookTop);
+		
+		 book = varBook;
+		
+		 }
+		
+		 return (MarketDoBook) book;
+	
+	 }
 
 	protected final boolean isValidPrice(final PriceValue price) {
 

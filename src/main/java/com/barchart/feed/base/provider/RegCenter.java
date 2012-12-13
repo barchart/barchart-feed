@@ -30,7 +30,7 @@ class RegCenter {
 	private final Market market;
 
 	/** current events collector */
-	private final EventSet eventSet = new EventSet();
+	final EventSet eventSet = new EventSet();
 
 	/** registered takers for event */
 	private final EventMap<RegTakerList> eventTakerMap = new EventMap<RegTakerList>();

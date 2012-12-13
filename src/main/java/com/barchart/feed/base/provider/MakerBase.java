@@ -72,6 +72,13 @@ public abstract class MakerBase<Message extends MarketMessage> implements
 		this.factory = factory;
 	}
 
+	
+	// register super taker
+	// make and store regTaker
+	// add taker to takerMap
+	// for each market in marketmap safeRegister taker 
+	// no registration listeners
+	
 	// ########################
 
 	@Override
@@ -305,7 +312,7 @@ public abstract class MakerBase<Message extends MarketMessage> implements
 	};
 
 	// ########################
-
+	
 	@Override
 	public final void make(final Message message) {
 
