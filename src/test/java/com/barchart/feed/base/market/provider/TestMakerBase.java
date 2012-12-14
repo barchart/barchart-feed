@@ -7,10 +7,8 @@
  */
 package com.barchart.feed.base.market.provider;
 
-import static com.barchart.util.values.provider.ValueBuilder.newText;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static com.barchart.util.values.provider.ValueBuilder.*;
+import static org.junit.Assert.*;
 
 import org.junit.After;
 import org.junit.Before;
@@ -51,152 +49,168 @@ public class TestMakerBase {
 		maker.register(inst);
 		assertEquals(maker.marketCount(), 1);
 
-		MarketTaker<Market> taker;
-		boolean isAdded;
+		{
 
-		taker = new MarketTaker<Market>() {
-			@Override
-			public MarketEvent[] bindEvents() {
-				return null;
-			}
+			final MarketTaker<Market> taker = new MarketTaker<Market>() {
+				@Override
+				public MarketEvent[] bindEvents() {
+					return null;
+				}
 
-			@Override
-			public MarketField<Market> bindField() {
-				return null;
-			}
+				@Override
+				public MarketField<Market> bindField() {
+					return null;
+				}
 
-			@Override
-			public MarketInstrument[] bindInstruments() {
-				return null;
-			}
+				@Override
+				public MarketInstrument[] bindInstruments() {
+					return null;
+				}
 
-			@Override
-			public void onMarketEvent(final MarketEvent event,
-					final MarketInstrument instrument, final Market value) {
-			}
-		};
-		isAdded = maker.register(taker);
-		assertFalse(isAdded);
+				@Override
+				public void onMarketEvent(final MarketEvent event,
+						final MarketInstrument instrument, final Market value) {
+				}
+			};
+			final boolean isAdded = maker.register(taker);
+			assertFalse("should not register invalid taker", isAdded);
 
-		taker = new MarketTaker<Market>() {
-			@Override
-			public MarketEvent[] bindEvents() {
-				return new MarketEvent[] {};
-			}
+		}
+		{
 
-			@Override
-			public MarketField<Market> bindField() {
-				return null;
-			}
+			final MarketTaker<Market> taker = new MarketTaker<Market>() {
+				@Override
+				public MarketEvent[] bindEvents() {
+					return new MarketEvent[] {};
+				}
 
-			@Override
-			public MarketInstrument[] bindInstruments() {
-				return null;
-			}
+				@Override
+				public MarketField<Market> bindField() {
+					return null;
+				}
 
-			@Override
-			public void onMarketEvent(final MarketEvent event,
-					final MarketInstrument instrument, final Market value) {
-			}
-		};
-		isAdded = maker.register(taker);
-		assertFalse(isAdded);
+				@Override
+				public MarketInstrument[] bindInstruments() {
+					return null;
+				}
 
-		taker = new MarketTaker<Market>() {
-			@Override
-			public MarketEvent[] bindEvents() {
-				return new MarketEvent[] { MarketEvent.MARKET_UPDATED };
-			}
+				@Override
+				public void onMarketEvent(final MarketEvent event,
+						final MarketInstrument instrument, final Market value) {
+				}
+			};
+			final boolean isAdded = maker.register(taker);
+			assertFalse("should not register invalid taker", isAdded);
 
-			@Override
-			public MarketField<Market> bindField() {
-				return null;
-			}
+		}
 
-			@Override
-			public MarketInstrument[] bindInstruments() {
-				return null;
-			}
+		{
 
-			@Override
-			public void onMarketEvent(final MarketEvent event,
-					final MarketInstrument instrument, final Market value) {
-			}
-		};
-		isAdded = maker.register(taker);
-		assertFalse(isAdded);
+			final MarketTaker<Market> taker = new MarketTaker<Market>() {
+				@Override
+				public MarketEvent[] bindEvents() {
+					return new MarketEvent[] { MarketEvent.MARKET_UPDATED };
+				}
 
-		taker = new MarketTaker<Market>() {
-			@Override
-			public MarketEvent[] bindEvents() {
-				return new MarketEvent[] { MarketEvent.MARKET_UPDATED };
-			}
+				@Override
+				public MarketField<Market> bindField() {
+					return null;
+				}
 
-			@Override
-			public MarketField<Market> bindField() {
-				return MarketField.MARKET;
-			}
+				@Override
+				public MarketInstrument[] bindInstruments() {
+					return null;
+				}
 
-			@Override
-			public MarketInstrument[] bindInstruments() {
-				return null;
-			}
+				@Override
+				public void onMarketEvent(final MarketEvent event,
+						final MarketInstrument instrument, final Market value) {
+				}
+			};
+			final boolean isAdded = maker.register(taker);
+			assertFalse(isAdded);
 
-			@Override
-			public void onMarketEvent(final MarketEvent event,
-					final MarketInstrument instrument, final Market value) {
-			}
-		};
-		isAdded = maker.register(taker);
-		assertFalse(isAdded);
+		}
 
-		taker = new MarketTaker<Market>() {
-			@Override
-			public MarketEvent[] bindEvents() {
-				return new MarketEvent[] { MarketEvent.MARKET_UPDATED };
-			}
+		{
+			final MarketTaker<Market> taker = new MarketTaker<Market>() {
+				@Override
+				public MarketEvent[] bindEvents() {
+					return new MarketEvent[] { MarketEvent.MARKET_UPDATED };
+				}
 
-			@Override
-			public MarketField<Market> bindField() {
-				return MarketField.MARKET;
-			}
+				@Override
+				public MarketField<Market> bindField() {
+					return MarketField.MARKET;
+				}
 
-			@Override
-			public MarketInstrument[] bindInstruments() {
-				return new MarketInstrument[] {};
-			}
+				@Override
+				public MarketInstrument[] bindInstruments() {
+					return null;
+				}
 
-			@Override
-			public void onMarketEvent(final MarketEvent event,
-					final MarketInstrument instrument, final Market value) {
-			}
-		};
-		isAdded = maker.register(taker);
-		assertFalse(isAdded);
+				@Override
+				public void onMarketEvent(final MarketEvent event,
+						final MarketInstrument instrument, final Market value) {
+				}
+			};
+			final boolean isAdded = maker.register(taker);
+			assertFalse("should not register invalid taker", isAdded);
 
-		taker = new MarketTaker<Market>() {
-			@Override
-			public MarketEvent[] bindEvents() {
-				return new MarketEvent[] { MarketEvent.MARKET_UPDATED };
-			}
+		}
 
-			@Override
-			public MarketField<Market> bindField() {
-				return MarketField.MARKET;
-			}
+		{
+			final MarketTaker<Market> taker = new MarketTaker<Market>() {
+				@Override
+				public MarketEvent[] bindEvents() {
+					return new MarketEvent[] { MarketEvent.MARKET_UPDATED };
+				}
 
-			@Override
-			public MarketInstrument[] bindInstruments() {
-				return new MarketInstrument[] { inst };
-			}
+				@Override
+				public MarketField<Market> bindField() {
+					return MarketField.MARKET;
+				}
 
-			@Override
-			public void onMarketEvent(final MarketEvent event,
-					final MarketInstrument instrument, final Market value) {
-			}
-		};
-		isAdded = maker.register(taker);
-		assertTrue(isAdded);
+				@Override
+				public MarketInstrument[] bindInstruments() {
+					return new MarketInstrument[] {};
+				}
+
+				@Override
+				public void onMarketEvent(final MarketEvent event,
+						final MarketInstrument instrument, final Market value) {
+				}
+			};
+			final boolean isAdded = maker.register(taker);
+			assertTrue("ok to have non null but empty fields", isAdded);
+
+		}
+
+		{
+			final MarketTaker<Market> taker = new MarketTaker<Market>() {
+				@Override
+				public MarketEvent[] bindEvents() {
+					return new MarketEvent[] { MarketEvent.MARKET_UPDATED };
+				}
+
+				@Override
+				public MarketField<Market> bindField() {
+					return MarketField.MARKET;
+				}
+
+				@Override
+				public MarketInstrument[] bindInstruments() {
+					return new MarketInstrument[] { inst };
+				}
+
+				@Override
+				public void onMarketEvent(final MarketEvent event,
+						final MarketInstrument instrument, final Market value) {
+				}
+			};
+			final boolean isAdded = maker.register(taker);
+			assertTrue(isAdded);
+		}
 
 	}
 
