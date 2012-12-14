@@ -6,6 +6,8 @@ import java.util.concurrent.ConcurrentMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.barchart.feed.base.instrument.enums.InstrumentField;
+import com.barchart.feed.base.instrument.enums.MarketDisplay.Fraction;
 import com.barchart.feed.base.instrument.values.MarketInstrument;
 import com.barchart.feed.base.market.api.Market;
 import com.barchart.feed.base.market.api.MarketDo;
@@ -16,6 +18,7 @@ import com.barchart.feed.base.market.api.MarketSafeRunner;
 import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.base.market.enums.MarketField;
+import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.Value;
 
 public abstract class MakerBaseAllMarkets<Message extends MarketMessage> 
@@ -208,6 +211,49 @@ public abstract class MakerBaseAllMarkets<Message extends MarketMessage>
 		
 		varMarket.reg.eventsClear();  // HACK
 		
+	}
+	
+	protected boolean isValid(final MarketDo market) {
+
+		if (market == null) {
+			return false;
+		}
+
+		return true;
+	}
+
+
+	protected boolean isValid(final MarketInstrument instrument) {
+
+		if (instrument == null) {
+			return false;
+		}
+
+		if (instrument.isNull()) {
+			return false;
+		}
+
+		final PriceValue priceStep = instrument.get(InstrumentField.PRICE_STEP);
+
+		if (priceStep.isZero()) {
+			log.error("priceStep.isZero()");
+			return false;
+		}
+
+		final Fraction fraction = instrument.get(InstrumentField.FRACTION);
+
+		if (fraction.isNull()) {
+			log.error("fraction.isNull()");
+			return false;
+		}
+
+		if (priceStep.exponent() != fraction.decimalExponent) {
+			log.error("priceStep.exponent() != fraction.decimalExponent");
+			return false;
+		}
+
+		return true;
+
 	}
 
 }

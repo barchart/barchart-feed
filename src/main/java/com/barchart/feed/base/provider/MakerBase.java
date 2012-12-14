@@ -389,7 +389,7 @@ public abstract class MakerBase<Message extends MarketMessage> implements
 
 	// ########################
 
-	protected final boolean isValid(final MarketDo market) {
+	protected boolean isValid(final MarketDo market) {
 
 		if (market == null) {
 			log.debug("market == null");
@@ -400,7 +400,7 @@ public abstract class MakerBase<Message extends MarketMessage> implements
 
 	}
 
-	protected final boolean isValid(final MarketInstrument instrument) {
+	protected boolean isValid(final MarketInstrument instrument) {
 
 		if (instrument == null) {
 			log.error("instrument == null");
