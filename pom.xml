@@ -10,14 +10,14 @@
 
 	<groupId>com.barchart.feed</groupId>
 	<artifactId>barchart-feed-base</artifactId>
-	<version>1.3.20</version>
+	<version>1.3.21-SNAPSHOT</version>
 	<packaging>bundle</packaging>
 
 	<scm>
 		<url>https://github.com/barchart/barchart-feed-base</url>
 		<connection>scm:git:git://github.com/barchart/barchart-feed-base.git</connection>
 		<developerConnection>scm:git:ssh://git@github.com/barchart/barchart-feed-base.git</developerConnection>
-	  <tag>barchart-feed-base-1.3.20</tag>
+	  <tag>HEAD</tag>
   </scm>
 
 	<properties>
