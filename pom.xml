@@ -14,6 +14,13 @@
 	<version>1.3.22-SNAPSHOT</version>
 	<packaging>bundle</packaging>
 
+	<url>https://github.com/barchart/barchart-feed-base</url>
+
+	<issueManagement>
+		<system>github</system>
+		<url>https://github.com/barchart/barchart-feed-base/issues</url>
+	</issueManagement>
+
 	<scm>
 		<url>https://github.com/barchart/barchart-feed-base</url>
 		<connection>scm:git:git://github.com/barchart/barchart-feed-base.git</connection>
