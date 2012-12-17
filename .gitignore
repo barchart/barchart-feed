@@ -6,17 +6,21 @@
 # http://www.opensource.org/licenses/bsd-license.php
 #
 
-# keep top level
-!/.project
-
-# drop all below
+#
+# remove eclipse meta data
+#
 .project
 .classpath
 .settings/
 
+#
+# remove build folders
+#
 bin/
 target/
-logs/
 
+#
+# remove release meta data
+#
 release.properties
 pom.xml.*
