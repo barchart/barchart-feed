@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
 
@@ -17,14 +18,14 @@
 		<url>https://github.com/barchart/barchart-feed-base</url>
 		<connection>scm:git:git://github.com/barchart/barchart-feed-base.git</connection>
 		<developerConnection>scm:git:ssh://git@github.com/barchart/barchart-feed-base.git</developerConnection>
-	  <tag>HEAD</tag>
-  </scm>
+		<tag>HEAD</tag>
+	</scm>
 
 	<properties>
 
 		<!-- MAIN -->
 		<barchartUtilVersion>2.0.9</barchartUtilVersion>
-	
+
 	</properties>
 
 	<dependencies>
@@ -107,5 +108,35 @@
 		</dependency>
 
 	</dependencies>
+
+	<build>
+
+		<plugins>
+
+			<!-- subject to github rate limit 5k/hr -->
+			<plugin>
+				<groupId>com.github.github</groupId>
+				<artifactId>site-maven-plugin</artifactId>
+				<version>0.7</version>
+				<executions>
+					<execution>
+						<id>maven-site</id>
+						<goals>
+							<goal>site</goal>
+						</goals>
+						<phase>site</phase>
+						<configuration>
+							<merge>true</merge>
+							<server>github</server>
+							<path>site/${project.artifactId}</path>
+							<message>site ${project.artifactId}-${project.version}</message>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+		</plugins>
+
+	</build>
 
 </project>
