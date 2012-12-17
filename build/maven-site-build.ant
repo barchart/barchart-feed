@@ -22,11 +22,8 @@
 
 		<exec executable="${executable}">
 
-			<arg value="clean" />
-			<arg value="install" />
-
-			<arg value="--define" />
-			<arg value="skipTests" />
+			<arg value="validate" />
+			<arg value="site:site" />
 
 		</exec>
 

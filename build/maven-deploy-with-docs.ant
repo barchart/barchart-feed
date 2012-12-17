@@ -23,7 +23,10 @@
 		<exec executable="${executable}">
 
 			<arg value="clean" />
-			<arg value="install" />
+			<arg value="package" />
+			<arg value="javadoc:jar" />
+			<arg value="source:jar" />
+			<arg value="deploy" />
 
 			<arg value="--define" />
 			<arg value="skipTests" />
