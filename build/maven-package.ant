@@ -25,6 +25,9 @@
 			<arg value="clean" />
 			<arg value="package" />
 
+			<arg value="--define" />
+			<arg value="skipTests" />
+
 		</exec>
 	</target>
 

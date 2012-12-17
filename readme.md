@@ -9,7 +9,7 @@
 -->
 ## info
 
-barchart data feed projects -- client 
+barchart data feed -- generic client 
 
 Link to project's Mavent site:
 (http://barchart.github.com/barchart-feed-client/)
