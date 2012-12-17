@@ -19,13 +19,13 @@
 
 	<groupId>com.barchart.feed</groupId>
 	<artifactId>barchart-feed-client</artifactId>
-	<version>1.0.4</version>
+	<version>1.0.5-SNAPSHOT</version>
 
 	<scm>
 		<url>https://github.com/barchart/barchart-feed-client</url>
 		<connection>scm:git:git://github.com/barchart/barchart-feed-client.git</connection>
 		<developerConnection>scm:git:ssh://git@github.com/barchart/barchart-feed-client.git</developerConnection>
-	  <tag>barchart-feed-client-1.0.4</tag>
+	  <tag>HEAD</tag>
   </scm>
 
 	<dependencies>
