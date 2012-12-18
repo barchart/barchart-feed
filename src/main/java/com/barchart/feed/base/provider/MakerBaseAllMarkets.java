@@ -40,22 +40,6 @@ public abstract class MakerBaseAllMarkets<Message extends MarketMessage>
 		}
 	}
 	
-	@Override
-	public int marketCount() {
-		return marketMap.size();
-	}
-	
-	@Override
-	public boolean isRegistered(final MarketInstrument instrument) {
-		return marketMap.containsKey(instrument);
-	}
-	
-	@Override
-	public boolean isRegistered(final MarketTaker<?> taker) {
-		return takerMap.containsKey(taker);
-	}
-	
-	
 	// ########################
 	
 	
@@ -179,16 +163,6 @@ public abstract class MakerBaseAllMarkets<Message extends MarketMessage>
 		
 	}
 	
-	private final MarketSafeRunner<Void, Message> safeMake = 
-			new MarketSafeRunner<Void, Message>() {
-				@Override
-				public Void runSafe(final MarketDo market, final Message message) {
-					make(message, market);
-					market.fireEvents();
-					return null;
-				}
-			};
-	
 	protected abstract void make(Message message, MarketDo market);
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -208,8 +182,6 @@ public abstract class MakerBaseAllMarkets<Message extends MarketMessage>
 			}
 			
 		}
-		
-		varMarket.reg.eventsClear();  // HACK
 		
 	}
 	

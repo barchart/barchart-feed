@@ -332,7 +332,7 @@ public abstract class MakerBase<Message extends MarketMessage> implements
 
 	}
 
-	private final MarketSafeRunner<Void, Message> safeMake = //
+	protected MarketSafeRunner<Void, Message> safeMake = //
 	new MarketSafeRunner<Void, Message>() {
 		@Override
 		public Void runSafe(final MarketDo market, final Message message) {

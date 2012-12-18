@@ -39,6 +39,7 @@ import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
 import com.barchart.util.values.api.Value;
 import com.barchart.util.values.provider.ValueBuilder;
+import com.barchart.util.values.util.ValueUtil;
 
 /**
  * basic market life cycle; NO event management logic here
@@ -258,7 +259,7 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 
 			final MarketInstrument inst = get(INSTRUMENT);
 			final PriceValue priceStep = inst.get(PRICE_STEP);
-
+			
 			final VarCuvol varCuvol = new VarCuvol(priceStep);
 			final VarCuvolLast varCuvolLast = new VarCuvolLast(varCuvol);
 
