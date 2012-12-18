@@ -6,7 +6,7 @@
  * http://www.opensource.org/licenses/bsd-license.php
  */
 /**
- * public instrument api 
+ * market components implementation
  */
-package com.barchart.feed.base.instrument.api;
+package com.barchart.feed.base.provider;
 

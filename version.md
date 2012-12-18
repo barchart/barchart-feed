@@ -18,5 +18,6 @@ Broke out top level packages, removed VarMarketDDF
 
 ### 1.2.2
 Intermediary release, refactoring DDF out 
+
 ### 1.2.0
 original release

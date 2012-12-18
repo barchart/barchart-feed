@@ -13,14 +13,14 @@
   <skin>
   	<groupId>org.apache.maven.skins</groupId>
     <artifactId>maven-fluido-skin</artifactId>
-    <version>1.1</version>
+    <version>1.3.0</version>
   </skin>
 
   <custom>
     <fluidoSkin>
       <gitHub>
         <projectId>barchart/barchart-feed-base</projectId>
-        <ribbonOrientation>left</ribbonOrientation>
+        <ribbonOrientation>right</ribbonOrientation>
         <ribbonColor>orange</ribbonColor>
       </gitHub>
     </fluidoSkin>
@@ -43,11 +43,10 @@
       
     <menu name="Main">
       <item name="About" href="./index.html"/>
-	  <item name="Plugin Goals" href="./plugin-info.html"/>
     </menu>
     
-    <menu name="Examples">
-      <item name="Image Build" href="https://github.com/barchart/"/>
+    <menu name="Tutorials">
+      <item name="Demo 1" href="https://"/>
     </menu>
         
     <menu ref="reports"/>
