@@ -134,4 +134,16 @@
 
 	</profiles>
 
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<configuration>
+					<stylesheetfile>${basedir}/src/site/stylesheet.css</stylesheetfile>
+				</configuration>
+			</plugin>
+		</plugins>
+	</reporting>
+
 </project>
