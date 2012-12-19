@@ -35,7 +35,7 @@
 
 	<properties>
 
-		<barchartUtilVersion>2.0.14</barchartUtilVersion>
+		<barchartUtilVersion>2.0.16</barchartUtilVersion>
 
 		<maven.site.skip>true</maven.site.skip>
 
