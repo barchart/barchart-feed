@@ -1,5 +1,5 @@
 barchart-feed
 =============
 
-  generic feed api : market, instrument, client
+  generic feed api : market, client
   
