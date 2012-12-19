@@ -15,6 +15,8 @@
 	<packaging>pom</packaging>
 
 	<modules>
+		<module>barchart-feed-base</module>
+		<module>barchart-feed-client</module>
 	</modules>
 
 	<url>https://github.com/barchart/barchart-feed</url>
@@ -30,5 +32,60 @@
 		<developerConnection>scm:git:ssh://git@github.com/barchart/barchart-feed.git</developerConnection>
 		<tag>HEAD</tag>
 	</scm>
+
+	<properties>
+
+		<barchartUtilVersion>2.0.14</barchartUtilVersion>
+
+	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+
+			<!-- MAIN -->
+
+			<dependency>
+				<groupId>com.barchart.util</groupId>
+				<artifactId>barchart-util-anno</artifactId>
+				<version>${barchartUtilVersion}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.barchart.util</groupId>
+				<artifactId>barchart-util-clone</artifactId>
+				<version>${barchartUtilVersion}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.barchart.util</groupId>
+				<artifactId>barchart-util-collections</artifactId>
+				<version>${barchartUtilVersion}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.barchart.util</groupId>
+				<artifactId>barchart-util-enums</artifactId>
+				<version>${barchartUtilVersion}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.barchart.util</groupId>
+				<artifactId>barchart-util-values</artifactId>
+				<version>${barchartUtilVersion}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.barchart.util</groupId>
+				<artifactId>barchart-util-thread</artifactId>
+				<version>${barchartUtilVersion}</version>
+			</dependency>
+
+			<!-- TEST -->
+
+			<dependency>
+				<groupId>com.barchart.util</groupId>
+				<artifactId>barchart-util-bench</artifactId>
+				<version>${barchartUtilVersion}</version>
+				<scope>test</scope>
+			</dependency>
+
+		</dependencies>
+	</dependencyManagement>
+
 
 </project>
