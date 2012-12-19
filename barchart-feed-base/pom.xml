@@ -46,37 +46,32 @@
 		<dependency>
 			<groupId>com.barchart.util</groupId>
 			<artifactId>barchart-util-anno</artifactId>
-			<version>${barchartUtilVersion}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.barchart.util</groupId>
 			<artifactId>barchart-util-clone</artifactId>
-			<version>${barchartUtilVersion}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.barchart.util</groupId>
 			<artifactId>barchart-util-collections</artifactId>
-			<version>${barchartUtilVersion}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.barchart.util</groupId>
 			<artifactId>barchart-util-enums</artifactId>
-			<version>${barchartUtilVersion}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.barchart.util</groupId>
 			<artifactId>barchart-util-values</artifactId>
-			<version>${barchartUtilVersion}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.barchart.util</groupId>
 			<artifactId>barchart-util-thread</artifactId>
-			<version>${barchartUtilVersion}</version>
 		</dependency>
+		
+		
 		<dependency>
 			<groupId>com.barchart.util</groupId>
 			<artifactId>barchart-util-bench</artifactId>
-			<version>${barchartUtilVersion}</version>
 			<scope>test</scope>
 		</dependency>
 
@@ -119,35 +114,5 @@
 		</dependency>
 
 	</dependencies>
-
-	<build>
-
-		<plugins>
-
-			<!-- subject to github rate limit 5k/hr -->
-			<plugin>
-				<groupId>com.github.github</groupId>
-				<artifactId>site-maven-plugin</artifactId>
-				<version>0.7</version>
-				<executions>
-					<execution>
-						<id>maven-site</id>
-						<goals>
-							<goal>site</goal>
-						</goals>
-						<phase>site</phase>
-						<configuration>
-							<merge>true</merge>
-							<server>github</server>
-							<path>site/${project.artifactId}</path>
-							<message>site ${project.artifactId}-${project.version}</message>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-
-		</plugins>
-
-	</build>
 
 </project>

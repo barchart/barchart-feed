@@ -37,6 +37,8 @@
 
 		<barchartUtilVersion>2.0.14</barchartUtilVersion>
 
+		<maven.site.skip>true</maven.site.skip>
+
 	</properties>
 
 	<dependencyManagement>
@@ -87,5 +89,49 @@
 		</dependencies>
 	</dependencyManagement>
 
+	<!-- publish maven site to github -->
+	<profiles>
+
+		<profile>
+			<id>maven-site</id>
+			<activation>
+				<!-- selectively enable module maven site -->
+				<file>
+					<exists>maven-site.md</exists>
+				</file>
+			</activation>
+			<properties>
+				<maven.site.skip>false</maven.site.skip>
+			</properties>
+			<build>
+				<plugins>
+
+					<!-- subject to github rate limit 5k/hr -->
+					<plugin>
+						<groupId>com.github.github</groupId>
+						<artifactId>site-maven-plugin</artifactId>
+						<version>0.7</version>
+						<executions>
+							<execution>
+								<id>maven-site</id>
+								<goals>
+									<goal>site</goal>
+								</goals>
+								<phase>site</phase>
+								<configuration>
+									<merge>true</merge>
+									<server>github</server>
+									<path>site/${project.artifactId}</path>
+									<message>site ${project.artifactId}-${project.version}</message>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+
+				</plugins>
+			</build>
+		</profile>
+
+	</profiles>
 
 </project>

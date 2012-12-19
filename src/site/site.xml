@@ -19,7 +19,7 @@
   <custom>
     <fluidoSkin>
       <gitHub>
-        <projectId>barchart/barchart-feed-base</projectId>
+        <projectId>barchart/barchart-feed</projectId>
         <ribbonOrientation>right</ribbonOrientation>
         <ribbonColor>orange</ribbonColor>
       </gitHub>
