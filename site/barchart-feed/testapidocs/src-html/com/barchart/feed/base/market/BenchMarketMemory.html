@@ -1,0 +1,115 @@
+<HTML>
+<BODY BGCOLOR="white">
+<PRE>
+<FONT color="green">001</FONT>    /**<a name="line.1"></a>
+<FONT color="green">002</FONT>     * Copyright (C) 2011-2012 Barchart, Inc. &lt;http://www.barchart.com/&gt;<a name="line.2"></a>
+<FONT color="green">003</FONT>     *<a name="line.3"></a>
+<FONT color="green">004</FONT>     * All rights reserved. Licensed under the OSI BSD License.<a name="line.4"></a>
+<FONT color="green">005</FONT>     *<a name="line.5"></a>
+<FONT color="green">006</FONT>     * http://www.opensource.org/licenses/bsd-license.php<a name="line.6"></a>
+<FONT color="green">007</FONT>     */<a name="line.7"></a>
+<FONT color="green">008</FONT>    package com.barchart.feed.base.market;<a name="line.8"></a>
+<FONT color="green">009</FONT>    <a name="line.9"></a>
+<FONT color="green">010</FONT>    import com.barchart.feed.base.instrument.MockDefinitionService;<a name="line.10"></a>
+<FONT color="green">011</FONT>    import com.barchart.feed.base.instrument.api.DefinitionService;<a name="line.11"></a>
+<FONT color="green">012</FONT>    import com.barchart.feed.base.instrument.values.MarketInstrument;<a name="line.12"></a>
+<FONT color="green">013</FONT>    import com.barchart.feed.base.market.api.Market;<a name="line.13"></a>
+<FONT color="green">014</FONT>    import com.barchart.feed.base.market.api.MarketTaker;<a name="line.14"></a>
+<FONT color="green">015</FONT>    import com.barchart.util.values.api.TextValue;<a name="line.15"></a>
+<FONT color="green">016</FONT>    import com.barchart.util.values.provider.ValueBuilder;<a name="line.16"></a>
+<FONT color="green">017</FONT>    <a name="line.17"></a>
+<FONT color="green">018</FONT>    public class BenchMarketMemory {<a name="line.18"></a>
+<FONT color="green">019</FONT>    <a name="line.19"></a>
+<FONT color="green">020</FONT>            static MockMaker maker = new MockMaker(new MockMarketFactory());<a name="line.20"></a>
+<FONT color="green">021</FONT>    <a name="line.21"></a>
+<FONT color="green">022</FONT>            static int COUNT = 100 * 1000;<a name="line.22"></a>
+<FONT color="green">023</FONT>    <a name="line.23"></a>
+<FONT color="green">024</FONT>            static DefinitionService service = new MockDefinitionService();<a name="line.24"></a>
+<FONT color="green">025</FONT>    <a name="line.25"></a>
+<FONT color="green">026</FONT>            public static void main(final String[] args) throws Exception {<a name="line.26"></a>
+<FONT color="green">027</FONT>    <a name="line.27"></a>
+<FONT color="green">028</FONT>                    MarketInstrument[] inst = new MarketInstrument[COUNT];<a name="line.28"></a>
+<FONT color="green">029</FONT>    <a name="line.29"></a>
+<FONT color="green">030</FONT>                    MarketTaker&lt;Market&gt; taker;<a name="line.30"></a>
+<FONT color="green">031</FONT>    <a name="line.31"></a>
+<FONT color="green">032</FONT>                    for (int k = 0; k &lt; COUNT; k++) {<a name="line.32"></a>
+<FONT color="green">033</FONT>    <a name="line.33"></a>
+<FONT color="green">034</FONT>                            final TextValue id = ValueBuilder.newText("market-" + k);<a name="line.34"></a>
+<FONT color="green">035</FONT>    <a name="line.35"></a>
+<FONT color="green">036</FONT>                            inst = new MarketInstrument[] { service.lookup(id) };<a name="line.36"></a>
+<FONT color="green">037</FONT>    <a name="line.37"></a>
+<FONT color="green">038</FONT>                            taker = new MockTaker&lt;Market&gt;(inst);<a name="line.38"></a>
+<FONT color="green">039</FONT>    <a name="line.39"></a>
+<FONT color="green">040</FONT>                            maker.register(taker);<a name="line.40"></a>
+<FONT color="green">041</FONT>    <a name="line.41"></a>
+<FONT color="green">042</FONT>                    }<a name="line.42"></a>
+<FONT color="green">043</FONT>    <a name="line.43"></a>
+<FONT color="green">044</FONT>                    System.gc();<a name="line.44"></a>
+<FONT color="green">045</FONT>    <a name="line.45"></a>
+<FONT color="green">046</FONT>                    Thread.sleep(1000 * 1000);<a name="line.46"></a>
+<FONT color="green">047</FONT>    <a name="line.47"></a>
+<FONT color="green">048</FONT>            }<a name="line.48"></a>
+<FONT color="green">049</FONT>    }<a name="line.49"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</PRE>
+</BODY>
+</HTML>

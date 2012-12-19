@@ -1,0 +1,180 @@
+<HTML>
+<BODY BGCOLOR="white">
+<PRE>
+<FONT color="green">001</FONT>    /**<a name="line.1"></a>
+<FONT color="green">002</FONT>     * Copyright (C) 2011-2012 Barchart, Inc. &lt;http://www.barchart.com/&gt;<a name="line.2"></a>
+<FONT color="green">003</FONT>     *<a name="line.3"></a>
+<FONT color="green">004</FONT>     * All rights reserved. Licensed under the OSI BSD License.<a name="line.4"></a>
+<FONT color="green">005</FONT>     *<a name="line.5"></a>
+<FONT color="green">006</FONT>     * http://www.opensource.org/licenses/bsd-license.php<a name="line.6"></a>
+<FONT color="green">007</FONT>     */<a name="line.7"></a>
+<FONT color="green">008</FONT>    package com.barchart.feed.base.market.enums;<a name="line.8"></a>
+<FONT color="green">009</FONT>    <a name="line.9"></a>
+<FONT color="green">010</FONT>    import static com.barchart.feed.base.instrument.api.InstrumentConst.*;<a name="line.10"></a>
+<FONT color="green">011</FONT>    import static com.barchart.feed.base.provider.MarketConst.*;<a name="line.11"></a>
+<FONT color="green">012</FONT>    import static com.barchart.util.values.provider.ValueConst.*;<a name="line.12"></a>
+<FONT color="green">013</FONT>    <a name="line.13"></a>
+<FONT color="green">014</FONT>    import com.barchart.feed.base.bar.api.MarketBar;<a name="line.14"></a>
+<FONT color="green">015</FONT>    import com.barchart.feed.base.book.api.MarketBook;<a name="line.15"></a>
+<FONT color="green">016</FONT>    import com.barchart.feed.base.book.api.MarketBookEntry;<a name="line.16"></a>
+<FONT color="green">017</FONT>    import com.barchart.feed.base.book.api.MarketBookTop;<a name="line.17"></a>
+<FONT color="green">018</FONT>    import com.barchart.feed.base.cuvol.api.MarketCuvol;<a name="line.18"></a>
+<FONT color="green">019</FONT>    import com.barchart.feed.base.cuvol.api.MarketCuvolEntry;<a name="line.19"></a>
+<FONT color="green">020</FONT>    import com.barchart.feed.base.instrument.values.MarketInstrument;<a name="line.20"></a>
+<FONT color="green">021</FONT>    import com.barchart.feed.base.market.api.Market;<a name="line.21"></a>
+<FONT color="green">022</FONT>    import com.barchart.feed.base.state.api.MarketState;<a name="line.22"></a>
+<FONT color="green">023</FONT>    import com.barchart.feed.base.trade.api.MarketTrade;<a name="line.23"></a>
+<FONT color="green">024</FONT>    import com.barchart.util.anno.NotMutable;<a name="line.24"></a>
+<FONT color="green">025</FONT>    import com.barchart.util.collections.BitSetEnum;<a name="line.25"></a>
+<FONT color="green">026</FONT>    import com.barchart.util.enums.DictEnum;<a name="line.26"></a>
+<FONT color="green">027</FONT>    import com.barchart.util.enums.ParaEnumBase;<a name="line.27"></a>
+<FONT color="green">028</FONT>    import com.barchart.util.values.api.TimeValue;<a name="line.28"></a>
+<FONT color="green">029</FONT>    import com.barchart.util.values.api.Value;<a name="line.29"></a>
+<FONT color="green">030</FONT>    <a name="line.30"></a>
+<FONT color="green">031</FONT>    @NotMutable<a name="line.31"></a>
+<FONT color="green">032</FONT>    public final class MarketField&lt;V extends Value&lt;V&gt;&gt; extends<a name="line.32"></a>
+<FONT color="green">033</FONT>                    ParaEnumBase&lt;V, MarketField&lt;V&gt;&gt; implements BitSetEnum&lt;MarketField&lt;?&gt;&gt; {<a name="line.33"></a>
+<FONT color="green">034</FONT>    <a name="line.34"></a>
+<FONT color="green">035</FONT>            // ##################################<a name="line.35"></a>
+<FONT color="green">036</FONT>    <a name="line.36"></a>
+<FONT color="green">037</FONT>            /** primary key */<a name="line.37"></a>
+<FONT color="green">038</FONT>            public static final MarketField&lt;MarketInstrument&gt; INSTRUMENT = NEW(NULL_INSTRUMENT);<a name="line.38"></a>
+<FONT color="green">039</FONT>    <a name="line.39"></a>
+<FONT color="green">040</FONT>            /** last time any change of any market field */<a name="line.40"></a>
+<FONT color="green">041</FONT>            public static final MarketField&lt;TimeValue&gt; MARKET_TIME = NEW(NULL_TIME);<a name="line.41"></a>
+<FONT color="green">042</FONT>    <a name="line.42"></a>
+<FONT color="green">043</FONT>            /** last trade, any source */<a name="line.43"></a>
+<FONT color="green">044</FONT>            public static final MarketField&lt;MarketTrade&gt; TRADE = NEW(NULL_TRADE);<a name="line.44"></a>
+<FONT color="green">045</FONT>    <a name="line.45"></a>
+<FONT color="green">046</FONT>            /** market depth, a.k.a book */<a name="line.46"></a>
+<FONT color="green">047</FONT>            public static final MarketField&lt;MarketBook&gt; BOOK = NEW(NULL_BOOK);<a name="line.47"></a>
+<FONT color="green">048</FONT>    <a name="line.48"></a>
+<FONT color="green">049</FONT>            /** proxy to last updated entry */<a name="line.49"></a>
+<FONT color="green">050</FONT>            public static final MarketField&lt;MarketBookEntry&gt; BOOK_LAST = NEW(NULL_BOOK_ENTRY);<a name="line.50"></a>
+<FONT color="green">051</FONT>    <a name="line.51"></a>
+<FONT color="green">052</FONT>            /** proxy to market depth top bid &amp; top ask */<a name="line.52"></a>
+<FONT color="green">053</FONT>            public static final MarketField&lt;MarketBookTop&gt; BOOK_TOP = NEW(NULL_BOOK_TOP);<a name="line.53"></a>
+<FONT color="green">054</FONT>    <a name="line.54"></a>
+<FONT color="green">055</FONT>            /** cumulative volume - price / size ladder */<a name="line.55"></a>
+<FONT color="green">056</FONT>            public static final MarketField&lt;MarketCuvol&gt; CUVOL = NEW(NULL_CUVOL);<a name="line.56"></a>
+<FONT color="green">057</FONT>    <a name="line.57"></a>
+<FONT color="green">058</FONT>            /** proxy to last updated entry in cumulative volume */<a name="line.58"></a>
+<FONT color="green">059</FONT>            public static final MarketField&lt;MarketCuvolEntry&gt; CUVOL_LAST = NEW(NULL_CUVOL_ENTRY);<a name="line.59"></a>
+<FONT color="green">060</FONT>    <a name="line.60"></a>
+<FONT color="green">061</FONT>            // market bars aka sessions<a name="line.61"></a>
+<FONT color="green">062</FONT>    <a name="line.62"></a>
+<FONT color="green">063</FONT>            /** current or default or combo = electronic + manual */<a name="line.63"></a>
+<FONT color="green">064</FONT>            public static final MarketField&lt;MarketBar&gt; BAR_CURRENT = NEW(NULL_BAR);<a name="line.64"></a>
+<FONT color="green">065</FONT>    <a name="line.65"></a>
+<FONT color="green">066</FONT>            /** extra / stocks form t */<a name="line.66"></a>
+<FONT color="green">067</FONT>            public static final MarketField&lt;MarketBar&gt; BAR_CURRENT_EXT = NEW(NULL_BAR);<a name="line.67"></a>
+<FONT color="green">068</FONT>    <a name="line.68"></a>
+<FONT color="green">069</FONT>            /** past - previous day; default or combo */<a name="line.69"></a>
+<FONT color="green">070</FONT>            public static final MarketField&lt;MarketBar&gt; BAR_PREVIOUS = NEW(NULL_BAR);<a name="line.70"></a>
+<FONT color="green">071</FONT>    <a name="line.71"></a>
+<FONT color="green">072</FONT>            // MarketState<a name="line.72"></a>
+<FONT color="green">073</FONT>            public static final MarketField&lt;MarketState&gt; STATE = NEW(NULL_STATE);<a name="line.73"></a>
+<FONT color="green">074</FONT>    <a name="line.74"></a>
+<FONT color="green">075</FONT>            //<a name="line.75"></a>
+<FONT color="green">076</FONT>    <a name="line.76"></a>
+<FONT color="green">077</FONT>            /** market container with all market fields (self reference) */<a name="line.77"></a>
+<FONT color="green">078</FONT>            // NOTE: keep market last<a name="line.78"></a>
+<FONT color="green">079</FONT>            public static final MarketField&lt;Market&gt; MARKET = NEW(NULL_MARKET);<a name="line.79"></a>
+<FONT color="green">080</FONT>    <a name="line.80"></a>
+<FONT color="green">081</FONT>            // ##################################<a name="line.81"></a>
+<FONT color="green">082</FONT>    <a name="line.82"></a>
+<FONT color="green">083</FONT>            public static int size() {<a name="line.83"></a>
+<FONT color="green">084</FONT>                    return values().length;<a name="line.84"></a>
+<FONT color="green">085</FONT>            }<a name="line.85"></a>
+<FONT color="green">086</FONT>    <a name="line.86"></a>
+<FONT color="green">087</FONT>            public static MarketField&lt;?&gt;[] values() {<a name="line.87"></a>
+<FONT color="green">088</FONT>                    return DictEnum.valuesForType(MarketField.class);<a name="line.88"></a>
+<FONT color="green">089</FONT>            }<a name="line.89"></a>
+<FONT color="green">090</FONT>    <a name="line.90"></a>
+<FONT color="green">091</FONT>            //<a name="line.91"></a>
+<FONT color="green">092</FONT>    <a name="line.92"></a>
+<FONT color="green">093</FONT>            private final long mask;<a name="line.93"></a>
+<FONT color="green">094</FONT>    <a name="line.94"></a>
+<FONT color="green">095</FONT>            @Override<a name="line.95"></a>
+<FONT color="green">096</FONT>            public long mask() {<a name="line.96"></a>
+<FONT color="green">097</FONT>                    return mask;<a name="line.97"></a>
+<FONT color="green">098</FONT>            }<a name="line.98"></a>
+<FONT color="green">099</FONT>    <a name="line.99"></a>
+<FONT color="green">100</FONT>            private MarketField() {<a name="line.100"></a>
+<FONT color="green">101</FONT>                    super();<a name="line.101"></a>
+<FONT color="green">102</FONT>                    mask = 0;<a name="line.102"></a>
+<FONT color="green">103</FONT>            }<a name="line.103"></a>
+<FONT color="green">104</FONT>    <a name="line.104"></a>
+<FONT color="green">105</FONT>            private MarketField(final V value) {<a name="line.105"></a>
+<FONT color="green">106</FONT>                    super("", value);<a name="line.106"></a>
+<FONT color="green">107</FONT>                    mask = ONE &lt;&lt; ordinal();<a name="line.107"></a>
+<FONT color="green">108</FONT>            }<a name="line.108"></a>
+<FONT color="green">109</FONT>    <a name="line.109"></a>
+<FONT color="green">110</FONT>            private static final &lt;X extends Value&lt;X&gt;&gt; MarketField&lt;X&gt; NEW(final X value) {<a name="line.110"></a>
+<FONT color="green">111</FONT>                    return new MarketField&lt;X&gt;(value);<a name="line.111"></a>
+<FONT color="green">112</FONT>            }<a name="line.112"></a>
+<FONT color="green">113</FONT>    <a name="line.113"></a>
+<FONT color="green">114</FONT>    }<a name="line.114"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</PRE>
+</BODY>
+</HTML>
