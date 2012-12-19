@@ -68,13 +68,6 @@
 			<artifactId>barchart-util-thread</artifactId>
 		</dependency>
 		
-		
-		<dependency>
-			<groupId>com.barchart.util</groupId>
-			<artifactId>barchart-util-bench</artifactId>
-			<scope>test</scope>
-		</dependency>
-
 		<dependency>
 			<groupId>joda-time</groupId>
 			<artifactId>joda-time</artifactId>
@@ -91,6 +84,12 @@
 		</dependency>
 
 		<!-- TEST -->
+
+		<dependency>
+			<groupId>com.barchart.util</groupId>
+			<artifactId>barchart-util-bench</artifactId>
+			<scope>test</scope>
+		</dependency>
 
 		<dependency>
 			<groupId>javolution</groupId>
