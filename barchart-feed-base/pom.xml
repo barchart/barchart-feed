@@ -1,0 +1,158 @@
+<!--
+
+    Copyright (C) 2011-2012 Barchart, Inc. <http://www.barchart.com />
+
+    All rights reserved. Licensed under the OSI BSD License.
+
+    http://www.opensource.org/licenses/bsd-license.php
+
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.barchart.base</groupId>
+		<artifactId>barchart-archon</artifactId>
+		<version>2.3.6</version>
+	</parent>
+
+	<groupId>com.barchart.feed</groupId>
+	<artifactId>barchart-feed-base</artifactId>
+	<version>1.3.24-SNAPSHOT</version>
+	<packaging>bundle</packaging>
+
+	<url>https://github.com/barchart/barchart-feed-base</url>
+
+	<issueManagement>
+		<system>github</system>
+		<url>https://github.com/barchart/barchart-feed-base/issues</url>
+	</issueManagement>
+
+	<scm>
+		<url>https://github.com/barchart/barchart-feed-base</url>
+		<connection>scm:git:git://github.com/barchart/barchart-feed-base.git</connection>
+		<developerConnection>scm:git:ssh://git@github.com/barchart/barchart-feed-base.git</developerConnection>
+		<tag>HEAD</tag>
+	</scm>
+
+	<properties>
+
+		<!-- MAIN -->
+	
+		<barchartUtilVersion>2.0.14</barchartUtilVersion>
+
+	</properties>
+
+	<dependencies>
+
+		<!-- MAIN -->
+
+		<dependency>
+			<groupId>com.barchart.util</groupId>
+			<artifactId>barchart-util-anno</artifactId>
+			<version>${barchartUtilVersion}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.barchart.util</groupId>
+			<artifactId>barchart-util-clone</artifactId>
+			<version>${barchartUtilVersion}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.barchart.util</groupId>
+			<artifactId>barchart-util-collections</artifactId>
+			<version>${barchartUtilVersion}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.barchart.util</groupId>
+			<artifactId>barchart-util-enums</artifactId>
+			<version>${barchartUtilVersion}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.barchart.util</groupId>
+			<artifactId>barchart-util-values</artifactId>
+			<version>${barchartUtilVersion}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.barchart.util</groupId>
+			<artifactId>barchart-util-thread</artifactId>
+			<version>${barchartUtilVersion}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.barchart.util</groupId>
+			<artifactId>barchart-util-bench</artifactId>
+			<version>${barchartUtilVersion}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>joda-time</groupId>
+			<artifactId>joda-time</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- TEST -->
+
+		<dependency>
+			<groupId>javolution</groupId>
+			<artifactId>javolution</artifactId>
+			<version>5.5.1</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>it.unimi.dsi</groupId>
+			<artifactId>fastutil</artifactId>
+			<version>6.4.4</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.wicket</groupId>
+			<artifactId>wicket-objectsizeof-agent</artifactId>
+			<version>1.4.1</version>
+			<scope>test</scope>
+		</dependency>
+
+	</dependencies>
+
+	<build>
+
+		<plugins>
+
+			<!-- subject to github rate limit 5k/hr -->
+			<plugin>
+				<groupId>com.github.github</groupId>
+				<artifactId>site-maven-plugin</artifactId>
+				<version>0.7</version>
+				<executions>
+					<execution>
+						<id>maven-site</id>
+						<goals>
+							<goal>site</goal>
+						</goals>
+						<phase>site</phase>
+						<configuration>
+							<merge>true</merge>
+							<server>github</server>
+							<path>site/${project.artifactId}</path>
+							<message>site ${project.artifactId}-${project.version}</message>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+		</plugins>
+
+	</build>
+
+</project>
