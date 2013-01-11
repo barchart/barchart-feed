@@ -7,9 +7,6 @@
  */
 package com.barchart.feed.base.provider;
 
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,7 +18,6 @@ import com.barchart.feed.base.market.api.MarketDo;
 import com.barchart.feed.base.market.api.MarketFactory;
 import com.barchart.feed.base.market.api.MarketMakerProvider;
 import com.barchart.feed.base.market.api.MarketMessage;
-import com.barchart.feed.base.market.api.MarketSafeRunner;
 import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.base.market.enums.MarketField;
@@ -38,7 +34,6 @@ public abstract class MakerBaseAllMarkets<Message extends MarketMessage>
 	
 	// ########################
 	
-	
 	protected MakerBaseAllMarkets(final MarketFactory factory) {
 		super(factory);
 		
@@ -48,7 +43,6 @@ public abstract class MakerBaseAllMarkets<Message extends MarketMessage>
 	}
 	
 	// ########################
-	
 	
 	public synchronized final <V extends Value<V>> boolean registerForAll(
 			final MarketTaker<V> taker) {
@@ -73,7 +67,6 @@ public abstract class MakerBaseAllMarkets<Message extends MarketMessage>
 		}
 		
 		return wasAdded;
-		
 	}
 
 	public synchronized final <V extends Value<V>> boolean updateForAll (
@@ -155,6 +148,7 @@ public abstract class MakerBaseAllMarkets<Message extends MarketMessage>
 		final MarketInstrument instrument = message.getInstrument();
 		
 		if (!isValid(instrument)) {
+			log.debug("Instrument {} not valid", instrument.get(InstrumentField.SYMBOL));
 			return;
 		}
 		
