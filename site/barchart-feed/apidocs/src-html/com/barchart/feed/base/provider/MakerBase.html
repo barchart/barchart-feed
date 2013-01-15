@@ -284,261 +284,262 @@
 <FONT color="green">281</FONT>                                    final MarketDo market = marketMap.get(inst);<a name="line.281"></a>
 <FONT color="green">282</FONT>    <a name="line.282"></a>
 <FONT color="green">283</FONT>                                    if(market==null){<a name="line.283"></a>
-<FONT color="green">284</FONT>                                            log.error("can get MarketDo for " + inst.get(InstrumentField.ID).toString());<a name="line.284"></a>
-<FONT color="green">285</FONT>                                            continue;<a name="line.285"></a>
-<FONT color="green">286</FONT>                                    }<a name="line.286"></a>
-<FONT color="green">287</FONT>                                    <a name="line.287"></a>
-<FONT color="green">288</FONT>                                    market.runSafe(safeUnregister, regTaker);<a name="line.288"></a>
-<FONT color="green">289</FONT>    <a name="line.289"></a>
-<FONT color="green">290</FONT>                                    if (!market.hasRegTakers()) {<a name="line.290"></a>
-<FONT color="green">291</FONT>                                            unregister(inst);<a name="line.291"></a>
-<FONT color="green">292</FONT>                                    }<a name="line.292"></a>
-<FONT color="green">293</FONT>    <a name="line.293"></a>
-<FONT color="green">294</FONT>                                    notifyRegListeners(market);<a name="line.294"></a>
-<FONT color="green">295</FONT>    <a name="line.295"></a>
-<FONT color="green">296</FONT>                            }<a name="line.296"></a>
-<FONT color="green">297</FONT>                    } else {<a name="line.297"></a>
-<FONT color="green">298</FONT>                            log.warn("was not registered : {}", taker);<a name="line.298"></a>
-<FONT color="green">299</FONT>                    }<a name="line.299"></a>
-<FONT color="green">300</FONT>    <a name="line.300"></a>
-<FONT color="green">301</FONT>                    return wasRemoved;<a name="line.301"></a>
-<FONT color="green">302</FONT>    <a name="line.302"></a>
-<FONT color="green">303</FONT>            }<a name="line.303"></a>
-<FONT color="green">304</FONT>    <a name="line.304"></a>
-<FONT color="green">305</FONT>            private final MarketSafeRunner&lt;Void, RegTaker&lt;?&gt;&gt; safeUnregister = //<a name="line.305"></a>
-<FONT color="green">306</FONT>            new MarketSafeRunner&lt;Void, RegTaker&lt;?&gt;&gt;() {<a name="line.306"></a>
-<FONT color="green">307</FONT>                    @Override<a name="line.307"></a>
-<FONT color="green">308</FONT>                    public Void runSafe(final MarketDo market, final RegTaker&lt;?&gt; regTaker) {<a name="line.308"></a>
-<FONT color="green">309</FONT>                            market.regRemove(regTaker);<a name="line.309"></a>
-<FONT color="green">310</FONT>                            return null;<a name="line.310"></a>
-<FONT color="green">311</FONT>                    }<a name="line.311"></a>
-<FONT color="green">312</FONT>            };<a name="line.312"></a>
-<FONT color="green">313</FONT>    <a name="line.313"></a>
-<FONT color="green">314</FONT>            // ########################<a name="line.314"></a>
-<FONT color="green">315</FONT>            <a name="line.315"></a>
-<FONT color="green">316</FONT>            @Override<a name="line.316"></a>
-<FONT color="green">317</FONT>            public void make(final Message message) {<a name="line.317"></a>
-<FONT color="green">318</FONT>    <a name="line.318"></a>
-<FONT color="green">319</FONT>                    final MarketInstrument instrument = message.getInstrument();<a name="line.319"></a>
-<FONT color="green">320</FONT>    <a name="line.320"></a>
-<FONT color="green">321</FONT>                    if (!isValid(instrument)) {<a name="line.321"></a>
-<FONT color="green">322</FONT>                            return;<a name="line.322"></a>
-<FONT color="green">323</FONT>                    }<a name="line.323"></a>
-<FONT color="green">324</FONT>    <a name="line.324"></a>
-<FONT color="green">325</FONT>                    final MarketDo market = marketMap.get(instrument);<a name="line.325"></a>
-<FONT color="green">326</FONT>    <a name="line.326"></a>
-<FONT color="green">327</FONT>                    if (!isValid(market)) {<a name="line.327"></a>
-<FONT color="green">328</FONT>                            return;<a name="line.328"></a>
-<FONT color="green">329</FONT>                    }<a name="line.329"></a>
-<FONT color="green">330</FONT>    <a name="line.330"></a>
-<FONT color="green">331</FONT>                    market.runSafe(safeMake, message);<a name="line.331"></a>
-<FONT color="green">332</FONT>    <a name="line.332"></a>
-<FONT color="green">333</FONT>            }<a name="line.333"></a>
-<FONT color="green">334</FONT>    <a name="line.334"></a>
-<FONT color="green">335</FONT>            protected MarketSafeRunner&lt;Void, Message&gt; safeMake = //<a name="line.335"></a>
-<FONT color="green">336</FONT>            new MarketSafeRunner&lt;Void, Message&gt;() {<a name="line.336"></a>
-<FONT color="green">337</FONT>                    @Override<a name="line.337"></a>
-<FONT color="green">338</FONT>                    public Void runSafe(final MarketDo market, final Message message) {<a name="line.338"></a>
-<FONT color="green">339</FONT>                            make(message, market);<a name="line.339"></a>
-<FONT color="green">340</FONT>                            market.fireEvents();<a name="line.340"></a>
-<FONT color="green">341</FONT>                            return null;<a name="line.341"></a>
-<FONT color="green">342</FONT>                    }<a name="line.342"></a>
-<FONT color="green">343</FONT>            };<a name="line.343"></a>
-<FONT color="green">344</FONT>    <a name="line.344"></a>
-<FONT color="green">345</FONT>            protected abstract void make(Message message, MarketDo market);<a name="line.345"></a>
-<FONT color="green">346</FONT>    <a name="line.346"></a>
-<FONT color="green">347</FONT>            // ########################<a name="line.347"></a>
-<FONT color="green">348</FONT>    <a name="line.348"></a>
-<FONT color="green">349</FONT>            @SuppressWarnings("unchecked")<a name="line.349"></a>
-<FONT color="green">350</FONT>            @Override<a name="line.350"></a>
-<FONT color="green">351</FONT>            public final &lt;S extends MarketInstrument, V extends Value&lt;V&gt;&gt; V take(<a name="line.351"></a>
-<FONT color="green">352</FONT>                            final S instrument, final MarketField&lt;V&gt; field) {<a name="line.352"></a>
-<FONT color="green">353</FONT>    <a name="line.353"></a>
-<FONT color="green">354</FONT>                    final MarketDo market = marketMap.get(instrument);<a name="line.354"></a>
-<FONT color="green">355</FONT>    <a name="line.355"></a>
-<FONT color="green">356</FONT>                    if (market == null) {<a name="line.356"></a>
-<FONT color="green">357</FONT>                            return MarketConst.NULL_MARKET.get(field).freeze();<a name="line.357"></a>
-<FONT color="green">358</FONT>                    }<a name="line.358"></a>
-<FONT color="green">359</FONT>    <a name="line.359"></a>
-<FONT color="green">360</FONT>                    return (V) market.runSafe(safeTake, field);<a name="line.360"></a>
-<FONT color="green">361</FONT>    <a name="line.361"></a>
-<FONT color="green">362</FONT>            }<a name="line.362"></a>
-<FONT color="green">363</FONT>    <a name="line.363"></a>
-<FONT color="green">364</FONT>            private final MarketSafeRunner&lt;Value&lt;?&gt;, MarketField&lt;?&gt;&gt; safeTake = //<a name="line.364"></a>
-<FONT color="green">365</FONT>            new MarketSafeRunner&lt;Value&lt;?&gt;, MarketField&lt;?&gt;&gt;() {<a name="line.365"></a>
-<FONT color="green">366</FONT>                    @Override<a name="line.366"></a>
-<FONT color="green">367</FONT>                    public Value&lt;?&gt; runSafe(final MarketDo market,<a name="line.367"></a>
-<FONT color="green">368</FONT>                                    final MarketField&lt;?&gt; field) {<a name="line.368"></a>
-<FONT color="green">369</FONT>                            return market.get(field).freeze();<a name="line.369"></a>
-<FONT color="green">370</FONT>                    }<a name="line.370"></a>
-<FONT color="green">371</FONT>            };<a name="line.371"></a>
-<FONT color="green">372</FONT>    <a name="line.372"></a>
-<FONT color="green">373</FONT>            // ########################<a name="line.373"></a>
-<FONT color="green">374</FONT>    <a name="line.374"></a>
-<FONT color="green">375</FONT>            @Override<a name="line.375"></a>
-<FONT color="green">376</FONT>            public synchronized final void copyTo(<a name="line.376"></a>
-<FONT color="green">377</FONT>                            final MarketMakerProvider&lt;Message&gt; maker,<a name="line.377"></a>
-<FONT color="green">378</FONT>                            final MarketField&lt;?&gt;... fields) {<a name="line.378"></a>
-<FONT color="green">379</FONT>                    throw new UnsupportedOperationException("TODO");<a name="line.379"></a>
-<FONT color="green">380</FONT>            }<a name="line.380"></a>
-<FONT color="green">381</FONT>    <a name="line.381"></a>
-<FONT color="green">382</FONT>            // ########################<a name="line.382"></a>
-<FONT color="green">383</FONT>    <a name="line.383"></a>
-<FONT color="green">384</FONT>            @Override<a name="line.384"></a>
-<FONT color="green">385</FONT>            public synchronized void clearAll() {<a name="line.385"></a>
-<FONT color="green">386</FONT>                    marketMap.clear();<a name="line.386"></a>
-<FONT color="green">387</FONT>                    takerMap.clear();<a name="line.387"></a>
-<FONT color="green">388</FONT>            }<a name="line.388"></a>
-<FONT color="green">389</FONT>    <a name="line.389"></a>
-<FONT color="green">390</FONT>            // ########################<a name="line.390"></a>
-<FONT color="green">391</FONT>    <a name="line.391"></a>
-<FONT color="green">392</FONT>            protected boolean isValid(final MarketDo market) {<a name="line.392"></a>
-<FONT color="green">393</FONT>    <a name="line.393"></a>
-<FONT color="green">394</FONT>                    if (market == null) {<a name="line.394"></a>
-<FONT color="green">395</FONT>                            log.debug("market == null");<a name="line.395"></a>
-<FONT color="green">396</FONT>                            return false;<a name="line.396"></a>
-<FONT color="green">397</FONT>                    }<a name="line.397"></a>
-<FONT color="green">398</FONT>    <a name="line.398"></a>
-<FONT color="green">399</FONT>                    return true;<a name="line.399"></a>
-<FONT color="green">400</FONT>    <a name="line.400"></a>
-<FONT color="green">401</FONT>            }<a name="line.401"></a>
-<FONT color="green">402</FONT>    <a name="line.402"></a>
-<FONT color="green">403</FONT>            protected boolean isValid(final MarketInstrument instrument) {<a name="line.403"></a>
-<FONT color="green">404</FONT>    <a name="line.404"></a>
-<FONT color="green">405</FONT>                    if (instrument == null) {<a name="line.405"></a>
-<FONT color="green">406</FONT>                            log.error("instrument == null");<a name="line.406"></a>
-<FONT color="green">407</FONT>                            return false;<a name="line.407"></a>
-<FONT color="green">408</FONT>                    }<a name="line.408"></a>
-<FONT color="green">409</FONT>    <a name="line.409"></a>
-<FONT color="green">410</FONT>                    if (instrument.isNull()) {<a name="line.410"></a>
-<FONT color="green">411</FONT>                            log.error("instrument.isNull()");<a name="line.411"></a>
-<FONT color="green">412</FONT>                            return false;<a name="line.412"></a>
-<FONT color="green">413</FONT>                    }<a name="line.413"></a>
-<FONT color="green">414</FONT>    <a name="line.414"></a>
-<FONT color="green">415</FONT>                    final PriceValue priceStep = instrument.get(InstrumentField.PRICE_STEP);<a name="line.415"></a>
-<FONT color="green">416</FONT>    <a name="line.416"></a>
-<FONT color="green">417</FONT>                    if (priceStep.isZero()) {<a name="line.417"></a>
-<FONT color="green">418</FONT>                            log.error("priceStep.isZero()");<a name="line.418"></a>
-<FONT color="green">419</FONT>                            return false;<a name="line.419"></a>
-<FONT color="green">420</FONT>                    }<a name="line.420"></a>
-<FONT color="green">421</FONT>    <a name="line.421"></a>
-<FONT color="green">422</FONT>                    final Fraction fraction = instrument.get(InstrumentField.FRACTION);<a name="line.422"></a>
-<FONT color="green">423</FONT>    <a name="line.423"></a>
-<FONT color="green">424</FONT>                    if (fraction.isNull()) {<a name="line.424"></a>
-<FONT color="green">425</FONT>                            log.error("fraction.isNull()");<a name="line.425"></a>
-<FONT color="green">426</FONT>                            return false;<a name="line.426"></a>
-<FONT color="green">427</FONT>                    }<a name="line.427"></a>
-<FONT color="green">428</FONT>    <a name="line.428"></a>
-<FONT color="green">429</FONT>                    if (priceStep.exponent() != fraction.decimalExponent) {<a name="line.429"></a>
-<FONT color="green">430</FONT>                            log.error("priceStep.exponent() != fraction.decimalExponent");<a name="line.430"></a>
-<FONT color="green">431</FONT>                            return false;<a name="line.431"></a>
-<FONT color="green">432</FONT>                    }<a name="line.432"></a>
-<FONT color="green">433</FONT>    <a name="line.433"></a>
-<FONT color="green">434</FONT>                    return true;<a name="line.434"></a>
-<FONT color="green">435</FONT>    <a name="line.435"></a>
-<FONT color="green">436</FONT>            }<a name="line.436"></a>
-<FONT color="green">437</FONT>    <a name="line.437"></a>
-<FONT color="green">438</FONT>            //<a name="line.438"></a>
-<FONT color="green">439</FONT>    <a name="line.439"></a>
-<FONT color="green">440</FONT>            @Override<a name="line.440"></a>
-<FONT color="green">441</FONT>            public final synchronized boolean register(final MarketInstrument instrument) {<a name="line.441"></a>
-<FONT color="green">442</FONT>    <a name="line.442"></a>
-<FONT color="green">443</FONT>                    if (!isValid(instrument)) {<a name="line.443"></a>
-<FONT color="green">444</FONT>                            return false;<a name="line.444"></a>
-<FONT color="green">445</FONT>                    }<a name="line.445"></a>
-<FONT color="green">446</FONT>    <a name="line.446"></a>
-<FONT color="green">447</FONT>                    MarketDo market = marketMap.get(instrument);<a name="line.447"></a>
-<FONT color="green">448</FONT>    <a name="line.448"></a>
-<FONT color="green">449</FONT>                    final boolean wasAdded = (market == null);<a name="line.449"></a>
-<FONT color="green">450</FONT>    <a name="line.450"></a>
-<FONT color="green">451</FONT>                    while (market == null) {<a name="line.451"></a>
-<FONT color="green">452</FONT>                            market = factory.newMarket();<a name="line.452"></a>
-<FONT color="green">453</FONT>                            market.setInstrument(instrument);<a name="line.453"></a>
-<FONT color="green">454</FONT>                            marketMap.putIfAbsent(instrument, market);<a name="line.454"></a>
-<FONT color="green">455</FONT>                            market = marketMap.get(instrument);<a name="line.455"></a>
-<FONT color="green">456</FONT>                    }<a name="line.456"></a>
-<FONT color="green">457</FONT>    <a name="line.457"></a>
-<FONT color="green">458</FONT>                    if (wasAdded) {<a name="line.458"></a>
-<FONT color="green">459</FONT>                            //<a name="line.459"></a>
-<FONT color="green">460</FONT>                    } else {<a name="line.460"></a>
-<FONT color="green">461</FONT>                            log.warn("already registered : {}", instrument);<a name="line.461"></a>
-<FONT color="green">462</FONT>                    }<a name="line.462"></a>
-<FONT color="green">463</FONT>    <a name="line.463"></a>
-<FONT color="green">464</FONT>                    return wasAdded;<a name="line.464"></a>
-<FONT color="green">465</FONT>    <a name="line.465"></a>
-<FONT color="green">466</FONT>            }<a name="line.466"></a>
-<FONT color="green">467</FONT>    <a name="line.467"></a>
-<FONT color="green">468</FONT>            @Override<a name="line.468"></a>
-<FONT color="green">469</FONT>            public final synchronized boolean unregister(<a name="line.469"></a>
-<FONT color="green">470</FONT>                            final MarketInstrument instrument) {<a name="line.470"></a>
-<FONT color="green">471</FONT>    <a name="line.471"></a>
-<FONT color="green">472</FONT>                    if (!isValid(instrument)) {<a name="line.472"></a>
-<FONT color="green">473</FONT>                            return false;<a name="line.473"></a>
-<FONT color="green">474</FONT>                    }<a name="line.474"></a>
-<FONT color="green">475</FONT>    <a name="line.475"></a>
-<FONT color="green">476</FONT>                    final MarketDo market = marketMap.remove(instrument);<a name="line.476"></a>
-<FONT color="green">477</FONT>    <a name="line.477"></a>
-<FONT color="green">478</FONT>                    final boolean wasRemoved = (market != null);<a name="line.478"></a>
-<FONT color="green">479</FONT>    <a name="line.479"></a>
-<FONT color="green">480</FONT>                    if (wasRemoved) {<a name="line.480"></a>
-<FONT color="green">481</FONT>                            //<a name="line.481"></a>
-<FONT color="green">482</FONT>                    } else {<a name="line.482"></a>
-<FONT color="green">483</FONT>                            log.warn("was not registered : {}", instrument);<a name="line.483"></a>
-<FONT color="green">484</FONT>                    }<a name="line.484"></a>
-<FONT color="green">485</FONT>    <a name="line.485"></a>
-<FONT color="green">486</FONT>                    return wasRemoved;<a name="line.486"></a>
-<FONT color="green">487</FONT>    <a name="line.487"></a>
-<FONT color="green">488</FONT>            }<a name="line.488"></a>
-<FONT color="green">489</FONT>    <a name="line.489"></a>
-<FONT color="green">490</FONT>            //<a name="line.490"></a>
-<FONT color="green">491</FONT>    <a name="line.491"></a>
-<FONT color="green">492</FONT>            @Override<a name="line.492"></a>
-<FONT color="green">493</FONT>            public void add(final MarketRegListener listener) {<a name="line.493"></a>
-<FONT color="green">494</FONT>                    listenerList.addIfAbsent(listener);<a name="line.494"></a>
-<FONT color="green">495</FONT>            }<a name="line.495"></a>
-<FONT color="green">496</FONT>    <a name="line.496"></a>
-<FONT color="green">497</FONT>            @Override<a name="line.497"></a>
-<FONT color="green">498</FONT>            public void remove(final MarketRegListener listener) {<a name="line.498"></a>
-<FONT color="green">499</FONT>                    listenerList.remove(listener);<a name="line.499"></a>
-<FONT color="green">500</FONT>            }<a name="line.500"></a>
-<FONT color="green">501</FONT>    <a name="line.501"></a>
-<FONT color="green">502</FONT>            protected final void notifyRegListeners(final MarketDo market) {<a name="line.502"></a>
-<FONT color="green">503</FONT>    <a name="line.503"></a>
-<FONT color="green">504</FONT>                    final MarketInstrument inst = market.get(MarketField.INSTRUMENT);<a name="line.504"></a>
-<FONT color="green">505</FONT>    <a name="line.505"></a>
-<FONT color="green">506</FONT>                    final Set&lt;MarketEvent&gt; events = market.regEvents();<a name="line.506"></a>
-<FONT color="green">507</FONT>    <a name="line.507"></a>
-<FONT color="green">508</FONT>                    for (final MarketRegListener listener : listenerList) {<a name="line.508"></a>
-<FONT color="green">509</FONT>                            try {<a name="line.509"></a>
-<FONT color="green">510</FONT>                                    listener.onRegistrationChange(inst, events);<a name="line.510"></a>
-<FONT color="green">511</FONT>                            } catch (final Exception e) {<a name="line.511"></a>
-<FONT color="green">512</FONT>                                    log.error("", e);<a name="line.512"></a>
-<FONT color="green">513</FONT>                            }<a name="line.513"></a>
-<FONT color="green">514</FONT>                    }<a name="line.514"></a>
-<FONT color="green">515</FONT>    <a name="line.515"></a>
-<FONT color="green">516</FONT>            }<a name="line.516"></a>
-<FONT color="green">517</FONT>    <a name="line.517"></a>
-<FONT color="green">518</FONT>            @Override<a name="line.518"></a>
-<FONT color="green">519</FONT>            public void notifyRegListeners() {<a name="line.519"></a>
-<FONT color="green">520</FONT>                    for (final MarketDo market : marketMap.values()) {<a name="line.520"></a>
-<FONT color="green">521</FONT>                            notifyRegListeners(market);<a name="line.521"></a>
-<FONT color="green">522</FONT>                    }<a name="line.522"></a>
-<FONT color="green">523</FONT>            }<a name="line.523"></a>
-<FONT color="green">524</FONT>    <a name="line.524"></a>
-<FONT color="green">525</FONT>            @Override<a name="line.525"></a>
-<FONT color="green">526</FONT>            public void appendMarketProvider(final MarketFactory marketFactory) {<a name="line.526"></a>
-<FONT color="green">527</FONT>                    throw new UnsupportedOperationException("TODO");<a name="line.527"></a>
-<FONT color="green">528</FONT>            }<a name="line.528"></a>
-<FONT color="green">529</FONT>    <a name="line.529"></a>
-<FONT color="green">530</FONT>            protected RegTaker&lt;?&gt; getRegTaker(final MarketTaker&lt;?&gt; taker) {<a name="line.530"></a>
-<FONT color="green">531</FONT>                    return takerMap.get(taker);<a name="line.531"></a>
-<FONT color="green">532</FONT>            }<a name="line.532"></a>
-<FONT color="green">533</FONT>    <a name="line.533"></a>
-<FONT color="green">534</FONT>            protected MarketDo getMarket(final MarketInstrument inst) {<a name="line.534"></a>
-<FONT color="green">535</FONT>                    return marketMap.get(inst);<a name="line.535"></a>
-<FONT color="green">536</FONT>            }<a name="line.536"></a>
-<FONT color="green">537</FONT>    <a name="line.537"></a>
-<FONT color="green">538</FONT>    }<a name="line.538"></a>
+<FONT color="green">284</FONT>                                            log.error("Failed to get MarketDo for " + inst.get(<a name="line.284"></a>
+<FONT color="green">285</FONT>                                                            InstrumentField.ID).toString());<a name="line.285"></a>
+<FONT color="green">286</FONT>                                            continue;<a name="line.286"></a>
+<FONT color="green">287</FONT>                                    }<a name="line.287"></a>
+<FONT color="green">288</FONT>                                    <a name="line.288"></a>
+<FONT color="green">289</FONT>                                    market.runSafe(safeUnregister, regTaker);<a name="line.289"></a>
+<FONT color="green">290</FONT>    <a name="line.290"></a>
+<FONT color="green">291</FONT>                                    if (!market.hasRegTakers()) {<a name="line.291"></a>
+<FONT color="green">292</FONT>                                            unregister(inst);<a name="line.292"></a>
+<FONT color="green">293</FONT>                                    }<a name="line.293"></a>
+<FONT color="green">294</FONT>    <a name="line.294"></a>
+<FONT color="green">295</FONT>                                    notifyRegListeners(market);<a name="line.295"></a>
+<FONT color="green">296</FONT>    <a name="line.296"></a>
+<FONT color="green">297</FONT>                            }<a name="line.297"></a>
+<FONT color="green">298</FONT>                    } else {<a name="line.298"></a>
+<FONT color="green">299</FONT>                            log.warn("was not registered : {}", taker);<a name="line.299"></a>
+<FONT color="green">300</FONT>                    }<a name="line.300"></a>
+<FONT color="green">301</FONT>    <a name="line.301"></a>
+<FONT color="green">302</FONT>                    return wasRemoved;<a name="line.302"></a>
+<FONT color="green">303</FONT>    <a name="line.303"></a>
+<FONT color="green">304</FONT>            }<a name="line.304"></a>
+<FONT color="green">305</FONT>    <a name="line.305"></a>
+<FONT color="green">306</FONT>            private final MarketSafeRunner&lt;Void, RegTaker&lt;?&gt;&gt; safeUnregister = //<a name="line.306"></a>
+<FONT color="green">307</FONT>            new MarketSafeRunner&lt;Void, RegTaker&lt;?&gt;&gt;() {<a name="line.307"></a>
+<FONT color="green">308</FONT>                    @Override<a name="line.308"></a>
+<FONT color="green">309</FONT>                    public Void runSafe(final MarketDo market, final RegTaker&lt;?&gt; regTaker) {<a name="line.309"></a>
+<FONT color="green">310</FONT>                            market.regRemove(regTaker);<a name="line.310"></a>
+<FONT color="green">311</FONT>                            return null;<a name="line.311"></a>
+<FONT color="green">312</FONT>                    }<a name="line.312"></a>
+<FONT color="green">313</FONT>            };<a name="line.313"></a>
+<FONT color="green">314</FONT>    <a name="line.314"></a>
+<FONT color="green">315</FONT>            // ########################<a name="line.315"></a>
+<FONT color="green">316</FONT>            <a name="line.316"></a>
+<FONT color="green">317</FONT>            @Override<a name="line.317"></a>
+<FONT color="green">318</FONT>            public void make(final Message message) {<a name="line.318"></a>
+<FONT color="green">319</FONT>    <a name="line.319"></a>
+<FONT color="green">320</FONT>                    final MarketInstrument instrument = message.getInstrument();<a name="line.320"></a>
+<FONT color="green">321</FONT>    <a name="line.321"></a>
+<FONT color="green">322</FONT>                    if (!isValid(instrument)) {<a name="line.322"></a>
+<FONT color="green">323</FONT>                            return;<a name="line.323"></a>
+<FONT color="green">324</FONT>                    }<a name="line.324"></a>
+<FONT color="green">325</FONT>    <a name="line.325"></a>
+<FONT color="green">326</FONT>                    final MarketDo market = marketMap.get(instrument);<a name="line.326"></a>
+<FONT color="green">327</FONT>    <a name="line.327"></a>
+<FONT color="green">328</FONT>                    if (!isValid(market)) {<a name="line.328"></a>
+<FONT color="green">329</FONT>                            return;<a name="line.329"></a>
+<FONT color="green">330</FONT>                    }<a name="line.330"></a>
+<FONT color="green">331</FONT>    <a name="line.331"></a>
+<FONT color="green">332</FONT>                    market.runSafe(safeMake, message);<a name="line.332"></a>
+<FONT color="green">333</FONT>    <a name="line.333"></a>
+<FONT color="green">334</FONT>            }<a name="line.334"></a>
+<FONT color="green">335</FONT>    <a name="line.335"></a>
+<FONT color="green">336</FONT>            protected MarketSafeRunner&lt;Void, Message&gt; safeMake = //<a name="line.336"></a>
+<FONT color="green">337</FONT>            new MarketSafeRunner&lt;Void, Message&gt;() {<a name="line.337"></a>
+<FONT color="green">338</FONT>                    @Override<a name="line.338"></a>
+<FONT color="green">339</FONT>                    public Void runSafe(final MarketDo market, final Message message) {<a name="line.339"></a>
+<FONT color="green">340</FONT>                            make(message, market);<a name="line.340"></a>
+<FONT color="green">341</FONT>                            market.fireEvents();<a name="line.341"></a>
+<FONT color="green">342</FONT>                            return null;<a name="line.342"></a>
+<FONT color="green">343</FONT>                    }<a name="line.343"></a>
+<FONT color="green">344</FONT>            };<a name="line.344"></a>
+<FONT color="green">345</FONT>    <a name="line.345"></a>
+<FONT color="green">346</FONT>            protected abstract void make(Message message, MarketDo market);<a name="line.346"></a>
+<FONT color="green">347</FONT>    <a name="line.347"></a>
+<FONT color="green">348</FONT>            // ########################<a name="line.348"></a>
+<FONT color="green">349</FONT>    <a name="line.349"></a>
+<FONT color="green">350</FONT>            @SuppressWarnings("unchecked")<a name="line.350"></a>
+<FONT color="green">351</FONT>            @Override<a name="line.351"></a>
+<FONT color="green">352</FONT>            public final &lt;S extends MarketInstrument, V extends Value&lt;V&gt;&gt; V take(<a name="line.352"></a>
+<FONT color="green">353</FONT>                            final S instrument, final MarketField&lt;V&gt; field) {<a name="line.353"></a>
+<FONT color="green">354</FONT>    <a name="line.354"></a>
+<FONT color="green">355</FONT>                    final MarketDo market = marketMap.get(instrument);<a name="line.355"></a>
+<FONT color="green">356</FONT>    <a name="line.356"></a>
+<FONT color="green">357</FONT>                    if (market == null) {<a name="line.357"></a>
+<FONT color="green">358</FONT>                            return MarketConst.NULL_MARKET.get(field).freeze();<a name="line.358"></a>
+<FONT color="green">359</FONT>                    }<a name="line.359"></a>
+<FONT color="green">360</FONT>    <a name="line.360"></a>
+<FONT color="green">361</FONT>                    return (V) market.runSafe(safeTake, field);<a name="line.361"></a>
+<FONT color="green">362</FONT>    <a name="line.362"></a>
+<FONT color="green">363</FONT>            }<a name="line.363"></a>
+<FONT color="green">364</FONT>    <a name="line.364"></a>
+<FONT color="green">365</FONT>            private final MarketSafeRunner&lt;Value&lt;?&gt;, MarketField&lt;?&gt;&gt; safeTake = //<a name="line.365"></a>
+<FONT color="green">366</FONT>            new MarketSafeRunner&lt;Value&lt;?&gt;, MarketField&lt;?&gt;&gt;() {<a name="line.366"></a>
+<FONT color="green">367</FONT>                    @Override<a name="line.367"></a>
+<FONT color="green">368</FONT>                    public Value&lt;?&gt; runSafe(final MarketDo market,<a name="line.368"></a>
+<FONT color="green">369</FONT>                                    final MarketField&lt;?&gt; field) {<a name="line.369"></a>
+<FONT color="green">370</FONT>                            return market.get(field).freeze();<a name="line.370"></a>
+<FONT color="green">371</FONT>                    }<a name="line.371"></a>
+<FONT color="green">372</FONT>            };<a name="line.372"></a>
+<FONT color="green">373</FONT>    <a name="line.373"></a>
+<FONT color="green">374</FONT>            // ########################<a name="line.374"></a>
+<FONT color="green">375</FONT>    <a name="line.375"></a>
+<FONT color="green">376</FONT>            @Override<a name="line.376"></a>
+<FONT color="green">377</FONT>            public synchronized final void copyTo(<a name="line.377"></a>
+<FONT color="green">378</FONT>                            final MarketMakerProvider&lt;Message&gt; maker,<a name="line.378"></a>
+<FONT color="green">379</FONT>                            final MarketField&lt;?&gt;... fields) {<a name="line.379"></a>
+<FONT color="green">380</FONT>                    throw new UnsupportedOperationException("TODO");<a name="line.380"></a>
+<FONT color="green">381</FONT>            }<a name="line.381"></a>
+<FONT color="green">382</FONT>    <a name="line.382"></a>
+<FONT color="green">383</FONT>            // ########################<a name="line.383"></a>
+<FONT color="green">384</FONT>    <a name="line.384"></a>
+<FONT color="green">385</FONT>            @Override<a name="line.385"></a>
+<FONT color="green">386</FONT>            public synchronized void clearAll() {<a name="line.386"></a>
+<FONT color="green">387</FONT>                    marketMap.clear();<a name="line.387"></a>
+<FONT color="green">388</FONT>                    takerMap.clear();<a name="line.388"></a>
+<FONT color="green">389</FONT>            }<a name="line.389"></a>
+<FONT color="green">390</FONT>    <a name="line.390"></a>
+<FONT color="green">391</FONT>            // ########################<a name="line.391"></a>
+<FONT color="green">392</FONT>    <a name="line.392"></a>
+<FONT color="green">393</FONT>            protected boolean isValid(final MarketDo market) {<a name="line.393"></a>
+<FONT color="green">394</FONT>    <a name="line.394"></a>
+<FONT color="green">395</FONT>                    if (market == null) {<a name="line.395"></a>
+<FONT color="green">396</FONT>                            log.debug("market == null");<a name="line.396"></a>
+<FONT color="green">397</FONT>                            return false;<a name="line.397"></a>
+<FONT color="green">398</FONT>                    }<a name="line.398"></a>
+<FONT color="green">399</FONT>    <a name="line.399"></a>
+<FONT color="green">400</FONT>                    return true;<a name="line.400"></a>
+<FONT color="green">401</FONT>    <a name="line.401"></a>
+<FONT color="green">402</FONT>            }<a name="line.402"></a>
+<FONT color="green">403</FONT>    <a name="line.403"></a>
+<FONT color="green">404</FONT>            protected boolean isValid(final MarketInstrument instrument) {<a name="line.404"></a>
+<FONT color="green">405</FONT>    <a name="line.405"></a>
+<FONT color="green">406</FONT>                    if (instrument == null) {<a name="line.406"></a>
+<FONT color="green">407</FONT>                            log.error("instrument == null");<a name="line.407"></a>
+<FONT color="green">408</FONT>                            return false;<a name="line.408"></a>
+<FONT color="green">409</FONT>                    }<a name="line.409"></a>
+<FONT color="green">410</FONT>    <a name="line.410"></a>
+<FONT color="green">411</FONT>                    if (instrument.isNull()) {<a name="line.411"></a>
+<FONT color="green">412</FONT>                            log.error("instrument.isNull()");<a name="line.412"></a>
+<FONT color="green">413</FONT>                            return false;<a name="line.413"></a>
+<FONT color="green">414</FONT>                    }<a name="line.414"></a>
+<FONT color="green">415</FONT>    <a name="line.415"></a>
+<FONT color="green">416</FONT>                    final PriceValue priceStep = instrument.get(InstrumentField.PRICE_STEP);<a name="line.416"></a>
+<FONT color="green">417</FONT>    <a name="line.417"></a>
+<FONT color="green">418</FONT>                    if (priceStep.isZero()) {<a name="line.418"></a>
+<FONT color="green">419</FONT>                            log.error("priceStep.isZero()");<a name="line.419"></a>
+<FONT color="green">420</FONT>                            return false;<a name="line.420"></a>
+<FONT color="green">421</FONT>                    }<a name="line.421"></a>
+<FONT color="green">422</FONT>    <a name="line.422"></a>
+<FONT color="green">423</FONT>                    final Fraction fraction = instrument.get(InstrumentField.FRACTION);<a name="line.423"></a>
+<FONT color="green">424</FONT>    <a name="line.424"></a>
+<FONT color="green">425</FONT>                    if (fraction.isNull()) {<a name="line.425"></a>
+<FONT color="green">426</FONT>                            log.error("fraction.isNull()");<a name="line.426"></a>
+<FONT color="green">427</FONT>                            return false;<a name="line.427"></a>
+<FONT color="green">428</FONT>                    }<a name="line.428"></a>
+<FONT color="green">429</FONT>    <a name="line.429"></a>
+<FONT color="green">430</FONT>                    if (priceStep.exponent() != fraction.decimalExponent) {<a name="line.430"></a>
+<FONT color="green">431</FONT>                            log.error("priceStep.exponent() != fraction.decimalExponent");<a name="line.431"></a>
+<FONT color="green">432</FONT>                            return false;<a name="line.432"></a>
+<FONT color="green">433</FONT>                    }<a name="line.433"></a>
+<FONT color="green">434</FONT>    <a name="line.434"></a>
+<FONT color="green">435</FONT>                    return true;<a name="line.435"></a>
+<FONT color="green">436</FONT>    <a name="line.436"></a>
+<FONT color="green">437</FONT>            }<a name="line.437"></a>
+<FONT color="green">438</FONT>    <a name="line.438"></a>
+<FONT color="green">439</FONT>            //<a name="line.439"></a>
+<FONT color="green">440</FONT>    <a name="line.440"></a>
+<FONT color="green">441</FONT>            @Override<a name="line.441"></a>
+<FONT color="green">442</FONT>            public final synchronized boolean register(final MarketInstrument instrument) {<a name="line.442"></a>
+<FONT color="green">443</FONT>    <a name="line.443"></a>
+<FONT color="green">444</FONT>                    if (!isValid(instrument)) {<a name="line.444"></a>
+<FONT color="green">445</FONT>                            return false;<a name="line.445"></a>
+<FONT color="green">446</FONT>                    }<a name="line.446"></a>
+<FONT color="green">447</FONT>    <a name="line.447"></a>
+<FONT color="green">448</FONT>                    MarketDo market = marketMap.get(instrument);<a name="line.448"></a>
+<FONT color="green">449</FONT>    <a name="line.449"></a>
+<FONT color="green">450</FONT>                    final boolean wasAdded = (market == null);<a name="line.450"></a>
+<FONT color="green">451</FONT>    <a name="line.451"></a>
+<FONT color="green">452</FONT>                    while (market == null) {<a name="line.452"></a>
+<FONT color="green">453</FONT>                            market = factory.newMarket();<a name="line.453"></a>
+<FONT color="green">454</FONT>                            market.setInstrument(instrument);<a name="line.454"></a>
+<FONT color="green">455</FONT>                            marketMap.putIfAbsent(instrument, market);<a name="line.455"></a>
+<FONT color="green">456</FONT>                            market = marketMap.get(instrument);<a name="line.456"></a>
+<FONT color="green">457</FONT>                    }<a name="line.457"></a>
+<FONT color="green">458</FONT>    <a name="line.458"></a>
+<FONT color="green">459</FONT>                    if (wasAdded) {<a name="line.459"></a>
+<FONT color="green">460</FONT>                            //<a name="line.460"></a>
+<FONT color="green">461</FONT>                    } else {<a name="line.461"></a>
+<FONT color="green">462</FONT>                            log.warn("already registered : {}", instrument);<a name="line.462"></a>
+<FONT color="green">463</FONT>                    }<a name="line.463"></a>
+<FONT color="green">464</FONT>    <a name="line.464"></a>
+<FONT color="green">465</FONT>                    return wasAdded;<a name="line.465"></a>
+<FONT color="green">466</FONT>    <a name="line.466"></a>
+<FONT color="green">467</FONT>            }<a name="line.467"></a>
+<FONT color="green">468</FONT>    <a name="line.468"></a>
+<FONT color="green">469</FONT>            @Override<a name="line.469"></a>
+<FONT color="green">470</FONT>            public final synchronized boolean unregister(<a name="line.470"></a>
+<FONT color="green">471</FONT>                            final MarketInstrument instrument) {<a name="line.471"></a>
+<FONT color="green">472</FONT>    <a name="line.472"></a>
+<FONT color="green">473</FONT>                    if (!isValid(instrument)) {<a name="line.473"></a>
+<FONT color="green">474</FONT>                            return false;<a name="line.474"></a>
+<FONT color="green">475</FONT>                    }<a name="line.475"></a>
+<FONT color="green">476</FONT>    <a name="line.476"></a>
+<FONT color="green">477</FONT>                    final MarketDo market = marketMap.remove(instrument);<a name="line.477"></a>
+<FONT color="green">478</FONT>    <a name="line.478"></a>
+<FONT color="green">479</FONT>                    final boolean wasRemoved = (market != null);<a name="line.479"></a>
+<FONT color="green">480</FONT>    <a name="line.480"></a>
+<FONT color="green">481</FONT>                    if (wasRemoved) {<a name="line.481"></a>
+<FONT color="green">482</FONT>                            //<a name="line.482"></a>
+<FONT color="green">483</FONT>                    } else {<a name="line.483"></a>
+<FONT color="green">484</FONT>                            log.warn("was not registered : {}", instrument);<a name="line.484"></a>
+<FONT color="green">485</FONT>                    }<a name="line.485"></a>
+<FONT color="green">486</FONT>    <a name="line.486"></a>
+<FONT color="green">487</FONT>                    return wasRemoved;<a name="line.487"></a>
+<FONT color="green">488</FONT>    <a name="line.488"></a>
+<FONT color="green">489</FONT>            }<a name="line.489"></a>
+<FONT color="green">490</FONT>    <a name="line.490"></a>
+<FONT color="green">491</FONT>            //<a name="line.491"></a>
+<FONT color="green">492</FONT>    <a name="line.492"></a>
+<FONT color="green">493</FONT>            @Override<a name="line.493"></a>
+<FONT color="green">494</FONT>            public void add(final MarketRegListener listener) {<a name="line.494"></a>
+<FONT color="green">495</FONT>                    listenerList.addIfAbsent(listener);<a name="line.495"></a>
+<FONT color="green">496</FONT>            }<a name="line.496"></a>
+<FONT color="green">497</FONT>    <a name="line.497"></a>
+<FONT color="green">498</FONT>            @Override<a name="line.498"></a>
+<FONT color="green">499</FONT>            public void remove(final MarketRegListener listener) {<a name="line.499"></a>
+<FONT color="green">500</FONT>                    listenerList.remove(listener);<a name="line.500"></a>
+<FONT color="green">501</FONT>            }<a name="line.501"></a>
+<FONT color="green">502</FONT>    <a name="line.502"></a>
+<FONT color="green">503</FONT>            protected final void notifyRegListeners(final MarketDo market) {<a name="line.503"></a>
+<FONT color="green">504</FONT>    <a name="line.504"></a>
+<FONT color="green">505</FONT>                    final MarketInstrument inst = market.get(MarketField.INSTRUMENT);<a name="line.505"></a>
+<FONT color="green">506</FONT>    <a name="line.506"></a>
+<FONT color="green">507</FONT>                    final Set&lt;MarketEvent&gt; events = market.regEvents();<a name="line.507"></a>
+<FONT color="green">508</FONT>    <a name="line.508"></a>
+<FONT color="green">509</FONT>                    for (final MarketRegListener listener : listenerList) {<a name="line.509"></a>
+<FONT color="green">510</FONT>                            try {<a name="line.510"></a>
+<FONT color="green">511</FONT>                                    listener.onRegistrationChange(inst, events);<a name="line.511"></a>
+<FONT color="green">512</FONT>                            } catch (final Exception e) {<a name="line.512"></a>
+<FONT color="green">513</FONT>                                    log.error("", e);<a name="line.513"></a>
+<FONT color="green">514</FONT>                            }<a name="line.514"></a>
+<FONT color="green">515</FONT>                    }<a name="line.515"></a>
+<FONT color="green">516</FONT>    <a name="line.516"></a>
+<FONT color="green">517</FONT>            }<a name="line.517"></a>
+<FONT color="green">518</FONT>    <a name="line.518"></a>
+<FONT color="green">519</FONT>            @Override<a name="line.519"></a>
+<FONT color="green">520</FONT>            public void notifyRegListeners() {<a name="line.520"></a>
+<FONT color="green">521</FONT>                    for (final MarketDo market : marketMap.values()) {<a name="line.521"></a>
+<FONT color="green">522</FONT>                            notifyRegListeners(market);<a name="line.522"></a>
+<FONT color="green">523</FONT>                    }<a name="line.523"></a>
+<FONT color="green">524</FONT>            }<a name="line.524"></a>
+<FONT color="green">525</FONT>    <a name="line.525"></a>
+<FONT color="green">526</FONT>            @Override<a name="line.526"></a>
+<FONT color="green">527</FONT>            public void appendMarketProvider(final MarketFactory marketFactory) {<a name="line.527"></a>
+<FONT color="green">528</FONT>                    throw new UnsupportedOperationException("TODO");<a name="line.528"></a>
+<FONT color="green">529</FONT>            }<a name="line.529"></a>
+<FONT color="green">530</FONT>    <a name="line.530"></a>
+<FONT color="green">531</FONT>            protected RegTaker&lt;?&gt; getRegTaker(final MarketTaker&lt;?&gt; taker) {<a name="line.531"></a>
+<FONT color="green">532</FONT>                    return takerMap.get(taker);<a name="line.532"></a>
+<FONT color="green">533</FONT>            }<a name="line.533"></a>
+<FONT color="green">534</FONT>    <a name="line.534"></a>
+<FONT color="green">535</FONT>            protected MarketDo getMarket(final MarketInstrument inst) {<a name="line.535"></a>
+<FONT color="green">536</FONT>                    return marketMap.get(inst);<a name="line.536"></a>
+<FONT color="green">537</FONT>            }<a name="line.537"></a>
+<FONT color="green">538</FONT>    <a name="line.538"></a>
+<FONT color="green">539</FONT>    }<a name="line.539"></a>
 
 
 
