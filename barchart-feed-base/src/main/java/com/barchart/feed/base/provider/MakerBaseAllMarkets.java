@@ -7,9 +7,6 @@
  */
 package com.barchart.feed.base.provider;
 
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,38 +18,35 @@ import com.barchart.feed.base.market.api.MarketDo;
 import com.barchart.feed.base.market.api.MarketFactory;
 import com.barchart.feed.base.market.api.MarketMakerProvider;
 import com.barchart.feed.base.market.api.MarketMessage;
-import com.barchart.feed.base.market.api.MarketSafeRunner;
 import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.Value;
 
-public abstract class MakerBaseAllMarkets<Message extends MarketMessage> 
-	extends MakerBase<Message>
-	implements MarketMakerProvider<Message> {
+public abstract class MakerBaseAllMarkets<Message extends MarketMessage>
+		extends MakerBase<Message> implements MarketMakerProvider<Message> {
 
 	protected final Logger log = LoggerFactory.getLogger(getClass());
 
-	private final EventMap<RegTakerList> eventTakerMap = new EventMap<RegTakerList>();
-	
+	private final EventMap<RegTakerList> eventTakerMap =
+			new EventMap<RegTakerList>();
+
 	// ########################
-	
-	
+
 	protected MakerBaseAllMarkets(final MarketFactory factory) {
 		super(factory);
-		
-		for(final MarketEvent event : MarketEvent.values()) {
+
+		for (final MarketEvent event : MarketEvent.values()) {
 			eventTakerMap.put(event, new RegTakerList());
 		}
 	}
-	
+
 	// ########################
-	
-	
+
 	public synchronized final <V extends Value<V>> boolean registerForAll(
 			final MarketTaker<V> taker) {
-		
+
 		if (!RegTaker.isValid(taker)) {
 			return false;
 		}
@@ -66,39 +60,39 @@ public abstract class MakerBaseAllMarkets<Message extends MarketMessage>
 			takerMap.putIfAbsent(taker, regTaker);
 			regTaker = takerMap.get(taker);
 		}
-	
+
 		/* Add taker to TakerList for each MarketEvent */
-		for(MarketEvent e : regTaker.getEvents()) {
+		for (final MarketEvent e : regTaker.getEvents()) {
 			eventTakerMap.get(e).add(regTaker);
 		}
-		
+
 		return wasAdded;
-		
+
 	}
 
-	public synchronized final <V extends Value<V>> boolean updateForAll (
+	public synchronized final <V extends Value<V>> boolean updateForAll(
 			final MarketTaker<V> taker) {
-		
+
 		if (!RegTaker.isValid(taker)) {
 			return false;
 		}
-		
+
 		final RegTaker<?> regTaker = takerMap.get(taker);
-		
+
 		/* Purge taker from all TakerLists */
-		for(MarketEvent e : MarketEvent.values()) {
+		for (final MarketEvent e : MarketEvent.values()) {
 			eventTakerMap.get(e).remove(regTaker);
 		}
-		
+
 		/* Add taker to TakerList for each MarketEvent */
-		for(MarketEvent e : regTaker.getEvents()) {
+		for (final MarketEvent e : regTaker.getEvents()) {
 			eventTakerMap.get(e).add(regTaker);
 		}
-		
+
 		return true;
 	}
-	
-	public synchronized final <V extends Value<V>> boolean unregisterForAll (
+
+	public synchronized final <V extends Value<V>> boolean unregisterForAll(
 			final MarketTaker<V> taker) {
 
 		if (!RegTaker.isValid(taker)) {
@@ -108,20 +102,20 @@ public abstract class MakerBaseAllMarkets<Message extends MarketMessage>
 		final RegTaker<?> regTaker = takerMap.remove(taker);
 
 		/* Purge taker from all TakerLists */
-		for(MarketEvent e : MarketEvent.values()) {
+		for (final MarketEvent e : MarketEvent.values()) {
 			eventTakerMap.get(e).remove(regTaker);
 		}
 
 		return true;
-		
+
 	}
-	
+
 	// ########################
-	
+
 	private final MarketTaker<Market> omniTaker = new MarketTaker<Market>() {
 
 		final MarketInstrument[] blankInsts = {};
-		
+
 		@Override
 		public MarketField<Market> bindField() {
 			return MarketField.MARKET;
@@ -138,60 +132,58 @@ public abstract class MakerBaseAllMarkets<Message extends MarketMessage>
 		}
 
 		@Override
-		public void onMarketEvent(MarketEvent event,
-				MarketInstrument instrument, Market value) {
-			
-			fireEvents(marketMap.get(instrument));
-			
+		public void onMarketEvent(final MarketEvent event,
+				final MarketInstrument instrument, final Market market) {
+
+			fireEvents(marketMap.get(instrument), event);
+
 		}
-		
+
 	};
-	
-	private final RegTaker<Market> regOmniTaker = new RegTaker<Market>(omniTaker);
-	
+
+	private final RegTaker<Market> regOmniTaker = new RegTaker<Market>(
+			omniTaker);
+
 	@Override
 	public final void make(final Message message) {
 
 		final MarketInstrument instrument = message.getInstrument();
-		
+
 		if (!isValid(instrument)) {
 			return;
 		}
-		
+
 		MarketDo market = marketMap.get(instrument);
-		
-		if(!isValid(market)) {
+
+		if (!isValid(market)) {
 			register(instrument);
 			market = marketMap.get(instrument);
+			market.regAdd(regOmniTaker);
 		}
-		
-		market.regAdd(regOmniTaker);
+
 		market.runSafe(safeMake, message);
-		
+
 	}
-	
+
+	@Override
 	protected abstract void make(Message message, MarketDo market);
-	
+
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private final void fireEvents(final MarketDo market) {
-		
-		VarMarket varMarket = (VarMarket)market;
-		
-		for(final MarketEvent event : varMarket.reg.eventSet) {
-			
-			final RegTakerList takers = eventTakerMap.get(event);
-			
-			for(final RegTaker taker : takers) {
-				
-				taker.getTaker().onMarketEvent(event, market.get(MarketField.INSTRUMENT), 
-						market.get(taker.getField()));
-				
-			}
-			
+	private final void fireEvents(final MarketDo market, final MarketEvent event) {
+
+		final RegTakerList takers = eventTakerMap.get(event);
+
+		for (final RegTaker taker : takers) {
+
+			taker.getTaker().onMarketEvent(event,
+					market.get(MarketField.INSTRUMENT),
+					market.get(taker.getField()));
+
 		}
-		
+
 	}
-	
+
+	@Override
 	protected boolean isValid(final MarketDo market) {
 
 		if (market == null) {
@@ -201,7 +193,7 @@ public abstract class MakerBaseAllMarkets<Message extends MarketMessage>
 		return true;
 	}
 
-
+	@Override
 	protected boolean isValid(final MarketInstrument instrument) {
 
 		if (instrument == null) {
