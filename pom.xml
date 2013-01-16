@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>com.barchart.base</groupId>
 		<artifactId>barchart-archon</artifactId>
-		<version>2.3.7</version>
+		<version>2.3.8</version>
 	</parent>
 
 	<groupId>com.barchart.feed</groupId>
@@ -88,13 +88,13 @@
 		</dependencies>
 	</dependencyManagement>
 
-	<!-- publish maven site to github -->
 	<profiles>
 
+		<!-- publish maven site to github -->
 		<profile>
-			<id>maven-site</id>
+			<id>maven-site-github-pages</id>
 			<activation>
-				<!-- selectively enable module maven site -->
+				<!-- selectively enable maven site -->
 				<file>
 					<exists>maven-site.md</exists>
 				</file>
@@ -102,33 +102,6 @@
 			<properties>
 				<maven.site.skip>false</maven.site.skip>
 			</properties>
-			<build>
-				<plugins>
-
-					<!-- subject to github rate limit 5k/hr -->
-					<plugin>
-						<groupId>com.github.github</groupId>
-						<artifactId>site-maven-plugin</artifactId>
-						<version>0.7</version>
-						<executions>
-							<execution>
-								<id>maven-site</id>
-								<goals>
-									<goal>site</goal>
-								</goals>
-								<phase>site</phase>
-								<configuration>
-									<merge>true</merge>
-									<server>github</server>
-									<path>site/${project.artifactId}</path>
-									<message>site ${project.artifactId}-${project.version}</message>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-
-				</plugins>
-			</build>
 		</profile>
 
 	</profiles>
