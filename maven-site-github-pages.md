@@ -9,5 +9,5 @@
 -->
 ### maven build marker
 when this file is present in project root folder, 
-maven site profile will be activated
+maven site for github pages profile will be activated
 
