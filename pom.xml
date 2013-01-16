@@ -36,8 +36,6 @@
 
 		<barchartUtilVersion>2.0.16</barchartUtilVersion>
 
-		<maven.site.skip>true</maven.site.skip>
-
 	</properties>
 
 	<dependencyManagement>
