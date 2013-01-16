@@ -1,0 +1,84 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  
+  	<modelVersion>4.0.0</modelVersion>
+  
+  	<parent>
+    	<groupId>com.barchart.feed</groupId>
+    	<artifactId>barchart-feed</artifactId>
+    	<version>1.3.27-SNAPSHOT</version>
+  	</parent>
+  	
+  	<artifactId>barchart-feed-inst</artifactId>
+  	<packaging>bundle</packaging>
+  	
+  	<url>https://github.com/barchart/barchart-feed</url>
+  	
+  	<issueManagement>
+		<system>github</system>
+		<url>https://github.com/barchart/barchart-feed/issues</url>
+	</issueManagement>
+
+	<scm>
+		<url>https://github.com/barchart/barchart-feed</url>
+		<connection>scm:git:git://github.com/barchart/barchart-feed.git</connection>
+		<developerConnection>scm:git:ssh://git@github.com/barchart/barchart-feed.git</developerConnection>
+		<tag>HEAD</tag>
+	</scm>
+	
+	<properties>
+
+	</properties>
+  	
+  	<dependencies>
+  	
+  		<dependency>
+  			<groupId>com.barchart.feed</groupId>
+  			<artifactId>barchart-feed-base</artifactId>
+  			<version>${parent.version}</version>
+  		</dependency>
+  	
+  		<!-- OSGi -->
+		<dependency>
+			<groupId>com.barchart.osgi</groupId>
+			<artifactId>barchart-osgi-factory</artifactId>
+			<version>[1.0.3,1.1.0)</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.carrotgarden.osgi</groupId>
+			<artifactId>carrot-osgi-anno-scr-core</artifactId>
+			<version>1.1.3</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.osgi</groupId>
+			<artifactId>org.osgi.core</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.osgi</groupId>
+			<artifactId>org.osgi.compendium</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.barchart.osgi</groupId>
+			<artifactId>barchart-osgi-event</artifactId>
+			<version>1.0.2</version>
+			<scope>provided</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<scope>provided</scope>
+		</dependency>
+  	
+  	</dependencies>
+  	<groupId>com.barchart.feed</groupId>
+</project>
