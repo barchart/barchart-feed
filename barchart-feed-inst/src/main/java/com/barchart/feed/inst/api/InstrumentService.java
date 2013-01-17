@@ -1,22 +1,23 @@
 package com.barchart.feed.inst.api;
 
-import com.barchart.osgi.factory.api.Fidget;
+import java.util.List;
+import java.util.concurrent.FutureTask;
 
-public interface InstrumentService extends Fidget {
+public interface InstrumentService {
 	
-	/**
-	 * 
-	 * @param id
-	 * @param context
-	 * @return
-	 */
-	Instrument lookup(String id, SymbologyContext context);
+	Instrument lookup(CharSequence symbol);
 	
-	/**
-	 * 
-	 * @param guid
-	 * @return
-	 */
+	FutureTask<Instrument> lookupAsync(CharSequence symbol);
+	
+	List<Instrument> lookup(List<CharSequence> symbols);
+	
+	FutureTask<List<Instrument>> lookupAsync(List<CharSequence> symbols);
+	
+	
 	Instrument lookup(InstrumentGUID guid);
+	
+	FutureTask<Instrument> lookupAsnyc(InstrumentGUID guid);
+	
+	
 
 }
