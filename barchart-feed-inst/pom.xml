@@ -26,17 +26,54 @@
 	</scm>
 	
 	<properties>
-
+		<bdbjeVersion>4.0.92</bdbjeVersion>
 	</properties>
   	
   	<dependencies>
   	
   		<dependency>
-  			<groupId>com.barchart.feed</groupId>
-  			<artifactId>barchart-feed-base</artifactId>
-  			<version>${parent.version}</version>
+			<groupId>com.sleepycat</groupId>
+			<artifactId>je</artifactId>
+			<version>${bdbjeVersion}</version>
+			<optional>true</optional>
+		</dependency>
+  	
+  		<dependency>
+  			<groupId>com.barchart.missive</groupId>
+			<artifactId>barchart-missive</artifactId>
+			<version>1.1.0</version>
+			<scope>provided</scope>
+  		</dependency>
+  		<dependency>
+  			<groupId>com.barchart.missive</groupId>
+  			<artifactId>barchart-missive-protobuf</artifactId>
+  			<version>1.0.1-SNAPSHOT</version>
+  			<scope>provided</scope>
+  		</dependency>
+  		
+  		<!-- protocol buffers - original -->
+		<dependency>
+			<groupId>com.google.protobuf</groupId>
+			<artifactId>protobuf-java</artifactId>
+			<version>2.4.1</version>
+			<scope>provided</scope>
+		</dependency>	
+  		
+  		<dependency>
+  			<groupId>com.barchart.proto</groupId>
+  			<artifactId>barchart-proto-buf-inst</artifactId>
+			<version>1.0.1-SNAPSHOT</version>
   		</dependency>
   	
+  		<dependency>
+			<groupId>com.barchart.util</groupId>
+			<artifactId>barchart-util-values</artifactId>
+		</dependency>
+		
+  		<dependency>
+			<groupId>joda-time</groupId>
+			<artifactId>joda-time</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
@@ -48,5 +85,4 @@
 		</dependency>
   	
   	</dependencies>
-  	<groupId>com.barchart.feed</groupId>
 </project>

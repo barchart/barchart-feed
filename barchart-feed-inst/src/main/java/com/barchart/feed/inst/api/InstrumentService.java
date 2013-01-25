@@ -15,6 +15,6 @@ public interface InstrumentService {
 	
 	Instrument lookup(InstrumentGUID guid);
 	
-	Future<Instrument> lookupAsnyc(InstrumentGUID guid);
+	Future<Instrument> lookupAsync(InstrumentGUID guid);
 	
 }

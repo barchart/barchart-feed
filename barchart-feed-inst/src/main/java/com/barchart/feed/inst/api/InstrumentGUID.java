@@ -2,7 +2,7 @@ package com.barchart.feed.inst.api;
 
 public interface InstrumentGUID extends Comparable<InstrumentGUID> {
 	
-	CharSequence getGUID();
+	long getGUID();
 
 	@Override
 	boolean equals(Object thatGUID);

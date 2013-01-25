@@ -53,10 +53,6 @@ import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
 import com.barchart.util.values.api.TimeValue;
 
-/**
- * @author g-litchfield
- * 
- */
 public class MockMarket extends VarMarket {
 
 	@Override
