@@ -7,7 +7,6 @@
  */
 package com.barchart.feed.base.provider;
 
-import static com.barchart.feed.base.instrument.enums.InstrumentField.*;
 import static com.barchart.feed.base.market.enums.MarketField.*;
 
 import java.util.List;
@@ -20,11 +19,8 @@ import com.barchart.feed.base.bar.api.MarketBar;
 import com.barchart.feed.base.bar.api.MarketDoBar;
 import com.barchart.feed.base.book.api.MarketBook;
 import com.barchart.feed.base.book.api.MarketDoBook;
-import com.barchart.feed.base.book.enums.MarketBookType;
 import com.barchart.feed.base.cuvol.api.MarketCuvol;
 import com.barchart.feed.base.cuvol.api.MarketDoCuvol;
-import com.barchart.feed.base.instrument.enums.InstrumentField;
-import com.barchart.feed.base.instrument.values.MarketInstrument;
 import com.barchart.feed.base.market.api.Market;
 import com.barchart.feed.base.market.api.MarketDo;
 import com.barchart.feed.base.market.api.MarketSafeRunner;
@@ -33,6 +29,9 @@ import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.feed.base.state.api.MarketState;
 import com.barchart.feed.base.trade.api.MarketDoTrade;
 import com.barchart.feed.base.trade.api.MarketTrade;
+import com.barchart.feed.inst.api.Instrument;
+import com.barchart.feed.inst.api.InstrumentField;
+import com.barchart.feed.inst.enums.MarketBookType;
 import com.barchart.util.anno.Mutable;
 import com.barchart.util.anno.ThreadSafe;
 import com.barchart.util.values.api.PriceValue;
@@ -257,8 +256,8 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 
 		if (cuvol.isFrozen()) {
 
-			final MarketInstrument inst = get(INSTRUMENT);
-			final PriceValue priceStep = inst.get(PRICE_STEP);
+			final Instrument inst = get(INSTRUMENT);
+			final PriceValue priceStep = inst.get(InstrumentField.PRICE_STEP);
 			
 			final VarCuvol varCuvol = new VarCuvol(priceStep);
 			final VarCuvolLast varCuvolLast = new VarCuvolLast(varCuvol);
@@ -301,11 +300,11 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 		
 		 if (book.isFrozen()) {
 		
-		 final MarketInstrument inst = get(INSTRUMENT);
+		 final Instrument inst = get(INSTRUMENT);
 		
-		 final MarketBookType type = inst.get(BOOK_TYPE);
+		 final MarketBookType type = inst.get(InstrumentField.BOOK_TYPE);
 		 final SizeValue size = LIMIT; // inst.get(BOOK_SIZE);
-		 final PriceValue step = inst.get(PRICE_STEP);
+		 final PriceValue step = inst.get(InstrumentField.PRICE_STEP);
 		
 		 final VarBook varBook = new VarBook(type, size, step);
 		 final VarBookLast varBookLast = new VarBookLast(varBook);
@@ -325,7 +324,7 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 
 	protected final boolean isValidPrice(final PriceValue price) {
 
-		final MarketInstrument inst = get(INSTRUMENT);
+		final Instrument inst = get(INSTRUMENT);
 
 		final PriceValue priceStep = inst.get(InstrumentField.PRICE_STEP);
 

@@ -5,7 +5,7 @@
  *
  * http://www.opensource.org/licenses/bsd-license.php
  */
-package com.barchart.feed.base.instrument;
+package com.barchart.feed.inst.provider;
 
 public class MockDefinitionService  {
 

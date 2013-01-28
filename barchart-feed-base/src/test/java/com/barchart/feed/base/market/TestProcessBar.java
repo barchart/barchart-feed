@@ -34,13 +34,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.base.bar.api.MarketBar;
-import com.barchart.feed.base.instrument.MockDefinitionService;
 import com.barchart.feed.base.instrument.api.DefinitionService;
-import com.barchart.feed.base.instrument.values.MarketInstrument;
 import com.barchart.feed.base.market.api.Market;
 import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.message.MockMsgTrade;
 import com.barchart.feed.base.trade.api.MarketTrade;
+import com.barchart.feed.inst.api.Instrument;
+import com.barchart.feed.inst.provider.MockDefinitionService;
 
 public class TestProcessBar {
 
@@ -67,11 +67,11 @@ public class TestProcessBar {
 
 		final MockMaker maker = new MockMaker(new MockMarketFactory());
 
-		MarketInstrument inst;
+		Instrument inst;
 
 		inst = service.lookup(newText("1"));
 
-		final MarketInstrument[] insts = new MarketInstrument[] { inst };
+		final Instrument[] insts = new Instrument[] { inst };
 
 		final MarketTaker<Market> tempTaker = new MockTaker<Market>(insts);
 

@@ -61,7 +61,6 @@ public class BenchPrimitiveMemory {
 		log.info("ReentrantLock {}", JavaSize.of(new ReentrantLock()));
 		log.info("Object {}", JavaSize.of(new Object()));
 		log.info("DefMarket {}", JavaSize.of(new DefMarket()));
-		log.info("VarMarketL1 {}", JavaSize.of(new MockVarMarket()));
 
 		log.info("BenchClassByte {}", JavaSize.of(new BenchClassByte()));
 		log.info("BenchClassInt {}", JavaSize.of(new BenchClassInt()));
@@ -87,7 +86,6 @@ public class BenchPrimitiveMemory {
 			lockArray[k] = new ReentrantLock();
 			objectArray[k] = new Object();
 			marketArray[k] = new DefMarket();
-			marketArray2[k] = new MockVarMarket();
 
 			benchByte[k] = new BenchClassByte();
 			benchInt[k] = new BenchClassInt();

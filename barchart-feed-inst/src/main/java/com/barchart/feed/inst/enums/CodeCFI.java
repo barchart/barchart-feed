@@ -3,7 +3,21 @@ package com.barchart.feed.inst.enums;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public enum CodeCFI {
+import com.barchart.util.values.api.Value;
+
+/**
+ * 
+ * http://en.wikipedia.org/wiki/ISO_10962
+ * 
+ * http://www.anna-web.com/index.php/home/cfiaiso10962
+ * 
+ * http://www.onixs.biz/tools/fixdictionary/4.4/app_6_d.html
+ * 
+ * http://www.quanthouse.com/misc/docs/cficode.html
+ * 
+ * 
+ */
+public enum CodeCFI implements Value<CodeCFI> {
 	
 	/* keep most specific first; 'X' means 'any' */
 
@@ -156,6 +170,21 @@ public enum CodeCFI {
 
 		return true; // total match
 
+	}
+
+	@Override
+	public CodeCFI freeze() {
+		return this;
+	}
+
+	@Override
+	public boolean isFrozen() {
+		return true;
+	}
+
+	@Override
+	public boolean isNull() {
+		return this == UNKNOWN;
 	}
 
 }

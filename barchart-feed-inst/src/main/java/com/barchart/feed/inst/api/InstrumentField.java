@@ -71,5 +71,11 @@ public final class InstrumentField {
 	
 	/** instrument termination trading date; such as future expiration month */
 	public static final Tag<TimeValue> DATE_FINISH = Tag.create("DATE_FINISH", TimeValue.class);
+	
+	public static final Tag<?>[] FIELDS = new Tag[] {
+		ID, GROUP_ID, EXCHANGE_ID, SYMBOL, DESCRIPTION, BOOK_SIZE, BOOK_TYPE, PRICE_STEP,
+		PRICE_POINT, FRACTION, CURRENCY, TYPE, TIME_ZONE, TIME_OPEN, TIME_CLOSE,
+		DATE_START, DATE_FINISH
+	};
 
 }

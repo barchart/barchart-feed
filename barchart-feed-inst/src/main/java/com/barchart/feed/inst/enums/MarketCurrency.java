@@ -1,6 +1,8 @@
 package com.barchart.feed.inst.enums;
 
-public enum MarketCurrency {
+import com.barchart.util.values.api.Value;
+
+public enum MarketCurrency implements Value<MarketCurrency> {
 	
 	NULL_CURRENCY, //
 
@@ -195,6 +197,26 @@ public enum MarketCurrency {
 		}
 		
 		return NULL_CURRENCY;
+	}
+
+	@Override
+	public MarketCurrency freeze() {
+		return this;
+	}
+
+	@Override
+	public boolean isFrozen() {
+		return true;
+	}
+
+	@Override
+	public boolean isNull() {
+		return this == NULL_CURRENCY;
+	}
+	
+	@Override
+	public String toString() {
+		return String.format("Currency > %4s", name());
 	}
 
 }

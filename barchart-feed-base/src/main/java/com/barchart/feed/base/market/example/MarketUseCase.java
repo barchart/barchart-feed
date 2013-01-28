@@ -26,7 +26,6 @@ import com.barchart.feed.base.book.api.MarketBook;
 import com.barchart.feed.base.book.api.MarketBookEntry;
 import com.barchart.feed.base.book.enums.MarketBookSide;
 import com.barchart.feed.base.cuvol.api.MarketCuvol;
-import com.barchart.feed.base.instrument.values.MarketInstrument;
 import com.barchart.feed.base.market.api.Market;
 import com.barchart.feed.base.market.api.MarketMakerProvider;
 import com.barchart.feed.base.market.api.MarketMessage;
@@ -34,6 +33,7 @@ import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.feed.base.trade.api.MarketTrade;
+import com.barchart.feed.inst.api.Instrument;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
 import com.barchart.util.values.util.ValueUtil;
@@ -70,14 +70,14 @@ abstract class MarketUseCase {
 		}
 
 		@Override
-		public MarketInstrument[] bindInstruments() {
+		public Instrument[] bindInstruments() {
 			return null; // some instruments
 		}
 
 		@SuppressWarnings("deprecation")
 		@Override
 		public void onMarketEvent(final MarketEvent event,
-				final MarketInstrument instrument, final Market market) {
+				final Instrument instrument, final Market market) {
 
 			final MarketBar bar = market.get(BAR_CURRENT);
 
@@ -126,14 +126,14 @@ abstract class MarketUseCase {
 		}
 
 		@Override
-		public MarketInstrument[] bindInstruments() {
+		public Instrument[] bindInstruments() {
 			return null; // some instrument
 		}
 
 		@SuppressWarnings("deprecation")
 		@Override
 		public void onMarketEvent(final MarketEvent event,
-				final MarketInstrument instrument, final MarketBar bar) {
+				final Instrument instrument, final MarketBar bar) {
 
 			switch (event) {
 			case MARKET_STATUS_OPENED:
@@ -170,13 +170,13 @@ abstract class MarketUseCase {
 		}
 
 		@Override
-		public MarketInstrument[] bindInstruments() {
+		public Instrument[] bindInstruments() {
 			return null; // some valid instruments
 		}
 
 		@Override
 		public void onMarketEvent(final MarketEvent event,
-				final MarketInstrument instrument, final MarketTrade trade) {
+				final Instrument instrument, final MarketTrade trade) {
 
 			switch (event) {
 			case NEW_TRADE:

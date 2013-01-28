@@ -17,9 +17,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.feed.base.instrument.enums.InstrumentField;
-import com.barchart.feed.base.instrument.enums.MarketDisplay.Fraction;
-import com.barchart.feed.base.instrument.values.MarketInstrument;
 import com.barchart.feed.base.market.api.MarketDo;
 import com.barchart.feed.base.market.api.MarketFactory;
 import com.barchart.feed.base.market.api.MarketMakerProvider;
@@ -29,6 +26,9 @@ import com.barchart.feed.base.market.api.MarketSafeRunner;
 import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.base.market.enums.MarketField;
+import com.barchart.feed.inst.api.Instrument;
+import com.barchart.feed.inst.api.InstrumentField;
+import com.barchart.feed.inst.enums.MarketDisplay.Fraction;
 import com.barchart.util.anno.ThreadSafe;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.Value;
@@ -42,8 +42,8 @@ public abstract class MakerBase<Message extends MarketMessage> implements
 
 	protected final MarketFactory factory;
 
-	final ConcurrentMap<MarketInstrument, MarketDo> marketMap = //
-	new ConcurrentHashMap<MarketInstrument, MarketDo>();
+	final ConcurrentMap<Instrument, MarketDo> marketMap = //
+	new ConcurrentHashMap<Instrument, MarketDo>();
 
 	final ConcurrentMap<MarketTaker<?>, RegTaker<?>> takerMap = //
 	new ConcurrentHashMap<MarketTaker<?>, RegTaker<?>>();
@@ -59,7 +59,7 @@ public abstract class MakerBase<Message extends MarketMessage> implements
 	}
 
 	@Override
-	public boolean isRegistered(final MarketInstrument instrument) {
+	public boolean isRegistered(final Instrument instrument) {
 		return marketMap.containsKey(instrument);
 	}
 
@@ -100,7 +100,7 @@ public abstract class MakerBase<Message extends MarketMessage> implements
 		}
 
 		if (wasAdded) {
-			for (final MarketInstrument inst : regTaker.getInstruments()) {
+			for (final Instrument inst : regTaker.getInstruments()) {
 
 				if (!isValid(inst)) {
 					continue;
@@ -153,19 +153,19 @@ public abstract class MakerBase<Message extends MarketMessage> implements
 
 		//
 
-		final Set<MarketInstrument> updateSet = new HashSet<MarketInstrument>();
-		final Set<MarketInstrument> registerSet = new HashSet<MarketInstrument>();
-		final Set<MarketInstrument> unregisterSet = new HashSet<MarketInstrument>();
-		final Set<MarketInstrument> changeNotifySet = new HashSet<MarketInstrument>();
+		final Set<Instrument> updateSet = new HashSet<Instrument>();
+		final Set<Instrument> registerSet = new HashSet<Instrument>();
+		final Set<Instrument> unregisterSet = new HashSet<Instrument>();
+		final Set<Instrument> changeNotifySet = new HashSet<Instrument>();
 
 		{
 
-			final MarketInstrument[] pastArray = regTaker.getInstruments();
-			final MarketInstrument[] nextArray = taker.bindInstruments();
+			final Instrument[] pastArray = regTaker.getInstruments();
+			final Instrument[] nextArray = taker.bindInstruments();
 
-			final Set<MarketInstrument> pastSet = new HashSet<MarketInstrument>(
+			final Set<Instrument> pastSet = new HashSet<Instrument>(
 					Arrays.asList(pastArray));
-			final Set<MarketInstrument> nextSet = new HashSet<MarketInstrument>(
+			final Set<Instrument> nextSet = new HashSet<Instrument>(
 					Arrays.asList(nextArray));
 
 			/** past & next */
@@ -197,7 +197,7 @@ public abstract class MakerBase<Message extends MarketMessage> implements
 		//
 
 		/** unregister : based on past */
-		for (final MarketInstrument inst : unregisterSet) {
+		for (final Instrument inst : unregisterSet) {
 
 			final MarketDo market = marketMap.get(inst);
 
@@ -206,7 +206,7 @@ public abstract class MakerBase<Message extends MarketMessage> implements
 		}
 
 		/** update : based on merge of next and past */
-		for (final MarketInstrument inst : updateSet) {
+		for (final Instrument inst : updateSet) {
 
 			final MarketDo market = marketMap.get(inst);
 
@@ -218,7 +218,7 @@ public abstract class MakerBase<Message extends MarketMessage> implements
 		regTaker.bind();
 
 		/** register : based on next */
-		for (final MarketInstrument inst : registerSet) {
+		for (final Instrument inst : registerSet) {
 
 			if (!isValid(inst)) {
 				continue;
@@ -235,7 +235,7 @@ public abstract class MakerBase<Message extends MarketMessage> implements
 		}
 
 		/** remove / notify */
-		for (final MarketInstrument inst : changeNotifySet) {
+		for (final Instrument inst : changeNotifySet) {
 
 			final MarketDo market = marketMap.get(inst);
 
@@ -272,7 +272,7 @@ public abstract class MakerBase<Message extends MarketMessage> implements
 		final boolean wasRemoved = (regTaker != null);
 
 		if (wasRemoved) {
-			for (final MarketInstrument inst : regTaker.getInstruments()) {
+			for (final Instrument inst : regTaker.getInstruments()) {
 
 				if (!isValid(inst)) {
 					continue;
@@ -317,7 +317,7 @@ public abstract class MakerBase<Message extends MarketMessage> implements
 	@Override
 	public void make(final Message message) {
 
-		final MarketInstrument instrument = message.getInstrument();
+		final Instrument instrument = message.getInstrument();
 
 		if (!isValid(instrument)) {
 			return;
@@ -349,7 +349,7 @@ public abstract class MakerBase<Message extends MarketMessage> implements
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public final <S extends MarketInstrument, V extends Value<V>> V take(
+	public final <S extends Instrument, V extends Value<V>> V take(
 			final S instrument, final MarketField<V> field) {
 
 		final MarketDo market = marketMap.get(instrument);
@@ -401,7 +401,7 @@ public abstract class MakerBase<Message extends MarketMessage> implements
 
 	}
 
-	protected boolean isValid(final MarketInstrument instrument) {
+	protected boolean isValid(final Instrument instrument) {
 
 		if (instrument == null) {
 			log.error("instrument == null");
@@ -439,7 +439,7 @@ public abstract class MakerBase<Message extends MarketMessage> implements
 	//
 
 	@Override
-	public final synchronized boolean register(final MarketInstrument instrument) {
+	public final synchronized boolean register(final Instrument instrument) {
 
 		if (!isValid(instrument)) {
 			return false;
@@ -468,7 +468,7 @@ public abstract class MakerBase<Message extends MarketMessage> implements
 
 	@Override
 	public final synchronized boolean unregister(
-			final MarketInstrument instrument) {
+			final Instrument instrument) {
 
 		if (!isValid(instrument)) {
 			return false;
@@ -502,7 +502,7 @@ public abstract class MakerBase<Message extends MarketMessage> implements
 
 	protected final void notifyRegListeners(final MarketDo market) {
 
-		final MarketInstrument inst = market.get(MarketField.INSTRUMENT);
+		final Instrument inst = market.get(MarketField.INSTRUMENT);
 
 		final Set<MarketEvent> events = market.regEvents();
 
@@ -532,7 +532,7 @@ public abstract class MakerBase<Message extends MarketMessage> implements
 		return takerMap.get(taker);
 	}
 
-	protected MarketDo getMarket(final MarketInstrument inst) {
+	protected MarketDo getMarket(final Instrument inst) {
 		return marketMap.get(inst);
 	}
 

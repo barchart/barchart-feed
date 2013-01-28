@@ -7,8 +7,8 @@
  */
 package com.barchart.feed.base.market.api;
 
-import com.barchart.feed.base.instrument.values.MarketInstrument;
 import com.barchart.feed.base.market.enums.MarketField;
+import com.barchart.feed.inst.api.Instrument;
 import com.barchart.util.anno.NotMutable;
 import com.barchart.util.anno.NotYetImplemented;
 import com.barchart.util.anno.ThreadSafe;
@@ -58,9 +58,9 @@ public interface MarketMakerProvider<Message extends MarketMessage> extends
 	void appendMarketProvider(MarketFactory marketFactory);
 
 	/** register market w/o takers */
-	boolean register(MarketInstrument instrument);
+	boolean register(Instrument instrument);
 
 	/** unregister market w/o takers */
-	boolean unregister(MarketInstrument instrument);
+	boolean unregister(Instrument instrument);
 
 }

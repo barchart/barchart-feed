@@ -8,7 +8,7 @@
 package com.barchart.feed.base.book.api;
 
 import com.barchart.feed.base.book.enums.MarketBookAction;
-import com.barchart.feed.base.book.enums.MarketBookType;
+import com.barchart.feed.inst.enums.MarketBookType;
 import com.barchart.util.anno.NotMutable;
 
 @NotMutable

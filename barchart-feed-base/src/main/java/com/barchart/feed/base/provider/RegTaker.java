@@ -15,10 +15,10 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.feed.base.instrument.values.MarketInstrument;
 import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.base.market.enums.MarketField;
+import com.barchart.feed.inst.api.Instrument;
 import com.barchart.util.anno.NotMutable;
 import com.barchart.util.anno.NotThreadSafe;
 import com.barchart.util.thread.Runner;
@@ -37,7 +37,7 @@ public class RegTaker<V extends Value<V>> implements RunnerLoop<MarketEvent> {
 
 	private volatile EventSet eventSet;
 
-	private volatile MarketInstrument[] instruments;
+	private volatile Instrument[] instruments;
 
 	public RegTaker(final MarketTaker<V> taker) {
 
@@ -63,7 +63,7 @@ public class RegTaker<V extends Value<V>> implements RunnerLoop<MarketEvent> {
 
 	final void fire(final RegCenter regCenter, final MarketEvent event) {
 
-		final MarketInstrument inst = regCenter.cache(INSTRUMENT);
+		final Instrument inst = regCenter.cache(INSTRUMENT);
 
 		final V value = regCenter.cache(field);
 
@@ -87,7 +87,7 @@ public class RegTaker<V extends Value<V>> implements RunnerLoop<MarketEvent> {
 		return field;
 	}
 
-	final MarketInstrument[] getInstruments() {
+	final Instrument[] getInstruments() {
 		return instruments;
 	}
 
@@ -112,7 +112,7 @@ public class RegTaker<V extends Value<V>> implements RunnerLoop<MarketEvent> {
 			return false;
 		}
 
-		final MarketInstrument[] insts = taker.bindInstruments();
+		final Instrument[] insts = taker.bindInstruments();
 
 		if (insts == null) { // Removed size check
 			log.debug("invalid : bindInstruments()");

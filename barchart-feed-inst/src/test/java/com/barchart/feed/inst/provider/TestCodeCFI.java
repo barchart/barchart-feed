@@ -5,9 +5,9 @@
  *
  * http://www.opensource.org/licenses/bsd-license.php
  */
-package com.barchart.feed.base.instrument;
+package com.barchart.feed.inst.provider;
 
-import static com.barchart.feed.base.instrument.enums.CodeCFI.*;
+import static com.barchart.feed.inst.enums.CodeCFI.*;
 import static org.junit.Assert.*;
 
 import org.junit.Test;

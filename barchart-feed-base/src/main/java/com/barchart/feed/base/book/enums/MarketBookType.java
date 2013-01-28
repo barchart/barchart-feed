@@ -9,7 +9,7 @@ package com.barchart.feed.base.book.enums;
 
 import com.barchart.util.values.api.Value;
 
-public enum MarketBookType implements Value<MarketBookType> {
+enum MarketBookType implements Value<MarketBookType> {
 
 	/** no size book */
 	EMPTY, //

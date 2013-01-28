@@ -39,8 +39,6 @@ import com.barchart.feed.base.book.api.MarketDoBookEntry;
 import com.barchart.feed.base.book.enums.UniBookResult;
 import com.barchart.feed.base.cuvol.api.MarketDoCuvol;
 import com.barchart.feed.base.cuvol.api.MarketDoCuvolEntry;
-import com.barchart.feed.base.instrument.api.InstrumentConst;
-import com.barchart.feed.base.instrument.values.MarketInstrument;
 import com.barchart.feed.base.provider.VarMarket;
 import com.barchart.feed.base.state.api.MarketState;
 import com.barchart.feed.base.state.enums.MarketStateEntry;
@@ -49,6 +47,8 @@ import com.barchart.feed.base.trade.enums.MarketTradeField;
 import com.barchart.feed.base.trade.enums.MarketTradeSequencing;
 import com.barchart.feed.base.trade.enums.MarketTradeSession;
 import com.barchart.feed.base.trade.enums.MarketTradeType;
+import com.barchart.feed.inst.api.Instrument;
+import com.barchart.feed.inst.api.InstrumentConst;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
 import com.barchart.util.values.api.TimeValue;
@@ -56,9 +56,9 @@ import com.barchart.util.values.api.TimeValue;
 public class MockMarket extends VarMarket {
 
 	@Override
-	public void setInstrument(final MarketInstrument symbol) {
+	public void setInstrument(final Instrument symbol) {
 
-		final MarketInstrument oldInst = get(INSTRUMENT);
+		final Instrument oldInst = get(INSTRUMENT);
 
 		if (InstrumentConst.NULL_INSTRUMENT.equals(oldInst)) {
 			set(INSTRUMENT, symbol);

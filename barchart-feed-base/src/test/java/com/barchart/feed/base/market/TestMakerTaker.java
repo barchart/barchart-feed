@@ -28,14 +28,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.base.bar.api.MarketBar;
-import com.barchart.feed.base.instrument.MockDefinitionService;
 import com.barchart.feed.base.instrument.api.DefinitionService;
-import com.barchart.feed.base.instrument.values.MarketInstrument;
 import com.barchart.feed.base.market.api.Market;
 import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.feed.base.message.MockMsgTrade;
+import com.barchart.feed.inst.api.Instrument;
+import com.barchart.feed.inst.provider.MockDefinitionService;
 import com.barchart.util.values.api.SizeValue;
 
 public class TestMakerTaker {
@@ -59,11 +59,11 @@ public class TestMakerTaker {
 
 		final MockMaker maker = new MockMaker(new MockMarketFactory());
 
-		final MarketInstrument inst;
+		final Instrument inst;
 
 		inst = service.lookup(newText("1"));
 
-		final MarketInstrument[] insts = new MarketInstrument[] { inst };
+		final Instrument[] insts = new Instrument[] { inst };
 
 		final MarketTaker<Market> tempTaker = new MockTaker<Market>(insts);
 
@@ -87,15 +87,15 @@ public class TestMakerTaker {
 			}
 
 			@Override
-			public MarketInstrument[] bindInstruments() {
-				return new MarketInstrument[] { inst };
+			public Instrument[] bindInstruments() {
+				return new Instrument[] { inst };
 			}
 
 			Market previous;
 
 			@Override
 			public void onMarketEvent(final MarketEvent event,
-					final MarketInstrument instrument, final Market market) {
+					final Instrument instrument, final Market market) {
 
 				count.incrementAndGet();
 
@@ -144,11 +144,11 @@ public class TestMakerTaker {
 
 		final MockMaker maker = new MockMaker(new MockMarketFactory());
 
-		final MarketInstrument inst;
+		final Instrument inst;
 
 		inst = service.lookup(newText("1"));
 
-		final MarketInstrument[] insts = new MarketInstrument[] { inst };
+		final Instrument[] insts = new Instrument[] { inst };
 
 		final MarketTaker<Market> tempTaker = new MockTaker<Market>(insts);
 
@@ -172,15 +172,15 @@ public class TestMakerTaker {
 			}
 
 			@Override
-			public MarketInstrument[] bindInstruments() {
-				return new MarketInstrument[] { inst };
+			public Instrument[] bindInstruments() {
+				return new Instrument[] { inst };
 			}
 
 			MarketBar previous;
 
 			@Override
 			public void onMarketEvent(final MarketEvent event,
-					final MarketInstrument instrument, final MarketBar bar) {
+					final Instrument instrument, final MarketBar bar) {
 
 				count.incrementAndGet();
 

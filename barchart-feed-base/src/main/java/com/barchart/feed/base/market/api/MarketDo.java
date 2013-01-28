@@ -15,7 +15,6 @@ import com.barchart.feed.base.bar.api.MarketDoBar;
 import com.barchart.feed.base.bar.enums.MarketBarType;
 import com.barchart.feed.base.book.api.MarketDoBookEntry;
 import com.barchart.feed.base.cuvol.api.MarketDoCuvolEntry;
-import com.barchart.feed.base.instrument.values.MarketInstrument;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.feed.base.provider.RegTaker;
@@ -23,6 +22,7 @@ import com.barchart.feed.base.state.enums.MarketStateEntry;
 import com.barchart.feed.base.trade.enums.MarketTradeSequencing;
 import com.barchart.feed.base.trade.enums.MarketTradeSession;
 import com.barchart.feed.base.trade.enums.MarketTradeType;
+import com.barchart.feed.inst.api.Instrument;
 import com.barchart.util.anno.Mutable;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
@@ -50,7 +50,7 @@ public interface MarketDo extends Market {
 	/* VALUES */
 
 	/** one time instrument initialization */
-	void setInstrument(MarketInstrument symbol);
+	void setInstrument(Instrument symbol);
 
 	/**  */
 	void setBookUpdate(MarketDoBookEntry entry, TimeValue time);

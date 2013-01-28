@@ -9,7 +9,6 @@ package com.barchart.feed.base.provider;
 
 import static com.barchart.feed.base.book.enums.MarketBookAction.*;
 import static com.barchart.feed.base.book.enums.MarketBookSide.*;
-import static com.barchart.feed.base.book.enums.MarketBookType.*;
 import static com.barchart.feed.base.provider.MarketConst.*;
 import static com.barchart.util.values.provider.ValueConst.*;
 
@@ -17,7 +16,7 @@ import com.barchart.feed.base.book.api.MarketBookEntry;
 import com.barchart.feed.base.book.api.MarketDoBookEntry;
 import com.barchart.feed.base.book.enums.MarketBookAction;
 import com.barchart.feed.base.book.enums.MarketBookSide;
-import com.barchart.feed.base.book.enums.MarketBookType;
+import com.barchart.feed.inst.enums.MarketBookType;
 import com.barchart.util.math.MathExtra;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
@@ -29,7 +28,7 @@ public class DefBookEntry extends ValueFreezer<MarketBookEntry> implements
 
 	private final static byte nulAct = NOOP.ord;
 	private final static byte nulSide = GAP.ord;
-	private final static byte nulType = EMPTY.ord;
+	private final static byte nulType = MarketBookType.EMPTY.ord;
 
 	// store byte ordinal to save heap
 	private final byte ordAct;

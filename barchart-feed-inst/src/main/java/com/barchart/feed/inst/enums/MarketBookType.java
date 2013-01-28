@@ -1,6 +1,8 @@
 package com.barchart.feed.inst.enums;
 
-public enum MarketBookType {
+import com.barchart.util.values.api.Value;
+
+public enum MarketBookType implements Value<MarketBookType> {
 	
 	/** no size book */
 	EMPTY, //
@@ -15,5 +17,28 @@ public enum MarketBookType {
 	COMBO, //
 
 	;
+
+	public final byte ord = (byte) ordinal();
+	
+	private static final MarketBookType[] ENUM_VALUES = values();
+	
+	public static final MarketBookType fromOrd(final byte ord) {
+		return ENUM_VALUES[ord];
+	}
+	
+	@Override
+	public MarketBookType freeze() {
+		return this;
+	}
+
+	@Override
+	public boolean isFrozen() {
+		return true;
+	}
+
+	@Override
+	public boolean isNull() {
+		return this == EMPTY;
+	}
 
 }

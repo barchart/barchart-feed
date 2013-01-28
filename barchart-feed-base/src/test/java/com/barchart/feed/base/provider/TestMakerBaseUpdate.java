@@ -7,8 +7,10 @@
  */
 package com.barchart.feed.base.provider;
 
-import static com.barchart.util.values.provider.ValueBuilder.*;
-import static org.junit.Assert.*;
+import static com.barchart.util.values.provider.ValueBuilder.newText;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 import java.util.Set;
@@ -19,9 +21,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.feed.base.instrument.MockDefinitionService;
 import com.barchart.feed.base.instrument.api.DefinitionService;
-import com.barchart.feed.base.instrument.values.MarketInstrument;
 import com.barchart.feed.base.market.MockMaker;
 import com.barchart.feed.base.market.MockMarketFactory;
 import com.barchart.feed.base.market.api.Market;
@@ -30,7 +30,8 @@ import com.barchart.feed.base.market.api.MarketRegListener;
 import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.base.market.enums.MarketField;
-import com.barchart.feed.base.provider.RegTaker;
+import com.barchart.feed.inst.api.Instrument;
+import com.barchart.feed.inst.provider.MockDefinitionService;
 
 public class TestMakerBaseUpdate {
 
@@ -47,7 +48,7 @@ public class TestMakerBaseUpdate {
 		return text.append("}").toString();
 	}
 
-	private DefinitionService<MarketInstrument> service;
+	private DefinitionService<Instrument> service;
 
 	private MarketRegListener regListenter;
 
@@ -59,7 +60,7 @@ public class TestMakerBaseUpdate {
 		regListenter = new MarketRegListener() {
 
 			@Override
-			public void onRegistrationChange(final MarketInstrument inst,
+			public void onRegistrationChange(final Instrument inst,
 					final Set<MarketEvent> events) {
 
 				log.debug("inst : {} ; events : {}", inst, asString(events));
@@ -76,7 +77,7 @@ public class TestMakerBaseUpdate {
 
 	private MarketField<?> field;
 	private MarketEvent[] eventArray;
-	private MarketInstrument[] instArray;
+	private Instrument[] instArray;
 
 	private final MarketTaker<?> taker = new MarketTaker<Market>() {
 		@Override
@@ -91,13 +92,13 @@ public class TestMakerBaseUpdate {
 		}
 
 		@Override
-		public MarketInstrument[] bindInstruments() {
+		public Instrument[] bindInstruments() {
 			return instArray;
 		}
 
 		@Override
 		public void onMarketEvent(final MarketEvent event,
-				final MarketInstrument inst, final Market value) {
+				final Instrument inst, final Market value) {
 		}
 	};
 
@@ -109,9 +110,9 @@ public class TestMakerBaseUpdate {
 		maker.add(regListenter);
 
 		// 3 different instruments
-		final MarketInstrument inst1 = service.lookup(newText("1"));
-		final MarketInstrument inst2 = service.lookup(newText("2"));
-		final MarketInstrument inst3 = service.lookup(newText("3"));
+		final Instrument inst1 = service.lookup(newText("1"));
+		final Instrument inst2 = service.lookup(newText("2"));
+		final Instrument inst3 = service.lookup(newText("3"));
 
 		//
 
@@ -123,7 +124,7 @@ public class TestMakerBaseUpdate {
 		log.debug("step 1");
 
 		field = MarketField.BAR_CURRENT;
-		instArray = new MarketInstrument[] { inst1, inst2 }; // #2 is present
+		instArray = new Instrument[] { inst1, inst2 }; // #2 is present
 		eventArray = MarketEvent.in(event1);
 
 		// original registration
@@ -160,7 +161,7 @@ public class TestMakerBaseUpdate {
 		log.debug("step 2");
 
 		field = MarketField.BAR_PREVIOUS;
-		instArray = new MarketInstrument[] { inst2, inst3 }; // #2 is present
+		instArray = new Instrument[] { inst2, inst3 }; // #2 is present
 		eventArray = MarketEvent.in(event2); // event1 != event2
 
 		maker.update(taker); // XXX bind again

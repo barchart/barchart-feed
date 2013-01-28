@@ -10,9 +10,6 @@ package com.barchart.feed.base.provider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.feed.base.instrument.enums.InstrumentField;
-import com.barchart.feed.base.instrument.enums.MarketDisplay.Fraction;
-import com.barchart.feed.base.instrument.values.MarketInstrument;
 import com.barchart.feed.base.market.api.Market;
 import com.barchart.feed.base.market.api.MarketDo;
 import com.barchart.feed.base.market.api.MarketFactory;
@@ -21,6 +18,9 @@ import com.barchart.feed.base.market.api.MarketMessage;
 import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.base.market.enums.MarketField;
+import com.barchart.feed.inst.api.Instrument;
+import com.barchart.feed.inst.api.InstrumentField;
+import com.barchart.feed.inst.enums.MarketDisplay.Fraction;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.Value;
 
@@ -114,7 +114,7 @@ public abstract class MakerBaseAllMarkets<Message extends MarketMessage>
 
 	private final MarketTaker<Market> omniTaker = new MarketTaker<Market>() {
 
-		final MarketInstrument[] blankInsts = {};
+		final Instrument[] blankInsts = {};
 
 		@Override
 		public MarketField<Market> bindField() {
@@ -127,13 +127,13 @@ public abstract class MakerBaseAllMarkets<Message extends MarketMessage>
 		}
 
 		@Override
-		public MarketInstrument[] bindInstruments() {
+		public Instrument[] bindInstruments() {
 			return blankInsts;
 		}
 
 		@Override
 		public void onMarketEvent(final MarketEvent event,
-				final MarketInstrument instrument, final Market market) {
+				final Instrument instrument, final Market market) {
 
 			fireEvents(marketMap.get(instrument), event);
 
@@ -147,7 +147,7 @@ public abstract class MakerBaseAllMarkets<Message extends MarketMessage>
 	@Override
 	public final void make(final Message message) {
 
-		final MarketInstrument instrument = message.getInstrument();
+		final Instrument instrument = message.getInstrument();
 
 		if (!isValid(instrument)) {
 			log.debug("Instrument {} not valid",
@@ -196,7 +196,7 @@ public abstract class MakerBaseAllMarkets<Message extends MarketMessage>
 	}
 
 	@Override
-	protected boolean isValid(final MarketInstrument instrument) {
+	protected boolean isValid(final Instrument instrument) {
 
 		if (instrument == null) {
 			return false;

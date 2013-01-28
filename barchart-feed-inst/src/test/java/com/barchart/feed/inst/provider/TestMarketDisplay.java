@@ -5,17 +5,20 @@
  *
  * http://www.opensource.org/licenses/bsd-license.php
  */
-package com.barchart.feed.base.instrument;
+package com.barchart.feed.inst.provider;
 
-import static com.barchart.feed.base.instrument.enums.MarketDisplay.priceFraction;
-import static com.barchart.feed.base.instrument.enums.MarketDisplay.priceFractionText;
-import static com.barchart.feed.base.instrument.enums.MarketDisplay.priceText;
-import static com.barchart.feed.base.instrument.enums.MarketDisplay.timeMonthFull;
-import static com.barchart.feed.base.instrument.enums.MarketDisplay.timeMonthShort;
-import static com.barchart.feed.base.instrument.enums.MarketDisplay.timeTextShort;
+import static com.barchart.feed.inst.enums.MarketDisplay.priceFraction;
+import static com.barchart.feed.inst.enums.MarketDisplay.priceFractionText;
+import static com.barchart.feed.inst.enums.MarketDisplay.priceText;
+import static com.barchart.feed.inst.enums.MarketDisplay.timeMonthFull;
+import static com.barchart.feed.inst.enums.MarketDisplay.timeMonthShort;
+import static com.barchart.feed.inst.enums.MarketDisplay.timeTextShort;
 import static com.barchart.util.values.provider.ValueBuilder.newPrice;
 import static com.barchart.util.values.provider.ValueBuilder.newTime;
 import static org.junit.Assert.assertEquals;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
@@ -23,10 +26,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.barchart.feed.base.instrument.enums.InstrumentField;
-import com.barchart.feed.base.instrument.enums.MarketDisplay;
-import com.barchart.feed.base.instrument.enums.MarketDisplay.Fraction;
-import com.barchart.feed.base.provider.VarInstrument;
+import com.barchart.feed.inst.enums.MarketDisplay.Fraction;
+import com.barchart.feed.inst.api.Instrument;
+import com.barchart.feed.inst.api.InstrumentField;
+import com.barchart.feed.inst.provider.InstrumentFactory;
+import com.barchart.missive.core.Tag;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.TimeValue;
 import com.barchart.util.values.provider.ValueBuilder;
@@ -258,10 +262,9 @@ public class TestMarketDisplay {
 
 		final TimeValue value = newTime(millisUTC);
 
-		final VarInstrument inst = new VarInstrument();
-
-		inst.set(InstrumentField.TIME_ZONE,
-				ValueBuilder.newText("America/New_York"));
+		final Map<Tag, Object> map = new HashMap<Tag, Object>();
+		map.put(InstrumentField.TIME_ZONE, ValueBuilder.newText("America/New_York"));
+		final Instrument inst = InstrumentFactory.build(map);
 
 		final String text = timeTextShort(value, inst);
 

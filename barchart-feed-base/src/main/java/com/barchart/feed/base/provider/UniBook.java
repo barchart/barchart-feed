@@ -9,7 +9,6 @@ package com.barchart.feed.base.provider;
 
 import static com.barchart.feed.base.book.api.MarketBook.ENTRY_TOP;
 import static com.barchart.feed.base.book.enums.MarketBookSide.GAP;
-import static com.barchart.feed.base.book.enums.MarketBookType.COMBO;
 import static com.barchart.feed.base.book.enums.UniBookResult.DISCARD;
 import static com.barchart.feed.base.book.enums.UniBookResult.ERROR;
 import static com.barchart.feed.base.book.enums.UniBookResult.NORMAL;
@@ -21,8 +20,8 @@ import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.base.book.api.MarketDoBookEntry;
 import com.barchart.feed.base.book.enums.MarketBookSide;
-import com.barchart.feed.base.book.enums.MarketBookType;
 import com.barchart.feed.base.book.enums.UniBookResult;
+import com.barchart.feed.inst.enums.MarketBookType;
 import com.barchart.util.anno.NotThreadSafe;
 import com.barchart.util.math.MathExtra;
 import com.barchart.util.values.api.PriceValue;
@@ -304,7 +303,7 @@ class UniBook<V extends Value<V>> extends ValueFreezer<V> {
 	}
 
 	private final DefBookEntry nullEntry(final int index) {
-		return new DefBookEntry(null, GAP, COMBO, 0, step.mult(index), null);
+		return new DefBookEntry(null, GAP, MarketBookType.COMBO, 0, step.mult(index), null);
 	}
 
 	@Override

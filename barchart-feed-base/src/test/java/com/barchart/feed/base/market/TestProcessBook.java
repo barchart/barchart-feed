@@ -12,7 +12,6 @@ import static com.barchart.feed.base.book.enums.MarketBookAction.MODIFY;
 import static com.barchart.feed.base.book.enums.MarketBookAction.REMOVE;
 import static com.barchart.feed.base.book.enums.MarketBookSide.ASK;
 import static com.barchart.feed.base.book.enums.MarketBookSide.BID;
-import static com.barchart.feed.base.book.enums.MarketBookType.DEFAULT;
 import static com.barchart.feed.base.market.enums.MarketEvent.NEW_BOOK_TOP;
 import static com.barchart.feed.base.market.enums.MarketEvent.NEW_BOOK_UPDATE;
 import static com.barchart.feed.base.market.enums.MarketField.BAR_CURRENT;
@@ -42,9 +41,7 @@ import com.barchart.feed.base.bar.api.MarketBar;
 import com.barchart.feed.base.book.api.MarketBook;
 import com.barchart.feed.base.book.api.MarketBookEntry;
 import com.barchart.feed.base.book.api.MarketBookTop;
-import com.barchart.feed.base.instrument.MockDefinitionService;
 import com.barchart.feed.base.instrument.api.DefinitionService;
-import com.barchart.feed.base.instrument.values.MarketInstrument;
 import com.barchart.feed.base.market.api.Market;
 import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketEvent;
@@ -53,6 +50,9 @@ import com.barchart.feed.base.message.MockMsgBook;
 import com.barchart.feed.base.message.MockMsgTrade;
 import com.barchart.feed.base.trade.api.MarketTrade;
 import com.barchart.feed.base.trade.enums.MarketTradeSession;
+import com.barchart.feed.inst.api.Instrument;
+import com.barchart.feed.inst.enums.MarketBookType;
+import com.barchart.feed.inst.provider.MockDefinitionService;
 import com.barchart.util.values.api.SizeValue;
 
 public class TestProcessBook {
@@ -85,11 +85,11 @@ public class TestProcessBook {
 
 		final MockMaker maker = new MockMaker(new MockMarketFactory());
 
-		MarketInstrument inst;
+		Instrument inst;
 
 		inst = service.lookup(newText("2"));
 
-		final MarketInstrument[] insts = new MarketInstrument[] { inst };
+		final Instrument[] insts = new Instrument[] { inst };
 
 		final MarketTaker<Market> tempTaker = new MockTaker<Market>(insts);
 
@@ -116,7 +116,7 @@ public class TestProcessBook {
 
 		msgBook.act = MODIFY;
 		msgBook.side = BID;
-		msgBook.type = DEFAULT;
+		msgBook.type = MarketBookType.DEFAULT;
 		msgBook.place = 0;
 		msgBook.price = newPrice(1000, -2);
 		msgBook.size = newSize(11);
@@ -145,7 +145,7 @@ public class TestProcessBook {
 
 		msgBook.act = MODIFY;
 		msgBook.side = BID;
-		msgBook.type = DEFAULT;
+		msgBook.type = MarketBookType.DEFAULT;
 		msgBook.place = 0;
 		msgBook.price = newPrice(1100, -2);
 		msgBook.size = newSize(13);
@@ -165,7 +165,7 @@ public class TestProcessBook {
 
 		msgBook.act = MODIFY;
 		msgBook.side = ASK;
-		msgBook.type = DEFAULT;
+		msgBook.type = MarketBookType.DEFAULT;
 		msgBook.place = 0;
 		msgBook.price = newPrice(1225, -2);
 		msgBook.size = newSize(15);
@@ -186,7 +186,7 @@ public class TestProcessBook {
 
 		msgBook.act = MODIFY;
 		msgBook.side = ASK;
-		msgBook.type = DEFAULT;
+		msgBook.type = MarketBookType.DEFAULT;
 		msgBook.place = 0;
 		msgBook.price = newPrice(1300, -2);
 		msgBook.size = newSize(17);
@@ -229,7 +229,7 @@ public class TestProcessBook {
 
 		msgBook.act = REMOVE;
 		msgBook.side = ASK;
-		msgBook.type = DEFAULT;
+		msgBook.type = MarketBookType.DEFAULT;
 		msgBook.place = 1;
 		msgBook.price = null;
 		msgBook.size = null;
@@ -250,7 +250,7 @@ public class TestProcessBook {
 
 		msgBook.act = REMOVE;
 		msgBook.side = BID;
-		msgBook.type = DEFAULT;
+		msgBook.type = MarketBookType.DEFAULT;
 		msgBook.place = 0;
 		msgBook.price = newPrice(1200, -2);
 		msgBook.size = null;
@@ -274,11 +274,11 @@ public class TestProcessBook {
 
 		final MockMaker maker = new MockMaker(new MockMarketFactory());
 
-		final MarketInstrument inst;
+		final Instrument inst;
 
 		inst = service.lookup(newText("2"));
 
-		final MarketInstrument[] insts = new MarketInstrument[] { inst };
+		final Instrument[] insts = new Instrument[] { inst };
 
 		final MarketTaker<Market> tempTaker = new MockTaker<Market>(insts);
 
@@ -302,15 +302,15 @@ public class TestProcessBook {
 			}
 
 			@Override
-			public MarketInstrument[] bindInstruments() {
-				return new MarketInstrument[] { inst };
+			public Instrument[] bindInstruments() {
+				return new Instrument[] { inst };
 			}
 
 			MarketBar previous;
 
 			@Override
 			public void onMarketEvent(final MarketEvent event,
-					final MarketInstrument instrument, final MarketBar bar) {
+					final Instrument instrument, final MarketBar bar) {
 
 				count.incrementAndGet();
 

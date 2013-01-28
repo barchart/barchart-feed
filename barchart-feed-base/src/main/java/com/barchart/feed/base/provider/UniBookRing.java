@@ -8,13 +8,12 @@
 package com.barchart.feed.base.provider;
 
 import static com.barchart.feed.base.book.enums.MarketBookAction.*;
-import static com.barchart.feed.base.book.enums.MarketBookType.*;
 import static com.barchart.util.values.provider.ValueBuilder.*;
 
 import com.barchart.feed.base.book.api.MarketDoBookEntry;
 import com.barchart.feed.base.book.enums.MarketBookAction;
 import com.barchart.feed.base.book.enums.MarketBookSide;
-import com.barchart.feed.base.book.enums.MarketBookType;
+import com.barchart.feed.inst.enums.MarketBookType;
 import com.barchart.util.anno.NotThreadSafe;
 import com.barchart.util.collections.ScadecRingBufferBase;
 import com.barchart.util.math.MathExtra;
@@ -56,7 +55,7 @@ abstract class UniBookRing extends
 
 	// use for entry reconstruction
 	protected final static MarketBookAction RET_ACT = NOOP;
-	protected final static MarketBookType RET_TYPE = COMBO;
+	protected final static MarketBookType RET_TYPE = MarketBookType.COMBO;
 
 	//
 
@@ -70,13 +69,13 @@ abstract class UniBookRing extends
 		switch (maskDefault + maskImplied) {
 		default:
 		case 0x0:
-			return EMPTY;
+			return MarketBookType.EMPTY;
 		case 0x1:
-			return DEFAULT;
+			return MarketBookType.DEFAULT;
 		case 0x2:
-			return IMPLIED;
+			return MarketBookType.IMPLIED;
 		case 0x3:
-			return COMBO;
+			return MarketBookType.COMBO;
 		}
 	}
 

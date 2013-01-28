@@ -7,22 +7,24 @@
  */
 package com.barchart.feed.base.market.provider;
 
-import static com.barchart.util.values.provider.ValueBuilder.*;
-import static org.junit.Assert.*;
+import static com.barchart.util.values.provider.ValueBuilder.newText;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.barchart.feed.base.instrument.MockDefinitionService;
 import com.barchart.feed.base.instrument.api.DefinitionService;
-import com.barchart.feed.base.instrument.values.MarketInstrument;
 import com.barchart.feed.base.market.MockMaker;
 import com.barchart.feed.base.market.MockMarketFactory;
 import com.barchart.feed.base.market.api.Market;
 import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.base.market.enums.MarketField;
+import com.barchart.feed.inst.api.Instrument;
+import com.barchart.feed.inst.provider.MockDefinitionService;
 
 public class TestMakerBase {
 
@@ -42,7 +44,7 @@ public class TestMakerBase {
 
 		final MockMaker maker = new MockMaker(new MockMarketFactory());
 
-		final MarketInstrument inst;
+		final Instrument inst;
 
 		inst = service.lookup(newText("1"));
 
@@ -63,13 +65,13 @@ public class TestMakerBase {
 				}
 
 				@Override
-				public MarketInstrument[] bindInstruments() {
+				public Instrument[] bindInstruments() {
 					return null;
 				}
 
 				@Override
 				public void onMarketEvent(final MarketEvent event,
-						final MarketInstrument instrument, final Market value) {
+						final Instrument instrument, final Market value) {
 				}
 			};
 			final boolean isAdded = maker.register(taker);
@@ -90,13 +92,13 @@ public class TestMakerBase {
 				}
 
 				@Override
-				public MarketInstrument[] bindInstruments() {
+				public Instrument[] bindInstruments() {
 					return null;
 				}
 
 				@Override
 				public void onMarketEvent(final MarketEvent event,
-						final MarketInstrument instrument, final Market value) {
+						final Instrument instrument, final Market value) {
 				}
 			};
 			final boolean isAdded = maker.register(taker);
@@ -118,13 +120,13 @@ public class TestMakerBase {
 				}
 
 				@Override
-				public MarketInstrument[] bindInstruments() {
+				public Instrument[] bindInstruments() {
 					return null;
 				}
 
 				@Override
 				public void onMarketEvent(final MarketEvent event,
-						final MarketInstrument instrument, final Market value) {
+						final Instrument instrument, final Market value) {
 				}
 			};
 			final boolean isAdded = maker.register(taker);
@@ -145,13 +147,13 @@ public class TestMakerBase {
 				}
 
 				@Override
-				public MarketInstrument[] bindInstruments() {
+				public Instrument[] bindInstruments() {
 					return null;
 				}
 
 				@Override
 				public void onMarketEvent(final MarketEvent event,
-						final MarketInstrument instrument, final Market value) {
+						final Instrument instrument, final Market value) {
 				}
 			};
 			final boolean isAdded = maker.register(taker);
@@ -172,13 +174,13 @@ public class TestMakerBase {
 				}
 
 				@Override
-				public MarketInstrument[] bindInstruments() {
-					return new MarketInstrument[] {};
+				public Instrument[] bindInstruments() {
+					return new Instrument[] {};
 				}
 
 				@Override
 				public void onMarketEvent(final MarketEvent event,
-						final MarketInstrument instrument, final Market value) {
+						final Instrument instrument, final Market value) {
 				}
 			};
 			final boolean isAdded = maker.register(taker);
@@ -199,13 +201,13 @@ public class TestMakerBase {
 				}
 
 				@Override
-				public MarketInstrument[] bindInstruments() {
-					return new MarketInstrument[] { inst };
+				public Instrument[] bindInstruments() {
+					return new Instrument[] { inst };
 				}
 
 				@Override
 				public void onMarketEvent(final MarketEvent event,
-						final MarketInstrument instrument, final Market value) {
+						final Instrument instrument, final Market value) {
 				}
 			};
 			final boolean isAdded = maker.register(taker);
@@ -219,7 +221,7 @@ public class TestMakerBase {
 
 		final MockMaker maker = new MockMaker(new MockMarketFactory());
 
-		MarketInstrument inst;
+		Instrument inst;
 
 		inst = service.lookup(newText("1"));
 

@@ -57,7 +57,7 @@ public class LocalInstDefDB implements MetadataContext {
 			throw new RuntimeException(e);
 		}
 		
-		return InstrumentBuilder.buildFromProtoBuf(resInst);
+		return InstrumentFactory.buildFromProtoBuf(resInst);
 		
 	}
 
