@@ -9,7 +9,7 @@ public interface SymbologyContext<V> {
 
 	InstrumentGUID lookup(V symbol);
 	
-	Map<V, InstrumentGUID> lookup(Collection<V> symbols);
+	Map<V, InstrumentGUID> lookup(Collection<? extends V> symbols);
 	
 	List<InstrumentGUID> search(CharSequence symbol);
 	

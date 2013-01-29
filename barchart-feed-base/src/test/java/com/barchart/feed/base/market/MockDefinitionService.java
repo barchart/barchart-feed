@@ -6,9 +6,8 @@ import static com.barchart.feed.inst.api.InstrumentField.ID;
 import static com.barchart.feed.inst.api.InstrumentField.PRICE_STEP;
 import static com.barchart.feed.inst.api.InstrumentField.SYMBOL;
 
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Future;
@@ -92,7 +91,8 @@ public class MockDefinitionService implements InstrumentService<CharSequence> {
 	}
 
 	@Override
-	public Map<CharSequence, Instrument> lookup(final List<CharSequence> symbols) {
+	public Map<CharSequence, Instrument> lookup(
+			final Collection<? extends CharSequence> symbols) {
 		
 		final Map<CharSequence, Instrument> insts = new HashMap<CharSequence, Instrument>();
 		for(final CharSequence symbol : symbols) {
@@ -103,7 +103,8 @@ public class MockDefinitionService implements InstrumentService<CharSequence> {
 	}
 
 	@Override
-	public Map<CharSequence, Future<Instrument>> lookupAsync(final List<CharSequence> symbols) {
+	public Map<CharSequence, Future<Instrument>> lookupAsync(
+			final Collection<? extends CharSequence> symbols) {
 		// TODO Auto-generated method stub
 		return null;
 	}

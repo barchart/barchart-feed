@@ -1,13 +1,12 @@
 package com.barchart.feed.inst.provider;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.Future;
 
 import com.barchart.feed.inst.api.Instrument;
-import com.barchart.feed.inst.api.InstrumentConst;
 import com.barchart.feed.inst.api.InstrumentGUID;
 import com.barchart.feed.inst.api.InstrumentService;
 
@@ -47,14 +46,14 @@ public class LocalDBInstrumentService implements InstrumentService<InstrumentGUI
 	}
 
 	@Override
-	public Map<InstrumentGUID, Instrument> lookup(List<InstrumentGUID> symbols) {
+	public Map<InstrumentGUID, Instrument> lookup(Collection<? extends InstrumentGUID> symbols) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public Map<InstrumentGUID, Future<Instrument>> lookupAsync(
-			List<InstrumentGUID> symbols) {
+			Collection<? extends InstrumentGUID> symbols) {
 		// TODO Auto-generated method stub
 		return null;
 	}
