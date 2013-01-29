@@ -20,8 +20,10 @@ import com.barchart.proto.buf.inst.BookType;
 import com.barchart.proto.buf.inst.Interval;
 import com.barchart.proto.buf.inst.PriceFraction;
 import com.barchart.util.values.provider.ValueBuilder;
+import com.barchart.util.values.provider.ValueConst;
+import com.google.protobuf.InvalidProtocolBufferException;
 
-class InstrumentProto implements Instrument {
+class InstrumentProto extends InstrumentBase implements Instrument {
 	
 	private static final Logger log = LoggerFactory.getLogger(InstrumentProto.class);
 	
@@ -94,8 +96,19 @@ class InstrumentProto implements Instrument {
 		map.put(InstrumentField.TIME_OPEN, ValueBuilder.newTime(mktHours.getTimeStart()));
 		map.put(InstrumentField.TIME_CLOSE, ValueBuilder.newTime(mktHours.getTimeFinish()));
 		
+		/* Will revisit */
+		map.put(InstrumentField.PRICE_POINT, ValueConst.NULL_PRICE);
+		map.put(InstrumentField.PRICE_STEP, ValueConst.NULL_PRICE);
+		map.put(InstrumentField.TIME_ZONE, ValueConst.NULL_TEXT);
+		map.put(InstrumentField.GROUP_ID, ValueConst.NULL_TEXT);
+		map.put(InstrumentField.EXCHANGE_ID, ValueConst.NULL_TEXT);
+		
 		guid = new InstrumentGUIDImpl(i.getTargetId());
 		
+	}
+	
+	InstrumentProto(final byte[] bytes) throws InvalidProtocolBufferException {
+		this(com.barchart.proto.buf.inst.Instrument.parseFrom(bytes));
 	}
 	
 	@Override

@@ -4,6 +4,7 @@ import java.util.Map;
 
 import com.barchart.feed.inst.api.Instrument;
 import com.barchart.missive.core.Tag;
+import com.barchart.missive.core.TagMap;
 
 public final class InstrumentFactory {
 	
@@ -18,6 +19,10 @@ public final class InstrumentFactory {
 	@SuppressWarnings("rawtypes")
 	public static final Instrument build(final Map<Tag, Object> map) {
 		return new InstrumentImpl(map);
+	}
+	
+	public static final Instrument build(final TagMap map) {
+		return null;
 	}
 
 }

@@ -7,10 +7,10 @@
  */
 package com.barchart.feed.base.market;
 
-import com.barchart.feed.base.instrument.api.DefinitionService;
 import com.barchart.feed.base.market.api.Market;
 import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.inst.api.Instrument;
+import com.barchart.feed.inst.api.InstrumentService;
 import com.barchart.feed.inst.provider.MockDefinitionService;
 import com.barchart.util.values.api.TextValue;
 import com.barchart.util.values.provider.ValueBuilder;
@@ -21,7 +21,7 @@ public class BenchMarketMemory {
 
 	static int COUNT = 100 * 1000;
 
-	static DefinitionService service = new MockDefinitionService();
+	static InstrumentService service = new MockDefinitionService();
 
 	public static void main(final String[] args) throws Exception {
 

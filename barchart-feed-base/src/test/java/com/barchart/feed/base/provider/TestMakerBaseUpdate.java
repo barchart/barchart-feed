@@ -21,7 +21,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.feed.base.instrument.api.DefinitionService;
+import com.barchart.feed.base.market.MockDefinitionService;
 import com.barchart.feed.base.market.MockMaker;
 import com.barchart.feed.base.market.MockMarketFactory;
 import com.barchart.feed.base.market.api.Market;
@@ -31,7 +31,7 @@ import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.feed.inst.api.Instrument;
-import com.barchart.feed.inst.provider.MockDefinitionService;
+import com.barchart.feed.inst.api.InstrumentService;
 
 public class TestMakerBaseUpdate {
 
@@ -48,7 +48,7 @@ public class TestMakerBaseUpdate {
 		return text.append("}").toString();
 	}
 
-	private DefinitionService<Instrument> service;
+	private InstrumentService service;
 
 	private MarketRegListener regListenter;
 
@@ -110,9 +110,9 @@ public class TestMakerBaseUpdate {
 		maker.add(regListenter);
 
 		// 3 different instruments
-		final Instrument inst1 = service.lookup(newText("1"));
-		final Instrument inst2 = service.lookup(newText("2"));
-		final Instrument inst3 = service.lookup(newText("3"));
+		final Instrument inst1 = service.lookup(MockDefinitionService.INST_SYMBOL_1);
+		final Instrument inst2 = service.lookup(MockDefinitionService.INST_SYMBOL_2);
+		final Instrument inst3 = service.lookup(MockDefinitionService.INST_SYMBOL_3);
 
 		//
 

@@ -5,7 +5,7 @@
  *
  * http://www.opensource.org/licenses/bsd-license.php
  */
-package com.barchart.feed.inst.provider;
+package com.barchart.feed.inst.enums;
 
 import static com.barchart.feed.inst.enums.MarketDisplay.priceFraction;
 import static com.barchart.feed.inst.enums.MarketDisplay.priceFractionText;
@@ -264,6 +264,7 @@ public class TestMarketDisplay {
 
 		final Map<Tag, Object> map = new HashMap<Tag, Object>();
 		map.put(InstrumentField.TIME_ZONE, ValueBuilder.newText("America/New_York"));
+		map.put(InstrumentField.ID, ValueBuilder.newText("1"));
 		final Instrument inst = InstrumentFactory.build(map);
 
 		final String text = timeTextShort(value, inst);

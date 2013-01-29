@@ -29,17 +29,16 @@ import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.base.cuvol.api.MarketCuvol;
 import com.barchart.feed.base.cuvol.api.MarketCuvolEntry;
-import com.barchart.feed.base.instrument.api.DefinitionService;
 import com.barchart.feed.base.market.api.Market;
 import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.message.MockMsgTrade;
 import com.barchart.feed.inst.api.Instrument;
-import com.barchart.feed.inst.provider.MockDefinitionService;
+import com.barchart.feed.inst.api.InstrumentService;
 import com.barchart.util.values.api.SizeValue;
 
 public class TestProcessCuvol {
 
-	DefinitionService service;
+	InstrumentService service;
 
 	private static final Logger log = LoggerFactory
 			.getLogger(TestProcessCuvol.class);
@@ -58,7 +57,7 @@ public class TestProcessCuvol {
 
 		final MockMaker maker = new MockMaker(new MockMarketFactory());
 
-		final Instrument inst = service.lookup(newText("3"));
+		final Instrument inst = service.lookup(MockDefinitionService.INST_SYMBOL_3);
 
 		final Instrument[] insts = new Instrument[] { inst };
 

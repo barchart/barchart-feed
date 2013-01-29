@@ -28,19 +28,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.base.bar.api.MarketBar;
-import com.barchart.feed.base.instrument.api.DefinitionService;
 import com.barchart.feed.base.market.api.Market;
 import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.feed.base.message.MockMsgTrade;
 import com.barchart.feed.inst.api.Instrument;
-import com.barchart.feed.inst.provider.MockDefinitionService;
+import com.barchart.feed.inst.api.InstrumentService;
 import com.barchart.util.values.api.SizeValue;
 
 public class TestMakerTaker {
 
-	DefinitionService service;
+	InstrumentService service;
 
 	private static final Logger log = LoggerFactory
 			.getLogger(TestMakerTaker.class);
@@ -61,7 +60,7 @@ public class TestMakerTaker {
 
 		final Instrument inst;
 
-		inst = service.lookup(newText("1"));
+		inst = service.lookup(MockDefinitionService.INST_SYMBOL_1);
 
 		final Instrument[] insts = new Instrument[] { inst };
 
@@ -146,7 +145,7 @@ public class TestMakerTaker {
 
 		final Instrument inst;
 
-		inst = service.lookup(newText("1"));
+		inst = service.lookup(MockDefinitionService.INST_SYMBOL_1);
 
 		final Instrument[] insts = new Instrument[] { inst };
 

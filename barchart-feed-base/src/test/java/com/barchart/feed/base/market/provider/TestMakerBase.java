@@ -16,7 +16,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.barchart.feed.base.instrument.api.DefinitionService;
+import com.barchart.feed.base.market.MockDefinitionService;
 import com.barchart.feed.base.market.MockMaker;
 import com.barchart.feed.base.market.MockMarketFactory;
 import com.barchart.feed.base.market.api.Market;
@@ -24,11 +24,11 @@ import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.feed.inst.api.Instrument;
-import com.barchart.feed.inst.provider.MockDefinitionService;
+import com.barchart.feed.inst.api.InstrumentService;
 
 public class TestMakerBase {
 
-	DefinitionService service;
+	InstrumentService service;
 
 	@Before
 	public void setUp() throws Exception {
@@ -46,7 +46,7 @@ public class TestMakerBase {
 
 		final Instrument inst;
 
-		inst = service.lookup(newText("1"));
+		inst = service.lookup(MockDefinitionService.INST_SYMBOL_1);
 
 		maker.register(inst);
 		assertEquals(maker.marketCount(), 1);
@@ -223,7 +223,7 @@ public class TestMakerBase {
 
 		Instrument inst;
 
-		inst = service.lookup(newText("1"));
+		inst = service.lookup(MockDefinitionService.INST_SYMBOL_1);
 
 		maker.register(inst);
 		assertEquals(maker.marketCount(), 1);

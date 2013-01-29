@@ -6,7 +6,7 @@ public class InstrumentGUIDImpl implements InstrumentGUID {
 
 	private final long guid;
 	
-	InstrumentGUIDImpl(final long guid) {
+	public InstrumentGUIDImpl(final long guid) {
 		this.guid = guid;
 	}
 	

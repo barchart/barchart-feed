@@ -1,20 +1,17 @@
 package com.barchart.feed.inst.api;
 
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Future;
 
-public interface InstrumentService {
+public interface InstrumentService<V> {
 	
-	Instrument lookup(CharSequence symbol);
+	Instrument lookup(V symbol);
 	
-	Future<Instrument> lookupAsync(CharSequence symbol);
+	Future<Instrument> lookupAsync(V symbol);
 	
-	List<Instrument> lookup(List<CharSequence> symbols);
+	Map<V, Instrument> lookup(List<V> symbols);
 	
-	Future<List<Instrument>> lookupAsync(List<CharSequence> symbols);
-	
-	Instrument lookup(InstrumentGUID guid);
-	
-	Future<Instrument> lookupAsync(InstrumentGUID guid);
+	Map<V, Future<Instrument>> lookupAsync(List<V> symbols);
 	
 }

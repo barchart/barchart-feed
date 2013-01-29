@@ -36,11 +36,18 @@
 	<properties>
 
 		<barchartUtilVersion>2.0.16</barchartUtilVersion>
+		<barchartMissiveVersion>1.1.1</barchartMissiveVersion>
 
 	</properties>
 
 	<dependencyManagement>
 		<dependencies>
+		
+			<dependency>
+				<groupId>com.barchart.missive</groupId>
+				<artifactId>barchart-missive</artifactId>
+				<version>${barchartMissiveVersion}</version>
+			</dependency>
 
 			<!-- MAIN -->
 

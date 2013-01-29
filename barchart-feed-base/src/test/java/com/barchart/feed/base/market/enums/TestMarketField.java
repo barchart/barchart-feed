@@ -40,8 +40,6 @@ public class TestMarketField {
 	@Test
 	public void testInit1() {
 
-		// MarketField<? extends Value<?>>[] values = MarketField.values();
-
 		log.info("MarketField.MARKET.index() : {}",
 				MarketField.MARKET.ordinal());
 
@@ -51,8 +49,6 @@ public class TestMarketField {
 
 	@Test
 	public void testInit2() {
-
-		// MarketField<? extends Value<?>>[] values = MarketField.values();
 
 		assertNotNull(MarketField.BAR_CURRENT.value());
 
@@ -66,10 +62,6 @@ public class TestMarketField {
 		for (final MarketField<?> field : values) {
 			log.info("field : {} ", field);
 		}
-
-		// for (DictEnum<?> field : DictEnum.valuesFor(MarketField.class)) {
-		// log.info("dictenum : {} ", field);
-		// }
 
 		log.info("MarketField.size : {}", MarketField.size());
 

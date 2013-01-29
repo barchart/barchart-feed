@@ -7,6 +7,8 @@ import com.barchart.missive.core.Tag;
 
 public final class NullInstrument implements Instrument {
 	
+	private final InstrumentGUID guid = new NullInstrumentGUID(); 
+	
 	@Override
 	public <V> V get(Tag<V> tag) throws MissiveException {
 		return null;
@@ -44,7 +46,16 @@ public final class NullInstrument implements Instrument {
 
 	@Override
 	public InstrumentGUID getGUID() {
-		return null;
+		return guid;
+	}
+
+	@Override
+	public int compareTo(final Instrument o) {
+		if(o instanceof NullInstrument) {
+			return 0;
+		} else {
+			return -1;
+		}
 	}
 
 }
