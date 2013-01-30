@@ -40,10 +40,11 @@ import com.barchart.feed.base.message.MockMsgTrade;
 import com.barchart.feed.base.trade.api.MarketTrade;
 import com.barchart.feed.inst.api.Instrument;
 import com.barchart.feed.inst.api.InstrumentService;
+import com.barchart.feed.inst.provider.MockDefinitionService;
 
 public class TestProcessBar {
 
-	InstrumentService service;
+	InstrumentService<CharSequence> service;
 
 	private static final Logger log = LoggerFactory
 			.getLogger(TestProcessBar.class);

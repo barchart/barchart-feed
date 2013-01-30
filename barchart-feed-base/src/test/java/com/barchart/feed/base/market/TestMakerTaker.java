@@ -14,7 +14,6 @@ import static com.barchart.feed.base.trade.enums.MarketTradeSession.DEFAULT;
 import static com.barchart.feed.base.trade.enums.MarketTradeType.FUTURE_ELECTRONIC;
 import static com.barchart.util.values.provider.ValueBuilder.newPrice;
 import static com.barchart.util.values.provider.ValueBuilder.newSize;
-import static com.barchart.util.values.provider.ValueBuilder.newText;
 import static com.barchart.util.values.provider.ValueBuilder.newTime;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -35,11 +34,12 @@ import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.feed.base.message.MockMsgTrade;
 import com.barchart.feed.inst.api.Instrument;
 import com.barchart.feed.inst.api.InstrumentService;
+import com.barchart.feed.inst.provider.MockDefinitionService;
 import com.barchart.util.values.api.SizeValue;
 
 public class TestMakerTaker {
 
-	InstrumentService service;
+	InstrumentService<CharSequence> service;
 
 	private static final Logger log = LoggerFactory
 			.getLogger(TestMakerTaker.class);

@@ -3,6 +3,9 @@ package com.barchart.feed.inst.provider;
 import java.io.File;
 import java.nio.ByteBuffer;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.barchart.feed.inst.api.Instrument;
 import com.barchart.feed.inst.api.InstrumentConst;
 import com.barchart.feed.inst.api.InstrumentGUID;
@@ -16,11 +19,16 @@ import com.sleepycat.je.EnvironmentConfig;
 import com.sleepycat.je.Transaction;
 
 public class LocalInstDefDB implements MetadataContext {
+	
+	private static final Logger log = LoggerFactory
+			.getLogger(LocalInstDefDB.class);
 
 	private final Database db;
 	private final Environment env;
 	
 	public LocalInstDefDB(final String location) {
+		
+		// Manage directory creation
 		
 		EnvironmentConfig envConfig = new EnvironmentConfig();
     	envConfig.setAllowCreate(true);
@@ -33,6 +41,8 @@ public class LocalInstDefDB implements MetadataContext {
         dbConfig.setSortedDuplicates(false);
         db = env.openDatabase(null, "InstrumentDef", dbConfig);
 		
+        log.debug("Database currently has {} entries", db.count());
+        
 	}
 	
 	@Override
@@ -58,6 +68,19 @@ public class LocalInstDefDB implements MetadataContext {
 		}
 		
 		return InstrumentFactory.buildFromProtoBuf(resInst);
+		
+	}
+	
+	public void store(final InstrumentGUID guid, final Instrument inst) {
+		
+		Transaction txn = env.beginTransaction(null, null);
+		byte[] key = ByteBuffer.allocate(8).putLong(guid.getGUID()).array();
+		
+		db.put(txn, new DatabaseEntry(key), new DatabaseEntry(
+				InstrumentProtoBuilder.build(inst).toByteArray()));
+		txn.commit();
+		
+		log.debug("Database currently has {} entries", db.count());
 		
 	}
 

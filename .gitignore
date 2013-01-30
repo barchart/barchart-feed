@@ -12,6 +12,7 @@
 .project
 .classpath
 .settings/
+.jdb
 
 #
 # remove build folders

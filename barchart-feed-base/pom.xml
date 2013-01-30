@@ -39,11 +39,19 @@
 	</properties>
 
 	<dependencies>
-
+	
 		<dependency>
 			<groupId>com.barchart.feed</groupId>
 			<artifactId>barchart-feed-inst</artifactId>
 			<version>${project.parent.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.barchart.feed</groupId>
+			<artifactId>barchart-feed-inst</artifactId>
+			<version>${project.parent.version}</version>
+			<scope>test</scope>
+			<classifier>tests</classifier>
+			<type>jar</type>
 		</dependency>
 
 		<dependency>

@@ -48,7 +48,7 @@ public class MockDefinitionService implements InstrumentService<CharSequence> {
 		
 		Map<Tag, Object> tagmap1 = new HashMap<Tag, Object>();
 		
-		tagmap1.put(ID, INST_GUID_1);
+		tagmap1.put(ID, ValueBuilder.newText("1"));
 		tagmap1.put(SYMBOL, INST_SYMBOL_1);
 		tagmap1.put(FRACTION, Fraction.DEC_N01);
 		tagmap1.put(PRICE_STEP, ValueBuilder.newPrice(1, -1));
@@ -59,7 +59,7 @@ public class MockDefinitionService implements InstrumentService<CharSequence> {
 		
 		Map<Tag, Object> tagmap2 = new HashMap<Tag, Object>();
 		
-		tagmap2.put(ID, INST_GUID_2);
+		tagmap2.put(ID, ValueBuilder.newText("2"));
 		tagmap2.put(SYMBOL, INST_SYMBOL_2);
 		tagmap2.put(FRACTION, Fraction.DEC_N02);
 		tagmap2.put(PRICE_STEP, ValueBuilder.newPrice(25, -2));
@@ -70,7 +70,7 @@ public class MockDefinitionService implements InstrumentService<CharSequence> {
 		
 		Map<Tag, Object> tagmap3 = new HashMap<Tag, Object>();
 		
-		tagmap3.put(ID, INST_GUID_3);
+		tagmap3.put(ID, ValueBuilder.newText("3"));
 		tagmap3.put(SYMBOL,  INST_SYMBOL_3);
 		tagmap3.put(FRACTION, Fraction.BIN_N03);
 		tagmap3.put(PRICE_STEP, ValueBuilder.newPrice(125, -3));

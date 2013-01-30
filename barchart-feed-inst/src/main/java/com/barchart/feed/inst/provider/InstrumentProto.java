@@ -84,17 +84,19 @@ class InstrumentProto extends InstrumentBase implements Instrument {
 		map.put(InstrumentField.FRACTION, fracTypeMap.get(i.getPriceDisplay().getFraction()));
 		
 		/* Calendar Fields */
-		final Interval instLife = i.getCalendar().getLifeTime();
-		map.put(InstrumentField.DATE_START, ValueBuilder.newTime(instLife.getTimeStart()));
-		map.put(InstrumentField.DATE_FINISH, ValueBuilder.newTime(instLife.getTimeFinish()));
-		
-		if(i.getCalendar().getMarketHoursCount() > 1) {
-			log.warn("Market hours contains more than one interval");
+		if(i.hasCalendar()) {
+			final Interval instLife = i.getCalendar().getLifeTime();
+			map.put(InstrumentField.DATE_START, ValueBuilder.newTime(instLife.getTimeStart()));
+			map.put(InstrumentField.DATE_FINISH, ValueBuilder.newTime(instLife.getTimeFinish()));
+			
+			if(i.getCalendar().getMarketHoursCount() > 1) {
+				log.warn("Market hours contains more than one interval");
+			}
+			
+			final Interval mktHours = i.getCalendar().getMarketHoursList().get(0);
+			map.put(InstrumentField.TIME_OPEN, ValueBuilder.newTime(mktHours.getTimeStart()));
+			map.put(InstrumentField.TIME_CLOSE, ValueBuilder.newTime(mktHours.getTimeFinish()));
 		}
-		
-		final Interval mktHours = i.getCalendar().getMarketHoursList().get(0);
-		map.put(InstrumentField.TIME_OPEN, ValueBuilder.newTime(mktHours.getTimeStart()));
-		map.put(InstrumentField.TIME_CLOSE, ValueBuilder.newTime(mktHours.getTimeFinish()));
 		
 		/* Will revisit */
 		map.put(InstrumentField.PRICE_POINT, ValueConst.NULL_PRICE);

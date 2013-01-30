@@ -7,7 +7,6 @@
  */
 package com.barchart.feed.base.provider;
 
-import static com.barchart.util.values.provider.ValueBuilder.newText;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -21,7 +20,6 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.feed.base.market.MockDefinitionService;
 import com.barchart.feed.base.market.MockMaker;
 import com.barchart.feed.base.market.MockMarketFactory;
 import com.barchart.feed.base.market.api.Market;
@@ -32,6 +30,7 @@ import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.feed.inst.api.Instrument;
 import com.barchart.feed.inst.api.InstrumentService;
+import com.barchart.feed.inst.provider.MockDefinitionService;
 
 public class TestMakerBaseUpdate {
 
@@ -48,7 +47,7 @@ public class TestMakerBaseUpdate {
 		return text.append("}").toString();
 	}
 
-	private InstrumentService service;
+	private InstrumentService<CharSequence> service;
 
 	private MarketRegListener regListenter;
 
