@@ -22,7 +22,7 @@ public final class InstrumentFactory {
 	}
 	
 	public static final Instrument build(final TagMap map) {
-		return null;
+		return new InstrumentImpl(map);
 	}
 
 }

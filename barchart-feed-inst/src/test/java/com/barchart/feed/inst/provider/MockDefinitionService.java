@@ -17,18 +17,28 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executor;
 import java.util.concurrent.Future;
+import java.util.concurrent.atomic.AtomicLong;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.inst.api.Instrument;
 import com.barchart.feed.inst.api.InstrumentConst;
+import com.barchart.feed.inst.api.InstrumentFuture;
 import com.barchart.feed.inst.api.InstrumentGUID;
 import com.barchart.feed.inst.api.InstrumentService;
+import com.barchart.feed.inst.api.MetadataContext;
 import com.barchart.feed.inst.enums.MarketDisplay.Fraction;
 import com.barchart.missive.core.Tag;
 import com.barchart.util.values.api.TextValue;
 import com.barchart.util.values.provider.ValueBuilder;
 
 public class MockDefinitionService implements InstrumentService<CharSequence> {
+	
+	private static final Logger log = LoggerFactory
+			.getLogger(MockDefinitionService.class);
 
 	public static final InstrumentGUID INST_GUID_1 = new InstrumentGUIDImpl(1);
 	public static final InstrumentGUID INST_GUID_2 = new InstrumentGUIDImpl(2);
@@ -40,8 +50,8 @@ public class MockDefinitionService implements InstrumentService<CharSequence> {
 	
 	final Map<InstrumentGUID, Instrument> guidMap = 
 			new ConcurrentHashMap<InstrumentGUID, Instrument>();
-	final Map<TextValue, Instrument> symbolMap = 
-			new ConcurrentHashMap<TextValue, Instrument>();
+	final Map<TextValue, InstrumentGUID> symbolMap = 
+			new ConcurrentHashMap<TextValue, InstrumentGUID>();
 		
 	@SuppressWarnings("rawtypes")
 	public MockDefinitionService() {
@@ -55,7 +65,7 @@ public class MockDefinitionService implements InstrumentService<CharSequence> {
 		tagmap1.put(BOOK_SIZE, ValueBuilder.newSize(10));
 		
 		guidMap.put(INST_GUID_1, InstrumentFactory.build(tagmap1));
-		symbolMap.put(INST_SYMBOL_1, InstrumentFactory.build(tagmap1));
+		symbolMap.put(INST_SYMBOL_1, INST_GUID_1);
 		
 		Map<Tag, Object> tagmap2 = new HashMap<Tag, Object>();
 		
@@ -66,7 +76,7 @@ public class MockDefinitionService implements InstrumentService<CharSequence> {
 		tagmap2.put(BOOK_SIZE, ValueBuilder.newSize(10));
 		
 		guidMap.put(INST_GUID_2, InstrumentFactory.build(tagmap2));
-		symbolMap.put(INST_SYMBOL_2, InstrumentFactory.build(tagmap2));
+		symbolMap.put(INST_SYMBOL_2, INST_GUID_2);
 		
 		Map<Tag, Object> tagmap3 = new HashMap<Tag, Object>();
 		
@@ -77,22 +87,28 @@ public class MockDefinitionService implements InstrumentService<CharSequence> {
 		tagmap3.put(BOOK_SIZE, ValueBuilder.newSize(10));
 		
 		guidMap.put(INST_GUID_3, InstrumentFactory.build(tagmap3));
-		symbolMap.put(INST_SYMBOL_3, InstrumentFactory.build(tagmap3));
+		symbolMap.put(INST_SYMBOL_3, INST_GUID_3);
 		
 	}
 	
 	@Override
 	public Instrument lookup(final CharSequence symbol) {
 		if(symbolMap.containsKey(symbol)) {
-			return symbolMap.get(symbol);
+			return guidMap.get(symbolMap.get(symbol));
 		}
 		return InstrumentConst.NULL_INSTRUMENT;
 	}
 
 	@Override
-	public Future<Instrument> lookupAsync(final CharSequence symbol) {
-		// TODO Auto-generated method stub
-		return null;
+	public InstrumentFuture lookupAsync(final CharSequence symbol) {
+		
+		InstrumentGUID guid = symbolMap.get(symbol);
+		if(guid == null) {
+			guid = InstrumentConst.NULL_GUID;
+		}
+		
+		return new InstrumentFutureImpl(guid, randomDelayContext, executor);
+		
 	}
 
 	@Override
@@ -112,5 +128,34 @@ public class MockDefinitionService implements InstrumentService<CharSequence> {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	private Executor executor = new Executor() {
+
+		private final AtomicLong counter = new AtomicLong(0);
+
+		final String name = "# DDF Client - " + counter.getAndIncrement();
+
+		@Override
+		public void execute(final Runnable task) {
+			log.debug("executing new runnable = " + task.toString());
+			new Thread(task, name).start();
+		}
+
+	};
+	
+	private MetadataContext randomDelayContext = new MetadataContext() {
+
+		@Override
+		public Instrument lookup(final InstrumentGUID guid) {
+			try {
+				Thread.sleep((long) (Math.random() * 100));
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			return guidMap.get(guid);
+			
+		}
+		
+	};
 
 }
