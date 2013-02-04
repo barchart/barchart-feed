@@ -7,11 +7,10 @@
  */
 package com.barchart.feed.inst.provider;
 
-import static com.barchart.feed.inst.api.InstrumentField.BOOK_SIZE;
-import static com.barchart.feed.inst.api.InstrumentField.FRACTION;
-import static com.barchart.feed.inst.api.InstrumentField.ID;
+import static com.barchart.feed.inst.api.InstrumentField.BOOK_DEPTH;
+import static com.barchart.feed.inst.api.InstrumentField.GUID;
 import static com.barchart.feed.inst.api.InstrumentField.PRICE_STEP;
-import static com.barchart.feed.inst.api.InstrumentField.SYMBOL;
+import static com.barchart.feed.inst.api.InstrumentField.VENDOR_SYMBOL;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -25,7 +24,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.inst.api.Instrument;
-import com.barchart.feed.inst.api.InstrumentConst;
 import com.barchart.feed.inst.api.InstrumentFuture;
 import com.barchart.feed.inst.api.InstrumentGUID;
 import com.barchart.feed.inst.api.InstrumentService;
@@ -58,33 +56,30 @@ public class MockDefinitionService implements InstrumentService<CharSequence> {
 		
 		Map<Tag, Object> tagmap1 = new HashMap<Tag, Object>();
 		
-		tagmap1.put(ID, ValueBuilder.newText("1"));
-		tagmap1.put(SYMBOL, INST_SYMBOL_1);
-		tagmap1.put(FRACTION, Fraction.DEC_N01);
+		tagmap1.put(GUID, ValueBuilder.newText("1"));
+		tagmap1.put(VENDOR_SYMBOL, INST_SYMBOL_1);
 		tagmap1.put(PRICE_STEP, ValueBuilder.newPrice(1, -1));
-		tagmap1.put(BOOK_SIZE, ValueBuilder.newSize(10));
+		tagmap1.put(BOOK_DEPTH, ValueBuilder.newSize(10));
 		
 		guidMap.put(INST_GUID_1, InstrumentFactory.build(tagmap1));
 		symbolMap.put(INST_SYMBOL_1, INST_GUID_1);
 		
 		Map<Tag, Object> tagmap2 = new HashMap<Tag, Object>();
 		
-		tagmap2.put(ID, ValueBuilder.newText("2"));
-		tagmap2.put(SYMBOL, INST_SYMBOL_2);
-		tagmap2.put(FRACTION, Fraction.DEC_N02);
+		tagmap2.put(GUID, ValueBuilder.newText("2"));
+		tagmap2.put(VENDOR_SYMBOL, INST_SYMBOL_2);
 		tagmap2.put(PRICE_STEP, ValueBuilder.newPrice(25, -2));
-		tagmap2.put(BOOK_SIZE, ValueBuilder.newSize(10));
+		tagmap2.put(BOOK_DEPTH, ValueBuilder.newSize(10));
 		
 		guidMap.put(INST_GUID_2, InstrumentFactory.build(tagmap2));
 		symbolMap.put(INST_SYMBOL_2, INST_GUID_2);
 		
 		Map<Tag, Object> tagmap3 = new HashMap<Tag, Object>();
 		
-		tagmap3.put(ID, ValueBuilder.newText("3"));
-		tagmap3.put(SYMBOL,  INST_SYMBOL_3);
-		tagmap3.put(FRACTION, Fraction.BIN_N03);
+		tagmap3.put(GUID, ValueBuilder.newText("3"));
+		tagmap3.put(VENDOR_SYMBOL,  INST_SYMBOL_3);
 		tagmap3.put(PRICE_STEP, ValueBuilder.newPrice(125, -3));
-		tagmap3.put(BOOK_SIZE, ValueBuilder.newSize(10));
+		tagmap3.put(BOOK_DEPTH, ValueBuilder.newSize(10));
 		
 		guidMap.put(INST_GUID_3, InstrumentFactory.build(tagmap3));
 		symbolMap.put(INST_SYMBOL_3, INST_GUID_3);
@@ -96,7 +91,7 @@ public class MockDefinitionService implements InstrumentService<CharSequence> {
 		if(symbolMap.containsKey(symbol)) {
 			return guidMap.get(symbolMap.get(symbol));
 		}
-		return InstrumentConst.NULL_INSTRUMENT;
+		return Instrument.NULL_INSTRUMENT;
 	}
 
 	@Override
@@ -104,7 +99,7 @@ public class MockDefinitionService implements InstrumentService<CharSequence> {
 		
 		InstrumentGUID guid = symbolMap.get(symbol);
 		if(guid == null) {
-			guid = InstrumentConst.NULL_GUID;
+			guid = InstrumentGUID.NULL_INSTRUMENT_GUID;
 		}
 		
 		return new InstrumentFutureImpl(guid, randomDelayContext, executor);

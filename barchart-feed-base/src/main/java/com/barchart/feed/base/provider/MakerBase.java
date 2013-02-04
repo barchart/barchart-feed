@@ -282,7 +282,7 @@ public abstract class MakerBase<Message extends MarketMessage> implements
 
 				if(market==null){
 					log.error("Failed to get MarketDo for " + inst.get(
-							InstrumentField.ID).toString());
+							InstrumentField.GUID).toString());
 					continue;
 				}
 				

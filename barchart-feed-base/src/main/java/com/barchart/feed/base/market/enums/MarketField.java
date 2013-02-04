@@ -20,7 +20,6 @@ import com.barchart.feed.base.market.api.Market;
 import com.barchart.feed.base.state.api.MarketState;
 import com.barchart.feed.base.trade.api.MarketTrade;
 import com.barchart.feed.inst.api.Instrument;
-import com.barchart.feed.inst.api.InstrumentConst;
 import com.barchart.util.anno.NotMutable;
 import com.barchart.util.collections.BitSetEnum;
 import com.barchart.util.enums.DictEnum;
@@ -35,7 +34,7 @@ public final class MarketField<V extends Value<V>> extends
 	// ##################################
 
 	/** primary key */
-	public static final MarketField<Instrument> INSTRUMENT = NEW(InstrumentConst.NULL_INSTRUMENT);
+	public static final MarketField<Instrument> INSTRUMENT = NEW(Instrument.NULL_INSTRUMENT);
 
 	/** last time any change of any market field */
 	public static final MarketField<TimeValue> MARKET_TIME = NEW(NULL_TIME);

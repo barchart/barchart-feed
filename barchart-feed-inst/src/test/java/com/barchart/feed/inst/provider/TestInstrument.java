@@ -1,23 +1,16 @@
 package com.barchart.feed.inst.provider;
 
-import static com.barchart.feed.inst.api.InstrumentField.BOOK_SIZE;
-import static com.barchart.feed.inst.api.InstrumentField.BOOK_TYPE;
+import static com.barchart.feed.inst.api.InstrumentField.BOOK_DEPTH;
 import static com.barchart.feed.inst.api.InstrumentField.CURRENCY;
-import static com.barchart.feed.inst.api.InstrumentField.DATE_FINISH;
-import static com.barchart.feed.inst.api.InstrumentField.DATE_START;
 import static com.barchart.feed.inst.api.InstrumentField.DESCRIPTION;
 import static com.barchart.feed.inst.api.InstrumentField.EXCHANGE_ID;
 import static com.barchart.feed.inst.api.InstrumentField.FIELDS;
-import static com.barchart.feed.inst.api.InstrumentField.FRACTION;
-import static com.barchart.feed.inst.api.InstrumentField.GROUP_ID;
-import static com.barchart.feed.inst.api.InstrumentField.ID;
-import static com.barchart.feed.inst.api.InstrumentField.PRICE_POINT;
+import static com.barchart.feed.inst.api.InstrumentField.GUID;
+import static com.barchart.feed.inst.api.InstrumentField.POINT_VALUE;
 import static com.barchart.feed.inst.api.InstrumentField.PRICE_STEP;
-import static com.barchart.feed.inst.api.InstrumentField.SYMBOL;
-import static com.barchart.feed.inst.api.InstrumentField.TIME_CLOSE;
-import static com.barchart.feed.inst.api.InstrumentField.TIME_OPEN;
-import static com.barchart.feed.inst.api.InstrumentField.TIME_ZONE;
-import static com.barchart.feed.inst.api.InstrumentField.TYPE;
+import static com.barchart.feed.inst.api.InstrumentField.VENDOR_SYMBOL;
+import static com.barchart.feed.inst.api.InstrumentField.TIME_ZONE_OFFSET;
+import static com.barchart.feed.inst.api.InstrumentField.CFI_CODE;
 import static com.barchart.util.values.provider.ValueBuilder.newPrice;
 import static com.barchart.util.values.provider.ValueBuilder.newSize;
 import static com.barchart.util.values.provider.ValueBuilder.newText;
@@ -25,14 +18,13 @@ import static com.barchart.util.values.provider.ValueBuilder.newTime;
 
 import com.barchart.feed.inst.api.Instrument;
 import com.barchart.feed.inst.enums.CodeCFI;
-import com.barchart.feed.inst.enums.MarketBookType;
 import com.barchart.feed.inst.enums.MarketCurrency;
 import com.barchart.feed.inst.enums.MarketDisplay.Fraction;
 import com.barchart.missive.core.TagMapSafe;
 import com.barchart.missive.hash.HashTagMapSafe;
 import com.barchart.proto.buf.inst.BookType;
 import com.barchart.proto.buf.inst.Calendar;
-import com.barchart.proto.buf.inst.InstType;
+import com.barchart.proto.buf.inst.InstrumentDefinition;
 import com.barchart.proto.buf.inst.Interval;
 import com.barchart.proto.buf.inst.PriceDisplay;
 import com.barchart.proto.buf.inst.PriceFraction;
@@ -43,13 +35,12 @@ import com.barchart.util.values.api.TimeValue;
 
 public class TestInstrument {
 
-	public static final TextValue ID_V = newText("123456");
+	public static final SizeValue ID_V = newSize(123456);
 	public static final TextValue GROUP_ID_V = newText("groupID");
 	public static final TextValue EXCHANGE_ID_V = newText("exchangeID");
 	public static final TextValue SYMBOL_V = newText("symbol");
 	public static final TextValue DESCRIPTION_V = newText("description");
 	public static final SizeValue BOOK_SIZE_V = newSize(10);
-	public static final MarketBookType BOOK_TYPE_V = MarketBookType.DEFAULT;
 	public static final PriceValue PRICE_STEP_V = newPrice(25, -1);
 	public static final PriceValue PRICE_POINT_V = newPrice(500, 1);
 	public static final Fraction FRACTION_V = Fraction.BIN_N01;
@@ -64,29 +55,26 @@ public class TestInstrument {
 	static final TagMapSafe map = new HashTagMapSafe(FIELDS);
 	
 	static {
-		map.set(ID, ID_V);
-		map.set(GROUP_ID, GROUP_ID_V);
+		map.set(GUID, ID_V);
 		map.set(EXCHANGE_ID, EXCHANGE_ID_V);
-		map.set(SYMBOL, SYMBOL_V);
+		map.set(VENDOR_SYMBOL, SYMBOL_V);
 		map.set(DESCRIPTION, DESCRIPTION_V);
-		map.set(BOOK_SIZE, BOOK_SIZE_V);
-		map.set(BOOK_TYPE, BOOK_TYPE_V);
+		map.set(BOOK_DEPTH, BOOK_SIZE_V);
 		map.set(PRICE_STEP, PRICE_STEP_V);
-		map.set(PRICE_POINT, PRICE_POINT_V);
+		map.set(POINT_VALUE, PRICE_POINT_V);
 		map.set(PRICE_STEP, PRICE_STEP_V);
-		map.set(FRACTION, FRACTION_V);
 		map.set(CURRENCY, CURRENCY_V);
-		map.set(TYPE, TYPE_V);
-		map.set(TIME_ZONE, TIME_ZONE_V);
-		map.set(TIME_OPEN, TIME_OPEN_V);
-		map.set(TIME_CLOSE, TIME_CLOSE_V);
-		map.set(DATE_START, DATE_START_V);
-		map.set(DATE_FINISH, DATE_FINISH_V);
+		map.set(CFI_CODE, TYPE_V);
+//		map.set(TIME_ZONE_OFFSET, TIME_ZONE_V);
+//		map.set(TIME_OPEN, TIME_OPEN_V);
+//		map.set(TIME_CLOSE, TIME_CLOSE_V);
+//		map.set(DATE_START, DATE_START_V);
+//		map.set(DATE_FINISH, DATE_FINISH_V);
 	}
 	
 	public static final Instrument TEST_INST_BARCHART = new InstrumentImpl(map);
 	
-	static com.barchart.proto.buf.inst.Instrument.Builder instBuilder;
+	static InstrumentDefinition.Builder instBuilder;
 	
 	static {
 		PriceDisplay.Builder priceDisplayBuilder = PriceDisplay.newBuilder();
@@ -106,22 +94,22 @@ public class TestInstrument {
 		calBuilder.addMarketHours(intervalBuilder.build()); 
 		
 		
-		instBuilder = com.barchart.proto.buf.inst.Instrument.newBuilder();
-		instBuilder.setSourceId(SYMBOL_V.toString());
-		instBuilder.setTargetId(Long.parseLong(ID_V.toString()));
-		instBuilder.setInstType(InstType.FutureInst);
-		instBuilder.setBookType(BookType.DefaultBook);
-		instBuilder.setBookSize(10);
-		instBuilder.setSymbol(SYMBOL_V.toString());
-		instBuilder.setDescription(DESCRIPTION_V.toString());
-		instBuilder.setPriceDisplay(priceDisplayBuilder.build());
-		instBuilder.setCalendar(calBuilder.build());
-		instBuilder.setCodeCFI(TYPE_V.name());
+		instBuilder = InstrumentDefinition.newBuilder();
+//		instBuilder.setSourceId(SYMBOL_V.toString());
+//		instBuilder.setTargetId(Long.parseLong(ID_V.toString()));
+//		instBuilder.setInstType(InstType.FutureInst);
+//		instBuilder.setBookType(BookType.DefaultBook);
+//		instBuilder.setBookSize(10);
+//		instBuilder.setSymbol(SYMBOL_V.toString());
+//		instBuilder.setDescription(DESCRIPTION_V.toString());
+//		instBuilder.setPriceDisplay(priceDisplayBuilder.build());
+//		instBuilder.setCalendar(calBuilder.build());
+//		instBuilder.setCodeCFI(TYPE_V.name());
 		instBuilder.setCurrency(CURRENCY_V.name());
 		instBuilder.setRecordCreateTime(1234);
 		instBuilder.setRecordUpdateTime(1235);
 	}
 	
-	public static final com.barchart.proto.buf.inst.Instrument TEST_INST_PROTO = instBuilder.build();
+	public static final InstrumentDefinition TEST_INST_PROTO = instBuilder.build();
 	
 }

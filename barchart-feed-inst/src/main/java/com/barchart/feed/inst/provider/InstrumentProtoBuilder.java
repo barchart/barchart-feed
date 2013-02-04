@@ -1,30 +1,32 @@
 package com.barchart.feed.inst.provider;
 
-import static com.barchart.feed.inst.api.InstrumentField.*;
+import static com.barchart.feed.inst.api.InstrumentField.BOOK_DEPTH;
+import static com.barchart.feed.inst.api.InstrumentField.CFI_CODE;
+import static com.barchart.feed.inst.api.InstrumentField.CURRENCY;
+import static com.barchart.feed.inst.api.InstrumentField.DESCRIPTION;
+import static com.barchart.feed.inst.api.InstrumentField.DISPLAY_BASE;
+import static com.barchart.feed.inst.api.InstrumentField.DISPLAY_EXPONENT;
+import static com.barchart.feed.inst.api.InstrumentField.EXCHANGE_ID;
+import static com.barchart.feed.inst.api.InstrumentField.LIFETIME;
+import static com.barchart.feed.inst.api.InstrumentField.MARKET_HOURS;
+import static com.barchart.feed.inst.api.InstrumentField.POINT_VALUE;
+import static com.barchart.feed.inst.api.InstrumentField.PRICE_STEP;
+import static com.barchart.feed.inst.api.InstrumentField.VENDOR;
+import static com.barchart.feed.inst.api.InstrumentField.VENDOR_SYMBOL;
+import static com.barchart.feed.inst.api.InstrumentField.TIME_ZONE_OFFSET;
 
 import java.util.EnumMap;
 
 import com.barchart.feed.inst.api.Instrument;
-import com.barchart.feed.inst.api.InstrumentConst;
-import com.barchart.feed.inst.enums.MarketBookType;
+import com.barchart.feed.inst.api.TimeInterval;
 import com.barchart.feed.inst.enums.MarketDisplay.Fraction;
-import com.barchart.proto.buf.inst.BookType;
 import com.barchart.proto.buf.inst.Calendar;
+import com.barchart.proto.buf.inst.InstrumentDefinition;
 import com.barchart.proto.buf.inst.Interval;
-import com.barchart.proto.buf.inst.PriceDisplay;
 import com.barchart.proto.buf.inst.PriceFraction;
+import com.barchart.util.values.api.PriceValue;
 
 public final class InstrumentProtoBuilder {
-	
-	private static final EnumMap<MarketBookType, BookType> bookTypeMap = 
-			new EnumMap<MarketBookType, BookType>(MarketBookType.class);
-	
-	static {
-		bookTypeMap.put(MarketBookType.EMPTY, BookType.NoBook);
-		bookTypeMap.put(MarketBookType.DEFAULT, BookType.DefaultBook);
-		bookTypeMap.put(MarketBookType.IMPLIED, BookType.ImpliedBook);
-		bookTypeMap.put(MarketBookType.COMBO, BookType.CombinedBook);
-	}
 	
 	private static final EnumMap<Fraction, PriceFraction> fracTypeMap =
 			new EnumMap<Fraction, PriceFraction>(Fraction.class);
@@ -57,65 +59,104 @@ public final class InstrumentProtoBuilder {
 		
 	}
 	
-	public static com.barchart.proto.buf.inst.Instrument build(final Instrument inst) {
+	public static InstrumentDefinition build(final Instrument inst) {
 		
-		if(inst == null || inst.equals(InstrumentConst.NULL_INSTRUMENT)) {
-			return null;
+		if(inst == null || inst.equals(Instrument.NULL_INSTRUMENT)) {
+			return null; // Return empty instrument def
 		}
 		
-		final com.barchart.proto.buf.inst.Instrument.Builder builder = 
-				com.barchart.proto.buf.inst.Instrument.newBuilder();
+		final InstrumentDefinition.Builder builder = 
+				InstrumentDefinition.newBuilder();
 		
-		builder.setTargetId(inst.getGUID().getGUID());
+		/* market identifier; must be globally unique; */
+		builder.setInstrumentId(inst.getGUID().getGUID());
 		
-		if(inst.contains(BOOK_TYPE)) {
-			builder.setBookType(bookTypeMap.get(inst.get(BOOK_TYPE)));
+		/* vendor */
+		if(inst.contains(VENDOR)) {
+			builder.setVendor(inst.get(VENDOR).toString());
 		}
 		
-		if(inst.contains(BOOK_SIZE)) {
-			builder.setBookSize((int)inst.get(BOOK_SIZE).asLong());
+		/* market symbol; can be non unique; */
+		if(inst.contains(VENDOR_SYMBOL)) {
+			builder.setVendorSymbol(inst.get(VENDOR_SYMBOL).toString());
 		}
-		
-		if(inst.contains(SYMBOL)) {
-			builder.setSymbol(inst.get(SYMBOL).toString());
-		}
-		
+		/* market free style description; can be used in full text search */
 		if(inst.contains(DESCRIPTION)) {
 			builder.setDescription(inst.get(DESCRIPTION).toString());
 		}
 		
-		if(inst.contains(TYPE)) {
-			builder.setCodeCFI(inst.get(TYPE).getCode());
+		/* market originating exchange identifier */
+		if(inst.contains(EXCHANGE_ID)) {
+			builder.setExchange(inst.get(EXCHANGE_ID).toString());
 		}
 		
+		/* book depth */
+		if(inst.contains(BOOK_DEPTH)) {
+			builder.setBookDepth((int)inst.get(BOOK_DEPTH).asLong());
+		}
+		
+		/* stock vs future vs etc. */
+		if(inst.contains(CFI_CODE)) {
+			builder.setCfiCode(inst.get(CFI_CODE).getCode());
+		}
+		
+		/* price currency */
 		if(inst.contains(CURRENCY)) {
 			builder.setCurrency(inst.get(CURRENCY).name());
 		}
 		
-		/* Price Display */
-		final PriceDisplay.Builder pBuilder = PriceDisplay.newBuilder();
-		pBuilder.setFraction(fracTypeMap.get(inst.get(FRACTION)));
-		// PriceFactor???
-		builder.setPriceDisplay(pBuilder.build());
+		/* price step / increment size / tick size */
+		if(inst.contains(PRICE_STEP)) {
+			final PriceValue step = inst.get(PRICE_STEP);
+			step.norm();
+			builder.setMinPriceIncrementMantissa(step.mantissa());
+			builder.setMinPriceIncrementExponent(step.exponent());
+		}
+		
+		/* value of a future contract / stock share */
+		if(inst.contains(POINT_VALUE)) {
+			final PriceValue val = inst.get(POINT_VALUE);
+			val.norm();
+			builder.setPointValueMantissa(val.mantissa());
+			builder.setPointValueExponent(val.exponent());
+		}
+		
+		/* display fraction base : decimal(10) vs binary(2), etc. */
+		if(inst.contains(DISPLAY_BASE)) {
+			builder.setDisplayFractionDenominator((int)inst.get(DISPLAY_BASE).asLong());
+		}
+		
+		/* display fraction exponent */
+		if(inst.contains(DISPLAY_EXPONENT)) {
+			builder.setDisplayExponent((int)inst.get(DISPLAY_EXPONENT).asLong());
+		}
 		
 		/* Calendar */
-		if(inst.contains(DATE_START) && inst.contains(DATE_FINISH)) {
+		if(inst.contains(LIFETIME) && inst.contains(MARKET_HOURS)) {
 			final Calendar.Builder calBuilder = Calendar.newBuilder();
 			final Interval.Builder intBuilder = Interval.newBuilder();
-			intBuilder.setTimeStart(inst.get(DATE_START).asMillisUTC());
-			intBuilder.setTimeFinish(inst.get(DATE_FINISH).asMillisUTC());
+			intBuilder.setTimeStart(inst.get(LIFETIME).getBegin());
+			intBuilder.setTimeFinish(inst.get(LIFETIME).getEnd());
 			
+			/* lifetime of instrument */
 			calBuilder.setLifeTime(intBuilder.build());
 			
 			intBuilder.clear();
-			intBuilder.setTimeStart(inst.get(TIME_OPEN).asMillisUTC());
-			intBuilder.setTimeFinish(inst.get(TIME_CLOSE).asMillisUTC());
+			for(final TimeInterval ti : inst.get(MARKET_HOURS)) {
+				intBuilder.setTimeStart(ti.getBegin());
+				intBuilder.setTimeFinish(ti.getEnd());
+				calBuilder.addMarketHours(intBuilder.build());
+				intBuilder.clear();
+			}
 			
-			calBuilder.addMarketHours(0, intBuilder.build());
+			/* array of intervals of market hours in a normal week, denoted in minutes from Sunday morning */
 			builder.setCalendar(calBuilder.build());
 		}
 		
-		// Missing : PRICE_POINT, PRICE_STEP, TIME_ZONE, GROUP_ID, EXCHANGE_ID
+		/* timezone represented as offset in minutes from utc */
+		if(inst.contains(TIME_ZONE_OFFSET)) {
+			builder.setTimeZoneOffset((int)inst.get(TIME_ZONE_OFFSET).asLong());
+		}
 		
 		return builder.build();
 	}

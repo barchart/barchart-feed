@@ -1,7 +1,9 @@
 package com.barchart.feed.inst.provider;
 
-import java.util.EnumMap;
+import static com.barchart.feed.inst.api.InstrumentField.*;
+
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -10,21 +12,20 @@ import org.slf4j.LoggerFactory;
 import com.barchart.feed.inst.api.Instrument;
 import com.barchart.feed.inst.api.InstrumentField;
 import com.barchart.feed.inst.api.InstrumentGUID;
+import com.barchart.feed.inst.api.TimeInterval;
 import com.barchart.feed.inst.enums.CodeCFI;
-import com.barchart.feed.inst.enums.MarketBookType;
 import com.barchart.feed.inst.enums.MarketCurrency;
-import com.barchart.feed.inst.enums.MarketDisplay.Fraction;
 import com.barchart.missive.core.MissiveException;
 import com.barchart.missive.core.Tag;
-import com.barchart.proto.buf.inst.BookType;
+import com.barchart.proto.buf.inst.InstrumentDefinition;
 import com.barchart.proto.buf.inst.Interval;
-import com.barchart.proto.buf.inst.PriceFraction;
 import com.barchart.util.values.provider.ValueBuilder;
 import com.barchart.util.values.provider.ValueConst;
 import com.google.protobuf.InvalidProtocolBufferException;
 
 class InstrumentProto extends InstrumentBase implements Instrument {
 	
+	@SuppressWarnings("unused")
 	private static final Logger log = LoggerFactory.getLogger(InstrumentProto.class);
 	
 	private final InstrumentGUID guid;
@@ -32,85 +33,46 @@ class InstrumentProto extends InstrumentBase implements Instrument {
 	@SuppressWarnings("rawtypes")
 	private final Map<Tag, Object> map = new HashMap<Tag, Object>();
 	
-	private static final EnumMap<BookType, MarketBookType> bookTypeMap = 
-			new EnumMap<BookType, MarketBookType>(BookType.class);
-	
-	static {
-		bookTypeMap.put(BookType.NoBook, MarketBookType.EMPTY);
-		bookTypeMap.put(BookType.DefaultBook, MarketBookType.DEFAULT);
-		bookTypeMap.put(BookType.ImpliedBook, MarketBookType.IMPLIED);
-		bookTypeMap.put(BookType.CombinedBook, MarketBookType.COMBO);
-	}
-	
-	private static final EnumMap<PriceFraction, Fraction> fracTypeMap =
-			new EnumMap<PriceFraction, Fraction>(PriceFraction.class);
-	
-	static {
-		fracTypeMap.put(PriceFraction.FactionDecimal_Z00, Fraction.DEC_Z00);
-		fracTypeMap.put(PriceFraction.FactionDecimal_N01, Fraction.DEC_N01);
-		fracTypeMap.put(PriceFraction.FactionDecimal_N02, Fraction.DEC_N02);
-		fracTypeMap.put(PriceFraction.FactionDecimal_N03, Fraction.DEC_N03);
-		fracTypeMap.put(PriceFraction.FactionDecimal_N04, Fraction.DEC_N04);
-		fracTypeMap.put(PriceFraction.FactionDecimal_N05, Fraction.DEC_N05);
-		fracTypeMap.put(PriceFraction.FactionDecimal_N06, Fraction.DEC_N06);
-		fracTypeMap.put(PriceFraction.FactionDecimal_N07, Fraction.DEC_N07);
-		fracTypeMap.put(PriceFraction.FactionDecimal_N08, Fraction.DEC_N08);
-		fracTypeMap.put(PriceFraction.FactionDecimal_N09, Fraction.DEC_N09);
+	InstrumentProto(final InstrumentDefinition i) {
 		
-		fracTypeMap.put(PriceFraction.FactionBinary_Z00, Fraction.BIN_Z00);
-		fracTypeMap.put(PriceFraction.FactionBinary_N01, Fraction.BIN_N01);
-		fracTypeMap.put(PriceFraction.FactionBinary_N02, Fraction.BIN_N02);
-		fracTypeMap.put(PriceFraction.FactionBinary_N03, Fraction.BIN_N03);
-		fracTypeMap.put(PriceFraction.FactionBinary_N04, Fraction.BIN_N04);
-		fracTypeMap.put(PriceFraction.FactionBinary_N05, Fraction.BIN_N05);
-		fracTypeMap.put(PriceFraction.FactionBinary_N06, Fraction.BIN_N06);
-		fracTypeMap.put(PriceFraction.FactionBinary_N07, Fraction.BIN_N07);
-		fracTypeMap.put(PriceFraction.FactionBinary_N08, Fraction.BIN_N08);
-		fracTypeMap.put(PriceFraction.FactionBinary_N09, Fraction.BIN_N09);
-	}
-	
-	InstrumentProto(final com.barchart.proto.buf.inst.Instrument i) {
+		map.put(GUID, ValueBuilder.newText(String.valueOf(i.getInstrumentId())));
+		map.put(VENDOR, ValueBuilder.newText(i.getVendor()));
+		map.put(VENDOR_SYMBOL, ValueBuilder.newText(i.getVendorSymbol()));
+		map.put(DESCRIPTION, ValueBuilder.newText(i.getDescription()));
+		map.put(EXCHANGE_ID, ValueBuilder.newText(i.getExchange()));
+		map.put(BOOK_DEPTH, ValueBuilder.newSize(i.getBookDepth()));
+		map.put(CFI_CODE, CodeCFI.fromCode(i.getCfiCode()));
+		map.put(CURRENCY, MarketCurrency.fromString(i.getCurrency()));
 		
-		map.put(InstrumentField.ID, ValueBuilder.newText(String.valueOf(i.getTargetId())));
-		map.put(InstrumentField.BOOK_TYPE, bookTypeMap.get(i.getBookType()));
-		map.put(InstrumentField.BOOK_SIZE, ValueBuilder.newSize(i.getBookSize()));
-		map.put(InstrumentField.SYMBOL, ValueBuilder.newText(i.getSymbol()));
-		map.put(InstrumentField.DESCRIPTION, ValueBuilder.newText(i.getDescription()));
-		
-		map.put(InstrumentField.TYPE, CodeCFI.fromCode(i.getCodeCFI()));
-		map.put(InstrumentField.CURRENCY, MarketCurrency.fromString(i.getCurrency()));
+		map.put(PRICE_STEP, ValueConst.NULL_PRICE);
+		map.put(POINT_VALUE, ValueConst.NULL_PRICE);
 		
 		/* Price Display Fields */
-		map.put(InstrumentField.FRACTION, fracTypeMap.get(i.getPriceDisplay().getFraction()));
+		map.put(DISPLAY_BASE, ValueBuilder.newSize(i.getDisplayFractionDenominator()));
+		map.put(DISPLAY_EXPONENT, ValueBuilder.newSize(i.getDisplayExponent()));
 		
 		/* Calendar Fields */
 		if(i.hasCalendar()) {
 			final Interval instLife = i.getCalendar().getLifeTime();
-			map.put(InstrumentField.DATE_START, ValueBuilder.newTime(instLife.getTimeStart()));
-			map.put(InstrumentField.DATE_FINISH, ValueBuilder.newTime(instLife.getTimeFinish()));
+			map.put(LIFETIME, new TimeInterval(instLife.getTimeStart(), instLife.getTimeFinish()));
 			
-			if(i.getCalendar().getMarketHoursCount() > 1) {
-				log.warn("Market hours contains more than one interval");
+			final List<Interval> mktHours = i.getCalendar().getMarketHoursList();
+			final TimeInterval[] sessions = new TimeInterval[mktHours.size()];
+			
+			for(int n = 0; n < mktHours.size(); n++) {
+				sessions[n] = new TimeInterval(mktHours.get(n).getTimeStart(), mktHours.get(n).getTimeFinish());
 			}
-			
-			final Interval mktHours = i.getCalendar().getMarketHoursList().get(0);
-			map.put(InstrumentField.TIME_OPEN, ValueBuilder.newTime(mktHours.getTimeStart()));
-			map.put(InstrumentField.TIME_CLOSE, ValueBuilder.newTime(mktHours.getTimeFinish()));
+			map.put(MARKET_HOURS, sessions);
 		}
 		
-		/* Will revisit */
-		map.put(InstrumentField.PRICE_POINT, ValueConst.NULL_PRICE);
-		map.put(InstrumentField.PRICE_STEP, ValueConst.NULL_PRICE);
-		map.put(InstrumentField.TIME_ZONE, ValueConst.NULL_TEXT);
-		map.put(InstrumentField.GROUP_ID, ValueConst.NULL_TEXT);
-		map.put(InstrumentField.EXCHANGE_ID, ValueConst.NULL_TEXT);
+		map.put(TIME_ZONE_OFFSET, ValueBuilder.newSize(i.getTimeZoneOffset()));
 		
-		guid = new InstrumentGUIDImpl(i.getTargetId());
+		guid = new InstrumentGUIDImpl(i.getInstrumentId());
 		
 	}
 	
 	InstrumentProto(final byte[] bytes) throws InvalidProtocolBufferException {
-		this(com.barchart.proto.buf.inst.Instrument.parseFrom(bytes));
+		this(InstrumentDefinition.parseFrom(bytes));
 	}
 	
 	@Override

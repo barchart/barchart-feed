@@ -40,6 +40,7 @@ import com.barchart.feed.base.bar.api.MarketBar;
 import com.barchart.feed.base.book.api.MarketBook;
 import com.barchart.feed.base.book.api.MarketBookEntry;
 import com.barchart.feed.base.book.api.MarketBookTop;
+import com.barchart.feed.base.book.enums.MarketBookType;
 import com.barchart.feed.base.market.api.Market;
 import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketEvent;
@@ -50,7 +51,6 @@ import com.barchart.feed.base.trade.api.MarketTrade;
 import com.barchart.feed.base.trade.enums.MarketTradeSession;
 import com.barchart.feed.inst.api.Instrument;
 import com.barchart.feed.inst.api.InstrumentService;
-import com.barchart.feed.inst.enums.MarketBookType;
 import com.barchart.feed.inst.provider.MockDefinitionService;
 import com.barchart.util.values.api.SizeValue;
 

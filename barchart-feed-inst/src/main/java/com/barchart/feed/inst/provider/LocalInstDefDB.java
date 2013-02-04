@@ -7,9 +7,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.inst.api.Instrument;
-import com.barchart.feed.inst.api.InstrumentConst;
 import com.barchart.feed.inst.api.InstrumentGUID;
 import com.barchart.feed.inst.api.MetadataContext;
+import com.barchart.proto.buf.inst.InstrumentDefinition;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.sleepycat.je.Database;
 import com.sleepycat.je.DatabaseConfig;
@@ -54,15 +54,15 @@ public class LocalInstDefDB implements MetadataContext {
 		db.get(txn, new DatabaseEntry(key), result, null);
 		txn.commit();
 		
-		com.barchart.proto.buf.inst.Instrument resInst;
+		InstrumentDefinition resInst;
 		byte[] resData = result.getData();
 		
 		if(resData == null || resData.length == 0) {
-			return InstrumentConst.NULL_INSTRUMENT;
+			return Instrument.NULL_INSTRUMENT;
 		}
 		
 		try {
-			resInst = com.barchart.proto.buf.inst.Instrument.parseFrom(result.getData());
+			resInst = InstrumentDefinition.parseFrom(result.getData());
 		} catch (final InvalidProtocolBufferException e) {
 			throw new RuntimeException(e);
 		}

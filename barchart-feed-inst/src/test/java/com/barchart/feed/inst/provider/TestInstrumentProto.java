@@ -15,7 +15,6 @@ import com.barchart.feed.inst.api.Instrument;
 import com.barchart.missive.core.Tag;
 import com.barchart.proto.buf.inst.BookType;
 import com.barchart.proto.buf.inst.Calendar;
-import com.barchart.proto.buf.inst.InstType;
 import com.barchart.proto.buf.inst.Interval;
 import com.barchart.proto.buf.inst.PriceDisplay;
 import com.barchart.proto.buf.inst.PriceFraction;

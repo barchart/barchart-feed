@@ -5,6 +5,7 @@ import java.util.Map;
 import com.barchart.feed.inst.api.Instrument;
 import com.barchart.missive.core.Tag;
 import com.barchart.missive.core.TagMap;
+import com.barchart.proto.buf.inst.InstrumentDefinition;
 
 public final class InstrumentFactory {
 	
@@ -12,7 +13,7 @@ public final class InstrumentFactory {
 		
 	}
 	
-	public static Instrument buildFromProtoBuf(com.barchart.proto.buf.inst.Instrument instDef) {
+	public static Instrument buildFromProtoBuf(InstrumentDefinition instDef) {
 		return new InstrumentProto(instDef);
 	}
 	

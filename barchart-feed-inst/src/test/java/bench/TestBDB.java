@@ -5,8 +5,7 @@ import java.nio.ByteBuffer;
 
 import com.barchart.proto.buf.inst.BookType;
 import com.barchart.proto.buf.inst.Calendar;
-import com.barchart.proto.buf.inst.InstType;
-import com.barchart.proto.buf.inst.Instrument;
+import com.barchart.proto.buf.inst.InstrumentDefinition;
 import com.barchart.proto.buf.inst.Interval;
 import com.barchart.proto.buf.inst.PriceDisplay;
 import com.barchart.proto.buf.inst.PriceFraction;
@@ -34,7 +33,7 @@ public class TestBDB {
         dbConfig.setSortedDuplicates(false);
         Database db = env.openDatabase(null, "TestDB", dbConfig);
         
-		Instrument inst = build();
+		InstrumentDefinition inst = build();
 		byte[] data = inst.toByteArray();
 		
 		Transaction txn = env.beginTransaction(null, null);
@@ -53,8 +52,8 @@ public class TestBDB {
 		for(int i = 0; i < 1000000; i++) {
 			DatabaseEntry result = new DatabaseEntry();
 			db.get(txn2, new DatabaseEntry(ByteBuffer.allocate(8).putLong(i).array()), result, null);
-			Instrument testInst = Instrument.parseFrom(result.getData());
-			ID = testInst.getSymbol();
+			InstrumentDefinition testInst = InstrumentDefinition.parseFrom(result.getData());
+			ID = testInst.getVendorSymbol();
 			if(i % 10000 == 0) {
 				System.out.println("Pulled " + i);
 			}
@@ -64,7 +63,7 @@ public class TestBDB {
 		
 	}
 	
-	private static Instrument build() {
+	private static InstrumentDefinition build() {
 		PriceDisplay.Builder priceDisplayBuilder = PriceDisplay.newBuilder();
 		priceDisplayBuilder.setPriceFactor(100);
 		priceDisplayBuilder.setFraction(PriceFraction.FactionBinary_N01);
@@ -77,17 +76,12 @@ public class TestBDB {
 		calBuilder.setLifeTime(intervalBuilder.build());
 		//calBuilder.setMarketHours(1, intervalBuilder.build());
 		
-		Instrument.Builder instBuilder = Instrument.newBuilder()
-			.setSourceId("TestSource")
-			.setTargetId(1234)
-			.setInstType(InstType.FutureInst)
-			.setBookType(BookType.DefaultBook)
-			.setBookSize(10)
-			.setSymbol("TestSymbol")
+		InstrumentDefinition.Builder instBuilder = InstrumentDefinition.newBuilder()
+			.setInstrumentId(1234)
+			.setBookDepth(10)
+			.setVendorSymbol("TestSymbol")
 			.setDescription("TestDesc")
-			.setPriceDisplay(priceDisplayBuilder.build())
 			.setCalendar(calBuilder.build())
-			.setCodeCFI("TestCodeCFI")
 			.setCurrency("TestCurrency")
 			.setRecordCreateTime(1234)
 			.setRecordUpdateTime(1234);

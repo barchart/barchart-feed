@@ -10,7 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.inst.api.Instrument;
-import com.barchart.feed.inst.api.InstrumentConst;
 import com.barchart.feed.inst.api.InstrumentFuture;
 import com.barchart.feed.inst.api.InstrumentGUID;
 import com.barchart.feed.inst.api.MetadataContext;
@@ -88,13 +87,13 @@ public class InstrumentFutureImpl extends InstrumentBase implements InstrumentFu
 
 	@Override
 	public boolean isNull() {
-		return inst == InstrumentConst.NULL_INSTRUMENT;
+		return inst == Instrument.NULL_INSTRUMENT;
 	}
 
 	@Override
 	public boolean cancel(final boolean mayInterruptIfRunning) {
 		if(task.cancel(mayInterruptIfRunning)) {
-			inst = InstrumentConst.NULL_INSTRUMENT;
+			inst = Instrument.NULL_INSTRUMENT;
 			return true;
 		} else {
 			return false;

@@ -410,13 +410,13 @@ public enum MarketDisplay {
 		return TIME_SHORT.print(value.asDateTime(zone));
 	}
 
-	/** in instrument time zone */
-	public static final String timeTextShort(final TimeValue value,
-			final Instrument instrument) {
-		final TextValue name = instrument.get(InstrumentField.TIME_ZONE);
-		final DateTimeZone zone = DateTimeZone.forID(name.toString());
-		return TIME_SHORT.print(value.asDateTime(zone));
-	}
+//	/** in instrument time zone */
+//	public static final String timeTextShort(final TimeValue value,
+//			final Instrument instrument) {
+//		final TextValue name = instrument.get(InstrumentField.TIME_ZONE);
+//		final DateTimeZone zone = DateTimeZone.forID(name.toString());
+//		return TIME_SHORT.print(value.asDateTime(zone));
+//	}
 
 	// ############################################
 
