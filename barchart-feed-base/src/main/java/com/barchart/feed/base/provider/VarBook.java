@@ -16,8 +16,8 @@ import com.barchart.feed.base.book.api.MarketBookEntry;
 import com.barchart.feed.base.book.api.MarketDoBook;
 import com.barchart.feed.base.book.api.MarketDoBookEntry;
 import com.barchart.feed.base.book.enums.MarketBookSide;
-import com.barchart.feed.base.book.enums.MarketBookType;
 import com.barchart.feed.base.book.enums.UniBookResult;
+import com.barchart.feed.inst.enums.BookLiquidity;
 import com.barchart.util.anno.Mutable;
 import com.barchart.util.anno.ThreadSafe;
 import com.barchart.util.values.api.PriceValue;
@@ -31,7 +31,7 @@ public final class VarBook extends UniBook<MarketBook> implements MarketDoBook {
 
 	private long millisUTC;
 
-	public VarBook(final MarketBookType type, final SizeValue size,
+	public VarBook(final BookLiquidity type, final SizeValue size,
 			final PriceValue step) {
 		super(type, size, step);
 	}

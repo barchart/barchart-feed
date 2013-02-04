@@ -40,7 +40,6 @@ import com.barchart.feed.base.bar.api.MarketBar;
 import com.barchart.feed.base.book.api.MarketBook;
 import com.barchart.feed.base.book.api.MarketBookEntry;
 import com.barchart.feed.base.book.api.MarketBookTop;
-import com.barchart.feed.base.book.enums.MarketBookType;
 import com.barchart.feed.base.market.api.Market;
 import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketEvent;
@@ -51,6 +50,7 @@ import com.barchart.feed.base.trade.api.MarketTrade;
 import com.barchart.feed.base.trade.enums.MarketTradeSession;
 import com.barchart.feed.inst.api.Instrument;
 import com.barchart.feed.inst.api.InstrumentService;
+import com.barchart.feed.inst.enums.BookLiquidity;
 import com.barchart.feed.inst.provider.MockDefinitionService;
 import com.barchart.util.values.api.SizeValue;
 
@@ -115,7 +115,7 @@ public class TestProcessBook {
 
 		msgBook.act = MODIFY;
 		msgBook.side = BID;
-		msgBook.type = MarketBookType.DEFAULT;
+		msgBook.type = BookLiquidity.DEFAULT;
 		msgBook.place = 0;
 		msgBook.price = newPrice(1000, -2);
 		msgBook.size = newSize(11);
@@ -144,7 +144,7 @@ public class TestProcessBook {
 
 		msgBook.act = MODIFY;
 		msgBook.side = BID;
-		msgBook.type = MarketBookType.DEFAULT;
+		msgBook.type = BookLiquidity.DEFAULT;
 		msgBook.place = 0;
 		msgBook.price = newPrice(1100, -2);
 		msgBook.size = newSize(13);
@@ -164,7 +164,7 @@ public class TestProcessBook {
 
 		msgBook.act = MODIFY;
 		msgBook.side = ASK;
-		msgBook.type = MarketBookType.DEFAULT;
+		msgBook.type = BookLiquidity.DEFAULT;
 		msgBook.place = 0;
 		msgBook.price = newPrice(1225, -2);
 		msgBook.size = newSize(15);
@@ -185,7 +185,7 @@ public class TestProcessBook {
 
 		msgBook.act = MODIFY;
 		msgBook.side = ASK;
-		msgBook.type = MarketBookType.DEFAULT;
+		msgBook.type = BookLiquidity.DEFAULT;
 		msgBook.place = 0;
 		msgBook.price = newPrice(1300, -2);
 		msgBook.size = newSize(17);
@@ -228,7 +228,7 @@ public class TestProcessBook {
 
 		msgBook.act = REMOVE;
 		msgBook.side = ASK;
-		msgBook.type = MarketBookType.DEFAULT;
+		msgBook.type = BookLiquidity.DEFAULT;
 		msgBook.place = 1;
 		msgBook.price = null;
 		msgBook.size = null;
@@ -249,7 +249,7 @@ public class TestProcessBook {
 
 		msgBook.act = REMOVE;
 		msgBook.side = BID;
-		msgBook.type = MarketBookType.DEFAULT;
+		msgBook.type = BookLiquidity.DEFAULT;
 		msgBook.place = 0;
 		msgBook.price = newPrice(1200, -2);
 		msgBook.size = null;

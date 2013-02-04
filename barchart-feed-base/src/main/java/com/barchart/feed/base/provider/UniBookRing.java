@@ -13,7 +13,7 @@ import static com.barchart.util.values.provider.ValueBuilder.*;
 import com.barchart.feed.base.book.api.MarketDoBookEntry;
 import com.barchart.feed.base.book.enums.MarketBookAction;
 import com.barchart.feed.base.book.enums.MarketBookSide;
-import com.barchart.feed.base.book.enums.MarketBookType;
+import com.barchart.feed.inst.enums.BookLiquidity;
 import com.barchart.util.anno.NotThreadSafe;
 import com.barchart.util.collections.ScadecRingBufferBase;
 import com.barchart.util.math.MathExtra;
@@ -55,7 +55,7 @@ abstract class UniBookRing extends
 
 	// use for entry reconstruction
 	protected final static MarketBookAction RET_ACT = NOOP;
-	protected final static MarketBookType RET_TYPE = MarketBookType.COMBO;
+	protected final static BookLiquidity RET_TYPE = BookLiquidity.COMBINED;
 
 	//
 
@@ -63,25 +63,25 @@ abstract class UniBookRing extends
 	private final int[] arrayDefault;
 	private final int[] arrayImplied;
 
-	protected final MarketBookType type() {
+	protected final BookLiquidity type() {
 		final int maskDefault = arrayDefault == null ? 0x0 : 0x1;
 		final int maskImplied = arrayImplied == null ? 0x0 : 0x2;
 		switch (maskDefault + maskImplied) {
 		default:
 		case 0x0:
-			return MarketBookType.EMPTY;
+			return BookLiquidity.NONE;
 		case 0x1:
-			return MarketBookType.DEFAULT;
+			return BookLiquidity.DEFAULT;
 		case 0x2:
-			return MarketBookType.IMPLIED;
+			return BookLiquidity.IMPLIED;
 		case 0x3:
-			return MarketBookType.COMBO;
+			return BookLiquidity.COMBINED;
 		}
 	}
 
 	protected final UniBook<?> book;
 
-	public UniBookRing(final UniBook<?> book, final MarketBookType type)
+	public UniBookRing(final UniBook<?> book, final BookLiquidity type)
 			throws IllegalArgumentException {
 
 		if (book == null) {
@@ -103,7 +103,7 @@ abstract class UniBookRing extends
 		}
 
 		switch (type) {
-		case EMPTY:
+		case NONE:
 			arrayDefault = null;
 			arrayImplied = null;
 			break;
@@ -115,7 +115,7 @@ abstract class UniBookRing extends
 			arrayDefault = null;
 			arrayImplied = new int[size];
 			break;
-		case COMBO:
+		case COMBINED:
 			arrayDefault = new int[size];
 			arrayImplied = new int[size];
 			break;
@@ -125,7 +125,7 @@ abstract class UniBookRing extends
 
 	}
 
-	private final int[] arrayFor(final MarketBookType type) {
+	private final int[] arrayFor(final BookLiquidity type) {
 		switch (type) {
 		case DEFAULT:
 			return arrayDefault;

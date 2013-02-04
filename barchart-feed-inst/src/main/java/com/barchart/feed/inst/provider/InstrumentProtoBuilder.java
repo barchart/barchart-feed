@@ -6,14 +6,14 @@ import static com.barchart.feed.inst.api.InstrumentField.CURRENCY;
 import static com.barchart.feed.inst.api.InstrumentField.DESCRIPTION;
 import static com.barchart.feed.inst.api.InstrumentField.DISPLAY_BASE;
 import static com.barchart.feed.inst.api.InstrumentField.DISPLAY_EXPONENT;
-import static com.barchart.feed.inst.api.InstrumentField.EXCHANGE_ID;
+import static com.barchart.feed.inst.api.InstrumentField.EXCHANGE_CODE;
 import static com.barchart.feed.inst.api.InstrumentField.LIFETIME;
 import static com.barchart.feed.inst.api.InstrumentField.MARKET_HOURS;
 import static com.barchart.feed.inst.api.InstrumentField.POINT_VALUE;
 import static com.barchart.feed.inst.api.InstrumentField.PRICE_STEP;
 import static com.barchart.feed.inst.api.InstrumentField.VENDOR;
-import static com.barchart.feed.inst.api.InstrumentField.VENDOR_SYMBOL;
-import static com.barchart.feed.inst.api.InstrumentField.TIME_ZONE_OFFSET;
+import static com.barchart.feed.inst.api.InstrumentField.SYMBOL;
+import static com.barchart.feed.inst.api.InstrumentField.TIME_ZONE;
 
 import java.util.EnumMap;
 
@@ -77,8 +77,8 @@ public final class InstrumentProtoBuilder {
 		}
 		
 		/* market symbol; can be non unique; */
-		if(inst.contains(VENDOR_SYMBOL)) {
-			builder.setVendorSymbol(inst.get(VENDOR_SYMBOL).toString());
+		if(inst.contains(SYMBOL)) {
+			builder.setVendorSymbol(inst.get(SYMBOL).toString());
 		}
 		/* market free style description; can be used in full text search */
 		if(inst.contains(DESCRIPTION)) {
@@ -86,8 +86,8 @@ public final class InstrumentProtoBuilder {
 		}
 		
 		/* market originating exchange identifier */
-		if(inst.contains(EXCHANGE_ID)) {
-			builder.setExchange(inst.get(EXCHANGE_ID).toString());
+		if(inst.contains(EXCHANGE_CODE)) {
+			builder.setExchange(inst.get(EXCHANGE_CODE).toString());
 		}
 		
 		/* book depth */
@@ -154,8 +154,8 @@ public final class InstrumentProtoBuilder {
 		}
 		
 		/* timezone represented as offset in minutes from utc */
-		if(inst.contains(TIME_ZONE_OFFSET)) {
-			builder.setTimeZoneOffset((int)inst.get(TIME_ZONE_OFFSET).asLong());
+		if(inst.contains(TIME_ZONE)) {
+			builder.setTimeZoneOffset((int)inst.get(TIME_ZONE).asLong());
 		}
 		
 		return builder.build();

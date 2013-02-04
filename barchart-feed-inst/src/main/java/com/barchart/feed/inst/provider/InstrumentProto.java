@@ -35,11 +35,11 @@ class InstrumentProto extends InstrumentBase implements Instrument {
 	
 	InstrumentProto(final InstrumentDefinition i) {
 		
-		map.put(GUID, ValueBuilder.newText(String.valueOf(i.getInstrumentId())));
+		map.put(MARKET_ID, ValueBuilder.newText(String.valueOf(i.getInstrumentId())));
 		map.put(VENDOR, ValueBuilder.newText(i.getVendor()));
-		map.put(VENDOR_SYMBOL, ValueBuilder.newText(i.getVendorSymbol()));
+		map.put(SYMBOL, ValueBuilder.newText(i.getVendorSymbol()));
 		map.put(DESCRIPTION, ValueBuilder.newText(i.getDescription()));
-		map.put(EXCHANGE_ID, ValueBuilder.newText(i.getExchange()));
+		map.put(EXCHANGE_CODE, ValueBuilder.newText(i.getExchange()));
 		map.put(BOOK_DEPTH, ValueBuilder.newSize(i.getBookDepth()));
 		map.put(CFI_CODE, CodeCFI.fromCode(i.getCfiCode()));
 		map.put(CURRENCY, MarketCurrency.fromString(i.getCurrency()));
@@ -65,7 +65,7 @@ class InstrumentProto extends InstrumentBase implements Instrument {
 			map.put(MARKET_HOURS, sessions);
 		}
 		
-		map.put(TIME_ZONE_OFFSET, ValueBuilder.newSize(i.getTimeZoneOffset()));
+		map.put(TIME_ZONE, ValueBuilder.newSize(i.getTimeZoneOffset()));
 		
 		guid = new InstrumentGUIDImpl(i.getInstrumentId());
 		

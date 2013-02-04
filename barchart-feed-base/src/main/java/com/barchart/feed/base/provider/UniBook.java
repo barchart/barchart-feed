@@ -20,8 +20,8 @@ import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.base.book.api.MarketDoBookEntry;
 import com.barchart.feed.base.book.enums.MarketBookSide;
-import com.barchart.feed.base.book.enums.MarketBookType;
 import com.barchart.feed.base.book.enums.UniBookResult;
+import com.barchart.feed.inst.enums.BookLiquidity;
 import com.barchart.util.anno.NotThreadSafe;
 import com.barchart.util.math.MathExtra;
 import com.barchart.util.values.api.PriceValue;
@@ -44,7 +44,7 @@ class UniBook<V extends Value<V>> extends ValueFreezer<V> {
 	protected final UniBookRing bids;
 	protected final UniBookRing asks;
 
-	public UniBook(final MarketBookType type, final SizeValue size,
+	public UniBook(final BookLiquidity type, final SizeValue size,
 			final PriceValue step) throws IllegalArgumentException,
 			ArithmeticException {
 
@@ -303,7 +303,7 @@ class UniBook<V extends Value<V>> extends ValueFreezer<V> {
 	}
 
 	private final DefBookEntry nullEntry(final int index) {
-		return new DefBookEntry(null, GAP, MarketBookType.COMBO, 0, step.mult(index), null);
+		return new DefBookEntry(null, GAP, BookLiquidity.COMBINED, 0, step.mult(index), null);
 	}
 
 	@Override

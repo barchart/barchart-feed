@@ -3,13 +3,13 @@ package com.barchart.feed.inst.provider;
 import static com.barchart.feed.inst.api.InstrumentField.BOOK_DEPTH;
 import static com.barchart.feed.inst.api.InstrumentField.CURRENCY;
 import static com.barchart.feed.inst.api.InstrumentField.DESCRIPTION;
-import static com.barchart.feed.inst.api.InstrumentField.EXCHANGE_ID;
+import static com.barchart.feed.inst.api.InstrumentField.EXCHANGE_CODE;
 import static com.barchart.feed.inst.api.InstrumentField.FIELDS;
-import static com.barchart.feed.inst.api.InstrumentField.GUID;
+import static com.barchart.feed.inst.api.InstrumentField.MARKET_ID;
 import static com.barchart.feed.inst.api.InstrumentField.POINT_VALUE;
 import static com.barchart.feed.inst.api.InstrumentField.PRICE_STEP;
-import static com.barchart.feed.inst.api.InstrumentField.VENDOR_SYMBOL;
-import static com.barchart.feed.inst.api.InstrumentField.TIME_ZONE_OFFSET;
+import static com.barchart.feed.inst.api.InstrumentField.SYMBOL;
+import static com.barchart.feed.inst.api.InstrumentField.TIME_ZONE;
 import static com.barchart.feed.inst.api.InstrumentField.CFI_CODE;
 import static com.barchart.util.values.provider.ValueBuilder.newPrice;
 import static com.barchart.util.values.provider.ValueBuilder.newSize;
@@ -55,9 +55,9 @@ public class TestInstrument {
 	static final TagMapSafe map = new HashTagMapSafe(FIELDS);
 	
 	static {
-		map.set(GUID, ID_V);
-		map.set(EXCHANGE_ID, EXCHANGE_ID_V);
-		map.set(VENDOR_SYMBOL, SYMBOL_V);
+		map.set(MARKET_ID, ID_V);
+		map.set(EXCHANGE_CODE, EXCHANGE_ID_V);
+		map.set(SYMBOL, SYMBOL_V);
 		map.set(DESCRIPTION, DESCRIPTION_V);
 		map.set(BOOK_DEPTH, BOOK_SIZE_V);
 		map.set(PRICE_STEP, PRICE_STEP_V);

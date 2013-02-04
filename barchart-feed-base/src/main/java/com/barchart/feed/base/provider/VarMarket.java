@@ -19,7 +19,6 @@ import com.barchart.feed.base.bar.api.MarketBar;
 import com.barchart.feed.base.bar.api.MarketDoBar;
 import com.barchart.feed.base.book.api.MarketBook;
 import com.barchart.feed.base.book.api.MarketDoBook;
-import com.barchart.feed.base.book.enums.MarketBookType;
 import com.barchart.feed.base.cuvol.api.MarketCuvol;
 import com.barchart.feed.base.cuvol.api.MarketDoCuvol;
 import com.barchart.feed.base.market.api.Market;
@@ -32,6 +31,7 @@ import com.barchart.feed.base.trade.api.MarketDoTrade;
 import com.barchart.feed.base.trade.api.MarketTrade;
 import com.barchart.feed.inst.api.Instrument;
 import com.barchart.feed.inst.api.InstrumentField;
+import com.barchart.feed.inst.enums.BookLiquidity;
 import com.barchart.util.anno.Mutable;
 import com.barchart.util.anno.ThreadSafe;
 import com.barchart.util.values.api.PriceValue;
@@ -302,7 +302,7 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 		
 		 final Instrument inst = get(INSTRUMENT);
 		
-		 final MarketBookType type = inst.get(InstrumentField.BOOK_TYPE);
+		 final BookLiquidity type = inst.get(InstrumentField.BOOK_LIQUIDITY);
 		 final SizeValue size = LIMIT; // inst.get(BOOK_SIZE);
 		 final PriceValue step = inst.get(InstrumentField.PRICE_STEP);
 		

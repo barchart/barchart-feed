@@ -263,8 +263,8 @@ public class TestMarketDisplay {
 		final TimeValue value = newTime(millisUTC);
 
 		final Map<Tag, Object> map = new HashMap<Tag, Object>();
-		map.put(InstrumentField.TIME_ZONE_OFFSET, ValueBuilder.newSize(60 * -5));
-		map.put(InstrumentField.GUID, ValueBuilder.newText("1"));
+		map.put(InstrumentField.TIME_ZONE, ValueBuilder.newSize(60 * -5));
+		map.put(InstrumentField.MARKET_ID, ValueBuilder.newText("1"));
 		final Instrument inst = InstrumentFactory.build(map);
 		final DateTimeZone zone = DateTimeZone.forOffsetHours(-5);
 		

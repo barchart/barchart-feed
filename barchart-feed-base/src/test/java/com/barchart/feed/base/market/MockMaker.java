@@ -9,7 +9,6 @@ package com.barchart.feed.base.market;
 
 import com.barchart.feed.base.book.enums.MarketBookAction;
 import com.barchart.feed.base.book.enums.MarketBookSide;
-import com.barchart.feed.base.book.enums.MarketBookType;
 import com.barchart.feed.base.market.api.MarketDo;
 import com.barchart.feed.base.market.api.MarketFactory;
 import com.barchart.feed.base.message.MockMessage;
@@ -21,6 +20,7 @@ import com.barchart.feed.base.provider.MakerBase;
 import com.barchart.feed.base.trade.enums.MarketTradeSequencing;
 import com.barchart.feed.base.trade.enums.MarketTradeSession;
 import com.barchart.feed.base.trade.enums.MarketTradeType;
+import com.barchart.feed.inst.enums.BookLiquidity;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
 import com.barchart.util.values.api.TimeValue;
@@ -59,7 +59,7 @@ public class MockMaker extends MakerBase<MockMessage> implements
 
 		final MarketBookAction act = message.act;
 		final MarketBookSide side = message.side;
-		final MarketBookType type = message.type;
+		final BookLiquidity type = message.type;
 		final int place = message.place;
 		final PriceValue price = message.price;
 		final SizeValue size = message.size;

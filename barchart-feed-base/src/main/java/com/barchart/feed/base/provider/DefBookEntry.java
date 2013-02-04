@@ -16,7 +16,7 @@ import com.barchart.feed.base.book.api.MarketBookEntry;
 import com.barchart.feed.base.book.api.MarketDoBookEntry;
 import com.barchart.feed.base.book.enums.MarketBookAction;
 import com.barchart.feed.base.book.enums.MarketBookSide;
-import com.barchart.feed.base.book.enums.MarketBookType;
+import com.barchart.feed.inst.enums.BookLiquidity;
 import com.barchart.util.math.MathExtra;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
@@ -28,7 +28,7 @@ public class DefBookEntry extends ValueFreezer<MarketBookEntry> implements
 
 	private final static byte nulAct = NOOP.ord;
 	private final static byte nulSide = GAP.ord;
-	private final static byte nulType = MarketBookType.EMPTY.ord;
+	private final static byte nulType = BookLiquidity.NONE.ord;
 
 	// store byte ordinal to save heap
 	private final byte ordAct;
@@ -43,7 +43,7 @@ public class DefBookEntry extends ValueFreezer<MarketBookEntry> implements
 	private final SizeValue size;
 
 	public DefBookEntry(final MarketBookAction act, final MarketBookSide side,
-			final MarketBookType type, final int place, final PriceValue price,
+			final BookLiquidity type, final int place, final PriceValue price,
 			final SizeValue size) throws ArithmeticException {
 
 		this.ordAct = (act == null ? nulAct : act.ord);
@@ -68,8 +68,8 @@ public class DefBookEntry extends ValueFreezer<MarketBookEntry> implements
 	}
 
 	@Override
-	public final MarketBookType type() {
-		return MarketBookType.fromOrd(ordType);
+	public final BookLiquidity type() {
+		return BookLiquidity.fromOrd(ordType);
 	}
 
 	@Override

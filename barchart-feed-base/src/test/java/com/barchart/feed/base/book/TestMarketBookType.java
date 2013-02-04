@@ -13,7 +13,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.barchart.feed.base.book.enums.MarketBookType;
+import com.barchart.feed.inst.enums.BookLiquidity;
 import com.barchart.util.math.MathExtra;
 
 public class TestMarketBookType {
@@ -29,11 +29,11 @@ public class TestMarketBookType {
 	@Test
 	public void testOf() {
 
-		MathExtra.castIntToByte(MarketBookType.values().length);
+		MathExtra.castIntToByte(BookLiquidity.values().length);
 
-		for (final MarketBookType type : MarketBookType.values()) {
+		for (final BookLiquidity type : BookLiquidity.values()) {
 			final byte ord = MathExtra.castIntToByte(type.ordinal());
-			assertEquals(type, MarketBookType.fromOrd(ord));
+			assertEquals(type, BookLiquidity.fromOrd(ord));
 		}
 
 	}
