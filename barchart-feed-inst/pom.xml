@@ -1,19 +1,29 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  
-  	<modelVersion>4.0.0</modelVersion>
-  
-  	<parent>
-    	<groupId>com.barchart.feed</groupId>
-    	<artifactId>barchart-feed</artifactId>
-    	<version>1.4.1-SNAPSHOT</version>
-  	</parent>
-  	
-  	<artifactId>barchart-feed-inst</artifactId>
-  	<packaging>bundle</packaging>
-  	
-  	<url>https://github.com/barchart/barchart-feed</url>
-  	
-  	<issueManagement>
+<!--
+
+    Copyright (C) 2011-2012 Barchart, Inc. <http://www.barchart.com />
+
+    All rights reserved. Licensed under the OSI BSD License.
+
+    http://www.opensource.org/licenses/bsd-license.php
+
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.barchart.feed</groupId>
+		<artifactId>barchart-feed</artifactId>
+		<version>1.4.1-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>barchart-feed-inst</artifactId>
+	<packaging>bundle</packaging>
+
+	<url>https://github.com/barchart/barchart-feed</url>
+
+	<issueManagement>
 		<system>github</system>
 		<url>https://github.com/barchart/barchart-feed/issues</url>
 	</issueManagement>
@@ -24,61 +34,62 @@
 		<developerConnection>scm:git:ssh://git@github.com/barchart/barchart-feed.git</developerConnection>
 		<tag>HEAD</tag>
 	</scm>
-	
+
 	<properties>
 		<bdbjeVersion>4.0.92</bdbjeVersion>
 		<protoInstVersion>1.1.1</protoInstVersion>
 	</properties>
-  	
-  	<dependencies>
-  	
-  		<dependency>
+
+	<dependencies>
+
+		<dependency>
 			<groupId>com.sleepycat</groupId>
 			<artifactId>je</artifactId>
 			<version>${bdbjeVersion}</version>
 			<optional>true</optional>
 		</dependency>
-  	
-  		<dependency>
-  			<groupId>com.barchart.missive</groupId>
+
+		<dependency>
+			<groupId>com.barchart.missive</groupId>
 			<artifactId>barchart-missive</artifactId>
 			<scope>provided</scope>
-  		</dependency>
-  		<!-- <dependency>
-  			<groupId>com.barchart.missive</groupId>
-  			<artifactId>barchart-missive-protobuf</artifactId>
-  			<version>1.0.1-SNAPSHOT</version>
-  			<scope>provided</scope>
-  		</dependency> -->
-  		
-  		<!-- protocol buffers - original -->
+		</dependency>
+		<!-- <dependency> -->
+		<!-- <groupId>com.barchart.missive</groupId> -->
+		<!-- <artifactId>barchart-missive-protobuf</artifactId> -->
+		<!-- <version>1.0.1-SNAPSHOT</version> -->
+		<!-- <scope>provided</scope> -->
+		<!-- </dependency> -->
+
+		<!-- protocol buffers - original -->
 		<dependency>
 			<groupId>com.google.protobuf</groupId>
 			<artifactId>protobuf-java</artifactId>
 			<version>2.4.1</version>
 			<scope>provided</scope>
-		</dependency>	
-  		
-  		<dependency>
-  			<groupId>com.barchart.proto</groupId>
-  			<artifactId>barchart-proto-buf-inst</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.barchart.proto</groupId>
+			<artifactId>barchart-proto-buf-inst</artifactId>
 			<version>${protoInstVersion}</version>
-  		</dependency>
-  	
-  		<dependency>
+		</dependency>
+
+		<dependency>
 			<groupId>com.barchart.util</groupId>
 			<artifactId>barchart-util-values</artifactId>
 		</dependency>
-		
+
 		<dependency>
-        	<groupId>com.yammer.metrics</groupId>
-        	<artifactId>metrics-core</artifactId>
-        	<version>2.2.0</version>
-    	</dependency>
-  		<dependency>
+			<groupId>com.yammer.metrics</groupId>
+			<artifactId>metrics-core</artifactId>
+			<version>2.2.0</version>
+		</dependency>
+		<dependency>
 			<groupId>joda-time</groupId>
 			<artifactId>joda-time</artifactId>
 		</dependency>
+		
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
@@ -88,34 +99,37 @@
 			<artifactId>logback-classic</artifactId>
 			<scope>provided</scope>
 		</dependency>
-  	
-  	</dependencies>
-  	
-  	<build>
-  	
-  		<extensions>
-	      <!-- Whysoever version 2.2 has issues with Maven 3.0.3:
-	           java.lang.NoSuchMethodError: org.apache.maven.wagon.shared.http4.AbstractHttpClientWagon.getReadTimeout()I
-	      -->
-	      <extension>
-	        <groupId>org.apache.maven.wagon</groupId>
-	        <artifactId>wagon-ssh</artifactId>
-	        <version>2.1</version>
-	      </extension>
-	      <extension>
-	        <groupId>org.apache.maven.wagon</groupId>
-	        <artifactId>wagon-http</artifactId>
-	        <version>2.1</version>
-	      </extension>
-	      <extension>
-	        <groupId>org.apache.maven.wagon</groupId>
-	        <artifactId>wagon-file</artifactId>
-	        <version>2.1</version>
-	      </extension>
-	    </extensions>
-    
-  		<plugins>
-  			<!-- always attach test sources -->
+
+	</dependencies>
+
+	<build>
+
+		<!-- Whysoever version 2.2 has issues with Maven 3.0.3: java.lang.NoSuchMethodError: 
+			org.apache.maven.wagon.shared.http4.AbstractHttpClientWagon.getReadTimeout()I -->
+
+		<!-- Please migrate to 3.0.4 -->
+
+		<extensions>
+			<!-- <extension> -->
+			<!-- <groupId>org.apache.maven.wagon</groupId> -->
+			<!-- <artifactId>wagon-ssh</artifactId> -->
+			<!-- <version>2.1</version> -->
+			<!-- </extension> -->
+			<!-- <extension> -->
+			<!-- <groupId>org.apache.maven.wagon</groupId> -->
+			<!-- <artifactId>wagon-http</artifactId> -->
+			<!-- <version>2.1</version> -->
+			<!-- </extension> -->
+			<!-- <extension> -->
+			<!-- <groupId>org.apache.maven.wagon</groupId> -->
+			<!-- <artifactId>wagon-file</artifactId> -->
+			<!-- <version>2.1</version> -->
+			<!-- </extension> -->
+		</extensions>
+
+		<plugins>
+
+			<!-- always attach test sources -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
@@ -141,7 +155,7 @@
 					</execution>
 				</executions>
 			</plugin>
-  		</plugins>
-  	</build> 
-  	
+		</plugins>
+	</build>
+
 </project>
