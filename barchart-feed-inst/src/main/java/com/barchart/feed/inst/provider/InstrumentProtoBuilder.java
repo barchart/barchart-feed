@@ -3,11 +3,11 @@ package com.barchart.feed.inst.provider;
 import static com.barchart.feed.inst.api.InstrumentField.*;
 
 import com.barchart.feed.inst.api.Instrument;
-import com.barchart.feed.inst.api.TimeInterval;
 import com.barchart.proto.buf.inst.Calendar;
 import com.barchart.proto.buf.inst.InstrumentDefinition;
 import com.barchart.proto.buf.inst.Interval;
 import com.barchart.util.values.api.PriceValue;
+import com.barchart.util.values.api.TimeInterval;
 
 public final class InstrumentProtoBuilder {
 
@@ -91,16 +91,16 @@ public final class InstrumentProtoBuilder {
 		if (inst.contains(LIFETIME) && inst.contains(MARKET_HOURS)) {
 			final Calendar.Builder calBuilder = Calendar.newBuilder();
 			final Interval.Builder intBuilder = Interval.newBuilder();
-			intBuilder.setTimeStart(inst.get(LIFETIME).getBegin());
-			intBuilder.setTimeFinish(inst.get(LIFETIME).getEnd());
+			intBuilder.setTimeStart(inst.get(LIFETIME).startAsMillis());
+			intBuilder.setTimeFinish(inst.get(LIFETIME).stopAsMillis());
 
 			/* lifetime of instrument */
 			calBuilder.setLifeTime(intBuilder.build());
 
 			intBuilder.clear();
 			for (final TimeInterval ti : inst.get(MARKET_HOURS)) {
-				intBuilder.setTimeStart(ti.getBegin());
-				intBuilder.setTimeFinish(ti.getEnd());
+				intBuilder.setTimeStart(ti.startAsMillis());
+				intBuilder.setTimeFinish(ti.stopAsMillis());
 				calBuilder.addMarketHours(intBuilder.build());
 				intBuilder.clear();
 			}

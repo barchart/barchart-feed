@@ -19,6 +19,7 @@ import com.barchart.util.values.api.Value;
  */
 public enum CodeCFI implements Value<CodeCFI> {
 	
+	//TODO Can be made into text 
 	/* keep most specific first; 'X' means 'any' */
 
 	/* equity */

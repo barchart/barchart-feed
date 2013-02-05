@@ -33,7 +33,7 @@ import com.barchart.util.values.provider.ValueConst;
 
 public enum MarketDisplay {
 	
-	/* TODO add custom overrides */
+	/* TODO MAKE INTO INTERFACE */
 	DEFAULT, //
 
 	;
