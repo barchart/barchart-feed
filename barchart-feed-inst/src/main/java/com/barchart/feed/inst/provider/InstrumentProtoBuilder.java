@@ -44,7 +44,7 @@ public final class InstrumentProtoBuilder {
 
 		/* market originating exchange identifier */
 		if (inst.contains(EXCHANGE_CODE)) {
-			builder.setExchange(inst.get(EXCHANGE_CODE).toString());
+			builder.setExchangeCode(inst.get(EXCHANGE_CODE).toString());
 		}
 
 		/* book depth */
@@ -78,14 +78,13 @@ public final class InstrumentProtoBuilder {
 
 		/* display fraction base : decimal(10) vs binary(2), etc. */
 		if (inst.contains(DISPLAY_BASE)) {
-			builder.setDisplayDenominatorBase((int) inst.get(DISPLAY_BASE)
-					.asLong());
+			builder.setDisplayBase((int) inst.get(DISPLAY_BASE).asLong());
 		}
 
 		/* display fraction exponent */
 		if (inst.contains(DISPLAY_EXPONENT)) {
-			builder.setDisplayDenominatorExponent((int) inst.get(
-					DISPLAY_EXPONENT).asLong());
+			builder.setDisplayExponent((int) inst.get(DISPLAY_EXPONENT)
+					.asLong());
 		}
 
 		/* Calendar */

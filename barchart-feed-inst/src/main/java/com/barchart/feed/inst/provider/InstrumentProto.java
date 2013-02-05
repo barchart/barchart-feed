@@ -41,7 +41,7 @@ class InstrumentProto extends InstrumentBase implements Instrument {
 		map.put(VENDOR, ValueBuilder.newText(i.getVendorId()));
 		map.put(SYMBOL, ValueBuilder.newText(i.getSymbol()));
 		map.put(DESCRIPTION, ValueBuilder.newText(i.getDescription()));
-		map.put(EXCHANGE_CODE, ValueBuilder.newText(i.getExchange()));
+		map.put(EXCHANGE_CODE, ValueBuilder.newText(i.getExchangeCode()));
 		map.put(BOOK_DEPTH, ValueBuilder.newSize(i.getBookDepth()));
 		map.put(CFI_CODE, CodeCFI.fromCode(i.getCfiCode()));
 		map.put(CURRENCY, MarketCurrency.fromString(i.getCurrencyCode()));
@@ -50,10 +50,8 @@ class InstrumentProto extends InstrumentBase implements Instrument {
 		map.put(POINT_VALUE, ValueConst.NULL_PRICE);
 
 		/* Price Display Fields */
-		map.put(DISPLAY_BASE,
-				ValueBuilder.newSize(i.getDisplayDenominatorBase()));
-		map.put(DISPLAY_EXPONENT,
-				ValueBuilder.newSize(i.getDisplayDenominatorExponent()));
+		map.put(DISPLAY_BASE, ValueBuilder.newSize(i.getDisplayBase()));
+		map.put(DISPLAY_EXPONENT, ValueBuilder.newSize(i.getDisplayExponent()));
 
 		/* Calendar Fields */
 		if (i.hasCalendar()) {
