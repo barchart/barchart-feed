@@ -11,7 +11,7 @@ import java.io.OutputStream;
 
 import org.junit.Test;
 
-import com.barchart.feed.inst.api.Instrument;
+import com.barchart.feed.api.inst.Instrument;
 import com.barchart.missive.core.Tag;
 import com.barchart.proto.buf.inst.Calendar;
 import com.barchart.proto.buf.inst.Interval;

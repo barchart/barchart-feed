@@ -4,8 +4,8 @@ import static com.barchart.feed.api.fields.InstrumentField.*;
 
 import java.util.Map;
 
-import com.barchart.feed.inst.api.Instrument;
-import com.barchart.feed.inst.api.InstrumentGUID;
+import com.barchart.feed.api.inst.Instrument;
+import com.barchart.feed.api.inst.InstrumentGUID;
 import com.barchart.missive.core.MissiveException;
 import com.barchart.missive.core.Tag;
 import com.barchart.missive.core.TagMap;

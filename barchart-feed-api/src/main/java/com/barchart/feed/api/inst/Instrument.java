@@ -1,4 +1,4 @@
-package com.barchart.feed.inst.api;
+package com.barchart.feed.api.inst;
 
 import com.barchart.missive.core.MissiveException;
 import com.barchart.missive.core.Tag;

@@ -2,7 +2,7 @@ package com.barchart.feed.inst.provider;
 
 import static com.barchart.feed.api.fields.InstrumentField.*;
 
-import com.barchart.feed.inst.api.Instrument;
+import com.barchart.feed.api.inst.Instrument;
 import com.barchart.proto.buf.inst.Calendar;
 import com.barchart.proto.buf.inst.InstrumentDefinition;
 import com.barchart.proto.buf.inst.Interval;

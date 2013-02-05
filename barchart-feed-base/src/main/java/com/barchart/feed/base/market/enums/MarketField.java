@@ -10,6 +10,7 @@ package com.barchart.feed.base.market.enums;
 import static com.barchart.feed.base.provider.MarketConst.*;
 import static com.barchart.util.values.provider.ValueConst.*;
 
+import com.barchart.feed.api.inst.Instrument;
 import com.barchart.feed.base.bar.api.MarketBar;
 import com.barchart.feed.base.book.api.MarketBook;
 import com.barchart.feed.base.book.api.MarketBookEntry;
@@ -19,7 +20,6 @@ import com.barchart.feed.base.cuvol.api.MarketCuvolEntry;
 import com.barchart.feed.base.market.api.Market;
 import com.barchart.feed.base.state.api.MarketState;
 import com.barchart.feed.base.trade.api.MarketTrade;
-import com.barchart.feed.inst.api.Instrument;
 import com.barchart.util.anno.NotMutable;
 import com.barchart.util.collections.BitSetEnum;
 import com.barchart.util.enums.DictEnum;

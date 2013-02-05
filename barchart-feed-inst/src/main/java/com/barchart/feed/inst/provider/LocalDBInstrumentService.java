@@ -6,9 +6,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.Future;
 
-import com.barchart.feed.inst.api.Instrument;
-import com.barchart.feed.inst.api.InstrumentGUID;
-import com.barchart.feed.inst.api.InstrumentService;
+import com.barchart.feed.api.inst.Instrument;
+import com.barchart.feed.api.inst.InstrumentGUID;
+import com.barchart.feed.api.inst.InstrumentService;
 
 public class LocalDBInstrumentService implements InstrumentService<InstrumentGUID> {
 	

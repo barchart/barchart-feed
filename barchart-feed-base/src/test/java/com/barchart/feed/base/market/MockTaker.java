@@ -10,11 +10,11 @@
  */
 package com.barchart.feed.base.market;
 
+import com.barchart.feed.api.inst.Instrument;
 import com.barchart.feed.base.market.api.Market;
 import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.base.market.enums.MarketField;
-import com.barchart.feed.inst.api.Instrument;
 
 /**
  * @author g-litchfield

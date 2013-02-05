@@ -17,7 +17,7 @@ import static com.barchart.util.values.provider.ValueBuilder.newText;
 import static com.barchart.util.values.provider.ValueBuilder.newTime;
 
 import com.barchart.feed.api.enums.MarketCurrency;
-import com.barchart.feed.inst.api.Instrument;
+import com.barchart.feed.api.inst.Instrument;
 import com.barchart.feed.inst.enums.CodeCFI;
 import com.barchart.feed.inst.enums.MarketDisplay.Fraction;
 import com.barchart.missive.core.TagMapSafe;

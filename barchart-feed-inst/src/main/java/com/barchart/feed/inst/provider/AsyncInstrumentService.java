@@ -2,9 +2,9 @@ package com.barchart.feed.inst.provider;
 
 import java.util.concurrent.Executor;
 
-import com.barchart.feed.inst.api.InstrumentFuture;
-import com.barchart.feed.inst.api.InstrumentGUID;
-import com.barchart.feed.inst.api.MetadataContext;
+import com.barchart.feed.api.inst.InstrumentFuture;
+import com.barchart.feed.api.inst.InstrumentGUID;
+import com.barchart.feed.api.inst.MetadataContext;
 
 public class AsyncInstrumentService {
 

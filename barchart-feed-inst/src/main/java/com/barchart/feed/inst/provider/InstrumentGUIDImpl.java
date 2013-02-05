@@ -1,6 +1,6 @@
 package com.barchart.feed.inst.provider;
 
-import com.barchart.feed.inst.api.InstrumentGUID;
+import com.barchart.feed.api.inst.InstrumentGUID;
 import com.barchart.util.values.api.TextValue;
 import com.barchart.util.values.provider.ValueBuilder;
 

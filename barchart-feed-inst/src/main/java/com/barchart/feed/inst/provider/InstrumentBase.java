@@ -1,6 +1,6 @@
 package com.barchart.feed.inst.provider;
 
-import com.barchart.feed.inst.api.Instrument;
+import com.barchart.feed.api.inst.Instrument;
 
 public abstract class InstrumentBase implements Instrument {
 	

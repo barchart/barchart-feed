@@ -10,8 +10,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.api.enums.MarketCurrency;
-import com.barchart.feed.inst.api.Instrument;
-import com.barchart.feed.inst.api.InstrumentGUID;
+import com.barchart.feed.api.inst.Instrument;
+import com.barchart.feed.api.inst.InstrumentGUID;
 import com.barchart.feed.inst.enums.CodeCFI;
 import com.barchart.missive.core.MissiveException;
 import com.barchart.missive.core.Tag;

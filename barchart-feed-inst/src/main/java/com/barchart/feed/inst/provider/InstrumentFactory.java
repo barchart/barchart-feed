@@ -2,7 +2,7 @@ package com.barchart.feed.inst.provider;
 
 import java.util.Map;
 
-import com.barchart.feed.inst.api.Instrument;
+import com.barchart.feed.api.inst.Instrument;
 import com.barchart.missive.core.Tag;
 import com.barchart.missive.core.TagMap;
 import com.barchart.proto.buf.inst.InstrumentDefinition;

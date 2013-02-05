@@ -7,8 +7,8 @@
  */
 package com.barchart.feed.base.market.api;
 
+import com.barchart.feed.api.inst.Instrument;
 import com.barchart.feed.base.market.enums.MarketField;
-import com.barchart.feed.inst.api.Instrument;
 import com.barchart.util.anno.NotMutable;
 import com.barchart.util.anno.NotYetImplemented;
 import com.barchart.util.anno.ThreadSafe;

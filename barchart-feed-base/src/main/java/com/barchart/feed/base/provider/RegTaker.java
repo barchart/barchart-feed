@@ -15,10 +15,10 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.barchart.feed.api.inst.Instrument;
 import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.base.market.enums.MarketField;
-import com.barchart.feed.inst.api.Instrument;
 import com.barchart.util.anno.NotMutable;
 import com.barchart.util.anno.NotThreadSafe;
 import com.barchart.util.thread.Runner;
