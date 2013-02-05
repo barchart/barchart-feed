@@ -36,7 +36,7 @@
 	<properties>
 
 		<barchartUtilVersion>2.0.16</barchartUtilVersion>
-		<barchartMissiveVersion>1.1.1</barchartMissiveVersion>
+		<barchartMissiveVersion>1.1.2-SNAPSHOT</barchartMissiveVersion>
 
 	</properties>
 

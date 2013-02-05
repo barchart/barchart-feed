@@ -78,9 +78,7 @@ public interface InstrumentField {
 	Tag<BookStructure> BOOK_STRUCTURE = Tag.create("BOOK_STRUCTURE",
 			BookStructure.class);
 
-	Tag<?>[] FIELDS = new Tag[] { MARKET_ID, VENDOR, SYMBOL, EXCHANGE_CODE,
-			DESCRIPTION, BOOK_DEPTH, CFI_CODE, CURRENCY, PRICE_STEP,
-			POINT_VALUE, DISPLAY_BASE, DISPLAY_EXPONENT, LIFETIME,
-			MARKET_HOURS, TIME_ZONE };
+	// keep last
+	Tag<?>[] FIELDS = Tag.collectTop(InstrumentField.class);
 
 }
