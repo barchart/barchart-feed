@@ -12,7 +12,6 @@ import org.slf4j.LoggerFactory;
 import com.barchart.feed.api.enums.MarketCurrency;
 import com.barchart.feed.api.inst.Instrument;
 import com.barchart.feed.api.inst.InstrumentGUID;
-import com.barchart.feed.inst.enums.CodeCFI;
 import com.barchart.missive.core.MissiveException;
 import com.barchart.missive.core.Tag;
 import com.barchart.proto.buf.inst.InstrumentDefinition;
@@ -43,7 +42,7 @@ class InstrumentProto extends InstrumentBase implements Instrument {
 		map.put(DESCRIPTION, ValueBuilder.newText(i.getDescription()));
 		map.put(EXCHANGE_CODE, ValueBuilder.newText(i.getExchangeCode()));
 		map.put(BOOK_DEPTH, ValueBuilder.newSize(i.getBookDepth()));
-		map.put(CFI_CODE, CodeCFI.fromCode(i.getCfiCode()));
+		map.put(CFI_CODE, ValueBuilder.newText(i.getCfiCode()));
 		map.put(CURRENCY, MarketCurrency.fromString(i.getCurrencyCode()));
 
 		map.put(PRICE_STEP, ValueConst.NULL_PRICE);
