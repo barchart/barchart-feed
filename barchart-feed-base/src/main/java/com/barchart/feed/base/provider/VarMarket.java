@@ -38,7 +38,6 @@ import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
 import com.barchart.util.values.api.Value;
 import com.barchart.util.values.provider.ValueBuilder;
-import com.barchart.util.values.util.ValueUtil;
 
 /**
  * basic market life cycle; NO event management logic here
@@ -155,7 +154,6 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 
 	//
 
-
 	/** do not set self reference on freeze */
 	@Override
 	public final Market freeze() {
@@ -258,7 +256,7 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 
 			final Instrument inst = get(INSTRUMENT);
 			final PriceValue priceStep = inst.get(InstrumentField.PRICE_STEP);
-			
+
 			final VarCuvol varCuvol = new VarCuvol(priceStep);
 			final VarCuvolLast varCuvolLast = new VarCuvolLast(varCuvol);
 
@@ -294,33 +292,34 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 			.newSize(MarketBook.ENTRY_LIMIT);
 
 	// XXX make final
-	 protected MarketDoBook loadBook() {
-	
-		 MarketBook book = get(BOOK);
-		
-		 if (book.isFrozen()) {
-		
-		 final Instrument inst = get(INSTRUMENT);
-		
-		 final BookLiquidity type = inst.get(InstrumentField.BOOK_LIQUIDITY);
-		 final SizeValue size = LIMIT; // inst.get(BOOK_SIZE);
-		 final PriceValue step = inst.get(InstrumentField.PRICE_STEP);
-		
-		 final VarBook varBook = new VarBook(type, size, step);
-		 final VarBookLast varBookLast = new VarBookLast(varBook);
-		 final VarBookTop varBookTop = new VarBookTop(varBook);
-		
-		 set(BOOK, varBook);
-		 set(BOOK_LAST, varBookLast);
-		 set(BOOK_TOP, varBookTop);
-		
-		 book = varBook;
-		
-		 }
-		
-		 return (MarketDoBook) book;
-	
-	 }
+	protected MarketDoBook loadBook() {
+
+		MarketBook book = get(BOOK);
+
+		if (book.isFrozen()) {
+
+			final Instrument inst = get(INSTRUMENT);
+
+			final BookLiquidity type = inst.get(InstrumentField.BOOK_LIQUIDITY);
+
+			final SizeValue size = LIMIT; // inst.get(BOOK_SIZE);
+			final PriceValue step = inst.get(InstrumentField.PRICE_STEP);
+
+			final VarBook varBook = new VarBook(type, size, step);
+			final VarBookLast varBookLast = new VarBookLast(varBook);
+			final VarBookTop varBookTop = new VarBookTop(varBook);
+
+			set(BOOK, varBook);
+			set(BOOK_LAST, varBookLast);
+			set(BOOK_TOP, varBookTop);
+
+			book = varBook;
+
+		}
+
+		return (MarketDoBook) book;
+
+	}
 
 	protected final boolean isValidPrice(final PriceValue price) {
 

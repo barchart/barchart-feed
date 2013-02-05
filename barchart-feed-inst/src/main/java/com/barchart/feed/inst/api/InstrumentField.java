@@ -74,6 +74,10 @@ public interface InstrumentField {
 	/** FIXME migrate */
 	Tag<BookStructure> BOOK_STRUCTURE = Tag.create(BookStructure.class);
 
+	/** ordered list of component guids */
+	public static final Tag<SizeValue[]> COMPONENT_LEGS = Tag
+			.create(SizeValue[].class);
+
 	// keep last
 	Tag<?>[] FIELDS = Tag.collectTop(InstrumentField.class);
 

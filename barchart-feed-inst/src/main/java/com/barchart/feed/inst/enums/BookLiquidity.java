@@ -7,6 +7,7 @@
  */
 package com.barchart.feed.inst.enums;
 
+import com.barchart.util.values.api.TextValue;
 import com.barchart.util.values.api.Value;
 
 public enum BookLiquidity implements Value<BookLiquidity> {
@@ -31,6 +32,15 @@ public enum BookLiquidity implements Value<BookLiquidity> {
 
 	public static final BookLiquidity fromOrd(final byte ord) {
 		return ENUM_VALUES[ord];
+	}
+
+	public static final BookLiquidity fromText(final TextValue type) {
+		for (final BookLiquidity t : values()) {
+			if (type.compareTo(t.name()) == 0) {
+				return t;
+			}
+		}
+		return NONE;
 	}
 
 	@Override

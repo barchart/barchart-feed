@@ -10,7 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.inst.api.Instrument;
-import com.barchart.feed.inst.api.InstrumentField;
 import com.barchart.feed.inst.api.InstrumentGUID;
 import com.barchart.feed.inst.api.TimeInterval;
 import com.barchart.feed.inst.enums.CodeCFI;
@@ -24,57 +23,65 @@ import com.barchart.util.values.provider.ValueConst;
 import com.google.protobuf.InvalidProtocolBufferException;
 
 class InstrumentProto extends InstrumentBase implements Instrument {
-	
+
 	@SuppressWarnings("unused")
-	private static final Logger log = LoggerFactory.getLogger(InstrumentProto.class);
-	
+	private static final Logger log = LoggerFactory
+			.getLogger(InstrumentProto.class);
+
 	private final InstrumentGUID guid;
-	
+
 	@SuppressWarnings("rawtypes")
 	private final Map<Tag, Object> map = new HashMap<Tag, Object>();
-	
+
 	InstrumentProto(final InstrumentDefinition i) {
-		
-		map.put(MARKET_ID, ValueBuilder.newText(String.valueOf(i.getInstrumentId())));
-		map.put(VENDOR, ValueBuilder.newText(i.getVendor()));
-		map.put(SYMBOL, ValueBuilder.newText(i.getVendorSymbol()));
+
+		map.put(MARKET_ID,
+				ValueBuilder.newText(String.valueOf(i.getMarketId())));
+
+		map.put(VENDOR, ValueBuilder.newText(i.getVendorId()));
+		map.put(SYMBOL, ValueBuilder.newText(i.getSymbol()));
 		map.put(DESCRIPTION, ValueBuilder.newText(i.getDescription()));
 		map.put(EXCHANGE_CODE, ValueBuilder.newText(i.getExchange()));
 		map.put(BOOK_DEPTH, ValueBuilder.newSize(i.getBookDepth()));
 		map.put(CFI_CODE, CodeCFI.fromCode(i.getCfiCode()));
-		map.put(CURRENCY, MarketCurrency.fromString(i.getCurrency()));
-		
+		map.put(CURRENCY, MarketCurrency.fromString(i.getCurrencyCode()));
+
 		map.put(PRICE_STEP, ValueConst.NULL_PRICE);
 		map.put(POINT_VALUE, ValueConst.NULL_PRICE);
-		
+
 		/* Price Display Fields */
-		map.put(DISPLAY_BASE, ValueBuilder.newSize(i.getDisplayFractionDenominator()));
-		map.put(DISPLAY_EXPONENT, ValueBuilder.newSize(i.getDisplayExponent()));
-		
+		map.put(DISPLAY_BASE,
+				ValueBuilder.newSize(i.getDisplayDenominatorBase()));
+		map.put(DISPLAY_EXPONENT,
+				ValueBuilder.newSize(i.getDisplayDenominatorExponent()));
+
 		/* Calendar Fields */
-		if(i.hasCalendar()) {
+		if (i.hasCalendar()) {
 			final Interval instLife = i.getCalendar().getLifeTime();
-			map.put(LIFETIME, new TimeInterval(instLife.getTimeStart(), instLife.getTimeFinish()));
-			
-			final List<Interval> mktHours = i.getCalendar().getMarketHoursList();
+			map.put(LIFETIME, new TimeInterval(instLife.getTimeStart(),
+					instLife.getTimeFinish()));
+
+			final List<Interval> mktHours = i.getCalendar()
+					.getMarketHoursList();
 			final TimeInterval[] sessions = new TimeInterval[mktHours.size()];
-			
-			for(int n = 0; n < mktHours.size(); n++) {
-				sessions[n] = new TimeInterval(mktHours.get(n).getTimeStart(), mktHours.get(n).getTimeFinish());
+
+			for (int n = 0; n < mktHours.size(); n++) {
+				sessions[n] = new TimeInterval(mktHours.get(n).getTimeStart(),
+						mktHours.get(n).getTimeFinish());
 			}
 			map.put(MARKET_HOURS, sessions);
 		}
-		
+
 		map.put(TIME_ZONE, ValueBuilder.newSize(i.getTimeZoneOffset()));
-		
-		guid = new InstrumentGUIDImpl(i.getInstrumentId());
-		
+
+		guid = new InstrumentGUIDImpl(i.getMarketId());
+
 	}
-	
+
 	InstrumentProto(final byte[] bytes) throws InvalidProtocolBufferException {
 		this(InstrumentDefinition.parseFrom(bytes));
 	}
-	
+
 	@Override
 	public InstrumentGUID getGUID() {
 		return guid;

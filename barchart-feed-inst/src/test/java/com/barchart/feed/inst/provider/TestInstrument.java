@@ -22,12 +22,9 @@ import com.barchart.feed.inst.enums.MarketCurrency;
 import com.barchart.feed.inst.enums.MarketDisplay.Fraction;
 import com.barchart.missive.core.TagMapSafe;
 import com.barchart.missive.hash.HashTagMapSafe;
-import com.barchart.proto.buf.inst.BookType;
 import com.barchart.proto.buf.inst.Calendar;
 import com.barchart.proto.buf.inst.InstrumentDefinition;
 import com.barchart.proto.buf.inst.Interval;
-import com.barchart.proto.buf.inst.PriceDisplay;
-import com.barchart.proto.buf.inst.PriceFraction;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
 import com.barchart.util.values.api.TextValue;
@@ -77,9 +74,6 @@ public class TestInstrument {
 	static InstrumentDefinition.Builder instBuilder;
 	
 	static {
-		PriceDisplay.Builder priceDisplayBuilder = PriceDisplay.newBuilder();
-		priceDisplayBuilder.setPriceFactor(100); // **********???????????
-		priceDisplayBuilder.setFraction(PriceFraction.FactionBinary_N01);
 		
 		Interval.Builder intervalBuilder = Interval.newBuilder();
 		intervalBuilder.setTimeStart(DATE_START_V.asMillisUTC());
@@ -105,7 +99,7 @@ public class TestInstrument {
 //		instBuilder.setPriceDisplay(priceDisplayBuilder.build());
 //		instBuilder.setCalendar(calBuilder.build());
 //		instBuilder.setCodeCFI(TYPE_V.name());
-		instBuilder.setCurrency(CURRENCY_V.name());
+		instBuilder.setCurrencyCode(CURRENCY_V.name());
 		instBuilder.setRecordCreateTime(1234);
 		instBuilder.setRecordUpdateTime(1235);
 	}
