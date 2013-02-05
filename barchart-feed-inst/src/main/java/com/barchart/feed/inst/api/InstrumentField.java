@@ -4,7 +4,6 @@ import com.barchart.feed.inst.enums.BookLiquidity;
 import com.barchart.feed.inst.enums.BookStructure;
 import com.barchart.feed.inst.enums.CodeCFI;
 import com.barchart.feed.inst.enums.MarketCurrency;
-import com.barchart.feed.inst.enums.MarketDisplay.Fraction;
 import com.barchart.missive.core.Tag;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;

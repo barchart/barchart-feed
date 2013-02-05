@@ -1,20 +1,16 @@
 package com.barchart.feed.inst.provider;
 
 import com.barchart.feed.inst.api.InstrumentGUID;
+import com.barchart.util.values.api.TextValue;
 
 public class InstrumentGUIDImpl implements InstrumentGUID {
 
-	private final long guid;
+	private final TextValue guid;
 	
-	public InstrumentGUIDImpl(final long guid) {
+	public InstrumentGUIDImpl(final TextValue guid) {
 		this.guid = guid;
 	}
 	
-	@Override
-	public long getGUID() {
-		return guid;
-	}
-
 	@Override 
 	public boolean equals(final Object o) {
 		
@@ -23,7 +19,7 @@ public class InstrumentGUIDImpl implements InstrumentGUID {
 		}
 		
 		if(o instanceof InstrumentGUID) {
-			if(guid == ((InstrumentGUID)o).getGUID()) {
+			if(guid.equals(o)) {
 				return true;
 			} else {
 				return false;
@@ -36,14 +32,37 @@ public class InstrumentGUIDImpl implements InstrumentGUID {
 	
 	@Override
 	public int compareTo(final InstrumentGUID thatGUID) {
-		
-		if(guid > thatGUID.getGUID()) {
-			return 1;
-		} else if(guid < thatGUID.getGUID()) {
-			return -1;
-		} else {
-			return 0;
-		}
+		return guid.compareTo(thatGUID);
+	}
+
+	@Override
+	public InstrumentGUID freeze() {
+		return this;
+	}
+
+	@Override
+	public boolean isFrozen() {
+		return true;
+	}
+
+	@Override
+	public boolean isNull() {
+		return this == NULL_INSTRUMENT_GUID;
+	}
+
+	@Override
+	public int length() {
+		return guid.length();
+	}
+
+	@Override
+	public char charAt(int index) {
+		return guid.charAt(index);
+	}
+
+	@Override
+	public CharSequence subSequence(int start, int end) {
+		return guid.subSequence(start, end);
 	}
 
 }
