@@ -9,6 +9,7 @@ import com.barchart.missive.core.Tag;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
 import com.barchart.util.values.api.TextValue;
+import com.barchart.util.values.api.TimeInterval;
 
 public interface InstrumentField {
 
@@ -64,9 +65,6 @@ public interface InstrumentField {
 	 * FIXME offset is seasonal
 	 */
 	Tag<SizeValue> TIME_ZONE = Tag.create(SizeValue.class);
-
-	/** FIXME migrate */
-	Tag<Fraction> FRACTION = Tag.create(Fraction.class);
 
 	/** FIXME migrate */
 	Tag<BookLiquidity> BOOK_LIQUIDITY = Tag.create(BookLiquidity.class);

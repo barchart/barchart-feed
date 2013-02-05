@@ -11,13 +11,13 @@ import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.inst.api.Instrument;
 import com.barchart.feed.inst.api.InstrumentGUID;
-import com.barchart.feed.inst.api.TimeInterval;
 import com.barchart.feed.inst.enums.CodeCFI;
 import com.barchart.feed.inst.enums.MarketCurrency;
 import com.barchart.missive.core.MissiveException;
 import com.barchart.missive.core.Tag;
 import com.barchart.proto.buf.inst.InstrumentDefinition;
 import com.barchart.proto.buf.inst.Interval;
+import com.barchart.util.values.api.TimeInterval;
 import com.barchart.util.values.provider.ValueBuilder;
 import com.barchart.util.values.provider.ValueConst;
 import com.google.protobuf.InvalidProtocolBufferException;
@@ -41,7 +41,7 @@ class InstrumentProto extends InstrumentBase implements Instrument {
 		map.put(VENDOR, ValueBuilder.newText(i.getVendorId()));
 		map.put(SYMBOL, ValueBuilder.newText(i.getSymbol()));
 		map.put(DESCRIPTION, ValueBuilder.newText(i.getDescription()));
-		map.put(EXCHANGE_CODE, ValueBuilder.newText(i.getExchange()));
+		map.put(EXCHANGE_CODE, ValueBuilder.newText(i.getExchangeCode()));
 		map.put(BOOK_DEPTH, ValueBuilder.newSize(i.getBookDepth()));
 		map.put(CFI_CODE, CodeCFI.fromCode(i.getCfiCode()));
 		map.put(CURRENCY, MarketCurrency.fromString(i.getCurrencyCode()));
@@ -58,7 +58,7 @@ class InstrumentProto extends InstrumentBase implements Instrument {
 		/* Calendar Fields */
 		if (i.hasCalendar()) {
 			final Interval instLife = i.getCalendar().getLifeTime();
-			map.put(LIFETIME, new TimeInterval(instLife.getTimeStart(),
+			map.put(LIFETIME, ValueBuilder.newTimeInterval(instLife.getTimeStart(),
 					instLife.getTimeFinish()));
 
 			final List<Interval> mktHours = i.getCalendar()
@@ -66,7 +66,7 @@ class InstrumentProto extends InstrumentBase implements Instrument {
 			final TimeInterval[] sessions = new TimeInterval[mktHours.size()];
 
 			for (int n = 0; n < mktHours.size(); n++) {
-				sessions[n] = new TimeInterval(mktHours.get(n).getTimeStart(),
+				sessions[n] = ValueBuilder.newTimeInterval(mktHours.get(n).getTimeStart(),
 						mktHours.get(n).getTimeFinish());
 			}
 			map.put(MARKET_HOURS, sessions);
