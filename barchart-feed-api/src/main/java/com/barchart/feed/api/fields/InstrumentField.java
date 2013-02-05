@@ -1,8 +1,8 @@
-package com.barchart.api.fields;
+package com.barchart.feed.api.fields;
 
-import com.barchart.api.enums.BookLiquidity;
-import com.barchart.api.enums.BookStructure;
-import com.barchart.api.enums.MarketCurrency;
+import com.barchart.feed.api.enums.BookLiquidity;
+import com.barchart.feed.api.enums.BookStructure;
+import com.barchart.feed.api.enums.MarketCurrency;
 import com.barchart.missive.core.Tag;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;

@@ -7,10 +7,10 @@
  */
 package com.barchart.feed.inst.provider;
 
-import static com.barchart.api.fields.InstrumentField.BOOK_DEPTH;
-import static com.barchart.api.fields.InstrumentField.MARKET_ID;
-import static com.barchart.api.fields.InstrumentField.PRICE_STEP;
-import static com.barchart.api.fields.InstrumentField.SYMBOL;
+import static com.barchart.feed.api.fields.InstrumentField.BOOK_DEPTH;
+import static com.barchart.feed.api.fields.InstrumentField.MARKET_ID;
+import static com.barchart.feed.api.fields.InstrumentField.PRICE_STEP;
+import static com.barchart.feed.api.fields.InstrumentField.SYMBOL;
 
 import java.util.Collection;
 import java.util.HashMap;

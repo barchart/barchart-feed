@@ -15,8 +15,8 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.api.enums.BookLiquidity;
-import com.barchart.api.fields.InstrumentField;
+import com.barchart.feed.api.enums.BookLiquidity;
+import com.barchart.feed.api.fields.InstrumentField;
 import com.barchart.feed.base.bar.api.MarketBar;
 import com.barchart.feed.base.bar.api.MarketDoBar;
 import com.barchart.feed.base.book.api.MarketBook;

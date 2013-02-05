@@ -1,6 +1,6 @@
 package com.barchart.feed.inst.provider;
 
-import static com.barchart.api.fields.InstrumentField.*;
+import static com.barchart.feed.api.fields.InstrumentField.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -9,7 +9,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.api.enums.MarketCurrency;
+import com.barchart.feed.api.enums.MarketCurrency;
 import com.barchart.feed.inst.api.Instrument;
 import com.barchart.feed.inst.api.InstrumentGUID;
 import com.barchart.feed.inst.enums.CodeCFI;

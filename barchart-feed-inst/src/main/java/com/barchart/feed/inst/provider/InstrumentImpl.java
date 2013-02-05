@@ -1,6 +1,6 @@
 package com.barchart.feed.inst.provider;
 
-import static com.barchart.api.fields.InstrumentField.*;
+import static com.barchart.feed.api.fields.InstrumentField.*;
 
 import java.util.Map;
 

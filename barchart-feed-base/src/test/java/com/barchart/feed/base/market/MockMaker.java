@@ -7,7 +7,7 @@
  */
 package com.barchart.feed.base.market;
 
-import com.barchart.api.enums.BookLiquidity;
+import com.barchart.feed.api.enums.BookLiquidity;
 import com.barchart.feed.base.book.enums.MarketBookAction;
 import com.barchart.feed.base.book.enums.MarketBookSide;
 import com.barchart.feed.base.market.api.MarketDo;

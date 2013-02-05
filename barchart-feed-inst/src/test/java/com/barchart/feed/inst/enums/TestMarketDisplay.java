@@ -26,7 +26,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.barchart.api.fields.InstrumentField;
+import com.barchart.feed.api.fields.InstrumentField;
 import com.barchart.feed.inst.enums.MarketDisplay.Fraction;
 import com.barchart.feed.inst.api.Instrument;
 import com.barchart.feed.inst.provider.InstrumentFactory;

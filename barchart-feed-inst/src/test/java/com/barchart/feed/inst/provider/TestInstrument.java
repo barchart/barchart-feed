@@ -1,22 +1,22 @@
 package com.barchart.feed.inst.provider;
 
-import static com.barchart.api.fields.InstrumentField.BOOK_DEPTH;
-import static com.barchart.api.fields.InstrumentField.CFI_CODE;
-import static com.barchart.api.fields.InstrumentField.CURRENCY;
-import static com.barchart.api.fields.InstrumentField.DESCRIPTION;
-import static com.barchart.api.fields.InstrumentField.EXCHANGE_CODE;
-import static com.barchart.api.fields.InstrumentField.FIELDS;
-import static com.barchart.api.fields.InstrumentField.MARKET_ID;
-import static com.barchart.api.fields.InstrumentField.POINT_VALUE;
-import static com.barchart.api.fields.InstrumentField.PRICE_STEP;
-import static com.barchart.api.fields.InstrumentField.SYMBOL;
-import static com.barchart.api.fields.InstrumentField.TIME_ZONE;
+import static com.barchart.feed.api.fields.InstrumentField.BOOK_DEPTH;
+import static com.barchart.feed.api.fields.InstrumentField.CFI_CODE;
+import static com.barchart.feed.api.fields.InstrumentField.CURRENCY;
+import static com.barchart.feed.api.fields.InstrumentField.DESCRIPTION;
+import static com.barchart.feed.api.fields.InstrumentField.EXCHANGE_CODE;
+import static com.barchart.feed.api.fields.InstrumentField.FIELDS;
+import static com.barchart.feed.api.fields.InstrumentField.MARKET_ID;
+import static com.barchart.feed.api.fields.InstrumentField.POINT_VALUE;
+import static com.barchart.feed.api.fields.InstrumentField.PRICE_STEP;
+import static com.barchart.feed.api.fields.InstrumentField.SYMBOL;
+import static com.barchart.feed.api.fields.InstrumentField.TIME_ZONE;
 import static com.barchart.util.values.provider.ValueBuilder.newPrice;
 import static com.barchart.util.values.provider.ValueBuilder.newSize;
 import static com.barchart.util.values.provider.ValueBuilder.newText;
 import static com.barchart.util.values.provider.ValueBuilder.newTime;
 
-import com.barchart.api.enums.MarketCurrency;
+import com.barchart.feed.api.enums.MarketCurrency;
 import com.barchart.feed.inst.api.Instrument;
 import com.barchart.feed.inst.enums.CodeCFI;
 import com.barchart.feed.inst.enums.MarketDisplay.Fraction;
