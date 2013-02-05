@@ -5,26 +5,26 @@ import com.barchart.missive.core.Tag;
 import com.barchart.missive.core.TagMap;
 import com.barchart.util.values.api.Value;
 
+public interface Instrument extends TagMap, Value<Instrument>,
+		Comparable<Instrument> {
 
-public interface Instrument extends TagMap, Value<Instrument>, Comparable<Instrument> {
-	
 	InstrumentGUID getGUID();
-	
+
 	@Override
-	public boolean equals(Object that);
-	
+	boolean equals(Object that);
+
 	@Override
-	public int hashCode();
-	
-	public static final Instrument NULL_INSTRUMENT = new Instrument() {
+	int hashCode();
+
+	Instrument NULL_INSTRUMENT = new Instrument() {
 
 		@Override
-		public <V> V get(Tag<V> tag) throws MissiveException {
+		public <V> V get(final Tag<V> tag) throws MissiveException {
 			return null;
 		}
 
 		@Override
-		public boolean contains(Tag<?> tag) {
+		public boolean contains(final Tag<?> tag) {
 			return false;
 		}
 
@@ -54,7 +54,7 @@ public interface Instrument extends TagMap, Value<Instrument>, Comparable<Instru
 		}
 
 		@Override
-		public int compareTo(Instrument o) {
+		public int compareTo(final Instrument o) {
 			return InstrumentGUID.NULL_INSTRUMENT_GUID.compareTo(o.getGUID());
 		}
 
@@ -62,7 +62,7 @@ public interface Instrument extends TagMap, Value<Instrument>, Comparable<Instru
 		public InstrumentGUID getGUID() {
 			return InstrumentGUID.NULL_INSTRUMENT_GUID;
 		}
-		
+
 	};
-	
+
 }
