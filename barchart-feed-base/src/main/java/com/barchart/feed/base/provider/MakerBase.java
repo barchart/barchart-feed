@@ -28,9 +28,9 @@ import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.feed.inst.api.Instrument;
 import com.barchart.feed.inst.api.InstrumentField;
-import com.barchart.feed.inst.enums.MarketDisplay.Fraction;
 import com.barchart.util.anno.ThreadSafe;
 import com.barchart.util.values.api.PriceValue;
+import com.barchart.util.values.api.SizeValue;
 import com.barchart.util.values.api.Value;
 
 /** TODO review and remove synchronized */
@@ -420,15 +420,12 @@ public abstract class MakerBase<Message extends MarketMessage> implements
 			return false;
 		}
 
-		final Fraction fraction = instrument.get(InstrumentField.FRACTION);
-
-		if (fraction.isNull()) {
+		final SizeValue displayBase = instrument.get(InstrumentField.DISPLAY_BASE);
+		final SizeValue displayExponent = instrument.get(InstrumentField.DISPLAY_EXPONENT);
+		
+		if (displayBase == null || displayBase.isNull() ||
+				displayExponent == null || displayExponent.isNull()) {
 			log.error("fraction.isNull()");
-			return false;
-		}
-
-		if (priceStep.exponent() != fraction.decimalExponent) {
-			log.error("priceStep.exponent() != fraction.decimalExponent");
 			return false;
 		}
 

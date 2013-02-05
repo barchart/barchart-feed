@@ -284,105 +284,105 @@ public class TestMarketDisplay {
 		PriceValue price;
 		String text;
 
-		//
-		price = newPrice(181925, -2);
-		text = priceText(price, Fraction.DEC_N02);
-		System.out.println("price : " + text);
-		assertEquals("1819.25", text);
-
-		//
-		price = newPrice(181900, -2);
-		text = priceText(price, Fraction.DEC_N02);
-		System.out.println("price : " + text);
-		assertEquals("1819.00", text);
-
-		// 1819 1/4
-		price = newPrice(181925, -2);
-		text = priceText(price, Fraction.BIN_N02);
-		System.out.println("price : " + text);
-		assertEquals("1819-1", text);
-
-		// 1819 3/4
-		price = newPrice(181975, -2);
-		text = priceText(price, Fraction.BIN_N02);
-		System.out.println("price : " + text);
-		assertEquals("1819-3", text);
-
-		// 1819 1/8
-		price = newPrice(1819125, -3);
-		text = priceText(price, Fraction.BIN_N03);
-		System.out.println("price : " + text);
-		assertEquals("1819-1", text);
-
-		// 1819 2/8
-		price = newPrice(1819250, -3);
-		text = priceText(price, Fraction.BIN_N03);
-		System.out.println("price : " + text);
-		assertEquals("1819-2", text);
-
-		// 1819 2/16
-		price = newPrice(18191250, -4);
-		text = priceText(price, Fraction.BIN_N04);
-		System.out.println("price : " + text);
-		assertEquals("1819-02", text);
-
-		// 2 3/128
-		price = newPrice(20234375, -7);
-		text = priceText(price, Fraction.BIN_N07);
-		System.out.println("price : " + text);
-		assertEquals("2-003", text);
-
-		price = newPrice(181925, -3);
-		text = priceText(price, Fraction.DEC_N04);
-		System.out.println("price : " + text);
-		assertEquals("181.9250", text);
-
-		price = newPrice(181925, -2);
-		text = priceText(price, Fraction.DEC_N04);
-		System.out.println("price : " + text);
-		assertEquals("1819.2500", text);
-
-		price = newPrice(1819, 0);
-		text = priceText(price, Fraction.DEC_N03);
-		System.out.println("price : " + text);
-		assertEquals("1819.000", text);
-
-		price = newPrice(-1819, 0);
-		text = priceText(price, Fraction.DEC_N03);
-		System.out.println("price : " + text);
-		assertEquals("-1819.000", text);
-
-		price = newPrice(18195, -1);
-		text = priceText(price, Fraction.DEC_N02);
-		System.out.println("price : " + text);
-		assertEquals("1819.50", text);
-
-		price = newPrice(-1, 0);
-		text = priceText(price, Fraction.DEC_Z00);
-		System.out.println("price : " + text);
-		assertEquals("-1", text);
-
-		price = newPrice(-1, 0);
-		text = priceText(price, Fraction.DEC_N02);
-		System.out.println("price : " + text);
-		assertEquals("-1.00", text);
-
-		price = newPrice(-125, -2);
-		text = priceText(price, Fraction.DEC_N02);
-		System.out.println("price : " + text);
-		assertEquals("-1.25", text);
-
-		// 1 3/4
-		price = newPrice(175, -2);
-		text = priceText(price, Fraction.BIN_N02);
-		System.out.println("price : " + text);
-		assertEquals("1-3", text);
-
-		// -1 3/4
-		price = newPrice(-175, -2);
-		text = priceText(price, Fraction.BIN_N02);
-		System.out.println("price : " + text);
-		assertEquals("-1-3", text);
+//		//
+//		price = newPrice(181925, -2);
+//		text = priceText(price, Fraction.DEC_N02);
+//		System.out.println("price : " + text);
+//		assertEquals("1819.25", text);
+//
+//		//
+//		price = newPrice(181900, -2);
+//		text = priceText(price, Fraction.DEC_N02);
+//		System.out.println("price : " + text);
+//		assertEquals("1819.00", text);
+//
+//		// 1819 1/4
+//		price = newPrice(181925, -2);
+//		text = priceText(price, Fraction.BIN_N02);
+//		System.out.println("price : " + text);
+//		assertEquals("1819-1", text);
+//
+//		// 1819 3/4
+//		price = newPrice(181975, -2);
+//		text = priceText(price, Fraction.BIN_N02);
+//		System.out.println("price : " + text);
+//		assertEquals("1819-3", text);
+//
+//		// 1819 1/8
+//		price = newPrice(1819125, -3);
+//		text = priceText(price, Fraction.BIN_N03);
+//		System.out.println("price : " + text);
+//		assertEquals("1819-1", text);
+//
+//		// 1819 2/8
+//		price = newPrice(1819250, -3);
+//		text = priceText(price, Fraction.BIN_N03);
+//		System.out.println("price : " + text);
+//		assertEquals("1819-2", text);
+//
+//		// 1819 2/16
+//		price = newPrice(18191250, -4);
+//		text = priceText(price, Fraction.BIN_N04);
+//		System.out.println("price : " + text);
+//		assertEquals("1819-02", text);
+//
+//		// 2 3/128
+//		price = newPrice(20234375, -7);
+//		text = priceText(price, Fraction.BIN_N07);
+//		System.out.println("price : " + text);
+//		assertEquals("2-003", text);
+//
+//		price = newPrice(181925, -3);
+//		text = priceText(price, Fraction.DEC_N04);
+//		System.out.println("price : " + text);
+//		assertEquals("181.9250", text);
+//
+//		price = newPrice(181925, -2);
+//		text = priceText(price, Fraction.DEC_N04);
+//		System.out.println("price : " + text);
+//		assertEquals("1819.2500", text);
+//
+//		price = newPrice(1819, 0);
+//		text = priceText(price, Fraction.DEC_N03);
+//		System.out.println("price : " + text);
+//		assertEquals("1819.000", text);
+//
+//		price = newPrice(-1819, 0);
+//		text = priceText(price, Fraction.DEC_N03);
+//		System.out.println("price : " + text);
+//		assertEquals("-1819.000", text);
+//
+//		price = newPrice(18195, -1);
+//		text = priceText(price, Fraction.DEC_N02);
+//		System.out.println("price : " + text);
+//		assertEquals("1819.50", text);
+//
+//		price = newPrice(-1, 0);
+//		text = priceText(price, Fraction.DEC_Z00);
+//		System.out.println("price : " + text);
+//		assertEquals("-1", text);
+//
+//		price = newPrice(-1, 0);
+//		text = priceText(price, Fraction.DEC_N02);
+//		System.out.println("price : " + text);
+//		assertEquals("-1.00", text);
+//
+//		price = newPrice(-125, -2);
+//		text = priceText(price, Fraction.DEC_N02);
+//		System.out.println("price : " + text);
+//		assertEquals("-1.25", text);
+//
+//		// 1 3/4
+//		price = newPrice(175, -2);
+//		text = priceText(price, Fraction.BIN_N02);
+//		System.out.println("price : " + text);
+//		assertEquals("1-3", text);
+//
+//		// -1 3/4
+//		price = newPrice(-175, -2);
+//		text = priceText(price, Fraction.BIN_N02);
+//		System.out.println("price : " + text);
+//		assertEquals("-1-3", text);
 
 	}
 

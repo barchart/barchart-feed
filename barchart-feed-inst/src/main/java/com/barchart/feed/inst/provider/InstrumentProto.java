@@ -10,7 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.inst.api.Instrument;
-import com.barchart.feed.inst.api.InstrumentField;
 import com.barchart.feed.inst.api.InstrumentGUID;
 import com.barchart.feed.inst.api.TimeInterval;
 import com.barchart.feed.inst.enums.CodeCFI;
@@ -35,21 +34,21 @@ class InstrumentProto extends InstrumentBase implements Instrument {
 	
 	InstrumentProto(final InstrumentDefinition i) {
 		
-		map.put(GUID, ValueBuilder.newText(String.valueOf(i.getInstrumentId())));
-		map.put(VENDOR, ValueBuilder.newText(i.getVendor()));
-		map.put(VENDOR_SYMBOL, ValueBuilder.newText(i.getVendorSymbol()));
+		map.put(GUID, ValueBuilder.newText(String.valueOf(i.getMarketId())));
+		map.put(VENDOR, ValueBuilder.newText(i.getVendorId()));
+		map.put(VENDOR_SYMBOL, ValueBuilder.newText(i.getSymbol()));
 		map.put(DESCRIPTION, ValueBuilder.newText(i.getDescription()));
-		map.put(EXCHANGE_ID, ValueBuilder.newText(i.getExchange()));
+		map.put(EXCHANGE_ID, ValueBuilder.newText(i.getExchangeCode()));
 		map.put(BOOK_DEPTH, ValueBuilder.newSize(i.getBookDepth()));
 		map.put(CFI_CODE, CodeCFI.fromCode(i.getCfiCode()));
-		map.put(CURRENCY, MarketCurrency.fromString(i.getCurrency()));
+		map.put(CURRENCY, MarketCurrency.fromString(i.getCurrencyCode()));
 		
 		map.put(PRICE_STEP, ValueConst.NULL_PRICE);
 		map.put(POINT_VALUE, ValueConst.NULL_PRICE);
 		
 		/* Price Display Fields */
-		map.put(DISPLAY_BASE, ValueBuilder.newSize(i.getDisplayFractionDenominator()));
-		map.put(DISPLAY_EXPONENT, ValueBuilder.newSize(i.getDisplayExponent()));
+		map.put(DISPLAY_BASE, ValueBuilder.newSize(i.getDisplayDenominatorBase()));
+		map.put(DISPLAY_EXPONENT, ValueBuilder.newSize(i.getDisplayDenominatorExponent()));
 		
 		/* Calendar Fields */
 		if(i.hasCalendar()) {
@@ -67,7 +66,7 @@ class InstrumentProto extends InstrumentBase implements Instrument {
 		
 		map.put(TIME_ZONE_OFFSET, ValueBuilder.newSize(i.getTimeZoneOffset()));
 		
-		guid = new InstrumentGUIDImpl(i.getInstrumentId());
+		guid = new InstrumentGUIDImpl(i.getMarketId());
 		
 	}
 	

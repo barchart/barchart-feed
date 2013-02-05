@@ -171,6 +171,19 @@ public enum CodeCFI implements Value<CodeCFI> {
 		return true; // total match
 
 	}
+	
+	public static boolean isFuture(final CodeCFI code) {
+		switch(code) {
+		default:
+			return false;
+		case FUTURE_SPREAD:
+		case FUTURE_COMMODITY:
+		case FUTURE_FINANCIAL:
+		case FUTURE:
+			return true;
+		}
+			
+	}
 
 	@Override
 	public CodeCFI freeze() {

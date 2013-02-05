@@ -3,12 +3,9 @@ package bench;
 import java.io.File;
 import java.nio.ByteBuffer;
 
-import com.barchart.proto.buf.inst.BookType;
 import com.barchart.proto.buf.inst.Calendar;
 import com.barchart.proto.buf.inst.InstrumentDefinition;
 import com.barchart.proto.buf.inst.Interval;
-import com.barchart.proto.buf.inst.PriceDisplay;
-import com.barchart.proto.buf.inst.PriceFraction;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.sleepycat.je.Database;
 import com.sleepycat.je.DatabaseConfig;
@@ -53,7 +50,7 @@ public class TestBDB {
 			DatabaseEntry result = new DatabaseEntry();
 			db.get(txn2, new DatabaseEntry(ByteBuffer.allocate(8).putLong(i).array()), result, null);
 			InstrumentDefinition testInst = InstrumentDefinition.parseFrom(result.getData());
-			ID = testInst.getVendorSymbol();
+			ID = testInst.getSymbol();
 			if(i % 10000 == 0) {
 				System.out.println("Pulled " + i);
 			}
@@ -64,9 +61,6 @@ public class TestBDB {
 	}
 	
 	private static InstrumentDefinition build() {
-		PriceDisplay.Builder priceDisplayBuilder = PriceDisplay.newBuilder();
-		priceDisplayBuilder.setPriceFactor(100);
-		priceDisplayBuilder.setFraction(PriceFraction.FactionBinary_N01);
 		
 		Interval.Builder intervalBuilder = Interval.newBuilder();
 		intervalBuilder.setTimeStart(0);
@@ -77,12 +71,12 @@ public class TestBDB {
 		//calBuilder.setMarketHours(1, intervalBuilder.build());
 		
 		InstrumentDefinition.Builder instBuilder = InstrumentDefinition.newBuilder()
-			.setInstrumentId(1234)
+			.setMarketId(1234)
 			.setBookDepth(10)
-			.setVendorSymbol("TestSymbol")
+			.setSymbol("TestSymbol")
 			.setDescription("TestDesc")
 			.setCalendar(calBuilder.build())
-			.setCurrency("TestCurrency")
+			.setCurrencyCode("TestCurrency")
 			.setRecordCreateTime(1234)
 			.setRecordUpdateTime(1234);
 		

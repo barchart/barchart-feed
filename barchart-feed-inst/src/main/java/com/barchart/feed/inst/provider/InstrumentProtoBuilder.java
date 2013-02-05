@@ -15,45 +15,14 @@ import static com.barchart.feed.inst.api.InstrumentField.VENDOR;
 import static com.barchart.feed.inst.api.InstrumentField.VENDOR_SYMBOL;
 import static com.barchart.feed.inst.api.InstrumentField.TIME_ZONE_OFFSET;
 
-import java.util.EnumMap;
-
 import com.barchart.feed.inst.api.Instrument;
 import com.barchart.feed.inst.api.TimeInterval;
-import com.barchart.feed.inst.enums.MarketDisplay.Fraction;
 import com.barchart.proto.buf.inst.Calendar;
 import com.barchart.proto.buf.inst.InstrumentDefinition;
 import com.barchart.proto.buf.inst.Interval;
-import com.barchart.proto.buf.inst.PriceFraction;
 import com.barchart.util.values.api.PriceValue;
 
 public final class InstrumentProtoBuilder {
-	
-	private static final EnumMap<Fraction, PriceFraction> fracTypeMap =
-			new EnumMap<Fraction, PriceFraction>(Fraction.class);
-	
-	static {
-		fracTypeMap.put(Fraction.DEC_Z00, PriceFraction.FactionDecimal_Z00);
-		fracTypeMap.put(Fraction.DEC_N01, PriceFraction.FactionDecimal_N01);
-		fracTypeMap.put(Fraction.DEC_N02, PriceFraction.FactionDecimal_N02);
-		fracTypeMap.put(Fraction.DEC_N03, PriceFraction.FactionDecimal_N03);
-		fracTypeMap.put(Fraction.DEC_N04, PriceFraction.FactionDecimal_N04);
-		fracTypeMap.put(Fraction.DEC_N05, PriceFraction.FactionDecimal_N05);
-		fracTypeMap.put(Fraction.DEC_N06, PriceFraction.FactionDecimal_N06);
-		fracTypeMap.put(Fraction.DEC_N07, PriceFraction.FactionDecimal_N07);
-		fracTypeMap.put(Fraction.DEC_N08, PriceFraction.FactionDecimal_N08);
-		fracTypeMap.put(Fraction.DEC_N09, PriceFraction.FactionDecimal_N09);
-		
-		fracTypeMap.put(Fraction.BIN_Z00, PriceFraction.FactionBinary_Z00);
-		fracTypeMap.put(Fraction.BIN_N01, PriceFraction.FactionBinary_N01);
-		fracTypeMap.put(Fraction.BIN_N02, PriceFraction.FactionBinary_N02);
-		fracTypeMap.put(Fraction.BIN_N03, PriceFraction.FactionBinary_N03);
-		fracTypeMap.put(Fraction.BIN_N04, PriceFraction.FactionBinary_N04);
-		fracTypeMap.put(Fraction.BIN_N05, PriceFraction.FactionBinary_N05);
-		fracTypeMap.put(Fraction.BIN_N06, PriceFraction.FactionBinary_N06);
-		fracTypeMap.put(Fraction.BIN_N07, PriceFraction.FactionBinary_N07);
-		fracTypeMap.put(Fraction.BIN_N08, PriceFraction.FactionBinary_N08);
-		fracTypeMap.put(Fraction.BIN_N09, PriceFraction.FactionBinary_N09);
-	}
 	
 	private InstrumentProtoBuilder() {
 		
@@ -69,16 +38,16 @@ public final class InstrumentProtoBuilder {
 				InstrumentDefinition.newBuilder();
 		
 		/* market identifier; must be globally unique; */
-		builder.setInstrumentId(inst.getGUID().getGUID());
+		builder.setMarketId(inst.getGUID().getGUID());
 		
 		/* vendor */
 		if(inst.contains(VENDOR)) {
-			builder.setVendor(inst.get(VENDOR).toString());
+			builder.setVendorId(inst.get(VENDOR).toString());
 		}
 		
 		/* market symbol; can be non unique; */
 		if(inst.contains(VENDOR_SYMBOL)) {
-			builder.setVendorSymbol(inst.get(VENDOR_SYMBOL).toString());
+			builder.setSymbol(inst.get(VENDOR_SYMBOL).toString());
 		}
 		/* market free style description; can be used in full text search */
 		if(inst.contains(DESCRIPTION)) {
@@ -87,7 +56,7 @@ public final class InstrumentProtoBuilder {
 		
 		/* market originating exchange identifier */
 		if(inst.contains(EXCHANGE_ID)) {
-			builder.setExchange(inst.get(EXCHANGE_ID).toString());
+			builder.setExchangeCode(inst.get(EXCHANGE_ID).toString());
 		}
 		
 		/* book depth */
@@ -102,33 +71,31 @@ public final class InstrumentProtoBuilder {
 		
 		/* price currency */
 		if(inst.contains(CURRENCY)) {
-			builder.setCurrency(inst.get(CURRENCY).name());
+			builder.setCurrencyCode(inst.get(CURRENCY).name());
 		}
 		
 		/* price step / increment size / tick size */
 		if(inst.contains(PRICE_STEP)) {
 			final PriceValue step = inst.get(PRICE_STEP);
 			step.norm();
-			builder.setMinPriceIncrementMantissa(step.mantissa());
-			builder.setMinPriceIncrementExponent(step.exponent());
+			builder.setMinimumPriceIncrement(DecimalBuilder.build(step));
 		}
 		
 		/* value of a future contract / stock share */
 		if(inst.contains(POINT_VALUE)) {
 			final PriceValue val = inst.get(POINT_VALUE);
 			val.norm();
-			builder.setPointValueMantissa(val.mantissa());
-			builder.setPointValueExponent(val.exponent());
+			builder.setContractPointValue(DecimalBuilder.build(val));
 		}
 		
 		/* display fraction base : decimal(10) vs binary(2), etc. */
 		if(inst.contains(DISPLAY_BASE)) {
-			builder.setDisplayFractionDenominator((int)inst.get(DISPLAY_BASE).asLong());
+			builder.setDisplayDenominatorBase((int)inst.get(DISPLAY_BASE).asLong());
 		}
 		
 		/* display fraction exponent */
 		if(inst.contains(DISPLAY_EXPONENT)) {
-			builder.setDisplayExponent((int)inst.get(DISPLAY_EXPONENT).asLong());
+			builder.setDisplayDenominatorExponent((int)inst.get(DISPLAY_EXPONENT).asLong());
 		}
 		
 		/* Calendar */
@@ -153,7 +120,7 @@ public final class InstrumentProtoBuilder {
 			builder.setCalendar(calBuilder.build());
 		}
 		
-		/* timezone represented as offset in minutes from utc */
+		/* timezone represented as offset in millis from utc */
 		if(inst.contains(TIME_ZONE_OFFSET)) {
 			builder.setTimeZoneOffset((int)inst.get(TIME_ZONE_OFFSET).asLong());
 		}

@@ -27,7 +27,7 @@
 	
 	<properties>
 		<bdbjeVersion>4.0.92</bdbjeVersion>
-		<protoInstVersion>1.1.1</protoInstVersion>
+		<protoInstVersion>1.1.2-SNAPSHOT</protoInstVersion>
 	</properties>
   	
   	<dependencies>

@@ -25,8 +25,11 @@ public final class InstrumentField {
 	/** market free style description; can be used in full text search */
 	public static final Tag<TextValue> DESCRIPTION = Tag.create("DESCRIPTION", TextValue.class);
 	
-	/** market originating exchange identifier */
+	/** market originating exchange MIC, http://www.iso10383.org/ */
 	public static final Tag<TextValue> EXCHANGE_ID = Tag.create("EXCHANGE_ID", TextValue.class);
+	
+	/** None, Default, Implied, Combined */
+	public static final Tag<TextValue> BOOK_LIQUIDITY_TYPE = Tag.create("BOOK_LIQUIDITY_TYPE", TextValue.class);
 	
 	/** book depth */
 	public static final Tag<SizeValue> BOOK_DEPTH = Tag.create("BOOK_SIZE", SizeValue.class);
@@ -55,14 +58,16 @@ public final class InstrumentField {
 	/** array of intervals of market hours in a normal week, denoted in minutes from Sunday morning */
 	public static final Tag<TimeInterval[]> MARKET_HOURS = Tag.create("MARKET_HOURS", TimeInterval[].class);
 	
-	/** timezone represented as offset in minutes from utc */
+	/** timezone represented as offset in millis from utc */
 	public static final Tag<SizeValue> TIME_ZONE_OFFSET = Tag.create("TIME_ZONE", SizeValue.class);
 	
+	/** ordered list of component guids */
+	public static final Tag<SizeValue[]> COMPONENT_LEGS = Tag.create("COMPONENT_LEGS", SizeValue[].class);
 	
 	public static final Tag<?>[] FIELDS = new Tag[] {
-		GUID, VENDOR, VENDOR_SYMBOL, EXCHANGE_ID, DESCRIPTION, BOOK_DEPTH, 
+		GUID, VENDOR, VENDOR_SYMBOL, EXCHANGE_ID, DESCRIPTION, BOOK_LIQUIDITY_TYPE, BOOK_DEPTH, 
 		CFI_CODE, CURRENCY, PRICE_STEP, POINT_VALUE, DISPLAY_BASE, DISPLAY_EXPONENT,  
-		LIFETIME, MARKET_HOURS, TIME_ZONE_OFFSET
+		LIFETIME, MARKET_HOURS, TIME_ZONE_OFFSET,COMPONENT_LEGS
 	};
 
 }

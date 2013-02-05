@@ -302,7 +302,8 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 		
 		 final Instrument inst = get(INSTRUMENT);
 		
-		 final MarketBookType type = inst.get(InstrumentField.BOOK_TYPE);
+		 final MarketBookType type = MarketBookType.fromText(
+				 inst.get(InstrumentField.BOOK_LIQUIDITY_TYPE));
 		 final SizeValue size = LIMIT; // inst.get(BOOK_SIZE);
 		 final PriceValue step = inst.get(InstrumentField.PRICE_STEP);
 		

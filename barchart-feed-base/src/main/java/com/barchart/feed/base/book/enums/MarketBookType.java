@@ -7,6 +7,7 @@
  */
 package com.barchart.feed.base.book.enums;
 
+import com.barchart.util.values.api.TextValue;
 import com.barchart.util.values.api.Value;
 
 public enum MarketBookType implements Value<MarketBookType> {
@@ -31,6 +32,15 @@ public enum MarketBookType implements Value<MarketBookType> {
 
 	public static final MarketBookType fromOrd(final byte ord) {
 		return ENUM_VALUES[ord];
+	}
+	
+	public static final MarketBookType fromText(final TextValue type) {
+		for(MarketBookType t : values()) {
+			if(type.compareTo(t.name()) == 0) {
+				return t;
+			}
+		}
+		return EMPTY;
 	}
 
 	@Override

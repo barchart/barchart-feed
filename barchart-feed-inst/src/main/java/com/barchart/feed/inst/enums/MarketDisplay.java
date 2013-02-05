@@ -229,36 +229,43 @@ public enum MarketDisplay {
 
 	}
 
-	/**
-	 * render price according to BARCHART convention & fraction format; decimal
-	 * vs binary; number of places;
-	 */
-	public static final String priceText(/* local */PriceValue price,
-	/* local */Fraction frac) {
-
+//	/**
+//	 * render price according to BARCHART convention & fraction format; decimal
+//	 * vs binary; number of places;
+//	 */
+//	public static final String priceText(/* local */PriceValue price,
+//	/* local */Fraction frac) {
+//
+//		if (price == null) {
+//			price = ValueConst.NULL_PRICE;
+//		}
+//
+//		if (frac == null) {
+//			frac = Fraction.DEC_Z00;
+//		}
+//
+//		return priceText(price.mantissa(), price.exponent(), frac);
+//
+//	}
+	
+	public static final String priceText(PriceValue price, final long base, final long exponent) {
+		
 		if (price == null) {
 			price = ValueConst.NULL_PRICE;
 		}
-
-		if (frac == null) {
-			frac = Fraction.DEC_Z00;
-		}
-
-		return priceText(price.mantissa(), price.exponent(), frac);
-
+		
+		return priceText(price.mantissa(), price.exponent(), base, exponent);
+		
 	}
 
 	/**
 	 * render price according to BARCHART convention & fraction format; decimal
 	 * vs binary; proper number of places;
 	 */
-	public static final String priceText(/* local */long mantissa,
-	/* local */int exponent, /* local */Fraction frac) {
+	public static final String priceText(long mantissa, int exponent, long base, long baseExp) {
 
-		if (frac == null) {
-			frac = Fraction.DEC_Z00;
-		}
-
+		final long denominator = base ^ baseExp;
+		
 		/* consume sign */
 
 		final boolean isMinus;
@@ -272,7 +279,7 @@ public enum MarketDisplay {
 
 		/* normalize exponent to fraction */
 
-		final int scale = frac.decimalExponent;
+		final long scale = baseExp;
 
 		while (exponent > scale) {
 			mantissa *= 10;
@@ -286,25 +293,37 @@ public enum MarketDisplay {
 
 		/* produce whole */
 
-		long whole = mantissa / frac.decimalDenominator;
+		long whole = mantissa / base;
 
 		/* produce part */
 
 		final char separator;
 
-		switch (frac.base) {
-		default:
-		case DECIMAL:
-			mantissa %= frac.denominator;
+		if(base == 2) {
+			mantissa %= base;
 			separator = ASCII.DOT;
-			break;
-		case BINARY:
-			mantissa %= frac.decimalDenominator;
-			mantissa *= frac.denominator;
-			mantissa /= frac.decimalDenominator;
+		} else if(base == 10) {
+			mantissa %= base;
+			mantissa *= denominator;
+			mantissa /= base;
 			separator = ASCII.DASH;
-			break;
+		} else {
+			separator = 'X';
 		}
+		
+//		switch (base) {
+//		default:
+//		case DECIMAL:
+//			mantissa %= frac.denominator;
+//			separator = ASCII.DOT;
+//			break;
+//		case BINARY:
+//			mantissa %= frac.decimalDenominator;
+//			mantissa *= frac.denominator;
+//			mantissa /= frac.decimalDenominator;
+//			separator = ASCII.DASH;
+//			break;
+//		}
 
 		long part = mantissa;
 
@@ -316,7 +335,16 @@ public enum MarketDisplay {
 
 		int index = size - 1;
 
-		final int places = frac.places;
+		long places = 0;
+		if(base == 2) {
+			if(denominator == 1) {
+				places = 0;
+			} else {
+				places = (int) (1 + log10(denominator));
+			}
+		} else if(base == 10) {
+			places = -baseExp;
+		}
 
 		/* part */if (places > 0) {
 
