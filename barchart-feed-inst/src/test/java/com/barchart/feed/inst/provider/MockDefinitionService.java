@@ -7,10 +7,10 @@
  */
 package com.barchart.feed.inst.provider;
 
-import static com.barchart.feed.inst.api.InstrumentField.BOOK_DEPTH;
-import static com.barchart.feed.inst.api.InstrumentField.MARKET_ID;
-import static com.barchart.feed.inst.api.InstrumentField.PRICE_STEP;
-import static com.barchart.feed.inst.api.InstrumentField.SYMBOL;
+import static com.barchart.api.fields.InstrumentField.BOOK_DEPTH;
+import static com.barchart.api.fields.InstrumentField.MARKET_ID;
+import static com.barchart.api.fields.InstrumentField.PRICE_STEP;
+import static com.barchart.api.fields.InstrumentField.SYMBOL;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -28,7 +28,6 @@ import com.barchart.feed.inst.api.InstrumentFuture;
 import com.barchart.feed.inst.api.InstrumentGUID;
 import com.barchart.feed.inst.api.InstrumentService;
 import com.barchart.feed.inst.api.MetadataContext;
-import com.barchart.feed.inst.enums.MarketDisplay.Fraction;
 import com.barchart.missive.core.Tag;
 import com.barchart.util.values.api.TextValue;
 import com.barchart.util.values.provider.ValueBuilder;
@@ -38,9 +37,9 @@ public class MockDefinitionService implements InstrumentService<CharSequence> {
 	private static final Logger log = LoggerFactory
 			.getLogger(MockDefinitionService.class);
 
-	public static final InstrumentGUID INST_GUID_1 = new InstrumentGUIDImpl(1);
-	public static final InstrumentGUID INST_GUID_2 = new InstrumentGUIDImpl(2);
-	public static final InstrumentGUID INST_GUID_3 = new InstrumentGUIDImpl(3);
+	public static final InstrumentGUID INST_GUID_1 = new InstrumentGUIDImpl("1");
+	public static final InstrumentGUID INST_GUID_2 = new InstrumentGUIDImpl("2");
+	public static final InstrumentGUID INST_GUID_3 = new InstrumentGUIDImpl("3");
 	
 	public static final TextValue INST_SYMBOL_1 = ValueBuilder.newText("one");
 	public static final TextValue INST_SYMBOL_2 = ValueBuilder.newText("two");

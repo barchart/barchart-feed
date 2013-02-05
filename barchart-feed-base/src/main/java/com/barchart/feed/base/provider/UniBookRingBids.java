@@ -7,9 +7,9 @@
  */
 package com.barchart.feed.base.provider;
 
+import com.barchart.api.enums.BookLiquidity;
 import com.barchart.feed.base.book.api.MarketDoBookEntry;
 import com.barchart.feed.base.book.enums.MarketBookSide;
-import com.barchart.feed.inst.enums.BookLiquidity;
 
 class UniBookRingBids extends UniBookRing {
 

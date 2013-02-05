@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.barchart.api.fields.InstrumentField;
 import com.barchart.missive.core.Tag;
 
 public class TestInstrumentField implements InstrumentField {

@@ -1,9 +1,8 @@
-package com.barchart.feed.inst.api;
+package com.barchart.api.fields;
 
-import com.barchart.feed.inst.enums.BookLiquidity;
-import com.barchart.feed.inst.enums.BookStructure;
-import com.barchart.feed.inst.enums.CodeCFI;
-import com.barchart.feed.inst.enums.MarketCurrency;
+import com.barchart.api.enums.BookLiquidity;
+import com.barchart.api.enums.BookStructure;
+import com.barchart.api.enums.MarketCurrency;
 import com.barchart.missive.core.Tag;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
@@ -13,7 +12,7 @@ import com.barchart.util.values.api.TimeInterval;
 public interface InstrumentField {
 
 	/** market identifier; must be globally unique; */
-	Tag<SizeValue> MARKET_ID = Tag.create(SizeValue.class);
+	Tag<TextValue> MARKET_ID = Tag.create(TextValue.class);
 
 	/** vendor */
 	Tag<TextValue> VENDOR = Tag.create(TextValue.class);
@@ -31,7 +30,7 @@ public interface InstrumentField {
 	Tag<SizeValue> BOOK_DEPTH = Tag.create(SizeValue.class);
 
 	/** stock vs future vs etc. */
-	Tag<CodeCFI> CFI_CODE = Tag.create(CodeCFI.class);
+	Tag<TextValue> CFI_CODE = Tag.create(TextValue.class);
 
 	/** price currency */
 	Tag<MarketCurrency> CURRENCY = Tag.create(MarketCurrency.class);

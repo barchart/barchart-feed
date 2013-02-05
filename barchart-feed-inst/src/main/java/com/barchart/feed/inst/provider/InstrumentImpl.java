@@ -1,9 +1,10 @@
 package com.barchart.feed.inst.provider;
 
+import static com.barchart.api.fields.InstrumentField.*;
+
 import java.util.Map;
 
 import com.barchart.feed.inst.api.Instrument;
-import com.barchart.feed.inst.api.InstrumentField;
 import com.barchart.feed.inst.api.InstrumentGUID;
 import com.barchart.missive.core.MissiveException;
 import com.barchart.missive.core.Tag;
@@ -19,13 +20,12 @@ class InstrumentImpl extends InstrumentBase implements Instrument {
 	@SuppressWarnings("rawtypes")
 	InstrumentImpl(final Map<Tag, Object> map) {
 		
-		if(!map.containsKey(InstrumentField.MARKET_ID) ||
-				map.get(InstrumentField.MARKET_ID) == null) {
+		if(!map.containsKey(MARKET_ID) ||
+				map.get(MARKET_ID) == null) {
 			throw new IllegalArgumentException("Map must contain ID");
 		}
 		
-		guid = new InstrumentGUIDImpl(Long.parseLong(
-				map.get(InstrumentField.MARKET_ID).toString()));
+		guid = new InstrumentGUIDImpl(MARKET_ID.cast(map.get(MARKET_ID)));
 		
 		tmap = new HashTagMap(map);
 		
@@ -33,13 +33,12 @@ class InstrumentImpl extends InstrumentBase implements Instrument {
 	
 	InstrumentImpl(final TagMap tagMap) {
 		
-		if(!tagMap.contains(InstrumentField.MARKET_ID) ||
-				tagMap.get(InstrumentField.MARKET_ID) == null) {
+		if(!tagMap.contains(MARKET_ID) ||
+				tagMap.get(MARKET_ID) == null) {
 			throw new IllegalArgumentException("Map must contain ID");
 		}
 		
-		guid = new InstrumentGUIDImpl(Long.parseLong(
-				tagMap.get(InstrumentField.MARKET_ID).toString()));
+		guid = new InstrumentGUIDImpl(tagMap.get(MARKET_ID));
 		
 		tmap = tagMap;
 		

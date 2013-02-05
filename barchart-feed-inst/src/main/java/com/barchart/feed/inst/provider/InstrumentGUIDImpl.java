@@ -2,6 +2,7 @@ package com.barchart.feed.inst.provider;
 
 import com.barchart.feed.inst.api.InstrumentGUID;
 import com.barchart.util.values.api.TextValue;
+import com.barchart.util.values.provider.ValueBuilder;
 
 public class InstrumentGUIDImpl implements InstrumentGUID {
 
@@ -9,6 +10,10 @@ public class InstrumentGUIDImpl implements InstrumentGUID {
 	
 	public InstrumentGUIDImpl(final TextValue guid) {
 		this.guid = guid;
+	}
+	
+	public InstrumentGUIDImpl(final String seq) {
+		guid = ValueBuilder.newText(seq);
 	}
 	
 	@Override 

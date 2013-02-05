@@ -7,8 +7,8 @@
  */
 package com.barchart.feed.base.book.api;
 
+import com.barchart.api.enums.BookLiquidity;
 import com.barchart.feed.base.book.enums.MarketBookAction;
-import com.barchart.feed.inst.enums.BookLiquidity;
 import com.barchart.util.anno.NotMutable;
 
 @NotMutable

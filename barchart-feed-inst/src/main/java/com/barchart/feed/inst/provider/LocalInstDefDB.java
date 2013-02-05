@@ -49,7 +49,7 @@ public class LocalInstDefDB implements MetadataContext {
 	public Instrument lookup(final InstrumentGUID guid) {
 		
 		Transaction txn = env.beginTransaction(null, null);
-		byte[] key = ByteBuffer.allocate(8).putLong(guid.getGUID()).array();
+		byte[] key = guid.toString().getBytes(); 
 		DatabaseEntry result = new DatabaseEntry();
 		db.get(txn, new DatabaseEntry(key), result, null);
 		txn.commit();
@@ -74,7 +74,7 @@ public class LocalInstDefDB implements MetadataContext {
 	public void store(final InstrumentGUID guid, final Instrument inst) {
 		
 		Transaction txn = env.beginTransaction(null, null);
-		byte[] key = ByteBuffer.allocate(8).putLong(guid.getGUID()).array();
+		byte[] key = guid.toString().getBytes(); 
 		
 		db.put(txn, new DatabaseEntry(key), new DatabaseEntry(
 				InstrumentProtoBuilder.build(inst).toByteArray()));

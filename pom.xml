@@ -17,6 +17,7 @@
 		<module>barchart-feed-base</module>
 		<module>barchart-feed-client</module>
 		<module>barchart-feed-inst</module>
+		<module>barchart-feed-api</module>
 	</modules>
 
 	<url>https://github.com/barchart/barchart-feed</url>

@@ -5,7 +5,7 @@
  *
  * http://www.opensource.org/licenses/bsd-license.php
  */
-package com.barchart.feed.inst.enums;
+package com.barchart.api.enums;
 
 import com.barchart.util.values.api.Value;
 

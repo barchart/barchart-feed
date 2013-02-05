@@ -1,24 +1,24 @@
 package com.barchart.feed.inst.provider;
 
-import static com.barchart.feed.inst.api.InstrumentField.BOOK_DEPTH;
-import static com.barchart.feed.inst.api.InstrumentField.CURRENCY;
-import static com.barchart.feed.inst.api.InstrumentField.DESCRIPTION;
-import static com.barchart.feed.inst.api.InstrumentField.EXCHANGE_CODE;
-import static com.barchart.feed.inst.api.InstrumentField.FIELDS;
-import static com.barchart.feed.inst.api.InstrumentField.MARKET_ID;
-import static com.barchart.feed.inst.api.InstrumentField.POINT_VALUE;
-import static com.barchart.feed.inst.api.InstrumentField.PRICE_STEP;
-import static com.barchart.feed.inst.api.InstrumentField.SYMBOL;
-import static com.barchart.feed.inst.api.InstrumentField.TIME_ZONE;
-import static com.barchart.feed.inst.api.InstrumentField.CFI_CODE;
+import static com.barchart.api.fields.InstrumentField.BOOK_DEPTH;
+import static com.barchart.api.fields.InstrumentField.CFI_CODE;
+import static com.barchart.api.fields.InstrumentField.CURRENCY;
+import static com.barchart.api.fields.InstrumentField.DESCRIPTION;
+import static com.barchart.api.fields.InstrumentField.EXCHANGE_CODE;
+import static com.barchart.api.fields.InstrumentField.FIELDS;
+import static com.barchart.api.fields.InstrumentField.MARKET_ID;
+import static com.barchart.api.fields.InstrumentField.POINT_VALUE;
+import static com.barchart.api.fields.InstrumentField.PRICE_STEP;
+import static com.barchart.api.fields.InstrumentField.SYMBOL;
+import static com.barchart.api.fields.InstrumentField.TIME_ZONE;
 import static com.barchart.util.values.provider.ValueBuilder.newPrice;
 import static com.barchart.util.values.provider.ValueBuilder.newSize;
 import static com.barchart.util.values.provider.ValueBuilder.newText;
 import static com.barchart.util.values.provider.ValueBuilder.newTime;
 
+import com.barchart.api.enums.MarketCurrency;
 import com.barchart.feed.inst.api.Instrument;
 import com.barchart.feed.inst.enums.CodeCFI;
-import com.barchart.feed.inst.enums.MarketCurrency;
 import com.barchart.feed.inst.enums.MarketDisplay.Fraction;
 import com.barchart.missive.core.TagMapSafe;
 import com.barchart.missive.hash.HashTagMapSafe;
@@ -32,7 +32,7 @@ import com.barchart.util.values.api.TimeValue;
 
 public class TestInstrument {
 
-	public static final SizeValue ID_V = newSize(123456);
+	public static final TextValue ID_V = newText("123456");
 	public static final TextValue GROUP_ID_V = newText("groupID");
 	public static final TextValue EXCHANGE_ID_V = newText("exchangeID");
 	public static final TextValue SYMBOL_V = newText("symbol");
@@ -42,7 +42,7 @@ public class TestInstrument {
 	public static final PriceValue PRICE_POINT_V = newPrice(500, 1);
 	public static final Fraction FRACTION_V = Fraction.BIN_N01;
 	public static final MarketCurrency CURRENCY_V = MarketCurrency.USD;
-	public static final CodeCFI TYPE_V = CodeCFI.FUTURE;
+	public static final TextValue TYPE_V = newText("FXXXXX");
 	public static final TextValue TIME_ZONE_V = newText("Central");
 	public static final TimeValue TIME_OPEN_V = newTime(100000000);
 	public static final TimeValue TIME_CLOSE_V = newTime(100000001);

@@ -1,6 +1,6 @@
 package com.barchart.feed.inst.provider;
 
-import static com.barchart.feed.inst.api.InstrumentField.*;
+import static com.barchart.api.fields.InstrumentField.*;
 
 import com.barchart.feed.inst.api.Instrument;
 import com.barchart.proto.buf.inst.Calendar;
@@ -25,7 +25,7 @@ public final class InstrumentProtoBuilder {
 				.newBuilder();
 
 		/* market identifier; must be globally unique; */
-		builder.setMarketId(inst.getGUID().getGUID());
+		builder.setMarketId(Long.parseLong(inst.getGUID().toString()));
 
 		/* vendor */
 		if (inst.contains(VENDOR)) {
@@ -54,7 +54,7 @@ public final class InstrumentProtoBuilder {
 
 		/* stock vs future vs etc. */
 		if (inst.contains(CFI_CODE)) {
-			builder.setCfiCode(inst.get(CFI_CODE).getCode());
+			builder.setCfiCode(inst.get(CFI_CODE).toString());
 		}
 
 		/* price currency */

@@ -11,7 +11,7 @@ public abstract class InstrumentBase implements Instrument {
 	
 	@Override
 	public int hashCode() {
-		return (int)getGUID().getGUID();
+		return getGUID().hashCode();
 	}
 	
 	@Override

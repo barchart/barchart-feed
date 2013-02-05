@@ -13,7 +13,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.barchart.feed.inst.enums.BookLiquidity;
+import com.barchart.api.enums.BookLiquidity;
 import com.barchart.util.math.MathExtra;
 
 public class TestMarketBookType {

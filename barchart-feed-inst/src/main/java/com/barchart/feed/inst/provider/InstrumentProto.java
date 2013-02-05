@@ -1,6 +1,6 @@
 package com.barchart.feed.inst.provider;
 
-import static com.barchart.feed.inst.api.InstrumentField.*;
+import static com.barchart.api.fields.InstrumentField.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -9,10 +9,10 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.barchart.api.enums.MarketCurrency;
 import com.barchart.feed.inst.api.Instrument;
 import com.barchart.feed.inst.api.InstrumentGUID;
 import com.barchart.feed.inst.enums.CodeCFI;
-import com.barchart.feed.inst.enums.MarketCurrency;
 import com.barchart.missive.core.MissiveException;
 import com.barchart.missive.core.Tag;
 import com.barchart.proto.buf.inst.InstrumentDefinition;
@@ -72,7 +72,7 @@ class InstrumentProto extends InstrumentBase implements Instrument {
 
 		map.put(TIME_ZONE, ValueBuilder.newSize(i.getTimeZoneOffset()));
 
-		guid = new InstrumentGUIDImpl(i.getMarketId());
+		guid = new InstrumentGUIDImpl(String.valueOf(i.getMarketId()));
 
 	}
 

@@ -28,10 +28,10 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.barchart.api.enums.BookLiquidity;
 import com.barchart.feed.base.book.api.MarketDoBookEntry;
 import com.barchart.feed.base.book.enums.UniBookResult;
 import com.barchart.feed.base.provider.DefBookEntry;
-import com.barchart.feed.inst.enums.BookLiquidity;
 import com.barchart.util.bench.size.JavaSize;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
