@@ -50,10 +50,8 @@ class InstrumentProto extends InstrumentBase implements Instrument {
 		map.put(POINT_VALUE, ValueConst.NULL_PRICE);
 
 		/* Price Display Fields */
-		map.put(DISPLAY_BASE,
-				ValueBuilder.newSize(i.getDisplayDenominatorBase()));
-		map.put(DISPLAY_EXPONENT,
-				ValueBuilder.newSize(i.getDisplayDenominatorExponent()));
+		map.put(DISPLAY_BASE, ValueBuilder.newSize(i.getDisplayBase()));
+		map.put(DISPLAY_EXPONENT, ValueBuilder.newSize(i.getDisplayExponent()));
 
 		/* Calendar Fields */
 		if (i.hasCalendar()) {
