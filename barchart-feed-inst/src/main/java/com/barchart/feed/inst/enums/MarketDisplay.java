@@ -31,7 +31,7 @@ import com.barchart.util.values.api.TimeValue;
 import com.barchart.util.values.api.Value;
 import com.barchart.util.values.provider.ValueConst;
 
-public enum MarketDisplay {
+enum MarketDisplay {
 	
 	/* TODO MAKE INTO INTERFACE */
 	DEFAULT, //
@@ -216,7 +216,6 @@ public enum MarketDisplay {
 		}
 
 		long value = priceFraction(price, frac);
-
 		final char[] array = new char[frac.places];
 
 		for (int k = frac.places - 1; k >= 0; k--) {

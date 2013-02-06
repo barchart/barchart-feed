@@ -284,11 +284,11 @@ public class TestMarketDisplay {
 		PriceValue price;
 		String text;
 
-//		//
-//		price = newPrice(181925, -2);
-//		text = priceText(price, Fraction.DEC_N02);
-//		System.out.println("price : " + text);
-//		assertEquals("1819.25", text);
+		//
+		price = newPrice(181925, -2);
+		text = priceText(price, 10, -2);
+		System.out.println("price : " + text);
+		assertEquals("1819.25", text);
 //
 //		//
 //		price = newPrice(181900, -2);

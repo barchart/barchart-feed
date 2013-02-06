@@ -283,6 +283,7 @@ public final class InstrumentProtoBuilder {
 		return newPrice(d.getMantissa(), d.getExponent());
 	}
 	
+	//TODO Map ordinal values
 	private static class BiEnumMap<K extends Enum<K>, V extends Enum<V>> {
 		
 		private final K[] keys;

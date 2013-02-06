@@ -2,6 +2,7 @@ package com.barchart.feed.api.market;
 
 import org.joda.time.DateTimeZone;
 
+import com.barchart.util.values.api.Fraction;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
 import com.barchart.util.values.api.TimeValue;
@@ -23,8 +24,13 @@ public interface MarketDisplay {
 	/** such as future January = "F" */
 	String timeMonthCode(TimeValue time);
 	
+	String priceFractionText(PriceValue price, Fraction frac);
+	
 	/** render price in fraction format */
-	String priceText(PriceValue price, final long base, final long exponent);
+	String priceText(PriceValue price, Fraction frac);
+	
+	/** render price in fraction format */
+	String priceText(PriceValue price, long base, long exponent);
 	
 	/** render price in fraction format */
 	String priceText(long mantissa, int exponent, long base, long baseExp);
@@ -37,22 +43,22 @@ public interface MarketDisplay {
 	/**
 	 * BARCHART convention: use ',' separators regardless of user LOCALE
 	 */
-	String sizeText(final long size);
+	String sizeText(long size);
 	
 	/** in default time zone */
-	String timeTextISO(final TimeValue value);
+	String timeTextISO(TimeValue value);
 	
 	/** in default time zone */
-	String timeTextShort(final TimeValue value);
+	String timeTextShort(TimeValue value);
 	
 	/** in default time zone with date MM/dd/yyyy */
-	String dateTimeText(final TimeValue value);
+	String dateTimeText(TimeValue value);
 	
 	/** in default date MM/dd/yyyy */
-	String dateTextShort(final TimeValue value);
+	String dateTextShort(TimeValue value);
 	
 	/** in provided time zone */
-	String timeTextShort(final TimeValue value,	final DateTimeZone zone);
+	String timeTextShort(TimeValue value, DateTimeZone zone);
 	
 	
 	
