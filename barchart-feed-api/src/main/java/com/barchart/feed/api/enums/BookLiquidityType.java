@@ -10,7 +10,7 @@ package com.barchart.feed.api.enums;
 import com.barchart.util.values.api.TextValue;
 import com.barchart.util.values.api.Value;
 
-public enum BookLiquidity implements Value<BookLiquidity> {
+public enum BookLiquidityType implements Value<BookLiquidityType> {
 
 	/** no size book */
 	NONE, //
@@ -28,14 +28,14 @@ public enum BookLiquidity implements Value<BookLiquidity> {
 
 	public final byte ord = (byte) ordinal();
 
-	private static final BookLiquidity[] ENUM_VALUES = values();
+	private static final BookLiquidityType[] ENUM_VALUES = values();
 
-	public static final BookLiquidity fromOrd(final byte ord) {
+	public static final BookLiquidityType fromOrd(final byte ord) {
 		return ENUM_VALUES[ord];
 	}
 
-	public static final BookLiquidity fromText(final TextValue type) {
-		for (final BookLiquidity t : values()) {
+	public static final BookLiquidityType fromText(final TextValue type) {
+		for (final BookLiquidityType t : values()) {
 			if (type.compareTo(t.name()) == 0) {
 				return t;
 			}
@@ -44,7 +44,7 @@ public enum BookLiquidity implements Value<BookLiquidity> {
 	}
 
 	@Override
-	public BookLiquidity freeze() {
+	public BookLiquidityType freeze() {
 		return this;
 	}
 

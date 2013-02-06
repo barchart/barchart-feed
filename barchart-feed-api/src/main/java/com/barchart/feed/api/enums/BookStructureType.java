@@ -9,7 +9,7 @@ package com.barchart.feed.api.enums;
 
 import com.barchart.util.values.api.Value;
 
-public enum BookStructure implements Value<BookStructure> {
+public enum BookStructureType implements Value<BookStructureType> {
 
 	/** no size book */
 	NONE, //
@@ -27,14 +27,14 @@ public enum BookStructure implements Value<BookStructure> {
 
 	public final byte ord = (byte) ordinal();
 
-	private static final BookStructure[] ENUM_VALUES = values();
+	private static final BookStructureType[] ENUM_VALUES = values();
 
-	public static final BookStructure fromOrd(final byte ord) {
+	public static final BookStructureType fromOrd(final byte ord) {
 		return ENUM_VALUES[ord];
 	}
 
 	@Override
-	public BookStructure freeze() {
+	public BookStructureType freeze() {
 		return this;
 	}
 

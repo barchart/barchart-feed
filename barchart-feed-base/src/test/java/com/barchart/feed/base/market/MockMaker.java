@@ -7,7 +7,7 @@
  */
 package com.barchart.feed.base.market;
 
-import com.barchart.feed.api.enums.BookLiquidity;
+import com.barchart.feed.api.enums.BookLiquidityType;
 import com.barchart.feed.base.book.enums.MarketBookAction;
 import com.barchart.feed.base.book.enums.MarketBookSide;
 import com.barchart.feed.base.market.api.MarketDo;
@@ -59,7 +59,7 @@ public class MockMaker extends MakerBase<MockMessage> implements
 
 		final MarketBookAction act = message.act;
 		final MarketBookSide side = message.side;
-		final BookLiquidity type = message.type;
+		final BookLiquidityType type = message.type;
 		final int place = message.place;
 		final PriceValue price = message.price;
 		final SizeValue size = message.size;

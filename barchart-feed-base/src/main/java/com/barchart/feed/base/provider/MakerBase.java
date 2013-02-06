@@ -29,8 +29,8 @@ import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.util.anno.ThreadSafe;
+import com.barchart.util.values.api.Fraction;
 import com.barchart.util.values.api.PriceValue;
-import com.barchart.util.values.api.SizeValue;
 import com.barchart.util.values.api.Value;
 
 /** TODO review and remove synchronized */
@@ -282,7 +282,7 @@ public abstract class MakerBase<Message extends MarketMessage> implements
 
 				if(market==null){
 					log.error("Failed to get MarketDo for " + inst.get(
-							InstrumentField.MARKET_ID).toString());
+							InstrumentField.MARKET_GUID).toString());
 					continue;
 				}
 				
@@ -420,11 +420,9 @@ public abstract class MakerBase<Message extends MarketMessage> implements
 			return false;
 		}
 
-		final SizeValue displayBase = instrument.get(InstrumentField.DISPLAY_BASE);
-		final SizeValue displayExponent = instrument.get(InstrumentField.DISPLAY_EXPONENT);
+		final Fraction fraction = instrument.get(InstrumentField.DISPLAY_FRACTION);
 		
-		if (displayBase == null || displayBase.isNull() ||
-				displayExponent == null || displayExponent.isNull()) {
+		if(fraction == null || fraction.isNull()) {
 			log.error("fraction.isNull()");
 			return false;
 		}

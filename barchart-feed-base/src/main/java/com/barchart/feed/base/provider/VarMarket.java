@@ -15,7 +15,7 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.feed.api.enums.BookLiquidity;
+import com.barchart.feed.api.enums.BookLiquidityType;
 import com.barchart.feed.api.fields.InstrumentField;
 import com.barchart.feed.api.inst.Instrument;
 import com.barchart.feed.base.bar.api.MarketBar;
@@ -300,7 +300,7 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 
 			final Instrument inst = get(INSTRUMENT);
 
-			final BookLiquidity type = inst.get(InstrumentField.BOOK_LIQUIDITY);
+			final BookLiquidityType type = inst.get(InstrumentField.BOOK_LIQUIDITY);
 
 			final SizeValue size = LIMIT; // inst.get(BOOK_SIZE);
 			final PriceValue step = inst.get(InstrumentField.PRICE_STEP);

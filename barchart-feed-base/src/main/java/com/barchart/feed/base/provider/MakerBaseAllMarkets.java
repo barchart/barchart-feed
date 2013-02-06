@@ -20,8 +20,8 @@ import com.barchart.feed.base.market.api.MarketMessage;
 import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.base.market.enums.MarketField;
+import com.barchart.util.values.api.Fraction;
 import com.barchart.util.values.api.PriceValue;
-import com.barchart.util.values.api.SizeValue;
 import com.barchart.util.values.api.Value;
 
 public abstract class MakerBaseAllMarkets<Message extends MarketMessage>
@@ -213,11 +213,9 @@ public abstract class MakerBaseAllMarkets<Message extends MarketMessage>
 			return false;
 		}
 
-		final SizeValue displayBase = instrument.get(InstrumentField.DISPLAY_BASE);
-		final SizeValue displayExponent = instrument.get(InstrumentField.DISPLAY_EXPONENT);
+		final Fraction fraction = instrument.get(InstrumentField.DISPLAY_FRACTION);
 		
-		if (displayBase == null || displayBase.isNull() ||
-				displayExponent == null || displayExponent.isNull()) {
+		if(fraction == null || fraction.isNull()) {
 			log.error("fraction.isNull()");
 			return false;
 		}

@@ -10,7 +10,7 @@ package com.barchart.feed.base.provider;
 import static com.barchart.feed.base.book.enums.MarketBookAction.*;
 import static com.barchart.util.values.provider.ValueBuilder.*;
 
-import com.barchart.feed.api.enums.BookLiquidity;
+import com.barchart.feed.api.enums.BookLiquidityType;
 import com.barchart.feed.base.book.api.MarketDoBookEntry;
 import com.barchart.feed.base.book.enums.MarketBookAction;
 import com.barchart.feed.base.book.enums.MarketBookSide;
@@ -55,7 +55,7 @@ abstract class UniBookRing extends
 
 	// use for entry reconstruction
 	protected final static MarketBookAction RET_ACT = NOOP;
-	protected final static BookLiquidity RET_TYPE = BookLiquidity.COMBINED;
+	protected final static BookLiquidityType RET_TYPE = BookLiquidityType.COMBINED;
 
 	//
 
@@ -63,25 +63,25 @@ abstract class UniBookRing extends
 	private final int[] arrayDefault;
 	private final int[] arrayImplied;
 
-	protected final BookLiquidity type() {
+	protected final BookLiquidityType type() {
 		final int maskDefault = arrayDefault == null ? 0x0 : 0x1;
 		final int maskImplied = arrayImplied == null ? 0x0 : 0x2;
 		switch (maskDefault + maskImplied) {
 		default:
 		case 0x0:
-			return BookLiquidity.NONE;
+			return BookLiquidityType.NONE;
 		case 0x1:
-			return BookLiquidity.DEFAULT;
+			return BookLiquidityType.DEFAULT;
 		case 0x2:
-			return BookLiquidity.IMPLIED;
+			return BookLiquidityType.IMPLIED;
 		case 0x3:
-			return BookLiquidity.COMBINED;
+			return BookLiquidityType.COMBINED;
 		}
 	}
 
 	protected final UniBook<?> book;
 
-	public UniBookRing(final UniBook<?> book, final BookLiquidity type)
+	public UniBookRing(final UniBook<?> book, final BookLiquidityType type)
 			throws IllegalArgumentException {
 
 		if (book == null) {
@@ -125,7 +125,7 @@ abstract class UniBookRing extends
 
 	}
 
-	private final int[] arrayFor(final BookLiquidity type) {
+	private final int[] arrayFor(final BookLiquidityType type) {
 		switch (type) {
 		case DEFAULT:
 			return arrayDefault;

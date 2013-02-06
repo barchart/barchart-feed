@@ -2,28 +2,28 @@ package com.barchart.feed.inst.provider;
 
 import static com.barchart.feed.api.fields.InstrumentField.BOOK_DEPTH;
 import static com.barchart.feed.api.fields.InstrumentField.CFI_CODE;
-import static com.barchart.feed.api.fields.InstrumentField.CURRENCY;
+import static com.barchart.feed.api.fields.InstrumentField.CURRENCY_CODE;
 import static com.barchart.feed.api.fields.InstrumentField.DESCRIPTION;
 import static com.barchart.feed.api.fields.InstrumentField.EXCHANGE_CODE;
 import static com.barchart.feed.api.fields.InstrumentField.FIELDS;
-import static com.barchart.feed.api.fields.InstrumentField.MARKET_ID;
+import static com.barchart.feed.api.fields.InstrumentField.MARKET_GUID;
 import static com.barchart.feed.api.fields.InstrumentField.POINT_VALUE;
 import static com.barchart.feed.api.fields.InstrumentField.PRICE_STEP;
 import static com.barchart.feed.api.fields.InstrumentField.SYMBOL;
-import static com.barchart.feed.api.fields.InstrumentField.TIME_ZONE;
-import static com.barchart.util.values.provider.ValueBuilder.newPrice;
+import static com.barchart.feed.api.fields.InstrumentField.TIME_ZONE_OFFSET;
+import static com.barchart.util.values.provider.ValueBuilder.*;
 import static com.barchart.util.values.provider.ValueBuilder.newSize;
 import static com.barchart.util.values.provider.ValueBuilder.newText;
 import static com.barchart.util.values.provider.ValueBuilder.newTime;
 
 import com.barchart.feed.api.enums.MarketCurrency;
 import com.barchart.feed.api.inst.Instrument;
-import com.barchart.feed.inst.enums.MarketDisplay.Fraction;
 import com.barchart.missive.core.TagMapSafe;
 import com.barchart.missive.hash.HashTagMapSafe;
 import com.barchart.proto.buf.inst.Calendar;
 import com.barchart.proto.buf.inst.InstrumentDefinition;
 import com.barchart.proto.buf.inst.Interval;
+import com.barchart.util.values.api.Fraction;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
 import com.barchart.util.values.api.TextValue;
@@ -39,10 +39,10 @@ public class TestInstrument {
 	public static final SizeValue BOOK_SIZE_V = newSize(10);
 	public static final PriceValue PRICE_STEP_V = newPrice(25, -1);
 	public static final PriceValue PRICE_POINT_V = newPrice(500, 1);
-	public static final Fraction FRACTION_V = Fraction.BIN_N01;
+	public static final Fraction FRACTION_V = newFraction(10, -2);
 	public static final MarketCurrency CURRENCY_V = MarketCurrency.USD;
 	public static final TextValue TYPE_V = newText("FXXXXX");
-	public static final TextValue TIME_ZONE_V = newText("Central");
+	public static final TextValue TIME_ZONE_TEXT_V = newText("Central");
 	public static final TimeValue TIME_OPEN_V = newTime(100000000);
 	public static final TimeValue TIME_CLOSE_V = newTime(100000001);
 	public static final TimeValue DATE_START_V = newTime(100000002);
@@ -51,7 +51,7 @@ public class TestInstrument {
 	static final TagMapSafe map = new HashTagMapSafe(FIELDS);
 	
 	static {
-		map.set(MARKET_ID, ID_V);
+		map.set(MARKET_GUID, ID_V);
 		map.set(EXCHANGE_CODE, EXCHANGE_ID_V);
 		map.set(SYMBOL, SYMBOL_V);
 		map.set(DESCRIPTION, DESCRIPTION_V);
@@ -59,7 +59,7 @@ public class TestInstrument {
 		map.set(PRICE_STEP, PRICE_STEP_V);
 		map.set(POINT_VALUE, PRICE_POINT_V);
 		map.set(PRICE_STEP, PRICE_STEP_V);
-		map.set(CURRENCY, CURRENCY_V);
+		map.set(CURRENCY_CODE, CURRENCY_V);
 		map.set(CFI_CODE, TYPE_V);
 //		map.set(TIME_ZONE_OFFSET, TIME_ZONE_V);
 //		map.set(TIME_OPEN, TIME_OPEN_V);

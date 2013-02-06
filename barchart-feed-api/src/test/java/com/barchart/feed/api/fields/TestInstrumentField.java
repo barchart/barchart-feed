@@ -1,4 +1,4 @@
-package com.barchart.feed.inst.api;
+package com.barchart.feed.api.fields;
 
 import static org.junit.Assert.*;
 

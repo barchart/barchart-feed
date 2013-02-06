@@ -22,7 +22,69 @@
 			<groupId>com.barchart.util</groupId>
 			<artifactId>barchart-util-values</artifactId>
 		</dependency>
+		
+		<dependency>
+			<groupId>joda-time</groupId>
+			<artifactId>joda-time</artifactId>
+		</dependency>
   
   </dependencies>
+  
+  <build>
+
+		<!-- Whysoever version 2.2 has issues with Maven 3.0.3: java.lang.NoSuchMethodError: 
+			org.apache.maven.wagon.shared.http4.AbstractHttpClientWagon.getReadTimeout()I -->
+
+		<!-- Please migrate to 3.0.4 -->
+		<!-- Still breaks with 3.0.4 -->
+		<extensions>
+			<extension>
+				<groupId>org.apache.maven.wagon</groupId>
+				<artifactId>wagon-ssh</artifactId>
+				<version>2.1</version>
+			</extension>
+			<extension>
+				<groupId>org.apache.maven.wagon</groupId>
+				<artifactId>wagon-http</artifactId>
+				<version>2.1</version>
+			</extension>
+			<extension>
+				<groupId>org.apache.maven.wagon</groupId>
+				<artifactId>wagon-file</artifactId>
+				<version>2.1</version>
+			</extension>
+		</extensions>
+
+		<plugins>
+
+			<!-- always attach test sources -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>attach-test-sources</id>
+						<goals>
+							<goal>test-jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!-- always attach tests jar -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>test-jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			
+		</plugins>
+	</build>
   
 </project>

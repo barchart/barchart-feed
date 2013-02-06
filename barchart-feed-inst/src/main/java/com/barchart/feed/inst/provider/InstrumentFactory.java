@@ -14,7 +14,7 @@ public final class InstrumentFactory {
 	}
 	
 	public static Instrument buildFromProtoBuf(InstrumentDefinition instDef) {
-		return new InstrumentProto(instDef);
+		return InstrumentProtoBuilder.buildInstrument(instDef);
 	}
 	
 	@SuppressWarnings("rawtypes")

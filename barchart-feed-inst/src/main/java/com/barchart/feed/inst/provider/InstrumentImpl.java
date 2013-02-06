@@ -20,12 +20,12 @@ class InstrumentImpl extends InstrumentBase implements Instrument {
 	@SuppressWarnings("rawtypes")
 	InstrumentImpl(final Map<Tag, Object> map) {
 		
-		if(!map.containsKey(MARKET_ID) ||
-				map.get(MARKET_ID) == null) {
+		if(!map.containsKey(MARKET_GUID) ||
+				map.get(MARKET_GUID) == null) {
 			throw new IllegalArgumentException("Map must contain ID");
 		}
 		
-		guid = new InstrumentGUIDImpl(MARKET_ID.cast(map.get(MARKET_ID)));
+		guid = new InstrumentGUIDImpl(MARKET_GUID.cast(map.get(MARKET_GUID)));
 		
 		tmap = new HashTagMap(map);
 		
@@ -33,12 +33,12 @@ class InstrumentImpl extends InstrumentBase implements Instrument {
 	
 	InstrumentImpl(final TagMap tagMap) {
 		
-		if(!tagMap.contains(MARKET_ID) ||
-				tagMap.get(MARKET_ID) == null) {
+		if(!tagMap.contains(MARKET_GUID) ||
+				tagMap.get(MARKET_GUID) == null) {
 			throw new IllegalArgumentException("Map must contain ID");
 		}
 		
-		guid = new InstrumentGUIDImpl(tagMap.get(MARKET_ID));
+		guid = new InstrumentGUIDImpl(tagMap.get(MARKET_GUID));
 		
 		tmap = tagMap;
 		

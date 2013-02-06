@@ -77,7 +77,7 @@ public class LocalInstDefDB implements MetadataContext {
 		byte[] key = guid.toString().getBytes(); 
 		
 		db.put(txn, new DatabaseEntry(key), new DatabaseEntry(
-				InstrumentProtoBuilder.build(inst).toByteArray()));
+				InstrumentProtoBuilder.buildInstDef(inst).toByteArray()));
 		txn.commit();
 		
 		log.debug("Database currently has {} entries", db.count());
