@@ -1,9 +1,6 @@
 package com.barchart.feed.api.inst;
 
 import static com.barchart.util.values.provider.ValueBuilder.*;
-import static com.barchart.util.values.provider.ValueBuilder.newSize;
-import static com.barchart.util.values.provider.ValueBuilder.newText;
-import static com.barchart.util.values.provider.ValueBuilder.newTime;
 
 import com.barchart.feed.api.enums.BookLiquidityType;
 import com.barchart.feed.api.enums.BookStructureType;

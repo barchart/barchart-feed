@@ -18,7 +18,7 @@ import com.barchart.proto.buf.inst.Interval;
 import com.google.protobuf.ExtensionRegistry;
 import com.google.protobuf.InvalidProtocolBufferException;
 
-public class TestInstrumentProto {
+public class TestInstrumentProtoBuilder {
 	
 //	public static void main(final String[] args) throws IOException {
 //		
