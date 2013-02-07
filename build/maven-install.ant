@@ -24,7 +24,7 @@
 
 			<arg value="clean" />
 			<arg value="install" />
-
+			<arg value="--show-version" />
 			<arg value="--define" />
 			<arg value="skipTests" />
 
