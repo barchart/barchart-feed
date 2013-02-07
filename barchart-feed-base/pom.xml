@@ -1,13 +1,7 @@
-<!--
-
-    Copyright (C) 2011-2012 Barchart, Inc. <http://www.barchart.com />
-
-    All rights reserved. Licensed under the OSI BSD License.
-
-    http://www.opensource.org/licenses/bsd-license.php
-
--->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<!-- Copyright (C) 2011-2012 Barchart, Inc. <http://www.barchart.com /> All 
+	rights reserved. Licensed under the OSI BSD License. http://www.opensource.org/licenses/bsd-license.php -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
 
@@ -39,32 +33,18 @@
 	</properties>
 
 	<dependencies>
-	
+
 		<dependency>
 			<groupId>com.barchart.feed</groupId>
 			<artifactId>barchart-feed-api</artifactId>
-			<version>${parent.version}</version>
-		</dependency>
-	
-		<!-- <dependency>
-			<groupId>com.barchart.feed</groupId>
-			<artifactId>barchart-feed-inst</artifactId>
 			<version>${project.parent.version}</version>
-		</dependency> -->
-		<dependency>
-			<groupId>com.barchart.feed</groupId>
-			<artifactId>barchart-feed-inst</artifactId>
-			<version>${project.parent.version}</version>
-			<scope>test</scope>
-			<classifier>tests</classifier>
-			<type>jar</type>
 		</dependency>
 
 		<dependency>
-  			<groupId>com.barchart.missive</groupId>
+			<groupId>com.barchart.missive</groupId>
 			<artifactId>barchart-missive</artifactId>
 			<scope>provided</scope>
-  		</dependency>
+		</dependency>
 
 		<!-- MAIN -->
 
@@ -92,7 +72,7 @@
 			<groupId>com.barchart.util</groupId>
 			<artifactId>barchart-util-thread</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>joda-time</groupId>
 			<artifactId>joda-time</artifactId>
@@ -109,6 +89,20 @@
 		</dependency>
 
 		<!-- TEST -->
+
+		<dependency>
+			<groupId>com.barchart.feed</groupId>
+			<artifactId>barchart-feed-inst</artifactId>
+			<version>${project.parent.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.barchart.feed</groupId>
+			<artifactId>barchart-feed-inst</artifactId>
+			<version>${project.parent.version}</version>
+			<scope>test</scope>
+			<classifier>tests</classifier>
+		</dependency>
 
 		<dependency>
 			<groupId>com.barchart.util</groupId>

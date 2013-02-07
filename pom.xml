@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
 
@@ -14,10 +15,10 @@
 	<packaging>pom</packaging>
 
 	<modules>
+		<module>barchart-feed-api</module>
+		<module>barchart-feed-inst</module>
 		<module>barchart-feed-base</module>
 		<module>barchart-feed-client</module>
-		<module>barchart-feed-inst</module>
-		<module>barchart-feed-api</module>
 	</modules>
 
 	<url>https://github.com/barchart/barchart-feed</url>
@@ -43,7 +44,7 @@
 
 	<dependencyManagement>
 		<dependencies>
-		
+
 			<dependency>
 				<groupId>com.barchart.missive</groupId>
 				<artifactId>barchart-missive</artifactId>
@@ -106,5 +107,41 @@
 			</plugin>
 		</plugins>
 	</reporting>
+
+	<build>
+
+		<plugins>
+
+			<!-- produce both jar and test-jar -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>jar</goal>
+							<goal>test-jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!-- produce both jar and test-jar -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>jar</goal>
+							<goal>test-jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+		</plugins>
+
+	</build>
 
 </project>
