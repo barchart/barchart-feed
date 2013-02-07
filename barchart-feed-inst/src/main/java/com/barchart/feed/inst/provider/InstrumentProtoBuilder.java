@@ -302,19 +302,11 @@ public final class InstrumentProtoBuilder {
 		}
 
 	}
-<<<<<<< HEAD
 	
 	public static Decimal build(final long mantissa, final int exponent) {
-		
+
 		final Decimal.Builder builder = Decimal.newBuilder();
 		
-=======
-
-	private static final Decimal.Builder builder = Decimal.newBuilder();
-
-	public static Decimal build(final long mantissa, final int exponent) {
-
->>>>>>> d99305eb5cd9d52ba9de77c82d67bb22f22e5ba9
 		builder.clear();
 
 		builder.setMantissa(mantissa);
@@ -325,13 +317,9 @@ public final class InstrumentProtoBuilder {
 	}
 
 	public static Decimal build(final PriceValue price) {
-<<<<<<< HEAD
 		
 		final Decimal.Builder builder = Decimal.newBuilder();
 		
-=======
-
->>>>>>> d99305eb5cd9d52ba9de77c82d67bb22f22e5ba9
 		builder.clear();
 
 		builder.setMantissa(price.mantissa());
