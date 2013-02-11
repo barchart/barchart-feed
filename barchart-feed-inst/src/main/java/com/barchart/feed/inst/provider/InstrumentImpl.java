@@ -90,5 +90,10 @@ class InstrumentImpl extends InstrumentBase implements Instrument {
 	public InstrumentGUID getGUID() {
 		return guid;
 	}
+	
+	@Override
+	public String toString() {
+		return tmap.toString();
+	}
 
 }
