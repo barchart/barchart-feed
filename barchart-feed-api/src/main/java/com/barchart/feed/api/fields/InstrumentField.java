@@ -11,6 +11,7 @@ import com.barchart.feed.api.enums.BookLiquidityType;
 import com.barchart.feed.api.enums.BookStructureType;
 import com.barchart.feed.api.enums.MarketCurrency;
 import com.barchart.feed.api.enums.SecurityType;
+import com.barchart.feed.api.inst.InstrumentGUID;
 import com.barchart.missive.core.Tag;
 import com.barchart.util.values.api.Fraction;
 import com.barchart.util.values.api.PriceValue;
@@ -20,6 +21,9 @@ import com.barchart.util.values.api.TimeInterval;
 
 public interface InstrumentField {
 
+	/** guid object used by feed for instrument identity*/
+	Tag<InstrumentGUID> GUID = Tag.create(InstrumentGUID.class);
+	
 	/** market identifier; must be globally unique; */
 	Tag<TextValue> MARKET_GUID = Tag.create(TextValue.class);
 

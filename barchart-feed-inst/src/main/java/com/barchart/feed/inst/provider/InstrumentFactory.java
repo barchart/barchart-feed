@@ -9,7 +9,10 @@ package com.barchart.feed.inst.provider;
 
 import java.util.Map;
 
+import com.barchart.feed.api.fields.InstrumentField;
 import com.barchart.feed.api.inst.Instrument;
+import com.barchart.feed.api.inst.InstrumentGUID;
+import com.barchart.missive.core.Missive;
 import com.barchart.missive.core.Tag;
 import com.barchart.missive.core.TagMap;
 import com.barchart.proto.buf.inst.InstrumentDefinition;
@@ -24,13 +27,31 @@ public final class InstrumentFactory {
 		return InstrumentProtoBuilder.buildInstrument(instDef);
 	}
 	
+	public static InstrumentDefinition buildProtoBuff(Instrument inst) {
+		return InstrumentProtoBuilder.buildInstDef(inst);
+	}
+	
 	@SuppressWarnings("rawtypes")
 	public static final Instrument build(final Map<Tag, Object> map) {
-		return new InstrumentImpl(map);
+		
+		if(!map.containsKey(InstrumentField.GUID) ||
+				map.get(InstrumentField.GUID) == null ||
+				((InstrumentGUID) map.get(InstrumentField.GUID)).isNull()) {
+			return Instrument.NULL_INSTRUMENT;
+		}
+		
+		return Missive.build(InstrumentImpl.class, map);
 	}
 	
 	public static final Instrument build(final TagMap map) {
-		return new InstrumentImpl(map);
+		
+		if(!map.contains(InstrumentField.GUID) ||
+				map.get(InstrumentField.GUID) == null ||
+				((InstrumentGUID) map.get(InstrumentField.GUID)).isNull()) {
+			return Instrument.NULL_INSTRUMENT;
+		}
+		
+		return Missive.build(InstrumentImpl.class, map);
 	}
 
 }

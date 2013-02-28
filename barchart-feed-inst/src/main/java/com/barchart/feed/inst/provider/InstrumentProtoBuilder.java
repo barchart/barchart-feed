@@ -12,11 +12,15 @@ import static com.barchart.util.values.provider.ValueBuilder.*;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.barchart.feed.api.enums.BookLiquidityType;
 import com.barchart.feed.api.enums.BookStructureType;
 import com.barchart.feed.api.enums.MarketCurrency;
 import com.barchart.feed.api.enums.SecurityType;
 import com.barchart.feed.api.inst.Instrument;
+import com.barchart.missive.core.Missive;
 import com.barchart.missive.core.TagMapSafe;
 import com.barchart.missive.hash.HashTagMapSafe;
 import com.barchart.proto.buf.inst.BookLiquidity;
@@ -30,6 +34,9 @@ import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.TimeInterval;
 
 public final class InstrumentProtoBuilder {
+	
+	private static final Logger log = LoggerFactory
+			.getLogger(InstrumentProtoBuilder.class);
 
 	private static final BiEnumMap<SecurityType, InstrumentType> secTypeMap = new BiEnumMap<SecurityType, InstrumentType>(
 			new SecurityType[] { SecurityType.NULL_TYPE, SecurityType.FOREX,
@@ -190,7 +197,11 @@ public final class InstrumentProtoBuilder {
 		final TagMapSafe map = new HashTagMapSafe(FIELDS);
 
 		if (instDef.hasMarketId()) {
+			map.set(GUID, new InstrumentGUIDImpl(String.valueOf(instDef.getMarketId())));
 			map.set(MARKET_GUID, newText(String.valueOf(instDef.getMarketId())));
+		} else {
+			log.warn("Inst def had no market id, returning null instrument: /n{}", instDef.toString());
+			return Instrument.NULL_INSTRUMENT;
 		}
 
 		if (instDef.hasInstrumentType()) {
@@ -275,7 +286,7 @@ public final class InstrumentProtoBuilder {
 			map.set(TIME_ZONE_NAME, newText(instDef.getTimeZoneName()));
 		}
 
-		return new InstrumentImpl(map);
+		return Missive.build(InstrumentImpl.class, map);
 	}
 
 	static PriceValue priceFromDecimal(final Decimal d) {

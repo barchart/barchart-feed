@@ -37,7 +37,6 @@
 
 	<properties>
 		<bdbjeVersion>4.0.92</bdbjeVersion>
-		<protoInstVersion>1.2.0-SNAPSHOT</protoInstVersion>
 	</properties>
 
 	<dependencies>
@@ -78,7 +77,7 @@
 		<dependency>
 			<groupId>com.barchart.proto</groupId>
 			<artifactId>barchart-proto-buf-inst</artifactId>
-			<version>${protoInstVersion}</version>
+			<version>${barchartProtoInstVersion}</version>
 		</dependency>
 
 		<dependency>

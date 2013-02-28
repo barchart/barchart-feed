@@ -27,6 +27,10 @@ import com.yammer.metrics.core.Histogram;
 
 public class InstrumentFutureImpl extends InstrumentBase implements InstrumentFuture {
 	
+	static {
+		install(new Tag<?>[0]);
+	}
+	
 	private static final Logger log = LoggerFactory
 			.getLogger(InstrumentFutureImpl.class);
 

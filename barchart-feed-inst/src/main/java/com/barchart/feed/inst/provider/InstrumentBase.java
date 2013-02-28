@@ -7,9 +7,15 @@
  */
 package com.barchart.feed.inst.provider;
 
+import com.barchart.feed.api.fields.InstrumentField;
 import com.barchart.feed.api.inst.Instrument;
+import com.barchart.missive.core.Missive;
 
-public abstract class InstrumentBase implements Instrument {
+public abstract class InstrumentBase extends Missive implements Instrument {
+	
+	static {
+		install(InstrumentField.FIELDS);
+	}
 	
 	@Override
 	public int compareTo(final Instrument o) {

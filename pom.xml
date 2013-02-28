@@ -46,9 +46,9 @@
 
 	<properties>
 
-		<barchartUtilVersion>2.0.24-SNAPSHOT</barchartUtilVersion>
-		<barchartMissiveVersion>1.1.2-SNAPSHOT</barchartMissiveVersion>
-		<barchartProtoInstVersion>1.2.0-SNAPSHOT</barchartProtoInstVersion>
+		<barchartUtilVersion>2.0.26</barchartUtilVersion>
+		<barchartMissiveVersion>1.2.1</barchartMissiveVersion>
+		<barchartProtoInstVersion>1.2.0</barchartProtoInstVersion>
 		
 	</properties>
 

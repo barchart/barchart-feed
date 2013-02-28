@@ -150,8 +150,8 @@ public abstract class MakerBaseAllMarkets<Message extends MarketMessage>
 		final Instrument instrument = message.getInstrument();
 
 		if (!isValid(instrument)) {
-			log.debug("Instrument {} not valid",
-					instrument.get(InstrumentField.SYMBOL));
+//			log.debug("Instrument {} not valid",
+//					instrument.get(InstrumentField.SYMBOL));
 			return;
 		}
 

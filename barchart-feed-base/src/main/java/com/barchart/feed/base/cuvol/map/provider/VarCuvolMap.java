@@ -177,27 +177,29 @@ public class VarCuvolMap extends NulCuvolMap implements MarketDoCuvolMap {
 		
 		DecimalValue priceStep = ValueBuilder.newDecimal(25, -2);
 		
-		PriceValue test1 = ValueBuilder.newPrice(1000);
-		PriceValue test2 = ValueBuilder.newPrice(100);
-		PriceValue test3 = ValueBuilder.newPrice(10);
-		PriceValue test4 = ValueBuilder.newPrice(1);
-		PriceValue test5 = ValueBuilder.newPrice(.5);
+//		PriceValue test1 = ValueBuilder.newPrice(1000);
+//		PriceValue test2 = ValueBuilder.newPrice(100);
+//		PriceValue test3 = ValueBuilder.newPrice(10);
+//		PriceValue test4 = ValueBuilder.newPrice(1);
+//		PriceValue test5 = ValueBuilder.newPrice(.5);
+		PriceValue test5 = ValueBuilder.newPrice(.24);
 		PriceValue test6 = ValueBuilder.newPrice(.25);
-		PriceValue test7 = ValueBuilder.newPrice(10000.1);
-		PriceValue test8 = ValueBuilder.newPrice(1.26);
-		PriceValue test9 = ValueBuilder.newPrice(1.0001);
-		PriceValue test10 = ValueBuilder.newPrice(1.000005);
+		PriceValue test7 = ValueBuilder.newPrice(.26);
+//		PriceValue test7 = ValueBuilder.newPrice(10000.1);
+//		PriceValue test8 = ValueBuilder.newPrice(1.26);
+//		PriceValue test9 = ValueBuilder.newPrice(1.0001);
+//		PriceValue test10 = ValueBuilder.newPrice(1.000005);
 		
-		System.out.println(onGrid(test1, priceStep));
-		System.out.println(onGrid(test2, priceStep));
-		System.out.println(onGrid(test3, priceStep));
-		System.out.println(onGrid(test4, priceStep));
-		System.out.println(onGrid(test5, priceStep));
-		System.out.println(onGrid(test6, priceStep));
-		System.out.println(onGrid(test7, priceStep));
-		System.out.println(onGrid(test8, priceStep));
-		System.out.println(onGrid(test9, priceStep));
-		System.out.println(onGrid(test10, priceStep));
+//		System.out.println(roundDown(test1, priceStep));
+//		System.out.println(roundDown(test2, priceStep));
+//		System.out.println(roundDown(test3, priceStep));
+//		System.out.println(roundDown(test4, priceStep));
+		System.out.println(roundDown(test5, priceStep));
+		System.out.println(roundDown(test6, priceStep));
+		System.out.println(roundDown(test7, priceStep));
+//		System.out.println(roundDown(test8, priceStep));
+//		System.out.println(roundDown(test9, priceStep));
+//		System.out.println(roundDown(test10, priceStep));
 		
 	}
 	
@@ -211,6 +213,32 @@ public class VarCuvolMap extends NulCuvolMap implements MarketDoCuvolMap {
 		
 	}
 	
+	
+	private static PriceValue roundDown(PriceValue price, final DecimalValue priceStep) {
+		
+		DecimalValue inv = ValueBuilder.newDecimal(1, 
+				-priceStep.exponent()).div(priceStep.mantissa()).norm();
+		
+		price = price.mult(inv).norm();
+		
+		int exp = price.exponent();
+		
+		DecimalValue fac = ValueBuilder.newDecimal(1, -exp);
+		PriceValue pFac = ValueBuilder.newPrice(1, -exp);
+		
+		if(exp < 0) {
+			long count = (price.mult(fac).count(pFac));
+			
+			if(count == 0) {
+				return ValueConst.ZERO_PRICE;
+			}
+			price = ValueBuilder.newPrice(
+					price.mult(fac).count(pFac)).norm();
+		} 
+		
+		return price.div(inv);
+		
+	}
 	
 	
 	
