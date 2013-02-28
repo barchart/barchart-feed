@@ -1,6 +1,6 @@
 <!--
 
-    Copyright (C) 2011-2013 Barchart, Inc. <http://www.barchart.com/>
+    Copyright (C) 2011-2013 Barchart, Inc. <http://www.barchart.com />
 
     All rights reserved. Licensed under the OSI BSD License.
 
@@ -14,7 +14,7 @@
 	<parent>
 		<groupId>com.barchart.feed</groupId>
 		<artifactId>barchart-feed</artifactId>
-		<version>1.4.1-SNAPSHOT</version>
+		<version>1.4.1</version>
 	</parent>
 
 	<artifactId>barchart-feed-client</artifactId>
@@ -31,7 +31,7 @@
 		<url>https://github.com/barchart/barchart-feed</url>
 		<connection>scm:git:git://github.com/barchart/barchart-feed.git</connection>
 		<developerConnection>scm:git:ssh://git@github.com/barchart/barchart-feed.git</developerConnection>
-		<tag>HEAD</tag>
+		<tag>barchart-feed-1.4.1</tag>
 	</scm>
 
 	<dependencies>
