@@ -37,9 +37,9 @@ public class MockDefinitionService implements InstrumentService<CharSequence> {
 	private static final Logger log = LoggerFactory
 			.getLogger(MockDefinitionService.class);
 
-	public static final InstrumentGUID INST_GUID_1 = new InstrumentGUIDImpl("1");
-	public static final InstrumentGUID INST_GUID_2 = new InstrumentGUIDImpl("2");
-	public static final InstrumentGUID INST_GUID_3 = new InstrumentGUIDImpl("3");
+	public static final InstrumentGUID INST_GUID_1 = new InstrumentGUID("1");
+	public static final InstrumentGUID INST_GUID_2 = new InstrumentGUID("2");
+	public static final InstrumentGUID INST_GUID_3 = new InstrumentGUID("3");
 	
 	public static final TextValue INST_SYMBOL_1 = ValueBuilder.newText("one");
 	public static final TextValue INST_SYMBOL_2 = ValueBuilder.newText("two");

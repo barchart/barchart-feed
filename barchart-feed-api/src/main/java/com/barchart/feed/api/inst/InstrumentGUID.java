@@ -7,61 +7,83 @@
  */
 package com.barchart.feed.api.inst;
 
+import com.barchart.util.values.api.TextValue;
 import com.barchart.util.values.api.Value;
+import com.barchart.util.values.provider.ValueBuilder;
 
-public interface InstrumentGUID extends Comparable<InstrumentGUID>, Value<InstrumentGUID>, CharSequence {
+public final class InstrumentGUID implements Comparable<InstrumentGUID>, Value<InstrumentGUID>, CharSequence {
+
+	private final TextValue guid;
+	
+	public InstrumentGUID(final TextValue guid) {
+		this.guid = guid;
+	}
+	
+	public InstrumentGUID(final String seq) {
+		this.guid = ValueBuilder.newText(seq);
+	}
+	
+	@Override
+	public int compareTo(final InstrumentGUID thatGUID) {
+		return guid.compareTo(thatGUID);
+	}
 
 	@Override
-	boolean equals(Object thatGUID);
+	public InstrumentGUID freeze() {
+		return this;
+	}
 
 	@Override
-	int hashCode();
+	public boolean isFrozen() {
+		return true;
+	}
 
 	@Override
-	int compareTo(InstrumentGUID thatGUID);
+	public boolean isNull() {
+		return this == NULL_INSTRUMENT_GUID;
+	}
+
+	@Override
+	public int length() {
+		return guid.length();
+	}
+
+	@Override
+	public char charAt(int index) {
+		return guid.charAt(index);
+	}
+
+	@Override
+	public CharSequence subSequence(int start, int end) {
+		return guid.subSequence(start, end);
+	}
+	
+	@Override 
+	public boolean equals(final Object o) {
+		
+		if(o == null) {
+			return false;
+		}
+		
+		if(o instanceof InstrumentGUID) {
+			if(guid.equals(o)) {
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			return false;
+		}
+		
+	}
+	
+	@Override
+	public int hashCode() {
+		return guid.hashCode();
+	}
+	
 	
 	/** null instrument */
-	InstrumentGUID NULL_INSTRUMENT_GUID = new InstrumentGUID() {
-
-		@Override
-		public int compareTo(final InstrumentGUID thatGUID) {
-			if (this == thatGUID) {
-				return 0;
-			} else {
-				return -1;
-			}
-		}
-
-		@Override
-		public InstrumentGUID freeze() {
-			return this;
-		}
-
-		@Override
-		public boolean isFrozen() {
-			return true;
-		}
-
-		@Override
-		public boolean isNull() {
-			return true;
-		}
-
-		@Override
-		public int length() {
-			return 0;
-		}
-
-		@Override
-		public char charAt(int index) {
-			return 0;
-		}
-
-		@Override
-		public CharSequence subSequence(int start, int end) {
-			return null;
-		}
-
-	};
+	public static final InstrumentGUID NULL_INSTRUMENT_GUID = new InstrumentGUID("NULL"); 
 
 }

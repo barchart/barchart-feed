@@ -7,8 +7,32 @@
  */
 package com.barchart.feed.inst.provider;
 
-import static com.barchart.feed.api.fields.InstrumentField.*;
-import static com.barchart.util.values.provider.ValueBuilder.*;
+import static com.barchart.feed.api.fields.InstrumentField.BOOK_DEPTH;
+import static com.barchart.feed.api.fields.InstrumentField.BOOK_LIQUIDITY;
+import static com.barchart.feed.api.fields.InstrumentField.BOOK_STRUCTURE;
+import static com.barchart.feed.api.fields.InstrumentField.CFI_CODE;
+import static com.barchart.feed.api.fields.InstrumentField.COMPONENT_LEGS;
+import static com.barchart.feed.api.fields.InstrumentField.CURRENCY_CODE;
+import static com.barchart.feed.api.fields.InstrumentField.DESCRIPTION;
+import static com.barchart.feed.api.fields.InstrumentField.DISPLAY_FRACTION;
+import static com.barchart.feed.api.fields.InstrumentField.EXCHANGE_CODE;
+import static com.barchart.feed.api.fields.InstrumentField.FIELDS;
+import static com.barchart.feed.api.fields.InstrumentField.GUID;
+import static com.barchart.feed.api.fields.InstrumentField.LIFETIME;
+import static com.barchart.feed.api.fields.InstrumentField.MARKET_GUID;
+import static com.barchart.feed.api.fields.InstrumentField.MARKET_HOURS;
+import static com.barchart.feed.api.fields.InstrumentField.POINT_VALUE;
+import static com.barchart.feed.api.fields.InstrumentField.PRICE_STEP;
+import static com.barchart.feed.api.fields.InstrumentField.SECURITY_TYPE;
+import static com.barchart.feed.api.fields.InstrumentField.SYMBOL;
+import static com.barchart.feed.api.fields.InstrumentField.TIME_ZONE_NAME;
+import static com.barchart.feed.api.fields.InstrumentField.TIME_ZONE_OFFSET;
+import static com.barchart.feed.api.fields.InstrumentField.VENDOR;
+import static com.barchart.util.values.provider.ValueBuilder.newFraction;
+import static com.barchart.util.values.provider.ValueBuilder.newPrice;
+import static com.barchart.util.values.provider.ValueBuilder.newSize;
+import static com.barchart.util.values.provider.ValueBuilder.newText;
+import static com.barchart.util.values.provider.ValueBuilder.newTimeInterval;
 
 import java.util.List;
 
@@ -20,7 +44,9 @@ import com.barchart.feed.api.enums.BookLiquidityType;
 import com.barchart.feed.api.enums.BookStructureType;
 import com.barchart.feed.api.enums.MarketCurrency;
 import com.barchart.feed.api.enums.SecurityType;
+import com.barchart.feed.api.inst.GuidList;
 import com.barchart.feed.api.inst.Instrument;
+import com.barchart.feed.api.inst.InstrumentGUID;
 import com.barchart.missive.core.Missive;
 import com.barchart.missive.core.TagMapSafe;
 import com.barchart.missive.hash.HashTagMapSafe;
@@ -32,7 +58,10 @@ import com.barchart.proto.buf.inst.InstrumentDefinition;
 import com.barchart.proto.buf.inst.InstrumentType;
 import com.barchart.proto.buf.inst.Interval;
 import com.barchart.util.values.api.PriceValue;
+import com.barchart.util.values.api.TextValue;
 import com.barchart.util.values.api.TimeInterval;
+import com.barchart.util.values.provider.ValueBuilder;
+import com.barchart.util.values.provider.ValueConst;
 
 public final class InstrumentProtoBuilder {
 	
@@ -198,7 +227,7 @@ public final class InstrumentProtoBuilder {
 		final TagMapSafe map = new HashTagMapSafe(FIELDS);
 
 		if (instDef.hasMarketId()) {
-			map.set(GUID, new InstrumentGUIDImpl(String.valueOf(instDef.getMarketId())));
+			map.set(GUID, new InstrumentGUID(String.valueOf(instDef.getMarketId())));
 			map.set(MARKET_GUID, newText(String.valueOf(instDef.getMarketId())));
 		} else {
 			log.warn("Inst def had no market id, returning null instrument: /n{}", instDef.toString());
@@ -267,8 +296,13 @@ public final class InstrumentProtoBuilder {
 
 		if (instDef.hasCalendar()) {
 			final Interval i = instDef.getCalendar().getLifeTime();
-			map.set(LIFETIME,
-					newTimeInterval(i.getTimeStart(), i.getTimeFinish()));
+			
+			if(i.getTimeFinish() > 0) {
+				map.set(LIFETIME, newTimeInterval(i.getTimeStart(), i.getTimeFinish()));
+			} else {
+				map.set(LIFETIME, ValueConst.NULL_TIME_INTERVAL);
+			}
+			
 			final List<Interval> ints = instDef.getCalendar()
 					.getMarketHoursList();
 			final TimeInterval[] tints = new TimeInterval[ints.size()];
@@ -285,6 +319,19 @@ public final class InstrumentProtoBuilder {
 
 		if (instDef.hasTimeZoneName()) {
 			map.set(TIME_ZONE_NAME, newText(instDef.getTimeZoneName()));
+		}
+		
+		final List<Long> ids = instDef.getComponentIdList();
+		if(ids.isEmpty()) {
+			map.set(COMPONENT_LEGS, new GuidList());
+		} else {
+			GuidList idvs = new GuidList();
+			
+			for(int i = 0; i < ids.size(); i++) {
+				idvs.add(new InstrumentGUID(String.valueOf(ids.get(i))));
+			}
+			
+			map.set(COMPONENT_LEGS, idvs);
 		}
 
 		return Missive.build(InstrumentImpl.class, map);
