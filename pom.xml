@@ -19,7 +19,7 @@
 
 	<groupId>com.barchart.feed</groupId>
 	<artifactId>barchart-feed</artifactId>
-	<version>1.4.3</version>
+	<version>1.4.4-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<modules>
@@ -40,7 +40,7 @@
 		<url>https://github.com/barchart/barchart-feed</url>
 		<connection>scm:git:git://github.com/barchart/barchart-feed.git</connection>
 		<developerConnection>scm:git:ssh://git@github.com/barchart/barchart-feed.git</developerConnection>
-		<tag>barchart-feed-1.4.3</tag>
+		<tag>HEAD</tag>
 	</scm>
 
 	<properties>
