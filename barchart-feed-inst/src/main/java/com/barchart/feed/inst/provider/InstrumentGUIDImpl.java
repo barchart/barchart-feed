@@ -76,5 +76,5 @@ public class InstrumentGUIDImpl implements InstrumentGUID {
 	public CharSequence subSequence(int start, int end) {
 		return guid.subSequence(start, end);
 	}
-
+	
 }

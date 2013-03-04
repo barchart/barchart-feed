@@ -7,6 +7,7 @@
  */
 package com.barchart.feed.api.fields;
 
+import com.barchart.feed.api.Schedule;
 import com.barchart.feed.api.enums.BookLiquidityType;
 import com.barchart.feed.api.enums.BookStructureType;
 import com.barchart.feed.api.enums.MarketCurrency;
@@ -72,7 +73,7 @@ public interface InstrumentField {
 	 * array of intervals of market hours in a normal week, milliseconds from
 	 * Sunday 00:00:00.000, local market time
 	 */
-	Tag<TimeInterval[]> MARKET_HOURS = Tag.create(TimeInterval[].class);
+	Tag<Schedule> MARKET_HOURS = Tag.create(Schedule.class);
 
 	/**
 	 * time zone represented as offset in milliseconds between local market time

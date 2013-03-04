@@ -15,6 +15,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.barchart.feed.api.Schedule;
 import com.barchart.feed.api.enums.BookLiquidityType;
 import com.barchart.feed.api.enums.BookStructureType;
 import com.barchart.feed.api.enums.MarketCurrency;
@@ -275,7 +276,7 @@ public final class InstrumentProtoBuilder {
 				tints[n] = newTimeInterval(ints.get(n).getTimeStart(), ints
 						.get(n).getTimeFinish());
 			}
-			map.set(MARKET_HOURS, tints);
+			map.set(MARKET_HOURS, new Schedule(tints));
 		}
 
 		if (instDef.hasTimeZoneOffset()) {

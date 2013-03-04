@@ -7,8 +7,13 @@
  */
 package com.barchart.feed.api.inst;
 
-import static com.barchart.util.values.provider.ValueBuilder.*;
+import static com.barchart.util.values.provider.ValueBuilder.newFraction;
+import static com.barchart.util.values.provider.ValueBuilder.newPrice;
+import static com.barchart.util.values.provider.ValueBuilder.newSize;
+import static com.barchart.util.values.provider.ValueBuilder.newText;
+import static com.barchart.util.values.provider.ValueBuilder.newTimeInterval;
 
+import com.barchart.feed.api.Schedule;
 import com.barchart.feed.api.enums.BookLiquidityType;
 import com.barchart.feed.api.enums.BookStructureType;
 import com.barchart.feed.api.enums.MarketCurrency;
@@ -36,9 +41,8 @@ public final class TestValues {
 	public static final PriceValue POINT_VALUE_V_1 = newPrice(500, 1);
 	public static final Fraction DISP_FRAC_V_1 = newFraction(10, -2);
 	public static final TimeInterval LIFETIME_V_1 = newTimeInterval(100, 100000);
-	public static final TimeInterval[] MKT_HOURS_V_1 = new TimeInterval[] {
-		newTimeInterval(1000,5000), newTimeInterval(10000,20000)
-	};
+	public static final Schedule MKT_HOURS_V_1 = new Schedule(new TimeInterval[] {
+		newTimeInterval(1000,5000), newTimeInterval(10000,20000)});
 	public static final SizeValue TIME_ZONE_OFFSET_V_1 = newSize(-6 * 60 * 60 * 1000);
 	public static final TextValue TIME_ZONE_NAME_V_1 = newText("CST");
 	
