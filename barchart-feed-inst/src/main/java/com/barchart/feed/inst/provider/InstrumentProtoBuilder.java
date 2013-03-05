@@ -230,7 +230,7 @@ public final class InstrumentProtoBuilder {
 			map.set(GUID, new InstrumentGUID(String.valueOf(instDef.getMarketId())));
 			map.set(MARKET_GUID, newText(String.valueOf(instDef.getMarketId())));
 		} else {
-			log.warn("Inst def had no market id, returning null instrument: /n{}", instDef.toString());
+			log.warn("Inst def had no market id, returning null instrument: \n{}", instDef.toString());
 			return Instrument.NULL_INSTRUMENT;
 		}
 

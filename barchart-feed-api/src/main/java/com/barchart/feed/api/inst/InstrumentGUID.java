@@ -82,6 +82,11 @@ public final class InstrumentGUID implements Comparable<InstrumentGUID>, Value<I
 		return guid.hashCode();
 	}
 	
+	@Override
+	public String toString() {
+		return guid.toString();
+	}
+	
 	
 	/** null instrument */
 	public static final InstrumentGUID NULL_INSTRUMENT_GUID = new InstrumentGUID("NULL"); 
