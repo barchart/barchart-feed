@@ -9,6 +9,7 @@ package com.barchart.feed.inst.provider;
 
 import com.barchart.feed.api.fields.InstrumentField;
 import com.barchart.feed.api.inst.Instrument;
+import com.barchart.feed.api.inst.InstrumentGUID;
 import com.barchart.missive.core.Missive;
 
 public abstract class InstrumentBase extends Missive implements Instrument {
@@ -35,5 +36,25 @@ public abstract class InstrumentBase extends Missive implements Instrument {
 			return false;
 		}
 	}
+	
+	@Override
+	public boolean isFrozen() {
+		return true;
+	}
+	
+	@Override
+	public Instrument freeze() {
+		return this;
+	}
 
+	@Override
+	public final boolean isNull() {
+		return this == Instrument.NULL_INSTRUMENT;
+	}
+	
+	@Override
+	public InstrumentGUID getGUID() {
+		return get(InstrumentField.GUID);
+	}
+	
 }

@@ -7,9 +7,10 @@
  */
 package com.barchart.feed.inst.provider;
 
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executor;
-import java.util.concurrent.FutureTask;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
@@ -37,7 +38,7 @@ public class InstrumentFutureImpl extends InstrumentBase implements InstrumentFu
 	private static final Histogram hist = Metrics.newHistogram(
 			InstrumentFutureImpl.class, "LookupTime");
 	
-	private volatile FutureTask<Instrument> task;
+	private volatile Future<Instrument> task;
 	
 	private final InstrumentGUID guid;
 	private final MetadataContext ctx;
@@ -45,12 +46,11 @@ public class InstrumentFutureImpl extends InstrumentBase implements InstrumentFu
 	private final long startTime;
 	
 	public InstrumentFutureImpl(final InstrumentGUID guid, final MetadataContext ctx, 
-			final Executor executor) {
+			final ExecutorService executor) {
 		this.guid = guid;
 		this.ctx = ctx;
-		task = new FutureTask<Instrument>(lookup, this);
+		task = executor.submit(new LookupCallable(guid));
 		startTime = System.currentTimeMillis();
-		executor.execute(task);
 	}
 	
 	@Override
@@ -83,22 +83,12 @@ public class InstrumentFutureImpl extends InstrumentBase implements InstrumentFu
 	}
 
 	@Override
-	public Instrument freeze() {
-		return this;
-	}
-
-	@Override
 	public boolean isFrozen() {
 		if(isDone() || isCancelled()) {
 			return true;
 		} else {
 			return false;
 		}
-	}
-
-	@Override
-	public boolean isNull() {
-		return inst == Instrument.NULL_INSTRUMENT;
 	}
 
 	@Override
@@ -132,15 +122,24 @@ public class InstrumentFutureImpl extends InstrumentBase implements InstrumentFu
 		return task.get(timeout, unit);
 	}
 	
-	private Runnable lookup = new Runnable() {
+	private class LookupCallable implements Callable<Instrument> {
 
-		@Override
-		public void run() {
-			inst = ctx.lookup(guid);
-			hist.update(System.currentTimeMillis() - startTime);
+		final InstrumentGUID guid;
+		
+		LookupCallable(final InstrumentGUID guid) {
+			this.guid = guid;
 		}
 		
-	};
+		@Override
+		public Instrument call() throws Exception {
+			
+			final Instrument res = ctx.lookup(guid);
+			hist.update(System.currentTimeMillis() - startTime);
+			
+			return res;
+		}
+		
+	}
 	
 	private void populate() {
 		
