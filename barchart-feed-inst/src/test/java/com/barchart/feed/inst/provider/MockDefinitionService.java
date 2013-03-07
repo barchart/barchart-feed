@@ -7,7 +7,9 @@
  */
 package com.barchart.feed.inst.provider;
 
-import static com.barchart.feed.api.fields.InstrumentField.*;
+import static com.barchart.feed.api.fields.InstrumentField.BOOK_DEPTH;
+import static com.barchart.feed.api.fields.InstrumentField.DISPLAY_FRACTION;
+import static com.barchart.feed.api.fields.InstrumentField.GUID;
 import static com.barchart.feed.api.fields.InstrumentField.MARKET_GUID;
 import static com.barchart.feed.api.fields.InstrumentField.PRICE_STEP;
 import static com.barchart.feed.api.fields.InstrumentField.SYMBOL;
@@ -16,9 +18,9 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.concurrent.atomic.AtomicLong;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +36,7 @@ import com.barchart.util.values.provider.ValueBuilder;
 
 public class MockDefinitionService implements InstrumentService<CharSequence> {
 	
+	@SuppressWarnings("unused")
 	private static final Logger log = LoggerFactory
 			.getLogger(MockDefinitionService.class);
 
@@ -49,6 +52,8 @@ public class MockDefinitionService implements InstrumentService<CharSequence> {
 			new ConcurrentHashMap<InstrumentGUID, Instrument>();
 	final Map<TextValue, InstrumentGUID> symbolMap = 
 			new ConcurrentHashMap<TextValue, InstrumentGUID>();
+	
+	final ExecutorService executor = Executors.newCachedThreadPool();
 		
 	@SuppressWarnings("rawtypes")
 	public MockDefinitionService() {
@@ -128,20 +133,6 @@ public class MockDefinitionService implements InstrumentService<CharSequence> {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
-	private Executor executor = new Executor() {
-
-		private final AtomicLong counter = new AtomicLong(0);
-
-		final String name = "# DDF Client - " + counter.getAndIncrement();
-
-		@Override
-		public void execute(final Runnable task) {
-			log.debug("executing new runnable = " + task.toString());
-			new Thread(task, name).start();
-		}
-
-	};
 	
 	private MetadataContext randomDelayContext = new MetadataContext() {
 
