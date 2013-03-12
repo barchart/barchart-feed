@@ -58,9 +58,7 @@ import com.barchart.proto.buf.inst.InstrumentDefinition;
 import com.barchart.proto.buf.inst.InstrumentType;
 import com.barchart.proto.buf.inst.Interval;
 import com.barchart.util.values.api.PriceValue;
-import com.barchart.util.values.api.TextValue;
 import com.barchart.util.values.api.TimeInterval;
-import com.barchart.util.values.provider.ValueBuilder;
 import com.barchart.util.values.provider.ValueConst;
 
 public final class InstrumentProtoBuilder {

@@ -25,8 +25,8 @@ import static com.barchart.util.values.provider.ValueBuilder.newTime;
 
 import com.barchart.feed.api.enums.MarketCurrency;
 import com.barchart.feed.api.inst.Instrument;
-import com.barchart.missive.core.Missive;
 import com.barchart.missive.core.TagMapSafe;
+import com.barchart.missive.core.Missive;
 import com.barchart.missive.hash.HashTagMapSafe;
 import com.barchart.proto.buf.inst.Calendar;
 import com.barchart.proto.buf.inst.InstrumentDefinition;
