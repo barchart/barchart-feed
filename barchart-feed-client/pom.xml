@@ -14,7 +14,7 @@
 	<parent>
 		<groupId>com.barchart.feed</groupId>
 		<artifactId>barchart-feed</artifactId>
-		<version>1.4.4-SNAPSHOT</version>
+		<version>1.4.4</version>
 	</parent>
 
 	<artifactId>barchart-feed-client</artifactId>
@@ -31,7 +31,7 @@
 		<url>https://github.com/barchart/barchart-feed</url>
 		<connection>scm:git:git://github.com/barchart/barchart-feed.git</connection>
 		<developerConnection>scm:git:ssh://git@github.com/barchart/barchart-feed.git</developerConnection>
-		<tag>HEAD</tag>
+		<tag>barchart-feed-1.4.4</tag>
 	</scm>
 
 	<dependencies>
