@@ -12,12 +12,17 @@ import java.util.Map;
 import com.barchart.feed.api.fields.InstrumentField;
 import com.barchart.feed.api.inst.Instrument;
 import com.barchart.feed.api.inst.InstrumentGUID;
+import com.barchart.feed.inst.missive.BarchartFeedInstManifest;
 import com.barchart.missive.api.Tag;
 import com.barchart.missive.api.TagMap;
 import com.barchart.missive.core.ObjectMapFactory;
 import com.barchart.proto.buf.inst.InstrumentDefinition;
 
 public final class InstrumentFactory {
+	
+	static {
+		ObjectMapFactory.install(new BarchartFeedInstManifest());
+	}
 	
 	private InstrumentFactory() {
 		
