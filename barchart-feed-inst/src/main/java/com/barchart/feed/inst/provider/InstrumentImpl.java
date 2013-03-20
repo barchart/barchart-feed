@@ -8,12 +8,8 @@
 package com.barchart.feed.inst.provider;
 
 import com.barchart.feed.api.inst.Instrument;
-import com.barchart.missive.core.Tag;
+import com.barchart.missive.api.Tag;
 
-class InstrumentImpl extends InstrumentBase implements Instrument {
-
-	static {
-		install(new Tag<?>[0]);
-	}
+public class InstrumentImpl extends InstrumentBase implements Instrument {
 
 }

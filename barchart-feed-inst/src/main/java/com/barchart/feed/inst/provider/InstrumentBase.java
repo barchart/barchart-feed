@@ -10,13 +10,9 @@ package com.barchart.feed.inst.provider;
 import com.barchart.feed.api.fields.InstrumentField;
 import com.barchart.feed.api.inst.Instrument;
 import com.barchart.feed.api.inst.InstrumentGUID;
-import com.barchart.missive.core.Missive;
+import com.barchart.missive.core.ObjectMap;
 
-public abstract class InstrumentBase extends Missive implements Instrument {
-	
-	static {
-		install(InstrumentField.FIELDS);
-	}
+public abstract class InstrumentBase extends ObjectMap implements Instrument {
 	
 	@Override
 	public int compareTo(final Instrument o) {

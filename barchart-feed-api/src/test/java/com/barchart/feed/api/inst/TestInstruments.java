@@ -10,7 +10,7 @@ package com.barchart.feed.api.inst;
 import static com.barchart.feed.api.fields.InstrumentField.*;
 import static com.barchart.feed.api.inst.TestValues.*;
 
-import com.barchart.missive.core.TagMapSafe;
+import com.barchart.missive.api.TagMapSafe;
 import com.barchart.missive.hash.HashTagMapSafe;
 
 public final class TestInstruments {

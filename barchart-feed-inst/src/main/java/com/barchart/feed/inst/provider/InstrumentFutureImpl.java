@@ -21,16 +21,12 @@ import com.barchart.feed.api.inst.Instrument;
 import com.barchart.feed.api.inst.InstrumentFuture;
 import com.barchart.feed.api.inst.InstrumentGUID;
 import com.barchart.feed.api.inst.MetadataContext;
+import com.barchart.missive.api.Tag;
 import com.barchart.missive.core.MissiveException;
-import com.barchart.missive.core.Tag;
 import com.yammer.metrics.Metrics;
 import com.yammer.metrics.core.Histogram;
 
 public class InstrumentFutureImpl extends InstrumentBase implements InstrumentFuture {
-	
-	static {
-		install(new Tag<?>[0]);
-	}
 	
 	private static final Logger log = LoggerFactory
 			.getLogger(InstrumentFutureImpl.class);

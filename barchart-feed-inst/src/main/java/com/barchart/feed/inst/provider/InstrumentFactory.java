@@ -12,9 +12,9 @@ import java.util.Map;
 import com.barchart.feed.api.fields.InstrumentField;
 import com.barchart.feed.api.inst.Instrument;
 import com.barchart.feed.api.inst.InstrumentGUID;
-import com.barchart.missive.core.Missive;
-import com.barchart.missive.core.Tag;
-import com.barchart.missive.core.TagMap;
+import com.barchart.missive.api.Tag;
+import com.barchart.missive.api.TagMap;
+import com.barchart.missive.core.ObjectMapFactory;
 import com.barchart.proto.buf.inst.InstrumentDefinition;
 
 public final class InstrumentFactory {
@@ -40,7 +40,7 @@ public final class InstrumentFactory {
 			return Instrument.NULL_INSTRUMENT;
 		}
 		
-		return Missive.build(InstrumentImpl.class, map);
+		return ObjectMapFactory.build(InstrumentImpl.class, map);
 	}
 	
 	public static final Instrument build(final TagMap map) {
@@ -51,7 +51,7 @@ public final class InstrumentFactory {
 			return Instrument.NULL_INSTRUMENT;
 		}
 		
-		return Missive.build(InstrumentImpl.class, map);
+		return ObjectMapFactory.build(InstrumentImpl.class, map);
 	}
 
 }

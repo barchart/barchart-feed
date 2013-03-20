@@ -17,16 +17,16 @@ import static com.barchart.feed.api.fields.InstrumentField.MARKET_GUID;
 import static com.barchart.feed.api.fields.InstrumentField.POINT_VALUE;
 import static com.barchart.feed.api.fields.InstrumentField.PRICE_STEP;
 import static com.barchart.feed.api.fields.InstrumentField.SYMBOL;
-import static com.barchart.feed.api.fields.InstrumentField.TIME_ZONE_OFFSET;
-import static com.barchart.util.values.provider.ValueBuilder.*;
+import static com.barchart.util.values.provider.ValueBuilder.newFraction;
+import static com.barchart.util.values.provider.ValueBuilder.newPrice;
 import static com.barchart.util.values.provider.ValueBuilder.newSize;
 import static com.barchart.util.values.provider.ValueBuilder.newText;
 import static com.barchart.util.values.provider.ValueBuilder.newTime;
 
 import com.barchart.feed.api.enums.MarketCurrency;
 import com.barchart.feed.api.inst.Instrument;
-import com.barchart.missive.core.TagMapSafe;
-import com.barchart.missive.core.Missive;
+import com.barchart.missive.api.TagMapSafe;
+import com.barchart.missive.core.ObjectMapFactory;
 import com.barchart.missive.hash.HashTagMapSafe;
 import com.barchart.proto.buf.inst.Calendar;
 import com.barchart.proto.buf.inst.InstrumentDefinition;
@@ -76,7 +76,8 @@ public class TestInstrument {
 //		map.set(DATE_FINISH, DATE_FINISH_V);
 	}
 	
-	public static final Instrument TEST_INST_BARCHART = Missive.build(InstrumentImpl.class, map);
+	public static final Instrument TEST_INST_BARCHART = 
+			ObjectMapFactory.build(InstrumentImpl.class, map);
 	
 	static InstrumentDefinition.Builder instBuilder;
 	

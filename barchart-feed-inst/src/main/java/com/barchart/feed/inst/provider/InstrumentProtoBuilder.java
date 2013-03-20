@@ -47,8 +47,8 @@ import com.barchart.feed.api.enums.SecurityType;
 import com.barchart.feed.api.inst.GuidList;
 import com.barchart.feed.api.inst.Instrument;
 import com.barchart.feed.api.inst.InstrumentGUID;
-import com.barchart.missive.core.Missive;
-import com.barchart.missive.core.TagMapSafe;
+import com.barchart.missive.api.TagMapSafe;
+import com.barchart.missive.core.ObjectMapFactory;
 import com.barchart.missive.hash.HashTagMapSafe;
 import com.barchart.proto.buf.inst.BookLiquidity;
 import com.barchart.proto.buf.inst.BookStructure;
@@ -332,7 +332,7 @@ public final class InstrumentProtoBuilder {
 			map.set(COMPONENT_LEGS, idvs);
 		}
 
-		return Missive.build(InstrumentImpl.class, map);
+		return ObjectMapFactory.build(InstrumentImpl.class, map);
 	}
 
 	static PriceValue priceFromDecimal(final Decimal d) {

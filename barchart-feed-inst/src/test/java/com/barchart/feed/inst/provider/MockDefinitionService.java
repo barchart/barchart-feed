@@ -30,7 +30,7 @@ import com.barchart.feed.api.inst.InstrumentFuture;
 import com.barchart.feed.api.inst.InstrumentGUID;
 import com.barchart.feed.api.inst.InstrumentService;
 import com.barchart.feed.api.inst.MetadataContext;
-import com.barchart.missive.core.Tag;
+import com.barchart.missive.api.Tag;
 import com.barchart.util.values.api.TextValue;
 import com.barchart.util.values.provider.ValueBuilder;
 

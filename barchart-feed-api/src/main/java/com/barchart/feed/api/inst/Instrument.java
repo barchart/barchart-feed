@@ -7,9 +7,9 @@
  */
 package com.barchart.feed.api.inst;
 
+import com.barchart.missive.api.Tag;
+import com.barchart.missive.api.TagMap;
 import com.barchart.missive.core.MissiveException;
-import com.barchart.missive.core.Tag;
-import com.barchart.missive.core.TagMap;
 import com.barchart.util.values.api.Value;
 
 public interface Instrument extends TagMap, Value<Instrument>,

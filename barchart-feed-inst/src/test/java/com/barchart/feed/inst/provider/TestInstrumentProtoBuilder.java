@@ -9,20 +9,10 @@ package com.barchart.feed.inst.provider;
 
 import static org.junit.Assert.assertTrue;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-
 import org.junit.Test;
 
 import com.barchart.feed.api.inst.Instrument;
-import com.barchart.missive.core.Tag;
-import com.barchart.proto.buf.inst.Calendar;
-import com.barchart.proto.buf.inst.Interval;
-import com.google.protobuf.ExtensionRegistry;
+import com.barchart.missive.api.Tag;
 import com.google.protobuf.InvalidProtocolBufferException;
 
 public class TestInstrumentProtoBuilder {
