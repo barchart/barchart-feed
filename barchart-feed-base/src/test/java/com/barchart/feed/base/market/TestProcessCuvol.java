@@ -34,7 +34,9 @@ import com.barchart.feed.base.cuvol.api.MarketCuvolEntry;
 import com.barchart.feed.base.market.api.Market;
 import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.message.MockMsgTrade;
+import com.barchart.feed.inst.missive.BarchartFeedInstManifest;
 import com.barchart.feed.inst.provider.MockDefinitionService;
+import com.barchart.missive.core.ObjectMapFactory;
 import com.barchart.util.values.api.SizeValue;
 
 public class TestProcessCuvol {
@@ -46,6 +48,7 @@ public class TestProcessCuvol {
 
 	@Before
 	public void setUp() throws Exception {
+		ObjectMapFactory.install(new BarchartFeedInstManifest());
 		service = new MockDefinitionService();
 	}
 

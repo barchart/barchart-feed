@@ -51,7 +51,9 @@ import com.barchart.feed.base.message.MockMsgBook;
 import com.barchart.feed.base.message.MockMsgTrade;
 import com.barchart.feed.base.trade.api.MarketTrade;
 import com.barchart.feed.base.trade.enums.MarketTradeSession;
+import com.barchart.feed.inst.missive.BarchartFeedInstManifest;
 import com.barchart.feed.inst.provider.MockDefinitionService;
+import com.barchart.missive.core.ObjectMapFactory;
 import com.barchart.util.values.api.SizeValue;
 
 public class TestProcessBook {
@@ -63,6 +65,7 @@ public class TestProcessBook {
 
 	@Before
 	public void setUp() throws Exception {
+		ObjectMapFactory.install(new BarchartFeedInstManifest());
 		service = new MockDefinitionService();
 	}
 
