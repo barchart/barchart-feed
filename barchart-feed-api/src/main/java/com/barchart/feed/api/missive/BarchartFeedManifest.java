@@ -9,7 +9,6 @@ public class BarchartFeedManifest extends Manifest<ObjectMap> {
 	public BarchartFeedManifest() {
 		super();
 		
-		
 	}
 	
 }
