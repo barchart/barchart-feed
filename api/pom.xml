@@ -1,46 +1,41 @@
-<!--
+<!-- Copyright (C) 2011-2013 Barchart, Inc. <http://www.barchart.com /> All 
+	rights reserved. Licensed under the OSI BSD License. http://www.opensource.org/licenses/bsd-license.php -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-    Copyright (C) 2011-2013 Barchart, Inc. <http://www.barchart.com />
+	<modelVersion>4.0.0</modelVersion>
 
-    All rights reserved. Licensed under the OSI BSD License.
-
-    http://www.opensource.org/licenses/bsd-license.php
-
--->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  
-  	<modelVersion>4.0.0</modelVersion>
-  
-  	<parent>
+	<parent>
 		<groupId>com.barchart.base</groupId>
 		<artifactId>barchart-archon</artifactId>
 		<version>2.5.6</version>
 	</parent>
-  	
-  	<artifactId>barchart-feed-api</artifactId>
-  	<version>1.4.7-SNAPSHOT</version>
-  	<packaging>bundle</packaging>
-  	
- 	<dependencies>
-  	
-  		<dependency>
+
+	<groupId>com.barchart.feed</groupId>
+	<artifactId>barchart-feed-api</artifactId>
+	<version>1.4.7-SNAPSHOT</version>
+	<packaging>bundle</packaging>
+
+	<dependencies>
+
+		<dependency>
 			<groupId>com.barchart.missive</groupId>
 			<artifactId>barchart-missive</artifactId>
 			<version>1.4.2-SNAPSHOT</version>
 		</dependency>
-  	
-  		<dependency>
+
+		<dependency>
 			<groupId>com.barchart.util</groupId>
 			<artifactId>barchart-util-values</artifactId>
 			<version>2.0.30</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>joda-time</groupId>
 			<artifactId>joda-time</artifactId>
 		</dependency>
-  
-  		<dependency>
+
+		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
 		</dependency>
@@ -48,11 +43,11 @@
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
 		</dependency>
-		
-  </dependencies>
-  
-  <build>
-  	<plugins>
+
+	</dependencies>
+
+	<build>
+		<plugins>
 
 			<!-- produce both jar and test-jar -->
 			<plugin>
@@ -83,6 +78,6 @@
 			</plugin>
 
 		</plugins>
-  </build>
-  
+	</build>
+
 </project>

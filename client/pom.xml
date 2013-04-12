@@ -17,6 +17,7 @@
 		<version>2.5.6</version>
 	</parent>
 
+	<groupId>com.barchart.feed</groupId>
 	<artifactId>barchart-feed-client</artifactId>
 	<version>1.4.7-SNAPSHOT</version>
 	<packaging>bundle</packaging>

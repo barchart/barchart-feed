@@ -17,7 +17,8 @@
 		<version>2.5.6</version>
 	</parent>
 
-	<artifactId>barchart-feed-inst</artifactId>
+	<groupId>com.barchart.feed</groupId>
+	<artifactId>barchart-feed-base</artifactId>
 	<version>1.4.7-SNAPSHOT</version>
 	<packaging>bundle</packaging>
 
@@ -32,11 +33,8 @@
 		<url>https://github.com/barchart/barchart-feed</url>
 		<connection>scm:git:git://github.com/barchart/barchart-feed.git</connection>
 		<developerConnection>scm:git:ssh://git@github.com/barchart/barchart-feed.git</developerConnection>
-		<tag>master</tag>
+		<tag>HEAD</tag>
 	</scm>
-
-	<properties>
-	</properties>
 
 	<dependencies>
 	
@@ -46,60 +44,98 @@
 			<version>1.4.7-SNAPSHOT</version>
 		</dependency>
 
-		<dependency>
-			<groupId>com.sleepycat</groupId>
-			<artifactId>je</artifactId>
-			<version>4.0.92</version>
-			<optional>true</optional>
-		</dependency>
-
+		<!-- MAIN -->
+		
 		<dependency>
 			<groupId>com.barchart.missive</groupId>
 			<artifactId>barchart-missive</artifactId>
 			<version>1.4.2-SNAPSHOT</version>
 		</dependency>
 
-		<!-- protocol buffers - original -->
 		<dependency>
-			<groupId>com.google.protobuf</groupId>
-			<artifactId>protobuf-java</artifactId>
-			<version>2.4.1</version>
+			<groupId>com.barchart.util</groupId>
+			<artifactId>barchart-util-anno</artifactId>
+			<version>2.0.32</version>
+			<scope>provided</scope>
 		</dependency>
-
 		<dependency>
-			<groupId>com.barchart.proto</groupId>
-			<artifactId>barchart-proto-buf-inst</artifactId>
-			<version>1.2.0</version>
+			<groupId>com.barchart.util</groupId>
+			<artifactId>barchart-util-clone</artifactId>
+			<version>2.0.28</version>
+			<scope>provided</scope>
 		</dependency>
-
+		<dependency>
+			<groupId>com.barchart.util</groupId>
+			<artifactId>barchart-util-collections</artifactId>
+			<version>2.0.30</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.barchart.util</groupId>
+			<artifactId>barchart-util-enums</artifactId>
+			<version>2.0.28</version>
+			<scope>provided</scope>
+		</dependency>
 		<dependency>
 			<groupId>com.barchart.util</groupId>
 			<artifactId>barchart-util-values</artifactId>
 			<version>2.0.30</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.barchart.util</groupId>
+			<artifactId>barchart-util-thread</artifactId>
+			<version>2.0.29</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- TEST -->
+
+		<dependency>
+			<groupId>com.barchart.feed</groupId>
+			<artifactId>barchart-feed-inst</artifactId>
+			<version>1.4.7-SNAPSHOT</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.barchart.feed</groupId>
+			<artifactId>barchart-feed-inst</artifactId>
+			<version>1.4.7-SNAPSHOT</version>
+			<scope>test</scope>
+			<classifier>tests</classifier>
 		</dependency>
 
 		<dependency>
-			<groupId>com.yammer.metrics</groupId>
-			<artifactId>metrics-core</artifactId>
-			<version>2.2.0</version>
+			<groupId>com.barchart.util</groupId>
+			<artifactId>barchart-util-bench</artifactId>
+			<version>2.0.29</version>
+			<scope>test</scope>
 		</dependency>
-		
+
 		<dependency>
-			<groupId>joda-time</groupId>
-			<artifactId>joda-time</artifactId>
+			<groupId>javolution</groupId>
+			<artifactId>javolution</artifactId>
+			<version>5.5.1</version>
+			<scope>test</scope>
 		</dependency>
+
 		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
+			<groupId>it.unimi.dsi</groupId>
+			<artifactId>fastutil</artifactId>
+			<version>6.4.4</version>
+			<scope>test</scope>
 		</dependency>
+
 		<dependency>
-			<groupId>ch.qos.logback</groupId>
-			<artifactId>logback-classic</artifactId>
+			<groupId>org.apache.wicket</groupId>
+			<artifactId>wicket-objectsizeof-agent</artifactId>
+			<version>1.4.1</version>
+			<scope>test</scope>
 		</dependency>
 
 	</dependencies>
 	
-	 <build>
+	<build>
   	<plugins>
 
 			<!-- produce both jar and test-jar -->
