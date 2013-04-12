@@ -43,14 +43,6 @@
 		<tag>HEAD</tag>
 	</scm>
 
-	<properties>
-
-		<barchartUtilVersion>2.0.28</barchartUtilVersion>
-		<barchartMissiveVersion>[1.4.0, 1.5.0)</barchartMissiveVersion>
-		<barchartProtoInstVersion>1.2.0</barchartProtoInstVersion>
-		
-	</properties>
-
 	<dependencyManagement>
 		<dependencies>
 
@@ -119,36 +111,15 @@
 
 	<build>
 
+		<!-- Layout project is not for deployment. -->
 		<plugins>
-
-			<!-- produce both jar and test-jar -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
-				<executions>
-					<execution>
-						<goals>
-							<goal>jar</goal>
-							<goal>test-jar</goal>
-						</goals>
-					</execution>
-				</executions>
+				<artifactId>maven-deploy-plugin</artifactId>
+				<configuration>
+					<skip>true</skip>
+				</configuration>
 			</plugin>
-
-			<!-- produce both jar and test-jar -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-source-plugin</artifactId>
-				<executions>
-					<execution>
-						<goals>
-							<goal>jar</goal>
-							<goal>test-jar</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-
 		</plugins>
 
 	</build>
