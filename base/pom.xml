@@ -94,13 +94,13 @@
 		<dependency>
 			<groupId>com.barchart.feed</groupId>
 			<artifactId>barchart-feed-inst</artifactId>
-			<version>1.4.7</version>
+			<version>1.4.8-SNAPSHOT</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.barchart.feed</groupId>
 			<artifactId>barchart-feed-inst</artifactId>
-			<version>1.4.7</version>
+			<version>1.4.8-SNAPSHOT</version>
 			<scope>test</scope>
 			<classifier>tests</classifier>
 		</dependency>
