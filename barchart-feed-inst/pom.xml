@@ -12,12 +12,13 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>com.barchart.feed</groupId>
-		<artifactId>barchart-feed</artifactId>
-		<version>1.4.7-SNAPSHOT</version>
+		<groupId>com.barchart.base</groupId>
+		<artifactId>barchart-archon</artifactId>
+		<version>2.3.9</version>
 	</parent>
 
 	<artifactId>barchart-feed-inst</artifactId>
+	<version>1.4.7-SNAPSHOT</version>
 	<packaging>bundle</packaging>
 
 	<url>https://github.com/barchart/barchart-feed</url>
@@ -31,11 +32,10 @@
 		<url>https://github.com/barchart/barchart-feed</url>
 		<connection>scm:git:git://github.com/barchart/barchart-feed.git</connection>
 		<developerConnection>scm:git:ssh://git@github.com/barchart/barchart-feed.git</developerConnection>
-		<tag>HEAD</tag>
+		<tag>master</tag>
 	</scm>
 
 	<properties>
-		<bdbjeVersion>4.0.92</bdbjeVersion>
 	</properties>
 
 	<dependencies>
@@ -43,45 +43,39 @@
 		<dependency>
 			<groupId>com.barchart.feed</groupId>
 			<artifactId>barchart-feed-api</artifactId>
-			<version>${project.parent.version}</version>
+			<version>1.4.7-SNAPSHOT</version>
 		</dependency>
 
 		<dependency>
 			<groupId>com.sleepycat</groupId>
 			<artifactId>je</artifactId>
-			<version>${bdbjeVersion}</version>
+			<version>4.0.92</version>
 			<optional>true</optional>
 		</dependency>
 
 		<dependency>
 			<groupId>com.barchart.missive</groupId>
 			<artifactId>barchart-missive</artifactId>
-			<scope>provided</scope>
+			<version>1.4.2-SNAPSHOT</version>
 		</dependency>
-		<!-- <dependency> -->
-		<!-- <groupId>com.barchart.missive</groupId> -->
-		<!-- <artifactId>barchart-missive-protobuf</artifactId> -->
-		<!-- <version>1.0.1-SNAPSHOT</version> -->
-		<!-- <scope>provided</scope> -->
-		<!-- </dependency> -->
 
 		<!-- protocol buffers - original -->
 		<dependency>
 			<groupId>com.google.protobuf</groupId>
 			<artifactId>protobuf-java</artifactId>
 			<version>2.4.1</version>
-			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>com.barchart.proto</groupId>
 			<artifactId>barchart-proto-buf-inst</artifactId>
-			<version>${barchartProtoInstVersion}</version>
+			<version>1.2.0</version>
 		</dependency>
 
 		<dependency>
 			<groupId>com.barchart.util</groupId>
 			<artifactId>barchart-util-values</artifactId>
+			<version>2.0.30</version>
 		</dependency>
 
 		<dependency>
@@ -89,11 +83,11 @@
 			<artifactId>metrics-core</artifactId>
 			<version>2.2.0</version>
 		</dependency>
+		
 		<dependency>
 			<groupId>joda-time</groupId>
 			<artifactId>joda-time</artifactId>
 		</dependency>
-		
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
@@ -101,9 +95,42 @@
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
-			<scope>provided</scope>
 		</dependency>
 
 	</dependencies>
+	
+	 <build>
+  	<plugins>
+
+			<!-- produce both jar and test-jar -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>jar</goal>
+							<goal>test-jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!-- produce both jar and test-jar -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>jar</goal>
+							<goal>test-jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+		</plugins>
+  </build>
 
 </project>
