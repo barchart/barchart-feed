@@ -44,7 +44,7 @@
 		<dependency>
 			<groupId>com.barchart.feed</groupId>
 			<artifactId>barchart-feed-api</artifactId>
-			<version>1.4.8-SNAPSHOT</version>
+			<version>1.4.8</version>
 		</dependency>
 
 		<dependency>
