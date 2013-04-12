@@ -12,14 +12,14 @@
 
 	<groupId>com.barchart.feed</groupId>
 	<artifactId>barchart-feed-api</artifactId>
-	<version>1.4.8</version>
+	<version>1.4.9-SNAPSHOT</version>
 	<packaging>bundle</packaging>
 
 	<scm>
 		<url>https://github.com/barchart/barchart-feed</url>
 		<connection>scm:git:git://github.com/barchart/barchart-feed.git</connection>
 		<developerConnection>scm:git:ssh://git@github.com/barchart/barchart-feed.git</developerConnection>
-		<tag>barchart-feed-api-1.4.8</tag>
+		<tag>1_4_0</tag>
 	</scm>
 
 	<dependencies>
