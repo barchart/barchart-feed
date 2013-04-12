@@ -15,6 +15,13 @@
 	<version>1.4.7</version>
 	<packaging>bundle</packaging>
 
+	<scm>
+		<url>https://github.com/barchart/barchart-feed</url>
+		<connection>scm:git:git://github.com/barchart/barchart-feed.git</connection>
+		<developerConnection>scm:git:ssh://git@github.com/barchart/barchart-feed.git</developerConnection>
+		<tag>1_4_0</tag>
+	</scm>
+
 	<dependencies>
 
 		<dependency>
@@ -79,8 +86,4 @@
 		</plugins>
 	</build>
 
-
-  <scm>
-    <tag>barchart-feed-api-1.4.7</tag>
-  </scm>
 </project>

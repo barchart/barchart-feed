@@ -11,18 +11,21 @@
 
 	<echo message="basedir : ${basedir}" />
 
-	<input message="DELETE TAG:" addproperty="tag" />
+	<input message="CREATE TAG:" addproperty="tag" />
 
 	<target name="git">
 		<exec executable="git">
 			<arg value="tag" />
-			<arg value="-d" />
+			<arg value="-a" />
 			<arg value="${tag}" />
+			<arg value="-m" />
+			<arg value="mannual tagging" />
 		</exec>
 		<exec executable="git">
 			<arg value="push" />
 			<arg value="origin" />
-			<arg value=":refs/tags/${tag}" />
+			<arg value="tag" />
+			<arg value="${tag}" />
 		</exec>
 	</target>
 
