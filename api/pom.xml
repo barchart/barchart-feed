@@ -21,7 +21,7 @@
 		<dependency>
 			<groupId>com.barchart.missive</groupId>
 			<artifactId>barchart-missive</artifactId>
-			<version>1.4.2-SNAPSHOT</version>
+			<version>1.4.2</version>
 		</dependency>
 
 		<dependency>
