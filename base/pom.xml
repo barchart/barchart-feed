@@ -19,7 +19,7 @@
 
 	<groupId>com.barchart.feed</groupId>
 	<artifactId>barchart-feed-base</artifactId>
-	<version>1.4.9-SNAPSHOT</version>
+	<version>1.4.9</version>
 	<packaging>bundle</packaging>
 
 	<url>https://github.com/barchart/barchart-feed</url>
@@ -33,7 +33,7 @@
 		<url>https://github.com/barchart/barchart-feed</url>
 		<connection>scm:git:git://github.com/barchart/barchart-feed.git</connection>
 		<developerConnection>scm:git:ssh://git@github.com/barchart/barchart-feed.git</developerConnection>
-		<tag>1_4_0</tag>
+		<tag>barchart-feed-base-1.4.9</tag>
 	</scm>
 
 	<dependencies>
