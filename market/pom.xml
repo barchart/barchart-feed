@@ -8,68 +8,66 @@
 
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-
-	<modelVersion>4.0.0</modelVersion>
-
-	<parent>
+  
+  	<modelVersion>4.0.0</modelVersion>
+  
+  	<parent>
 		<groupId>com.barchart.base</groupId>
 		<artifactId>barchart-archon</artifactId>
 		<version>2.5.6</version>
 	</parent>
-
+	
 	<groupId>com.barchart.feed</groupId>
-	<artifactId>barchart-feed</artifactId>
-	<version>0.0.0</version>
-	<packaging>pom</packaging>
-
-	<modules>
-		<module>api</module>
-		<module>inst</module>
-		<module>base</module>
-		<module>client</module>
-		<module>archon</module>
-		<module>market</module>
-	</modules>
-
+  	<artifactId>barchart-feed-market</artifactId>
+  	<version>1.0.1-SNAPSHOT</version>
+	<packaging>bundle</packaging>
+	
 	<url>https://github.com/barchart/barchart-feed</url>
 
 	<issueManagement>
 		<system>github</system>
 		<url>https://github.com/barchart/barchart-feed/issues</url>
 	</issueManagement>
-
+	
 	<scm>
 		<url>https://github.com/barchart/barchart-feed</url>
 		<connection>scm:git:git://github.com/barchart/barchart-feed.git</connection>
 		<developerConnection>scm:git:ssh://git@github.com/barchart/barchart-feed.git</developerConnection>
-		<tag>HEAD</tag>
+		<tag>1_4_0</tag>
 	</scm>
+  	
+  	<build>
+  		<plugins>
 
-	<reporting>
-		<plugins>
+			<!-- produce both jar and test-jar -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<configuration>
-					<stylesheetfile>${basedir}/src/site/stylesheet.css</stylesheetfile>
-				</configuration>
+				<artifactId>maven-jar-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>jar</goal>
+							<goal>test-jar</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
-		</plugins>
-	</reporting>
 
-	<build>
-
-		<!-- Layout project is not for deployment. -->
-		<plugins>
+			<!-- produce both jar and test-jar -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-deploy-plugin</artifactId>
-				<configuration>
-					<skip>true</skip>
-				</configuration>
+				<artifactId>maven-source-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>jar</goal>
+							<goal>test-jar</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
+
 		</plugins>
-
-	</build>
-
+  	</build>
+  
 </project>

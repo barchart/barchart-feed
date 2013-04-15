@@ -7,8 +7,13 @@
  */
 package com.barchart.feed.base.provider;
 
+import org.joda.time.DateTime;
+
 import com.barchart.feed.base.trade.api.MarketTrade;
 import com.barchart.feed.base.trade.enums.MarketTradeField;
+import com.barchart.feed.base.trade.enums.MarketTradeSequencing;
+import com.barchart.feed.base.trade.enums.MarketTradeSession;
+import com.barchart.feed.base.trade.enums.MarketTradeType;
 import com.barchart.util.values.api.Value;
 import com.barchart.util.values.provider.ValueFreezer;
 
@@ -41,6 +46,36 @@ public class NulTrade extends ValueFreezer<MarketTrade> implements MarketTrade {
 
 		return text.toString();
 
+	}
+
+	@Override
+	public MarketTradeType getTradeType() {
+		return MarketTradeType.NULL_TRADE_TYPE;
+	}
+
+	@Override
+	public MarketTradeSession getTradeSession() {
+		return MarketTradeSession.NULL_TRADE_SESSION;
+	}
+
+	@Override
+	public MarketTradeSequencing getTradeSequencing() {
+		return MarketTradeSequencing.NULL_TRADE_SEQUENCE;
+	}
+
+	@Override
+	public double getTradePrice() {
+		return Double.NaN;
+	}
+
+	@Override
+	public long getTradeSize() {
+		return 0l;
+	}
+
+	@Override
+	public DateTime getTradeTime() {
+		return MarketConst.NULL_DATETIME;
 	}
 
 }

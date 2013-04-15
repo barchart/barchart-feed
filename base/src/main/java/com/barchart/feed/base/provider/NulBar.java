@@ -7,6 +7,8 @@
  */
 package com.barchart.feed.base.provider;
 
+import org.joda.time.DateTime;
+
 import com.barchart.feed.base.bar.api.MarketBar;
 import com.barchart.feed.base.bar.enums.MarketBarField;
 import com.barchart.util.anno.NotMutable;
@@ -51,6 +53,51 @@ public class NulBar extends ValueFreezer<MarketBar> implements MarketBar {
 
 		return text.toString();
 
+	}
+
+	@Override
+	public double getOpen() {
+		return Double.NaN;
+	}
+
+	@Override
+	public double getHigh() {
+		return Double.NaN;
+	}
+
+	@Override
+	public double getLow() {
+		return Double.NaN;
+	}
+
+	@Override
+	public double getClose() {
+		return Double.NaN;
+	}
+
+	@Override
+	public double getSettle() {
+		return Double.NaN;
+	}
+
+	@Override
+	public long getVolume() {
+		return 0;
+	}
+
+	@Override
+	public long getOpenInterest() {
+		return 0;
+	}
+
+	@Override
+	public DateTime getLastUpdate() {
+		return MarketConst.NULL_DATETIME;
+	}
+
+	@Override
+	public DateTime getSessionClose() {
+		return MarketConst.NULL_DATETIME;
 	}
 
 }

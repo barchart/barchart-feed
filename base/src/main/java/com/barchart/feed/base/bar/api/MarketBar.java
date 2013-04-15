@@ -7,6 +7,8 @@
  */
 package com.barchart.feed.base.bar.api;
 
+import org.joda.time.DateTime;
+
 import com.barchart.feed.base.bar.enums.MarketBarField;
 import com.barchart.util.values.api.Value;
 
@@ -18,5 +20,17 @@ import com.barchart.util.values.api.Value;
 public interface MarketBar extends Value<MarketBar> {
 
 	<V extends Value<V>> V get(MarketBarField<V> field);
+	
+	public double getOpen();
+	public double getHigh();
+	public double getLow();
+	public double getClose();
+	public double getSettle();
+	
+	public long getVolume();
+	public long getOpenInterest();
+	
+	public DateTime getLastUpdate();
+	public DateTime getSessionClose();
 
 }

@@ -7,8 +7,11 @@
  */
 package com.barchart.feed.base.provider;
 
-import static com.barchart.util.values.provider.ValueConst.*;
+import static com.barchart.util.values.provider.ValueConst.NULL_PRICE;
+import static com.barchart.util.values.provider.ValueConst.NULL_SIZE;
+import static com.barchart.util.values.provider.ValueConst.NULL_TIME;
 
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,6 +34,9 @@ public final class MarketConst {
 	private static final Logger log = LoggerFactory
 			.getLogger(MarketConst.class);
 
+	public static final DateTime NULL_DATETIME = //
+	new DateTime(0l);
+	
 	//
 
 	public static final MarketCuvol NULL_CUVOL = //

@@ -7,8 +7,18 @@
  */
 package com.barchart.feed.base.provider;
 
+import org.joda.time.DateTime;
+
+import com.barchart.feed.api.inst.Instrument;
+import com.barchart.feed.base.bar.api.MarketBar;
+import com.barchart.feed.base.book.api.MarketBook;
+import com.barchart.feed.base.book.api.MarketBookEntry;
+import com.barchart.feed.base.book.api.MarketBookTop;
+import com.barchart.feed.base.cuvol.api.MarketCuvol;
+import com.barchart.feed.base.cuvol.api.MarketCuvolEntry;
 import com.barchart.feed.base.market.api.Market;
 import com.barchart.feed.base.market.enums.MarketField;
+import com.barchart.feed.base.trade.api.MarketTrade;
 import com.barchart.util.anno.NotMutable;
 import com.barchart.util.values.api.Value;
 import com.barchart.util.values.provider.ValueFreezer;
@@ -54,6 +64,61 @@ class NulMarket extends ValueFreezer<Market> implements Market {
 	@Override
 	public final boolean isNull() {
 		return this == MarketConst.NULL_MARKET;
+	}
+
+	@Override
+	public Instrument getInstrument() {
+		return Instrument.NULL_INSTRUMENT;
+	}
+
+	@Override
+	public DateTime getLastChangeTime() {
+		return MarketConst.NULL_DATETIME;
+	}
+
+	@Override
+	public MarketTrade getLastTrade() {
+		return MarketConst.NULL_TRADE;
+	}
+
+	@Override
+	public MarketBook getBook() {
+		return MarketConst.NULL_BOOK;
+	}
+
+	@Override
+	public MarketBookEntry getLastBookUpdate() {
+		return MarketConst.NULL_BOOK_ENTRY;
+	}
+
+	@Override
+	public MarketBookTop getTopOfBook() {
+		return MarketConst.NULL_BOOK_TOP;
+	}
+
+	@Override
+	public MarketCuvol getCuvol() {
+		return MarketConst.NULL_CUVOL;
+	}
+
+	@Override
+	public MarketCuvolEntry getLastCuvolUpdate() {
+		return MarketConst.NULL_CUVOL_ENTRY;
+	}
+
+	@Override
+	public MarketBar getCurrentSession() {
+		return MarketConst.NULL_BAR;
+	}
+
+	@Override
+	public MarketBar getExtraSession() {
+		return MarketConst.NULL_BAR;
+	}
+
+	@Override
+	public MarketBar getPreviousSession() {
+		return MarketConst.NULL_BAR;
 	}
 
 }

@@ -101,7 +101,7 @@
 	</dependencies>
 	
 	 <build>
-  	<plugins>
+  		<plugins>
 
 			<!-- produce both jar and test-jar -->
 			<plugin>

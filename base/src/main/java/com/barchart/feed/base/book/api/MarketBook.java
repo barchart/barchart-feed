@@ -60,8 +60,6 @@ public interface MarketBook extends Value<MarketBook> {
 	MarketBookEntry[] entries(MarketBookSide side) throws NullPointerException,
 			IllegalArgumentException;
 
-	/* TODO consider to remove */
-
 	/** top price: bid or ask; or NULL_PRICE if invalid */
 	PriceValue priceTop(final MarketBookSide side);
 
