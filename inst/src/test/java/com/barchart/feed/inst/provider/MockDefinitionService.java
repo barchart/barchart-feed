@@ -7,12 +7,12 @@
  */
 package com.barchart.feed.inst.provider;
 
-import static com.barchart.feed.api.fields.InstrumentField.BOOK_DEPTH;
-import static com.barchart.feed.api.fields.InstrumentField.DISPLAY_FRACTION;
-import static com.barchart.feed.api.fields.InstrumentField.GUID;
-import static com.barchart.feed.api.fields.InstrumentField.MARKET_GUID;
-import static com.barchart.feed.api.fields.InstrumentField.PRICE_STEP;
-import static com.barchart.feed.api.fields.InstrumentField.SYMBOL;
+import static com.barchart.feed.api.framework.fields.InstrumentField.BOOK_DEPTH;
+import static com.barchart.feed.api.framework.fields.InstrumentField.DISPLAY_FRACTION;
+import static com.barchart.feed.api.framework.fields.InstrumentField.GUID;
+import static com.barchart.feed.api.framework.fields.InstrumentField.MARKET_GUID;
+import static com.barchart.feed.api.framework.fields.InstrumentField.PRICE_STEP;
+import static com.barchart.feed.api.framework.fields.InstrumentField.SYMBOL;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -25,11 +25,11 @@ import java.util.concurrent.Future;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.feed.api.inst.Instrument;
-import com.barchart.feed.api.inst.InstrumentFuture;
-import com.barchart.feed.api.inst.InstrumentGUID;
-import com.barchart.feed.api.inst.InstrumentService;
-import com.barchart.feed.api.inst.MetadataContext;
+import com.barchart.feed.api.framework.inst.Instrument;
+import com.barchart.feed.api.framework.inst.InstrumentFuture;
+import com.barchart.feed.api.framework.inst.InstrumentGUID;
+import com.barchart.feed.api.framework.inst.InstrumentService;
+import com.barchart.feed.api.framework.inst.MetadataContext;
 import com.barchart.missive.api.Tag;
 import com.barchart.util.values.api.TextValue;
 import com.barchart.util.values.provider.ValueBuilder;

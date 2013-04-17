@@ -21,7 +21,7 @@ import static com.barchart.feed.base.market.enums.MarketField.CUVOL;
 import static com.barchart.feed.base.market.enums.MarketField.MARKET;
 import static com.barchart.feed.base.market.enums.MarketField.TRADE;
 
-import com.barchart.feed.api.inst.Instrument;
+import com.barchart.feed.api.framework.inst.Instrument;
 import com.barchart.feed.base.bar.api.MarketBar;
 import com.barchart.feed.base.book.api.MarketBook;
 import com.barchart.feed.base.book.api.MarketBookEntry;

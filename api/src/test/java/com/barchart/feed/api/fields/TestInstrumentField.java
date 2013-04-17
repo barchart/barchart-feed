@@ -13,7 +13,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.feed.api.fields.InstrumentField;
+import com.barchart.feed.api.framework.fields.InstrumentField;
 import com.barchart.missive.api.Tag;
 
 public class TestInstrumentField implements InstrumentField {

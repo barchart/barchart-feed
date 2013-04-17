@@ -7,9 +7,9 @@
  */
 package com.barchart.feed.inst.provider;
 
-import com.barchart.feed.api.fields.InstrumentField;
-import com.barchart.feed.api.inst.Instrument;
-import com.barchart.feed.api.inst.InstrumentGUID;
+import com.barchart.feed.api.framework.fields.InstrumentField;
+import com.barchart.feed.api.framework.inst.Instrument;
+import com.barchart.feed.api.framework.inst.InstrumentGUID;
 import com.barchart.missive.core.ObjectMap;
 
 public abstract class InstrumentBase extends ObjectMap implements Instrument {

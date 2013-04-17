@@ -17,12 +17,6 @@ import com.barchart.util.values.api.SizeValue;
 import com.barchart.util.values.api.TimeValue;
 import com.barchart.util.values.api.Value;
 
-/**
- * This is not a book, this is a market. Should rename.
- * 
- * @author g-litchfield
- * 
- */
 @NotMutable
 public interface MarketBook extends Value<MarketBook> {
 

@@ -1,6 +1,6 @@
 package com.barchart.feed.base.market.api;
 
-import com.barchart.feed.api.inst.Instrument;
+import com.barchart.feed.api.framework.inst.Instrument;
 import com.barchart.util.values.api.Value;
 
 public interface NEWMarketMaker<Message extends MarketMessage> {

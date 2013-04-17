@@ -7,24 +7,24 @@
  */
 package com.barchart.feed.inst.provider;
 
-import static com.barchart.feed.api.fields.InstrumentField.BOOK_DEPTH;
-import static com.barchart.feed.api.fields.InstrumentField.CFI_CODE;
-import static com.barchart.feed.api.fields.InstrumentField.CURRENCY_CODE;
-import static com.barchart.feed.api.fields.InstrumentField.DESCRIPTION;
-import static com.barchart.feed.api.fields.InstrumentField.EXCHANGE_CODE;
-import static com.barchart.feed.api.fields.InstrumentField.FIELDS;
-import static com.barchart.feed.api.fields.InstrumentField.MARKET_GUID;
-import static com.barchart.feed.api.fields.InstrumentField.POINT_VALUE;
-import static com.barchart.feed.api.fields.InstrumentField.PRICE_STEP;
-import static com.barchart.feed.api.fields.InstrumentField.SYMBOL;
+import static com.barchart.feed.api.framework.fields.InstrumentField.BOOK_DEPTH;
+import static com.barchart.feed.api.framework.fields.InstrumentField.CFI_CODE;
+import static com.barchart.feed.api.framework.fields.InstrumentField.CURRENCY_CODE;
+import static com.barchart.feed.api.framework.fields.InstrumentField.DESCRIPTION;
+import static com.barchart.feed.api.framework.fields.InstrumentField.EXCHANGE_CODE;
+import static com.barchart.feed.api.framework.fields.InstrumentField.FIELDS;
+import static com.barchart.feed.api.framework.fields.InstrumentField.MARKET_GUID;
+import static com.barchart.feed.api.framework.fields.InstrumentField.POINT_VALUE;
+import static com.barchart.feed.api.framework.fields.InstrumentField.PRICE_STEP;
+import static com.barchart.feed.api.framework.fields.InstrumentField.SYMBOL;
 import static com.barchart.util.values.provider.ValueBuilder.newFraction;
 import static com.barchart.util.values.provider.ValueBuilder.newPrice;
 import static com.barchart.util.values.provider.ValueBuilder.newSize;
 import static com.barchart.util.values.provider.ValueBuilder.newText;
 import static com.barchart.util.values.provider.ValueBuilder.newTime;
 
-import com.barchart.feed.api.enums.MarketCurrency;
-import com.barchart.feed.api.inst.Instrument;
+import com.barchart.feed.api.commons.enums.MarketCurrency;
+import com.barchart.feed.api.framework.inst.Instrument;
 import com.barchart.missive.api.TagMapSafe;
 import com.barchart.missive.core.ObjectMapFactory;
 import com.barchart.missive.hash.HashTagMapSafe;

@@ -7,7 +7,7 @@
  */
 package com.barchart.feed.api.inst;
 
-import static com.barchart.feed.api.fields.InstrumentField.*;
+import static com.barchart.feed.api.framework.fields.InstrumentField.*;
 import static com.barchart.feed.api.inst.TestValues.*;
 
 import com.barchart.missive.api.TagMapSafe;

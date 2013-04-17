@@ -13,9 +13,9 @@ import java.nio.ByteBuffer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.feed.api.inst.Instrument;
-import com.barchart.feed.api.inst.InstrumentGUID;
-import com.barchart.feed.api.inst.MetadataContext;
+import com.barchart.feed.api.framework.inst.Instrument;
+import com.barchart.feed.api.framework.inst.InstrumentGUID;
+import com.barchart.feed.api.framework.inst.MetadataContext;
 import com.barchart.proto.buf.inst.InstrumentDefinition;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.sleepycat.je.Database;

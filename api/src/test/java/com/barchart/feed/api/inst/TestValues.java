@@ -13,11 +13,11 @@ import static com.barchart.util.values.provider.ValueBuilder.newSize;
 import static com.barchart.util.values.provider.ValueBuilder.newText;
 import static com.barchart.util.values.provider.ValueBuilder.newTimeInterval;
 
-import com.barchart.feed.api.Schedule;
-import com.barchart.feed.api.enums.BookLiquidityType;
-import com.barchart.feed.api.enums.BookStructureType;
-import com.barchart.feed.api.enums.MarketCurrency;
-import com.barchart.feed.api.enums.SecurityType;
+import com.barchart.feed.api.commons.Schedule;
+import com.barchart.feed.api.commons.enums.BookLiquidityType;
+import com.barchart.feed.api.commons.enums.BookStructureType;
+import com.barchart.feed.api.commons.enums.MarketCurrency;
+import com.barchart.feed.api.commons.enums.SecurityType;
 import com.barchart.util.values.api.Fraction;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
