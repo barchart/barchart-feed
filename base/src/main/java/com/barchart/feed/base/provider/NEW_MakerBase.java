@@ -123,11 +123,14 @@ public abstract class NEW_MakerBase<Message extends MarketMessage>
 
 		final NEW_MarketDo market = marketMap.get(instrument);
 
-		if (!isValid(market)) {
+		if(!isValid(market)) {
 			return;
 		}
 		
+		// Update Market State
 		make(message, market);
+		
+		// Signal Agents to fire callbacks
 		market.fireEvents();
 		
 	}

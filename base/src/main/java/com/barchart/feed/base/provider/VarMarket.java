@@ -140,8 +140,6 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 		return reg != null;
 	}
 
-	//
-
 	protected final <T extends Value<T>> void set(final MarketField<T> field,
 			final T value) {
 
@@ -151,8 +149,6 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 		valueArray[field.ordinal()] = value;
 
 	}
-
-	//
 
 	/** do not set self reference on freeze */
 	@Override
@@ -188,22 +184,6 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 
 	}
 
-	//
-
-	/** TODO review use of volatile fields */
-	// private final Lock thisGate = new ReentrantLock();
-	// @Override
-	// public final <Result, Param> Result runSafe(
-	// final MarketSafeRunner<Result, Param> task, final Param param) {
-	// thisGate.lock();
-	// try {
-	// return task.runSafe(this, param);
-	// } finally {
-	// thisGate.unlock();
-	// }
-	// }
-
-	/** use synchronized for now */
 	@Override
 	public final <Result, Param> Result runSafe(
 			final MarketSafeRunner<Result, Param> task, final Param param) {
@@ -216,7 +196,6 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 
 	}
 
-	//
 	@Override
 	public final boolean isFrozen() {
 		return false;

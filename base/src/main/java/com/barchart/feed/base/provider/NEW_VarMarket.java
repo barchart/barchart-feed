@@ -24,17 +24,20 @@ public abstract class NEW_VarMarket extends DefMarket implements NEW_MarketDo {
 			new CopyOnWriteArrayList<NEWMarketAgent<?,?>>();
 	
 	@Override
-	public void fireEvents() {
+	public final void fireEvents() {
 		
+		for(final NEWMarketAgent agent : agents) {
+			
+		}
 		
 	}
 
 	@Override
-	public void addAgent(NEWMarketAgent<?, ?> agent) {
+	public void addAgent(final NEWMarketAgent<?, ?> agent) {
 		
 		// Check agents conditions, if match this.getInstrument()
-
 		agents.add(agent);
+		
 	}
 
 	@Override
