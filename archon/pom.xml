@@ -20,7 +20,7 @@
 	<groupId>com.barchart.feed</groupId>
   	<artifactId>barchart-feed-archon</artifactId>
   	<version>2.0.1-SNAPSHOT</version>
-	<packaging>bundle</packaging>
+	<packaging>pom</packaging>
 	
 	<url>https://github.com/barchart/barchart-feed</url>
 
