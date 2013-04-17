@@ -1,11 +1,9 @@
 package com.barchart.feed.base.market.api;
 
-import com.barchart.feed.api.missive.Callback;
-import com.barchart.feed.api.missive.Conditional;
 import com.barchart.util.values.api.Value;
 
-public interface NEWMarketAgent<Message extends MarketMessage, V extends Value<V>> 
-		extends Conditional, Callback<V> {
+//extends Conditional, Callback
+public interface NEWMarketAgent<Message extends MarketMessage, V extends Value<V>>	{
 
 	public void activate();
 	public void deactivate();
