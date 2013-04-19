@@ -1,5 +1,6 @@
 package com.barchart.feed.api.client.marketplace;
 
+import com.barchart.feed.api.commons.api.MarketCallback;
 import com.barchart.feed.api.commons.enums.MarketEventType;
 import com.barchart.feed.api.framework.inst.Instrument;
 
@@ -36,7 +37,7 @@ public interface MarketAgentFactory {
 	// ***** ***** Filter agent binding by exchange ***** *****
 	
 	MarketAgent forExchange(MarketCallback<?> callback, String exchangeID);
-	//...
+	
 	//...
 	//...
 	//...

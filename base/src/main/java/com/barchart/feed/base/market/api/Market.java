@@ -35,6 +35,8 @@ public interface Market extends Value<Market> {
 	public MarketBookTop getTopOfBook();
 	public MarketCuvol getCuvol();
 	public MarketCuvolEntry getLastCuvolUpdate();
+	
+	/* Should each session be its own distinct type? */
 	public MarketBar getCurrentSession();
 	public MarketBar getExtraSession();
 	public MarketBar getPreviousSession();

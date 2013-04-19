@@ -2,6 +2,7 @@ package com.barchart.feed.api.client.data;
 
 import org.joda.time.DateTime;
 
+import com.barchart.feed.api.commons.api.MarketDataObject;
 import com.barchart.feed.api.framework.inst.Instrument;
 
 public interface MarketObject extends MarketDataObject {
@@ -13,8 +14,8 @@ public interface MarketObject extends MarketDataObject {
 	public PriceLevelObject getLastBookUpdate();
 	public TopOfBookObject getTopOfBook();
 	public CuvolObject getCuvol();
-	public MarketSessionObject getCurrentSession();
-	public MarketSessionObject getExtraSession();
-	public MarketSessionObject getPreviousSession();
+	public CurrentSessionObject getCurrentSession();
+	public PreviousSessionObject getExtraSession();
+	public ExtendedSessionObject getPreviousSession();
 	
 }
