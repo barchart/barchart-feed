@@ -2,10 +2,11 @@ package com.barchart.feed.api.client.data;
 
 import org.joda.time.DateTime;
 
+import com.barchart.feed.api.commons.api.Market;
 import com.barchart.feed.api.commons.api.MarketDataObject;
 import com.barchart.feed.api.framework.inst.Instrument;
 
-public interface MarketObject extends MarketDataObject {
+public interface MarketObject extends MarketDataObject<MarketObject>, Market {
 
 	public Instrument getInstrument();
 	public DateTime getLastChangeTime();
