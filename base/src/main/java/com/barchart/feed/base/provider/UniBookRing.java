@@ -10,7 +10,7 @@ package com.barchart.feed.base.provider;
 import static com.barchart.feed.base.book.enums.MarketBookAction.*;
 import static com.barchart.util.values.provider.ValueBuilder.*;
 
-import com.barchart.feed.api.commons.enums.BookLiquidityType;
+import com.barchart.feed.api.enums.BookLiquidityType;
 import com.barchart.feed.base.book.api.MarketDoBookEntry;
 import com.barchart.feed.base.book.enums.MarketBookAction;
 import com.barchart.feed.base.book.enums.MarketBookSide;

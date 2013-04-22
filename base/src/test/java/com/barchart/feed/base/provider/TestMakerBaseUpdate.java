@@ -20,8 +20,8 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.feed.api.framework.inst.Instrument;
-import com.barchart.feed.api.framework.inst.InstrumentService;
+import com.barchart.feed.api.inst.Instrument;
+import com.barchart.feed.api.inst.InstrumentService;
 import com.barchart.feed.base.market.MockMaker;
 import com.barchart.feed.base.market.MockMarketFactory;
 import com.barchart.feed.base.market.api.Market;

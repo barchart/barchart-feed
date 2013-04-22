@@ -7,7 +7,7 @@
  */
 package com.barchart.feed.base.market.api;
 
-import com.barchart.feed.api.framework.inst.Instrument;
+import com.barchart.feed.api.inst.Instrument;
 
 public interface MarketMessage {
 

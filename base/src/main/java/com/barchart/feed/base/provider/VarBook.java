@@ -11,7 +11,7 @@ import static com.barchart.feed.base.book.enums.MarketBookSide.ASK;
 import static com.barchart.feed.base.book.enums.MarketBookSide.BID;
 import static com.barchart.feed.base.provider.MarketConst.NULL_BOOK_ENTRY;
 
-import com.barchart.feed.api.commons.enums.BookLiquidityType;
+import com.barchart.feed.api.enums.BookLiquidityType;
 import com.barchart.feed.base.book.api.MarketBook;
 import com.barchart.feed.base.book.api.MarketBookEntry;
 import com.barchart.feed.base.book.api.MarketDoBook;

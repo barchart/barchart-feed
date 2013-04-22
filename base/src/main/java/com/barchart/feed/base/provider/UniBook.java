@@ -18,7 +18,7 @@ import static com.barchart.feed.base.provider.UniBookRing.CLUE_NONE;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.feed.api.commons.enums.BookLiquidityType;
+import com.barchart.feed.api.enums.BookLiquidityType;
 import com.barchart.feed.base.book.api.MarketDoBookEntry;
 import com.barchart.feed.base.book.enums.MarketBookSide;
 import com.barchart.feed.base.book.enums.UniBookResult;

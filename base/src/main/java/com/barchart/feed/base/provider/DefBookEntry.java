@@ -12,7 +12,7 @@ import static com.barchart.feed.base.book.enums.MarketBookSide.*;
 import static com.barchart.feed.base.provider.MarketConst.*;
 import static com.barchart.util.values.provider.ValueConst.*;
 
-import com.barchart.feed.api.commons.enums.BookLiquidityType;
+import com.barchart.feed.api.enums.BookLiquidityType;
 import com.barchart.feed.base.book.api.MarketBookEntry;
 import com.barchart.feed.base.book.api.MarketDoBookEntry;
 import com.barchart.feed.base.book.enums.MarketBookAction;
