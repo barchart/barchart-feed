@@ -1,4 +1,7 @@
-package com.barchart.feed.api.market;
+package com.barchart.feed.api.data;
+
+import com.barchart.feed.api.market.Snapshot;
+import com.barchart.feed.api.market.Update;
 
 
 

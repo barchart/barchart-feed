@@ -1,4 +1,4 @@
-package com.barchart.feed.api.market;
+package com.barchart.feed.api.util;
 
 public interface Filter<M> {
 	

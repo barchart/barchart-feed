@@ -1,13 +1,12 @@
 package com.barchart.feed.api.data;
 
-import com.barchart.feed.api.Schedule;
 import com.barchart.feed.api.enums.BookLiquidityType;
 import com.barchart.feed.api.enums.BookStructureType;
 import com.barchart.feed.api.enums.MarketCurrency;
 import com.barchart.feed.api.enums.SecurityType;
 import com.barchart.feed.api.inst.GuidList;
 import com.barchart.feed.api.inst.InstrumentGUID;
-import com.barchart.feed.api.market.MarketDataObject;
+import com.barchart.feed.api.util.Schedule;
 import com.barchart.util.values.api.Fraction;
 import com.barchart.util.values.api.TimeInterval;
 

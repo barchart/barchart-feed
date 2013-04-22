@@ -7,13 +7,14 @@
  */
 package com.barchart.feed.api.fields;
 
-import com.barchart.feed.api.Schedule;
 import com.barchart.feed.api.enums.BookLiquidityType;
 import com.barchart.feed.api.enums.BookStructureType;
 import com.barchart.feed.api.enums.MarketCurrency;
 import com.barchart.feed.api.enums.SecurityType;
+import com.barchart.feed.api.exchange.Exchange;
 import com.barchart.feed.api.inst.GuidList;
 import com.barchart.feed.api.inst.InstrumentGUID;
+import com.barchart.feed.api.util.Schedule;
 import com.barchart.missive.api.Tag;
 import com.barchart.missive.core.TagFactory;
 import com.barchart.util.values.api.Fraction;
@@ -57,6 +58,10 @@ public interface InstrumentField {
 	/** price currency */
 	Tag<MarketCurrency> CURRENCY_CODE = TagFactory.create(MarketCurrency.class);
 
+	/** exchange data object */
+	Tag<Exchange> EXCHANGE = TagFactory.create(Exchange.class);
+	
+	//TODO Remove, replaced with above tag
 	/** market originating exchange identifier */
 	Tag<TextValue> EXCHANGE_CODE = TagFactory.create(TextValue.class);
 

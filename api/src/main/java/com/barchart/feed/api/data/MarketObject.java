@@ -4,7 +4,6 @@ import org.joda.time.DateTime;
 
 import com.barchart.feed.api.inst.Instrument;
 import com.barchart.feed.api.market.Market;
-import com.barchart.feed.api.market.MarketDataObject;
 
 public interface MarketObject extends MarketDataObject<MarketObject>, Market {
 

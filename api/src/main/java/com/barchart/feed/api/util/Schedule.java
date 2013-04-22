@@ -1,4 +1,4 @@
-package com.barchart.feed.api;
+package com.barchart.feed.api.util;
 
 import java.util.ArrayList;
 
