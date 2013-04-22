@@ -3,9 +3,8 @@ package com.barchart.feed.api.data;
 import org.joda.time.DateTime;
 
 import com.barchart.feed.api.inst.Instrument;
-import com.barchart.feed.api.market.Market;
 
-public interface MarketObject extends MarketDataObject<MarketObject>, Market {
+public interface MarketObject extends MarketDataObject<MarketObject> {
 
 	public Instrument getInstrument();
 	public DateTime getLastChangeTime();

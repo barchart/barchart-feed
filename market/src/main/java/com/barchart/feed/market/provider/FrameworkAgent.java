@@ -1,7 +1,9 @@
-package com.barchart.feed.api.market;
+package com.barchart.feed.market.provider;
 
 import com.barchart.feed.api.data.MarketDataObject;
 import com.barchart.feed.api.inst.Instrument;
+import com.barchart.feed.api.market.MarketAgent;
+import com.barchart.feed.api.market.MarketCallback;
 import com.barchart.feed.api.util.Filter;
 
 public interface FrameworkAgent extends Filter<Instrument>, MarketAgent {
