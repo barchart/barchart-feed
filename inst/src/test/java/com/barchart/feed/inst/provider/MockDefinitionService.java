@@ -11,7 +11,7 @@ import static com.barchart.feed.api.fields.InstrumentField.BOOK_DEPTH;
 import static com.barchart.feed.api.fields.InstrumentField.DISPLAY_FRACTION;
 import static com.barchart.feed.api.fields.InstrumentField.GUID;
 import static com.barchart.feed.api.fields.InstrumentField.MARKET_GUID;
-import static com.barchart.feed.api.fields.InstrumentField.PRICE_STEP;
+import static com.barchart.feed.api.fields.InstrumentField.TICK_SIZE;
 import static com.barchart.feed.api.fields.InstrumentField.SYMBOL;
 
 import java.util.Collection;
@@ -63,7 +63,7 @@ public class MockDefinitionService implements InstrumentService<CharSequence> {
 		tagmap1.put(GUID, INST_GUID_1);
 		tagmap1.put(MARKET_GUID, ValueBuilder.newText("1"));
 		tagmap1.put(SYMBOL, INST_SYMBOL_1);
-		tagmap1.put(PRICE_STEP, ValueBuilder.newPrice(1, -1));
+		tagmap1.put(TICK_SIZE, ValueBuilder.newPrice(1, -1));
 		tagmap1.put(BOOK_DEPTH, ValueBuilder.newSize(10));
 		tagmap1.put(DISPLAY_FRACTION, ValueBuilder.newFraction(10, -1));
 		
@@ -75,7 +75,7 @@ public class MockDefinitionService implements InstrumentService<CharSequence> {
 		tagmap2.put(GUID, INST_GUID_2);
 		tagmap2.put(MARKET_GUID, ValueBuilder.newText("2"));
 		tagmap2.put(SYMBOL, INST_SYMBOL_2);
-		tagmap2.put(PRICE_STEP, ValueBuilder.newPrice(25, -2));
+		tagmap2.put(TICK_SIZE, ValueBuilder.newPrice(25, -2));
 		tagmap2.put(BOOK_DEPTH, ValueBuilder.newSize(10));
 		tagmap2.put(DISPLAY_FRACTION, ValueBuilder.newFraction(10, -1));
 		
@@ -87,7 +87,7 @@ public class MockDefinitionService implements InstrumentService<CharSequence> {
 		tagmap3.put(GUID, INST_GUID_3);
 		tagmap3.put(MARKET_GUID, ValueBuilder.newText("3"));
 		tagmap3.put(SYMBOL,  INST_SYMBOL_3);
-		tagmap3.put(PRICE_STEP, ValueBuilder.newPrice(125, -3));
+		tagmap3.put(TICK_SIZE, ValueBuilder.newPrice(125, -3));
 		tagmap3.put(BOOK_DEPTH, ValueBuilder.newSize(10));
 		tagmap3.put(DISPLAY_FRACTION, ValueBuilder.newFraction(10, -1));
 		

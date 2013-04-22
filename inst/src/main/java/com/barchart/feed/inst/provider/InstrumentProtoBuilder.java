@@ -22,7 +22,7 @@ import static com.barchart.feed.api.fields.InstrumentField.LIFETIME;
 import static com.barchart.feed.api.fields.InstrumentField.MARKET_GUID;
 import static com.barchart.feed.api.fields.InstrumentField.MARKET_HOURS;
 import static com.barchart.feed.api.fields.InstrumentField.POINT_VALUE;
-import static com.barchart.feed.api.fields.InstrumentField.PRICE_STEP;
+import static com.barchart.feed.api.fields.InstrumentField.TICK_SIZE;
 import static com.barchart.feed.api.fields.InstrumentField.SECURITY_TYPE;
 import static com.barchart.feed.api.fields.InstrumentField.SYMBOL;
 import static com.barchart.feed.api.fields.InstrumentField.TIME_ZONE_NAME;
@@ -165,8 +165,8 @@ public final class InstrumentProtoBuilder {
 		}
 
 		/* price step / increment size / tick size */
-		if (inst.contains(PRICE_STEP)) {
-			final PriceValue step = inst.get(PRICE_STEP).norm();
+		if (inst.contains(TICK_SIZE)) {
+			final PriceValue step = inst.get(TICK_SIZE).norm();
 			builder.setMinimumPriceIncrement(build(step));
 		}
 
@@ -277,7 +277,7 @@ public final class InstrumentProtoBuilder {
 		}
 
 		if (instDef.hasMinimumPriceIncrement()) {
-			map.set(PRICE_STEP,
+			map.set(TICK_SIZE,
 					priceFromDecimal(instDef.getMinimumPriceIncrement()));
 		}
 

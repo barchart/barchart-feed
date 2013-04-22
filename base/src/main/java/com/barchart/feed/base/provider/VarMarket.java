@@ -234,7 +234,7 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 		if (cuvol.isFrozen()) {
 
 			final Instrument inst = get(INSTRUMENT);
-			final PriceValue priceStep = inst.get(InstrumentField.PRICE_STEP);
+			final PriceValue priceStep = inst.get(InstrumentField.TICK_SIZE);
 
 			final VarCuvol varCuvol = new VarCuvol(priceStep);
 			final VarCuvolLast varCuvolLast = new VarCuvolLast(varCuvol);
@@ -282,7 +282,7 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 			final BookLiquidityType type = inst.get(InstrumentField.BOOK_LIQUIDITY);
 
 			final SizeValue size = LIMIT; // inst.get(BOOK_SIZE);
-			final PriceValue step = inst.get(InstrumentField.PRICE_STEP);
+			final PriceValue step = inst.get(InstrumentField.TICK_SIZE);
 
 			final VarBook varBook = new VarBook(type, size, step);
 			final VarBookLast varBookLast = new VarBookLast(varBook);
@@ -304,7 +304,7 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 
 		final Instrument inst = get(INSTRUMENT);
 
-		final PriceValue priceStep = inst.get(InstrumentField.PRICE_STEP);
+		final PriceValue priceStep = inst.get(InstrumentField.TICK_SIZE);
 
 		if (!price.equalsScale(priceStep)) {
 			log.error("not normalized");

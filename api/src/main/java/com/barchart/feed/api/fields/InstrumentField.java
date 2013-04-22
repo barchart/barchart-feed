@@ -61,7 +61,7 @@ public interface InstrumentField {
 	Tag<TextValue> EXCHANGE_CODE = TagFactory.create(TextValue.class);
 
 	/** price step / increment size / tick size */
-	Tag<PriceValue> PRICE_STEP = TagFactory.create(PriceValue.class);
+	Tag<PriceValue> TICK_SIZE = TagFactory.create(PriceValue.class);
 
 	/** value of a future contract / stock share */
 	Tag<PriceValue> POINT_VALUE = TagFactory.create(PriceValue.class);

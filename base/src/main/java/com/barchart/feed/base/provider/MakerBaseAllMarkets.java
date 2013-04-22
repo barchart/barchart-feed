@@ -206,7 +206,7 @@ public abstract class MakerBaseAllMarkets<Message extends MarketMessage>
 			return false;
 		}
 
-		final PriceValue priceStep = instrument.get(InstrumentField.PRICE_STEP);
+		final PriceValue priceStep = instrument.get(InstrumentField.TICK_SIZE);
 
 		if (priceStep.isZero()) {
 			log.error("priceStep.isZero()");
