@@ -7,8 +7,7 @@
  */
 package com.barchart.feed.base.trade.api;
 
-import org.joda.time.DateTime;
-
+import com.barchart.feed.api.data.TradeObject;
 import com.barchart.feed.base.trade.enums.MarketTradeField;
 import com.barchart.feed.base.trade.enums.MarketTradeSequencing;
 import com.barchart.feed.base.trade.enums.MarketTradeSession;
@@ -18,15 +17,12 @@ import com.barchart.util.values.api.Value;
 
 /** represents market trade transaction */
 @NotMutable
-public interface MarketTrade extends Value<MarketTrade> {
+public interface MarketTrade extends Value<MarketTrade>, TradeObject {
 
 	<V extends Value<V>> V get(MarketTradeField<V> field);
 	
 	public MarketTradeType getTradeType();
 	public MarketTradeSession getTradeSession();
 	public MarketTradeSequencing getTradeSequencing();
-	public double getTradePrice();
-	public long getTradeSize();
-	public DateTime getTradeTime();
 
 }

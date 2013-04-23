@@ -1,6 +1,7 @@
-package com.barchart.feed.market.provider;
+package com.barchart.feed.market.api;
 
 import com.barchart.feed.api.data.MarketDataObject;
+import com.barchart.feed.api.market.Market;
 import com.barchart.feed.api.market.MarketMessage;
 import com.barchart.feed.api.market.Marketplace;
 

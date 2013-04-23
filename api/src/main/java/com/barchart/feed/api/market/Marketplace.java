@@ -10,32 +10,17 @@ public interface Marketplace {
 	void attachAgent(MarketAgent agent);
 	void updateAgent(MarketAgent agent);
 	void detachAgent(MarketAgent agent);
+	
+	<V extends MarketDataObject<V>> Builder<V> builder();
 
-	public static class Builder<V extends MarketDataObject<V>> {
+	public static interface Builder<V extends MarketDataObject<V>> {
 		
-		public Builder<V> filter(String... symbols) {
-			return this;
-		}
-		
-		public Builder<V> filter(Instrument... instruments) {
-			return this;
-		}
-		
-		public Builder<V> filter(Exchange... exchange) {
-			return this;
-		}
-		
-		public Builder<V> filter(Class<MarketMessage<?>>... message) {
-			return this;
-		}
-		
-		public Builder<V> filter(Filter<V>... filter) {
-			return this;
-		}
-		
-		public MarketAgent build(MarketCallback<V> callback) {
-			return null;
-		}
+		public Builder<V> filter(String... symbols);
+		public Builder<V> filter(Instrument... instruments);
+		public Builder<V> filter(Exchange... exchange);
+		public Builder<V> filter(Class<MarketMessage<?>>... message);
+		public Builder<V> filter(Filter<V>... filter);
+		public MarketAgent build(MarketCallback<V> callback);
 		
 	}
 	

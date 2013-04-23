@@ -6,15 +6,15 @@ import com.barchart.feed.api.inst.Instrument;
 
 public interface MarketObject extends MarketDataObject<MarketObject> {
 
-	public Instrument getInstrument();
-	public DateTime getLastChangeTime();
-	public TradeObject getLastTrade();
-	public OrderBookObject getOrderBook();
-	public PriceLevelObject getLastBookUpdate();
-	public TopOfBookObject getTopOfBook();
-	public CuvolObject getCuvol();
-	public CurrentSessionObject getCurrentSession();
-	public PreviousSessionObject getExtraSession();
-	public ExtendedSessionObject getPreviousSession();
+	public Instrument instrument();
+	public DateTime lastChangeTime();
+	public TradeObject lastTrade();
+	public OrderBookObject orderBook();
+	public PriceLevelObject lastBookUpdate();
+	public TopOfBookObject topOfBook();
+	public CuvolObject cuvol();
+	public CurrentSessionObject currentSession();
+	public PreviousSessionObject extraSession();
+	public ExtendedSessionObject previousSession();
 	
 }

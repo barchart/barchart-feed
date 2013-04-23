@@ -10,6 +10,7 @@
  */
 package com.barchart.feed.base.book.api;
 
+import com.barchart.feed.api.data.OrderBookObject;
 import com.barchart.feed.base.book.enums.MarketBookSide;
 import com.barchart.util.anno.NotMutable;
 import com.barchart.util.values.api.PriceValue;
@@ -18,7 +19,7 @@ import com.barchart.util.values.api.TimeValue;
 import com.barchart.util.values.api.Value;
 
 @NotMutable
-public interface MarketBook extends Value<MarketBook> {
+public interface MarketBook extends Value<MarketBook>, OrderBookObject {
 
 	/**
 	 * starting value for place() on bid or ask side; book entry place() can be
@@ -40,6 +41,8 @@ public interface MarketBook extends Value<MarketBook> {
 	 **/
 	TimeValue time();
 
+	
+	//TODO REMOVE METHODS???
 	/**
 	 * non null entries; ordered by price; carry place information;
 	 * 

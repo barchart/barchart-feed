@@ -7,6 +7,9 @@
  */
 package com.barchart.feed.base.provider;
 
+import com.barchart.feed.api.data.CuvolObject;
+import com.barchart.feed.api.market.Snapshot;
+import com.barchart.feed.api.market.Update;
 import com.barchart.feed.base.cuvol.api.MarketCuvol;
 import com.barchart.util.anno.NotMutable;
 import com.barchart.util.values.api.PriceValue;
@@ -58,6 +61,33 @@ public class NulCuvol extends ValueFreezer<MarketCuvol> implements MarketCuvol {
 	@Override
 	public final boolean isNull() {
 		return this == MarketConst.NULL_CUVOL;
+	}
+
+	@Override
+	public double firstPrice() {
+		return Double.NaN;
+	}
+
+	@Override
+	public double tickSize() {
+		return 0;
+	}
+
+	@Override
+	public long[] cuvols() {
+		return new long[0];
+	}
+
+	@Override
+	public Update<CuvolObject> lastUpdate() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Snapshot<CuvolObject> lastSnapshot() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

@@ -1,8 +1,7 @@
-package com.barchart.feed.market.provider;
+package com.barchart.feed.api.market;
 
 import com.barchart.feed.api.data.MarketDataObject;
 import com.barchart.feed.api.data.MarketObject;
-import com.barchart.feed.api.market.MarketMessage;
 
 public interface Market extends MarketObject {
 

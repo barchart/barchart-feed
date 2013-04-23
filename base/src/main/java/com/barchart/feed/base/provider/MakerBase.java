@@ -258,7 +258,7 @@ public abstract class MakerBase<Message extends MarketMessage> implements
 			return null;
 		}
 	};
-
+	
 	@Override
 	public synchronized final <V extends Value<V>> boolean unregister(
 			final MarketTaker<V> taker) {
@@ -311,7 +311,7 @@ public abstract class MakerBase<Message extends MarketMessage> implements
 			return null;
 		}
 	};
-
+	
 	// ########################
 	
 	@Override

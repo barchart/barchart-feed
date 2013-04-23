@@ -9,6 +9,9 @@ package com.barchart.feed.base.provider;
 
 import org.joda.time.DateTime;
 
+import com.barchart.feed.api.data.SessionObject;
+import com.barchart.feed.api.market.Snapshot;
+import com.barchart.feed.api.market.Update;
 import com.barchart.feed.base.bar.enums.MarketBarField;
 import com.barchart.util.anno.NotMutable;
 import com.barchart.util.values.api.Value;
@@ -90,5 +93,16 @@ class DefBar extends NulBar {
 	public DateTime getSessionClose() {
 		return get(MarketBarField.TRADE_DATE).asDateTime();
 	}
+	
+	@Override
+	public Update<SessionObject> lastUpdate() {
+		return null;
+	}
+
+	@Override
+	public Snapshot<SessionObject> lastSnapshot() {
+		return null;
+	}
+
 
 }
