@@ -10,7 +10,7 @@
  */
 package com.barchart.feed.base.book.api;
 
-import com.barchart.feed.api.data.OrderBookObject;
+import com.barchart.feed.api.market.data.OrderBookObject;
 import com.barchart.feed.base.book.enums.MarketBookSide;
 import com.barchart.util.anno.NotMutable;
 import com.barchart.util.values.api.PriceValue;

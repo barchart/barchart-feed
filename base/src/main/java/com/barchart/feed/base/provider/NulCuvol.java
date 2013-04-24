@@ -7,10 +7,11 @@
  */
 package com.barchart.feed.base.provider;
 
-import com.barchart.feed.api.data.CuvolObject;
 import com.barchart.feed.api.market.Snapshot;
 import com.barchart.feed.api.market.Update;
+import com.barchart.feed.api.market.data.CuvolObject;
 import com.barchart.feed.base.cuvol.api.MarketCuvol;
+import com.barchart.missive.api.Tag;
 import com.barchart.util.anno.NotMutable;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
@@ -86,6 +87,12 @@ public class NulCuvol extends ValueFreezer<MarketCuvol> implements MarketCuvol {
 
 	@Override
 	public Snapshot<CuvolObject> lastSnapshot() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Tag<CuvolObject> tag() {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -1,4 +1,4 @@
-package com.barchart.feed.api.data;
+package com.barchart.feed.api.market.data;
 
 import com.barchart.feed.api.enums.MarketSide;
 

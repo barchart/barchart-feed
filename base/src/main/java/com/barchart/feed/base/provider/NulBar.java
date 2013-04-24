@@ -9,11 +9,12 @@ package com.barchart.feed.base.provider;
 
 import org.joda.time.DateTime;
 
-import com.barchart.feed.api.data.SessionObject;
 import com.barchart.feed.api.market.Snapshot;
 import com.barchart.feed.api.market.Update;
+import com.barchart.feed.api.market.data.SessionObject;
 import com.barchart.feed.base.bar.api.MarketBar;
 import com.barchart.feed.base.bar.enums.MarketBarField;
+import com.barchart.missive.api.Tag;
 import com.barchart.util.anno.NotMutable;
 import com.barchart.util.values.api.Value;
 import com.barchart.util.values.provider.ValueFreezer;
@@ -110,6 +111,12 @@ public class NulBar extends ValueFreezer<MarketBar> implements MarketBar {
 
 	@Override
 	public Snapshot<SessionObject> lastSnapshot() {
+		return null;
+	}
+
+	@Override
+	public Tag<SessionObject> tag() {
+		// TODO Auto-generated method stub
 		return null;
 	}
 

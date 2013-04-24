@@ -1,15 +1,19 @@
 package com.barchart.feed.base.provider;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-import com.barchart.feed.api.data.MarketDataObject;
+import com.barchart.feed.api.exchange.Exchange;
 import com.barchart.feed.api.inst.Instrument;
-import com.barchart.feed.api.market.Market;
+import com.barchart.feed.api.inst.InstrumentService;
 import com.barchart.feed.api.market.MarketAgent;
 import com.barchart.feed.api.market.MarketCallback;
 import com.barchart.feed.api.market.Marketplace;
-import com.barchart.feed.base.market.api.MarketFactory;
+import com.barchart.feed.api.market.data.MarketDataObject;
+import com.barchart.feed.api.util.Filter;
 import com.barchart.feed.base.market.api.MarketMessage;
 import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketEvent;
@@ -17,39 +21,18 @@ import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.util.values.api.PriceValue;
 
 public abstract class MarketplaceImpl<Message extends MarketMessage> 
-		extends MakerBase<Message> implements Marketplace {
+		implements Marketplace {
+	
+	private final MakerBase<Message> maker;
+	final InstrumentService<String> instService;
 	
 	final ConcurrentMap<MarketAgent, MarketTaker<?>> agentMap =
 			new ConcurrentHashMap<MarketAgent, MarketTaker<?>>();
 	
-	protected MarketplaceImpl(MarketFactory factory) {
-		super(factory);
-	}
-	
-	/* ***** ***** ***** ***** ***** */
-	
-	@Override
-	public void attachAgent(final MarketAgent agent) {
-		
-		if(agentMap.containsKey(agent)) {
-			return;
-		}
-		
-		final TakerAgent takerAgent = new TakerAgent(agent);
-		
-		agentMap.put(agent, takerAgent.taker());
-		register(takerAgent.taker());
-		
-	}
-	
-	@Override
-	public void updateAgent(final MarketAgent agent) {
-		
-	}
-
-	@Override
-	public void detachAgent(final MarketAgent agent) {
-		
+	protected MarketplaceImpl(MakerBase<Message> maker, 
+			InstrumentService<String> instService) {
+		this.maker = maker;
+		this.instService = instService;
 	}
 	
 	/* ***** ***** ***** ***** ***** */
@@ -70,47 +53,27 @@ public abstract class MarketplaceImpl<Message extends MarketMessage>
 
 		@Override
 		public void activate() {
-			register(taker);
+			maker.register(taker);
 		}
 
 		@Override
 		public void update() {
-			MarketplaceImpl.super.update(taker);
+			maker.update(taker);
 		}
 		
 		@Override
 		public void deactivate() {
-			unregister(taker);
+			maker.unregister(taker);
 		}
 
 		@Override
 		public void dismiss() {
-			unregister(taker);
+			maker.unregister(taker);
 		}
 
-		// These methods will be moved out, IGNORE
-		
-		@Override
-		public <V extends MarketDataObject<V>> MarketCallback<V> callback() {
-			return null;
-		}
-		@Override
-		public void attach(Market market) {
-			// Do nothing
-		}
-		@Override
-		public void update(Market market) {
-			// Do nothing
-		}
-		@Override
-		public void detach(Market market) {
-			// Do nothing
-		}
-		
 	}
 
 	static MarketTaker<?> makeTaker(final MarketAgent agent) {
-		
 		
 		return new MarketTaker<PriceValue>() {
 
@@ -142,5 +105,103 @@ public abstract class MarketplaceImpl<Message extends MarketMessage>
 		};
 	}
 	
+	private static Map<Class<com.barchart.feed.api.market.MarketMessage<?>>, MarketEvent> eventMap = 
+			new HashMap<Class<com.barchart.feed.api.market.MarketMessage<?>>, MarketEvent>();
+	
+	
+	
+	private class MBuilder<V extends MarketDataObject<V>> implements Builder<V> {
+		
+		private volatile Map<Instrument, Void> insts = new HashMap<Instrument, Void>();
+		private volatile Map<Exchange, Void> exchs = new HashMap<Exchange, Void>();
+		private volatile Map<MarketEvent, Void> events = new HashMap<MarketEvent, Void>();
+		private volatile Map<Filter<?>, Void> filMap = new HashMap<Filter<?>, Void>();
+		
+		@Override
+		public Builder<V> filter(String... symbols) {
+			
+			if(symbols == null) {
+				return this;
+			}
+			
+			for(final Instrument i : instService.lookup(Arrays.asList(symbols)).values()) {
+				if(i != null) {
+					insts.put(i, null);
+				}
+			}
+			
+			return this;
+		}
+
+		@Override
+		public Builder<V> filter(Instrument... instruments) {
+			
+			if(instruments == null) {
+				return this;
+			}
+			
+			for(final Instrument i : instruments) {
+				if(i != null) {
+					insts.put(i, null);
+				}
+			}
+			return this;
+		}
+
+		@Override
+		public Builder<V> filter(Exchange... exchanges) {
+			
+			if(exchanges == null) {
+				return this;
+			}
+			
+			for(final Exchange e : exchanges) {
+				if(e != null) {
+					exchs.put(e, null);
+				}
+			}
+			
+			return this;
+		}
+
+		@Override
+		public Builder<V> filter(
+				Class<com.barchart.feed.api.market.MarketMessage<?>>... messageTypes) {
+			
+			if(messageTypes == null) {
+				return this;
+			}
+			
+			for(Class<com.barchart.feed.api.market.MarketMessage<?>> m : messageTypes) {
+				if(m != null) {
+					events.put(eventMap.get(m), null);
+				}
+			}
+			return this;
+		}
+
+		@Override
+		public Builder<V> filter(Filter<?>... filters) {
+			
+			if(filters == null) {
+				return this;
+			}
+			
+			for(final Filter<?> f : filters) {
+				filMap.put(f, null);
+			}
+			
+			return this;
+		}
+
+		@Override
+		public MarketAgent build(MarketCallback<V> callback) {
+			
+			
+			
+			return null;
+		}
+		
+	}
 
 }

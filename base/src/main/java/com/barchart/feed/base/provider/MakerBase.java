@@ -71,7 +71,6 @@ public abstract class MakerBase<Message extends MarketMessage> implements
 	protected MakerBase(final MarketFactory factory) {
 		this.factory = factory;
 	}
-
 	
 	// register super taker
 	// make and store regTaker
@@ -117,6 +116,7 @@ public abstract class MakerBase<Message extends MarketMessage> implements
 				notifyRegListeners(market);
 
 			}
+			
 		} else {
 			log.warn("already registered : {}", taker);
 		}

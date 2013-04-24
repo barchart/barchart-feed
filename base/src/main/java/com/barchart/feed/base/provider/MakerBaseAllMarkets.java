@@ -134,9 +134,7 @@ public abstract class MakerBaseAllMarkets<Message extends MarketMessage>
 		@Override
 		public void onMarketEvent(final MarketEvent event,
 				final Instrument instrument, final Market market) {
-
 			fireEvents(marketMap.get(instrument), event);
-
 		}
 
 	};
@@ -150,8 +148,6 @@ public abstract class MakerBaseAllMarkets<Message extends MarketMessage>
 		final Instrument instrument = message.getInstrument();
 
 		if (!isValid(instrument)) {
-//			log.debug("Instrument {} not valid",
-//					instrument.get(InstrumentField.SYMBOL));
 			return;
 		}
 

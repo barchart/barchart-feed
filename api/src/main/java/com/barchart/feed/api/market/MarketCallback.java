@@ -1,6 +1,6 @@
 package com.barchart.feed.api.market;
 
-import com.barchart.feed.api.data.MarketDataObject;
+import com.barchart.feed.api.market.data.MarketDataObject;
 
 /*
  * Will extends base missive class Callback<V extends TagMap>

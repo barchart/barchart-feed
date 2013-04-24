@@ -9,9 +9,9 @@ package com.barchart.feed.base.provider;
 
 import org.joda.time.DateTime;
 
-import com.barchart.feed.api.data.SessionObject;
 import com.barchart.feed.api.market.Snapshot;
 import com.barchart.feed.api.market.Update;
+import com.barchart.feed.api.market.data.SessionObject;
 import com.barchart.feed.base.bar.enums.MarketBarField;
 import com.barchart.util.anno.NotMutable;
 import com.barchart.util.values.api.Value;

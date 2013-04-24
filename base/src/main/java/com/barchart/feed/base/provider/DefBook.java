@@ -9,14 +9,15 @@ package com.barchart.feed.base.provider;
 
 import static com.barchart.feed.base.provider.MarketConst.NULL_BOOK_ENTRY;
 
-import com.barchart.feed.api.data.OrderBookObject;
-import com.barchart.feed.api.data.PriceLevelObject;
 import com.barchart.feed.api.enums.MarketSide;
 import com.barchart.feed.api.market.Snapshot;
 import com.barchart.feed.api.market.Update;
+import com.barchart.feed.api.market.data.OrderBookObject;
+import com.barchart.feed.api.market.data.PriceLevelObject;
 import com.barchart.feed.base.book.api.MarketBook;
 import com.barchart.feed.base.book.api.MarketBookEntry;
 import com.barchart.feed.base.book.enums.MarketBookSide;
+import com.barchart.missive.api.Tag;
 import com.barchart.util.anno.NotMutable;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
@@ -269,6 +270,12 @@ public class DefBook extends ValueFreezer<MarketBook> implements MarketBook {
 
 	@Override
 	public Snapshot<OrderBookObject> lastSnapshot() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Tag<OrderBookObject> tag() {
 		// TODO Auto-generated method stub
 		return null;
 	}
