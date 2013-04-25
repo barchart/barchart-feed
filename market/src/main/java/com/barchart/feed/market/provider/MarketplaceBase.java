@@ -11,7 +11,7 @@ import com.barchart.feed.api.data.framework.Instrument;
 import com.barchart.feed.api.data.framework.Market;
 import com.barchart.feed.api.market.FrameworkAgent;
 import com.barchart.feed.api.market.Marketplace;
-import com.barchart.feed.api.message.MarketMessage;
+import com.barchart.feed.api.message.Message;
 
 public class MarketplaceBase implements Marketplace {
 
@@ -121,7 +121,7 @@ public class MarketplaceBase implements Marketplace {
 	
 	@Override
 	public <V extends FrameworkElement<V>> void handle(
-			final MarketMessage<V> message) {
+			final Message<V> message) {
 		
 		
 		

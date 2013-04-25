@@ -6,5 +6,7 @@ import com.barchart.missive.api.TagMap;
 
 public interface Session extends TagMap, SessionObject, 
 		FrameworkElement<Session> {
+	
+	
 
 }

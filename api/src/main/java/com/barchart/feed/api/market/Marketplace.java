@@ -4,7 +4,7 @@ import com.barchart.feed.api.data.FrameworkElement;
 import com.barchart.feed.api.data.client.MarketDataObject;
 import com.barchart.feed.api.data.framework.Instrument;
 import com.barchart.feed.api.exchange.Exchange;
-import com.barchart.feed.api.message.MarketMessage;
+import com.barchart.feed.api.message.Message;
 import com.barchart.feed.api.util.Filter;
 
 
@@ -16,7 +16,7 @@ public interface Marketplace {
 	
 	// dispatch? 
 	// This will be protected in impl
-	<V extends FrameworkElement<V>> void handle(MarketMessage<V> message);
+	<V extends FrameworkElement<V>> void handle(Message<V> message);
 	
 	<V extends FrameworkElement<V>> Builder<V> builder();
 
@@ -25,7 +25,7 @@ public interface Marketplace {
 		public Builder<V> filter(String... symbols);
 		public Builder<V> filter(Instrument... instruments);
 		public Builder<V> filter(Exchange... exchange);
-		public Builder<V> filter(Class<MarketMessage<?>>... message);
+		public Builder<V> filter(Class<Message<?>>... message);
 		public Builder<V> filter(Filter<?>... filter);
 		
 		// Not sure here

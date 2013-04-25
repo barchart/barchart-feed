@@ -21,7 +21,7 @@ import com.barchart.feed.api.data.framework.Instrument;
 import com.barchart.feed.api.data.framework.Market;
 import com.barchart.feed.api.fields.MarketField;
 import com.barchart.feed.api.market.FrameworkAgent;
-import com.barchart.feed.api.message.MarketMessage;
+import com.barchart.feed.api.message.Message;
 import com.barchart.feed.api.message.Snapshot;
 import com.barchart.feed.api.message.Update;
 import com.barchart.missive.api.Tag;
@@ -33,10 +33,6 @@ public class MarketBase extends ObjectMap implements Market {
 	private volatile Update<Market> lastUpdate = null;
 	private volatile Snapshot<Market> lastSnapshot = null;
 	
-	// Fake tagMap
-	private final ConcurrentMap<Tag<?>, FrameworkElement<?>> tagMap = 
-			new ConcurrentHashMap<Tag<?>, FrameworkElement<?>>();
-	
 	private final ConcurrentMap<Tag<?>, Set<FrameworkAgent>> agentMap = 
 			new ConcurrentHashMap<Tag<?>, Set<FrameworkAgent>>();
 	
@@ -47,6 +43,13 @@ public class MarketBase extends ObjectMap implements Market {
 	
 	public MarketBase(final Instrument instrument) {
 		this.instrument = instrument;
+	}
+	
+	@Override
+	public void init() {
+		
+		// INIT SHIT SON
+		
 	}
 	
 	/* ***** ***** ***** ***** ***** ***** ***** */
@@ -132,14 +135,14 @@ public class MarketBase extends ObjectMap implements Market {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public <V extends FrameworkElement<V>> void handle(
-			final MarketMessage<V> message) {
+			final Message<V> message) {
 		
 		// Check instrument?
 		
 		if(Snapshot.class.isAssignableFrom(message.getClass())) {
-			tagMap.get(message.tag()).snapshot((Snapshot)message);
+			get(message.tag()).snapshot((Snapshot)message);
 		} else if(Update.class.isAssignableFrom(message.getClass())) {
-			tagMap.get(message.tag()).update((Update)message);
+			get(message.tag()).update((Update)message);
 		} else {
 			// Unknown
 		}
@@ -153,12 +156,16 @@ public class MarketBase extends ObjectMap implements Market {
 		
 		lastUpdate = update;
 		
+		
+		
 	}
 
 	@Override
 	public void snapshot(final Snapshot<Market> snapshot) {
 
 		lastSnapshot = snapshot;
+		
+		
 		
 	}
 
@@ -194,14 +201,12 @@ public class MarketBase extends ObjectMap implements Market {
 
 	@Override
 	public TradeObject lastTrade() {
-		// TODO Auto-generated method stub
-		return null;
+		return get(MarketField.LAST_TRADE);
 	}
 
 	@Override
 	public OrderBookObject orderBook() {
-		// TODO Auto-generated method stub
-		return null;
+		return get(MarketField.ORDER_BOOK);
 	}
 
 	@Override

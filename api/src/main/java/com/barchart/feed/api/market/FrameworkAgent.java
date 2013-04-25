@@ -3,7 +3,7 @@ package com.barchart.feed.api.market;
 import com.barchart.feed.api.data.FrameworkElement;
 import com.barchart.feed.api.data.framework.Instrument;
 import com.barchart.feed.api.data.framework.Market;
-import com.barchart.feed.api.message.MarketMessage;
+import com.barchart.feed.api.message.Message;
 import com.barchart.feed.api.util.Filter;
 import com.barchart.missive.api.Tag;
 
@@ -22,7 +22,7 @@ public interface FrameworkAgent extends Filter<Instrument>, MarketAgent {
 	// And makes Market responsible for getting the data object to
 	// pass into the callback
 	<M extends FrameworkElement<M>> void handle(Market market, 
-			MarketMessage<?> message, FrameworkElement<M> data);
+			Message<?> message, FrameworkElement<M> data);
 	
 	void attach(Market market);
 	void update(Market market);

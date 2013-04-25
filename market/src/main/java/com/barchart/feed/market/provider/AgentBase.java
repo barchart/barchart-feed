@@ -10,7 +10,7 @@ import com.barchart.feed.api.data.framework.Instrument;
 import com.barchart.feed.api.data.framework.Market;
 import com.barchart.feed.api.market.FrameworkAgent;
 import com.barchart.feed.api.market.Marketplace;
-import com.barchart.feed.api.message.MarketMessage;
+import com.barchart.feed.api.message.Message;
 import com.barchart.missive.api.Tag;
 
 public class AgentBase implements FrameworkAgent {
@@ -72,7 +72,7 @@ public class AgentBase implements FrameworkAgent {
 	
 	@Override
 	public <M extends FrameworkElement<M>> void handle(final Market market,
-			final MarketMessage<?> message, final FrameworkElement<M> data) {
+			final Message<?> message, final FrameworkElement<M> data) {
 		
 		if(market == null || message == null || data == null) {
 			return;
