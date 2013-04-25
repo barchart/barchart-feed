@@ -12,18 +12,12 @@ import static com.barchart.feed.base.book.enums.MarketBookSide.BID;
 import static com.barchart.feed.base.provider.MarketConst.NULL_BOOK_ENTRY;
 
 import com.barchart.feed.api.enums.BookLiquidityType;
-import com.barchart.feed.api.enums.MarketSide;
-import com.barchart.feed.api.market.Snapshot;
-import com.barchart.feed.api.market.Update;
-import com.barchart.feed.api.market.data.OrderBookObject;
-import com.barchart.feed.api.market.data.PriceLevelObject;
 import com.barchart.feed.base.book.api.MarketBook;
 import com.barchart.feed.base.book.api.MarketBookEntry;
 import com.barchart.feed.base.book.api.MarketDoBook;
 import com.barchart.feed.base.book.api.MarketDoBookEntry;
 import com.barchart.feed.base.book.enums.MarketBookSide;
 import com.barchart.feed.base.book.enums.UniBookResult;
-import com.barchart.missive.api.Tag;
 import com.barchart.util.anno.Mutable;
 import com.barchart.util.anno.ThreadSafe;
 import com.barchart.util.values.api.PriceValue;
@@ -109,54 +103,6 @@ public final class VarBook extends UniBook<MarketBook> implements MarketDoBook {
 	@Override
 	public UniBookResult setSnapshot(final MarketDoBookEntry[] entries) {
 		throw new UnsupportedOperationException("UNUSED");
-	}
-
-	@Override
-	public PriceLevelObject[] entries(MarketSide side) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public double priceTop(MarketSide side) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public long sizeTop(MarketSide side) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public long[] sizes(MarketSide side) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public double gap() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public Update<OrderBookObject> lastUpdate() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Snapshot<OrderBookObject> lastSnapshot() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Tag<OrderBookObject> tag() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }

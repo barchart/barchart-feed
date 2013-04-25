@@ -6,54 +6,65 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import com.barchart.feed.api.inst.Instrument;
+import com.barchart.feed.api.market.FrameworkAgent;
+import com.barchart.feed.api.market.Marketplace;
+import com.barchart.feed.api.market.Market;
 import com.barchart.feed.api.market.MarketMessage;
 import com.barchart.feed.api.market.data.MarketDataObject;
-import com.barchart.feed.market.api.FrameworkAgent;
-import com.barchart.feed.market.api.FrameworkMarketplace;
-import com.barchart.feed.market.api.Market;
 import com.barchart.missive.api.Tag;
 
 public class AgentBase implements FrameworkAgent {
 	
-	// Not exactly sure what I will do with markets, but
-	// it could allow for lazy removal of agents
 	private final Set<Market> markets = Collections.newSetFromMap(
 			new ConcurrentHashMap<Market, Boolean>());
 	
 	private final AtomicBoolean active = new AtomicBoolean(true);
 	private final AtomicBoolean dismiss = new AtomicBoolean(false);
-	
 
 	/* ***** ***** ***** ***** ***** ***** ***** */
 	
 	@Override
-	public void attach(final Market market) {
+	public synchronized void attach(final Market market) {
 		
-		if(market == null) {
+		if(market == null || dismiss.get()) {
+			return;
+		}
+		
+		if(markets.contains(market)) {
+			update(market);
 			return;
 		}
 		
 		markets.add(market);
-	}
-
-	// This seems redundant
-	@Override
-	public void update(final Market market) {
+		market.attach(this);
 		
-		if(market == null) {
+	}
+	
+	@Override
+	public synchronized void update(final Market market) {
+		
+		if(market == null || dismiss.get()) {
 			return;
 		}
 		
+		if(!markets.contains(market)) {
+			attach(market);
+			return;
+		}
+		
+		market.update(this);
+		
 	}
 
 	@Override
-	public void detach(final Market market) {
+	public synchronized void detach(final Market market) {
 		
-		if(market == null) {
+		if(market == null || !markets.contains(market)) {
 			return;
 		}
 		
 		markets.remove(market);
+		market.detach(this);
 		
 	}
 
@@ -63,21 +74,17 @@ public class AgentBase implements FrameworkAgent {
 	public <M extends MarketDataObject<M>> void handle(final Market market,
 			final MarketMessage<?> message, final MarketDataObject<M> data) {
 		
-		if(!active.get()) {
+		if(market == null || message == null || data == null) {
+			return;
+		}
+		
+		if(!active.get() || !markets.contains(market)) {
 			return;
 		}
 		
 		if(dismiss.get()) {
 			market.detach(this);
 			return;
-		}
-		
-		// check if market is registered
-		// not sure what it would mean if handle was called on an unregistered market
-		if(!markets.contains(market)) {
-			// market.attach(this);
-			// or
-			// market.detach(this);
 		}
 		
 		// CALLBACK AT ME BRO
@@ -102,12 +109,12 @@ public class AgentBase implements FrameworkAgent {
 	
 	/* ***** ***** ***** ***** ***** ***** ***** */
 	
-	private volatile FrameworkMarketplace marketplace = null;
+	private volatile Marketplace marketplace = null;
 	
 	// This should go away if the marketplace provides the agent builders
 	// For now we'll just have it
 	@Override
-	public void bindMarketplace(final FrameworkMarketplace marketplace) {
+	public void bindMarketplace(final Marketplace marketplace) {
 		this.marketplace = marketplace;
 	}
 
@@ -133,6 +140,9 @@ public class AgentBase implements FrameworkAgent {
 	@Override
 	public void update() {
 		// ??? This is a different concept than the activate / deactivate
+		
+		// This should perform work on Marketplace,
+		
 	}
 
 	@Override

@@ -7,7 +7,6 @@
  */
 package com.barchart.feed.base.bar.api;
 
-import com.barchart.feed.api.market.data.SessionObject;
 import com.barchart.feed.base.bar.enums.MarketBarField;
 import com.barchart.util.values.api.Value;
 
@@ -16,7 +15,7 @@ import com.barchart.util.values.api.Value;
  * 
  * bar can be for current or previous day;
  */
-public interface MarketBar extends Value<MarketBar>, SessionObject{
+public interface MarketBar extends Value<MarketBar> {
 
 	<V extends Value<V>> V get(MarketBarField<V> field);
 	

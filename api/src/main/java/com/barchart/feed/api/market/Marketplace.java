@@ -5,7 +5,16 @@ import com.barchart.feed.api.inst.Instrument;
 import com.barchart.feed.api.market.data.MarketDataObject;
 import com.barchart.feed.api.util.Filter;
 
+
 public interface Marketplace {
+
+	void attachAgent(FrameworkAgent agent);
+	void updateAgent(FrameworkAgent agent);
+	void detachAgent(FrameworkAgent agent);
+	
+	// dispatch? 
+	// This will be protected in impl
+	<V extends MarketDataObject<V>> void handle(MarketMessage<V> message);
 	
 	<V extends MarketDataObject<V>> Builder<V> builder();
 

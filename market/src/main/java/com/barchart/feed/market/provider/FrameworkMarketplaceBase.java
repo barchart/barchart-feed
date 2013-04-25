@@ -7,13 +7,13 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import com.barchart.feed.api.inst.Instrument;
+import com.barchart.feed.api.market.FrameworkAgent;
+import com.barchart.feed.api.market.Marketplace;
+import com.barchart.feed.api.market.Market;
 import com.barchart.feed.api.market.MarketMessage;
 import com.barchart.feed.api.market.data.MarketDataObject;
-import com.barchart.feed.market.api.FrameworkAgent;
-import com.barchart.feed.market.api.FrameworkMarketplace;
-import com.barchart.feed.market.api.Market;
 
-public class FrameworkMarketplaceBase implements FrameworkMarketplace {
+public class FrameworkMarketplaceBase implements Marketplace {
 
 	private final Set<FrameworkAgent> agents = Collections.newSetFromMap(
 			new ConcurrentHashMap<FrameworkAgent, Boolean>());
@@ -33,7 +33,7 @@ public class FrameworkMarketplaceBase implements FrameworkMarketplace {
 			return;
 		}
 		
-		/* Agent already attached */
+		/* Agent already attached just update */
 		if(agents.contains(agent)) {
 			updateAgent(agent);
 			return;
@@ -47,8 +47,8 @@ public class FrameworkMarketplaceBase implements FrameworkMarketplace {
 		for(final Entry<Instrument, Market> e : marketMap.entrySet()) {
 			
 			if(agent.filter(e.getKey())) {
+				/* Agent will attach itself to market */
 				agent.attach(e.getValue());
-				e.getValue().attach(agent);
 			}
 			
 		}
@@ -62,7 +62,18 @@ public class FrameworkMarketplaceBase implements FrameworkMarketplace {
 			return;
 		}
 		
+		if(!agents.contains(agent)) {
+			attachAgent(agent);
+			return;
+		}
+		
 		for(final Entry<Instrument, Market> e : marketMap.entrySet()) {
+			
+			if(agent.filter(e.getKey())) {
+				agent.attach(e.getValue());
+			} else {
+				agent.detach(e.getValue());
+			}
 			
 		}
 		
@@ -71,11 +82,15 @@ public class FrameworkMarketplaceBase implements FrameworkMarketplace {
 	@Override
 	public synchronized void detachAgent(final FrameworkAgent agent) {
 		
-		if(agent == null) {
+		if(agent == null || !agents.contains(agent)) {
 			return;
 		}
 		
+		for(final Market market : markets) {
+			agent.detach(market);
+		}
 		
+		agents.remove(agent);
 		
 	}
 	
@@ -83,16 +98,9 @@ public class FrameworkMarketplaceBase implements FrameworkMarketplace {
 	
 	// static Market buildMarket(final Instrument inst);
 	
-	@Override
-	public synchronized void attachMarket(final Market market) {
+	protected synchronized void attachMarket(final Market market) {
 		
-		if(market == null) {
-			return;
-		}
-		
-		/* Market already attached */
-		if(markets.contains(market)) {
-			updateMarket(market);
+		if(market == null || markets.contains(market)) {
 			return;
 		}
 		
@@ -109,15 +117,13 @@ public class FrameworkMarketplaceBase implements FrameworkMarketplace {
 		
 	}
 
+	/* ***** ***** ***** ***** ***** ***** ***** */
+	
 	@Override
-	public synchronized void updateMarket(final Market market) {
-		// TODO Auto-generated method stub
+	public <V extends MarketDataObject<V>> void handle(
+			final MarketMessage<V> message) {
 		
-	}
-
-	@Override
-	public synchronized void detachMarket(final Market market) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	
@@ -129,11 +135,6 @@ public class FrameworkMarketplaceBase implements FrameworkMarketplace {
 		return null;
 	}
 
-	@Override
-	public <V extends MarketDataObject<V>> void handle(MarketMessage<V> message) {
-		
-		
-		
-	}
+	
 
 }

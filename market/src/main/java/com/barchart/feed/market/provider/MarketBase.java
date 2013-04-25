@@ -1,6 +1,7 @@
 package com.barchart.feed.market.provider;
 
-import java.util.List;
+import java.util.Collections;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -8,6 +9,8 @@ import org.joda.time.DateTime;
 
 import com.barchart.feed.api.fields.MarketField;
 import com.barchart.feed.api.inst.Instrument;
+import com.barchart.feed.api.market.FrameworkAgent;
+import com.barchart.feed.api.market.Market;
 import com.barchart.feed.api.market.MarketMessage;
 import com.barchart.feed.api.market.Snapshot;
 import com.barchart.feed.api.market.Update;
@@ -21,8 +24,6 @@ import com.barchart.feed.api.market.data.PreviousSessionObject;
 import com.barchart.feed.api.market.data.PriceLevelObject;
 import com.barchart.feed.api.market.data.TopOfBookObject;
 import com.barchart.feed.api.market.data.TradeObject;
-import com.barchart.feed.market.api.FrameworkAgent;
-import com.barchart.feed.market.api.Market;
 import com.barchart.missive.api.Tag;
 
 public class MarketBase implements Market {
@@ -35,38 +36,105 @@ public class MarketBase implements Market {
 	private final ConcurrentMap<Tag<?>, MarketDataObject<?>> tagMap = 
 			new ConcurrentHashMap<Tag<?>, MarketDataObject<?>>();
 	
-	private final ConcurrentMap<Tag<?>, List<FrameworkAgent>> agentMap = 
-			new ConcurrentHashMap<Tag<?>, List<FrameworkAgent>>();
+	private final ConcurrentMap<Tag<?>, Set<FrameworkAgent>> agentMap = 
+			new ConcurrentHashMap<Tag<?>, Set<FrameworkAgent>>();
+	
+	private final Set<FrameworkAgent> agents = Collections.newSetFromMap(
+			new ConcurrentHashMap<FrameworkAgent, Boolean>());
+	
+	private final Instrument instrument;
+	
+	public MarketBase(final Instrument instrument) {
+		this.instrument = instrument;
+	}
 	
 	/* ***** ***** ***** ***** ***** ***** ***** */
 	
+	/*
+	 * Attach and detach here just clear references to the agent.
+	 * 
+	 */
+	
 	@Override
-	public void attach(final FrameworkAgent agent) {
+	public synchronized void attach(final FrameworkAgent agent) {
 		
 		if(agent == null) {
 			return;
 		}
 		
+		if(agents.contains(agent)) {
+			update(agent);
+			return;
+		}
+		
+		agents.add(agent);
+		
 		for(final Tag<?> tag : agent.tagsToListenTo()) {
-			
-			//if agentMap contains tag
 			agentMap.get(tag).add(agent);
-			
 		}
 		
 	}
 	
 	@Override
-	public void detach(final FrameworkAgent agent) {
+	public synchronized void update(final FrameworkAgent agent) {
 		
+		if(agent == null) {
+			return;
+		}
 		
+		if(!agents.contains(agent)) {
+			attach(agent);
+			return;
+		}
+		
+		for(final Tag<?> t : agentMap.keySet()) {
+			
+			/* If tag's set has the agent, but the agent is no longer listening to the tag */
+			if(agentMap.get(t).contains(agent) && !contains(t, agent.tagsToListenTo())) {
+				agentMap.get(t).remove(agent);
+			}
+			
+			/* If tag's set is missing the agent and the agent is now listening to the tag */
+			if(!agentMap.get(t).contains(agent) && contains(t, agent.tagsToListenTo())) {
+				agentMap.get(t).add(agent);
+			}
+		}
 		
 	}
+	
+	private <V> boolean contains(V v, V[] array) {
+		for(final V vv : array) {
+			if(vv.equals(v)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	@Override
+	public synchronized void detach(final FrameworkAgent agent) {
+		
+		if(agent == null) {
+			return;
+		}
+		
+		/* Remove agent from all data structures */
+		for(final Tag<?> t : agentMap.keySet()) {
+			agentMap.get(t).remove(agent);
+		}
+		
+		agents.remove(agent);
+		
+	}
+	
+	/* ***** ***** ***** ***** ***** ***** ***** */
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public <V extends MarketDataObject<V>> void handle(
 			final MarketMessage<V> message) {
+		
+		// Check instrument?
 		
 		if(Snapshot.class.isAssignableFrom(message.getClass())) {
 			tagMap.get(message.tag()).snapshot((Snapshot)message);
@@ -75,6 +143,7 @@ public class MarketBase implements Market {
 		} else {
 			// Unknown
 		}
+		
 	}
 	
 	/* ***** ***** ***** ***** ***** ***** ***** */
@@ -114,8 +183,7 @@ public class MarketBase implements Market {
 	
 	@Override
 	public Instrument instrument() {
-		// TODO Auto-generated method stub
-		return null;
+		return instrument;
 	}
 
 	@Override

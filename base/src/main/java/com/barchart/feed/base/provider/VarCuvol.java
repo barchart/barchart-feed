@@ -7,9 +7,6 @@
  */
 package com.barchart.feed.base.provider;
 
-import com.barchart.feed.api.market.Snapshot;
-import com.barchart.feed.api.market.Update;
-import com.barchart.feed.api.market.data.CuvolObject;
 import com.barchart.feed.base.cuvol.api.MarketCuvolEntry;
 import com.barchart.feed.base.cuvol.api.MarketDoCuvol;
 import com.barchart.util.anno.Mutable;
@@ -134,35 +131,4 @@ public final class VarCuvol extends NulCuvol implements MarketDoCuvol {
 		map.clear();
 	}
 	
-	@Override
-	public double firstPrice() {
-		return map.keyHead().asDouble();
-	}
-
-	@Override
-	public double tickSize() {
-		return map.keyStep().asDouble();
-	}
-
-	@Override
-	public long[] cuvols() {
-		long[] cuvols = new long[map.size()];
-		for(int i = 0; i < map.size(); i++) {
-			cuvols[i] = map.get(i).asLong();
-		}
-		return cuvols;
-	}
-
-	@Override
-	public Update<CuvolObject> lastUpdate() {
-		
-		return null;
-	}
-
-	@Override
-	public Snapshot<CuvolObject> lastSnapshot() {
-		
-		return null;
-	}
-
 }

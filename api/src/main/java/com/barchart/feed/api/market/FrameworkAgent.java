@@ -1,15 +1,13 @@
-package com.barchart.feed.market.api;
+package com.barchart.feed.api.market;
 
 import com.barchart.feed.api.inst.Instrument;
-import com.barchart.feed.api.market.MarketAgent;
-import com.barchart.feed.api.market.MarketMessage;
 import com.barchart.feed.api.market.data.MarketDataObject;
 import com.barchart.feed.api.util.Filter;
 import com.barchart.missive.api.Tag;
 
 public interface FrameworkAgent extends Filter<Instrument>, MarketAgent {
 
-	void bindMarketplace(FrameworkMarketplace marketplace);
+	void bindMarketplace(Marketplace marketplace);
 	
 	// Eiter need a method which returns the MarketDataObject the callback needs
 	// or its Tag<M>
