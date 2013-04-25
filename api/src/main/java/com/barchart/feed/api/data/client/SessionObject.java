@@ -4,7 +4,7 @@ import org.joda.time.DateTime;
 
 
 
-public interface SessionObject extends MarketDataObject<SessionObject> {
+public interface SessionObject extends MarketDataObject {
 
 	public double getOpen();
 	public double getHigh();

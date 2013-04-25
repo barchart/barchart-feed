@@ -5,12 +5,12 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import com.barchart.feed.api.data.client.MarketDataObject;
+import com.barchart.feed.api.data.FrameworkElement;
 import com.barchart.feed.api.data.framework.Instrument;
 import com.barchart.feed.api.data.framework.Market;
 import com.barchart.feed.api.market.FrameworkAgent;
 import com.barchart.feed.api.market.Marketplace;
-import com.barchart.feed.api.market.MarketMessage;
+import com.barchart.feed.api.message.MarketMessage;
 import com.barchart.missive.api.Tag;
 
 public class AgentBase implements FrameworkAgent {
@@ -71,8 +71,8 @@ public class AgentBase implements FrameworkAgent {
 	/* ***** ***** ***** ***** ***** ***** ***** */
 	
 	@Override
-	public <M extends MarketDataObject<M>> void handle(final Market market,
-			final MarketMessage<?> message, final MarketDataObject<M> data) {
+	public <M extends FrameworkElement<M>> void handle(final Market market,
+			final MarketMessage<?> message, final FrameworkElement<M> data) {
 		
 		if(market == null || message == null || data == null) {
 			return;
@@ -120,7 +120,7 @@ public class AgentBase implements FrameworkAgent {
 
 	// This will be set in factory or something
 	@Override
-	public <M extends MarketDataObject<M>> Tag<M> callbackDataObjectTag() {
+	public <M extends FrameworkElement<M>> Tag<M> callbackDataObjectTag() {
 		// TODO Auto-generated method stub
 		return null;
 	}

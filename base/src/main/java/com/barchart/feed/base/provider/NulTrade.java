@@ -63,19 +63,4 @@ public class NulTrade extends ValueFreezer<MarketTrade> implements MarketTrade {
 		return MarketTradeSequencing.NULL_TRADE_SEQUENCE;
 	}
 
-	@Override
-	public double getTradePrice() {
-		return Double.NaN;
-	}
-
-	@Override
-	public long getTradeSize() {
-		return 0l;
-	}
-
-	@Override
-	public DateTime getTradeTime() {
-		return MarketConst.NULL_DATETIME;
-	}
-
 }

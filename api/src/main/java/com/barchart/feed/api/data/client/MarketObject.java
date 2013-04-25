@@ -4,7 +4,7 @@ import org.joda.time.DateTime;
 
 import com.barchart.feed.api.data.framework.Instrument;
 
-public interface MarketObject extends MarketDataObject<MarketObject> {
+public interface MarketObject extends MarketDataObject {
 
 	public Instrument instrument();
 	public DateTime lastChangeTime();

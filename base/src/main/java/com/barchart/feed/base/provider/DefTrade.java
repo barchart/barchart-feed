@@ -7,8 +7,6 @@
  */
 package com.barchart.feed.base.provider;
 
-import org.joda.time.DateTime;
-
 import com.barchart.feed.base.trade.enums.MarketTradeField;
 import com.barchart.feed.base.trade.enums.MarketTradeSequencing;
 import com.barchart.feed.base.trade.enums.MarketTradeSession;
@@ -63,21 +61,6 @@ class DefTrade extends NulTrade {
 	@Override
 	public MarketTradeSequencing getTradeSequencing() {
 		return get(MarketTradeField.SEQUENCING);
-	}
-
-	@Override
-	public double getTradePrice() {
-		return get(MarketTradeField.PRICE).asDouble();
-	}
-
-	@Override
-	public long getTradeSize() {
-		return get(MarketTradeField.SIZE).asLong();
-	}
-
-	@Override
-	public DateTime getTradeTime() {
-		return get(MarketTradeField.TRADE_TIME).asDateTime();
 	}
 	
 }

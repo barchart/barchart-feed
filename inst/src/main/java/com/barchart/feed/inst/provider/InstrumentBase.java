@@ -8,7 +8,6 @@
 package com.barchart.feed.inst.provider;
 
 import com.barchart.feed.api.data.MarketTag;
-import com.barchart.feed.api.data.client.InstrumentObject;
 import com.barchart.feed.api.data.framework.Instrument;
 import com.barchart.feed.api.enums.BookLiquidityType;
 import com.barchart.feed.api.enums.BookStructureType;
@@ -18,8 +17,8 @@ import com.barchart.feed.api.fields.InstrumentField;
 import com.barchart.feed.api.fields.MarketField;
 import com.barchart.feed.api.inst.GuidList;
 import com.barchart.feed.api.inst.InstrumentGUID;
-import com.barchart.feed.api.market.Snapshot;
-import com.barchart.feed.api.market.Update;
+import com.barchart.feed.api.message.Snapshot;
+import com.barchart.feed.api.message.Update;
 import com.barchart.feed.api.util.Schedule;
 import com.barchart.missive.core.ObjectMap;
 import com.barchart.util.values.api.Fraction;
@@ -28,7 +27,7 @@ import com.barchart.util.values.api.TimeInterval;
 public abstract class InstrumentBase extends ObjectMap implements Instrument {
 	
 	@Override
-	public MarketTag<?> tag() {
+	public MarketTag<Instrument> tag() {
 		return MarketField.INSTRUMENT;
 	}
 	
@@ -172,23 +171,23 @@ public abstract class InstrumentBase extends ObjectMap implements Instrument {
 	}
 
 	@Override
-	public Update<InstrumentObject> lastUpdate() {
+	public Update<Instrument> lastUpdate() {
 		return null;
 	}
 
 	@Override
-	public Snapshot<InstrumentObject> lastSnapshot() {
+	public Snapshot<Instrument> lastSnapshot() {
 		return null;
 	}
 
 	@Override
-	public void update(Update<InstrumentObject> update) {
+	public void update(Update<Instrument> update) {
 		
 		
 	}
 
 	@Override
-	public void snapshot(Snapshot<InstrumentObject> snapshot) {
+	public void snapshot(Snapshot<Instrument> snapshot) {
 		
 		
 	}

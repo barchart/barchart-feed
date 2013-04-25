@@ -10,7 +10,7 @@ import com.barchart.feed.api.util.Schedule;
 import com.barchart.util.values.api.Fraction;
 import com.barchart.util.values.api.TimeInterval;
 
-public interface InstrumentObject extends MarketDataObject<InstrumentObject> {
+public interface InstrumentObject extends MarketDataObject {
 	
 	InstrumentGUID GUID();
 	String marketGUID();

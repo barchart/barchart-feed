@@ -7,12 +7,11 @@ import java.util.concurrent.ConcurrentMap;
 
 import org.joda.time.DateTime;
 
+import com.barchart.feed.api.data.FrameworkElement;
 import com.barchart.feed.api.data.MarketTag;
 import com.barchart.feed.api.data.client.CurrentSessionObject;
 import com.barchart.feed.api.data.client.CuvolObject;
 import com.barchart.feed.api.data.client.ExtendedSessionObject;
-import com.barchart.feed.api.data.client.MarketDataObject;
-import com.barchart.feed.api.data.client.MarketObject;
 import com.barchart.feed.api.data.client.OrderBookObject;
 import com.barchart.feed.api.data.client.PreviousSessionObject;
 import com.barchart.feed.api.data.client.PriceLevelObject;
@@ -22,21 +21,21 @@ import com.barchart.feed.api.data.framework.Instrument;
 import com.barchart.feed.api.data.framework.Market;
 import com.barchart.feed.api.fields.MarketField;
 import com.barchart.feed.api.market.FrameworkAgent;
-import com.barchart.feed.api.market.MarketMessage;
-import com.barchart.feed.api.market.Snapshot;
-import com.barchart.feed.api.market.Update;
+import com.barchart.feed.api.message.MarketMessage;
+import com.barchart.feed.api.message.Snapshot;
+import com.barchart.feed.api.message.Update;
 import com.barchart.missive.api.Tag;
 import com.barchart.missive.core.ObjectMap;
 
 public class MarketBase extends ObjectMap implements Market {
 	
 	// MAKE CANONICAL NULL OBJECTS
-	private volatile Update<MarketObject> lastUpdate = null;
-	private volatile Snapshot<MarketObject> lastSnapshot = null;
+	private volatile Update<Market> lastUpdate = null;
+	private volatile Snapshot<Market> lastSnapshot = null;
 	
 	// Fake tagMap
-	private final ConcurrentMap<Tag<?>, MarketDataObject<?>> tagMap = 
-			new ConcurrentHashMap<Tag<?>, MarketDataObject<?>>();
+	private final ConcurrentMap<Tag<?>, FrameworkElement<?>> tagMap = 
+			new ConcurrentHashMap<Tag<?>, FrameworkElement<?>>();
 	
 	private final ConcurrentMap<Tag<?>, Set<FrameworkAgent>> agentMap = 
 			new ConcurrentHashMap<Tag<?>, Set<FrameworkAgent>>();
@@ -132,7 +131,7 @@ public class MarketBase extends ObjectMap implements Market {
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public <V extends MarketDataObject<V>> void handle(
+	public <V extends FrameworkElement<V>> void handle(
 			final MarketMessage<V> message) {
 		
 		// Check instrument?
@@ -150,14 +149,14 @@ public class MarketBase extends ObjectMap implements Market {
 	/* ***** ***** ***** ***** ***** ***** ***** */
 	
 	@Override
-	public void update(final Update<MarketObject> update) {
+	public void update(final Update<Market> update) {
 		
 		lastUpdate = update;
 		
 	}
 
 	@Override
-	public void snapshot(final Snapshot<MarketObject> snapshot) {
+	public void snapshot(final Snapshot<Market> snapshot) {
 
 		lastSnapshot = snapshot;
 		
@@ -166,12 +165,12 @@ public class MarketBase extends ObjectMap implements Market {
 	/* ***** ***** ***** ***** ***** ***** ***** */
 	
 	@Override
-	public Update<MarketObject> lastUpdate() {
+	public Update<Market> lastUpdate() {
 		return lastUpdate;
 	}
 
 	@Override
-	public Snapshot<MarketObject> lastSnapshot() {
+	public Snapshot<Market> lastSnapshot() {
 		return lastSnapshot;
 	}
 

@@ -7,6 +7,7 @@
  */
 package com.barchart.feed.api.data.framework;
 
+import com.barchart.feed.api.data.FrameworkElement;
 import com.barchart.feed.api.data.MarketTag;
 import com.barchart.feed.api.data.client.InstrumentObject;
 import com.barchart.feed.api.enums.BookLiquidityType;
@@ -15,8 +16,8 @@ import com.barchart.feed.api.enums.MarketCurrency;
 import com.barchart.feed.api.enums.SecurityType;
 import com.barchart.feed.api.inst.GuidList;
 import com.barchart.feed.api.inst.InstrumentGUID;
-import com.barchart.feed.api.market.Snapshot;
-import com.barchart.feed.api.market.Update;
+import com.barchart.feed.api.message.Snapshot;
+import com.barchart.feed.api.message.Update;
 import com.barchart.feed.api.util.Schedule;
 import com.barchart.missive.api.Tag;
 import com.barchart.missive.api.TagMap;
@@ -27,7 +28,7 @@ import com.barchart.util.values.api.Value;
 import com.barchart.util.values.provider.ValueConst;
 
 public interface Instrument extends TagMap, Value<Instrument>,
-		Comparable<Instrument>, InstrumentObject {
+		Comparable<Instrument>, InstrumentObject, FrameworkElement<Instrument> {
 
 	InstrumentGUID getGUID();
 
@@ -51,7 +52,7 @@ public interface Instrument extends TagMap, Value<Instrument>,
 
 		@Override
 		public Tag<?>[] tags() {
-			return null;
+			return new Tag<?>[0];
 		}
 
 		@Override
@@ -185,28 +186,30 @@ public interface Instrument extends TagMap, Value<Instrument>,
 		}
 
 		@Override
-		public MarketTag<?> tag() {
+		public Update<Instrument> lastUpdate() {
 			return null;
 		}
 
 		@Override
-		public Update<InstrumentObject> lastUpdate() {
+		public Snapshot<Instrument> lastSnapshot() {
 			return null;
 		}
 
 		@Override
-		public Snapshot<InstrumentObject> lastSnapshot() {
+		public MarketTag<Instrument> tag() {
 			return null;
 		}
 
 		@Override
-		public void update(Update<InstrumentObject> update) {
-			throw new UnsupportedOperationException("Cannot update null instrument");
+		public void update(Update<Instrument> update) {
+			// TODO Auto-generated method stub
+			
 		}
 
 		@Override
-		public void snapshot(Snapshot<InstrumentObject> snapshot) {
-			throw new UnsupportedOperationException("Cannot update null instrument");
+		public void snapshot(Snapshot<Instrument> snapshot) {
+			// TODO Auto-generated method stub
+			
 		}
 
 	};

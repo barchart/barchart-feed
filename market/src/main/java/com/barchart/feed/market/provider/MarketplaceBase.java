@@ -6,14 +6,14 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-import com.barchart.feed.api.data.client.MarketDataObject;
+import com.barchart.feed.api.data.FrameworkElement;
 import com.barchart.feed.api.data.framework.Instrument;
 import com.barchart.feed.api.data.framework.Market;
 import com.barchart.feed.api.market.FrameworkAgent;
 import com.barchart.feed.api.market.Marketplace;
-import com.barchart.feed.api.market.MarketMessage;
+import com.barchart.feed.api.message.MarketMessage;
 
-public class FrameworkMarketplaceBase implements Marketplace {
+public class MarketplaceBase implements Marketplace {
 
 	private final Set<FrameworkAgent> agents = Collections.newSetFromMap(
 			new ConcurrentHashMap<FrameworkAgent, Boolean>());
@@ -120,7 +120,7 @@ public class FrameworkMarketplaceBase implements Marketplace {
 	/* ***** ***** ***** ***** ***** ***** ***** */
 	
 	@Override
-	public <V extends MarketDataObject<V>> void handle(
+	public <V extends FrameworkElement<V>> void handle(
 			final MarketMessage<V> message) {
 		
 		
@@ -130,7 +130,7 @@ public class FrameworkMarketplaceBase implements Marketplace {
 	/* ***** ***** ***** ***** ***** ***** ***** */
 	
 	@Override
-	public <V extends MarketDataObject<V>> Builder<V> builder() {
+	public <V extends FrameworkElement<V>> Builder<V> builder() {
 		// TODO Auto-generated method stub
 		return null;
 	}

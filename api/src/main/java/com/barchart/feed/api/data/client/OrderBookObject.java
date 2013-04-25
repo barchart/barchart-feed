@@ -2,7 +2,7 @@ package com.barchart.feed.api.data.client;
 
 import com.barchart.feed.api.enums.MarketSide;
 
-public interface OrderBookObject extends MarketDataObject<OrderBookObject> {
+public interface OrderBookObject extends MarketDataObject {
 
 	PriceLevelObject[] entries(MarketSide side);
 	
