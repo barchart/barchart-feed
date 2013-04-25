@@ -11,6 +11,8 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.Future;
 
+import com.barchart.feed.api.data.framework.Instrument;
+
 public interface InstrumentService<V> {
 	
 	Instrument lookup(V symbol);

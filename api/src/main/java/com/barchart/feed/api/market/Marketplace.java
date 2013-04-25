@@ -1,8 +1,8 @@
 package com.barchart.feed.api.market;
 
+import com.barchart.feed.api.data.client.MarketDataObject;
+import com.barchart.feed.api.data.framework.Instrument;
 import com.barchart.feed.api.exchange.Exchange;
-import com.barchart.feed.api.inst.Instrument;
-import com.barchart.feed.api.market.data.MarketDataObject;
 import com.barchart.feed.api.util.Filter;
 
 

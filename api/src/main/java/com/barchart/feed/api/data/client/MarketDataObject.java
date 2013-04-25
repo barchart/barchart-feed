@@ -1,14 +1,12 @@
-package com.barchart.feed.api.market.data;
+package com.barchart.feed.api.data.client;
 
+import com.barchart.feed.api.data.MarketTag;
 import com.barchart.feed.api.market.Snapshot;
 import com.barchart.feed.api.market.Update;
-import com.barchart.missive.api.Tag;
-
-
 
 public interface MarketDataObject<M extends MarketDataObject<M>> {
 
-	Tag<M> tag();
+	MarketTag<?> tag();
 	
 	Update<M> lastUpdate();
 	Snapshot<M> lastSnapshot();

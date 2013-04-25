@@ -5,12 +5,12 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import com.barchart.feed.api.inst.Instrument;
+import com.barchart.feed.api.data.client.MarketDataObject;
+import com.barchart.feed.api.data.framework.Instrument;
+import com.barchart.feed.api.data.framework.Market;
 import com.barchart.feed.api.market.FrameworkAgent;
 import com.barchart.feed.api.market.Marketplace;
-import com.barchart.feed.api.market.Market;
 import com.barchart.feed.api.market.MarketMessage;
-import com.barchart.feed.api.market.data.MarketDataObject;
 import com.barchart.missive.api.Tag;
 
 public class AgentBase implements FrameworkAgent {

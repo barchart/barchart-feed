@@ -25,7 +25,7 @@ import java.util.concurrent.Future;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.feed.api.inst.Instrument;
+import com.barchart.feed.api.data.framework.Instrument;
 import com.barchart.feed.api.inst.InstrumentFuture;
 import com.barchart.feed.api.inst.InstrumentGUID;
 import com.barchart.feed.api.inst.InstrumentService;

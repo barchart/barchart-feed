@@ -1,4 +1,4 @@
-package com.barchart.feed.api.market.data;
+package com.barchart.feed.api.data.client;
 
 import com.barchart.feed.api.enums.BookLiquidityType;
 import com.barchart.feed.api.enums.BookStructureType;
@@ -17,7 +17,7 @@ public interface InstrumentObject extends MarketDataObject<InstrumentObject> {
 	SecurityType securityType();
 	BookLiquidityType liquidityType();
 	BookStructureType bookStructure();
-	int maxBookDepth();
+	long maxBookDepth();
 	String instrumentDataVendor();
 	String symbol();
 	String description();

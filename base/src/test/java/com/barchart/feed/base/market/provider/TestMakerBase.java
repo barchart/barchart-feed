@@ -15,7 +15,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.barchart.feed.api.inst.Instrument;
+import com.barchart.feed.api.data.framework.Instrument;
 import com.barchart.feed.api.inst.InstrumentService;
 import com.barchart.feed.base.market.MockMaker;
 import com.barchart.feed.base.market.MockMarketFactory;

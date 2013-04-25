@@ -36,8 +36,8 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.barchart.feed.api.data.framework.Instrument;
 import com.barchart.feed.api.enums.BookLiquidityType;
-import com.barchart.feed.api.inst.Instrument;
 import com.barchart.feed.api.inst.InstrumentService;
 import com.barchart.feed.base.bar.api.MarketBar;
 import com.barchart.feed.base.book.api.MarketBook;

@@ -1,7 +1,7 @@
 package com.barchart.feed.api.market;
 
+import com.barchart.feed.api.data.framework.Instrument;
 import com.barchart.feed.api.exchange.Exchange;
-import com.barchart.feed.api.inst.Instrument;
 
 public interface MarketAgentFactory {
 

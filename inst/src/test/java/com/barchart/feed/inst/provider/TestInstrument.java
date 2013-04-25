@@ -23,8 +23,8 @@ import static com.barchart.util.values.provider.ValueBuilder.newSize;
 import static com.barchart.util.values.provider.ValueBuilder.newText;
 import static com.barchart.util.values.provider.ValueBuilder.newTime;
 
+import com.barchart.feed.api.data.framework.Instrument;
 import com.barchart.feed.api.enums.MarketCurrency;
-import com.barchart.feed.api.inst.Instrument;
 import com.barchart.missive.api.TagMapSafe;
 import com.barchart.missive.core.ObjectMapFactory;
 import com.barchart.missive.hash.HashTagMapSafe;

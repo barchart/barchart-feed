@@ -7,8 +7,8 @@
  */
 package com.barchart.feed.base.message;
 
+import com.barchart.feed.api.data.framework.Instrument;
 import com.barchart.feed.api.enums.BookLiquidityType;
-import com.barchart.feed.api.inst.Instrument;
 import com.barchart.feed.base.book.enums.MarketBookAction;
 import com.barchart.feed.base.book.enums.MarketBookSide;
 import com.barchart.util.values.api.PriceValue;

@@ -7,7 +7,7 @@
  */
 package com.barchart.feed.base.market.api;
 
-import com.barchart.feed.api.inst.Instrument;
+import com.barchart.feed.api.data.framework.Instrument;
 import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.util.values.api.Value;
 

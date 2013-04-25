@@ -7,26 +7,28 @@ import java.util.concurrent.ConcurrentMap;
 
 import org.joda.time.DateTime;
 
+import com.barchart.feed.api.data.MarketTag;
+import com.barchart.feed.api.data.client.CurrentSessionObject;
+import com.barchart.feed.api.data.client.CuvolObject;
+import com.barchart.feed.api.data.client.ExtendedSessionObject;
+import com.barchart.feed.api.data.client.MarketDataObject;
+import com.barchart.feed.api.data.client.MarketObject;
+import com.barchart.feed.api.data.client.OrderBookObject;
+import com.barchart.feed.api.data.client.PreviousSessionObject;
+import com.barchart.feed.api.data.client.PriceLevelObject;
+import com.barchart.feed.api.data.client.TopOfBookObject;
+import com.barchart.feed.api.data.client.TradeObject;
+import com.barchart.feed.api.data.framework.Instrument;
+import com.barchart.feed.api.data.framework.Market;
 import com.barchart.feed.api.fields.MarketField;
-import com.barchart.feed.api.inst.Instrument;
 import com.barchart.feed.api.market.FrameworkAgent;
-import com.barchart.feed.api.market.Market;
 import com.barchart.feed.api.market.MarketMessage;
 import com.barchart.feed.api.market.Snapshot;
 import com.barchart.feed.api.market.Update;
-import com.barchart.feed.api.market.data.CurrentSessionObject;
-import com.barchart.feed.api.market.data.CuvolObject;
-import com.barchart.feed.api.market.data.ExtendedSessionObject;
-import com.barchart.feed.api.market.data.MarketDataObject;
-import com.barchart.feed.api.market.data.MarketObject;
-import com.barchart.feed.api.market.data.OrderBookObject;
-import com.barchart.feed.api.market.data.PreviousSessionObject;
-import com.barchart.feed.api.market.data.PriceLevelObject;
-import com.barchart.feed.api.market.data.TopOfBookObject;
-import com.barchart.feed.api.market.data.TradeObject;
 import com.barchart.missive.api.Tag;
+import com.barchart.missive.core.ObjectMap;
 
-public class MarketBase implements Market {
+public class MarketBase extends ObjectMap implements Market {
 	
 	// MAKE CANONICAL NULL OBJECTS
 	private volatile Update<MarketObject> lastUpdate = null;
@@ -54,7 +56,6 @@ public class MarketBase implements Market {
 	 * Attach and detach here just clear references to the agent.
 	 * 
 	 */
-	
 	@Override
 	public synchronized void attach(final FrameworkAgent agent) {
 		
@@ -175,7 +176,7 @@ public class MarketBase implements Market {
 	}
 
 	@Override
-	public Tag<MarketObject> tag() {
+	public MarketTag<Market> tag() {
 		return MarketField.MARKET;
 	}
 	
@@ -238,6 +239,33 @@ public class MarketBase implements Market {
 	public ExtendedSessionObject previousSession() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	/* ***** ***** ***** ***** ***** ***** ***** */
+
+	@Override
+	public int compareTo(final Market o) {
+		return instrument.compareTo(o.instrument());
+	}
+	
+	@Override
+	public boolean equals(final Object o) {
+		
+		if(o == null) {
+			return false;
+		}
+		
+		if(!Market.class.isAssignableFrom(o.getClass())) {
+			return false;
+		}
+		
+		return instrument.equals(((Market)o).instrument());
+		
+	}
+	
+	@Override
+	public int hashCode() {
+		return instrument.hashCode();
 	}
 
 }

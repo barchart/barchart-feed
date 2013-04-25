@@ -6,13 +6,13 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+import com.barchart.feed.api.data.client.MarketDataObject;
+import com.barchart.feed.api.data.framework.Instrument;
 import com.barchart.feed.api.exchange.Exchange;
-import com.barchart.feed.api.inst.Instrument;
 import com.barchart.feed.api.inst.InstrumentService;
 import com.barchart.feed.api.market.MarketAgent;
 import com.barchart.feed.api.market.MarketCallback;
 import com.barchart.feed.api.market.Marketplace;
-import com.barchart.feed.api.market.data.MarketDataObject;
 import com.barchart.feed.api.util.Filter;
 import com.barchart.feed.base.market.api.MarketMessage;
 import com.barchart.feed.base.market.api.MarketTaker;
