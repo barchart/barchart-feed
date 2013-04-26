@@ -7,7 +7,8 @@ import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
 
 // Maybe this isn't a framework element
-public interface PriceLevel extends PriceLevelObject, FrameworkElement<PriceLevel> {
+public interface PriceLevel extends PriceLevelObject, 
+		FrameworkElement<PriceLevel> {
 
 	OrderBookAction act();
 	

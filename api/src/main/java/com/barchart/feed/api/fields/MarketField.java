@@ -5,8 +5,8 @@ import com.barchart.feed.api.data.MarketTagFactory;
 import com.barchart.feed.api.data.framework.Instrument;
 import com.barchart.feed.api.data.framework.Market;
 import com.barchart.feed.api.data.framework.OrderBook;
+import com.barchart.feed.api.data.framework.TopOfBook;
 import com.barchart.feed.api.data.framework.Trade;
-import com.barchart.missive.api.Tag;
 
 //Interface or final class?????????
 public final class MarketField {
@@ -20,6 +20,8 @@ public final class MarketField {
 	
 	//public static final MarketTag<Session> 
 	
-	public static final Tag<OrderBook> ORDER_BOOK = MarketTagFactory.create(OrderBook.class); 
+	public static final MarketTag<OrderBook> ORDER_BOOK = MarketTagFactory.create(OrderBook.class); 
 
+	public static final MarketTag<TopOfBook> TOP_OF_BOOK = MarketTagFactory.create(TopOfBook.class);
+	
 }
