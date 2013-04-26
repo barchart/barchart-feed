@@ -3,13 +3,12 @@ package com.barchart.feed.market.provider.data;
 import org.joda.time.DateTime;
 
 import com.barchart.feed.api.data.MarketTag;
-import com.barchart.feed.api.data.client.TradeObject;
 import com.barchart.feed.api.data.framework.Trade;
 import com.barchart.feed.api.message.Snapshot;
 import com.barchart.feed.api.message.Update;
-import com.barchart.missive.core.ObjectMap;
+import com.barchart.missive.core.ObjectMapSafe;
 
-public class TradeBase extends ObjectMap implements Trade {
+public class TradeBase extends ObjectMapSafe implements Trade {
 
 	@Override
 	public double getTradePrice() {
@@ -57,6 +56,12 @@ public class TradeBase extends ObjectMap implements Trade {
 	public void snapshot(Snapshot<Trade> snapshot) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public DateTime lastTime() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

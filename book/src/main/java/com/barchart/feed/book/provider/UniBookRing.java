@@ -1,13 +1,11 @@
 package com.barchart.feed.book.provider;
 
-import static com.barchart.feed.base.book.enums.MarketBookAction.NOOP;
 import static com.barchart.util.values.provider.ValueBuilder.newSize;
 
+import com.barchart.feed.api.book.OrderBookAction;
+import com.barchart.feed.api.data.framework.PriceLevel;
 import com.barchart.feed.api.enums.BookLiquidityType;
-import com.barchart.feed.base.book.api.MarketDoBookEntry;
-import com.barchart.feed.base.book.enums.MarketBookAction;
-import com.barchart.feed.base.book.enums.MarketBookSide;
-import com.barchart.feed.base.provider.DefBookEntry;
+import com.barchart.feed.api.enums.MarketSide;
 import com.barchart.util.anno.NotThreadSafe;
 import com.barchart.util.collections.ScadecRingBufferBase;
 import com.barchart.util.math.MathExtra;
@@ -22,17 +20,17 @@ import com.barchart.util.values.provider.ValueConst;
 // javaSize deep = 16(def) + 16(imp) + 10(size) * 2(def+imp) * 4(int) = 112
 // javaSize = 136
 abstract class UniBookRing extends
-		ScadecRingBufferBase<PriceValue, MarketDoBookEntry> {
+		ScadecRingBufferBase<PriceValue, PriceLevel> {
 
 	//
 
 	// book side-dependent operations
 
-	protected abstract MarketBookSide side();
+	protected abstract MarketSide side();
 
 	protected abstract int indexTop();
 
-	protected abstract void setTop(int index, MarketDoBookEntry entry);
+	protected abstract void setTop(int index, PriceLevel entry);
 
 	protected abstract boolean isNewTop(int index);
 
@@ -48,7 +46,7 @@ abstract class UniBookRing extends
 	//
 
 	// use for entry reconstruction
-	protected final static MarketBookAction RET_ACT = NOOP;
+	protected final static OrderBookAction RET_ACT = OrderBookAction.NOOP;
 	protected final static BookLiquidityType RET_TYPE = BookLiquidityType.COMBINED;
 
 	//
@@ -150,16 +148,16 @@ abstract class UniBookRing extends
 	// reconstruct entry from components
 	// zero size makes null entry
 	@Override
-	protected final DefBookEntry arrayGet(final int clue) {
+	protected final PriceLevel arrayGet(final int clue) {
 		final int sizeCombo = sizeCombo(clue);
-		final DefBookEntry entry;
+		final PriceLevel entry;
 		if (sizeCombo == 0) {
 			entry = null;
 		} else {
 			final int place = placeFromClue(clue);
 			final PriceValue price = keyStep().mult(indexFromClue(clue));
 			final SizeValue size = newSize(sizeCombo);
-			entry = new DefBookEntry(RET_ACT, side(), RET_TYPE, place, price,
+			entry = new PriceLevelBase(RET_ACT, side(), RET_TYPE, place, price,
 					size);
 		}
 		return entry;
@@ -168,13 +166,14 @@ abstract class UniBookRing extends
 	// disassemble entry into components
 	// null entry makes zero size
 	@Override
-	protected final void arraySet(final int clue, final MarketDoBookEntry entry)
+	protected final void arraySet(final int clue, final PriceLevel entry)
 			throws ArithmeticException {
 		if (entry == null) {
 			safeSet(arrayDefault, clue, 0);
 			safeSet(arrayImplied, clue, 0);
 		} else {
-			final SizeValue entrySize = entry.size();
+			// ***** Change to longs
+			final SizeValue entrySize = entry.quantity();
 			final int value;
 			if (entrySize == null) {
 				value = 0;
@@ -226,9 +225,9 @@ abstract class UniBookRing extends
 	}
 
 	/** non empty only; ordered by offset */
-	protected final DefBookEntry[] entries() {
+	protected final PriceLevel[] entries() {
 
-		final DefBookEntry[] entries = new DefBookEntry[placeCount()];
+		final PriceLevel[] entries = new PriceLevel[placeCount()];
 
 		int entryIndex = 0;
 
@@ -255,12 +254,12 @@ abstract class UniBookRing extends
 	}
 
 	// reconstruct last entry
-	protected final DefBookEntry lastEntry(final int clue) {
-		final DefBookEntry entry = arrayGet(clue);
+	protected final PriceLevel lastEntry(final int clue) {
+		final PriceLevel entry = arrayGet(clue);
 		if (entry == null) {
 			final int index = indexFromClue(clue);
 			final PriceValue price = keyStep().mult(index);
-			return new DefBookEntry(RET_ACT, side(), RET_TYPE, 0, price, null);
+			return new PriceLevelBase(RET_ACT, side(), RET_TYPE, 0, price, null);
 		} else {
 			return entry;
 		}
@@ -333,7 +332,7 @@ abstract class UniBookRing extends
 		return placeFromClue(clueFromOffset(offset));
 	}
 
-	protected final int placeRemove(final MarketDoBookEntry entry) {
+	protected final int placeRemove(final PriceLevel entry) {
 		final int clue = clueFromPlace(entry.place());
 		if (clue == CLUE_NONE) {
 			// return false;

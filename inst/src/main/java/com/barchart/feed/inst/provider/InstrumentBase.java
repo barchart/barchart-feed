@@ -7,6 +7,8 @@
  */
 package com.barchart.feed.inst.provider;
 
+import org.joda.time.DateTime;
+
 import com.barchart.feed.api.data.MarketTag;
 import com.barchart.feed.api.data.framework.Instrument;
 import com.barchart.feed.api.enums.BookLiquidityType;
@@ -20,11 +22,11 @@ import com.barchart.feed.api.inst.InstrumentGUID;
 import com.barchart.feed.api.message.Snapshot;
 import com.barchart.feed.api.message.Update;
 import com.barchart.feed.api.util.Schedule;
-import com.barchart.missive.core.ObjectMap;
+import com.barchart.missive.core.ObjectMapSafe;
 import com.barchart.util.values.api.Fraction;
 import com.barchart.util.values.api.TimeInterval;
 
-public abstract class InstrumentBase extends ObjectMap implements Instrument {
+public abstract class InstrumentBase extends ObjectMapSafe implements Instrument {
 	
 	@Override
 	public MarketTag<Instrument> tag() {
@@ -190,6 +192,12 @@ public abstract class InstrumentBase extends ObjectMap implements Instrument {
 	public void snapshot(Snapshot<Instrument> snapshot) {
 		
 		
+	}
+	
+	@Override
+	public DateTime lastTime() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }

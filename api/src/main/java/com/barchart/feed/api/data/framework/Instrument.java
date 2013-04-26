@@ -7,6 +7,8 @@
  */
 package com.barchart.feed.api.data.framework;
 
+import org.joda.time.DateTime;
+
 import com.barchart.feed.api.data.FrameworkElement;
 import com.barchart.feed.api.data.MarketTag;
 import com.barchart.feed.api.data.client.InstrumentObject;
@@ -214,6 +216,11 @@ public interface Instrument extends Value<Instrument>, Comparable<Instrument>,
 		@Override
 		public <V> void set(Tag<V> tag, V value) throws MissiveException {
 			
+		}
+
+		@Override
+		public DateTime lastTime() {
+			return null;
 		}
 
 	};

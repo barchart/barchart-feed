@@ -277,4 +277,10 @@ class MarketBase extends ObjectMapSafe implements Market {
 		return instrument.hashCode();
 	}
 
+	@Override
+	public DateTime lastTime() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

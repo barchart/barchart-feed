@@ -10,11 +10,10 @@ import static com.barchart.feed.base.book.enums.UniBookResult.TOP;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.barchart.feed.api.data.framework.PriceLevel;
 import com.barchart.feed.api.enums.BookLiquidityType;
-import com.barchart.feed.base.book.api.MarketDoBookEntry;
-import com.barchart.feed.base.book.enums.MarketBookSide;
+import com.barchart.feed.api.enums.MarketSide;
 import com.barchart.feed.base.book.enums.UniBookResult;
-import com.barchart.feed.base.provider.DefBookEntry;
 import com.barchart.util.math.MathExtra;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
@@ -55,7 +54,7 @@ public class UniBook<V extends Value<V>> extends ValueFreezer<V> {
 	}
 
 	// XXX returns null
-	private final UniBookRing ringFor(final MarketBookSide side) {
+	private final UniBookRing ringFor(final MarketSide side) {
 		switch (side) {
 		case BID:
 			return bids;
@@ -66,11 +65,11 @@ public class UniBook<V extends Value<V>> extends ValueFreezer<V> {
 		}
 	}
 
-	private final boolean isTopPlace(final MarketDoBookEntry entry) {
+	private final boolean isTopPlace(final PriceLevel entry) {
 		return entry.place() == ENTRY_TOP;
 	}
 
-	private final boolean isValidEntryEnums(final MarketDoBookEntry entry) {
+	private final boolean isValidEntryEnums(final PriceLevel entry) {
 
 		if (entry == null) {
 			return false;
@@ -104,17 +103,17 @@ public class UniBook<V extends Value<V>> extends ValueFreezer<V> {
 
 	}
 
-	private final boolean isValidPlace(final MarketDoBookEntry entry) {
+	private final boolean isValidPlace(final PriceLevel entry) {
 		final int place = entry.place();
 		return ENTRY_TOP <= place && place <= size;
 	}
 
-	private final boolean isValidPrice(final MarketDoBookEntry entry) {
+	private final boolean isValidPrice(final PriceLevel entry) {
 		return !entry.price().isNull();
 	}
 
-	private final boolean isValidSize(final MarketDoBookEntry entry) {
-		return !entry.size().isNull();
+	private final boolean isValidSize(final PriceLevel entry) {
+		return !entry.quantity().isNull();
 	}
 
 	//
@@ -127,7 +126,7 @@ public class UniBook<V extends Value<V>> extends ValueFreezer<V> {
 		lastClue = MathExtra.castIntToByte(clue);
 	}
 
-	private void saveLastSide(final MarketBookSide side) {
+	private void saveLastSide(final MarketSide side) {
 		lastSide = side.ord;
 	}
 
@@ -135,8 +134,8 @@ public class UniBook<V extends Value<V>> extends ValueFreezer<V> {
 	 * can return null; returns last changed entry how it looks after
 	 * modification;
 	 */
-	protected final DefBookEntry lastEntry() {
-		final MarketBookSide side = MarketBookSide.fromOrd(lastSide);
+	protected final PriceLevel lastEntry() {
+		final MarketSide side = MarketSide.fromOrd(lastSide);
 		final UniBookRing ring = ringFor(side);
 		if (ring == null) {
 			return null;
@@ -144,7 +143,7 @@ public class UniBook<V extends Value<V>> extends ValueFreezer<V> {
 		return ring.lastEntry(lastClue);
 	}
 
-	public final UniBookResult make(final MarketDoBookEntry entry) {
+	public final UniBookResult make(final PriceLevel entry) {
 
 		make: if (isValidEntryEnums(entry)) {
 
@@ -181,7 +180,7 @@ public class UniBook<V extends Value<V>> extends ValueFreezer<V> {
 	/**
 	 * covers "add", "change", "overlay"
 	 **/
-	private final UniBookResult makeModify(final MarketDoBookEntry entry) {
+	private final UniBookResult makeModify(final PriceLevel entry) {
 
 		final UniBookRing ring = ringFor(entry.side());
 
@@ -216,7 +215,7 @@ public class UniBook<V extends Value<V>> extends ValueFreezer<V> {
 	/**
 	 * covers "clear", "delete", "remove"
 	 **/
-	private final UniBookResult makeRemove(final MarketDoBookEntry entry)
+	private final UniBookResult makeRemove(final PriceLevel entry)
 			throws IllegalArgumentException {
 
 		// expecting only NON meaningful size for delete operation
@@ -273,7 +272,7 @@ public class UniBook<V extends Value<V>> extends ValueFreezer<V> {
 	/**
 	 * can return null
 	 **/
-	protected final MarketDoBookEntry topFor(final MarketBookSide side) {
+	protected final PriceLevel topFor(final MarketSide side) {
 
 		final UniBookRing ring = ringFor(side);
 
@@ -291,8 +290,9 @@ public class UniBook<V extends Value<V>> extends ValueFreezer<V> {
 
 	}
 
-	private final DefBookEntry nullEntry(final int index) {
-		return new DefBookEntry(null, GAP, BookLiquidityType.COMBINED, 0, step.mult(index), null);
+	private final PriceLevel nullEntry(final int index) {
+		return new PriceLevelBase(null, MarketSide.GAP, BookLiquidityType.COMBINED, 
+				0, step.mult(index), null);
 	}
 
 	@Override
@@ -301,7 +301,7 @@ public class UniBook<V extends Value<V>> extends ValueFreezer<V> {
 		final StringBuilder text = new StringBuilder(1024);
 
 		for (int index = bids.head(); index <= bids.tail(); index++) {
-			MarketDoBookEntry entry = bids.get(index);
+			PriceLevel entry = bids.get(index);
 			if (entry == null) {
 				entry = nullEntry(index);
 			}
@@ -312,14 +312,14 @@ public class UniBook<V extends Value<V>> extends ValueFreezer<V> {
 		final int gap = asks.head() - bids.tail();
 		if (gap <= size) {
 			for (int index = bids.tail() + 1; index < asks.head(); index++) {
-				final DefBookEntry entry = nullEntry(index);
+				final PriceLevel entry = nullEntry(index);
 				text.append(entry);
 				text.append("\n");
 			}
 		}
 
 		for (int index = asks.head(); index <= asks.tail(); index++) {
-			MarketDoBookEntry entry = asks.get(index);
+			PriceLevel entry = asks.get(index);
 			if (entry == null) {
 				entry = nullEntry(index);
 			}
@@ -341,7 +341,7 @@ public class UniBook<V extends Value<V>> extends ValueFreezer<V> {
 		return false;
 	}
 
-	protected final boolean isEmpty(final MarketBookSide side) {
+	protected final boolean isEmpty(final MarketSide side) {
 		final UniBookRing ring = ringFor(side);
 		if (ring == null) {
 			return true;
@@ -356,7 +356,7 @@ public class UniBook<V extends Value<V>> extends ValueFreezer<V> {
 	}
 
 	// non null entries only, ordered by logical offset
-	protected final DefBookEntry[] entriesFor(final MarketBookSide side) {
+	protected final PriceLevel[] entriesFor(final MarketSide side) {
 		final UniBookRing ring = ringFor(side);
 		if (ring == null) {
 			throw new IllegalArgumentException("invalid book side=" + side);
@@ -365,7 +365,7 @@ public class UniBook<V extends Value<V>> extends ValueFreezer<V> {
 		}
 	}
 
-	protected final SizeValue[] sizesFor(final MarketBookSide side) {
+	protected final SizeValue[] sizesFor(final MarketSide side) {
 		final UniBookRing ring = ringFor(side);
 		if (ring == null) {
 			throw new IllegalArgumentException("invalid book side=" + side);

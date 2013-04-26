@@ -6,9 +6,9 @@ import com.barchart.feed.api.data.MarketTag;
 import com.barchart.feed.api.data.framework.Session;
 import com.barchart.feed.api.message.Snapshot;
 import com.barchart.feed.api.message.Update;
-import com.barchart.missive.core.ObjectMap;
+import com.barchart.missive.core.ObjectMapSafe;
 
-public class SessionBase extends ObjectMap implements Session {
+public class SessionBase extends ObjectMapSafe implements Session {
 
 	@Override
 	public double getOpen() {
@@ -92,6 +92,12 @@ public class SessionBase extends ObjectMap implements Session {
 	public void snapshot(Snapshot<Session> snapshot) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public DateTime lastTime() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

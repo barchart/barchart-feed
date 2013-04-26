@@ -1,8 +1,8 @@
 package com.barchart.feed.book.provider;
 
+import com.barchart.feed.api.data.framework.PriceLevel;
 import com.barchart.feed.api.enums.BookLiquidityType;
-import com.barchart.feed.base.book.api.MarketDoBookEntry;
-import com.barchart.feed.base.book.enums.MarketBookSide;
+import com.barchart.feed.api.enums.MarketSide;
 
 public class UniBookRingAsks extends UniBookRing {
 
@@ -12,7 +12,7 @@ public class UniBookRingAsks extends UniBookRing {
 	}
 
 	@Override
-	protected final void setTop(final int index, final MarketDoBookEntry entry) {
+	protected final void setTop(final int index, final PriceLevel entry) {
 		setHead(index, entry);
 	}
 
@@ -38,8 +38,8 @@ public class UniBookRingAsks extends UniBookRing {
 	}
 
 	@Override
-	protected final MarketBookSide side() {
-		return MarketBookSide.ASK;
+	protected final MarketSide side() {
+		return MarketSide.ASK;
 	}
 
 	@Override
