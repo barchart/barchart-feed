@@ -19,7 +19,7 @@
 		<url>https://github.com/barchart/barchart-feed</url>
 		<connection>scm:git:git://github.com/barchart/barchart-feed.git</connection>
 		<developerConnection>scm:git:ssh://git@github.com/barchart/barchart-feed.git</developerConnection>
-		<tag>1_4_0</tag>
+		<tag>2_0</tag>
 	</scm>
 
 	<dependencies>

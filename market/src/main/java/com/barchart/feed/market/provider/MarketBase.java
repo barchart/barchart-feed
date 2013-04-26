@@ -25,9 +25,9 @@ import com.barchart.feed.api.message.Message;
 import com.barchart.feed.api.message.Snapshot;
 import com.barchart.feed.api.message.Update;
 import com.barchart.missive.api.Tag;
-import com.barchart.missive.core.ObjectMap;
+import com.barchart.missive.core.ObjectMapSafe;
 
-public class MarketBase extends ObjectMap implements Market {
+class MarketBase extends ObjectMapSafe implements Market {
 	
 	// MAKE CANONICAL NULL OBJECTS
 	private volatile Update<Market> lastUpdate = null;
@@ -39,17 +39,22 @@ public class MarketBase extends ObjectMap implements Market {
 	private final Set<FrameworkAgent> agents = Collections.newSetFromMap(
 			new ConcurrentHashMap<FrameworkAgent, Boolean>());
 	
-	private final Instrument instrument;
-	
-	public MarketBase(final Instrument instrument) {
-		this.instrument = instrument;
-	}
+	/*
+	 * Default constructor only for ObjectMaps
+	 */
 	
 	@Override
 	public void init() {
 		
 		// INIT SHIT SON
 		
+	}
+	
+	/* Instrument set in MarketFactory */
+	private volatile Instrument instrument;
+	
+	void setInstrument(final Instrument inst) {
+		instrument = inst;
 	}
 	
 	/* ***** ***** ***** ***** ***** ***** ***** */

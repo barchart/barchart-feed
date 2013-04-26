@@ -98,6 +98,8 @@ public class MarketplaceBase implements Marketplace {
 	
 	// static Market buildMarket(final Instrument inst);
 	
+	
+	
 	protected synchronized void attachMarket(final Market market) {
 		
 		if(market == null || markets.contains(market)) {

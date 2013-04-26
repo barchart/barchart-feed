@@ -6,9 +6,9 @@ public interface OrderBookObject extends MarketDataObject {
 
 	PriceLevelObject[] entries(MarketSide side);
 	
-	double priceTop(MarketSide side);
+	double bestPrice(MarketSide side);
 	
-	long sizeTop(MarketSide side);
+	long bestSize(MarketSide side);
 	
 	long[] sizes(MarketSide side);
 	

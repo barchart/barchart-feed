@@ -2,8 +2,9 @@ package com.barchart.feed.api.data;
 
 import com.barchart.feed.api.message.Snapshot;
 import com.barchart.feed.api.message.Update;
+import com.barchart.missive.api.TagMapSafe;
 
-public interface FrameworkElement<M extends FrameworkElement<M>> {
+public interface FrameworkElement<M extends FrameworkElement<M>> extends TagMapSafe {
 	
 	Update<M> lastUpdate();
 	Snapshot<M> lastSnapshot();

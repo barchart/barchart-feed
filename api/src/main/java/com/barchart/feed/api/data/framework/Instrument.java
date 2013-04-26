@@ -20,15 +20,14 @@ import com.barchart.feed.api.message.Snapshot;
 import com.barchart.feed.api.message.Update;
 import com.barchart.feed.api.util.Schedule;
 import com.barchart.missive.api.Tag;
-import com.barchart.missive.api.TagMap;
 import com.barchart.missive.core.MissiveException;
 import com.barchart.util.values.api.Fraction;
 import com.barchart.util.values.api.TimeInterval;
 import com.barchart.util.values.api.Value;
 import com.barchart.util.values.provider.ValueConst;
 
-public interface Instrument extends TagMap, Value<Instrument>,
-		Comparable<Instrument>, InstrumentObject, FrameworkElement<Instrument> {
+public interface Instrument extends Value<Instrument>, Comparable<Instrument>, 
+		InstrumentObject, FrameworkElement<Instrument> {
 
 	InstrumentGUID getGUID();
 
@@ -209,6 +208,11 @@ public interface Instrument extends TagMap, Value<Instrument>,
 		@Override
 		public void snapshot(Snapshot<Instrument> snapshot) {
 			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public <V> void set(Tag<V> tag, V value) throws MissiveException {
 			
 		}
 
