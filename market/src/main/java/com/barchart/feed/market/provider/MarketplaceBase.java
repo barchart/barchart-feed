@@ -122,8 +122,7 @@ public class MarketplaceBase implements Marketplace {
 	/* ***** ***** ***** ***** ***** ***** ***** */
 	
 	@Override
-	public <V extends FrameworkElement<V>> void handle(
-			final Message<V> message) {
+	public void handle(final Message message) {
 		
 		
 		

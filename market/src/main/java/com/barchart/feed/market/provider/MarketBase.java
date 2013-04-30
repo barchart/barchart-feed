@@ -7,7 +7,6 @@ import java.util.concurrent.ConcurrentMap;
 
 import org.joda.time.DateTime;
 
-import com.barchart.feed.api.data.FrameworkElement;
 import com.barchart.feed.api.data.MarketTag;
 import com.barchart.feed.api.data.client.CurrentSessionObject;
 import com.barchart.feed.api.data.client.CuvolObject;
@@ -30,8 +29,8 @@ import com.barchart.missive.core.ObjectMapSafe;
 class MarketBase extends ObjectMapSafe implements Market {
 	
 	// MAKE CANONICAL NULL OBJECTS
-	private volatile Update<Market> lastUpdate = null;
-	private volatile Snapshot<Market> lastSnapshot = null;
+	private volatile Update lastUpdate = null;
+	private volatile Snapshot lastSnapshot = null;
 	
 	private final ConcurrentMap<Tag<?>, Set<FrameworkAgent>> agentMap = 
 			new ConcurrentHashMap<Tag<?>, Set<FrameworkAgent>>();
@@ -139,37 +138,17 @@ class MarketBase extends ObjectMapSafe implements Market {
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public <V extends FrameworkElement<V>> void handle(
-			final Message<V> message) {
+	public void handle(final Message message) {
 		
 		// Check instrument?
 		
-		if(Snapshot.class.isAssignableFrom(message.getClass())) {
-			get(message.tag()).snapshot((Snapshot)message);
-		} else if(Update.class.isAssignableFrom(message.getClass())) {
-			get(message.tag()).update((Update)message);
-		} else {
-			// Unknown
-		}
 		
 	}
 	
 	/* ***** ***** ***** ***** ***** ***** ***** */
 	
 	@Override
-	public void update(final Update<Market> update) {
-		
-		lastUpdate = update;
-		
-		
-		
-	}
-
-	@Override
-	public void snapshot(final Snapshot<Market> snapshot) {
-
-		lastSnapshot = snapshot;
-		
+	public void update(final Message message) {
 		
 		
 	}
@@ -177,12 +156,12 @@ class MarketBase extends ObjectMapSafe implements Market {
 	/* ***** ***** ***** ***** ***** ***** ***** */
 	
 	@Override
-	public Update<Market> lastUpdate() {
+	public Update lastUpdate() {
 		return lastUpdate;
 	}
 
 	@Override
-	public Snapshot<Market> lastSnapshot() {
+	public Snapshot lastSnapshot() {
 		return lastSnapshot;
 	}
 

@@ -7,6 +7,7 @@ import com.barchart.feed.api.data.MarketTag;
 import com.barchart.feed.api.data.framework.PriceLevel;
 import com.barchart.feed.api.enums.BookLiquidityType;
 import com.barchart.feed.api.enums.MarketSide;
+import com.barchart.feed.api.message.Message;
 import com.barchart.feed.api.message.Snapshot;
 import com.barchart.feed.api.message.Update;
 import com.barchart.missive.core.ObjectMapSafe;
@@ -93,13 +94,13 @@ public class PriceLevelBase extends ObjectMapSafe implements PriceLevel {
 	}
 
 	@Override
-	public Update<PriceLevel> lastUpdate() {
+	public Update lastUpdate() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Snapshot<PriceLevel> lastSnapshot() {
+	public Snapshot lastSnapshot() {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -111,17 +112,11 @@ public class PriceLevelBase extends ObjectMapSafe implements PriceLevel {
 	}
 
 	@Override
-	public void update(Update<PriceLevel> update) {
+	public void update(Message message) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	@Override
-	public void snapshot(Snapshot<PriceLevel> snapshot) {
-		// TODO Auto-generated method stub
-		
-	}
-	
 	@Override
 	public String toString() {
 		return String.format("%s   %s   %s   %s", side(), place(), priceLevel(),
@@ -144,7 +139,5 @@ public class PriceLevelBase extends ObjectMapSafe implements PriceLevel {
 			throw new NullPointerException("invalid implementation");
 		}
 	}
-
-	
 
 }

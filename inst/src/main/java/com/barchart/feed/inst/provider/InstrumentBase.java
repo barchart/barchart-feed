@@ -19,6 +19,7 @@ import com.barchart.feed.api.fields.InstrumentField;
 import com.barchart.feed.api.fields.MarketField;
 import com.barchart.feed.api.inst.GuidList;
 import com.barchart.feed.api.inst.InstrumentGUID;
+import com.barchart.feed.api.message.Message;
 import com.barchart.feed.api.message.Snapshot;
 import com.barchart.feed.api.message.Update;
 import com.barchart.feed.api.util.Schedule;
@@ -173,27 +174,21 @@ public abstract class InstrumentBase extends ObjectMapSafe implements Instrument
 	}
 
 	@Override
-	public Update<Instrument> lastUpdate() {
+	public Update lastUpdate() {
 		return null;
 	}
 
 	@Override
-	public Snapshot<Instrument> lastSnapshot() {
+	public Snapshot lastSnapshot() {
 		return null;
 	}
 
 	@Override
-	public void update(Update<Instrument> update) {
+	public void update(Message message) {
 		
 		
 	}
 
-	@Override
-	public void snapshot(Snapshot<Instrument> snapshot) {
-		
-		
-	}
-	
 	@Override
 	public DateTime lastTime() {
 		// TODO Auto-generated method stub

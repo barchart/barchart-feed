@@ -4,6 +4,7 @@ import org.joda.time.DateTime;
 
 import com.barchart.feed.api.data.MarketTag;
 import com.barchart.feed.api.data.framework.Session;
+import com.barchart.feed.api.message.Message;
 import com.barchart.feed.api.message.Snapshot;
 import com.barchart.feed.api.message.Update;
 import com.barchart.missive.core.ObjectMapSafe;
@@ -65,13 +66,13 @@ public class SessionBase extends ObjectMapSafe implements Session {
 	}
 
 	@Override
-	public Update<Session> lastUpdate() {
+	public Update lastUpdate() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Snapshot<Session> lastSnapshot() {
+	public Snapshot lastSnapshot() {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -83,13 +84,7 @@ public class SessionBase extends ObjectMapSafe implements Session {
 	}
 
 	@Override
-	public void update(Update<Session> update) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void snapshot(Snapshot<Session> snapshot) {
+	public void update(Message message) {
 		// TODO Auto-generated method stub
 		
 	}

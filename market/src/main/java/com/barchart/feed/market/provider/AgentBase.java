@@ -6,6 +6,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import com.barchart.feed.api.data.FrameworkElement;
+import com.barchart.feed.api.data.client.MarketDataObject;
 import com.barchart.feed.api.data.framework.Instrument;
 import com.barchart.feed.api.data.framework.Market;
 import com.barchart.feed.api.market.FrameworkAgent;
@@ -72,7 +73,7 @@ public class AgentBase implements FrameworkAgent {
 	
 	@Override
 	public <M extends FrameworkElement<M>> void handle(final Market market,
-			final Message<?> message, final FrameworkElement<M> data) {
+			final Message message, final FrameworkElement<M> data) {
 		
 		if(market == null || message == null || data == null) {
 			return;
@@ -101,11 +102,11 @@ public class AgentBase implements FrameworkAgent {
 		return null;
 	}
 	
-	@Override
-	public boolean filter(final Instrument m) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+//	@Override
+//	public boolean filter(final Instrument m) {
+//		// TODO Auto-generated method stub
+//		return false;
+//	}
 	
 	/* ***** ***** ***** ***** ***** ***** ***** */
 	
@@ -156,6 +157,18 @@ public class AgentBase implements FrameworkAgent {
 		}
 		
 		markets.clear();
+	}
+
+	@Override
+	public boolean filter(Object m) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void call(MarketDataObject v) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	
