@@ -9,8 +9,6 @@ package com.barchart.feed.api.data.framework;
 
 import org.joda.time.DateTime;
 
-import com.barchart.feed.api.data.FrameworkElement;
-import com.barchart.feed.api.data.MarketTag;
 import com.barchart.feed.api.data.client.InstrumentObject;
 import com.barchart.feed.api.enums.BookLiquidityType;
 import com.barchart.feed.api.enums.BookStructureType;
@@ -18,6 +16,8 @@ import com.barchart.feed.api.enums.MarketCurrency;
 import com.barchart.feed.api.enums.SecurityType;
 import com.barchart.feed.api.inst.GuidList;
 import com.barchart.feed.api.inst.InstrumentGUID;
+import com.barchart.feed.api.market.FrameworkElement;
+import com.barchart.feed.api.market.MarketTag;
 import com.barchart.feed.api.message.Message;
 import com.barchart.feed.api.message.Snapshot;
 import com.barchart.feed.api.message.Update;

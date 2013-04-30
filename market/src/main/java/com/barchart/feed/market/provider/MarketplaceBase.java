@@ -26,6 +26,7 @@ public class MarketplaceBase implements Marketplace {
 	
 	/* ***** ***** ***** ***** ***** ***** ***** */
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public synchronized void attachAgent(final FrameworkAgent agent) {
 		
@@ -55,6 +56,7 @@ public class MarketplaceBase implements Marketplace {
 		
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public synchronized void updateAgent(final FrameworkAgent agent) {
 		
@@ -100,6 +102,7 @@ public class MarketplaceBase implements Marketplace {
 	
 	
 	
+	@SuppressWarnings("unchecked")
 	protected synchronized void attachMarket(final Market market) {
 		
 		if(market == null || markets.contains(market)) {

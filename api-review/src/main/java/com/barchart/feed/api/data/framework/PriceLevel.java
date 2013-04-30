@@ -1,8 +1,8 @@
 package com.barchart.feed.api.data.framework;
 
 import com.barchart.feed.api.book.OrderBookAction;
-import com.barchart.feed.api.data.FrameworkElement;
 import com.barchart.feed.api.data.client.PriceLevelObject;
+import com.barchart.feed.api.market.FrameworkElement;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
 
