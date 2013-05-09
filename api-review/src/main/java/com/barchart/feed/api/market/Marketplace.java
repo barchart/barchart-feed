@@ -30,10 +30,10 @@ public interface Marketplace {
 		public Builder<V> filter(Class<Message>... message);
 		public Builder<V> filter(Filter<?>... filter);
 		
-		public <M extends MarketDataObject> Agent<M> build(
+		public <M extends MarketDataObject> Agent build(
 				MarketCallback<M> callback);
 		
-		public <M extends MarketDataObject> Agent<M> build(
+		public <M extends MarketDataObject> Agent build(
 				MarketCallback<M> callback, InstrumentFilter filter);
 		
 	}
@@ -41,7 +41,7 @@ public interface Marketplace {
 	/*
 	 * AKA "RegTaker"
 	 */
-	interface FrameworkAgent<V extends MarketDataObject> extends Agent<V> {
+	interface FrameworkAgent<V extends MarketDataObject> extends Agent, InstrumentFilter {
 
 		void bindMarketplace(Marketplace marketplace);
 		

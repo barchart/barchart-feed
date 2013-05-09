@@ -1,9 +1,6 @@
 package com.barchart.feed.api.market;
 
-import com.barchart.feed.api.data.client.MarketDataObject;
-
-public interface Agent<V extends MarketDataObject> 
-		extends InstrumentFilter, MarketCallback<V> {
+public interface Agent {
 
 	public void activate();
 	public void update();

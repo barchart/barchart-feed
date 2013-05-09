@@ -1,21 +1,34 @@
 package com.barchart.feed.api.data.client;
 
-import org.joda.time.DateTime;
-
-
+import com.barchart.feed.api.data.temp.PriceValue;
+import com.barchart.feed.api.data.temp.SizeValue;
+import com.barchart.feed.api.data.temp.TimeValue;
 
 public interface SessionObject extends MarketDataObject {
 
-	public double getOpen();
-	public double getHigh();
-	public double getLow();
-	public double getClose();
-	public double getSettle();
+	public PriceValue open();
+	public double openDouble();
 	
-	public long getVolume();
-	public long getOpenInterest();
+	public PriceValue high();
+	public double highDouble();
 	
-	public DateTime getLastUpdate();
-	public DateTime getSessionClose();
+	public PriceValue low();
+	public double lowDouble();
+	
+	public PriceValue close();
+	public double closeDouble();
+	
+	public PriceValue settle();
+	public double settleDouble();
+	
+	public SizeValue volume();
+	public long volumeLong();
+
+	// XXX Should open interest be included?  This is a futures concept which isn't
+	// event guaranteed to exist for all futures.
+	public SizeValue openInterest();
+	public long openInterestLong();
+	
+	public TimeValue sessionClose();
 	
 }

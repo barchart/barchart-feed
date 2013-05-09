@@ -10,6 +10,7 @@ package com.barchart.feed.api.data.framework;
 import org.joda.time.DateTime;
 
 import com.barchart.feed.api.data.client.InstrumentObject;
+import com.barchart.feed.api.data.temp.TimeValue;
 import com.barchart.feed.api.enums.BookLiquidityType;
 import com.barchart.feed.api.enums.BookStructureType;
 import com.barchart.feed.api.enums.MarketCurrency;
@@ -216,6 +217,17 @@ public interface Instrument extends Value<Instrument>, Comparable<Instrument>,
 		public void update(Message update) {
 			// TODO Auto-generated method stub
 			
+		}
+
+		@Override
+		public Instrument instrument() {
+			return this;
+		}
+
+		@Override
+		public TimeValue lastUpdateTime() {
+			// TODO Auto-generated method stub
+			return null;
 		}
 
 	};
