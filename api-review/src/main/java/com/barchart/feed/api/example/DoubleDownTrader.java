@@ -30,7 +30,7 @@ public class DoubleDownTrader {
 		this.targetPnL = targetPnL;
 
 		/* User just wants to trade front month S&P future */
-		agent = marketplace.builder().filter("ESM3").build(new DoubleDown());
+		agent = marketplace.agentBuilder().filter("ESM3").build(new DoubleDown());
 
 	}
 

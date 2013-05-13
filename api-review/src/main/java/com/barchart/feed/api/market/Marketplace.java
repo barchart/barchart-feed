@@ -21,7 +21,7 @@ public interface Marketplace {
 
 	void handle(Message message);
 
-	<V extends FrameworkElement<V>> Builder<V> builder();
+	<V extends FrameworkElement<V>> Builder<V> agentBuilder();
 
 	interface Builder<V extends FrameworkElement<V>> {
 

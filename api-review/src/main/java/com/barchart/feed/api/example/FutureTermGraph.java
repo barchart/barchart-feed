@@ -24,7 +24,7 @@ public class FutureTermGraph implements Agent {
 	
 	public FutureTermGraph(final Marketplace marketplace, final String prefix) {
 		this.prefix = prefix;
-		agent = marketplace.builder().build(new GraphCallback(), new SymbolFamilyFilter());
+		agent = marketplace.agentBuilder().build(new GraphCallback(), new SymbolFamilyFilter());
 	}
 
 	/**
