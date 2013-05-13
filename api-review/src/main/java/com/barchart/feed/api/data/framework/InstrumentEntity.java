@@ -9,15 +9,15 @@ package com.barchart.feed.api.data.framework;
 
 import org.joda.time.DateTime;
 
-import com.barchart.feed.api.data.client.InstrumentObject;
-import com.barchart.feed.api.data.temp.TimeValue;
+import com.barchart.feed.api.data.Time;
+import com.barchart.feed.api.data.client.Instrument;
 import com.barchart.feed.api.enums.BookLiquidityType;
 import com.barchart.feed.api.enums.BookStructureType;
 import com.barchart.feed.api.enums.MarketCurrency;
 import com.barchart.feed.api.enums.SecurityType;
 import com.barchart.feed.api.inst.GuidList;
 import com.barchart.feed.api.inst.InstrumentGUID;
-import com.barchart.feed.api.market.FrameworkElement;
+import com.barchart.feed.api.market.FrameworkEntity;
 import com.barchart.feed.api.market.MarketTag;
 import com.barchart.feed.api.message.Message;
 import com.barchart.feed.api.message.Snapshot;
@@ -30,8 +30,8 @@ import com.barchart.util.values.api.TimeInterval;
 import com.barchart.util.values.api.Value;
 import com.barchart.util.values.provider.ValueConst;
 
-public interface Instrument extends Value<Instrument>, Comparable<Instrument>, 
-		InstrumentObject, FrameworkElement<Instrument> {
+public interface InstrumentEntity extends Value<InstrumentEntity>, Comparable<InstrumentEntity>, 
+		Instrument, FrameworkEntity<InstrumentEntity> {
 
 	InstrumentGUID getGUID();
 
@@ -41,7 +41,7 @@ public interface Instrument extends Value<Instrument>, Comparable<Instrument>,
 	@Override
 	int hashCode();
 
-	Instrument NULL_INSTRUMENT = new Instrument() {
+	InstrumentEntity NULL_INSTRUMENT = new InstrumentEntity() {
 
 		@Override
 		public <V> V get(final Tag<V> tag) throws MissiveException {
@@ -64,7 +64,7 @@ public interface Instrument extends Value<Instrument>, Comparable<Instrument>,
 		}
 
 		@Override
-		public Instrument freeze() {
+		public InstrumentEntity freeze() {
 			return this;
 		}
 
@@ -79,7 +79,7 @@ public interface Instrument extends Value<Instrument>, Comparable<Instrument>,
 		}
 
 		@Override
-		public int compareTo(final Instrument o) {
+		public int compareTo(final InstrumentEntity o) {
 			return InstrumentGUID.NULL_INSTRUMENT_GUID.compareTo(o.getGUID());
 		}
 
@@ -199,7 +199,7 @@ public interface Instrument extends Value<Instrument>, Comparable<Instrument>,
 		}
 
 		@Override
-		public MarketTag<Instrument> tag() {
+		public MarketTag<InstrumentEntity> tag() {
 			return null;
 		}
 
@@ -220,12 +220,12 @@ public interface Instrument extends Value<Instrument>, Comparable<Instrument>,
 		}
 
 		@Override
-		public Instrument instrument() {
+		public InstrumentEntity instrument() {
 			return this;
 		}
 
 		@Override
-		public TimeValue lastUpdateTime() {
+		public Time lastUpdateTime() {
 			// TODO Auto-generated method stub
 			return null;
 		}

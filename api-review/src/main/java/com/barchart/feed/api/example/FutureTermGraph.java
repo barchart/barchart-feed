@@ -1,7 +1,7 @@
 package com.barchart.feed.api.example;
 
-import com.barchart.feed.api.data.client.TopOfBookObject;
-import com.barchart.feed.api.data.framework.Instrument;
+import com.barchart.feed.api.data.client.TopOfBook;
+import com.barchart.feed.api.data.framework.InstrumentEntity;
 import com.barchart.feed.api.enums.SecurityType;
 import com.barchart.feed.api.market.Agent;
 import com.barchart.feed.api.market.InstrumentFilter;
@@ -30,10 +30,10 @@ public class FutureTermGraph implements Agent {
 	/**
 	 * The callback which will hook updates to the top of book to the graph
 	 */
-	private class GraphCallback implements MarketCallback<TopOfBookObject> {
+	private class GraphCallback implements MarketCallback<TopOfBook> {
 
 		@Override
-		public void call(final TopOfBookObject top) {
+		public void call(final TopOfBook top) {
 			updateGraph(top.instrument(), top);
 		}
 		
@@ -46,7 +46,7 @@ public class FutureTermGraph implements Agent {
 	private class SymbolFamilyFilter implements InstrumentFilter {
 
 		@Override
-		public boolean filter(final Instrument instrument) {
+		public boolean filter(final InstrumentEntity instrument) {
 			
 			if(instrument.symbol().startsWith(prefix) &&
 					instrument.securityType() == SecurityType.FUTURE) {
@@ -64,7 +64,7 @@ public class FutureTermGraph implements Agent {
 	 * @param inst
 	 * @param top
 	 */
-	private void updateGraph(final Instrument inst, final TopOfBookObject top) {
+	private void updateGraph(final InstrumentEntity inst, final TopOfBook top) {
 		
 	}
 

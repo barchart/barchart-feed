@@ -1,9 +1,9 @@
 package com.barchart.feed.api.market;
 
-import com.barchart.feed.api.data.framework.Instrument;
+import com.barchart.feed.api.data.framework.InstrumentEntity;
 
 public interface InstrumentFilter {
 
-	boolean filter(Instrument instrument);
+	boolean filter(InstrumentEntity instrument);
 	
 }

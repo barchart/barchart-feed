@@ -1,8 +1,8 @@
 package com.barchart.feed.api.temp;
 
-import com.barchart.feed.api.data.temp.PriceValue;
-import com.barchart.feed.api.data.temp.SizeValue;
-import com.barchart.feed.api.data.temp.TimeValue;
+import com.barchart.feed.api.data.Price;
+import com.barchart.feed.api.data.Size;
+import com.barchart.feed.api.data.Time;
 
 public interface Session {
 
@@ -18,11 +18,11 @@ public interface Session {
 
 	interface Formal {
 
-		PriceValue open();
+		Price open();
 
-		SizeValue volume();
+		Size volume();
 
-		TimeValue timeOpened();
+		Time timeOpened();
 
 	}
 

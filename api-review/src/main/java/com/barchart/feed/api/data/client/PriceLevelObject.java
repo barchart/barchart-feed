@@ -4,7 +4,7 @@ import com.barchart.feed.api.enums.BookLiquidityType;
 import com.barchart.feed.api.enums.MarketSide;
 
 
-public interface PriceLevelObject extends MarketDataObject {
+public interface PriceLevelObject extends MarketData {
 
 	double priceLevel();
 	

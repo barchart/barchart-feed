@@ -1,8 +1,8 @@
 package com.barchart.feed.api.market;
 
-import com.barchart.feed.api.data.client.MarketDataObject;
-import com.barchart.feed.api.data.framework.Instrument;
-import com.barchart.feed.api.data.framework.Market;
+import com.barchart.feed.api.data.client.MarketData;
+import com.barchart.feed.api.data.framework.InstrumentEntity;
+import com.barchart.feed.api.data.framework.MarketEntity;
 import com.barchart.feed.api.exchange.Exchange;
 import com.barchart.feed.api.message.Message;
 import com.barchart.feed.api.util.Filter;
@@ -21,14 +21,14 @@ public interface Marketplace {
 
 	void handle(Message message);
 
-	<V extends FrameworkElement<V>> Builder<V> agentBuilder();
+	<V extends FrameworkEntity<V>> Builder<V> agentBuilder();
 
-	interface Builder<V extends FrameworkElement<V>> {
+	interface Builder<V extends FrameworkEntity<V>> {
 
 		/** FIXME resolution involved, throw exception on failure? */
 		Builder<V> filter(String... symbols);
 
-		Builder<V> filter(Instrument... instruments);
+		Builder<V> filter(InstrumentEntity... instruments);
 
 		Builder<V> filter(Exchange... exchange);
 
@@ -36,9 +36,9 @@ public interface Marketplace {
 
 		Builder<V> filter(Filter<?>... filter);
 
-		<M extends MarketDataObject> Agent build(MarketCallback<M> callback);
+		<M extends MarketData> Agent build(MarketCallback<M> callback);
 
-		<M extends MarketDataObject> Agent build(MarketCallback<M> callback,
+		<M extends MarketData> Agent build(MarketCallback<M> callback,
 				InstrumentFilter filter);
 
 	}
@@ -46,12 +46,12 @@ public interface Marketplace {
 	/*
 	 * AKA "RegTaker"
 	 */
-	interface FrameworkAgent<V extends MarketDataObject> extends Agent,
+	interface FrameworkAgent<V extends MarketData> extends Agent,
 			InstrumentFilter {
 
 		void bindMarketplace(Marketplace marketplace);
 
-		<M extends FrameworkElement<M>> MarketTag<M> callbackDataObjectTag();
+		<M extends FrameworkEntity<M>> MarketTag<M> callbackDataObjectTag();
 
 		Tag<?>[] tagsToListenTo();
 
@@ -59,14 +59,14 @@ public interface Marketplace {
 		// Agent can internally route callback based on message if needed
 		// And makes Market responsible for getting the data object to
 		// pass into the callback
-		<M extends FrameworkElement<M>> void handle(Market market,
-				Message message, FrameworkElement<M> data);
+		<M extends FrameworkEntity<M>> void handle(MarketEntity market,
+				Message message, FrameworkEntity<M> data);
 
-		void attach(Market market);
+		void attach(MarketEntity market);
 
-		void update(Market market);
+		void update(MarketEntity market);
 
-		void detach(Market market);
+		void detach(MarketEntity market);
 
 		//
 
@@ -85,7 +85,7 @@ public interface Marketplace {
 		//
 
 		@Override
-		boolean filter(Instrument instrument);
+		boolean filter(InstrumentEntity instrument);
 
 	}
 

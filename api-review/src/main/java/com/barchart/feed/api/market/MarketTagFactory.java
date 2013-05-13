@@ -11,7 +11,7 @@ public final class MarketTagFactory {
 		
 	}
 	
-	public static <V extends FrameworkElement<?>> MarketTag<V> 
+	public static <V extends FrameworkEntity<?>> MarketTag<V> 
 			create(final Class<V> clazz) {
 		
 		final Tag<V> tag = TagFactory.create(clazz);
