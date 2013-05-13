@@ -209,7 +209,7 @@ public interface InstrumentEntity extends Value<InstrumentEntity>, Comparable<In
 		}
 
 		@Override
-		public DateTime lastTime() {
+		public Time lastTime() {
 			return null;
 		}
 
@@ -228,6 +228,11 @@ public interface InstrumentEntity extends Value<InstrumentEntity>, Comparable<In
 		public Time lastUpdateTime() {
 			// TODO Auto-generated method stub
 			return null;
+		}
+
+		@Override
+		public InstrumentEntity copy() {
+			return this;
 		}
 
 	};
