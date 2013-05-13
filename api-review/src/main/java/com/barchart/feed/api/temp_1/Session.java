@@ -1,4 +1,4 @@
-package com.barchart.feed.api.temp;
+package com.barchart.feed.api.temp_1;
 
 import com.barchart.feed.api.data.Price;
 import com.barchart.feed.api.data.Size;
