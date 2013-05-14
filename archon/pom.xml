@@ -43,6 +43,12 @@
 			<artifactId>barchart-missive</artifactId>
 			<version>1.4.2</version>
 		</dependency>
+		
+		<dependency>
+			<groupId>com.barchart.util</groupId>
+			<artifactId>barchart-util-value-api</artifactId>
+			<version>3.0.0-SNAPSHOT</version>
+		</dependency>
   	
   	</dependencies>
   	

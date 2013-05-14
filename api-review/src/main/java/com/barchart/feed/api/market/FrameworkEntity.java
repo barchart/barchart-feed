@@ -1,9 +1,9 @@
 package com.barchart.feed.api.market;
 
-import com.barchart.feed.api.data.value.Time;
 import com.barchart.feed.api.message.Message;
-import com.barchart.feed.api.util.Copyable;
 import com.barchart.missive.api.TagMapSafe;
+import com.barchart.util.value.api.Copyable;
+import com.barchart.util.value.api.Time;
 
 public interface FrameworkEntity<M extends FrameworkEntity<M>> extends TagMapSafe, 
 		Copyable<M> {

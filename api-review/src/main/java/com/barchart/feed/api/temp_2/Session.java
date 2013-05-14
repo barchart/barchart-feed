@@ -1,8 +1,8 @@
 package com.barchart.feed.api.temp_2;
 
-import com.barchart.feed.api.data.value.Price;
-import com.barchart.feed.api.data.value.Size;
-import com.barchart.feed.api.data.value.Time;
+import com.barchart.util.value.api.Price;
+import com.barchart.util.value.api.Size;
+import com.barchart.util.value.api.Time;
 
 /**
  * Look: interface looks clean, documented in single place only via javadoc

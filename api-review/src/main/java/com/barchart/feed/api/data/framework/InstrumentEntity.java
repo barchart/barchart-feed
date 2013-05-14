@@ -10,7 +10,6 @@ package com.barchart.feed.api.data.framework;
 import org.joda.time.DateTime;
 
 import com.barchart.feed.api.data.client.Instrument;
-import com.barchart.feed.api.data.value.Time;
 import com.barchart.feed.api.enums.BookLiquidityType;
 import com.barchart.feed.api.enums.BookStructureType;
 import com.barchart.feed.api.enums.MarketCurrency;
@@ -25,6 +24,7 @@ import com.barchart.feed.api.message.Update;
 import com.barchart.feed.api.util.Schedule;
 import com.barchart.missive.api.Tag;
 import com.barchart.missive.core.MissiveException;
+import com.barchart.util.value.api.Time;
 import com.barchart.util.values.api.Fraction;
 import com.barchart.util.values.api.TimeInterval;
 import com.barchart.util.values.api.Value;

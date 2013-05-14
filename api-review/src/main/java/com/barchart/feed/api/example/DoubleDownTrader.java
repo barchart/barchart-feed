@@ -1,11 +1,11 @@
 package com.barchart.feed.api.example;
 
 import com.barchart.feed.api.data.client.CurrentSession;
-import com.barchart.feed.api.data.value.Price;
-import com.barchart.feed.api.data.value.Size;
 import com.barchart.feed.api.market.Agent;
 import com.barchart.feed.api.market.MarketCallback;
 import com.barchart.feed.api.market.Marketplace;
+import com.barchart.util.value.api.Price;
+import com.barchart.util.value.api.Size;
 
 /**
  * A mock trade signal generator which has built in agent life-cycle logic. The
