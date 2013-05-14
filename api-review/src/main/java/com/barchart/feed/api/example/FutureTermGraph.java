@@ -46,7 +46,7 @@ public class FutureTermGraph implements Agent {
 	private class SymbolFamilyFilter implements InstrumentFilter {
 
 		@Override
-		public boolean filter(final InstrumentEntity instrument) {
+		public boolean include(final InstrumentEntity instrument) {
 			
 			if(instrument.symbol().startsWith(prefix) &&
 					instrument.securityType() == SecurityType.FUTURE) {

@@ -7,7 +7,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import com.barchart.feed.api.data.FrameworkElement;
 import com.barchart.feed.api.data.client.MarketDataObject;
-import com.barchart.feed.api.data.framework.Instrument;
 import com.barchart.feed.api.data.framework.Market;
 import com.barchart.feed.api.market.FrameworkAgent;
 import com.barchart.feed.api.market.Marketplace;
@@ -160,15 +159,15 @@ public class AgentBase implements FrameworkAgent {
 	}
 
 	@Override
-	public boolean filter(Object m) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
 	public void call(MarketDataObject v) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public boolean include(Object m) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 	

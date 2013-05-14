@@ -47,7 +47,7 @@ public class MarketplaceBase implements Marketplace {
 		/* Attach agent and market to each other if passes agent's filter */
 		for(final Entry<Instrument, Market> e : marketMap.entrySet()) {
 			
-			if(agent.filter(e.getKey())) {
+			if(agent.include(e.getKey())) {
 				/* Agent will attach itself to market */
 				agent.attach(e.getValue());
 			}
@@ -71,7 +71,7 @@ public class MarketplaceBase implements Marketplace {
 		
 		for(final Entry<Instrument, Market> e : marketMap.entrySet()) {
 			
-			if(agent.filter(e.getKey())) {
+			if(agent.include(e.getKey())) {
 				agent.attach(e.getValue());
 			} else {
 				agent.detach(e.getValue());
@@ -114,7 +114,7 @@ public class MarketplaceBase implements Marketplace {
 		
 		/* Attach agent and market to each other if passes agent's filter */
 		for(final FrameworkAgent agent : agents) {
-			if(agent.filter(market.instrument())) {
+			if(agent.include(market.instrument())) {
 				agent.attach(market);
 				market.attach(agent);
 			}

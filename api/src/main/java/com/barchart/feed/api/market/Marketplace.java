@@ -5,7 +5,7 @@ import com.barchart.feed.api.data.client.MarketDataObject;
 import com.barchart.feed.api.data.framework.Instrument;
 import com.barchart.feed.api.exchange.Exchange;
 import com.barchart.feed.api.message.Message;
-import com.barchart.feed.api.util.Filter;
+import com.barchart.feed.api.util.Inclusive;
 
 
 public interface Marketplace {
@@ -26,7 +26,7 @@ public interface Marketplace {
 		public Builder<V> filter(Instrument... instruments);
 		public Builder<V> filter(Exchange... exchange);
 		public Builder<V> filter(Class<Message>... message);
-		public Builder<V> filter(Filter<?>... filter);
+		public Builder<V> filter(Inclusive<?>... filter);
 		
 		// Not sure here
 		public <O extends MarketDataObject> MarketAgent build(MarketCallback<O> callback);

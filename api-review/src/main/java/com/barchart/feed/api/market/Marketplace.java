@@ -5,7 +5,7 @@ import com.barchart.feed.api.data.framework.InstrumentEntity;
 import com.barchart.feed.api.data.framework.MarketEntity;
 import com.barchart.feed.api.exchange.Exchange;
 import com.barchart.feed.api.message.Message;
-import com.barchart.feed.api.util.Filter;
+import com.barchart.feed.api.util.Inclusive;
 import com.barchart.missive.api.Tag;
 
 /*
@@ -34,7 +34,7 @@ public interface Marketplace {
 
 		Builder<V> filter(Class<Message>... message);
 
-		Builder<V> filter(Filter<?>... filter);
+		Builder<V> filter(Inclusive<?>... filter);
 
 		<M extends MarketData> Agent build(MarketCallback<M> callback);
 
@@ -47,7 +47,7 @@ public interface Marketplace {
 	 * AKA "RegTaker"
 	 */
 	interface FrameworkAgent<V extends MarketData> extends Agent,
-			InstrumentFilter {
+			Inclusive<V> {
 
 		void bindMarketplace(Marketplace marketplace);
 
@@ -83,9 +83,6 @@ public interface Marketplace {
 		void dismiss();
 
 		//
-
-		@Override
-		boolean filter(InstrumentEntity instrument);
 
 	}
 
