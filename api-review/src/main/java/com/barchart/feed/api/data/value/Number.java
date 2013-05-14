@@ -1,4 +1,4 @@
-package com.barchart.feed.api.data;
+package com.barchart.feed.api.data.value;
 
 import com.barchart.feed.api.util.Copyable;
 
@@ -44,6 +44,7 @@ public interface Number<T extends Number<T>> extends Comparable<T>, Copyable<T> 
 	T mult(long factor) throws ArithmeticException;
 
 	/** type safe division for T */
+	T div(Number<?> factor) throws ArithmeticException;
 	T div(long factor) throws ArithmeticException;
 
 	/** type safe division for T */

@@ -9,8 +9,8 @@ package com.barchart.feed.api.data.framework;
 
 import org.joda.time.DateTime;
 
-import com.barchart.feed.api.data.Time;
 import com.barchart.feed.api.data.client.Instrument;
+import com.barchart.feed.api.data.value.Time;
 import com.barchart.feed.api.enums.BookLiquidityType;
 import com.barchart.feed.api.enums.BookStructureType;
 import com.barchart.feed.api.enums.MarketCurrency;
