@@ -1,8 +1,9 @@
 package com.barchart.feed.api.market;
 
-import com.barchart.feed.api.data.framework.InstrumentEntity;
-import com.barchart.feed.api.util.Inclusive;
+import com.barchart.feed.api.data.client.Instrument;
 
-public interface InstrumentFilter extends Inclusive<InstrumentEntity>{
+public interface InstrumentFilter {
+	
+	boolean accept(Instrument instrument);
 
 }

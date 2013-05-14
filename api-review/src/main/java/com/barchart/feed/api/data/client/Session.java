@@ -1,90 +1,61 @@
 package com.barchart.feed.api.data.client;
 
+import com.barchart.feed.api.data.client.simple.SessionSimple;
+import com.barchart.feed.api.data.client.val.SessionVal;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Size;
-import com.barchart.util.value.api.Time;
 
 /**
  * document object and primitive
  */
-public interface Session extends MarketData {
+public interface Session extends MarketData, SessionSimple, SessionVal {
 
-	/**
-	 * document object
-	 */
+	@Override
 	Price open();
 
-	/**
-	 * document primitive
-	 */
+	@Override
 	double openDouble();
 
-	/**
-	 * document object
-	 */
+	@Override
 	Price high();
 
-	/**
-	 * document primitive
-	 */
+	@Override
 	double highDouble();
 
-	/**
-	 * document object
-	 */
+	@Override
 	Price low();
 
-	/**
-	 * document primitive
-	 */
+	@Override
 	double lowDouble();
 
-	/**
-	 * document object
-	 */
+	@Override
 	Price close();
 
-	/**
-	 * document primitive
-	 */
+	@Override
 	double closeDouble();
 
-	/**
-	 * document object
-	 */
+	@Override
 	Price settle();
 
-	/**
-	 * document primitive
-	 */
+	// TODO Settle object?
+	@Override
 	double settleDouble();
 
-	/**
-	 * document object
-	 */
+	@Override
 	Size volume();
 
-	/**
-	 * document primitive
-	 */
+	@Override
 	long volumeLong();
 
-	/**
-	 * document object
-	 */
 	// XXX Should open interest be included? This is a futures concept which
 	// isn't
 	// event guaranteed to exist for all futures.
+	@Override
 	Size openInterest();
 
-	/**
-	 * document primitive
-	 */
+	@Override
 	long openInterestLong();
 
-	/**
-	 * document object
-	 */
-	Time sessionClose();
+	// TODO session close?
 
 }

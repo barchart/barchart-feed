@@ -1,7 +1,7 @@
 package com.barchart.feed.api.example;
 
+import com.barchart.feed.api.data.client.Instrument;
 import com.barchart.feed.api.data.client.TopOfBook;
-import com.barchart.feed.api.data.framework.InstrumentEntity;
 import com.barchart.feed.api.enums.SecurityType;
 import com.barchart.feed.api.market.Agent;
 import com.barchart.feed.api.market.InstrumentFilter;
@@ -46,7 +46,7 @@ public class FutureTermGraph implements Agent {
 	private class SymbolFamilyFilter implements InstrumentFilter {
 
 		@Override
-		public boolean include(final InstrumentEntity instrument) {
+		public boolean accept(final Instrument instrument) {
 			
 			if(instrument.symbol().startsWith(prefix) &&
 					instrument.securityType() == SecurityType.FUTURE) {
@@ -64,7 +64,7 @@ public class FutureTermGraph implements Agent {
 	 * @param inst
 	 * @param top
 	 */
-	private void updateGraph(final InstrumentEntity inst, final TopOfBook top) {
+	private void updateGraph(final Instrument inst, final TopOfBook top) {
 		
 	}
 
