@@ -4,7 +4,7 @@ import com.barchart.feed.api.data.client.Instrument;
 import com.barchart.feed.api.data.client.TopOfBook;
 import com.barchart.feed.api.enums.SecurityType;
 import com.barchart.feed.api.market.Agent;
-import com.barchart.feed.api.market.InstrumentFilter;
+import com.barchart.feed.api.market.InstrumentAcceptor;
 import com.barchart.feed.api.market.MarketCallback;
 import com.barchart.feed.api.market.Marketplace;
 
@@ -43,7 +43,7 @@ public class FutureTermGraph implements Agent {
 	/**
 	 * An instrument filter for Futures with a specific prefix, such as Eurodollars.
 	 */
-	private class SymbolFamilyFilter implements InstrumentFilter {
+	private class SymbolFamilyFilter implements InstrumentAcceptor {
 
 		@Override
 		public boolean accept(final Instrument instrument) {

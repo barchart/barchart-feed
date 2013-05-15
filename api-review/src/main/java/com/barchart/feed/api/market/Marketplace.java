@@ -39,7 +39,7 @@ public interface Marketplace {
 		<M extends MarketData> Agent build(MarketCallback<M> callback);
 
 		<M extends MarketData> Agent build(MarketCallback<M> callback,
-				InstrumentFilter filter);
+				InstrumentAcceptor filter);
 
 	}
 

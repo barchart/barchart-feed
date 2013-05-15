@@ -7,8 +7,6 @@
  */
 package com.barchart.feed.api.data.framework;
 
-import org.joda.time.DateTime;
-
 import com.barchart.feed.api.data.client.Instrument;
 import com.barchart.feed.api.enums.BookLiquidityType;
 import com.barchart.feed.api.enums.BookStructureType;
@@ -24,6 +22,8 @@ import com.barchart.feed.api.message.Update;
 import com.barchart.feed.api.util.Schedule;
 import com.barchart.missive.api.Tag;
 import com.barchart.missive.core.MissiveException;
+import com.barchart.util.value.api.Price;
+import com.barchart.util.value.api.Size;
 import com.barchart.util.value.api.Time;
 import com.barchart.util.values.api.Fraction;
 import com.barchart.util.values.api.TimeInterval;
@@ -114,11 +114,6 @@ public interface InstrumentEntity extends Value<InstrumentEntity>, Comparable<In
 		}
 
 		@Override
-		public long maxBookDepth() {
-			return 0;
-		}
-
-		@Override
 		public String instrumentDataVendor() {
 			return "NULL";
 		}
@@ -146,16 +141,6 @@ public interface InstrumentEntity extends Value<InstrumentEntity>, Comparable<In
 		@Override
 		public MarketCurrency currency() {
 			return MarketCurrency.NULL_CURRENCY;
-		}
-
-		@Override
-		public double tickSize() {
-			return 0;
-		}
-
-		@Override
-		public double pointValue() {
-			return 0;
 		}
 
 		@Override
@@ -233,6 +218,42 @@ public interface InstrumentEntity extends Value<InstrumentEntity>, Comparable<In
 		@Override
 		public InstrumentEntity copy() {
 			return this;
+		}
+
+		@Override
+		public long maxBookDepthLong() {
+			// TODO Auto-generated method stub
+			return 0;
+		}
+
+		@Override
+		public Size maxBookDepth() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public double tickSizeDouble() {
+			// TODO Auto-generated method stub
+			return 0;
+		}
+
+		@Override
+		public Price tickSize() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public double pointValueDouble() {
+			// TODO Auto-generated method stub
+			return 0;
+		}
+
+		@Override
+		public Price pointValue() {
+			// TODO Auto-generated method stub
+			return null;
 		}
 
 	};

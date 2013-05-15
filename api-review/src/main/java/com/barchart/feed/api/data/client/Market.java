@@ -10,7 +10,7 @@ public interface Market extends MarketData {
 	public DateTime lastChangeTime();
 	public Trade lastTrade();
 	public OrderBook orderBook();
-	public PriceLevelObject lastBookUpdate();
+	public PriceLevel lastBookUpdate();
 	public TopOfBook topOfBook();
 	public Cuvol cuvol();
 	public CurrentSession currentSession();

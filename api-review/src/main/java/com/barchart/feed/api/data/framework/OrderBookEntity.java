@@ -5,7 +5,7 @@ import com.barchart.feed.api.market.FrameworkEntity;
 
 public interface OrderBookEntity extends OrderBook, FrameworkEntity<OrderBookEntity> {
 
-	void setEntry(PriceLevel entry);
+	void setEntry(PriceLevelEntity entry);
 	// UniBookResult setSnapshot(PriceLevel[]);
 	
 	// void clear()

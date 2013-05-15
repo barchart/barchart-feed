@@ -1,14 +1,14 @@
 package com.barchart.feed.api.data.client;
 
-import com.barchart.feed.api.data.client.simple.SessionSimple;
-import com.barchart.feed.api.data.client.val.SessionVal;
+import com.barchart.feed.api.data.client.object.SessionObject;
+import com.barchart.feed.api.data.client.primitive.SessionPrimitive;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Size;
 
 /**
  * document object and primitive
  */
-public interface Session extends MarketData, SessionSimple, SessionVal {
+public interface Session extends MarketData, SessionPrimitive, SessionObject {
 
 	@Override
 	Price open();

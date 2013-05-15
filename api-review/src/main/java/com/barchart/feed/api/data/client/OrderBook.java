@@ -1,17 +1,36 @@
 package com.barchart.feed.api.data.client;
 
+import java.util.List;
+
+import com.barchart.feed.api.data.client.object.OrderBookObject;
+import com.barchart.feed.api.data.client.primitive.OrderBookPrimitive;
 import com.barchart.feed.api.enums.MarketSide;
+import com.barchart.util.value.api.Price;
+import com.barchart.util.value.api.Size;
 
-public interface OrderBook extends MarketData {
+public interface OrderBook extends MarketData, OrderBookObject, OrderBookPrimitive {
 
-	PriceLevelObject[] entries(MarketSide side);
+	@Override
+	PriceLevel[] entries(MarketSide side);
 	
-	double bestPrice(MarketSide side);
+	@Override
+	Price bestPrice(MarketSide side);
+	@Override
+	double bestPriceDouble(MarketSide side);
 	
-	long bestSize(MarketSide side);
+	@Override
+	Size bestSize(MarketSide side);
+	@Override
+	long bestSizeLong(MarketSide side);
 	
-	long[] sizes(MarketSide side);
+	@Override
+	List<Size> sizeList(MarketSide side);
+	@Override
+	List<Long> sizeListLong(MarketSide side);
 	
-	double gap();
+	@Override
+	Price gap();
+	@Override
+	double gapDouble();
 	
 }

@@ -2,11 +2,6 @@ package com.barchart.feed.market.provider.data;
 
 import org.joda.time.DateTime;
 
-import com.barchart.feed.api.data.MarketTag;
-import com.barchart.feed.api.data.framework.Trade;
-import com.barchart.feed.api.message.Message;
-import com.barchart.feed.api.message.Snapshot;
-import com.barchart.feed.api.message.Update;
 import com.barchart.missive.core.ObjectMapSafe;
 
 public class TradeBase extends ObjectMapSafe implements Trade {
