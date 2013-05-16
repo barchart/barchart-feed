@@ -2,28 +2,35 @@ package com.barchart.feed.api.data;
 
 import java.util.List;
 
-import com.barchart.feed.api.enums.BookLiquidityType;
+import com.barchart.feed.api.data.common.PriceLevelCommon;
+import com.barchart.feed.api.data.object.PriceLevelObject;
+import com.barchart.feed.api.data.primitive.PriceLevelPrimitive;
 import com.barchart.feed.api.enums.MarketSide;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Size;
 
-public interface PriceLevel extends MarketData {
+public interface PriceLevel extends PriceLevelCommon, PriceLevelObject,
+		PriceLevelPrimitive {
 
+	@Override
 	Price price();
 
+	@Override
 	double priceDouble();
 
-	Size quantity();
+	@Override
+	Size size();
 
-	long quantityLong();
+	@Override
+	long sizeLong();
 
+	@Override
 	MarketSide side();
 
-	int place();
+	@Override
+	int level();
 
-	BookLiquidityType type();
-
-	/** Order structure of a price level. */
+	@Override
 	List<Order> orderList();
 
 }

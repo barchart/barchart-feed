@@ -1,11 +1,15 @@
 package com.barchart.feed.api.data;
 
+import com.barchart.feed.api.data.common.OrderCommon;
 import com.barchart.feed.api.data.object.OrderObject;
 import com.barchart.feed.api.data.primitive.OrderPrimitive;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Size;
 
-public interface Order extends OrderObject, OrderPrimitive {
+/**
+ * Single order in a book price level.
+ */
+public interface Order extends OrderCommon, OrderObject, OrderPrimitive {
 
 	@Override
 	String id();

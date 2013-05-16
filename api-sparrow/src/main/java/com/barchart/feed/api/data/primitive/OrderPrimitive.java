@@ -7,8 +7,14 @@ public interface OrderPrimitive extends OrderCommon {
 	@Override
 	String id();
 
+	/**
+	 * Price of an order, as double.
+	 */
 	double priceDouble();
 
+	/**
+	 * Size of an order, as long.
+	 */
 	long sizeDouble();
 
 }
