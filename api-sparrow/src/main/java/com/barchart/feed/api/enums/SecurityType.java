@@ -11,13 +11,14 @@ import com.barchart.util.values.api.Value;
 
 public enum SecurityType implements Value<SecurityType> {
 
-	NULL_TYPE,
-	FOREX,
-	INDEX,
-	EQUITY,
-	FUTURE,
-	OPTION,
-	SPREAD;
+	NULL_TYPE, //
+	FOREX, //
+	INDEX, //
+	EQUITY, //
+	FUTURE, //
+	OPTION, //
+	SPREAD, //
+	;
 
 	@Override
 	public SecurityType freeze() {
@@ -33,5 +34,5 @@ public enum SecurityType implements Value<SecurityType> {
 	public boolean isNull() {
 		return this == NULL_TYPE;
 	}
-	
+
 }

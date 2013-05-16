@@ -8,9 +8,8 @@
 package com.barchart.feed.api.enums;
 
 import com.barchart.util.values.api.TextValue;
-import com.barchart.util.values.api.Value;
 
-public enum BookLiquidityType implements Value<BookLiquidityType> {
+public enum BookLiquidityType {
 
 	/** no size book */
 	NONE, //
@@ -41,21 +40,6 @@ public enum BookLiquidityType implements Value<BookLiquidityType> {
 			}
 		}
 		return NONE;
-	}
-
-	@Override
-	public BookLiquidityType freeze() {
-		return this;
-	}
-
-	@Override
-	public boolean isFrozen() {
-		return true;
-	}
-
-	@Override
-	public boolean isNull() {
-		return this == NONE;
 	}
 
 }

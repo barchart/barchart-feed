@@ -1,6 +1,6 @@
 package com.barchart.feed.api.enums;
 
-public enum UniBookResult {
+enum UniBookResult {
 
 	/** update processed on top */
 	TOP, //
@@ -13,5 +13,5 @@ public enum UniBookResult {
 
 	/** invalid update request */
 	ERROR, //
-	
+
 }

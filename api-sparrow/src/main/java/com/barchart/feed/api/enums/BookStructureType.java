@@ -7,9 +7,7 @@
  */
 package com.barchart.feed.api.enums;
 
-import com.barchart.util.values.api.Value;
-
-public enum BookStructureType implements Value<BookStructureType> {
+public enum BookStructureType {
 
 	/** no size book */
 	NONE, //
@@ -31,21 +29,6 @@ public enum BookStructureType implements Value<BookStructureType> {
 
 	public static final BookStructureType fromOrd(final byte ord) {
 		return ENUM_VALUES[ord];
-	}
-
-	@Override
-	public BookStructureType freeze() {
-		return this;
-	}
-
-	@Override
-	public boolean isFrozen() {
-		return true;
-	}
-
-	@Override
-	public boolean isNull() {
-		return this == NONE;
 	}
 
 }
