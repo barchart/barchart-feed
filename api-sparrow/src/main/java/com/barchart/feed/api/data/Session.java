@@ -4,6 +4,7 @@ import com.barchart.feed.api.data.object.SessionObject;
 import com.barchart.feed.api.data.primitive.SessionPrimitive;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Size;
+import com.barchart.util.value.api.Time;
 
 /**
  * document object and primitive
@@ -37,7 +38,6 @@ public interface Session extends MarketData, SessionPrimitive, SessionObject {
 	@Override
 	Price settle();
 
-	// TODO Settle object?
 	@Override
 	double settleDouble();
 
@@ -47,15 +47,28 @@ public interface Session extends MarketData, SessionPrimitive, SessionObject {
 	@Override
 	long volumeLong();
 
-	// XXX Should open interest be included? This is a futures concept which
-	// isn't
-	// event guaranteed to exist for all futures.
 	@Override
-	Size openInterest();
+	Size interest();
 
 	@Override
-	long openInterestLong();
+	long interestLong();
 
-	// TODO session close?
+	@Override
+	Time timeOpened();
+
+	@Override
+	long timeOpenedLong();
+
+	@Override
+	Time timeUpdated();
+
+	@Override
+	long timeUpdatedLong();
+
+	@Override
+	Time timeClosed();
+
+	@Override
+	long timeClosedLong();
 
 }

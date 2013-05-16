@@ -1,17 +1,18 @@
 package com.barchart.feed.api.data.primitive;
 
+
 public interface SessionPrimitive {
-	
+
 	/**
 	 * document primitive
 	 */
 	double openDouble();
-	
+
 	/**
 	 * document primitive
 	 */
 	double highDouble();
-	
+
 	/**
 	 * document primitive
 	 */
@@ -21,21 +22,35 @@ public interface SessionPrimitive {
 	 * document primitive
 	 */
 	double closeDouble();
-	
+
 	/**
 	 * document primitive
 	 */
 	double settleDouble();
-	
+
 	/**
 	 * document primitive
 	 */
 	long volumeLong();
-	
+
 	/**
 	 * document primitive
 	 */
-	long openInterestLong();
+	long interestLong();
 
-	
+	/**
+	 * document primitive
+	 */
+	long timeOpenedLong();
+
+	/**
+	 * document primitive
+	 */
+	long timeUpdatedLong();
+
+	/**
+	 * document primitive
+	 */
+	long timeClosedLong();
+
 }
