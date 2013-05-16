@@ -26,8 +26,9 @@ import com.barchart.util.values.api.TimeInterval;
 import com.barchart.util.values.api.Value;
 import com.barchart.util.values.provider.ValueConst;
 
-public interface InstrumentEntity extends Value<InstrumentEntity>, Comparable<InstrumentEntity>, 
-		Instrument, FrameworkEntity<InstrumentEntity> {
+public interface InstrumentEntity extends Value<InstrumentEntity>,
+		Comparable<InstrumentEntity>, Instrument,
+		FrameworkEntity<InstrumentEntity> {
 
 	InstrumentGUID getGUID();
 
@@ -50,12 +51,12 @@ public interface InstrumentEntity extends Value<InstrumentEntity>, Comparable<In
 		}
 
 		@Override
-		public Tag<?>[] tags() {
+		public Tag<?>[] tagsList() {
 			return new Tag<?>[0];
 		}
 
 		@Override
-		public int size() {
+		public int tagsSize() {
 			return 0;
 		}
 
@@ -155,8 +156,9 @@ public interface InstrumentEntity extends Value<InstrumentEntity>, Comparable<In
 		}
 
 		@Override
-		public <V> void set(Tag<V> tag, V value) throws MissiveException {
-			
+		public <V> void set(final Tag<V> tag, final V value)
+				throws MissiveException {
+
 		}
 
 		@Override
@@ -253,9 +255,9 @@ public interface InstrumentEntity extends Value<InstrumentEntity>, Comparable<In
 		}
 
 		@Override
-		public void update(Message update) {
+		public void update(final Message update) {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 	};

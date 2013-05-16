@@ -8,11 +8,9 @@ import com.barchart.feed.api.enums.MarketSide;
 public interface OrderBookPrimitive extends OrderBookCommon {
 
 	double bestPriceDouble(MarketSide side);
-	
+
 	long bestSizeLong(MarketSide side);
-	
+
 	List<Long> sizeListLong(MarketSide side);
-	
-	double gapDouble();
-	
+
 }
