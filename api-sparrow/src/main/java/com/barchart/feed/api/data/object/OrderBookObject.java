@@ -1,11 +1,10 @@
 package com.barchart.feed.api.data.object;
 
-import java.util.List;
-
 import com.barchart.feed.api.data.common.OrderBookCommon;
 import com.barchart.feed.api.enums.MarketSide;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Size;
+import com.barchart.util.value.api.Time;
 
 public interface OrderBookObject extends OrderBookCommon {
 
@@ -13,6 +12,8 @@ public interface OrderBookObject extends OrderBookCommon {
 
 	Size bestSize(MarketSide side);
 
-	List<Size> sizeList(MarketSide side);
+	Price lastPrice();
+
+	Time timeUpdated();
 
 }
