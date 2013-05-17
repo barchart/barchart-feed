@@ -1,8 +1,6 @@
-package com.barchart.feed.api.data.framework;
+package com.barchart.feed.api.framework;
 
-import com.barchart.feed.api.data.client.Market;
-import com.barchart.feed.api.market.FrameworkAgent;
-import com.barchart.feed.api.market.FrameworkEntity;
+import com.barchart.feed.api.data.Market;
 import com.barchart.feed.api.message.Message;
 
 public interface MarketEntity extends Market, Comparable<MarketEntity>, 

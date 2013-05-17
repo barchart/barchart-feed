@@ -1,6 +1,5 @@
-package com.barchart.feed.api.data;
+package com.barchart.feed.api.framework;
 
-import com.barchart.feed.api.market.MarketTag;
 import com.barchart.feed.api.message.Message;
 import com.barchart.missive.api.TagMapSafe;
 import com.barchart.util.value.api.Copyable;

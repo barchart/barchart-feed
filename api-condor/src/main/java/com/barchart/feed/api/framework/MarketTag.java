@@ -1,4 +1,4 @@
-package com.barchart.feed.api.market;
+package com.barchart.feed.api.framework;
 
 import com.barchart.missive.api.Tag;
 

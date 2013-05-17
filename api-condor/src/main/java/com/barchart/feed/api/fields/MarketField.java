@@ -4,9 +4,9 @@ import com.barchart.feed.api.data.InstrumentEntity;
 import com.barchart.feed.api.data.OrderBookEntity;
 import com.barchart.feed.api.data.TopOfBookEntity;
 import com.barchart.feed.api.data.TradeEntity;
-import com.barchart.feed.api.market.MarketEntity;
-import com.barchart.feed.api.market.MarketTag;
-import com.barchart.feed.api.market.MarketTagFactory;
+import com.barchart.feed.api.framework.MarketEntity;
+import com.barchart.feed.api.framework.MarketTag;
+import com.barchart.feed.api.framework.MarketTagFactory;
 
 //Interface or final class?????????
 public final class MarketField {

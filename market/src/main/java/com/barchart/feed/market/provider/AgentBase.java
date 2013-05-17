@@ -6,10 +6,10 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import com.barchart.feed.api.core.Marketplace;
-import com.barchart.feed.api.data.FrameworkEntity;
-import com.barchart.feed.api.market.FrameworkAgent;
-import com.barchart.feed.api.market.MarketEntity;
-import com.barchart.feed.api.market.MarketTag;
+import com.barchart.feed.api.framework.FrameworkAgent;
+import com.barchart.feed.api.framework.FrameworkEntity;
+import com.barchart.feed.api.framework.MarketEntity;
+import com.barchart.feed.api.framework.MarketTag;
 import com.barchart.feed.api.message.Message;
 import com.barchart.missive.api.Tag;
 

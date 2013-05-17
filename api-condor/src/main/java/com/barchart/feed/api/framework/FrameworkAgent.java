@@ -1,8 +1,7 @@
-package com.barchart.feed.api.market;
+package com.barchart.feed.api.framework;
 
 import com.barchart.feed.api.core.Agent;
 import com.barchart.feed.api.core.Marketplace;
-import com.barchart.feed.api.data.FrameworkEntity;
 import com.barchart.feed.api.message.Message;
 import com.barchart.missive.api.Tag;
 
@@ -20,12 +19,6 @@ public interface FrameworkAgent extends Agent {
 	// pass into the callback
 	<M extends FrameworkEntity<M>> void handle(MarketEntity market,
 			Message message, FrameworkEntity<M> data);
-
-	void attach(MarketEntity market);
-
-	void update(MarketEntity market);
-
-	void detach(MarketEntity market);
 
 	//
 
