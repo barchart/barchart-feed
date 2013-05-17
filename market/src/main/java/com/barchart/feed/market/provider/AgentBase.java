@@ -5,18 +5,18 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import com.barchart.feed.api.data.FrameworkElement;
-import com.barchart.feed.api.data.client.MarketDataObject;
-import com.barchart.feed.api.data.framework.Market;
+import com.barchart.feed.api.core.Marketplace;
+import com.barchart.feed.api.data.FrameworkEntity;
 import com.barchart.feed.api.market.FrameworkAgent;
-import com.barchart.feed.api.market.Marketplace;
+import com.barchart.feed.api.market.MarketEntity;
+import com.barchart.feed.api.market.MarketTag;
 import com.barchart.feed.api.message.Message;
 import com.barchart.missive.api.Tag;
 
 public class AgentBase implements FrameworkAgent {
 	
-	private final Set<Market> markets = Collections.newSetFromMap(
-			new ConcurrentHashMap<Market, Boolean>());
+	private final Set<MarketEntity> markets = Collections.newSetFromMap(
+			new ConcurrentHashMap<MarketEntity, Boolean>());
 	
 	private final AtomicBoolean active = new AtomicBoolean(true);
 	private final AtomicBoolean dismiss = new AtomicBoolean(false);
@@ -24,7 +24,7 @@ public class AgentBase implements FrameworkAgent {
 	/* ***** ***** ***** ***** ***** ***** ***** */
 	
 	@Override
-	public synchronized void attach(final Market market) {
+	public synchronized void attach(final MarketEntity market) {
 		
 		if(market == null || dismiss.get()) {
 			return;
@@ -41,7 +41,7 @@ public class AgentBase implements FrameworkAgent {
 	}
 	
 	@Override
-	public synchronized void update(final Market market) {
+	public synchronized void update(final MarketEntity market) {
 		
 		if(market == null || dismiss.get()) {
 			return;
@@ -57,7 +57,7 @@ public class AgentBase implements FrameworkAgent {
 	}
 
 	@Override
-	public synchronized void detach(final Market market) {
+	public synchronized void detach(final MarketEntity market) {
 		
 		if(market == null || !markets.contains(market)) {
 			return;
@@ -71,8 +71,8 @@ public class AgentBase implements FrameworkAgent {
 	/* ***** ***** ***** ***** ***** ***** ***** */
 	
 	@Override
-	public <M extends FrameworkElement<M>> void handle(final Market market,
-			final Message message, final FrameworkElement<M> data) {
+	public <M extends FrameworkEntity<M>> void handle(final MarketEntity market,
+			final Message message, final FrameworkEntity<M> data) {
 		
 		if(market == null || message == null || data == null) {
 			return;
@@ -120,7 +120,7 @@ public class AgentBase implements FrameworkAgent {
 
 	// This will be set in factory or something
 	@Override
-	public <M extends FrameworkElement<M>> Tag<M> callbackDataObjectTag() {
+	public <M extends FrameworkEntity<M>> MarketTag<M> callbackDataObjectTag() {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -151,25 +151,11 @@ public class AgentBase implements FrameworkAgent {
 		dismiss.set(true);
 		marketplace.detachAgent(this);
 		
-		for(final Market market : markets) {
+		for(final MarketEntity market : markets) {
 			market.detach(this);
 		}
 		
 		markets.clear();
 	}
-
-	@Override
-	public void call(MarketDataObject v) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public boolean include(Object m) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	
 
 }

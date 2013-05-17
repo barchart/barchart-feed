@@ -1,57 +1,62 @@
 package com.barchart.feed.market.provider.data;
 
-import org.joda.time.DateTime;
-
+import com.barchart.feed.api.data.Instrument;
+import com.barchart.feed.api.data.Trade;
 import com.barchart.missive.core.ObjectMapSafe;
+import com.barchart.util.value.api.Price;
+import com.barchart.util.value.api.Size;
+import com.barchart.util.value.api.Time;
 
 public class TradeBase extends ObjectMapSafe implements Trade {
 
 	@Override
-	public double getTradePrice() {
+	public Instrument instrument() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Time lastUpdateTime() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Price price() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public double priceDouble() {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public long getTradeSize() {
+	public Size size() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public long sizeLong() {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public DateTime getTradeTime() {
+	public Time time() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Update lastUpdate() {
+	public long timeLong() {
 		// TODO Auto-generated method stub
-		return null;
+		return 0;
 	}
 
-	@Override
-	public Snapshot lastSnapshot() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public MarketTag<Trade> tag() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void update(Message message) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public DateTime lastTime() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
 
 }

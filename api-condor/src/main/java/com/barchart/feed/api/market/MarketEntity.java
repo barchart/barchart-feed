@@ -2,7 +2,6 @@ package com.barchart.feed.api.market;
 
 import com.barchart.feed.api.data.FrameworkEntity;
 import com.barchart.feed.api.data.Market;
-import com.barchart.feed.api.market.Marketplace.FrameworkAgent;
 import com.barchart.feed.api.message.Message;
 
 public interface MarketEntity extends Market, Comparable<MarketEntity>, 
@@ -10,8 +9,8 @@ public interface MarketEntity extends Market, Comparable<MarketEntity>,
 
 	void handle(Message message);
 	
-	void attach(FrameworkAgent<?> agent);
-	void update(FrameworkAgent<?> agent);
-	void detach(FrameworkAgent<?> agent);
+	void attach(FrameworkAgent agent);
+	void update(FrameworkAgent agent);
+	void detach(FrameworkAgent agent);
 	
 }

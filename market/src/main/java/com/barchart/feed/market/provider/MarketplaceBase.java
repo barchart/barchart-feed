@@ -6,11 +6,13 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-import com.barchart.feed.api.data.FrameworkElement;
-import com.barchart.feed.api.data.framework.Instrument;
-import com.barchart.feed.api.data.framework.Market;
+import com.barchart.feed.api.core.Marketplace;
+import com.barchart.feed.api.data.FrameworkEntity;
+import com.barchart.feed.api.data.Instrument;
+import com.barchart.feed.api.data.InstrumentEntity;
+import com.barchart.feed.api.data.Market;
 import com.barchart.feed.api.market.FrameworkAgent;
-import com.barchart.feed.api.market.Marketplace;
+import com.barchart.feed.api.market.MarketEntity;
 import com.barchart.feed.api.message.Message;
 
 public class MarketplaceBase implements Marketplace {
@@ -18,11 +20,11 @@ public class MarketplaceBase implements Marketplace {
 	private final Set<FrameworkAgent> agents = Collections.newSetFromMap(
 			new ConcurrentHashMap<FrameworkAgent, Boolean>());
 	
-	private final Set<Market> markets = Collections.newSetFromMap( 
-			new ConcurrentHashMap<Market, Boolean>());
+	private final Set<MarketEntity> markets = Collections.newSetFromMap( 
+			new ConcurrentHashMap<MarketEntity, Boolean>());
 	
-	private final ConcurrentMap<Instrument, Market> marketMap = 
-			new ConcurrentHashMap<Instrument, Market>();
+	private final ConcurrentMap<InstrumentEntity, MarketEntity> marketMap = 
+			new ConcurrentHashMap<InstrumentEntity, MarketEntity>();
 	
 	/* ***** ***** ***** ***** ***** ***** ***** */
 	
@@ -45,7 +47,7 @@ public class MarketplaceBase implements Marketplace {
 		agents.add(agent);
 		
 		/* Attach agent and market to each other if passes agent's filter */
-		for(final Entry<Instrument, Market> e : marketMap.entrySet()) {
+		for(final Entry<InstrumentEntity, MarketEntity> e : marketMap.entrySet()) {
 			
 			if(agent.include(e.getKey())) {
 				/* Agent will attach itself to market */
@@ -69,7 +71,7 @@ public class MarketplaceBase implements Marketplace {
 			return;
 		}
 		
-		for(final Entry<Instrument, Market> e : marketMap.entrySet()) {
+		for(final Entry<InstrumentEntity, MarketEntity> e : marketMap.entrySet()) {
 			
 			if(agent.include(e.getKey())) {
 				agent.attach(e.getValue());
@@ -88,7 +90,7 @@ public class MarketplaceBase implements Marketplace {
 			return;
 		}
 		
-		for(final Market market : markets) {
+		for(final MarketEntity market : markets) {
 			agent.detach(market);
 		}
 		
@@ -103,7 +105,7 @@ public class MarketplaceBase implements Marketplace {
 	
 	
 	@SuppressWarnings("unchecked")
-	protected synchronized void attachMarket(final Market market) {
+	protected synchronized void attachMarket(final MarketEntity market) {
 		
 		if(market == null || markets.contains(market)) {
 			return;
@@ -130,11 +132,11 @@ public class MarketplaceBase implements Marketplace {
 		
 		
 	}
-	
+
 	/* ***** ***** ***** ***** ***** ***** ***** */
 	
 	@Override
-	public <V extends FrameworkElement<V>> Builder<V> builder() {
+	public <V extends FrameworkEntity<V>> Builder<V> agentBuilder() {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -5,28 +5,28 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-import org.joda.time.DateTime;
-
-import com.barchart.feed.api.data.MarketTag;
-import com.barchart.feed.api.data.client.CurrentSessionObject;
-import com.barchart.feed.api.data.client.CuvolObject;
-import com.barchart.feed.api.data.client.ExtendedSessionObject;
-import com.barchart.feed.api.data.client.OrderBookObject;
-import com.barchart.feed.api.data.client.PreviousSessionObject;
-import com.barchart.feed.api.data.client.PriceLevelObject;
-import com.barchart.feed.api.data.client.TopOfBookObject;
-import com.barchart.feed.api.data.client.TradeObject;
-import com.barchart.feed.api.data.framework.Instrument;
-import com.barchart.feed.api.data.framework.Market;
+import com.barchart.feed.api.data.Cuvol;
+import com.barchart.feed.api.data.Instrument;
+import com.barchart.feed.api.data.InstrumentEntity;
+import com.barchart.feed.api.data.Market;
+import com.barchart.feed.api.data.OrderBook;
+import com.barchart.feed.api.data.PriceLevel;
+import com.barchart.feed.api.data.Session;
+import com.barchart.feed.api.data.TopOfBook;
+import com.barchart.feed.api.data.Trade;
+import com.barchart.feed.api.enums.SessionType;
 import com.barchart.feed.api.fields.MarketField;
 import com.barchart.feed.api.market.FrameworkAgent;
+import com.barchart.feed.api.market.MarketEntity;
+import com.barchart.feed.api.market.MarketTag;
 import com.barchart.feed.api.message.Message;
 import com.barchart.feed.api.message.Snapshot;
 import com.barchart.feed.api.message.Update;
 import com.barchart.missive.api.Tag;
 import com.barchart.missive.core.ObjectMapSafe;
+import com.barchart.util.value.api.Time;
 
-class MarketBase extends ObjectMapSafe implements Market {
+class MarketBase extends ObjectMapSafe implements MarketEntity {
 	
 	// MAKE CANONICAL NULL OBJECTS
 	private volatile Update lastUpdate = null;
@@ -50,9 +50,9 @@ class MarketBase extends ObjectMapSafe implements Market {
 	}
 	
 	/* Instrument set in MarketFactory */
-	private volatile Instrument instrument;
+	private volatile InstrumentEntity instrument;
 	
-	void setInstrument(final Instrument inst) {
+	void setInstrument(final InstrumentEntity inst) {
 		instrument = inst;
 	}
 	
@@ -166,7 +166,7 @@ class MarketBase extends ObjectMapSafe implements Market {
 	}
 
 	@Override
-	public MarketTag<Market> tag() {
+	public MarketTag<MarketEntity> tag() {
 		return MarketField.MARKET;
 	}
 	
@@ -178,61 +178,37 @@ class MarketBase extends ObjectMapSafe implements Market {
 	}
 
 	@Override
-	public DateTime lastChangeTime() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public TradeObject lastTrade() {
+	public Trade lastTrade() {
 		return get(MarketField.LAST_TRADE);
 	}
 
 	@Override
-	public OrderBookObject orderBook() {
+	public OrderBook orderBook() {
 		return get(MarketField.ORDER_BOOK);
 	}
 
 	@Override
-	public PriceLevelObject lastBookUpdate() {
+	public PriceLevel lastBookUpdate() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public TopOfBookObject topOfBook() {
+	public TopOfBook topOfBook() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public CuvolObject cuvol() {
+	public Cuvol cuvol() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
-	public CurrentSessionObject currentSession() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public PreviousSessionObject extraSession() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public ExtendedSessionObject previousSession() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
 	/* ***** ***** ***** ***** ***** ***** ***** */
 
 	@Override
-	public int compareTo(final Market o) {
+	public int compareTo(final MarketEntity o) {
 		return instrument.compareTo(o.instrument());
 	}
 	
@@ -257,7 +233,24 @@ class MarketBase extends ObjectMapSafe implements Market {
 	}
 
 	@Override
-	public DateTime lastTime() {
+	public Time lastTime() {
+		return null;
+	}
+
+	@Override
+	public Session session(SessionType type) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Time lastUpdateTime() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public MarketEntity copy() {
 		// TODO Auto-generated method stub
 		return null;
 	}

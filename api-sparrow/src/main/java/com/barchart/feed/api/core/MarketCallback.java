@@ -1,4 +1,4 @@
-package com.barchart.feed.api.market;
+package com.barchart.feed.api.core;
 
 import com.barchart.feed.api.data.MarketData;
 
