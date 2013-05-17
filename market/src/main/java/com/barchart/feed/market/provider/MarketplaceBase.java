@@ -10,12 +10,14 @@ import com.barchart.feed.api.core.Marketplace;
 import com.barchart.feed.api.data.Instrument;
 import com.barchart.feed.api.data.InstrumentEntity;
 import com.barchart.feed.api.data.Market;
+import com.barchart.feed.api.data.MarketData;
 import com.barchart.feed.api.framework.FrameworkAgent;
 import com.barchart.feed.api.framework.FrameworkEntity;
+import com.barchart.feed.api.framework.FrameworkMarketplace;
 import com.barchart.feed.api.framework.MarketEntity;
 import com.barchart.feed.api.message.Message;
 
-public class MarketplaceBase implements Marketplace {
+public class MarketplaceBase implements FrameworkMarketplace {
 
 	private final Set<FrameworkAgent> agents = Collections.newSetFromMap(
 			new ConcurrentHashMap<FrameworkAgent, Boolean>());
@@ -91,7 +93,7 @@ public class MarketplaceBase implements Marketplace {
 		}
 		
 		for(final MarketEntity market : markets) {
-			agent.detach(market);
+			market.detach(agent);
 		}
 		
 		agents.remove(agent);
@@ -137,6 +139,12 @@ public class MarketplaceBase implements Marketplace {
 	
 	@Override
 	public <V extends FrameworkEntity<V>> Builder<V> agentBuilder() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public <V extends MarketData> Builder<V> agentBuilder() {
 		// TODO Auto-generated method stub
 		return null;
 	}

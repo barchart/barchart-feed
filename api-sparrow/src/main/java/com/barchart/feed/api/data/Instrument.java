@@ -12,7 +12,7 @@ import com.barchart.util.value.api.Size;
 import com.barchart.util.values.api.Fraction;
 import com.barchart.util.values.api.TimeInterval;
 
-public interface Instrument extends MarketData {
+public interface Instrument extends MarketData, Comparable<Instrument> {
 	
 	InstrumentGUID GUID();
 	

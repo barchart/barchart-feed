@@ -5,9 +5,9 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import com.barchart.feed.api.core.Marketplace;
 import com.barchart.feed.api.framework.FrameworkAgent;
 import com.barchart.feed.api.framework.FrameworkEntity;
+import com.barchart.feed.api.framework.FrameworkMarketplace;
 import com.barchart.feed.api.framework.MarketEntity;
 import com.barchart.feed.api.framework.MarketTag;
 import com.barchart.feed.api.message.Message;
@@ -23,7 +23,7 @@ public class AgentBase implements FrameworkAgent {
 
 	/* ***** ***** ***** ***** ***** ***** ***** */
 	
-	@Override
+/*	@Override
 	public synchronized void attach(final MarketEntity market) {
 		
 		if(market == null || dismiss.get()) {
@@ -67,7 +67,7 @@ public class AgentBase implements FrameworkAgent {
 		market.detach(this);
 		
 	}
-
+*/
 	/* ***** ***** ***** ***** ***** ***** ***** */
 	
 	@Override
@@ -109,12 +109,12 @@ public class AgentBase implements FrameworkAgent {
 	
 	/* ***** ***** ***** ***** ***** ***** ***** */
 	
-	private volatile Marketplace marketplace = null;
+	private volatile FrameworkMarketplace marketplace = null;
 	
 	// This should go away if the marketplace provides the agent builders
 	// For now we'll just have it
 	@Override
-	public void bindMarketplace(final Marketplace marketplace) {
+	public void bindMarketplace(final FrameworkMarketplace marketplace) {
 		this.marketplace = marketplace;
 	}
 

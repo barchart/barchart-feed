@@ -1,13 +1,12 @@
 package com.barchart.feed.api.framework;
 
 import com.barchart.feed.api.core.Agent;
-import com.barchart.feed.api.core.Marketplace;
 import com.barchart.feed.api.message.Message;
 import com.barchart.missive.api.Tag;
 
 public interface FrameworkAgent extends Agent {
 	
-	void bindMarketplace(Marketplace marketplace);
+	void bindMarketplace(FrameworkMarketplace marketplace);
 
 	<M extends FrameworkEntity<M>> MarketTag<M> callbackDataObjectTag();
 
