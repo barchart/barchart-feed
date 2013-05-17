@@ -11,7 +11,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.Future;
 
-import com.barchart.feed.api.data.framework.Instrument;
+import javax.sound.midi.Instrument;
 
 public interface InstrumentService<V> {
 	

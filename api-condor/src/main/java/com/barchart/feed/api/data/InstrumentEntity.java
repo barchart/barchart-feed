@@ -56,7 +56,7 @@ public interface InstrumentEntity extends Value<InstrumentEntity>,
 		}
 
 		@Override
-		public int tagsSize() {
+		public int mapSize() {
 			return 0;
 		}
 

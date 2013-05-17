@@ -7,7 +7,7 @@
  */
 package com.barchart.feed.api.inst;
 
-import com.barchart.feed.api.data.framework.Instrument;
+import javax.sound.midi.Instrument;
 
 
 public interface MetadataContext {

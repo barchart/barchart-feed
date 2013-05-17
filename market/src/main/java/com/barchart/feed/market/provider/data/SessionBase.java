@@ -1,98 +1,134 @@
 package com.barchart.feed.market.provider.data;
 
-import org.joda.time.DateTime;
-
-import com.barchart.feed.api.data.MarketTag;
-import com.barchart.feed.api.data.framework.Session;
-import com.barchart.feed.api.message.Message;
-import com.barchart.feed.api.message.Snapshot;
-import com.barchart.feed.api.message.Update;
+import com.barchart.feed.api.data.Instrument;
+import com.barchart.feed.api.data.Session;
 import com.barchart.missive.core.ObjectMapSafe;
+import com.barchart.util.value.api.Price;
+import com.barchart.util.value.api.Size;
+import com.barchart.util.value.api.Time;
 
 public class SessionBase extends ObjectMapSafe implements Session {
 
 	@Override
-	public double getOpen() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public double getHigh() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public double getLow() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public double getClose() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public double getSettle() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public long getVolume() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public long getOpenInterest() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public DateTime getLastUpdate() {
+	public Instrument instrument() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public DateTime getSessionClose() {
+	public Time lastUpdateTime() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Update lastUpdate() {
+	public Price open() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Snapshot lastSnapshot() {
+	public double openDouble() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public Price high() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public MarketTag<Session> tag() {
+	public double highDouble() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public Price low() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public void update(Message message) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public DateTime lastTime() {
+	public Price close() {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public double closeDouble() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public Price settle() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Size volume() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public long volumeLong() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public Size interest() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public long interestLong() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public Time timeOpened() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public long timeOpenedLong() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public Time timeUpdated() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public long timeUpdatedLong() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public Time timeClosed() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public long timeClosedLong() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	
 
 }
