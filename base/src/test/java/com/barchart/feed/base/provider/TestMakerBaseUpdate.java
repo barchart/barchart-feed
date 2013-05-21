@@ -20,7 +20,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.feed.api.data.framework.Instrument;
+import com.barchart.feed.api.data.InstrumentEntity;
 import com.barchart.feed.api.inst.InstrumentService;
 import com.barchart.feed.base.market.MockMaker;
 import com.barchart.feed.base.market.MockMarketFactory;
@@ -63,7 +63,7 @@ public class TestMakerBaseUpdate {
 		regListenter = new MarketRegListener() {
 
 			@Override
-			public void onRegistrationChange(final Instrument inst,
+			public void onRegistrationChange(final InstrumentEntity inst,
 					final Set<MarketEvent> events) {
 
 				log.debug("inst : {} ; events : {}", inst, asString(events));
@@ -80,7 +80,7 @@ public class TestMakerBaseUpdate {
 
 	private MarketField<?> field;
 	private MarketEvent[] eventArray;
-	private Instrument[] instArray;
+	private InstrumentEntity[] instArray;
 
 	private final MarketTaker<?> taker = new MarketTaker<Market>() {
 		@Override
@@ -95,13 +95,13 @@ public class TestMakerBaseUpdate {
 		}
 
 		@Override
-		public Instrument[] bindInstruments() {
+		public InstrumentEntity[] bindInstruments() {
 			return instArray;
 		}
 
 		@Override
 		public void onMarketEvent(final MarketEvent event,
-				final Instrument inst, final Market value) {
+				final InstrumentEntity inst, final Market value) {
 		}
 	};
 
@@ -113,9 +113,9 @@ public class TestMakerBaseUpdate {
 		maker.add(regListenter);
 
 		// 3 different instruments
-		final Instrument inst1 = service.lookup(MockDefinitionService.INST_SYMBOL_1);
-		final Instrument inst2 = service.lookup(MockDefinitionService.INST_SYMBOL_2);
-		final Instrument inst3 = service.lookup(MockDefinitionService.INST_SYMBOL_3);
+		final InstrumentEntity inst1 = service.lookup(MockDefinitionService.INST_SYMBOL_1);
+		final InstrumentEntity inst2 = service.lookup(MockDefinitionService.INST_SYMBOL_2);
+		final InstrumentEntity inst3 = service.lookup(MockDefinitionService.INST_SYMBOL_3);
 
 		//
 
@@ -127,7 +127,7 @@ public class TestMakerBaseUpdate {
 		log.debug("step 1");
 
 		field = MarketField.BAR_CURRENT;
-		instArray = new Instrument[] { inst1, inst2 }; // #2 is present
+		instArray = new InstrumentEntity[] { inst1, inst2 }; // #2 is present
 		eventArray = MarketEvent.in(event1);
 
 		// original registration
@@ -164,7 +164,7 @@ public class TestMakerBaseUpdate {
 		log.debug("step 2");
 
 		field = MarketField.BAR_PREVIOUS;
-		instArray = new Instrument[] { inst2, inst3 }; // #2 is present
+		instArray = new InstrumentEntity[] { inst2, inst3 }; // #2 is present
 		eventArray = MarketEvent.in(event2); // event1 != event2
 
 		maker.update(taker); // XXX bind again

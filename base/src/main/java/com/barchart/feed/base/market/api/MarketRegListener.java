@@ -9,7 +9,7 @@ package com.barchart.feed.base.market.api;
 
 import java.util.Set;
 
-import com.barchart.feed.api.data.framework.Instrument;
+import com.barchart.feed.api.data.InstrumentEntity;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.util.anno.EventListener;
 
@@ -24,6 +24,6 @@ public interface MarketRegListener {
 	 */
 	@EventListener(MarketTaker.class)
 	void onRegistrationChange(//
-			Instrument instrument, Set<MarketEvent> events);
+			InstrumentEntity instrument, Set<MarketEvent> events);
 
 }

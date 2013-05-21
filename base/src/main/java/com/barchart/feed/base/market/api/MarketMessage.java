@@ -7,12 +7,12 @@
  */
 package com.barchart.feed.base.market.api;
 
-import com.barchart.feed.api.data.framework.Instrument;
+import com.barchart.feed.api.data.InstrumentEntity;
 
 public interface MarketMessage {
 
 	// TimeValue getTime();
 
-	Instrument getInstrument();
+	InstrumentEntity getInstrument();
 
 }

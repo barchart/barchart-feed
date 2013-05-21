@@ -21,7 +21,7 @@ import static com.barchart.feed.base.market.enums.MarketField.CUVOL;
 import static com.barchart.feed.base.market.enums.MarketField.MARKET;
 import static com.barchart.feed.base.market.enums.MarketField.TRADE;
 
-import com.barchart.feed.api.data.framework.Instrument;
+import com.barchart.feed.api.data.InstrumentEntity;
 import com.barchart.feed.base.bar.api.MarketBar;
 import com.barchart.feed.base.book.api.MarketBook;
 import com.barchart.feed.base.book.api.MarketBookEntry;
@@ -70,14 +70,14 @@ abstract class MarketUseCase {
 		}
 
 		@Override
-		public Instrument[] bindInstruments() {
+		public InstrumentEntity[] bindInstruments() {
 			return null; // some instruments
 		}
 
 		@SuppressWarnings("deprecation")
 		@Override
 		public void onMarketEvent(final MarketEvent event,
-				final Instrument instrument, final Market market) {
+				final InstrumentEntity instrument, final Market market) {
 
 			final MarketBar bar = market.get(BAR_CURRENT);
 
@@ -126,14 +126,14 @@ abstract class MarketUseCase {
 		}
 
 		@Override
-		public Instrument[] bindInstruments() {
+		public InstrumentEntity[] bindInstruments() {
 			return null; // some instrument
 		}
 
 		@SuppressWarnings("deprecation")
 		@Override
 		public void onMarketEvent(final MarketEvent event,
-				final Instrument instrument, final MarketBar bar) {
+				final InstrumentEntity instrument, final MarketBar bar) {
 
 			switch (event) {
 			case MARKET_STATUS_OPENED:
@@ -170,13 +170,13 @@ abstract class MarketUseCase {
 		}
 
 		@Override
-		public Instrument[] bindInstruments() {
+		public InstrumentEntity[] bindInstruments() {
 			return null; // some valid instruments
 		}
 
 		@Override
 		public void onMarketEvent(final MarketEvent event,
-				final Instrument instrument, final MarketTrade trade) {
+				final InstrumentEntity instrument, final MarketTrade trade) {
 
 			switch (event) {
 			case NEW_TRADE:

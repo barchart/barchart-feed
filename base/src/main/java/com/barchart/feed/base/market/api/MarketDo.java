@@ -10,7 +10,7 @@ package com.barchart.feed.base.market.api;
 import java.util.List;
 import java.util.Set;
 
-import com.barchart.feed.api.data.framework.Instrument;
+import com.barchart.feed.api.data.InstrumentEntity;
 import com.barchart.feed.base.bar.api.MarketBar;
 import com.barchart.feed.base.bar.api.MarketDoBar;
 import com.barchart.feed.base.bar.enums.MarketBarType;
@@ -50,7 +50,7 @@ public interface MarketDo extends Market {
 	/* VALUES */
 
 	/** one time instrument initialization */
-	void setInstrument(Instrument symbol);
+	void setInstrument(InstrumentEntity symbol);
 
 	/**  */
 	void setBookUpdate(MarketDoBookEntry entry, TimeValue time);

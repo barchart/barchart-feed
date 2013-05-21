@@ -18,6 +18,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.barchart.feed.api.market.MarketDisplay;
+import com.barchart.feed.market.provider.MarketDisplayBaseImpl;
 import com.barchart.util.values.api.Fraction;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.TimeValue;

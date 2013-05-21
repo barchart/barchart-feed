@@ -7,7 +7,7 @@
  */
 package com.barchart.feed.base.message;
 
-import com.barchart.feed.api.data.framework.Instrument;
+import com.barchart.feed.api.data.InstrumentEntity;
 import com.barchart.feed.api.enums.BookLiquidityType;
 import com.barchart.feed.base.book.enums.MarketBookAction;
 import com.barchart.feed.base.book.enums.MarketBookSide;
@@ -17,7 +17,7 @@ import com.barchart.util.values.api.TimeValue;
 
 public class MockMsgBook extends MockMessage {
 
-	public MockMsgBook(Instrument inst) {
+	public MockMsgBook(InstrumentEntity inst) {
 		super(inst);
 	}
 

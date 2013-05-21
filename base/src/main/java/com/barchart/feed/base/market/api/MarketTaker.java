@@ -7,7 +7,7 @@
  */
 package com.barchart.feed.base.market.api;
 
-import com.barchart.feed.api.data.framework.Instrument;
+import com.barchart.feed.api.data.InstrumentEntity;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.util.anno.EventListener;
@@ -32,7 +32,7 @@ public interface MarketTaker<V extends Value<V>> {
 
 	/** Specify list of markets this taker will subscribe to */
 	@UsedOnce
-	Instrument[] bindInstruments();
+	InstrumentEntity[] bindInstruments();
 
 	//
 
@@ -41,7 +41,7 @@ public interface MarketTaker<V extends Value<V>> {
 	 * markets; returned values are frozen and disconnected from live market
 	 */
 	@EventListener(MarketEvent.class)
-	void onMarketEvent(MarketEvent event, Instrument instrument,
+	void onMarketEvent(MarketEvent event, InstrumentEntity instrument,
 			@NotMutable V value);
 
 	//

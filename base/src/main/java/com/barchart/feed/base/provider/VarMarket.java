@@ -15,7 +15,7 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.feed.api.data.framework.Instrument;
+import com.barchart.feed.api.data.InstrumentEntity;
 import com.barchart.feed.api.enums.BookLiquidityType;
 import com.barchart.feed.api.fields.InstrumentField;
 import com.barchart.feed.base.bar.api.MarketBar;
@@ -233,7 +233,7 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 
 		if (cuvol.isFrozen()) {
 
-			final Instrument inst = get(INSTRUMENT);
+			final InstrumentEntity inst = get(INSTRUMENT);
 			final PriceValue priceStep = inst.get(InstrumentField.TICK_SIZE);
 
 			final VarCuvol varCuvol = new VarCuvol(priceStep);
@@ -277,7 +277,7 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 
 		if (book.isFrozen()) {
 
-			final Instrument inst = get(INSTRUMENT);
+			final InstrumentEntity inst = get(INSTRUMENT);
 
 			final BookLiquidityType type = inst.get(InstrumentField.BOOK_LIQUIDITY);
 
@@ -302,7 +302,7 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 
 	protected final boolean isValidPrice(final PriceValue price) {
 
-		final Instrument inst = get(INSTRUMENT);
+		final InstrumentEntity inst = get(INSTRUMENT);
 
 		final PriceValue priceStep = inst.get(InstrumentField.TICK_SIZE);
 

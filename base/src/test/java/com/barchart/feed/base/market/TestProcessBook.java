@@ -36,7 +36,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.feed.api.data.framework.Instrument;
+import com.barchart.feed.api.data.InstrumentEntity;
 import com.barchart.feed.api.enums.BookLiquidityType;
 import com.barchart.feed.api.inst.InstrumentService;
 import com.barchart.feed.base.bar.api.MarketBar;
@@ -87,11 +87,11 @@ public class TestProcessBook {
 
 		final MockMaker maker = new MockMaker(new MockMarketFactory());
 
-		Instrument inst;
+		InstrumentEntity inst;
 
 		inst = service.lookup(MockDefinitionService.INST_SYMBOL_2);
 
-		final Instrument[] insts = new Instrument[] { inst };
+		final InstrumentEntity[] insts = new InstrumentEntity[] { inst };
 
 		final MarketTaker<Market> tempTaker = new MockTaker<Market>(insts);
 
@@ -276,11 +276,11 @@ public class TestProcessBook {
 
 		final MockMaker maker = new MockMaker(new MockMarketFactory());
 
-		final Instrument inst;
+		final InstrumentEntity inst;
 
 		inst = service.lookup(MockDefinitionService.INST_SYMBOL_2);
 
-		final Instrument[] insts = new Instrument[] { inst };
+		final InstrumentEntity[] insts = new InstrumentEntity[] { inst };
 
 		final MarketTaker<Market> tempTaker = new MockTaker<Market>(insts);
 
@@ -304,15 +304,15 @@ public class TestProcessBook {
 			}
 
 			@Override
-			public Instrument[] bindInstruments() {
-				return new Instrument[] { inst };
+			public InstrumentEntity[] bindInstruments() {
+				return new InstrumentEntity[] { inst };
 			}
 
 			MarketBar previous;
 
 			@Override
 			public void onMarketEvent(final MarketEvent event,
-					final Instrument instrument, final MarketBar bar) {
+					final InstrumentEntity instrument, final MarketBar bar) {
 
 				count.incrementAndGet();
 

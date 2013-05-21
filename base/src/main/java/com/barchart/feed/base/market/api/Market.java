@@ -9,7 +9,7 @@ package com.barchart.feed.base.market.api;
 
 import org.joda.time.DateTime;
 
-import com.barchart.feed.api.data.framework.Instrument;
+import com.barchart.feed.api.data.InstrumentEntity;
 import com.barchart.feed.base.bar.api.MarketBar;
 import com.barchart.feed.base.book.api.MarketBook;
 import com.barchart.feed.base.book.api.MarketBookEntry;
@@ -27,7 +27,7 @@ public interface Market extends Value<Market> {
 
 	<V extends Value<V>> V get(MarketField<V> field);
 	
-	public Instrument getInstrument();
+	public InstrumentEntity getInstrument();
 	public DateTime getLastChangeTime();
 	public MarketTrade getLastTrade();
 	public MarketBook getBook();

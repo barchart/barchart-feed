@@ -27,7 +27,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.feed.api.data.framework.Instrument;
+import com.barchart.feed.api.data.InstrumentEntity;
 import com.barchart.feed.api.inst.InstrumentService;
 import com.barchart.feed.base.cuvol.api.MarketCuvol;
 import com.barchart.feed.base.cuvol.api.MarketCuvolEntry;
@@ -61,9 +61,9 @@ public class TestProcessCuvol {
 
 		final MockMaker maker = new MockMaker(new MockMarketFactory());
 
-		final Instrument inst = service.lookup(MockDefinitionService.INST_SYMBOL_3);
+		final InstrumentEntity inst = service.lookup(MockDefinitionService.INST_SYMBOL_3);
 
-		final Instrument[] insts = new Instrument[] { inst };
+		final InstrumentEntity[] insts = new InstrumentEntity[] { inst };
 
 		final MarketTaker<Market> tempTaker = new MockTaker<Market>(insts);
 

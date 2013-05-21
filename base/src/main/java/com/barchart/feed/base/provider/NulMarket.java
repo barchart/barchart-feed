@@ -9,7 +9,7 @@ package com.barchart.feed.base.provider;
 
 import org.joda.time.DateTime;
 
-import com.barchart.feed.api.data.framework.Instrument;
+import com.barchart.feed.api.data.InstrumentEntity;
 import com.barchart.feed.base.bar.api.MarketBar;
 import com.barchart.feed.base.book.api.MarketBook;
 import com.barchart.feed.base.book.api.MarketBookEntry;
@@ -67,8 +67,8 @@ class NulMarket extends ValueFreezer<Market> implements Market {
 	}
 
 	@Override
-	public Instrument getInstrument() {
-		return Instrument.NULL_INSTRUMENT;
+	public InstrumentEntity getInstrument() {
+		return InstrumentEntity.NULL_INSTRUMENT;
 	}
 
 	@Override

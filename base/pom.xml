@@ -48,6 +48,12 @@
 			<artifactId>barchart-feed-api-condor</artifactId>
 			<version>[1.0.0, 1.1)</version>
 		</dependency>
+		
+		<dependency>
+			<groupId>com.barchart.feed</groupId>
+			<artifactId>barchart-feed-market</artifactId>
+			<version>[1.0.0, 1.1)</version>
+		</dependency>
 
 		<!-- MAIN -->
 		

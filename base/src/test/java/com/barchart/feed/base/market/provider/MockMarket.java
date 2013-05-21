@@ -32,7 +32,7 @@ import static com.barchart.feed.base.trade.enums.MarketTradeField.SIZE;
 import static com.barchart.feed.base.trade.enums.MarketTradeField.TRADE_TIME;
 import static com.barchart.feed.base.trade.enums.MarketTradeField.TYPE;
 
-import com.barchart.feed.api.data.framework.Instrument;
+import com.barchart.feed.api.data.InstrumentEntity;
 import com.barchart.feed.base.bar.api.MarketDoBar;
 import com.barchart.feed.base.bar.enums.MarketBarType;
 import com.barchart.feed.base.book.api.MarketDoBook;
@@ -55,11 +55,11 @@ import com.barchart.util.values.api.TimeValue;
 public class MockMarket extends VarMarket {
 
 	@Override
-	public void setInstrument(final Instrument symbol) {
+	public void setInstrument(final InstrumentEntity symbol) {
 
-		final Instrument oldInst = get(INSTRUMENT);
+		final InstrumentEntity oldInst = get(INSTRUMENT);
 
-		if (Instrument.NULL_INSTRUMENT.equals(oldInst)) {
+		if (InstrumentEntity.NULL_INSTRUMENT.equals(oldInst)) {
 			set(INSTRUMENT, symbol);
 		} else {
 			throw new IllegalStateException("symbol can be set only once");

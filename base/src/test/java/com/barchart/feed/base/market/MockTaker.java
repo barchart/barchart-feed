@@ -10,7 +10,7 @@
  */
 package com.barchart.feed.base.market;
 
-import com.barchart.feed.api.data.framework.Instrument;
+import com.barchart.feed.api.data.InstrumentEntity;
 import com.barchart.feed.base.market.api.Market;
 import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketEvent;
@@ -24,9 +24,9 @@ public class MockTaker<V> implements MarketTaker<Market> {
 
 	private final MarketField<Market> field;
 	private final MarketEvent[] events;
-	private final Instrument[] insts;
+	private final InstrumentEntity[] insts;
 
-	public MockTaker(final Instrument[] insts) {
+	public MockTaker(final InstrumentEntity[] insts) {
 		field = MarketField.MARKET;
 		events = new MarketEvent[] { MarketEvent.NEW_TRADE };
 		this.insts = insts;
@@ -43,13 +43,13 @@ public class MockTaker<V> implements MarketTaker<Market> {
 	}
 
 	@Override
-	public Instrument[] bindInstruments() {
+	public InstrumentEntity[] bindInstruments() {
 		return insts;
 	}
 
 	@Override
 	public void onMarketEvent(final MarketEvent event,
-			final Instrument instrument, final Market value) {
+			final InstrumentEntity instrument, final Market value) {
 
 	}
 

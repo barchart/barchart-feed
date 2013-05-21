@@ -33,7 +33,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.feed.api.data.framework.Instrument;
+import com.barchart.feed.api.data.InstrumentEntity;
 import com.barchart.feed.api.inst.InstrumentService;
 import com.barchart.feed.base.bar.api.MarketBar;
 import com.barchart.feed.base.market.api.Market;
@@ -70,11 +70,11 @@ public class TestProcessBar {
 
 		final MockMaker maker = new MockMaker(new MockMarketFactory());
 
-		Instrument inst;
+		InstrumentEntity inst;
 
 		inst = service.lookup(MockDefinitionService.INST_SYMBOL_1);
 
-		final Instrument[] insts = new Instrument[] { inst };
+		final InstrumentEntity[] insts = new InstrumentEntity[] { inst };
 
 		final MarketTaker<Market> tempTaker = new MockTaker<Market>(insts);
 

@@ -10,7 +10,7 @@ package com.barchart.feed.base.market.enums;
 import static com.barchart.feed.base.provider.MarketConst.*;
 import static com.barchart.util.values.provider.ValueConst.*;
 
-import com.barchart.feed.api.data.framework.Instrument;
+import com.barchart.feed.api.data.InstrumentEntity;
 import com.barchart.feed.base.bar.api.MarketBar;
 import com.barchart.feed.base.book.api.MarketBook;
 import com.barchart.feed.base.book.api.MarketBookEntry;
@@ -34,7 +34,7 @@ public final class MarketField<V extends Value<V>> extends
 	// ##################################
 
 	/** primary key */
-	public static final MarketField<Instrument> INSTRUMENT = NEW(Instrument.NULL_INSTRUMENT);
+	public static final MarketField<InstrumentEntity> INSTRUMENT = NEW(InstrumentEntity.NULL_INSTRUMENT);
 
 	/** last time any change of any market field */
 	public static final MarketField<TimeValue> MARKET_TIME = NEW(NULL_TIME);

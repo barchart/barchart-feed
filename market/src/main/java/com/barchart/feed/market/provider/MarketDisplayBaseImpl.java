@@ -5,7 +5,7 @@
  *
  * http://www.opensource.org/licenses/bsd-license.php
  */
-package com.barchart.feed.base.provider;
+package com.barchart.feed.market.provider;
 
 import static java.lang.Math.log10;
 

@@ -10,7 +10,7 @@ package com.barchart.feed.base.provider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.feed.api.data.framework.Instrument;
+import com.barchart.feed.api.data.InstrumentEntity;
 import com.barchart.feed.api.fields.InstrumentField;
 import com.barchart.feed.base.market.api.Market;
 import com.barchart.feed.base.market.api.MarketDo;
@@ -114,7 +114,7 @@ public abstract class MakerBaseAllMarkets<Message extends MarketMessage>
 
 	private final MarketTaker<Market> omniTaker = new MarketTaker<Market>() {
 
-		final Instrument[] blankInsts = {};
+		final InstrumentEntity[] blankInsts = {};
 
 		@Override
 		public MarketField<Market> bindField() {
@@ -127,13 +127,13 @@ public abstract class MakerBaseAllMarkets<Message extends MarketMessage>
 		}
 
 		@Override
-		public Instrument[] bindInstruments() {
+		public InstrumentEntity[] bindInstruments() {
 			return blankInsts;
 		}
 
 		@Override
 		public void onMarketEvent(final MarketEvent event,
-				final Instrument instrument, final Market market) {
+				final InstrumentEntity instrument, final Market market) {
 			fireEvents(marketMap.get(instrument), event);
 		}
 
@@ -145,7 +145,7 @@ public abstract class MakerBaseAllMarkets<Message extends MarketMessage>
 	@Override
 	public final void make(final Message message) {
 
-		final Instrument instrument = message.getInstrument();
+		final InstrumentEntity instrument = message.getInstrument();
 
 		if (!isValid(instrument)) {
 			return;
@@ -192,7 +192,7 @@ public abstract class MakerBaseAllMarkets<Message extends MarketMessage>
 	}
 
 	@Override
-	protected boolean isValid(final Instrument instrument) {
+	protected boolean isValid(final InstrumentEntity instrument) {
 
 		if (instrument == null) {
 			return false;
