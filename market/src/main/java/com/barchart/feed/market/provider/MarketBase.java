@@ -26,7 +26,7 @@ import com.barchart.missive.api.Tag;
 import com.barchart.missive.core.ObjectMapSafe;
 import com.barchart.util.value.api.Time;
 
-class MarketBase extends ObjectMapSafe implements MarketEntity {
+public class MarketBase extends ObjectMapSafe implements MarketEntity {
 	
 	// MAKE CANONICAL NULL OBJECTS
 	private volatile Update lastUpdate = null;

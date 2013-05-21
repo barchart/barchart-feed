@@ -35,13 +35,17 @@
 		<developerConnection>scm:git:ssh://git@github.com/barchart/barchart-feed.git</developerConnection>
 		<tag>2_0</tag>
 	</scm>
+	
+	<properties>
+		<missiveVersion>[2-SNAPSHOT, 2.1.0)</missiveVersion>
+	</properties>
   	
   	<dependencies>
   	
   		<dependency>
 			<groupId>com.barchart.missive</groupId>
 			<artifactId>barchart-missive</artifactId>
-			<version>1.4.2</version>
+			<version>${missiveVersion}</version>
 		</dependency>
 		
 		<dependency>

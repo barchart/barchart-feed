@@ -12,10 +12,10 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>com.barchart.base</groupId>
-		<artifactId>barchart-archon</artifactId>
-		<version>2.5.6</version>
-	</parent>
+	    <groupId>com.barchart.feed</groupId>
+	    <artifactId>barchart-feed-archon</artifactId>
+    	<version>2.0.2-SNAPSHOT</version>
+  	</parent>
 
 	<groupId>com.barchart.feed</groupId>
 	<artifactId>barchart-feed-inst</artifactId>
@@ -41,16 +41,16 @@
 
 	<dependencies>
 	
-		<dependency>
+		<!-- <dependency>
 			<groupId>com.barchart.feed</groupId>
 			<artifactId>barchart-feed-api</artifactId>
-			<version>[2.0.0, 2.1)</version>
+			<version>[2-SNAPSHOT, 2.1)</version>
 		</dependency>
-
+ -->
 		<dependency>
 			<groupId>com.barchart.feed</groupId>
 			<artifactId>barchart-feed-api-condor</artifactId>
-			<version>[1.0.0, 1.1)</version>
+			<version>1.0.1-SNAPSHOT</version>
 		</dependency>
 
 		<dependency>
@@ -63,7 +63,7 @@
 		<dependency>
 			<groupId>com.barchart.missive</groupId>
 			<artifactId>barchart-missive</artifactId>
-			<version>1.4.2</version>
+			<version>${missiveVersion}</version>
 		</dependency>
 
 		<!-- protocol buffers - original -->

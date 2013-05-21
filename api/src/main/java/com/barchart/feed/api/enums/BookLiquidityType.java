@@ -10,6 +10,7 @@ package com.barchart.feed.api.enums;
 import com.barchart.util.values.api.TextValue;
 import com.barchart.util.values.api.Value;
 
+
 public enum BookLiquidityType implements Value<BookLiquidityType> {
 
 	/** no size book */
