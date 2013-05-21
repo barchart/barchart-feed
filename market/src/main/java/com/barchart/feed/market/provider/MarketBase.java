@@ -136,7 +136,6 @@ class MarketBase extends ObjectMapSafe implements MarketEntity {
 	
 	/* ***** ***** ***** ***** ***** ***** ***** */
 	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public void handle(final Message message) {
 		
@@ -251,6 +250,12 @@ class MarketBase extends ObjectMapSafe implements MarketEntity {
 
 	@Override
 	public MarketEntity copy() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public InstrumentEntity instrumentEntity() {
 		// TODO Auto-generated method stub
 		return null;
 	}

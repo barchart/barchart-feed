@@ -5,6 +5,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import com.barchart.feed.api.data.Instrument;
 import com.barchart.feed.api.framework.FrameworkAgent;
 import com.barchart.feed.api.framework.FrameworkEntity;
 import com.barchart.feed.api.framework.FrameworkMarketplace;
@@ -101,11 +102,11 @@ public class AgentBase implements FrameworkAgent {
 		return null;
 	}
 	
-//	@Override
-//	public boolean filter(final Instrument m) {
-//		// TODO Auto-generated method stub
-//		return false;
-//	}
+	@Override
+	public boolean accept(Instrument instrument) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 	
 	/* ***** ***** ***** ***** ***** ***** ***** */
 	
@@ -157,5 +158,7 @@ public class AgentBase implements FrameworkAgent {
 		
 		markets.clear();
 	}
+
+	
 
 }
