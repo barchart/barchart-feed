@@ -7,16 +7,15 @@
  */
 package com.barchart.feed.inst.provider;
 
-import org.joda.time.DateTime;
-
-import com.barchart.feed.api.data.MarketTag;
-import com.barchart.feed.api.data.framework.Instrument;
+import com.barchart.feed.api.data.Instrument;
+import com.barchart.feed.api.data.InstrumentEntity;
 import com.barchart.feed.api.enums.BookLiquidityType;
 import com.barchart.feed.api.enums.BookStructureType;
 import com.barchart.feed.api.enums.MarketCurrency;
 import com.barchart.feed.api.enums.SecurityType;
 import com.barchart.feed.api.fields.InstrumentField;
 import com.barchart.feed.api.fields.MarketField;
+import com.barchart.feed.api.framework.MarketTag;
 import com.barchart.feed.api.inst.GuidList;
 import com.barchart.feed.api.inst.InstrumentGUID;
 import com.barchart.feed.api.message.Message;
@@ -24,18 +23,27 @@ import com.barchart.feed.api.message.Snapshot;
 import com.barchart.feed.api.message.Update;
 import com.barchart.feed.api.util.Schedule;
 import com.barchart.missive.core.ObjectMapSafe;
+import com.barchart.util.value.api.Price;
+import com.barchart.util.value.api.Size;
+import com.barchart.util.value.api.Time;
 import com.barchart.util.values.api.Fraction;
 import com.barchart.util.values.api.TimeInterval;
 
-public abstract class InstrumentBase extends ObjectMapSafe implements Instrument {
+public abstract class InstrumentBase extends ObjectMapSafe implements InstrumentEntity {
 	
 	@Override
-	public MarketTag<Instrument> tag() {
+	public Instrument instrument() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	@Override
+	public MarketTag<InstrumentEntity> tag() {
 		return MarketField.INSTRUMENT;
 	}
 	
 	@Override
-	public int compareTo(final Instrument o) {
+	public int compareTo(final InstrumentEntity o) {
 		return getGUID().compareTo(o.getGUID());
 	}
 	
@@ -46,8 +54,8 @@ public abstract class InstrumentBase extends ObjectMapSafe implements Instrument
 	
 	@Override
 	public boolean equals(final Object o) {
-		if(o instanceof Instrument) {
-			return compareTo((Instrument)o) == 0;
+		if(o instanceof InstrumentEntity) {
+			return compareTo((InstrumentEntity)o) == 0;
 		} else {
 			return false;
 		}
@@ -59,13 +67,13 @@ public abstract class InstrumentBase extends ObjectMapSafe implements Instrument
 	}
 	
 	@Override
-	public Instrument freeze() {
+	public InstrumentEntity freeze() {
 		return this;
 	}
 
 	@Override
 	public final boolean isNull() {
-		return this == Instrument.NULL_INSTRUMENT;
+		return this == InstrumentEntity.NULL_INSTRUMENT;
 	}
 	
 	@Override
@@ -99,7 +107,13 @@ public abstract class InstrumentBase extends ObjectMapSafe implements Instrument
 	}
 
 	@Override
-	public long maxBookDepth() {
+	public Size maxBookDepth() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	@Override
+	public long maxBookDepthLong() {
 		return get(InstrumentField.BOOK_DEPTH).asLong();
 	}
 
@@ -132,14 +146,26 @@ public abstract class InstrumentBase extends ObjectMapSafe implements Instrument
 	public MarketCurrency currency() {
 		return get(InstrumentField.CURRENCY_CODE);
 	}
-
+	
 	@Override
-	public double tickSize() {
-		return get(InstrumentField.TICK_SIZE).asDouble();
+	public Price tickSize() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
-	public double pointValue() {
+	public double tickSizeDouble() {
+		return get(InstrumentField.TICK_SIZE).asDouble();
+	}
+	
+	@Override
+	public Price pointValue() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public double pointValueDouble() {
 		return get(InstrumentField.POINT_VALUE).asDouble();
 	}
 
@@ -185,14 +211,26 @@ public abstract class InstrumentBase extends ObjectMapSafe implements Instrument
 
 	@Override
 	public void update(Message message) {
-		
-		
+		// Ignore
 	}
 
 	@Override
-	public DateTime lastTime() {
-		// TODO Auto-generated method stub
+	public Time lastTime() {
+		// Ignore
 		return null;
 	}
 	
+	
+	@Override
+	public Time lastUpdateTime() {
+		// Ignore
+		return null;
+	}
+
+	@Override
+	public InstrumentEntity copy() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

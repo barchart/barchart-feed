@@ -11,8 +11,8 @@ import static com.barchart.feed.api.fields.InstrumentField.BOOK_DEPTH;
 import static com.barchart.feed.api.fields.InstrumentField.DISPLAY_FRACTION;
 import static com.barchart.feed.api.fields.InstrumentField.GUID;
 import static com.barchart.feed.api.fields.InstrumentField.MARKET_GUID;
-import static com.barchart.feed.api.fields.InstrumentField.TICK_SIZE;
 import static com.barchart.feed.api.fields.InstrumentField.SYMBOL;
+import static com.barchart.feed.api.fields.InstrumentField.TICK_SIZE;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -25,7 +25,8 @@ import java.util.concurrent.Future;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.feed.api.data.framework.Instrument;
+import com.barchart.feed.api.data.Instrument;
+import com.barchart.feed.api.data.InstrumentEntity;
 import com.barchart.feed.api.inst.InstrumentFuture;
 import com.barchart.feed.api.inst.InstrumentGUID;
 import com.barchart.feed.api.inst.InstrumentService;
@@ -48,8 +49,8 @@ public class MockDefinitionService implements InstrumentService<CharSequence> {
 	public static final TextValue INST_SYMBOL_2 = ValueBuilder.newText("two");
 	public static final TextValue INST_SYMBOL_3 = ValueBuilder.newText("three");
 	
-	final Map<InstrumentGUID, Instrument> guidMap = 
-			new ConcurrentHashMap<InstrumentGUID, Instrument>();
+	final Map<InstrumentGUID, InstrumentEntity> guidMap = 
+			new ConcurrentHashMap<InstrumentGUID, InstrumentEntity>();
 	final Map<TextValue, InstrumentGUID> symbolMap = 
 			new ConcurrentHashMap<TextValue, InstrumentGUID>();
 	
@@ -101,7 +102,7 @@ public class MockDefinitionService implements InstrumentService<CharSequence> {
 		if(symbolMap.containsKey(symbol)) {
 			return guidMap.get(symbolMap.get(symbol));
 		}
-		return Instrument.NULL_INSTRUMENT;
+		return InstrumentEntity.NULL_INSTRUMENT;
 	}
 
 	@Override

@@ -9,7 +9,7 @@ package com.barchart.feed.inst.provider;
 
 import java.util.Map;
 
-import com.barchart.feed.api.data.framework.Instrument;
+import com.barchart.feed.api.data.InstrumentEntity;
 import com.barchart.feed.api.fields.InstrumentField;
 import com.barchart.feed.api.inst.InstrumentGUID;
 import com.barchart.feed.inst.missive.BarchartFeedInstManifest;
@@ -28,32 +28,32 @@ public final class InstrumentFactory {
 		
 	}
 	
-	public static Instrument buildFromProtoBuf(InstrumentDefinition instDef) {
+	public static InstrumentEntity buildFromProtoBuf(InstrumentDefinition instDef) {
 		return InstrumentProtoBuilder.buildInstrument(instDef);
 	}
 	
-	public static InstrumentDefinition buildProtoBuff(Instrument inst) {
+	public static InstrumentDefinition buildProtoBuff(InstrumentEntity inst) {
 		return InstrumentProtoBuilder.buildInstDef(inst);
 	}
 	
 	@SuppressWarnings("rawtypes")
-	public static final Instrument build(final Map<Tag, Object> map) {
+	public static final InstrumentEntity build(final Map<Tag, Object> map) {
 		
 		if(!map.containsKey(InstrumentField.GUID) ||
 				map.get(InstrumentField.GUID) == null ||
 				((InstrumentGUID) map.get(InstrumentField.GUID)).isNull()) {
-			return Instrument.NULL_INSTRUMENT;
+			return InstrumentEntity.NULL_INSTRUMENT;
 		}
 		
 		return ObjectMapFactory.build(InstrumentImpl.class, map);
 	}
 	
-	public static final Instrument build(final TagMap map) {
+	public static final InstrumentEntity build(final TagMap map) {
 		
 		if(!map.contains(InstrumentField.GUID) ||
 				map.get(InstrumentField.GUID) == null ||
 				((InstrumentGUID) map.get(InstrumentField.GUID)).isNull()) {
-			return Instrument.NULL_INSTRUMENT;
+			return InstrumentEntity.NULL_INSTRUMENT;
 		}
 		
 		return ObjectMapFactory.build(InstrumentImpl.class, map);

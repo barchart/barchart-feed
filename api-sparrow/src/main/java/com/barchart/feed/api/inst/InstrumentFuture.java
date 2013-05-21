@@ -11,6 +11,7 @@ import java.util.concurrent.Future;
 
 import com.barchart.feed.api.data.Instrument;
 
+// TODO Review
 public interface InstrumentFuture extends Instrument, Future<Instrument> {
 
 }

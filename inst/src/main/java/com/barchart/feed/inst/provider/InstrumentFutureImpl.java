@@ -17,12 +17,16 @@ import java.util.concurrent.TimeoutException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.feed.api.data.framework.Instrument;
+import com.barchart.feed.api.data.Instrument;
+import com.barchart.feed.api.data.InstrumentEntity;
 import com.barchart.feed.api.inst.InstrumentFuture;
 import com.barchart.feed.api.inst.InstrumentGUID;
 import com.barchart.feed.api.inst.MetadataContext;
 import com.barchart.missive.api.Tag;
 import com.barchart.missive.core.MissiveException;
+import com.barchart.util.value.api.Price;
+import com.barchart.util.value.api.Size;
+import com.barchart.util.value.api.Time;
 import com.yammer.metrics.Metrics;
 import com.yammer.metrics.core.Histogram;
 
@@ -34,11 +38,11 @@ public class InstrumentFutureImpl extends InstrumentBase implements InstrumentFu
 	private static final Histogram hist = Metrics.newHistogram(
 			InstrumentFutureImpl.class, "LookupTime");
 	
-	private volatile Future<Instrument> task;
+	private volatile Future<InstrumentEntity> task;
 	
 	private final InstrumentGUID guid;
 	private final MetadataContext ctx;
-	private volatile Instrument inst = null;
+	private volatile InstrumentEntity inst = null;
 	private final long startTime;
 	
 	public InstrumentFutureImpl(final InstrumentGUID guid, final MetadataContext ctx, 
@@ -66,17 +70,17 @@ public class InstrumentFutureImpl extends InstrumentBase implements InstrumentFu
 		return inst.contains(tag);
 	}
 
-	@Override
-	public Tag<?>[] tags() {
-		populate();
-		return inst.tags();
-	}
-
-	@Override
-	public int size() {
-		populate();
-		return inst.size();
-	}
+//	@Override
+//	public Tag<?>[] tags() {
+//		populate();
+//		return inst.tags();
+//	}
+//
+//	@Override
+//	public int size() {
+//		populate();
+//		return inst.size();
+//	}
 
 	@Override
 	public boolean isFrozen() {
@@ -90,7 +94,7 @@ public class InstrumentFutureImpl extends InstrumentBase implements InstrumentFu
 	@Override
 	public boolean cancel(final boolean mayInterruptIfRunning) {
 		if(task.cancel(mayInterruptIfRunning)) {
-			inst = Instrument.NULL_INSTRUMENT;
+			inst = InstrumentEntity.NULL_INSTRUMENT;
 			return true;
 		} else {
 			return false;
@@ -108,17 +112,17 @@ public class InstrumentFutureImpl extends InstrumentBase implements InstrumentFu
 	}
 
 	@Override
-	public Instrument get() throws InterruptedException, ExecutionException {
+	public InstrumentEntity get() throws InterruptedException, ExecutionException {
 		return task.get();
 	}
 
 	@Override
-	public Instrument get(final long timeout, final TimeUnit unit)
+	public InstrumentEntity get(final long timeout, final TimeUnit unit)
 			throws InterruptedException, ExecutionException, TimeoutException {
 		return task.get(timeout, unit);
 	}
 	
-	private class LookupCallable implements Callable<Instrument> {
+	private class LookupCallable implements Callable<InstrumentEntity> {
 
 		final InstrumentGUID guid;
 		
@@ -127,12 +131,14 @@ public class InstrumentFutureImpl extends InstrumentBase implements InstrumentFu
 		}
 		
 		@Override
-		public Instrument call() throws Exception {
+		public InstrumentEntity call() throws Exception {
 			
-			final Instrument res = ctx.lookup(guid);
-			hist.update(System.currentTimeMillis() - startTime);
-			
-			return res;
+			//TODO review 
+//			final InstrumentEntity res = ctx.lookup(guid);
+//			hist.update(System.currentTimeMillis() - startTime);
+//			
+//			return res;
+			return null;
 		}
 		
 	}
@@ -148,5 +154,5 @@ public class InstrumentFutureImpl extends InstrumentBase implements InstrumentFu
 		}
 		
 	}
-	
+
 }

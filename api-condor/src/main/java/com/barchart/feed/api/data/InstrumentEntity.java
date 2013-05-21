@@ -28,7 +28,8 @@ import com.barchart.util.values.api.Value;
 import com.barchart.util.values.provider.ValueConst;
 
 public interface InstrumentEntity extends Value<InstrumentEntity>,
-		Instrument,	FrameworkEntity<InstrumentEntity> {
+		Instrument,	FrameworkEntity<InstrumentEntity>,
+		Comparable<InstrumentEntity> {
 
 	InstrumentGUID getGUID();
 
@@ -256,7 +257,7 @@ public interface InstrumentEntity extends Value<InstrumentEntity>,
 		}
 
 		@Override
-		public int compareTo(Instrument o) {
+		public int compareTo(InstrumentEntity o) {
 			// TODO Auto-generated method stub
 			return 0;
 		}

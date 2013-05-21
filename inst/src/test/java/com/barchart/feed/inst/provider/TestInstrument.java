@@ -23,7 +23,7 @@ import static com.barchart.util.values.provider.ValueBuilder.newSize;
 import static com.barchart.util.values.provider.ValueBuilder.newText;
 import static com.barchart.util.values.provider.ValueBuilder.newTime;
 
-import com.barchart.feed.api.data.framework.Instrument;
+import com.barchart.feed.api.data.InstrumentEntity;
 import com.barchart.feed.api.enums.MarketCurrency;
 import com.barchart.missive.api.TagMapSafe;
 import com.barchart.missive.core.ObjectMapFactory;
@@ -76,7 +76,7 @@ public class TestInstrument {
 //		map.set(DATE_FINISH, DATE_FINISH_V);
 	}
 	
-	public static final Instrument TEST_INST_BARCHART = 
+	public static final InstrumentEntity TEST_INST_BARCHART = 
 			ObjectMapFactory.build(InstrumentImpl.class, map);
 	
 	static InstrumentDefinition.Builder instBuilder;

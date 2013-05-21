@@ -39,7 +39,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.feed.api.data.framework.Instrument;
+import com.barchart.feed.api.data.InstrumentEntity;
 import com.barchart.feed.api.enums.BookLiquidityType;
 import com.barchart.feed.api.enums.BookStructureType;
 import com.barchart.feed.api.enums.MarketCurrency;
@@ -99,9 +99,9 @@ public final class InstrumentProtoBuilder {
 
 	}
 
-	public static InstrumentDefinition buildInstDef(final Instrument inst) {
+	public static InstrumentDefinition buildInstDef(final InstrumentEntity inst) {
 
-		if (inst == null || inst.equals(Instrument.NULL_INSTRUMENT)) {
+		if (inst == null || inst.equals(InstrumentEntity.NULL_INSTRUMENT)) {
 			return null; // Return empty instrument def
 		}
 
@@ -220,7 +220,7 @@ public final class InstrumentProtoBuilder {
 		return builder.build();
 	}
 
-	public static Instrument buildInstrument(final InstrumentDefinition instDef) {
+	public static InstrumentEntity buildInstrument(final InstrumentDefinition instDef) {
 
 		final TagMapSafe map = new HashTagMapSafe(FIELDS);
 
@@ -229,7 +229,7 @@ public final class InstrumentProtoBuilder {
 			map.set(MARKET_GUID, newText(String.valueOf(instDef.getMarketId())));
 		} else {
 			log.warn("Inst def had no market id, returning null instrument: \n{}", instDef.toString());
-			return Instrument.NULL_INSTRUMENT;
+			return InstrumentEntity.NULL_INSTRUMENT;
 		}
 
 		if (instDef.hasInstrumentType()) {

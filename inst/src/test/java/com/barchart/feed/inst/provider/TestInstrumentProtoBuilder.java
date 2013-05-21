@@ -11,7 +11,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import com.barchart.feed.api.data.framework.Instrument;
+import com.barchart.feed.api.data.InstrumentEntity;
 import com.barchart.missive.api.Tag;
 import com.google.protobuf.InvalidProtocolBufferException;
 
@@ -90,14 +90,14 @@ public class TestInstrumentProtoBuilder {
 		
 	}
 	
-	public static void compareInsts(final Instrument thisInst, final Instrument thatInst) {
-		
-		assertTrue(thisInst.size() == thatInst.size());
-		
-		for(Tag<?> t : thisInst.tags()) {
-			assertTrue(thisInst.get(t).equals(thatInst.get(t)));
-		}
-		
-	}
+//	public static void compareInsts(final InstrumentEntity thisInst, final InstrumentEntity thatInst) {
+//		
+//		assertTrue(thisInst.size() == thatInst.size());
+//		
+//		for(Tag<?> t : thisInst.tags()) {
+//			assertTrue(thisInst.get(t).equals(thatInst.get(t)));
+//		}
+//		
+//	}
 
 }

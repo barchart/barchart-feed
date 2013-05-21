@@ -8,12 +8,11 @@
 package com.barchart.feed.inst.provider;
 
 import java.io.File;
-import java.nio.ByteBuffer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.feed.api.data.framework.Instrument;
+import com.barchart.feed.api.data.InstrumentEntity;
 import com.barchart.feed.api.inst.InstrumentGUID;
 import com.barchart.feed.api.inst.MetadataContext;
 import com.barchart.proto.buf.inst.InstrumentDefinition;
@@ -53,7 +52,7 @@ public class LocalInstDefDB implements MetadataContext {
 	}
 	
 	@Override
-	public Instrument lookup(final InstrumentGUID guid) {
+	public InstrumentEntity lookup(final InstrumentGUID guid) {
 		
 		Transaction txn = env.beginTransaction(null, null);
 		byte[] key = guid.toString().getBytes(); 
@@ -65,7 +64,7 @@ public class LocalInstDefDB implements MetadataContext {
 		byte[] resData = result.getData();
 		
 		if(resData == null || resData.length == 0) {
-			return Instrument.NULL_INSTRUMENT;
+			return InstrumentEntity.NULL_INSTRUMENT;
 		}
 		
 		try {
@@ -78,7 +77,7 @@ public class LocalInstDefDB implements MetadataContext {
 		
 	}
 	
-	public void store(final InstrumentGUID guid, final Instrument inst) {
+	public void store(final InstrumentGUID guid, final InstrumentEntity inst) {
 		
 		Transaction txn = env.beginTransaction(null, null);
 		byte[] key = guid.toString().getBytes(); 

@@ -208,7 +208,7 @@ class MarketBase extends ObjectMapSafe implements MarketEntity {
 
 	@Override
 	public int compareTo(final MarketEntity o) {
-		return instrument.compareTo(o.instrument());
+		return instrument.compareTo(o.instrumentEntity());
 	}
 	
 	@Override
