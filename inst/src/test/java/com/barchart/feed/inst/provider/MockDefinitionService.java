@@ -98,7 +98,7 @@ public class MockDefinitionService implements InstrumentService<CharSequence> {
 	}
 	
 	@Override
-	public Instrument lookup(final CharSequence symbol) {
+	public InstrumentEntity lookup(final CharSequence symbol) {
 		if(symbolMap.containsKey(symbol)) {
 			return guidMap.get(symbolMap.get(symbol));
 		}
@@ -118,9 +118,9 @@ public class MockDefinitionService implements InstrumentService<CharSequence> {
 	}
 
 	@Override
-	public Map<CharSequence, Instrument> lookup(final Collection<? extends CharSequence> symbols) {
+	public Map<CharSequence, InstrumentEntity> lookup(final Collection<? extends CharSequence> symbols) {
 		
-		final Map<CharSequence, Instrument> insts = new HashMap<CharSequence, Instrument>();
+		final Map<CharSequence, InstrumentEntity> insts = new HashMap<CharSequence, InstrumentEntity>();
 		for(final CharSequence symbol : symbols) {
 			insts.put(symbol,lookup(symbol));
 		}
@@ -129,7 +129,7 @@ public class MockDefinitionService implements InstrumentService<CharSequence> {
 	}
 
 	@Override
-	public Map<CharSequence, Future<Instrument>> lookupAsync(
+	public Map<CharSequence, Future<InstrumentEntity>> lookupAsync(
 			final Collection<? extends CharSequence> symbols) {
 		// TODO Auto-generated method stub
 		return null;

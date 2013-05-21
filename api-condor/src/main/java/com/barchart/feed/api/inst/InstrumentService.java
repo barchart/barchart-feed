@@ -11,16 +11,16 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.Future;
 
-import com.barchart.feed.api.data.Instrument;
+import com.barchart.feed.api.data.InstrumentEntity;
 
 public interface InstrumentService<V> {
 	
-	Instrument lookup(V symbol);
+	InstrumentEntity lookup(V symbol);
 	
-	Future<Instrument> lookupAsync(V symbol);
+	Future<InstrumentEntity> lookupAsync(V symbol);
 	
-	Map<V, Instrument> lookup(Collection<? extends V> symbols);
+	Map<V, InstrumentEntity> lookup(Collection<? extends V> symbols);
 	
-	Map<V, Future<Instrument>> lookupAsync(Collection<? extends V> symbols);
+	Map<V, Future<InstrumentEntity>> lookupAsync(Collection<? extends V> symbols);
 	
 }
