@@ -9,6 +9,9 @@ package com.barchart.feed.base.provider;
 
 import com.barchart.feed.base.cuvol.api.MarketCuvolEntry;
 import com.barchart.util.anno.ProxyTo;
+import com.barchart.util.value.api.Price;
+import com.barchart.util.value.api.Size;
+import com.barchart.util.value.api.Time;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
 import com.barchart.util.values.provider.ValueFreezer;
@@ -41,12 +44,27 @@ public final class VarCuvolLast extends ValueFreezer<MarketCuvolEntry>
 	}
 
 	@Override
-	public PriceValue price() {
+	public PriceValue priceValue() {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public SizeValue size() {
+	public SizeValue sizeValue() {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public Price price() {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public Size volume() {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public Time lastUpdateTime() {
 		throw new UnsupportedOperationException();
 	}
 

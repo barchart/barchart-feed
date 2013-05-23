@@ -135,7 +135,7 @@ public class MockMarket extends VarMarket {
 
 		assert entry != null && time != null;
 
-		makeCuvol(entry.price(), entry.size());
+		makeCuvol(entry.priceValue(), entry.sizeValue());
 
 		updateMarket(time);
 
@@ -152,7 +152,7 @@ public class MockMarket extends VarMarket {
 		cuvol.clear();
 
 		for (final MarketDoCuvolEntry entry : entries) {
-			cuvol.add(entry.price(), entry.size());
+			cuvol.add(entry.priceValue(), entry.sizeValue());
 		}
 
 		eventAdd(NEW_CUVOL_SNAPSHOT);

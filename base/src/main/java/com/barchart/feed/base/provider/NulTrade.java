@@ -9,11 +9,16 @@ package com.barchart.feed.base.provider;
 
 import org.joda.time.DateTime;
 
+import com.barchart.feed.api.data.Instrument;
 import com.barchart.feed.base.trade.api.MarketTrade;
 import com.barchart.feed.base.trade.enums.MarketTradeField;
 import com.barchart.feed.base.trade.enums.MarketTradeSequencing;
 import com.barchart.feed.base.trade.enums.MarketTradeSession;
 import com.barchart.feed.base.trade.enums.MarketTradeType;
+import com.barchart.util.value.api.Price;
+import com.barchart.util.value.api.Size;
+import com.barchart.util.value.api.Time;
+import com.barchart.util.value.impl.ValueConst;
 import com.barchart.util.values.api.Value;
 import com.barchart.util.values.provider.ValueFreezer;
 
@@ -61,6 +66,41 @@ public class NulTrade extends ValueFreezer<MarketTrade> implements MarketTrade {
 	@Override
 	public MarketTradeSequencing getTradeSequencing() {
 		return MarketTradeSequencing.NULL_TRADE_SEQUENCE;
+	}
+
+	@Override
+	public Price price() {
+		return ValueConst.NULL_PRICE;
+	}
+
+	@Override
+	public double priceDouble() {
+		return 0;
+	}
+
+	@Override
+	public Size size() {
+		return ValueConst.NULL_SIZE;
+	}
+
+	@Override
+	public long sizeLong() {
+		return 0;
+	}
+
+	@Override
+	public Time time() {
+		return ValueConst.NULL_TIME;
+	}
+
+	@Override
+	public long timeLong() {
+		return 0;
+	}
+
+	@Override
+	public Time lastUpdateTime() {
+		return ValueConst.NULL_TIME;
 	}
 
 }

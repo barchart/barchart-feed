@@ -7,6 +7,7 @@
  */
 package com.barchart.feed.base.market.api;
 
+import com.barchart.feed.api.data.Instrument;
 import com.barchart.feed.api.data.InstrumentEntity;
 import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.util.values.api.Value;
@@ -47,7 +48,7 @@ public interface MarketMaker {
 	 * 
 	 * @return NULL_VALUE if market is not present
 	 */
-	<S extends InstrumentEntity, V extends Value<V>> V //
+	<S extends Instrument, V extends Value<V>> V //
 	take(S instrument, MarketField<V> field);
 
 }

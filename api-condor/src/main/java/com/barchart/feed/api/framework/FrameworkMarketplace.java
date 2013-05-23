@@ -1,8 +1,9 @@
 package com.barchart.feed.api.framework;
 
+import com.barchart.feed.api.core.Marketplace;
 import com.barchart.feed.api.message.Message;
 
-public interface FrameworkMarketplace {
+public interface FrameworkMarketplace extends Marketplace {
 
 	
 	void attachAgent(FrameworkAgent agent);

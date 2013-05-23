@@ -7,20 +7,20 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import com.barchart.feed.api.data.InstrumentEntity;
+import com.barchart.feed.api.data.MarketData;
 import com.barchart.feed.api.framework.FrameworkAgent;
 import com.barchart.feed.api.framework.FrameworkMarketplace;
 import com.barchart.feed.api.framework.MarketEntity;
-import com.barchart.feed.api.message.Message;
 
-public class MarketplaceBase implements FrameworkMarketplace {
+public abstract class MarketplaceBase implements FrameworkMarketplace {
 
-	private final Set<FrameworkAgent> agents = Collections.newSetFromMap(
+	protected final Set<FrameworkAgent> agents = Collections.newSetFromMap(
 			new ConcurrentHashMap<FrameworkAgent, Boolean>());
 	
-	private final Set<MarketEntity> markets = Collections.newSetFromMap( 
+	protected final Set<MarketEntity> markets = Collections.newSetFromMap( 
 			new ConcurrentHashMap<MarketEntity, Boolean>());
 	
-	private final ConcurrentMap<InstrumentEntity, MarketEntity> marketMap = 
+	protected final ConcurrentMap<InstrumentEntity, MarketEntity> marketMap = 
 			new ConcurrentHashMap<InstrumentEntity, MarketEntity>();
 	
 	/* ***** ***** ***** ***** ***** ***** ***** */
@@ -118,10 +118,9 @@ public class MarketplaceBase implements FrameworkMarketplace {
 	/* ***** ***** ***** ***** ***** ***** ***** */
 	
 	@Override
-	public void handle(final Message message) {
-		
-		
-		
+	public <V extends MarketData> Builder<V> agentBuilder() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	/* ***** ***** ***** ***** ***** ***** ***** */

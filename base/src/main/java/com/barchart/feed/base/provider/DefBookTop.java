@@ -7,10 +7,11 @@
  */
 package com.barchart.feed.base.provider;
 
+import com.barchart.feed.api.enums.MarketSide;
 import com.barchart.feed.base.book.api.MarketBookEntry;
 import com.barchart.feed.base.book.api.MarketBookTop;
-import com.barchart.feed.base.book.enums.MarketBookSide;
 import com.barchart.util.anno.NotMutable;
+import com.barchart.util.value.api.Time;
 import com.barchart.util.values.api.TimeValue;
 import com.barchart.util.values.provider.ValueFreezer;
 
@@ -39,7 +40,7 @@ public class DefBookTop extends ValueFreezer<MarketBookTop> implements
 	}
 
 	@Override
-	public MarketBookEntry side(final MarketBookSide side) {
+	public MarketBookEntry side(final MarketSide side) {
 		switch (side) {
 		case BID:
 			return bid;
@@ -72,6 +73,11 @@ public class DefBookTop extends ValueFreezer<MarketBookTop> implements
 	@Override
 	public TimeValue time() {
 		return time;
+	}
+
+	@Override
+	public Time lastUpdateTime() {
+		return null; //TODO
 	}
 
 }

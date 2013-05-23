@@ -1,6 +1,5 @@
 package com.barchart.feed.market.provider.data;
 
-import com.barchart.feed.api.data.Instrument;
 import com.barchart.feed.api.data.Session;
 import com.barchart.missive.core.ObjectMapSafe;
 import com.barchart.util.value.api.Price;
@@ -8,12 +7,6 @@ import com.barchart.util.value.api.Size;
 import com.barchart.util.value.api.Time;
 
 public class SessionBase extends ObjectMapSafe implements Session {
-
-	@Override
-	public Instrument instrument() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
 	public Time lastUpdateTime() {
@@ -127,6 +120,12 @@ public class SessionBase extends ObjectMapSafe implements Session {
 	public long timeClosedLong() {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+
+	@Override
+	public boolean isNull() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 	

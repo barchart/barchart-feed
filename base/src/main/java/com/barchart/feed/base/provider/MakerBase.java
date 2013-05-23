@@ -17,6 +17,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.barchart.feed.api.data.Instrument;
 import com.barchart.feed.api.data.InstrumentEntity;
 import com.barchart.feed.api.fields.InstrumentField;
 import com.barchart.feed.base.market.api.MarketDo;
@@ -349,7 +350,7 @@ public abstract class MakerBase<Message extends MarketMessage> implements
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public final <S extends InstrumentEntity, V extends Value<V>> V take(
+	public final <S extends Instrument, V extends Value<V>> V take(
 			final S instrument, final MarketField<V> field) {
 
 		final MarketDo market = marketMap.get(instrument);

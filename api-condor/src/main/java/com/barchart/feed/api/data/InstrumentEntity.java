@@ -137,7 +137,7 @@ public interface InstrumentEntity extends Value<InstrumentEntity>,
 		}
 
 		@Override
-		public TimeInterval instLifetime() {
+		public TimeInterval lifetime() {
 			return ValueConst.NULL_TIME_INTERVAL;
 		}
 
@@ -160,11 +160,6 @@ public interface InstrumentEntity extends Value<InstrumentEntity>,
 		@Override
 		public Time lastTime() {
 			return null;
-		}
-
-		@Override
-		public InstrumentEntity instrument() {
-			return this;
 		}
 
 		@Override

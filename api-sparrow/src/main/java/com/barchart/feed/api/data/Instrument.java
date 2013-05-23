@@ -47,7 +47,7 @@ public interface Instrument extends MarketData {
 	
 	Fraction displayFraction();
 	
-	TimeInterval instLifetime();
+	TimeInterval lifetime();
 	
 	Schedule marketHours();
 	

@@ -7,8 +7,8 @@
  */
 package com.barchart.feed.base.provider;
 
+import static com.barchart.feed.api.enums.MarketSide.GAP;
 import static com.barchart.feed.base.book.api.MarketBook.ENTRY_TOP;
-import static com.barchart.feed.base.book.enums.MarketBookSide.GAP;
 import static com.barchart.feed.base.book.enums.UniBookResult.DISCARD;
 import static com.barchart.feed.base.book.enums.UniBookResult.ERROR;
 import static com.barchart.feed.base.book.enums.UniBookResult.NORMAL;
@@ -19,8 +19,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.api.enums.BookLiquidityType;
+import com.barchart.feed.api.enums.MarketSide;
 import com.barchart.feed.base.book.api.MarketDoBookEntry;
-import com.barchart.feed.base.book.enums.MarketBookSide;
 import com.barchart.feed.base.book.enums.UniBookResult;
 import com.barchart.util.anno.NotThreadSafe;
 import com.barchart.util.math.MathExtra;
@@ -66,7 +66,7 @@ class UniBook<V extends Value<V>> extends ValueFreezer<V> {
 	}
 
 	// XXX returns null
-	private final UniBookRing ringFor(final MarketBookSide side) {
+	private final UniBookRing ringFor(final MarketSide side) {
 		switch (side) {
 		case BID:
 			return bids;
@@ -121,11 +121,11 @@ class UniBook<V extends Value<V>> extends ValueFreezer<V> {
 	}
 
 	private final boolean isValidPrice(final MarketDoBookEntry entry) {
-		return !entry.price().isNull();
+		return !entry.priceValue().isNull();
 	}
 
 	private final boolean isValidSize(final MarketDoBookEntry entry) {
-		return !entry.size().isNull();
+		return !entry.sizeValue().isNull();
 	}
 
 	//
@@ -138,7 +138,7 @@ class UniBook<V extends Value<V>> extends ValueFreezer<V> {
 		lastClue = MathExtra.castIntToByte(clue);
 	}
 
-	private void saveLastSide(final MarketBookSide side) {
+	private void saveLastSide(final MarketSide side) {
 		lastSide = side.ord;
 	}
 
@@ -147,7 +147,7 @@ class UniBook<V extends Value<V>> extends ValueFreezer<V> {
 	 * modification;
 	 */
 	protected final DefBookEntry lastEntry() {
-		final MarketBookSide side = MarketBookSide.fromOrd(lastSide);
+		final MarketSide side = MarketSide.fromOrd(lastSide);
 		final UniBookRing ring = ringFor(side);
 		if (ring == null) {
 			return null;
@@ -198,7 +198,7 @@ class UniBook<V extends Value<V>> extends ValueFreezer<V> {
 
 		if (isValidPrice(entry)) {
 
-			final int index = ring.index(entry.price());
+			final int index = ring.index(entry.priceValue());
 
 			// update top; based on place or price
 			if (isTopPlace(entry) || ring.isNewTop(index)) {
@@ -240,7 +240,7 @@ class UniBook<V extends Value<V>> extends ValueFreezer<V> {
 		// try to remove based on price
 		if (isValidPrice(entry)) {
 
-			final int index = ring.index(entry.price());
+			final int index = ring.index(entry.priceValue());
 
 			if (ring.isValidIndex(index)) {
 				final boolean isOldTop = ring.isOldTop(index);
@@ -284,7 +284,7 @@ class UniBook<V extends Value<V>> extends ValueFreezer<V> {
 	/**
 	 * can return null
 	 **/
-	protected final MarketDoBookEntry topFor(final MarketBookSide side) {
+	protected final MarketDoBookEntry topFor(final MarketSide side) {
 
 		final UniBookRing ring = ringFor(side);
 
@@ -352,7 +352,7 @@ class UniBook<V extends Value<V>> extends ValueFreezer<V> {
 		return false;
 	}
 
-	protected final boolean isEmpty(final MarketBookSide side) {
+	protected final boolean isEmpty(final MarketSide side) {
 		final UniBookRing ring = ringFor(side);
 		if (ring == null) {
 			return true;
@@ -367,7 +367,7 @@ class UniBook<V extends Value<V>> extends ValueFreezer<V> {
 	}
 
 	// non null entries only, ordered by logical offset
-	protected final DefBookEntry[] entriesFor(final MarketBookSide side) {
+	protected final DefBookEntry[] entriesFor(final MarketSide side) {
 		final UniBookRing ring = ringFor(side);
 		if (ring == null) {
 			throw new IllegalArgumentException("invalid book side=" + side);
@@ -376,7 +376,7 @@ class UniBook<V extends Value<V>> extends ValueFreezer<V> {
 		}
 	}
 
-	protected final SizeValue[] sizesFor(final MarketBookSide side) {
+	protected final SizeValue[] sizesFor(final MarketSide side) {
 		final UniBookRing ring = ringFor(side);
 		if (ring == null) {
 			throw new IllegalArgumentException("invalid book side=" + side);

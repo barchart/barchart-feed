@@ -7,19 +7,26 @@
  */
 package com.barchart.feed.base.provider;
 
-import static com.barchart.feed.base.book.enums.MarketBookSide.ASK;
-import static com.barchart.feed.base.book.enums.MarketBookSide.BID;
+import static com.barchart.feed.api.enums.MarketSide.ASK;
+import static com.barchart.feed.api.enums.MarketSide.BID;
 import static com.barchart.feed.base.provider.MarketConst.NULL_BOOK_ENTRY;
 
+import java.util.List;
+
+import com.barchart.feed.api.data.PriceLevel;
 import com.barchart.feed.api.enums.BookLiquidityType;
+import com.barchart.feed.api.enums.MarketSide;
+import com.barchart.feed.api.enums.MarketSide;
 import com.barchart.feed.base.book.api.MarketBook;
 import com.barchart.feed.base.book.api.MarketBookEntry;
 import com.barchart.feed.base.book.api.MarketDoBook;
 import com.barchart.feed.base.book.api.MarketDoBookEntry;
-import com.barchart.feed.base.book.enums.MarketBookSide;
 import com.barchart.feed.base.book.enums.UniBookResult;
 import com.barchart.util.anno.Mutable;
 import com.barchart.util.anno.ThreadSafe;
+import com.barchart.util.value.api.Price;
+import com.barchart.util.value.api.Size;
+import com.barchart.util.value.api.Time;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
 import com.barchart.util.values.api.TimeValue;
@@ -42,7 +49,7 @@ public final class VarBook extends UniBook<MarketBook> implements MarketDoBook {
 	}
 
 	@Override
-	public final MarketBookEntry[] entries(final MarketBookSide side) {
+	public final MarketBookEntry[] entries(final MarketSide side) {
 		return entriesFor(side);
 	}
 
@@ -73,7 +80,7 @@ public final class VarBook extends UniBook<MarketBook> implements MarketDoBook {
 	}
 
 	@Override
-	public final MarketBookEntry top(final MarketBookSide side) {
+	public final MarketBookEntry top(final MarketSide side) {
 		final MarketDoBookEntry entry = topFor(side);
 		return entry == null ? NULL_BOOK_ENTRY : entry;
 	}
@@ -86,23 +93,77 @@ public final class VarBook extends UniBook<MarketBook> implements MarketDoBook {
 	}
 
 	@Override
-	public final SizeValue[] sizes(final MarketBookSide side) {
+	public final SizeValue[] sizes(final MarketSide side) {
 		throw new UnsupportedOperationException("UNUSED");
 	}
 
 	@Override
-	public PriceValue priceTop(final MarketBookSide side) {
+	public PriceValue priceTop(final MarketSide side) {
 		throw new UnsupportedOperationException("UNUSED");
 	}
 
 	@Override
-	public SizeValue sizeTop(final MarketBookSide side) {
+	public SizeValue sizeTop(final MarketSide side) {
 		throw new UnsupportedOperationException("UNUSED");
 	}
 
 	@Override
 	public UniBookResult setSnapshot(final MarketDoBookEntry[] entries) {
 		throw new UnsupportedOperationException("UNUSED");
+	}
+
+	@Override
+	public Price bestPrice(MarketSide side) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public double bestPriceDouble(MarketSide side) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public Size bestSize(MarketSide side) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public long bestSizeLong(MarketSide side) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public List<PriceLevel> entryList(MarketSide side) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Price lastPrice() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public double lastPriceDouble() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public Time timeUpdated() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Time lastUpdateTime() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

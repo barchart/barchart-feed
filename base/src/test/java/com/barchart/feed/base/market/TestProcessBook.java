@@ -7,11 +7,11 @@
  */
 package com.barchart.feed.base.market;
 
+import static com.barchart.feed.api.enums.MarketSide.ASK;
+import static com.barchart.feed.api.enums.MarketSide.BID;
 import static com.barchart.feed.base.bar.enums.MarketBarField.VOLUME;
 import static com.barchart.feed.base.book.enums.MarketBookAction.MODIFY;
 import static com.barchart.feed.base.book.enums.MarketBookAction.REMOVE;
-import static com.barchart.feed.base.book.enums.MarketBookSide.ASK;
-import static com.barchart.feed.base.book.enums.MarketBookSide.BID;
 import static com.barchart.feed.base.market.enums.MarketEvent.NEW_BOOK_TOP;
 import static com.barchart.feed.base.market.enums.MarketEvent.NEW_BOOK_UPDATE;
 import static com.barchart.feed.base.market.enums.MarketField.BAR_CURRENT;
@@ -140,8 +140,8 @@ public class TestProcessBook {
 		assertTrue(top.isFrozen());
 		entry = top.side(BID);
 		assertEquals(1, entry.place());
-		assertEquals(newPrice(1000, -2), entry.price());
-		assertEquals(newSize(11), entry.size());
+		assertEquals(newPrice(1000, -2), entry.priceValue());
+		assertEquals(newSize(11), entry.sizeValue());
 
 		//
 
@@ -181,8 +181,8 @@ public class TestProcessBook {
 		top = market.get(BOOK_TOP);
 		entry = top.side(ASK);
 		assertEquals(1, entry.place());
-		assertEquals(newPrice(1225, -2), entry.price());
-		assertEquals(newSize(15), entry.size());
+		assertEquals(newPrice(1225, -2), entry.priceValue());
+		assertEquals(newSize(15), entry.sizeValue());
 
 		//
 
@@ -205,13 +205,13 @@ public class TestProcessBook {
 
 		entry = bids[0];
 		assertEquals(2, entry.place());
-		assertEquals(newPrice(1000, -2), entry.price());
-		assertEquals(newSize(11), entry.size());
+		assertEquals(newPrice(1000, -2), entry.priceValue());
+		assertEquals(newSize(11), entry.sizeValue());
 
 		entry = bids[1];
 		assertEquals(1, entry.place());
-		assertEquals(newPrice(1100, -2), entry.price());
-		assertEquals(newSize(13), entry.size());
+		assertEquals(newPrice(1100, -2), entry.priceValue());
+		assertEquals(newSize(13), entry.sizeValue());
 
 		//
 
@@ -219,13 +219,13 @@ public class TestProcessBook {
 
 		entry = asks[0];
 		assertEquals(1, entry.place());
-		assertEquals(newPrice(1225, -2), entry.price());
-		assertEquals(newSize(15), entry.size());
+		assertEquals(newPrice(1225, -2), entry.priceValue());
+		assertEquals(newSize(15), entry.sizeValue());
 
 		entry = asks[1];
 		assertEquals(2, entry.place());
-		assertEquals(newPrice(1300, -2), entry.price());
-		assertEquals(newSize(17), entry.size());
+		assertEquals(newPrice(1300, -2), entry.priceValue());
+		assertEquals(newSize(17), entry.sizeValue());
 
 		//
 
@@ -245,8 +245,8 @@ public class TestProcessBook {
 		top = market.get(BOOK_TOP);
 		entry = top.side(ASK);
 		assertEquals(1, entry.place());
-		assertEquals(newPrice(1300, -2), entry.price());
-		assertEquals(newSize(17), entry.size());
+		assertEquals(newPrice(1300, -2), entry.priceValue());
+		assertEquals(newSize(17), entry.sizeValue());
 
 		//
 
@@ -266,8 +266,8 @@ public class TestProcessBook {
 		top = market.get(BOOK_TOP);
 		entry = top.side(BID);
 		assertEquals(1, entry.place());
-		assertEquals(newPrice(1100, -2), entry.price());
-		assertEquals(newSize(13), entry.size());
+		assertEquals(newPrice(1100, -2), entry.priceValue());
+		assertEquals(newSize(13), entry.sizeValue());
 
 	}
 

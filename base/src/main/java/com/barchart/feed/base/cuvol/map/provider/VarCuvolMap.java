@@ -25,7 +25,6 @@ import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
 import com.barchart.util.values.provider.ValueBuilder;
 import com.barchart.util.values.provider.ValueConst;
-import com.barchart.util.values.util.ValueUtil;
 
 @Mutable
 @NotThreadSafe

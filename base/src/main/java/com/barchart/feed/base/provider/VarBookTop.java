@@ -7,12 +7,13 @@
  */
 package com.barchart.feed.base.provider;
 
-import static com.barchart.feed.base.book.enums.MarketBookSide.*;
+import static com.barchart.feed.api.enums.MarketSide.*;
 
+import com.barchart.feed.api.enums.MarketSide;
 import com.barchart.feed.base.book.api.MarketBookEntry;
 import com.barchart.feed.base.book.api.MarketBookTop;
-import com.barchart.feed.base.book.enums.MarketBookSide;
 import com.barchart.util.anno.ProxyTo;
+import com.barchart.util.value.api.Time;
 import com.barchart.util.values.api.TimeValue;
 import com.barchart.util.values.provider.ValueFreezer;
 
@@ -32,7 +33,7 @@ final class VarBookTop extends ValueFreezer<MarketBookTop> implements
 	}
 
 	@Override
-	public final MarketBookEntry side(final MarketBookSide side) {
+	public final MarketBookEntry side(final MarketSide side) {
 		return book.top(side);
 	}
 
@@ -44,6 +45,11 @@ final class VarBookTop extends ValueFreezer<MarketBookTop> implements
 	@Override
 	public final boolean isFrozen() {
 		return false;
+	}
+
+	@Override
+	public Time lastUpdateTime() {
+		return null; //TODO
 	}
 
 }

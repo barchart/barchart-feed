@@ -15,9 +15,9 @@ import com.barchart.util.values.api.SizeValue;
 public interface MarketEntry {
 
 	/** price for a book level or a cuvol level */
-	PriceValue price();
+	PriceValue priceValue();
 
 	/** size for a book level or a cuvol level */
-	SizeValue size();
+	SizeValue sizeValue();
 
 }

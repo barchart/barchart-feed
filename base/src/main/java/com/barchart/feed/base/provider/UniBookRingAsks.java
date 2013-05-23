@@ -8,8 +8,8 @@
 package com.barchart.feed.base.provider;
 
 import com.barchart.feed.api.enums.BookLiquidityType;
+import com.barchart.feed.api.enums.MarketSide;
 import com.barchart.feed.base.book.api.MarketDoBookEntry;
-import com.barchart.feed.base.book.enums.MarketBookSide;
 
 class UniBookRingAsks extends UniBookRing {
 
@@ -45,8 +45,8 @@ class UniBookRingAsks extends UniBookRing {
 	}
 
 	@Override
-	protected final MarketBookSide side() {
-		return MarketBookSide.ASK;
+	protected final MarketSide side() {
+		return MarketSide.ASK;
 	}
 
 	@Override

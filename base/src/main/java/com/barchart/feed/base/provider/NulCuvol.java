@@ -7,8 +7,14 @@
  */
 package com.barchart.feed.base.provider;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.barchart.feed.base.cuvol.api.MarketCuvol;
 import com.barchart.util.anno.NotMutable;
+import com.barchart.util.value.api.Price;
+import com.barchart.util.value.api.Size;
+import com.barchart.util.value.api.Time;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
 import com.barchart.util.values.provider.ValueConst;
@@ -58,6 +64,41 @@ public class NulCuvol extends ValueFreezer<MarketCuvol> implements MarketCuvol {
 	@Override
 	public final boolean isNull() {
 		return this == MarketConst.NULL_CUVOL;
+	}
+
+	@Override
+	public Price firstPrice() {
+		return ValueConverter.price(ValueConst.NULL_PRICE);
+	}
+
+	@Override
+	public double firstPriceDouble() {
+		return 0;
+	}
+
+	@Override
+	public Price tickSize() {
+		return ValueConverter.price(ValueConst.NULL_PRICE);
+	}
+
+	@Override
+	public double tickSizeDouble() {
+		return 0;
+	}
+
+	@Override
+	public List<Size> cuvolList() {
+		return new ArrayList<Size>(0);
+	}
+
+	@Override
+	public List<Long> cuvolListLong() {
+		return new ArrayList<Long>(0);
+	}
+
+	@Override
+	public Time lastUpdateTime() {
+		return ValueConverter.time(ValueConst.NULL_TIME);
 	}
 
 }

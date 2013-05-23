@@ -1,6 +1,5 @@
 package com.barchart.feed.market.provider.data;
 
-import com.barchart.feed.api.data.Instrument;
 import com.barchart.feed.api.data.Trade;
 import com.barchart.missive.core.ObjectMapSafe;
 import com.barchart.util.value.api.Price;
@@ -8,12 +7,6 @@ import com.barchart.util.value.api.Size;
 import com.barchart.util.value.api.Time;
 
 public class TradeBase extends ObjectMapSafe implements Trade {
-
-	@Override
-	public Instrument instrument() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
 	public Time lastUpdateTime() {
@@ -55,6 +48,12 @@ public class TradeBase extends ObjectMapSafe implements Trade {
 	public long timeLong() {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+
+	@Override
+	public boolean isNull() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 	

@@ -7,12 +7,12 @@
  */
 package com.barchart.feed.base.provider;
 
+import static com.barchart.feed.api.enums.MarketSide.ASK;
+import static com.barchart.feed.api.enums.MarketSide.BID;
+import static com.barchart.feed.api.enums.MarketSide.GAP;
 import static com.barchart.feed.base.book.enums.MarketBookAction.MODIFY;
 import static com.barchart.feed.base.book.enums.MarketBookAction.NOOP;
 import static com.barchart.feed.base.book.enums.MarketBookAction.REMOVE;
-import static com.barchart.feed.base.book.enums.MarketBookSide.ASK;
-import static com.barchart.feed.base.book.enums.MarketBookSide.BID;
-import static com.barchart.feed.base.book.enums.MarketBookSide.GAP;
 import static com.barchart.feed.base.book.enums.UniBookResult.ERROR;
 import static com.barchart.feed.base.book.enums.UniBookResult.NORMAL;
 import static com.barchart.feed.base.book.enums.UniBookResult.TOP;
@@ -154,8 +154,8 @@ public class TestUniBook {
 		// System.out.println(book);
 		entry = book.topFor(BID);
 		assertEquals(entry.place(), 1);
-		assertEquals(entry.price(), newPrice(1000, -2));
-		assertEquals(entry.size(), newSize(13));
+		assertEquals(entry.priceValue(), newPrice(1000, -2));
+		assertEquals(entry.sizeValue(), newSize(13));
 		assertEquals(result, TOP);
 		assertEquals(bids.placeCount(), bids.count());
 
@@ -167,8 +167,8 @@ public class TestUniBook {
 		// System.out.println(book);
 		entry = book.topFor(ASK);
 		assertEquals(entry.place(), 1);
-		assertEquals(entry.price(), newPrice(1100, -2));
-		assertEquals(entry.size(), newSize(17));
+		assertEquals(entry.priceValue(), newPrice(1100, -2));
+		assertEquals(entry.sizeValue(), newSize(17));
 		assertEquals(result, TOP);
 		assertEquals(asks.placeCount(), asks.count());
 
@@ -181,8 +181,8 @@ public class TestUniBook {
 		entry = bids.get(newPrice(900, -2));
 		assertEquals(result, NORMAL);
 		assertEquals(entry.place(), 2);
-		assertEquals(entry.price(), newPrice(900, -2));
-		assertEquals(entry.size(), newSize(9));
+		assertEquals(entry.priceValue(), newPrice(900, -2));
+		assertEquals(entry.sizeValue(), newSize(9));
 		assertEquals(bids.placeCount(), bids.count());
 
 		//
@@ -194,8 +194,8 @@ public class TestUniBook {
 		entry = asks.get(newPrice(1200, -2));
 		assertEquals(result, NORMAL);
 		assertEquals(entry.place(), 2);
-		assertEquals(entry.price(), newPrice(1200, -2));
-		assertEquals(entry.size(), newSize(21));
+		assertEquals(entry.priceValue(), newPrice(1200, -2));
+		assertEquals(entry.sizeValue(), newSize(21));
 		assertEquals(asks.placeCount(), asks.count());
 
 		//
@@ -369,8 +369,8 @@ public class TestUniBook {
 		assertEquals(entry.side(), BID);
 		assertEquals(entry.type(), BookLiquidityType.COMBINED);
 		assertEquals(entry.place(), 1);
-		assertEquals(entry.price(), newPrice(3275, -2));
-		assertEquals(entry.size(), newSize(11));
+		assertEquals(entry.priceValue(), newPrice(3275, -2));
+		assertEquals(entry.sizeValue(), newSize(11));
 
 	}
 
@@ -394,8 +394,8 @@ public class TestUniBook {
 		assertEquals(entry.side(), BID);
 		assertEquals(entry.type(), BookLiquidityType.COMBINED);
 		assertEquals(entry.place(), 1);
-		assertEquals(entry.price(), newPrice(3275, -2));
-		assertEquals(entry.size(), newSize(11));
+		assertEquals(entry.priceValue(), newPrice(3275, -2));
+		assertEquals(entry.sizeValue(), newSize(11));
 
 		entry = new DefBookEntry(MODIFY, ASK, BookLiquidityType.DEFAULT, -1, newPrice(3300, -2),
 				newSize(13));
@@ -406,8 +406,8 @@ public class TestUniBook {
 		assertEquals(entry.side(), ASK);
 		assertEquals(entry.type(), BookLiquidityType.COMBINED);
 		assertEquals(entry.place(), 1);
-		assertEquals(entry.price(), newPrice(3300, -2));
-		assertEquals(entry.size(), newSize(13));
+		assertEquals(entry.priceValue(), newPrice(3300, -2));
+		assertEquals(entry.sizeValue(), newSize(13));
 
 		//
 
@@ -420,8 +420,8 @@ public class TestUniBook {
 		assertEquals(entry.side(), BID);
 		assertEquals(entry.type(), BookLiquidityType.COMBINED);
 		assertEquals(entry.place(), 1);
-		assertEquals(entry.price(), newPrice(3275, -2));
-		assertEquals(entry.size(), newSize(11 + 15));
+		assertEquals(entry.priceValue(), newPrice(3275, -2));
+		assertEquals(entry.sizeValue(), newSize(11 + 15));
 
 		entry = new DefBookEntry(MODIFY, ASK, BookLiquidityType.IMPLIED, -1, newPrice(3300, -2),
 				newSize(17));
@@ -432,8 +432,8 @@ public class TestUniBook {
 		assertEquals(entry.side(), ASK);
 		assertEquals(entry.type(), BookLiquidityType.COMBINED);
 		assertEquals(entry.place(), 1);
-		assertEquals(entry.price(), newPrice(3300, -2));
-		assertEquals(entry.size(), newSize(13 + 17));
+		assertEquals(entry.priceValue(), newPrice(3300, -2));
+		assertEquals(entry.sizeValue(), newSize(13 + 17));
 
 		//
 
@@ -446,8 +446,8 @@ public class TestUniBook {
 		assertEquals(entry.side(), BID);
 		assertEquals(entry.type(), BookLiquidityType.COMBINED);
 		assertEquals(entry.place(), 2);
-		assertEquals(entry.price(), newPrice(3200, -2));
-		assertEquals(entry.size(), newSize(19));
+		assertEquals(entry.priceValue(), newPrice(3200, -2));
+		assertEquals(entry.sizeValue(), newSize(19));
 
 		entry = new DefBookEntry(MODIFY, ASK, BookLiquidityType.IMPLIED, -1, newPrice(3400, -2),
 				newSize(21));
@@ -458,8 +458,8 @@ public class TestUniBook {
 		assertEquals(entry.side(), ASK);
 		assertEquals(entry.type(), BookLiquidityType.COMBINED);
 		assertEquals(entry.place(), 2);
-		assertEquals(entry.price(), newPrice(3400, -2));
-		assertEquals(entry.size(), newSize(21));
+		assertEquals(entry.priceValue(), newPrice(3400, -2));
+		assertEquals(entry.sizeValue(), newSize(21));
 
 		//
 
@@ -483,7 +483,7 @@ public class TestUniBook {
 		// System.out.println(book);
 		entry = bids.get(newPrice(3200, -2));
 		assertEquals(result, NORMAL);
-		assertEquals(entry.size(), newSize(19 + 27));
+		assertEquals(entry.sizeValue(), newSize(19 + 27));
 
 		entry = new DefBookEntry(MODIFY, ASK, BookLiquidityType.DEFAULT, 0, newPrice(3325, -2),
 				newSize(29));
@@ -491,7 +491,7 @@ public class TestUniBook {
 		// System.out.println(book);
 		entry = asks.get(newPrice(3325, -2));
 		assertEquals(result, NORMAL);
-		assertEquals(entry.size(), newSize(25 + 29));
+		assertEquals(entry.sizeValue(), newSize(25 + 29));
 
 		//
 

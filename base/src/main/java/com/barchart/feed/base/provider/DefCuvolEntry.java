@@ -11,6 +11,9 @@ import com.barchart.feed.base.book.api.MarketBookEntry;
 import com.barchart.feed.base.cuvol.api.MarketCuvolEntry;
 import com.barchart.feed.base.cuvol.api.MarketDoCuvolEntry;
 import com.barchart.util.anno.NotMutable;
+import com.barchart.util.value.api.Price;
+import com.barchart.util.value.api.Size;
+import com.barchart.util.value.api.Time;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
 import com.barchart.util.values.provider.ValueFreezer;
@@ -36,7 +39,7 @@ public class DefCuvolEntry extends ValueFreezer<MarketCuvolEntry> implements
 	}
 
 	DefCuvolEntry(final MarketBookEntry entry) {
-		this(entry.place(), entry.price(), entry.size());
+		this(entry.place(), entry.priceValue(), entry.sizeValue());
 	}
 
 	@Override
@@ -44,8 +47,8 @@ public class DefCuvolEntry extends ValueFreezer<MarketCuvolEntry> implements
 		if (thatEntry instanceof MarketCuvolEntry) {
 			final MarketCuvolEntry that = (MarketCuvolEntry) thatEntry;
 			return this.place() == that.place()
-					&& this.price().equals(that.price())
-					&& this.size().equals(that.size());
+					&& this.priceValue().equals(that.priceValue())
+					&& this.sizeValue().equals(that.sizeValue());
 		}
 		return false;
 	}
@@ -56,24 +59,39 @@ public class DefCuvolEntry extends ValueFreezer<MarketCuvolEntry> implements
 	}
 
 	@Override
-	public PriceValue price() {
+	public PriceValue priceValue() {
 		return price;
 	}
 
 	@Override
-	public SizeValue size() {
+	public SizeValue sizeValue() {
 		return size;
 	}
 
 	@Override
 	public final String toString() {
 		return String.format("MarketEntry > %2d %22s %16s", // 55
-				place(), price(), size());
+				place(), priceValue(), sizeValue());
 	}
 
 	@Override
 	public final boolean isNull() {
 		return this == MarketConst.NULL_CUVOL_ENTRY;
+	}
+
+	@Override
+	public Price price() {
+		return ValueConverter.price(price);
+	}
+
+	@Override
+	public Size volume() {
+		return ValueConverter.size(size);
+	}
+
+	@Override
+	public Time lastUpdateTime() {
+		throw new UnsupportedOperationException();
 	}
 
 }

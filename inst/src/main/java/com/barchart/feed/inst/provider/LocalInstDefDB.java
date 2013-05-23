@@ -12,6 +12,7 @@ import java.io.File;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.barchart.feed.api.data.Instrument;
 import com.barchart.feed.api.data.InstrumentEntity;
 import com.barchart.feed.api.inst.InstrumentGUID;
 import com.barchart.feed.api.inst.MetadataContext;
@@ -52,7 +53,7 @@ public class LocalInstDefDB implements MetadataContext {
 	}
 	
 	@Override
-	public InstrumentEntity lookup(final InstrumentGUID guid) {
+	public Instrument lookup(final InstrumentGUID guid) {
 		
 		Transaction txn = env.beginTransaction(null, null);
 		byte[] key = guid.toString().getBytes(); 

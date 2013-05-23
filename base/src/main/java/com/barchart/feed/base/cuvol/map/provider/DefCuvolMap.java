@@ -13,7 +13,6 @@ import com.barchart.util.collections.PriceArrayMap;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
 import com.barchart.util.values.provider.ValueConst;
-import com.barchart.util.values.util.ValueUtil;
 
 public class DefCuvolMap extends NulCuvolMap {
 
@@ -89,7 +88,7 @@ public class DefCuvolMap extends NulCuvolMap {
 	private boolean onGrid(final PriceValue price) {
 		
 		//Do without double
-		final double result = ValueUtil.asDouble(price) / ValueUtil.asDouble(priceStep);
+		final double result = price.asDouble() / priceStep.asDouble();
 		
 		final long resLong = Math.round(result);
 		

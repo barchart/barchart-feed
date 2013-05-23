@@ -4,6 +4,8 @@ import com.barchart.feed.api.enums.SessionType;
 
 public interface Market extends MarketData {
 
+	Instrument instrument();
+	
 	Trade lastTrade();
 
 	OrderBook orderBook();

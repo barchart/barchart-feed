@@ -32,12 +32,6 @@ import com.barchart.util.values.api.TimeInterval;
 public abstract class InstrumentBase extends ObjectMapSafe implements InstrumentEntity {
 	
 	@Override
-	public Instrument instrument() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	@Override
 	public MarketTag<InstrumentEntity> tag() {
 		return MarketField.INSTRUMENT;
 	}
@@ -175,7 +169,7 @@ public abstract class InstrumentBase extends ObjectMapSafe implements Instrument
 	}
 
 	@Override
-	public TimeInterval instLifetime() {
+	public TimeInterval lifetime() {
 		return get(InstrumentField.LIFETIME);
 	}
 

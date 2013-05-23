@@ -103,8 +103,8 @@ public class TestProcessCuvol {
 
 		entry = market.get(CUVOL_LAST);
 		assertEquals(entry.place(), 0);
-		assertEquals(entry.price(), newPrice(100, 0));
-		assertEquals(entry.size(), newSize(10));
+		assertEquals(entry.priceValue(), newPrice(100, 0));
+		assertEquals(entry.sizeValue(), newSize(10));
 
 		//
 
@@ -180,8 +180,8 @@ public class TestProcessCuvol {
 
 		entry = market.get(CUVOL_LAST);
 		assertEquals(entry.place(), 3);
-		assertEquals(entry.price(), newPrice(100375, -3));
-		assertEquals(entry.size(), newSize(20));
+		assertEquals(entry.priceValue(), newPrice(100375, -3));
+		assertEquals(entry.sizeValue(), newSize(20));
 
 	}
 

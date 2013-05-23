@@ -7,13 +7,14 @@
  */
 package com.barchart.feed.base.cuvol.api;
 
+import com.barchart.feed.api.data.CuvolEntry;
 import com.barchart.feed.base.market.api.MarketEntry;
 import com.barchart.util.anno.NotMutable;
 import com.barchart.util.values.api.Value;
 
 /** stand alone market cumulative volume value */
 @NotMutable
-public interface MarketCuvolEntry extends Value<MarketCuvolEntry>, MarketEntry {
+public interface MarketCuvolEntry extends Value<MarketCuvolEntry>, MarketEntry, CuvolEntry {
 
 	/** logical or relative index of this cuvol entry in the price ladder */
 	int place();

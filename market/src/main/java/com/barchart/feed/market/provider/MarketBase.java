@@ -41,7 +41,6 @@ public class MarketBase extends ObjectMapSafe implements MarketEntity {
 	/*
 	 * Default constructor only for ObjectMaps
 	 */
-	
 	@Override
 	public void init() {
 		
@@ -131,16 +130,6 @@ public class MarketBase extends ObjectMapSafe implements MarketEntity {
 		}
 		
 		agents.remove(agent);
-		
-	}
-	
-	/* ***** ***** ***** ***** ***** ***** ***** */
-	
-	@Override
-	public void handle(final Message message) {
-		
-		// Check instrument?
-		
 		
 	}
 	
@@ -258,6 +247,12 @@ public class MarketBase extends ObjectMapSafe implements MarketEntity {
 	public InstrumentEntity instrumentEntity() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public boolean isNull() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

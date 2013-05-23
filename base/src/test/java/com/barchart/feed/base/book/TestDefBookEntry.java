@@ -14,8 +14,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.barchart.feed.api.enums.BookLiquidityType;
+import com.barchart.feed.api.enums.MarketSide;
 import com.barchart.feed.base.book.enums.MarketBookAction;
-import com.barchart.feed.base.book.enums.MarketBookSide;
 import com.barchart.feed.base.provider.DefBookEntry;
 import com.barchart.util.bench.size.JavaSize;
 import com.barchart.util.values.provider.ValueConst;
@@ -51,12 +51,12 @@ public class TestDefBookEntry {
 				null);
 
 		assertEquals(entry.act(), MarketBookAction.NOOP);
-		assertEquals(entry.side(), MarketBookSide.GAP);
+		assertEquals(entry.side(), MarketSide.GAP);
 		assertEquals(entry.type(), BookLiquidityType.NONE);
 
 		assertEquals(entry.place(), 0);
-		assertEquals(entry.price(), ValueConst.NULL_PRICE);
-		assertEquals(entry.size(), ValueConst.NULL_SIZE);
+		assertEquals(entry.priceValue(), ValueConst.NULL_PRICE);
+		assertEquals(entry.sizeValue(), ValueConst.NULL_SIZE);
 
 	}
 

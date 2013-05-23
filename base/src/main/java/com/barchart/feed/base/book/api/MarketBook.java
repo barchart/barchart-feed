@@ -10,7 +10,8 @@
  */
 package com.barchart.feed.base.book.api;
 
-import com.barchart.feed.base.book.enums.MarketBookSide;
+import com.barchart.feed.api.data.OrderBook;
+import com.barchart.feed.api.enums.MarketSide;
 import com.barchart.util.anno.NotMutable;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
@@ -18,7 +19,7 @@ import com.barchart.util.values.api.TimeValue;
 import com.barchart.util.values.api.Value;
 
 @NotMutable
-public interface MarketBook extends Value<MarketBook> {
+public interface MarketBook extends Value<MarketBook>, OrderBook {
 
 	/**
 	 * starting value for place() on bid or ask side; book entry place() can be
@@ -53,17 +54,17 @@ public interface MarketBook extends Value<MarketBook> {
 	 * @throws IllegalArgumentException
 	 *             when side is not BID nor ASK
 	 */
-	MarketBookEntry[] entries(MarketBookSide side) throws NullPointerException,
+	MarketBookEntry[] entries(MarketSide side) throws NullPointerException,
 			IllegalArgumentException;
 
 	/** top price: bid or ask; or NULL_PRICE if invalid */
-	PriceValue priceTop(final MarketBookSide side);
+	PriceValue priceTop(final MarketSide side);
 
 	/** top size: bid or ask; or NULL_SIZE if invalid */
-	SizeValue sizeTop(final MarketBookSide side);
+	SizeValue sizeTop(final MarketSide side);
 
 	/** price-ladder spaced size array */
-	SizeValue[] sizes(MarketBookSide side) throws NullPointerException;
+	SizeValue[] sizes(MarketSide side) throws NullPointerException;
 
 	/** top ask - top bid; or NULL_PRICE if there is no gap */
 	PriceValue priceGap();

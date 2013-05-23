@@ -8,8 +8,8 @@
 package com.barchart.feed.base.market;
 
 import com.barchart.feed.api.enums.BookLiquidityType;
+import com.barchart.feed.api.enums.MarketSide;
 import com.barchart.feed.base.book.enums.MarketBookAction;
-import com.barchart.feed.base.book.enums.MarketBookSide;
 import com.barchart.feed.base.market.api.MarketDo;
 import com.barchart.feed.base.market.api.MarketFactory;
 import com.barchart.feed.base.message.MockMessage;
@@ -58,7 +58,7 @@ public class MockMaker extends MakerBase<MockMessage> implements
 	public Void visit(final MockMsgBook message, final MarketDo market) {
 
 		final MarketBookAction act = message.act;
-		final MarketBookSide side = message.side;
+		final MarketSide side = message.side;
 		final BookLiquidityType type = message.type;
 		final int place = message.place;
 		final PriceValue price = message.price;

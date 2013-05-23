@@ -7,7 +7,7 @@
  */
 package com.barchart.feed.base.book.api;
 
-import com.barchart.feed.base.book.enums.MarketBookSide;
+import com.barchart.feed.api.enums.MarketSide;
 import com.barchart.feed.base.book.enums.UniBookResult;
 import com.barchart.util.values.api.TimeValue;
 
@@ -24,6 +24,6 @@ public interface MarketDoBook extends MarketBook {
 
 	MarketBookEntry last();
 
-	MarketBookEntry top(MarketBookSide side);
+	MarketBookEntry top(MarketSide side);
 
 }

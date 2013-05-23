@@ -25,7 +25,7 @@ public class FutureTermGraph implements Agent {
 
 		@Override
 		public void call(final TopOfBook top) {
-			updateGraph(top.instrument(), top);
+			updateGraph(top);
 		}
 
 	}
@@ -52,10 +52,9 @@ public class FutureTermGraph implements Agent {
 	/**
 	 * This is the fake business logic method, so assume some graph is being updated here.
 	 * 
-	 * @param inst
 	 * @param top
 	 */
-	private void updateGraph(final Instrument inst, final TopOfBook top) {
+	private void updateGraph(final TopOfBook top) {
 
 	}
 

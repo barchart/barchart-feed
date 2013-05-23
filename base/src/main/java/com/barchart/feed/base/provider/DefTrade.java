@@ -11,6 +11,10 @@ import com.barchart.feed.base.trade.enums.MarketTradeField;
 import com.barchart.feed.base.trade.enums.MarketTradeSequencing;
 import com.barchart.feed.base.trade.enums.MarketTradeSession;
 import com.barchart.feed.base.trade.enums.MarketTradeType;
+import com.barchart.util.value.api.Price;
+import com.barchart.util.value.api.Size;
+import com.barchart.util.value.api.Time;
+import com.barchart.util.value.impl.ValueConst;
 import com.barchart.util.values.api.Value;
 
 class DefTrade extends NulTrade {
@@ -61,6 +65,41 @@ class DefTrade extends NulTrade {
 	@Override
 	public MarketTradeSequencing getTradeSequencing() {
 		return get(MarketTradeField.SEQUENCING);
+	}
+	
+	@Override
+	public Price price() {
+		return ValueConst.NULL_PRICE;
+	}
+
+	@Override
+	public double priceDouble() {
+		return 0;
+	}
+
+	@Override
+	public Size size() {
+		return ValueConst.NULL_SIZE;
+	}
+
+	@Override
+	public long sizeLong() {
+		return 0;
+	}
+
+	@Override
+	public Time time() {
+		return ValueConst.NULL_TIME;
+	}
+
+	@Override
+	public long timeLong() {
+		return 0;
+	}
+
+	@Override
+	public Time lastUpdateTime() {
+		return ValueConst.NULL_TIME;
 	}
 	
 }

@@ -11,9 +11,9 @@ import static com.barchart.feed.base.book.enums.MarketBookAction.*;
 import static com.barchart.util.values.provider.ValueBuilder.*;
 
 import com.barchart.feed.api.enums.BookLiquidityType;
+import com.barchart.feed.api.enums.MarketSide;
 import com.barchart.feed.base.book.api.MarketDoBookEntry;
 import com.barchart.feed.base.book.enums.MarketBookAction;
-import com.barchart.feed.base.book.enums.MarketBookSide;
 import com.barchart.util.anno.NotThreadSafe;
 import com.barchart.util.collections.ScadecRingBufferBase;
 import com.barchart.util.math.MathExtra;
@@ -34,7 +34,7 @@ abstract class UniBookRing extends
 
 	// book side-dependent operations
 
-	protected abstract MarketBookSide side();
+	protected abstract MarketSide side();
 
 	protected abstract int indexTop();
 
@@ -180,7 +180,7 @@ abstract class UniBookRing extends
 			safeSet(arrayDefault, clue, 0);
 			safeSet(arrayImplied, clue, 0);
 		} else {
-			final SizeValue entrySize = entry.size();
+			final SizeValue entrySize = entry.sizeValue();
 			final int value;
 			if (entrySize == null) {
 				value = 0;
