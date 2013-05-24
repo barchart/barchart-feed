@@ -18,12 +18,16 @@ public interface Session extends MarketData {
 	double highDouble();
 
 	Price low();
+	
+	double lowDouble();
 
 	Price close();
 
 	double closeDouble();
 
 	Price settle();
+	
+	double settleDouble();
 
 	Size volume();
 

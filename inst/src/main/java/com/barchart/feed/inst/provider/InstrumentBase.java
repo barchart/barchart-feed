@@ -7,14 +7,13 @@
  */
 package com.barchart.feed.inst.provider;
 
-import com.barchart.feed.api.data.Instrument;
 import com.barchart.feed.api.data.InstrumentEntity;
 import com.barchart.feed.api.enums.BookLiquidityType;
 import com.barchart.feed.api.enums.BookStructureType;
 import com.barchart.feed.api.enums.MarketCurrency;
 import com.barchart.feed.api.enums.SecurityType;
 import com.barchart.feed.api.fields.InstrumentField;
-import com.barchart.feed.api.fields.MarketField;
+import com.barchart.feed.api.framework.MarketEntity;
 import com.barchart.feed.api.framework.MarketTag;
 import com.barchart.feed.api.inst.GuidList;
 import com.barchart.feed.api.inst.InstrumentGUID;
@@ -33,7 +32,7 @@ public abstract class InstrumentBase extends ObjectMapSafe implements Instrument
 	
 	@Override
 	public MarketTag<InstrumentEntity> tag() {
-		return MarketField.INSTRUMENT;
+		return MarketEntity.INSTRUMENT;
 	}
 	
 	@Override

@@ -68,6 +68,10 @@ public final class MarketField<V extends Value<V>> extends
 	/** past - previous day; default or combo */
 	public static final MarketField<MarketBar> BAR_PREVIOUS = NEW(NULL_BAR);
 
+	// TODO Maybe
+	/** past - previous day extended session */
+	public static final MarketField<MarketBar> BAR_PREVIOUS_EXT = NEW(NULL_BAR);
+	
 	// MarketState
 	public static final MarketField<MarketState> STATE = NEW(NULL_STATE);
 

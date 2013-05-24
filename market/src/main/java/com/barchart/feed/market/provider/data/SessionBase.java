@@ -128,6 +128,18 @@ public class SessionBase extends ObjectMapSafe implements Session {
 		return false;
 	}
 
+	@Override
+	public double lowDouble() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public double settleDouble() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 	
 
 }

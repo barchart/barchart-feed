@@ -15,7 +15,6 @@ import com.barchart.feed.api.data.Session;
 import com.barchart.feed.api.data.TopOfBook;
 import com.barchart.feed.api.data.Trade;
 import com.barchart.feed.api.enums.SessionType;
-import com.barchart.feed.api.fields.MarketField;
 import com.barchart.feed.api.framework.FrameworkAgent;
 import com.barchart.feed.api.framework.MarketEntity;
 import com.barchart.feed.api.framework.MarketTag;
@@ -155,7 +154,7 @@ public class MarketBase extends ObjectMapSafe implements MarketEntity {
 
 	@Override
 	public MarketTag<MarketEntity> tag() {
-		return MarketField.MARKET;
+		return MarketEntity.MARKET;
 	}
 	
 	/* ***** ***** Market Data Object Getters ***** ***** */
@@ -167,12 +166,12 @@ public class MarketBase extends ObjectMapSafe implements MarketEntity {
 
 	@Override
 	public Trade lastTrade() {
-		return get(MarketField.LAST_TRADE);
+		return get(MarketEntity.LAST_TRADE);
 	}
 
 	@Override
 	public OrderBook orderBook() {
-		return get(MarketField.ORDER_BOOK);
+		return get(MarketEntity.ORDER_BOOK);
 	}
 
 	@Override
