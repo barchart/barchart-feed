@@ -4,6 +4,7 @@ import com.barchart.feed.api.core.Agent;
 import com.barchart.feed.api.core.MarketCallback;
 import com.barchart.feed.api.core.Marketplace;
 import com.barchart.feed.api.data.Session;
+import com.barchart.feed.api.enums.MarketEventType;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Size;
 
@@ -27,7 +28,7 @@ public class DoubleDownTrader {
 	private class DoubleDown implements MarketCallback<Session> {
 
 		@Override
-		public void call(final Session session) {
+		public void call(final Session session, final MarketEventType type) {
 
 			/* New High */
 			if (session.high().greaterThan(high)) {

@@ -1,8 +1,7 @@
 package com.barchart.feed.api.enums;
 
-// Mock enum 
-enum MarketEventType {
+public enum MarketEventType {
 
-	TRADE, BOOK_UPDATE, MARKET_STATE_CHANGE
+	 TRADE, SNAPSHOT, BOOK_UPDATE, BOOK_SNAPSHOT, CUVOL_UPDATE, CUVOL_SNAPSHOT, ALL
 
 }

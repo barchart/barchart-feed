@@ -6,6 +6,7 @@ import com.barchart.feed.api.core.MarketCallback;
 import com.barchart.feed.api.core.Marketplace;
 import com.barchart.feed.api.data.Instrument;
 import com.barchart.feed.api.data.TopOfBook;
+import com.barchart.feed.api.enums.MarketEventType;
 import com.barchart.feed.api.enums.SecurityType;
 
 public class FutureTermGraph implements Agent {
@@ -24,7 +25,7 @@ public class FutureTermGraph implements Agent {
 	private class GraphCallback implements MarketCallback<TopOfBook> {
 
 		@Override
-		public void call(final TopOfBook top) {
+		public void call(final TopOfBook top, final MarketEventType type) {
 			updateGraph(top);
 		}
 
