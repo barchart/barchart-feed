@@ -40,7 +40,7 @@
 		<dependency>
 			<groupId>com.barchart.feed</groupId>
 			<artifactId>barchart-feed-api</artifactId>
-			<version>[2.0.0, 2.1)</version>
+			<version>[2.0.0, 2.1.0)</version>
 		</dependency>
 		
 		<!-- MAIN -->
@@ -81,13 +81,27 @@
 		<dependency>
 			<groupId>com.barchart.feed</groupId>
 			<artifactId>barchart-feed-inst</artifactId>
-			<version>1.4.8</version>
+			<version>[2.0.0, 2.1.0)</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.barchart.feed</groupId>
 			<artifactId>barchart-feed-inst</artifactId>
-			<version>1.4.8</version>
+			<version>[2.0.0, 2.1.0)</version>
+			<scope>test</scope>
+			<classifier>tests</classifier>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.barchart.feed</groupId>
+			<artifactId>barchart-feed-market</artifactId>
+			<version>[1.0.0, 1.1.0)</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.barchart.feed</groupId>
+			<artifactId>barchart-feed-market</artifactId>
+			<version>[1.0.0, 1.1.0)</version>
 			<scope>test</scope>
 			<classifier>tests</classifier>
 		</dependency>
