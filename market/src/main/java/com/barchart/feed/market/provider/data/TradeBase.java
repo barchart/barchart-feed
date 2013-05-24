@@ -1,6 +1,6 @@
 package com.barchart.feed.market.provider.data;
 
-import com.barchart.feed.api.data.Trade;
+import com.barchart.feed.api.consumer.data.Trade;
 import com.barchart.missive.core.ObjectMapSafe;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Size;

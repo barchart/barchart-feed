@@ -10,8 +10,8 @@ package com.barchart.feed.base.provider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.feed.api.data.InstrumentEntity;
-import com.barchart.feed.api.fields.InstrumentField;
+import com.barchart.feed.api.framework.data.InstrumentEntity;
+import com.barchart.feed.api.framework.data.InstrumentField;
 import com.barchart.feed.base.market.api.Market;
 import com.barchart.feed.base.market.api.MarketDo;
 import com.barchart.feed.base.market.api.MarketFactory;

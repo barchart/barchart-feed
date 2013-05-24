@@ -7,8 +7,8 @@
  */
 package com.barchart.feed.base.market;
 
-import static com.barchart.feed.api.enums.MarketSide.ASK;
-import static com.barchart.feed.api.enums.MarketSide.BID;
+import static com.barchart.feed.api.consumer.enums.MarketSide.ASK;
+import static com.barchart.feed.api.consumer.enums.MarketSide.BID;
 import static com.barchart.feed.base.bar.enums.MarketBarField.VOLUME;
 import static com.barchart.feed.base.book.enums.MarketBookAction.MODIFY;
 import static com.barchart.feed.base.book.enums.MarketBookAction.REMOVE;
@@ -36,9 +36,9 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.feed.api.data.InstrumentEntity;
-import com.barchart.feed.api.enums.BookLiquidityType;
-import com.barchart.feed.api.inst.InstrumentService;
+import com.barchart.feed.api.consumer.enums.BookLiquidityType;
+import com.barchart.feed.api.framework.data.InstrumentEntity;
+import com.barchart.feed.api.framework.inst.InstrumentService;
 import com.barchart.feed.base.bar.api.MarketBar;
 import com.barchart.feed.base.book.api.MarketBook;
 import com.barchart.feed.base.book.api.MarketBookEntry;

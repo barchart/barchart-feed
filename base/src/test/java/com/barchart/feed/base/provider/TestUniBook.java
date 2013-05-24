@@ -7,9 +7,9 @@
  */
 package com.barchart.feed.base.provider;
 
-import static com.barchart.feed.api.enums.MarketSide.ASK;
-import static com.barchart.feed.api.enums.MarketSide.BID;
-import static com.barchart.feed.api.enums.MarketSide.GAP;
+import static com.barchart.feed.api.consumer.enums.MarketSide.ASK;
+import static com.barchart.feed.api.consumer.enums.MarketSide.BID;
+import static com.barchart.feed.api.consumer.enums.MarketSide.GAP;
 import static com.barchart.feed.base.book.enums.MarketBookAction.MODIFY;
 import static com.barchart.feed.base.book.enums.MarketBookAction.NOOP;
 import static com.barchart.feed.base.book.enums.MarketBookAction.REMOVE;
@@ -28,7 +28,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.barchart.feed.api.enums.BookLiquidityType;
+import com.barchart.feed.api.consumer.enums.BookLiquidityType;
 import com.barchart.feed.base.book.api.MarketDoBookEntry;
 import com.barchart.feed.base.book.enums.UniBookResult;
 import com.barchart.feed.base.provider.DefBookEntry;

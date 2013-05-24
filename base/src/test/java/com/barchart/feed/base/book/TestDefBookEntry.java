@@ -13,8 +13,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.barchart.feed.api.enums.BookLiquidityType;
-import com.barchart.feed.api.enums.MarketSide;
+import com.barchart.feed.api.consumer.enums.BookLiquidityType;
+import com.barchart.feed.api.consumer.enums.MarketSide;
 import com.barchart.feed.base.book.enums.MarketBookAction;
 import com.barchart.feed.base.provider.DefBookEntry;
 import com.barchart.util.bench.size.JavaSize;

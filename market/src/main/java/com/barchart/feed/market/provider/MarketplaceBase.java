@@ -6,11 +6,11 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-import com.barchart.feed.api.data.InstrumentEntity;
-import com.barchart.feed.api.data.MarketData;
+import com.barchart.feed.api.consumer.data.MarketData;
 import com.barchart.feed.api.framework.FrameworkAgent;
 import com.barchart.feed.api.framework.FrameworkMarketplace;
 import com.barchart.feed.api.framework.MarketEntity;
+import com.barchart.feed.api.framework.data.InstrumentEntity;
 
 public abstract class MarketplaceBase implements FrameworkMarketplace {
 
@@ -45,10 +45,10 @@ public abstract class MarketplaceBase implements FrameworkMarketplace {
 		/* Attach agent and market to each other if passes agent's filter */
 		for(final Entry<InstrumentEntity, MarketEntity> e : marketMap.entrySet()) {
 			
-			if(agent.accept(e.getKey())) {
-				/* Agent will attach itself to market */
-				e.getValue().attach(agent);
-			}
+//			if(agent.accept(e.getKey())) {
+//				/* Agent will attach itself to market */
+//				e.getValue().attach(agent);
+//			}
 			
 		}
 		
@@ -68,11 +68,11 @@ public abstract class MarketplaceBase implements FrameworkMarketplace {
 		
 		for(final Entry<InstrumentEntity, MarketEntity> e : marketMap.entrySet()) {
 			
-			if(agent.accept(e.getKey())) {
-				e.getValue().attach(agent);
-			} else {
-				e.getValue().detach(agent);
-			}
+//			if(agent.accept(e.getKey())) {
+//				e.getValue().attach(agent);
+//			} else {
+//				e.getValue().detach(agent);
+//			}
 			
 		}
 		
@@ -106,12 +106,12 @@ public abstract class MarketplaceBase implements FrameworkMarketplace {
 		markets.add(market);
 		marketMap.put(market.instrumentEntity(), market);
 		
-		/* Attach agent and market to each other if passes agent's filter */
-		for(final FrameworkAgent agent : agents) {
-			if(agent.accept(market.instrument())) {
-				market.attach(agent);
-			}
-		}
+//		/* Attach agent and market to each other if passes agent's filter */
+//		for(final FrameworkAgent agent : agents) {
+//			if(agent.accept(market.instrument())) {
+//				market.attach(agent);
+//			}
+//		}
 		
 	}
 

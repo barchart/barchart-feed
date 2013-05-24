@@ -7,7 +7,7 @@
  */
 package com.barchart.feed.base.message;
 
-import com.barchart.feed.api.data.InstrumentEntity;
+import com.barchart.feed.api.framework.data.InstrumentEntity;
 import com.barchart.feed.base.trade.enums.MarketTradeSequencing;
 import com.barchart.feed.base.trade.enums.MarketTradeSession;
 import com.barchart.feed.base.trade.enums.MarketTradeType;

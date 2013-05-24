@@ -7,7 +7,7 @@
  */
 package com.barchart.feed.base.cuvol.api;
 
-import com.barchart.feed.api.data.Cuvol;
+import com.barchart.feed.api.consumer.data.Cuvol;
 import com.barchart.util.anno.NotMutable;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;

@@ -5,13 +5,13 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import com.barchart.feed.api.data.Instrument;
+import com.barchart.feed.api.consumer.data.Instrument;
 import com.barchart.feed.api.framework.FrameworkAgent;
 import com.barchart.feed.api.framework.FrameworkEntity;
 import com.barchart.feed.api.framework.FrameworkMarketplace;
 import com.barchart.feed.api.framework.MarketEntity;
 import com.barchart.feed.api.framework.MarketTag;
-import com.barchart.feed.api.message.Message;
+import com.barchart.feed.api.framework.message.Message;
 import com.barchart.missive.api.Tag;
 
 public abstract class AgentBase implements FrameworkAgent {
@@ -95,12 +95,6 @@ public abstract class AgentBase implements FrameworkAgent {
 	/* ***** ***** ***** ***** ***** ***** ***** */
 	
 	// built by Builder or whatever
-	
-	@Override
-	public boolean accept(Instrument instrument) {
-		// TODO Auto-generated method stub
-		return false;
-	}
 	
 	/* ***** ***** ***** ***** ***** ***** ***** */
 	

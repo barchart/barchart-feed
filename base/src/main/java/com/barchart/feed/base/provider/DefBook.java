@@ -11,9 +11,8 @@ import static com.barchart.feed.base.provider.MarketConst.NULL_BOOK_ENTRY;
 
 import java.util.List;
 
-import com.barchart.feed.api.data.PriceLevel;
-import com.barchart.feed.api.enums.MarketSide;
-import com.barchart.feed.api.enums.MarketSide;
+import com.barchart.feed.api.consumer.data.PriceLevel;
+import com.barchart.feed.api.consumer.enums.MarketSide;
 import com.barchart.feed.base.book.api.MarketBook;
 import com.barchart.feed.base.book.api.MarketBookEntry;
 import com.barchart.util.anno.NotMutable;

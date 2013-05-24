@@ -10,7 +10,7 @@ package com.barchart.feed.base.market.api;
 import java.util.List;
 import java.util.Set;
 
-import com.barchart.feed.api.data.InstrumentEntity;
+import com.barchart.feed.api.framework.data.InstrumentEntity;
 import com.barchart.feed.base.bar.api.MarketBar;
 import com.barchart.feed.base.bar.api.MarketDoBar;
 import com.barchart.feed.base.bar.enums.MarketBarType;

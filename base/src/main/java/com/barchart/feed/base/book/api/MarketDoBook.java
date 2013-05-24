@@ -7,7 +7,7 @@
  */
 package com.barchart.feed.base.book.api;
 
-import com.barchart.feed.api.enums.MarketSide;
+import com.barchart.feed.api.consumer.enums.MarketSide;
 import com.barchart.feed.base.book.enums.UniBookResult;
 import com.barchart.util.values.api.TimeValue;
 

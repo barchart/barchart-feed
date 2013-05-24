@@ -10,8 +10,8 @@
  */
 package com.barchart.feed.base.book.api;
 
-import com.barchart.feed.api.data.OrderBook;
-import com.barchart.feed.api.enums.MarketSide;
+import com.barchart.feed.api.consumer.data.OrderBook;
+import com.barchart.feed.api.consumer.enums.MarketSide;
 import com.barchart.util.anno.NotMutable;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;

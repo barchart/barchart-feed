@@ -7,19 +7,19 @@
  */
 package com.barchart.feed.inst.provider;
 
-import com.barchart.feed.api.data.InstrumentEntity;
-import com.barchart.feed.api.enums.BookLiquidityType;
-import com.barchart.feed.api.enums.BookStructureType;
-import com.barchart.feed.api.enums.MarketCurrency;
-import com.barchart.feed.api.enums.SecurityType;
-import com.barchart.feed.api.fields.InstrumentField;
+import com.barchart.feed.api.consumer.enums.BookLiquidityType;
+import com.barchart.feed.api.consumer.enums.BookStructureType;
+import com.barchart.feed.api.consumer.enums.MarketCurrency;
+import com.barchart.feed.api.consumer.enums.SecurityType;
+import com.barchart.feed.api.consumer.inst.GuidList;
+import com.barchart.feed.api.consumer.inst.InstrumentGUID;
 import com.barchart.feed.api.framework.MarketEntity;
 import com.barchart.feed.api.framework.MarketTag;
-import com.barchart.feed.api.inst.GuidList;
-import com.barchart.feed.api.inst.InstrumentGUID;
-import com.barchart.feed.api.message.Message;
-import com.barchart.feed.api.message.Snapshot;
-import com.barchart.feed.api.message.Update;
+import com.barchart.feed.api.framework.data.InstrumentEntity;
+import com.barchart.feed.api.framework.data.InstrumentField;
+import com.barchart.feed.api.framework.message.Message;
+import com.barchart.feed.api.framework.message.Snapshot;
+import com.barchart.feed.api.framework.message.Update;
 import com.barchart.feed.api.util.Schedule;
 import com.barchart.missive.core.ObjectMapSafe;
 import com.barchart.util.value.api.Price;

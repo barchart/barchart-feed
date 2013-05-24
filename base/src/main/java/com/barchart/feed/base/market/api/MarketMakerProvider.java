@@ -7,7 +7,7 @@
  */
 package com.barchart.feed.base.market.api;
 
-import com.barchart.feed.api.data.InstrumentEntity;
+import com.barchart.feed.api.framework.data.InstrumentEntity;
 import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.util.anno.NotMutable;
 import com.barchart.util.anno.NotYetImplemented;

@@ -1,7 +1,7 @@
 package com.barchart.feed.market.provider;
 
-import com.barchart.feed.api.data.InstrumentEntity;
-import com.barchart.feed.api.data.Market;
+import com.barchart.feed.api.consumer.data.Market;
+import com.barchart.feed.api.framework.data.InstrumentEntity;
 import com.barchart.missive.core.ObjectMapFactory;
 
 public final class MarketFactory {

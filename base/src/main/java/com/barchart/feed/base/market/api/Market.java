@@ -9,7 +9,7 @@ package com.barchart.feed.base.market.api;
 
 import org.joda.time.DateTime;
 
-import com.barchart.feed.api.data.InstrumentEntity;
+import com.barchart.feed.api.framework.data.InstrumentEntity;
 import com.barchart.feed.base.bar.api.MarketBar;
 import com.barchart.feed.base.book.api.MarketBook;
 import com.barchart.feed.base.book.api.MarketBookEntry;

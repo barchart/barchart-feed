@@ -7,7 +7,7 @@
  */
 package com.barchart.feed.base.market.api;
 
-import com.barchart.feed.api.data.InstrumentEntity;
+import com.barchart.feed.api.framework.data.InstrumentEntity;
 import com.barchart.util.values.api.TimeValue;
 
 public interface MarketMessage {

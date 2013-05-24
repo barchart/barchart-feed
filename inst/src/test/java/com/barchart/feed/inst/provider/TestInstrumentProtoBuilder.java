@@ -11,7 +11,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import com.barchart.feed.api.data.InstrumentEntity;
+import com.barchart.feed.api.framework.data.InstrumentEntity;
 import com.barchart.missive.api.Tag;
 import com.google.protobuf.InvalidProtocolBufferException;
 
