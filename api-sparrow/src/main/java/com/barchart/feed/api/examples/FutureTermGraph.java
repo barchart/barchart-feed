@@ -124,4 +124,10 @@ public class FutureTermGraph implements Agent {
 		
 	}
 
+	@Override
+	public void includeAll(InstrumentAcceptor acceptor) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

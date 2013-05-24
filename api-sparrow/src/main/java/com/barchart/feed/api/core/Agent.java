@@ -9,8 +9,7 @@ import com.barchart.feed.api.data.Instrument;
  *  All Filter
  *  Exchange Filter
  *  Instrument Filter
- *  
- *  Custom filter?
+ *  Custom filter
  * 
  * @author Gavin M Litchfield
  *
@@ -39,6 +38,15 @@ public interface Agent {
 	 * Subscribes to and attaches agent to all available instruments.
 	 */
 	void includeAll();
+	
+	/**
+	 * Subscribes to and attaches agent to all available instruments which
+	 * provided acceptor accepts.  This overwrites previous acceptor if method
+	 * was previously called.
+	 * 
+	 * @param acceptor
+	 */
+	void includeAll(InstrumentAcceptor acceptor);
 	
 	/**
 	 * Subscribes to and attaches agent to provided symbols.
