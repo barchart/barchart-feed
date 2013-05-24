@@ -4,6 +4,7 @@ import com.barchart.feed.api.core.Agent;
 import com.barchart.feed.api.core.InstrumentAcceptor;
 import com.barchart.feed.api.core.MarketCallback;
 import com.barchart.feed.api.core.Marketplace;
+import com.barchart.feed.api.data.Exchange;
 import com.barchart.feed.api.data.Instrument;
 import com.barchart.feed.api.data.TopOfBook;
 import com.barchart.feed.api.enums.MarketEventType;
@@ -16,7 +17,8 @@ public class FutureTermGraph implements Agent {
 
 	public FutureTermGraph(final Marketplace marketplace, final String prefix) {
 		this.prefix = prefix;
-		agent = marketplace.agentBuilder().build(new GraphCallback(), new SymbolFamilyFilter());
+		//agent = marketplace.agentBuilder().build(new GraphCallback(), new SymbolFamilyFilter());
+		agent =  marketplace.newAgent(new GraphCallback(), MarketEventType.ALL);
 	}
 
 	/**
@@ -65,11 +67,6 @@ public class FutureTermGraph implements Agent {
 	}
 
 	@Override
-	public void update() {
-		agent.update();
-	}
-
-	@Override
 	public void deactivate() {
 		agent.deactivate();
 	}
@@ -77,6 +74,54 @@ public class FutureTermGraph implements Agent {
 	@Override
 	public void dismiss() {
 		agent.dismiss();
+	}
+
+	@Override
+	public void includeAll() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void include(CharSequence... symbols) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void include(Instrument... instruments) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exclude(CharSequence... symbols) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exclude(Instrument... instruments) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void clear() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void include(Exchange... exchanges) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exclude(Exchange... exchanges) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

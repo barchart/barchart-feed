@@ -117,13 +117,6 @@ public abstract class MarketplaceBase implements FrameworkMarketplace {
 
 	/* ***** ***** ***** ***** ***** ***** ***** */
 	
-	@Override
-	public <V extends MarketData> Builder<V> agentBuilder() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/* ***** ***** ***** ***** ***** ***** ***** */
 	
 	
 

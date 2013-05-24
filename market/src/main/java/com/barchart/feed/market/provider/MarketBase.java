@@ -74,37 +74,33 @@ public class MarketBase extends ObjectMapSafe implements MarketEntity {
 		
 		agents.add(agent);
 		
-		for(final Tag<?> tag : agent.tagsToListenTo()) {
-			agentMap.get(tag).add(agent);
-		}
-		
 	}
 	
 	@Override
 	public synchronized void update(final FrameworkAgent agent) {
 		
-		if(agent == null) {
-			return;
-		}
-		
-		if(!agents.contains(agent)) {
-			attach(agent);
-			return;
-		}
-		
-		for(final Tag<?> t : agentMap.keySet()) {
-			
-			/* If tag's set has the agent, but the agent is no longer listening to the tag */
-			if(agentMap.get(t).contains(agent) && !contains(t, agent.tagsToListenTo())) {
-				agentMap.get(t).remove(agent);
-			}
-			
-			/* If tag's set is missing the agent and the agent is now listening to the tag */
-			if(!agentMap.get(t).contains(agent) && contains(t, agent.tagsToListenTo())) {
-				agentMap.get(t).add(agent);
-			}
-		}
-		
+//		if(agent == null) {
+//			return;
+//		}
+//		
+//		if(!agents.contains(agent)) {
+//			attach(agent);
+//			return;
+//		}
+//		
+//		for(final Tag<?> t : agentMap.keySet()) {
+//			
+//			/* If tag's set has the agent, but the agent is no longer listening to the tag */
+//			if(agentMap.get(t).contains(agent) && !contains(t, agent.tagsToListenTo())) {
+//				agentMap.get(t).remove(agent);
+//			}
+//			
+//			/* If tag's set is missing the agent and the agent is now listening to the tag */
+//			if(!agentMap.get(t).contains(agent) && contains(t, agent.tagsToListenTo())) {
+//				agentMap.get(t).add(agent);
+//			}
+//		}
+//		
 	}
 	
 	private <V> boolean contains(V v, V[] array) {

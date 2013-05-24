@@ -11,8 +11,6 @@ public interface FrameworkAgent extends Agent, InstrumentAcceptor {
 
 	<M extends FrameworkEntity<M>> MarketTag<M> callbackDataObjectTag();
 
-	Tag<?>[] tagsToListenTo();
-
 	// To be called by market on handle(MarketMessage)
 	// Agent can internally route callback based on message if needed
 	// And makes Market responsible for getting the data object to
@@ -25,7 +23,6 @@ public interface FrameworkAgent extends Agent, InstrumentAcceptor {
 	@Override
 	void activate();
 
-	@Override
 	void update();
 
 	@Override

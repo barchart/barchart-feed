@@ -14,7 +14,7 @@ import com.barchart.feed.api.framework.MarketTag;
 import com.barchart.feed.api.message.Message;
 import com.barchart.missive.api.Tag;
 
-public class AgentBase implements FrameworkAgent {
+public abstract class AgentBase implements FrameworkAgent {
 	
 	private final Set<MarketEntity> markets = Collections.newSetFromMap(
 			new ConcurrentHashMap<MarketEntity, Boolean>());
@@ -95,12 +95,6 @@ public class AgentBase implements FrameworkAgent {
 	/* ***** ***** ***** ***** ***** ***** ***** */
 	
 	// built by Builder or whatever
-	
-	@Override
-	public Tag<?>[] tagsToListenTo() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 	
 	@Override
 	public boolean accept(Instrument instrument) {
