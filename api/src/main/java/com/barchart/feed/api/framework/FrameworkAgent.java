@@ -1,23 +1,21 @@
 package com.barchart.feed.api.framework;
 
 import com.barchart.feed.api.consumer.Agent;
-import com.barchart.feed.api.framework.message.Message;
+import com.barchart.feed.api.consumer.MarketCallback;
+import com.barchart.feed.api.consumer.data.MarketData;
+import com.barchart.feed.api.consumer.enums.MarketEventType;
 
-public interface FrameworkAgent extends Agent {
+public interface FrameworkAgent<M extends FrameworkEntity<M>, V extends MarketData> 
+		extends Agent {
 	
 	void bindMarketplace(FrameworkMarketplace marketplace);
 
-	<M extends FrameworkEntity<M>> MarketTag<M> callbackDataObjectTag();
+	MarketTag<M> tag();
 
-	// To be called by market on handle(MarketMessage)
-	// Agent can internally route callback based on message if needed
-	// And makes Market responsible for getting the data object to
-	// pass into the callback
-	<M extends FrameworkEntity<M>> void handle(MarketEntity market,
-			Message message, FrameworkEntity<M> data);
-
-	//
-
+	MarketEventType[] eventTypes();
+	
+	MarketCallback<V> callback();
+	
 	@Override
 	void activate();
 

@@ -71,7 +71,6 @@ public abstract class AgentBase implements FrameworkAgent {
 */
 	/* ***** ***** ***** ***** ***** ***** ***** */
 	
-	@Override
 	public <M extends FrameworkEntity<M>> void handle(final MarketEntity market,
 			final Message message, final FrameworkEntity<M> data) {
 		
@@ -107,12 +106,6 @@ public abstract class AgentBase implements FrameworkAgent {
 		this.marketplace = marketplace;
 	}
 
-	// This will be set in factory or something
-	@Override
-	public <M extends FrameworkEntity<M>> MarketTag<M> callbackDataObjectTag() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	/* ***** ***** Lifecycle methods ***** ***** */
 	

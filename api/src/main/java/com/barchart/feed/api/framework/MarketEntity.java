@@ -11,8 +11,6 @@ import com.barchart.missive.core.TagFactory;
 public interface MarketEntity extends Market, Comparable<MarketEntity>, 
 		FrameworkEntity<MarketEntity> {
 
-	// MARKET TAGS HERE
-	
 	InstrumentEntity instrumentEntity();
 	
 	void attach(FrameworkAgent agent);

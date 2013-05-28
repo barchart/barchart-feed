@@ -8,6 +8,7 @@
 package com.barchart.feed.api.framework.data;
 
 import com.barchart.feed.api.consumer.data.Instrument;
+import com.barchart.feed.api.consumer.data.MarketData;
 import com.barchart.feed.api.consumer.enums.BookLiquidityType;
 import com.barchart.feed.api.consumer.enums.BookStructureType;
 import com.barchart.feed.api.consumer.enums.MarketCurrency;
@@ -170,11 +171,6 @@ public interface InstrumentEntity extends Value<InstrumentEntity>,
 		}
 
 		@Override
-		public InstrumentEntity copy() {
-			return this;
-		}
-
-		@Override
 		public long maxBookDepthLong() {
 			// TODO Auto-generated method stub
 			return 0;
@@ -229,18 +225,6 @@ public interface InstrumentEntity extends Value<InstrumentEntity>,
 		}
 
 		@Override
-		public Message lastUpdate() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public Message lastSnapshot() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
 		public MarketTag<InstrumentEntity> tag() {
 			// TODO Auto-generated method stub
 			return null;
@@ -256,6 +240,12 @@ public interface InstrumentEntity extends Value<InstrumentEntity>,
 		public int compareTo(InstrumentEntity o) {
 			// TODO Auto-generated method stub
 			return 0;
+		}
+
+		@Override
+		public MarketData data() {
+			// TODO Auto-generated method stub
+			return null;
 		}
 
 	};
