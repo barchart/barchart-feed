@@ -6,8 +6,8 @@ import com.barchart.feed.api.consumer.enums.MarketEventType;
 /*
  * AKA MarketBase
  */
-public interface Marketplace {
+public interface AgentBuilder {
 
-	<V extends MarketData> Agent newAgent(MarketCallback<V> callback, 
+	<V extends MarketData> Agent newAgent(Class<V> clazz, MarketCallback<V> callback, 
 			MarketEventType... types);
 }

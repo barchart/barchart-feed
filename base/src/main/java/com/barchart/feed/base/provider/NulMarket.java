@@ -7,19 +7,18 @@
  */
 package com.barchart.feed.base.provider;
 
-import org.joda.time.DateTime;
-
-import com.barchart.feed.api.framework.data.InstrumentEntity;
-import com.barchart.feed.base.bar.api.MarketBar;
-import com.barchart.feed.base.book.api.MarketBook;
-import com.barchart.feed.base.book.api.MarketBookEntry;
-import com.barchart.feed.base.book.api.MarketBookTop;
-import com.barchart.feed.base.cuvol.api.MarketCuvol;
-import com.barchart.feed.base.cuvol.api.MarketCuvolEntry;
+import com.barchart.feed.api.consumer.data.Cuvol;
+import com.barchart.feed.api.consumer.data.Instrument;
+import com.barchart.feed.api.consumer.data.OrderBook;
+import com.barchart.feed.api.consumer.data.PriceLevel;
+import com.barchart.feed.api.consumer.data.Session;
+import com.barchart.feed.api.consumer.data.TopOfBook;
+import com.barchart.feed.api.consumer.data.Trade;
+import com.barchart.feed.api.consumer.enums.SessionType;
 import com.barchart.feed.base.market.api.Market;
 import com.barchart.feed.base.market.enums.MarketField;
-import com.barchart.feed.base.trade.api.MarketTrade;
 import com.barchart.util.anno.NotMutable;
+import com.barchart.util.value.api.Time;
 import com.barchart.util.values.api.Value;
 import com.barchart.util.values.provider.ValueFreezer;
 
@@ -67,58 +66,43 @@ class NulMarket extends ValueFreezer<Market> implements Market {
 	}
 
 	@Override
-	public InstrumentEntity getInstrument() {
-		return InstrumentEntity.NULL_INSTRUMENT;
+	public Instrument instrument() {
+		return null;
 	}
 
 	@Override
-	public DateTime getLastChangeTime() {
-		return MarketConst.NULL_DATETIME;
+	public Trade lastTrade() {
+		return null;
 	}
 
 	@Override
-	public MarketTrade getLastTrade() {
-		return MarketConst.NULL_TRADE;
+	public OrderBook orderBook() {
+		return null;
 	}
 
 	@Override
-	public MarketBook getBook() {
-		return MarketConst.NULL_BOOK;
+	public PriceLevel lastBookUpdate() {
+		return null;
 	}
 
 	@Override
-	public MarketBookEntry getLastBookUpdate() {
-		return MarketConst.NULL_BOOK_ENTRY;
+	public TopOfBook topOfBook() {
+		return null;
 	}
 
 	@Override
-	public MarketBookTop getTopOfBook() {
-		return MarketConst.NULL_BOOK_TOP;
+	public Cuvol cuvol() {
+		return null;
 	}
 
 	@Override
-	public MarketCuvol getCuvol() {
-		return MarketConst.NULL_CUVOL;
+	public Session session(SessionType type) {
+		return null;
 	}
 
 	@Override
-	public MarketCuvolEntry getLastCuvolUpdate() {
-		return MarketConst.NULL_CUVOL_ENTRY;
-	}
-
-	@Override
-	public MarketBar getCurrentSession() {
-		return MarketConst.NULL_BAR;
-	}
-
-	@Override
-	public MarketBar getExtraSession() {
-		return MarketConst.NULL_BAR;
-	}
-
-	@Override
-	public MarketBar getPreviousSession() {
-		return MarketConst.NULL_BAR;
+	public Time lastUpdateTime() {
+		return null;
 	}
 
 }

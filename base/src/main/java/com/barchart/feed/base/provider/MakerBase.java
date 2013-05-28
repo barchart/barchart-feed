@@ -13,11 +13,21 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.barchart.feed.api.consumer.Agent;
+import com.barchart.feed.api.consumer.AgentBuilder;
+import com.barchart.feed.api.consumer.MarketCallback;
+import com.barchart.feed.api.consumer.data.Exchange;
 import com.barchart.feed.api.consumer.data.Instrument;
+import com.barchart.feed.api.consumer.data.Market;
+import com.barchart.feed.api.consumer.data.MarketData;
+import com.barchart.feed.api.consumer.enums.MarketEventType;
+import com.barchart.feed.api.framework.AgentLifecycleHandler;
+import com.barchart.feed.api.framework.FrameworkAgent;
 import com.barchart.feed.api.framework.data.InstrumentEntity;
 import com.barchart.feed.api.framework.data.InstrumentField;
 import com.barchart.feed.base.market.api.MarketDo;
@@ -37,7 +47,7 @@ import com.barchart.util.values.api.Value;
 /** TODO review and remove synchronized */
 @ThreadSafe
 public abstract class MakerBase<Message extends MarketMessage> implements
-		MarketMakerProvider<Message> {
+		MarketMakerProvider<Message>, AgentBuilder, AgentLifecycleHandler {
 
 	protected final Logger log = LoggerFactory.getLogger(getClass());
 
@@ -51,7 +61,137 @@ public abstract class MakerBase<Message extends MarketMessage> implements
 
 	private final CopyOnWriteArrayList<MarketRegListener> listenerList = //
 	new CopyOnWriteArrayList<MarketRegListener>();
+	
+	// ########################
+	
+	@Override
+	public <V extends MarketData> Agent newAgent(final Class<V> clazz, 
+			final MarketCallback<V> callback, final MarketEventType... types) {
+		return new BaseAgent<V>(null, clazz, callback, types);
+	}
+	
+	private class BaseAgent<V extends MarketData> implements FrameworkAgent<V> {
 
+		private final AtomicBoolean isActive = new AtomicBoolean(true);
+		
+		private final AgentLifecycleHandler agentHandler;
+		private final MarketCallback<V> callback;
+		private final MarketEventType[] types;
+		
+		BaseAgent(final AgentLifecycleHandler agentHandler, final Class<V> clazz, 
+				final MarketCallback<V> callback, final MarketEventType... types) {
+			
+			this.agentHandler = agentHandler;
+			this.callback = callback;
+			this.types = types;
+			
+		}
+		
+		/* ***** ***** Framework Methods ***** ***** */
+		
+		@Override
+		public MarketEventType[] eventTypes() {
+			return types;
+		}
+
+		@Override
+		public MarketCallback<V> callback() {
+			return callback;
+		}
+
+		@Override
+		public V data(final Market market) {
+			// Methods? Hell yea!
+			return null;
+		}
+		
+		/* ***** ***** Consumer Methods ***** ***** */
+		
+		@Override
+		public boolean isActive() {
+			return isActive.get();
+		}
+		
+		@Override
+		public void activate() {
+			isActive.set(true);
+		}
+
+		@Override
+		public void deactivate() {
+			isActive.set(false);
+		}
+
+		@Override
+		public void dismiss() {
+			agentHandler.detachAgent(this);
+		}
+
+		@Override
+		public void includeAll() {
+			
+			
+		}
+
+		@Override
+		public void include(CharSequence... symbols) {
+			
+			
+		}
+
+		@Override
+		public void include(Instrument... instruments) {
+			
+			
+		}
+
+		@Override
+		public void include(Exchange... exchanges) {
+			
+			
+		}
+
+		@Override
+		public void exclude(CharSequence... symbols) {
+			
+			
+		}
+
+		@Override
+		public void exclude(Instrument... instruments) {
+			
+			
+		}
+
+		@Override
+		public void exclude(Exchange... exchanges) {
+			
+			
+		}
+
+		@Override
+		public void clear() {
+			
+			
+		}
+
+	}
+
+	@Override
+	public void attachAgent(final FrameworkAgent<?> agent) {
+		
+	}
+	
+	@Override
+	public void updateAgent(final FrameworkAgent<?> agent) {
+		
+	}
+	
+	@Override
+	public void detachAgent(final FrameworkAgent<?> agent) {
+		
+	}
+	
 	// ########################
 
 	@Override

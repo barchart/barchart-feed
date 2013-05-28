@@ -16,6 +16,8 @@ import com.barchart.feed.api.consumer.data.Instrument;
  */
 public interface Agent {
 
+	boolean isActive();
+	
 	/**
 	 * The default state of an agent, firing callback once the first
 	 * instrument is included.

@@ -7,18 +7,18 @@
  */
 package com.barchart.feed.base.provider;
 
-import org.joda.time.DateTime;
-
-import com.barchart.feed.api.framework.data.InstrumentEntity;
-import com.barchart.feed.base.bar.api.MarketBar;
-import com.barchart.feed.base.book.api.MarketBook;
-import com.barchart.feed.base.book.api.MarketBookEntry;
-import com.barchart.feed.base.book.api.MarketBookTop;
-import com.barchart.feed.base.cuvol.api.MarketCuvol;
-import com.barchart.feed.base.cuvol.api.MarketCuvolEntry;
+import com.barchart.feed.api.consumer.data.Cuvol;
+import com.barchart.feed.api.consumer.data.Instrument;
+import com.barchart.feed.api.consumer.data.OrderBook;
+import com.barchart.feed.api.consumer.data.PriceLevel;
+import com.barchart.feed.api.consumer.data.Session;
+import com.barchart.feed.api.consumer.data.TopOfBook;
+import com.barchart.feed.api.consumer.data.Trade;
+import com.barchart.feed.api.consumer.enums.SessionType;
 import com.barchart.feed.base.market.enums.MarketField;
-import com.barchart.feed.base.trade.api.MarketTrade;
 import com.barchart.util.anno.NotMutable;
+import com.barchart.util.value.api.Time;
+import com.barchart.util.value.impl.ValueConst;
 import com.barchart.util.values.api.Value;
 
 @NotMutable
@@ -27,6 +27,8 @@ public class DefMarket extends NulMarket {
 	protected final static int ARRAY_SIZE = MarketField.size();
 
 	protected final Value<?>[] valueArray;
+	
+	protected volatile Time lastUpdateTime = ValueConst.NULL_TIME;
 
 	public DefMarket() {
 		valueArray = new Value<?>[ARRAY_SIZE];
@@ -49,58 +51,55 @@ public class DefMarket extends NulMarket {
 	}
 	
 	@Override
-	public InstrumentEntity getInstrument() {
+	public Instrument instrument() {
 		return get(MarketField.INSTRUMENT);
-	}
-	
-	@Override
-	public DateTime getLastChangeTime() {
-		return get(MarketField.MARKET_TIME).asDateTime();
 	}
 
 	@Override
-	public MarketTrade getLastTrade() {
+	public Trade lastTrade() {
 		return get(MarketField.TRADE);
 	}
 
 	@Override
-	public MarketBook getBook() {
+	public OrderBook orderBook() {
 		return get(MarketField.BOOK);
 	}
 
 	@Override
-	public MarketBookEntry getLastBookUpdate() {
+	public PriceLevel lastBookUpdate() {
 		return get(MarketField.BOOK_LAST);
 	}
 
 	@Override
-	public MarketBookTop getTopOfBook() {
+	public TopOfBook topOfBook() {
 		return get(MarketField.BOOK_TOP);
 	}
 
 	@Override
-	public MarketCuvol getCuvol() {
+	public Cuvol cuvol() {
 		return get(MarketField.CUVOL);
 	}
 
 	@Override
-	public MarketCuvolEntry getLastCuvolUpdate() {
-		return get(MarketField.CUVOL_LAST);
+	public Session session(SessionType type) {
+		switch(type) {
+			default:
+				throw new UnsupportedOperationException(
+						"Session type not supported: " + type.name());
+			case CURRENT:
+				return get(MarketField.BAR_CURRENT);
+			case PREVIOUS:
+				return get(MarketField.BAR_PREVIOUS);
+			case EXTENDED_CURRENT:
+				return get(MarketField.BAR_CURRENT_EXT);
+			case EXTENDED_PREVIOUS:
+				return get(MarketField.BAR_PREVIOUS_EXT);
+		}
 	}
 
 	@Override
-	public MarketBar getCurrentSession() {
-		return get(MarketField.BAR_CURRENT);
+	public Time lastUpdateTime() {
+		return null;
 	}
-
-	@Override
-	public MarketBar getExtraSession() {
-		return get(MarketField.BAR_CURRENT_EXT);
-	}
-
-	@Override
-	public MarketBar getPreviousSession() {
-		return get(MarketField.BAR_PREVIOUS);
-	}
-
+	
 }

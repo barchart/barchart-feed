@@ -2,7 +2,7 @@ package com.barchart.feed.api.consumer.examples;
 
 import com.barchart.feed.api.consumer.Agent;
 import com.barchart.feed.api.consumer.MarketCallback;
-import com.barchart.feed.api.consumer.Marketplace;
+import com.barchart.feed.api.consumer.AgentBuilder;
 import com.barchart.feed.api.consumer.data.Session;
 import com.barchart.feed.api.consumer.enums.MarketEventType;
 import com.barchart.util.value.api.Price;
@@ -16,13 +16,13 @@ public class DoubleDownTrader {
 	private volatile Price high, low, currentPNL;
 	private volatile Size tradeSize;
 
-	public DoubleDownTrader(final Marketplace marketplace,
+	public DoubleDownTrader(final AgentBuilder marketplace,
 			final Price targetPnL) {
 		this.targetPnL = targetPnL;
 
 		/* User just wants to trade front month S&P future */
 		//agent = marketplace.agentBuilder().filter("ESM3").build(new DoubleDown());
-		agent = marketplace.newAgent(new DoubleDown(), MarketEventType.ALL);
+		agent = marketplace.newAgent(Session.class, new DoubleDown(), MarketEventType.ALL);
 	}
 
 	private class DoubleDown implements MarketCallback<Session> {
