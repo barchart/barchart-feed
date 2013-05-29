@@ -10,7 +10,8 @@ package com.barchart.feed.base.market.api;
 import java.util.List;
 import java.util.Set;
 
-import com.barchart.feed.api.framework.data.InstrumentEntity;
+import com.barchart.feed.api.consumer.data.Instrument;
+import com.barchart.feed.api.framework.AgentLifecycleHandler;
 import com.barchart.feed.base.bar.api.MarketBar;
 import com.barchart.feed.base.bar.api.MarketDoBar;
 import com.barchart.feed.base.bar.enums.MarketBarType;
@@ -29,9 +30,9 @@ import com.barchart.util.values.api.SizeValue;
 import com.barchart.util.values.api.TimeValue;
 
 @Mutable
-public interface MarketDo extends Market {
+public interface MarketDo extends Market, AgentLifecycleHandler {
 
-	/* EVENTS */
+	/* OLD EVENTS */
 
 	void fireEvents();
 
@@ -46,11 +47,11 @@ public interface MarketDo extends Market {
 	List<RegTaker<?>> regList();
 
 	Set<MarketEvent> regEvents();
-
+	
 	/* VALUES */
 
 	/** one time instrument initialization */
-	void setInstrument(InstrumentEntity symbol);
+	void setInstrument(Instrument symbol);
 
 	/**  */
 	void setBookUpdate(MarketDoBookEntry entry, TimeValue time);

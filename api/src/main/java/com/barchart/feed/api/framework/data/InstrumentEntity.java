@@ -7,6 +7,7 @@
  */
 package com.barchart.feed.api.framework.data;
 
+import com.barchart.feed.api.consumer.data.Exchange;
 import com.barchart.feed.api.consumer.data.Instrument;
 import com.barchart.feed.api.consumer.data.MarketData;
 import com.barchart.feed.api.consumer.enums.BookLiquidityType;
@@ -26,14 +27,9 @@ import com.barchart.util.value.api.Size;
 import com.barchart.util.value.api.Time;
 import com.barchart.util.values.api.Fraction;
 import com.barchart.util.values.api.TimeInterval;
-import com.barchart.util.values.api.Value;
 import com.barchart.util.values.provider.ValueConst;
 
-public interface InstrumentEntity extends Value<InstrumentEntity>,
-		Instrument,	FrameworkEntity<InstrumentEntity>,
-		Comparable<InstrumentEntity> {
-
-	InstrumentGUID getGUID();
+interface InstrumentEntity extends Instrument, FrameworkEntity<InstrumentEntity> {
 
 	@Override
 	boolean equals(Object that);
@@ -76,11 +72,6 @@ public interface InstrumentEntity extends Value<InstrumentEntity>,
 		@Override
 		public boolean isNull() {
 			return true;
-		}
-
-		@Override
-		public InstrumentGUID getGUID() {
-			return InstrumentGUID.NULL_INSTRUMENT_GUID;
 		}
 
 		@Override
@@ -232,18 +223,25 @@ public interface InstrumentEntity extends Value<InstrumentEntity>,
 
 		@Override
 		public void update(final Message update) {
-			// TODO Auto-generated method stub
 
 		}
 
 		@Override
-		public int compareTo(InstrumentEntity o) {
-			// TODO Auto-generated method stub
-			return 0;
+		public int compareTo(final Instrument o) {
+			if(o == this) {
+				return 0;
+			}
+			return 1;
 		}
 
 		@Override
 		public MarketData data() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public Exchange exchange() {
 			// TODO Auto-generated method stub
 			return null;
 		}

@@ -26,7 +26,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.feed.api.framework.data.InstrumentEntity;
+import com.barchart.feed.api.consumer.data.Instrument;
 import com.barchart.feed.api.framework.inst.InstrumentService;
 import com.barchart.feed.base.bar.api.MarketBar;
 import com.barchart.feed.base.market.api.Market;
@@ -61,11 +61,11 @@ public class TestMakerTaker {
 
 		final MockMaker maker = new MockMaker(new MockMarketFactory());
 
-		final InstrumentEntity inst;
+		final Instrument inst;
 
 		inst = service.lookup(MockDefinitionService.INST_SYMBOL_1);
 
-		final InstrumentEntity[] insts = new InstrumentEntity[] { inst };
+		final Instrument[] insts = new Instrument[] { inst };
 
 		final MarketTaker<Market> tempTaker = new MockTaker<Market>(insts);
 
@@ -89,15 +89,15 @@ public class TestMakerTaker {
 			}
 
 			@Override
-			public InstrumentEntity[] bindInstruments() {
-				return new InstrumentEntity[] { inst };
+			public Instrument[] bindInstruments() {
+				return new Instrument[] { inst };
 			}
 
 			Market previous;
 
 			@Override
 			public void onMarketEvent(final MarketEvent event,
-					final InstrumentEntity instrument, final Market market) {
+					final Instrument instrument, final Market market) {
 
 				count.incrementAndGet();
 
@@ -146,11 +146,11 @@ public class TestMakerTaker {
 
 		final MockMaker maker = new MockMaker(new MockMarketFactory());
 
-		final InstrumentEntity inst;
+		final Instrument inst;
 
 		inst = service.lookup(MockDefinitionService.INST_SYMBOL_1);
 
-		final InstrumentEntity[] insts = new InstrumentEntity[] { inst };
+		final Instrument[] insts = new Instrument[] { inst };
 
 		final MarketTaker<Market> tempTaker = new MockTaker<Market>(insts);
 
@@ -174,15 +174,15 @@ public class TestMakerTaker {
 			}
 
 			@Override
-			public InstrumentEntity[] bindInstruments() {
-				return new InstrumentEntity[] { inst };
+			public Instrument[] bindInstruments() {
+				return new Instrument[] { inst };
 			}
 
 			MarketBar previous;
 
 			@Override
 			public void onMarketEvent(final MarketEvent event,
-					final InstrumentEntity instrument, final MarketBar bar) {
+					final Instrument instrument, final MarketBar bar) {
 
 				count.incrementAndGet();
 

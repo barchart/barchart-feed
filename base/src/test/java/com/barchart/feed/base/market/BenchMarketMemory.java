@@ -7,7 +7,7 @@
  */
 package com.barchart.feed.base.market;
 
-import com.barchart.feed.api.framework.data.InstrumentEntity;
+import com.barchart.feed.api.consumer.data.Instrument;
 import com.barchart.feed.api.framework.inst.InstrumentService;
 import com.barchart.feed.base.market.api.Market;
 import com.barchart.feed.base.market.api.MarketTaker;
@@ -25,7 +25,7 @@ public class BenchMarketMemory {
 
 	public static void main(final String[] args) throws Exception {
 
-		InstrumentEntity[] inst = new InstrumentEntity[COUNT];
+		Instrument[] inst = new Instrument[COUNT];
 
 		MarketTaker<Market> taker;
 
@@ -33,7 +33,7 @@ public class BenchMarketMemory {
 
 			final TextValue id = ValueBuilder.newText("market-" + k);
 
-			inst = new InstrumentEntity[] { service.lookup(id) };
+			inst = new Instrument[] { service.lookup(id) };
 
 			taker = new MockTaker<Market>(inst);
 

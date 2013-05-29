@@ -9,9 +9,9 @@ package com.barchart.feed.api.framework.inst;
 
 import java.util.concurrent.Future;
 
-import com.barchart.feed.api.framework.data.InstrumentEntity;
+import com.barchart.feed.api.consumer.data.Instrument;
 
 // TODO Review
-public interface InstrumentFuture extends InstrumentEntity, Future<InstrumentEntity> {
+public interface InstrumentFuture extends Instrument, Future<Instrument> {
 
 }

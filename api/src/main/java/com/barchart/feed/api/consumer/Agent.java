@@ -1,5 +1,7 @@
 package com.barchart.feed.api.consumer;
 
+import java.util.Collection;
+
 import com.barchart.feed.api.consumer.data.Exchange;
 import com.barchart.feed.api.consumer.data.Instrument;
 
@@ -47,13 +49,16 @@ public interface Agent {
 	 * @param symbols
 	 */
 	void include(CharSequence...symbols);
-
+	
 	/**
 	 * Subscribes to and attaches agent to provided instruments.
 	 * 
 	 * @param instruments
 	 */
 	void include(Instrument...instruments);
+	
+	//TODO collection methods
+	//void include(Collection<Instrument> instruments);
 	
 	/**
 	 * Subscribes to and attaches agent to all instruments from provided

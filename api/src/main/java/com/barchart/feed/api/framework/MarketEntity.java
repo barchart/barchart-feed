@@ -1,17 +1,17 @@
 package com.barchart.feed.api.framework;
 
+import com.barchart.feed.api.consumer.data.Instrument;
 import com.barchart.feed.api.consumer.data.Market;
-import com.barchart.feed.api.framework.data.InstrumentEntity;
 import com.barchart.feed.api.framework.data.OrderBookEntity;
 import com.barchart.feed.api.framework.data.TopOfBookEntity;
 import com.barchart.feed.api.framework.data.TradeEntity;
 import com.barchart.missive.api.Tag;
 import com.barchart.missive.core.TagFactory;
 
-public interface MarketEntity extends Market, Comparable<MarketEntity>, 
+interface MarketEntity extends Market, Comparable<MarketEntity>, 
 		FrameworkEntity<MarketEntity> {
 
-	InstrumentEntity instrumentEntity();
+	Instrument instrumentEntity();
 	
 	void attach(FrameworkAgent agent);
 	void update(FrameworkAgent agent);
@@ -19,7 +19,7 @@ public interface MarketEntity extends Market, Comparable<MarketEntity>,
 	
 	public static final MarketTag<MarketEntity> MARKET = MarketTagFactory.create(MarketEntity.class);
 	
-	public static final MarketTag<InstrumentEntity> INSTRUMENT = MarketTagFactory.create(InstrumentEntity.class);
+	//public static final MarketTag<Instrument> INSTRUMENT = MarketTagFactory.create(Instrument.class);
 	
 	public static final MarketTag<TradeEntity> LAST_TRADE = MarketTagFactory.create(TradeEntity.class);
 	

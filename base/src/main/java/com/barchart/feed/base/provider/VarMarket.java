@@ -9,15 +9,19 @@ package com.barchart.feed.base.provider;
 
 import static com.barchart.feed.base.market.enums.MarketField.*;
 
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.barchart.feed.api.consumer.data.Instrument;
 import com.barchart.feed.api.consumer.enums.BookLiquidityType;
-import com.barchart.feed.api.framework.data.InstrumentEntity;
-import com.barchart.feed.api.framework.data.InstrumentField;
+import com.barchart.feed.api.consumer.enums.MarketEventType;
+import com.barchart.feed.api.framework.FrameworkAgent;
 import com.barchart.feed.base.bar.api.MarketBar;
 import com.barchart.feed.base.bar.api.MarketDoBar;
 import com.barchart.feed.base.book.api.MarketBook;
@@ -45,11 +49,16 @@ import com.barchart.util.values.provider.ValueBuilder;
 @Mutable
 @ThreadSafe(rule = "must use runSafe()")
 public abstract class VarMarket extends DefMarket implements MarketDo {
+	
+	protected final EnumMap<MarketEventType, Set<FrameworkAgent<?>>> agentMap =
+		new EnumMap<MarketEventType, Set<FrameworkAgent<?>>>(MarketEventType.class);
+	
+	private final ConcurrentMap<FrameworkAgent<?>, Boolean> agentSet = 
+			new ConcurrentHashMap<FrameworkAgent<?>, Boolean>();
 
 	// @SuppressWarnings("unused")
 	private static final Logger log = LoggerFactory.getLogger(VarMarket.class);
 
-	// HACK
 	RegCenter reg = new RegCenter(this);
 
 	public VarMarket() {
@@ -59,6 +68,57 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 
 	}
 
+	/* ***** ***** Agent Lifecycle ***** ***** */
+	
+	@Override
+	public synchronized void attachAgent(final FrameworkAgent<?> agent) {
+		
+		if(agentSet.containsKey(agent)) {
+			updateAgent(agent);
+			return;
+		}
+		
+		if(!agent.accept(instrument())) {
+			return;
+		}
+		
+		agentSet.put(agent, new Boolean(false));
+		
+		for(final MarketEventType type : agent.eventTypes()) {
+			agentMap.get(type).add(agent);
+		}
+		
+	}
+	
+	@Override
+	public synchronized void updateAgent(final FrameworkAgent<?> agent) {
+		
+		if(!agentSet.containsKey(agent)) {
+			attachAgent(agent);
+			return;
+		}
+		
+		if(!agent.accept(instrument())) {
+			detachAgent(agent);
+		}
+		
+	}
+	
+	@Override
+	public synchronized void detachAgent(final FrameworkAgent<?> agent) {
+		
+		if(!agentSet.containsKey(agent)) {
+			return;
+		}
+		
+		agentSet.remove(agent);
+		
+		for(final MarketEventType type : agent.eventTypes()) {
+			agentMap.get(type).remove(agent);
+		}
+		
+	}
+	
 	//
 
 	@Override
@@ -233,8 +293,9 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 
 		if (cuvol.isFrozen()) {
 
-			final InstrumentEntity inst = get(INSTRUMENT);
-			final PriceValue priceStep = inst.get(InstrumentField.TICK_SIZE);
+			final Instrument inst = get(INSTRUMENT);
+			final PriceValue priceStep = ValueBuilder.newPrice(inst.tickSize().mantissa(), 
+					inst.tickSize().exponent());
 
 			final VarCuvol varCuvol = new VarCuvol(priceStep);
 			final VarCuvolLast varCuvolLast = new VarCuvolLast(varCuvol);
@@ -277,12 +338,13 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 
 		if (book.isFrozen()) {
 
-			final InstrumentEntity inst = get(INSTRUMENT);
+			final Instrument inst = get(INSTRUMENT);
 
-			final BookLiquidityType type = inst.get(InstrumentField.BOOK_LIQUIDITY);
+			final BookLiquidityType type = inst.liquidityType();
 
 			final SizeValue size = LIMIT; // inst.get(BOOK_SIZE);
-			final PriceValue step = inst.get(InstrumentField.TICK_SIZE);
+			final PriceValue step = ValueBuilder.newPrice(inst.tickSize().mantissa(), 
+					inst.tickSize().exponent());
 
 			final VarBook varBook = new VarBook(type, size, step);
 			final VarBookLast varBookLast = new VarBookLast(varBook);
@@ -302,9 +364,10 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 
 	protected final boolean isValidPrice(final PriceValue price) {
 
-		final InstrumentEntity inst = get(INSTRUMENT);
+		final Instrument inst = get(INSTRUMENT);
 
-		final PriceValue priceStep = inst.get(InstrumentField.TICK_SIZE);
+		final PriceValue priceStep = ValueBuilder.newPrice(inst.tickSize().mantissa(), 
+				inst.tickSize().exponent());
 
 		if (!price.equalsScale(priceStep)) {
 			log.error("not normalized");

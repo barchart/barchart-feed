@@ -27,7 +27,6 @@ import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.api.consumer.data.Instrument;
 import com.barchart.feed.api.consumer.inst.InstrumentGUID;
-import com.barchart.feed.api.framework.data.InstrumentEntity;
 import com.barchart.feed.api.framework.inst.InstrumentFuture;
 import com.barchart.feed.api.framework.inst.InstrumentService;
 import com.barchart.feed.api.framework.inst.MetadataContext;
@@ -49,8 +48,8 @@ public class MockDefinitionService implements InstrumentService<CharSequence> {
 	public static final TextValue INST_SYMBOL_2 = ValueBuilder.newText("two");
 	public static final TextValue INST_SYMBOL_3 = ValueBuilder.newText("three");
 	
-	final Map<InstrumentGUID, InstrumentEntity> guidMap = 
-			new ConcurrentHashMap<InstrumentGUID, InstrumentEntity>();
+	final Map<InstrumentGUID, Instrument> guidMap = 
+			new ConcurrentHashMap<InstrumentGUID, Instrument>();
 	final Map<TextValue, InstrumentGUID> symbolMap = 
 			new ConcurrentHashMap<TextValue, InstrumentGUID>();
 	
@@ -98,11 +97,11 @@ public class MockDefinitionService implements InstrumentService<CharSequence> {
 	}
 	
 	@Override
-	public InstrumentEntity lookup(final CharSequence symbol) {
+	public Instrument lookup(final CharSequence symbol) {
 		if(symbolMap.containsKey(symbol)) {
 			return guidMap.get(symbolMap.get(symbol));
 		}
-		return InstrumentEntity.NULL_INSTRUMENT;
+		return Instrument.NULL_INSTRUMENT;
 	}
 
 	@Override
@@ -118,9 +117,9 @@ public class MockDefinitionService implements InstrumentService<CharSequence> {
 	}
 
 	@Override
-	public Map<CharSequence, InstrumentEntity> lookup(final Collection<? extends CharSequence> symbols) {
+	public Map<CharSequence, Instrument> lookup(final Collection<? extends CharSequence> symbols) {
 		
-		final Map<CharSequence, InstrumentEntity> insts = new HashMap<CharSequence, InstrumentEntity>();
+		final Map<CharSequence, Instrument> insts = new HashMap<CharSequence, Instrument>();
 		for(final CharSequence symbol : symbols) {
 			insts.put(symbol,lookup(symbol));
 		}
@@ -129,7 +128,7 @@ public class MockDefinitionService implements InstrumentService<CharSequence> {
 	}
 
 	@Override
-	public Map<CharSequence, Future<InstrumentEntity>> lookupAsync(
+	public Map<CharSequence, Future<Instrument>> lookupAsync(
 			final Collection<? extends CharSequence> symbols) {
 		// TODO Auto-generated method stub
 		return null;

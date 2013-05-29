@@ -7,20 +7,20 @@
  */
 package com.barchart.feed.base.message;
 
-import com.barchart.feed.api.framework.data.InstrumentEntity;
+import com.barchart.feed.api.consumer.data.Instrument;
 import com.barchart.feed.base.market.api.MarketMessage;
 import com.barchart.util.values.api.TimeValue;
 
 public abstract class MockMessage implements MarketMessage {
 
-	private final InstrumentEntity inst;
+	private final Instrument inst;
 
-	public MockMessage(InstrumentEntity inst) {
+	public MockMessage(Instrument inst) {
 		this.inst = inst;
 	}
 
 	@Override
-	public InstrumentEntity getInstrument() {
+	public Instrument getInstrument() {
 		return inst;
 	}
 

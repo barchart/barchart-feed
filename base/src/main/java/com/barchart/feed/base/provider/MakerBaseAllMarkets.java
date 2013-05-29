@@ -10,8 +10,7 @@ package com.barchart.feed.base.provider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.feed.api.framework.data.InstrumentEntity;
-import com.barchart.feed.api.framework.data.InstrumentField;
+import com.barchart.feed.api.consumer.data.Instrument;
 import com.barchart.feed.base.market.api.Market;
 import com.barchart.feed.base.market.api.MarketDo;
 import com.barchart.feed.base.market.api.MarketFactory;
@@ -20,8 +19,8 @@ import com.barchart.feed.base.market.api.MarketMessage;
 import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.base.market.enums.MarketField;
+import com.barchart.util.value.api.Price;
 import com.barchart.util.values.api.Fraction;
-import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.Value;
 
 public abstract class MakerBaseAllMarkets<Message extends MarketMessage>
@@ -114,7 +113,7 @@ public abstract class MakerBaseAllMarkets<Message extends MarketMessage>
 
 	private final MarketTaker<Market> omniTaker = new MarketTaker<Market>() {
 
-		final InstrumentEntity[] blankInsts = {};
+		final Instrument[] blankInsts = {};
 
 		@Override
 		public MarketField<Market> bindField() {
@@ -127,13 +126,13 @@ public abstract class MakerBaseAllMarkets<Message extends MarketMessage>
 		}
 
 		@Override
-		public InstrumentEntity[] bindInstruments() {
+		public Instrument[] bindInstruments() {
 			return blankInsts;
 		}
 
 		@Override
 		public void onMarketEvent(final MarketEvent event,
-				final InstrumentEntity instrument, final Market market) {
+				final Instrument instrument, final Market market) {
 			fireEvents(marketMap.get(instrument), event);
 		}
 
@@ -145,7 +144,7 @@ public abstract class MakerBaseAllMarkets<Message extends MarketMessage>
 	@Override
 	public final void make(final Message message) {
 
-		final InstrumentEntity instrument = message.getInstrument();
+		final Instrument instrument = message.getInstrument();
 
 		if (!isValid(instrument)) {
 			return;
@@ -192,7 +191,7 @@ public abstract class MakerBaseAllMarkets<Message extends MarketMessage>
 	}
 
 	@Override
-	protected boolean isValid(final InstrumentEntity instrument) {
+	protected boolean isValid(final Instrument instrument) {
 
 		if (instrument == null) {
 			return false;
@@ -202,14 +201,14 @@ public abstract class MakerBaseAllMarkets<Message extends MarketMessage>
 			return false;
 		}
 
-		final PriceValue priceStep = instrument.get(InstrumentField.TICK_SIZE);
+		final Price priceStep = instrument.tickSize();
 
 		if (priceStep.isZero()) {
 			log.error("priceStep.isZero()");
 			return false;
 		}
 
-		final Fraction fraction = instrument.get(InstrumentField.DISPLAY_FRACTION);
+		final Fraction fraction = instrument.displayFraction();
 		
 		if(fraction == null || fraction.isNull()) {
 			log.error("fraction.isNull()");

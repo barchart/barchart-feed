@@ -7,7 +7,7 @@
  */
 package com.barchart.feed.base.message;
 
-import com.barchart.feed.api.framework.data.InstrumentEntity;
+import com.barchart.feed.api.consumer.data.Instrument;
 import com.barchart.feed.base.trade.enums.MarketTradeSequencing;
 import com.barchart.feed.base.trade.enums.MarketTradeSession;
 import com.barchart.feed.base.trade.enums.MarketTradeType;
@@ -17,7 +17,7 @@ import com.barchart.util.values.api.TimeValue;
 
 public class MockMsgTrade extends MockMessage {
 
-	public MockMsgTrade(final InstrumentEntity inst) {
+	public MockMsgTrade(final Instrument inst) {
 		super(inst);
 	}
 

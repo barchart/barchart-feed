@@ -7,48 +7,41 @@
  */
 package com.barchart.feed.inst.provider;
 
+import com.barchart.feed.api.consumer.data.Exchange;
+import com.barchart.feed.api.consumer.data.Instrument;
 import com.barchart.feed.api.consumer.enums.BookLiquidityType;
 import com.barchart.feed.api.consumer.enums.BookStructureType;
 import com.barchart.feed.api.consumer.enums.MarketCurrency;
 import com.barchart.feed.api.consumer.enums.SecurityType;
 import com.barchart.feed.api.consumer.inst.GuidList;
 import com.barchart.feed.api.consumer.inst.InstrumentGUID;
-import com.barchart.feed.api.framework.MarketEntity;
-import com.barchart.feed.api.framework.MarketTag;
-import com.barchart.feed.api.framework.data.InstrumentEntity;
 import com.barchart.feed.api.framework.data.InstrumentField;
-import com.barchart.feed.api.framework.message.Message;
-import com.barchart.feed.api.framework.message.Snapshot;
-import com.barchart.feed.api.framework.message.Update;
 import com.barchart.feed.api.util.Schedule;
 import com.barchart.missive.core.ObjectMapSafe;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Size;
 import com.barchart.util.value.api.Time;
+import com.barchart.util.value.provider.FactoryProvider;
 import com.barchart.util.values.api.Fraction;
+import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.TimeInterval;
 
-public abstract class InstrumentBase extends ObjectMapSafe implements InstrumentEntity {
+public abstract class InstrumentBase extends ObjectMapSafe implements Instrument {
 	
 	@Override
-	public MarketTag<InstrumentEntity> tag() {
-		return MarketEntity.INSTRUMENT;
-	}
-	
-	@Override
-	public int compareTo(final InstrumentEntity o) {
-		return getGUID().compareTo(o.getGUID());
+	public int compareTo(final Instrument o) {
+		return GUID().compareTo(o.GUID());
 	}
 	
 	@Override
 	public int hashCode() {
-		return getGUID().hashCode();
+		return GUID().hashCode();
 	}
 	
 	@Override
 	public boolean equals(final Object o) {
-		if(o instanceof InstrumentEntity) {
-			return compareTo((InstrumentEntity)o) == 0;
+		if(o instanceof Instrument) {
+			return compareTo((Instrument)o) == 0;
 		} else {
 			return false;
 		}
@@ -60,18 +53,13 @@ public abstract class InstrumentBase extends ObjectMapSafe implements Instrument
 	}
 	
 	@Override
-	public InstrumentEntity freeze() {
+	public Instrument freeze() {
 		return this;
 	}
 
 	@Override
 	public final boolean isNull() {
-		return this == InstrumentEntity.NULL_INSTRUMENT;
-	}
-	
-	@Override
-	public InstrumentGUID getGUID() {
-		return get(InstrumentField.GUID);
+		return this == Instrument.NULL_INSTRUMENT;
 	}
 	
 	@Override
@@ -101,7 +89,6 @@ public abstract class InstrumentBase extends ObjectMapSafe implements Instrument
 
 	@Override
 	public Size maxBookDepth() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	
@@ -129,6 +116,11 @@ public abstract class InstrumentBase extends ObjectMapSafe implements Instrument
 	public String CFICode() {
 		return get(InstrumentField.CFI_CODE).toString();
 	}
+	
+	@Override
+	public Exchange exchange() {
+		return ExchangeFactory.fromCode(exchangeCode());
+	}
 
 	@Override
 	public String exchangeCode() {
@@ -153,8 +145,8 @@ public abstract class InstrumentBase extends ObjectMapSafe implements Instrument
 	
 	@Override
 	public Price pointValue() {
-		// TODO Auto-generated method stub
-		return null;
+		final PriceValue temp = get(InstrumentField.POINT_VALUE);
+		return FactoryProvider.instance().newPrice(temp.mantissa(), temp.exponent());
 	}
 
 	@Override
@@ -193,36 +185,8 @@ public abstract class InstrumentBase extends ObjectMapSafe implements Instrument
 	}
 
 	@Override
-	public Update lastUpdate() {
-		return null;
-	}
-
-	@Override
-	public Snapshot lastSnapshot() {
-		return null;
-	}
-
-	@Override
-	public void update(Message message) {
-		// Ignore
-	}
-
-	@Override
-	public Time lastTime() {
-		// Ignore
-		return null;
-	}
-	
-	
-	@Override
 	public Time lastUpdateTime() {
 		// Ignore
-		return null;
-	}
-
-	@Override
-	public InstrumentEntity copy() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

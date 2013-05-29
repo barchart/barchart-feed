@@ -93,20 +93,6 @@
 		</dependency>
 		
 		<dependency>
-			<groupId>com.barchart.feed</groupId>
-			<artifactId>barchart-feed-market</artifactId>
-			<version>[1.0.0, 1.1.0)</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.barchart.feed</groupId>
-			<artifactId>barchart-feed-market</artifactId>
-			<version>[1.0.0, 1.1.0)</version>
-			<scope>test</scope>
-			<classifier>tests</classifier>
-		</dependency>
-
-		<dependency>
 			<groupId>com.barchart.util</groupId>
 			<artifactId>barchart-util-bench</artifactId>
 			<version>2.0.29</version>

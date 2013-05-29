@@ -14,7 +14,6 @@ import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.api.consumer.data.Instrument;
 import com.barchart.feed.api.consumer.inst.InstrumentGUID;
-import com.barchart.feed.api.framework.data.InstrumentEntity;
 import com.barchart.feed.api.framework.inst.MetadataContext;
 import com.barchart.proto.buf.inst.InstrumentDefinition;
 import com.google.protobuf.InvalidProtocolBufferException;
@@ -65,7 +64,7 @@ public class LocalInstDefDB implements MetadataContext {
 		byte[] resData = result.getData();
 		
 		if(resData == null || resData.length == 0) {
-			return InstrumentEntity.NULL_INSTRUMENT;
+			return Instrument.NULL_INSTRUMENT;
 		}
 		
 		try {
@@ -78,7 +77,7 @@ public class LocalInstDefDB implements MetadataContext {
 		
 	}
 	
-	public void store(final InstrumentGUID guid, final InstrumentEntity inst) {
+	public void store(final InstrumentGUID guid, final Instrument inst) {
 		
 		Transaction txn = env.beginTransaction(null, null);
 		byte[] key = guid.toString().getBytes(); 
