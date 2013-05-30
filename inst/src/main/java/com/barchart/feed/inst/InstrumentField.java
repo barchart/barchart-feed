@@ -5,7 +5,7 @@
  *
  * http://www.opensource.org/licenses/bsd-license.php
  */
-package com.barchart.feed.api.framework.data;
+package com.barchart.feed.inst;
 
 import com.barchart.feed.api.consumer.data.Exchange;
 import com.barchart.feed.api.consumer.enums.BookLiquidityType;

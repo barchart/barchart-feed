@@ -1,4 +1,4 @@
-package com.barchart.feed.api.framework.market;
+package com.barchart.feed.api.consumer.market;
 
 import org.joda.time.DateTimeZone;
 

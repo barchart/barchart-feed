@@ -5,13 +5,12 @@
  *
  * http://www.opensource.org/licenses/bsd-license.php
  */
-package com.barchart.feed.api.framework.inst;
-
-import java.util.concurrent.Future;
+package com.barchart.feed.api.consumer.inst;
 
 import com.barchart.feed.api.consumer.data.Instrument;
 
-// TODO Review
-public interface InstrumentFuture extends Instrument, Future<Instrument> {
+public interface MetadataContext {
+	
+	Instrument lookup(InstrumentGUID guid);
 
 }

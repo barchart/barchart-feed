@@ -7,16 +7,16 @@
  */
 package com.barchart.feed.inst.provider;
 
-import static com.barchart.feed.api.framework.data.InstrumentField.BOOK_DEPTH;
-import static com.barchart.feed.api.framework.data.InstrumentField.CFI_CODE;
-import static com.barchart.feed.api.framework.data.InstrumentField.CURRENCY_CODE;
-import static com.barchart.feed.api.framework.data.InstrumentField.DESCRIPTION;
-import static com.barchart.feed.api.framework.data.InstrumentField.EXCHANGE_CODE;
-import static com.barchart.feed.api.framework.data.InstrumentField.FIELDS;
-import static com.barchart.feed.api.framework.data.InstrumentField.MARKET_GUID;
-import static com.barchart.feed.api.framework.data.InstrumentField.POINT_VALUE;
-import static com.barchart.feed.api.framework.data.InstrumentField.SYMBOL;
-import static com.barchart.feed.api.framework.data.InstrumentField.TICK_SIZE;
+import static com.barchart.feed.inst.InstrumentField.BOOK_DEPTH;
+import static com.barchart.feed.inst.InstrumentField.CFI_CODE;
+import static com.barchart.feed.inst.InstrumentField.CURRENCY_CODE;
+import static com.barchart.feed.inst.InstrumentField.DESCRIPTION;
+import static com.barchart.feed.inst.InstrumentField.EXCHANGE_CODE;
+import static com.barchart.feed.inst.InstrumentField.FIELDS;
+import static com.barchart.feed.inst.InstrumentField.MARKET_GUID;
+import static com.barchart.feed.inst.InstrumentField.POINT_VALUE;
+import static com.barchart.feed.inst.InstrumentField.SYMBOL;
+import static com.barchart.feed.inst.InstrumentField.TICK_SIZE;
 import static com.barchart.util.values.provider.ValueBuilder.newFraction;
 import static com.barchart.util.values.provider.ValueBuilder.newPrice;
 import static com.barchart.util.values.provider.ValueBuilder.newSize;

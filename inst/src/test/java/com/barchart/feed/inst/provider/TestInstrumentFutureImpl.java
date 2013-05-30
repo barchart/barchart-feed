@@ -9,7 +9,7 @@ package com.barchart.feed.inst.provider;
 
 import java.util.concurrent.ExecutionException;
 
-import com.barchart.feed.api.framework.inst.InstrumentFuture;
+import com.barchart.feed.api.consumer.inst.InstrumentFuture;
 
 public class TestInstrumentFutureImpl {
 

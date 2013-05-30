@@ -1,7 +1,7 @@
 package com.barchart.feed.inst.missive;
 
-import com.barchart.feed.api.framework.data.InstrumentField;
 import com.barchart.feed.api.missive.BarchartFeedManifest;
+import com.barchart.feed.inst.InstrumentField;
 import com.barchart.feed.inst.provider.InstrumentBase;
 import com.barchart.feed.inst.provider.InstrumentFutureImpl;
 import com.barchart.feed.inst.provider.InstrumentImpl;

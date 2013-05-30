@@ -5,7 +5,7 @@
  *
  * http://www.opensource.org/licenses/bsd-license.php
  */
-package com.barchart.feed.api.framework.inst;
+package com.barchart.feed.api.consumer.inst;
 
 import java.util.Collection;
 import java.util.Map;

@@ -18,9 +18,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.api.consumer.data.Instrument;
+import com.barchart.feed.api.consumer.inst.InstrumentFuture;
 import com.barchart.feed.api.consumer.inst.InstrumentGUID;
-import com.barchart.feed.api.framework.inst.InstrumentFuture;
-import com.barchart.feed.api.framework.inst.MetadataContext;
+import com.barchart.feed.api.consumer.inst.MetadataContext;
 import com.barchart.missive.api.Tag;
 import com.barchart.missive.core.MissiveException;
 import com.barchart.util.value.api.Price;
