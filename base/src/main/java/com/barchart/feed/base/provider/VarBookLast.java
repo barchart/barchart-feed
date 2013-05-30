@@ -9,8 +9,8 @@ package com.barchart.feed.base.provider;
 
 import java.util.List;
 
-import com.barchart.feed.api.consumer.data.Order;
-import com.barchart.feed.api.consumer.enums.MarketSide;
+import com.barchart.feed.api.data.Order;
+import com.barchart.feed.api.enums.MarketSide;
 import com.barchart.feed.base.book.api.MarketBookEntry;
 import com.barchart.util.anno.ProxyTo;
 import com.barchart.util.value.api.Price;

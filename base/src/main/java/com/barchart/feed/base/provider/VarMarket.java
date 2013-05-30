@@ -18,10 +18,10 @@ import java.util.concurrent.ConcurrentMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.feed.api.consumer.data.Instrument;
-import com.barchart.feed.api.consumer.enums.BookLiquidityType;
-import com.barchart.feed.api.consumer.enums.MarketEventType;
-import com.barchart.feed.api.framework.FrameworkAgent;
+import com.barchart.feed.api.FrameworkAgent;
+import com.barchart.feed.api.data.Instrument;
+import com.barchart.feed.api.enums.BookLiquidityType;
+import com.barchart.feed.api.enums.MarketEventType;
 import com.barchart.feed.base.bar.api.MarketBar;
 import com.barchart.feed.base.bar.api.MarketDoBar;
 import com.barchart.feed.base.book.api.MarketBook;

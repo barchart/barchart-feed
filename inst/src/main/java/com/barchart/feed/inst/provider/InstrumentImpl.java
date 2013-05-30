@@ -7,7 +7,7 @@
  */
 package com.barchart.feed.inst.provider;
 
-import com.barchart.feed.api.consumer.data.Instrument;
+import com.barchart.feed.api.data.Instrument;
 
 public class InstrumentImpl extends InstrumentBase implements Instrument {
 

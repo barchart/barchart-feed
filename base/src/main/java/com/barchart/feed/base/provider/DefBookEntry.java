@@ -7,16 +7,16 @@
  */
 package com.barchart.feed.base.provider;
 
-import static com.barchart.feed.api.consumer.enums.MarketSide.*;
+import static com.barchart.feed.api.enums.MarketSide.*;
 import static com.barchart.feed.base.book.enums.MarketBookAction.*;
 import static com.barchart.feed.base.provider.MarketConst.*;
 import static com.barchart.util.values.provider.ValueConst.*;
 
 import java.util.List;
 
-import com.barchart.feed.api.consumer.data.Order;
-import com.barchart.feed.api.consumer.enums.BookLiquidityType;
-import com.barchart.feed.api.consumer.enums.MarketSide;
+import com.barchart.feed.api.data.Order;
+import com.barchart.feed.api.enums.BookLiquidityType;
+import com.barchart.feed.api.enums.MarketSide;
 import com.barchart.feed.base.book.api.MarketBookEntry;
 import com.barchart.feed.base.book.api.MarketDoBookEntry;
 import com.barchart.feed.base.book.enums.MarketBookAction;

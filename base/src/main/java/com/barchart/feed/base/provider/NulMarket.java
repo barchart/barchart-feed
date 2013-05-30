@@ -7,14 +7,14 @@
  */
 package com.barchart.feed.base.provider;
 
-import com.barchart.feed.api.consumer.data.Cuvol;
-import com.barchart.feed.api.consumer.data.Instrument;
-import com.barchart.feed.api.consumer.data.OrderBook;
-import com.barchart.feed.api.consumer.data.PriceLevel;
-import com.barchart.feed.api.consumer.data.Session;
-import com.barchart.feed.api.consumer.data.TopOfBook;
-import com.barchart.feed.api.consumer.data.Trade;
-import com.barchart.feed.api.consumer.enums.SessionType;
+import com.barchart.feed.api.data.Cuvol;
+import com.barchart.feed.api.data.Instrument;
+import com.barchart.feed.api.data.OrderBook;
+import com.barchart.feed.api.data.PriceLevel;
+import com.barchart.feed.api.data.Session;
+import com.barchart.feed.api.data.TopOfBook;
+import com.barchart.feed.api.data.Trade;
+import com.barchart.feed.api.enums.SessionType;
 import com.barchart.feed.base.market.api.Market;
 import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.util.anno.NotMutable;

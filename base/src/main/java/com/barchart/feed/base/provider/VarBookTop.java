@@ -7,9 +7,9 @@
  */
 package com.barchart.feed.base.provider;
 
-import static com.barchart.feed.api.consumer.enums.MarketSide.*;
+import static com.barchart.feed.api.enums.MarketSide.*;
 
-import com.barchart.feed.api.consumer.enums.MarketSide;
+import com.barchart.feed.api.enums.MarketSide;
 import com.barchart.feed.base.book.api.MarketBookEntry;
 import com.barchart.feed.base.book.api.MarketBookTop;
 import com.barchart.util.anno.ProxyTo;

@@ -25,11 +25,11 @@ import java.util.concurrent.Future;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.feed.api.consumer.data.Instrument;
-import com.barchart.feed.api.consumer.inst.InstrumentFuture;
-import com.barchart.feed.api.consumer.inst.InstrumentGUID;
-import com.barchart.feed.api.consumer.inst.InstrumentService;
-import com.barchart.feed.api.consumer.inst.MetadataContext;
+import com.barchart.feed.api.data.Instrument;
+import com.barchart.feed.api.inst.InstrumentFuture;
+import com.barchart.feed.api.inst.InstrumentGUID;
+import com.barchart.feed.api.inst.InstrumentService;
+import com.barchart.feed.api.inst.MetadataContext;
 import com.barchart.missive.api.Tag;
 import com.barchart.util.values.api.TextValue;
 import com.barchart.util.values.provider.ValueBuilder;

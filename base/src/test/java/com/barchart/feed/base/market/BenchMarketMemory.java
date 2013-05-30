@@ -7,8 +7,8 @@
  */
 package com.barchart.feed.base.market;
 
-import com.barchart.feed.api.consumer.data.Instrument;
-import com.barchart.feed.api.consumer.inst.InstrumentService;
+import com.barchart.feed.api.data.Instrument;
+import com.barchart.feed.api.inst.InstrumentService;
 import com.barchart.feed.base.market.api.Market;
 import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.inst.provider.MockDefinitionService;

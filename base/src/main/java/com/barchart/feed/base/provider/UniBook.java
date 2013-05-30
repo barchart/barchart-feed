@@ -7,7 +7,7 @@
  */
 package com.barchart.feed.base.provider;
 
-import static com.barchart.feed.api.consumer.enums.MarketSide.GAP;
+import static com.barchart.feed.api.enums.MarketSide.GAP;
 import static com.barchart.feed.base.book.api.MarketBook.ENTRY_TOP;
 import static com.barchart.feed.base.book.enums.UniBookResult.DISCARD;
 import static com.barchart.feed.base.book.enums.UniBookResult.ERROR;
@@ -18,8 +18,8 @@ import static com.barchart.feed.base.provider.UniBookRing.CLUE_NONE;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.feed.api.consumer.enums.BookLiquidityType;
-import com.barchart.feed.api.consumer.enums.MarketSide;
+import com.barchart.feed.api.enums.BookLiquidityType;
+import com.barchart.feed.api.enums.MarketSide;
 import com.barchart.feed.base.book.api.MarketDoBookEntry;
 import com.barchart.feed.base.book.enums.UniBookResult;
 import com.barchart.util.anno.NotThreadSafe;

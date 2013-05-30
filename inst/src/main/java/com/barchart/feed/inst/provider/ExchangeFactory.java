@@ -1,6 +1,6 @@
 package com.barchart.feed.inst.provider;
 
-import com.barchart.feed.api.consumer.data.Exchange;
+import com.barchart.feed.api.data.Exchange;
 import com.barchart.util.value.api.Time;
 import com.barchart.util.value.impl.ValueConst;
 

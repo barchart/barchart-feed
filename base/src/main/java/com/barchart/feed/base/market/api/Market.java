@@ -14,7 +14,7 @@ import com.barchart.util.values.api.Value;
 /** represents complete market */
 @NotMutable
 public interface Market extends Value<Market>, 
-		com.barchart.feed.api.consumer.data.Market {
+		com.barchart.feed.api.data.Market {
 
 	<V extends Value<V>> V get(MarketField<V> field);
 	

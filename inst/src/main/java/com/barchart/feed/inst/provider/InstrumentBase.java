@@ -7,14 +7,14 @@
  */
 package com.barchart.feed.inst.provider;
 
-import com.barchart.feed.api.consumer.data.Exchange;
-import com.barchart.feed.api.consumer.data.Instrument;
-import com.barchart.feed.api.consumer.enums.BookLiquidityType;
-import com.barchart.feed.api.consumer.enums.BookStructureType;
-import com.barchart.feed.api.consumer.enums.MarketCurrency;
-import com.barchart.feed.api.consumer.enums.SecurityType;
-import com.barchart.feed.api.consumer.inst.GuidList;
-import com.barchart.feed.api.consumer.inst.InstrumentGUID;
+import com.barchart.feed.api.data.Exchange;
+import com.barchart.feed.api.data.Instrument;
+import com.barchart.feed.api.enums.BookLiquidityType;
+import com.barchart.feed.api.enums.BookStructureType;
+import com.barchart.feed.api.enums.MarketCurrency;
+import com.barchart.feed.api.enums.SecurityType;
+import com.barchart.feed.api.inst.GuidList;
+import com.barchart.feed.api.inst.InstrumentGUID;
 import com.barchart.feed.inst.InstrumentField;
 import com.barchart.missive.core.ObjectMapSafe;
 import com.barchart.util.value.api.Price;

@@ -14,7 +14,7 @@ import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-import com.barchart.feed.api.consumer.market.MarketDisplay;
+import com.barchart.feed.api.market.MarketDisplay;
 import com.barchart.util.ascii.ASCII;
 import com.barchart.util.values.api.Fraction;
 import com.barchart.util.values.api.PriceValue;
