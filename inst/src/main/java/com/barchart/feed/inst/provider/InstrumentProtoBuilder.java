@@ -32,7 +32,6 @@ import static com.barchart.util.values.provider.ValueBuilder.newFraction;
 import static com.barchart.util.values.provider.ValueBuilder.newPrice;
 import static com.barchart.util.values.provider.ValueBuilder.newSize;
 import static com.barchart.util.values.provider.ValueBuilder.newText;
-import static com.barchart.util.values.provider.ValueBuilder.newTimeInterval;
 
 import java.util.List;
 
@@ -46,7 +45,6 @@ import com.barchart.feed.api.consumer.enums.MarketCurrency;
 import com.barchart.feed.api.consumer.enums.SecurityType;
 import com.barchart.feed.api.consumer.inst.GuidList;
 import com.barchart.feed.api.consumer.inst.InstrumentGUID;
-import com.barchart.feed.api.util.Schedule;
 import com.barchart.missive.api.TagMapSafe;
 import com.barchart.missive.core.ObjectMapFactory;
 import com.barchart.missive.hash.HashTagMapSafe;
@@ -57,9 +55,10 @@ import com.barchart.proto.buf.inst.Decimal;
 import com.barchart.proto.buf.inst.InstrumentDefinition;
 import com.barchart.proto.buf.inst.InstrumentType;
 import com.barchart.proto.buf.inst.Interval;
+import com.barchart.util.value.api.TimeInterval;
+import com.barchart.util.value.impl.BaseSchedule;
+import com.barchart.util.value.impl.ValueConst;
 import com.barchart.util.values.api.PriceValue;
-import com.barchart.util.values.api.TimeInterval;
-import com.barchart.util.values.provider.ValueConst;
 
 public final class InstrumentProtoBuilder {
 	
@@ -186,16 +185,16 @@ public final class InstrumentProtoBuilder {
 		if (inst.contains(LIFETIME) && inst.contains(MARKET_HOURS)) {
 			final Calendar.Builder calBuilder = Calendar.newBuilder();
 			final Interval.Builder intBuilder = Interval.newBuilder();
-			intBuilder.setTimeStart(inst.get(LIFETIME).startAsMillis());
-			intBuilder.setTimeFinish(inst.get(LIFETIME).stopAsMillis());
+			intBuilder.setTimeStart(inst.get(LIFETIME).start().millisecond());
+			intBuilder.setTimeFinish(inst.get(LIFETIME).stop().millisecond());
 
 			/* lifetime of instrument */
 			calBuilder.setLifeTime(intBuilder.build());
 
 			intBuilder.clear();
 			for (final TimeInterval ti : inst.get(MARKET_HOURS)) {
-				intBuilder.setTimeStart(ti.startAsMillis());
-				intBuilder.setTimeFinish(ti.stopAsMillis());
+				intBuilder.setTimeStart(ti.start().millisecond());
+				intBuilder.setTimeFinish(ti.stop().millisecond());
 				calBuilder.addMarketHours(intBuilder.build());
 				intBuilder.clear();
 			}
@@ -296,7 +295,7 @@ public final class InstrumentProtoBuilder {
 			final Interval i = instDef.getCalendar().getLifeTime();
 			
 			if(i.getTimeFinish() > 0) {
-				map.set(LIFETIME, newTimeInterval(i.getTimeStart(), i.getTimeFinish()));
+				map.set(LIFETIME, com.barchart.util.value.impl.ValueBuilder.newTimeInterval(i.getTimeStart(), i.getTimeFinish()));
 			} else {
 				map.set(LIFETIME, ValueConst.NULL_TIME_INTERVAL);
 			}
@@ -305,10 +304,10 @@ public final class InstrumentProtoBuilder {
 					.getMarketHoursList();
 			final TimeInterval[] tints = new TimeInterval[ints.size()];
 			for (int n = 0; n < ints.size(); n++) {
-				tints[n] = newTimeInterval(ints.get(n).getTimeStart(), ints
-						.get(n).getTimeFinish());
+				tints[n] = com.barchart.util.value.impl.ValueBuilder.newTimeInterval(
+						ints.get(n).getTimeStart(), ints.get(n).getTimeFinish());
 			}
-			map.set(MARKET_HOURS, new Schedule(tints));
+			map.set(MARKET_HOURS, new BaseSchedule(tints));
 		}
 
 		if (instDef.hasTimeZoneOffset()) {
@@ -338,7 +337,7 @@ public final class InstrumentProtoBuilder {
 	static PriceValue priceFromDecimal(final Decimal d) {
 		return newPrice(d.getMantissa(), d.getExponent());
 	}
-
+	
 	// TODO Map ordinal values
 	private static class BiEnumMap<K extends Enum<K>, V extends Enum<V>> {
 

@@ -15,16 +15,16 @@ import com.barchart.feed.api.consumer.enums.MarketCurrency;
 import com.barchart.feed.api.consumer.enums.SecurityType;
 import com.barchart.feed.api.consumer.inst.GuidList;
 import com.barchart.feed.api.consumer.inst.InstrumentGUID;
-import com.barchart.feed.api.util.Schedule;
 import com.barchart.feed.inst.InstrumentField;
 import com.barchart.missive.core.ObjectMapSafe;
 import com.barchart.util.value.api.Price;
+import com.barchart.util.value.api.Schedule;
 import com.barchart.util.value.api.Size;
 import com.barchart.util.value.api.Time;
+import com.barchart.util.value.api.TimeInterval;
 import com.barchart.util.value.provider.FactoryProvider;
 import com.barchart.util.values.api.Fraction;
 import com.barchart.util.values.api.PriceValue;
-import com.barchart.util.values.api.TimeInterval;
 
 public abstract class InstrumentBase extends ObjectMapSafe implements Instrument {
 	
@@ -168,7 +168,7 @@ public abstract class InstrumentBase extends ObjectMapSafe implements Instrument
 	public Schedule marketHours() {
 		return get(InstrumentField.MARKET_HOURS);
 	}
-
+	
 	@Override
 	public long timeZoneOffset() {
 		return get(InstrumentField.TIME_ZONE_OFFSET).asLong();

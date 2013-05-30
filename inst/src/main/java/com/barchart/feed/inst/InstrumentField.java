@@ -14,14 +14,14 @@ import com.barchart.feed.api.consumer.enums.MarketCurrency;
 import com.barchart.feed.api.consumer.enums.SecurityType;
 import com.barchart.feed.api.consumer.inst.GuidList;
 import com.barchart.feed.api.consumer.inst.InstrumentGUID;
-import com.barchart.feed.api.util.Schedule;
 import com.barchart.missive.api.Tag;
 import com.barchart.missive.core.TagFactory;
+import com.barchart.util.value.api.Schedule;
+import com.barchart.util.value.api.TimeInterval;
 import com.barchart.util.values.api.Fraction;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
 import com.barchart.util.values.api.TextValue;
-import com.barchart.util.values.api.TimeInterval;
 
 public interface InstrumentField {
 

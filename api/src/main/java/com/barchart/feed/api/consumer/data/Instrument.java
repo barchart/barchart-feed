@@ -6,15 +6,15 @@ import com.barchart.feed.api.consumer.enums.MarketCurrency;
 import com.barchart.feed.api.consumer.enums.SecurityType;
 import com.barchart.feed.api.consumer.inst.GuidList;
 import com.barchart.feed.api.consumer.inst.InstrumentGUID;
-import com.barchart.feed.api.util.Schedule;
 import com.barchart.missive.api.Tag;
 import com.barchart.missive.api.TagMap;
 import com.barchart.missive.core.MissiveException;
 import com.barchart.util.value.api.Price;
+import com.barchart.util.value.api.Schedule;
 import com.barchart.util.value.api.Size;
 import com.barchart.util.value.api.Time;
+import com.barchart.util.value.api.TimeInterval;
 import com.barchart.util.values.api.Fraction;
-import com.barchart.util.values.api.TimeInterval;
 import com.barchart.util.values.api.Value;
 
 public interface Instrument extends MarketData, Comparable<Instrument>, Value<Instrument>, TagMap {
