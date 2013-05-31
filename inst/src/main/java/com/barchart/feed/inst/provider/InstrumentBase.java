@@ -90,7 +90,7 @@ public abstract class InstrumentBase extends ObjectMapSafe implements Instrument
 
 	@Override
 	public Size maxBookDepth() {
-		return null;
+		return FactoryProvider.instance().newSize(get(InstrumentField.BOOK_DEPTH).asLong(), 0);
 	}
 	
 	@Override
@@ -135,8 +135,8 @@ public abstract class InstrumentBase extends ObjectMapSafe implements Instrument
 	
 	@Override
 	public Price tickSize() {
-		// TODO Auto-generated method stub
-		return null;
+		final PriceValue temp = get(InstrumentField.TICK_SIZE);
+		return FactoryProvider.instance().newPrice(temp.mantissa(), temp.exponent());
 	}
 
 	@Override
