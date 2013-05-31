@@ -7,6 +7,7 @@
  */
 package com.barchart.feed.base.provider;
 
+import com.barchart.feed.api.data.CuvolEntry;
 import com.barchart.feed.base.book.api.MarketBookEntry;
 import com.barchart.feed.base.cuvol.api.MarketCuvolEntry;
 import com.barchart.feed.base.cuvol.api.MarketDoCuvolEntry;
@@ -92,6 +93,11 @@ public class DefCuvolEntry extends ValueFreezer<MarketCuvolEntry> implements
 	@Override
 	public Time lastUpdateTime() {
 		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public CuvolEntry copy() {
+		return this.freeze();
 	}
 
 }

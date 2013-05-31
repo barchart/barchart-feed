@@ -20,9 +20,6 @@ public interface Feed extends ConnectionLifecycle, InstrumentService<CharSequenc
 	void startup();
 	
 	@Override
-	void startUpProxy();
-	
-	@Override
 	void shutdown();
 	
 	@Override
@@ -37,16 +34,18 @@ public interface Feed extends ConnectionLifecycle, InstrumentService<CharSequenc
 	Future<Instrument> lookupAsync(CharSequence symbol);
 	
 	@Override
-	Map<CharSequence, Instrument> lookup(Collection<? extends CharSequence> symbols);
+	Map<CharSequence, Instrument> lookup(
+			Collection<? extends CharSequence> symbols);
 	
 	@Override
-	Map<CharSequence, Future<Instrument>> lookupAsync(Collection<? extends CharSequence> symbols);
+	Map<CharSequence, Future<Instrument>> lookupAsync(
+			Collection<? extends CharSequence> symbols);
 	
 	/* ***** ***** AgentBuilder ***** ***** */
 	
 	@Override
-	<V extends MarketData> Agent newAgent(Class<V> clazz, MarketCallback<V> callback, 
-			MarketEventType... types);
+	<V extends MarketData<V>> Agent newAgent(MarketData.Type type, 
+			MarketCallback<V> callback,	MarketEventType... types);
 	
 	
 }

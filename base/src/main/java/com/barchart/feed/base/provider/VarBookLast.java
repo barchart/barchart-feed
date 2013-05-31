@@ -10,6 +10,7 @@ package com.barchart.feed.base.provider;
 import java.util.List;
 
 import com.barchart.feed.api.data.Order;
+import com.barchart.feed.api.data.PriceLevel;
 import com.barchart.feed.api.enums.MarketSide;
 import com.barchart.feed.base.book.api.MarketBookEntry;
 import com.barchart.util.anno.ProxyTo;
@@ -95,6 +96,11 @@ final class VarBookLast extends ValueFreezer<MarketBookEntry> implements
 	@Override
 	public Time lastUpdateTime() {
 		return null;
+	}
+
+	@Override
+	public PriceLevel copy() {
+		return this.freeze();
 	}
 
 }

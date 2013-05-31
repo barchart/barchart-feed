@@ -7,9 +7,7 @@
  */
 package com.barchart.feed.base.provider;
 
-import org.joda.time.DateTime;
-
-import com.barchart.feed.api.data.Instrument;
+import com.barchart.feed.api.data.Trade;
 import com.barchart.feed.base.trade.api.MarketTrade;
 import com.barchart.feed.base.trade.enums.MarketTradeField;
 import com.barchart.feed.base.trade.enums.MarketTradeSequencing;
@@ -101,6 +99,11 @@ public class NulTrade extends ValueFreezer<MarketTrade> implements MarketTrade {
 	@Override
 	public Time lastUpdateTime() {
 		return ValueConst.NULL_TIME;
+	}
+
+	@Override
+	public Trade copy() {
+		return this.freeze();
 	}
 
 }

@@ -47,6 +47,11 @@ private ExchangeFactory() {
 			public int hashCode() {
 				return id.hashCode();
 			}
+
+			@Override
+			public Exchange copy() {
+				return this;
+			}
 			
 		};
 		

@@ -5,7 +5,7 @@ import com.barchart.feed.api.enums.MarketEventType;
 
 public interface AgentBuilder {
 
-	<V extends MarketData> Agent newAgent(Class<V> clazz, MarketCallback<V> callback, 
-			MarketEventType... types);
+	<V extends MarketData<V>> Agent newAgent(MarketData.Type clazz, 
+			MarketCallback<V> callback,	MarketEventType... types);
 	
 }

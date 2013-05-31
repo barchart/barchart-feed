@@ -7,7 +7,7 @@ import com.barchart.util.value.api.Time;
 /**
  * document object and primitive
  */
-public interface Session extends MarketData {
+public interface Session extends MarketData<Session> {
 
 	Price open();
 

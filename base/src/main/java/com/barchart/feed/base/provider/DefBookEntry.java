@@ -15,6 +15,7 @@ import static com.barchart.util.values.provider.ValueConst.*;
 import java.util.List;
 
 import com.barchart.feed.api.data.Order;
+import com.barchart.feed.api.data.PriceLevel;
 import com.barchart.feed.api.enums.BookLiquidityType;
 import com.barchart.feed.api.enums.MarketSide;
 import com.barchart.feed.base.book.api.MarketBookEntry;
@@ -178,6 +179,11 @@ public class DefBookEntry extends ValueFreezer<MarketBookEntry> implements
 	@Override
 	public Time lastUpdateTime() {
 		return null; //TODO
+	}
+
+	@Override
+	public PriceLevel copy() {
+		return this.freeze();
 	}
 
 }

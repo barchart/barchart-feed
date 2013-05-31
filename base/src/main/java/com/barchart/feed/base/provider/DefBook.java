@@ -11,6 +11,7 @@ import static com.barchart.feed.base.provider.MarketConst.NULL_BOOK_ENTRY;
 
 import java.util.List;
 
+import com.barchart.feed.api.data.OrderBook;
 import com.barchart.feed.api.data.PriceLevel;
 import com.barchart.feed.api.enums.MarketSide;
 import com.barchart.feed.base.book.api.MarketBook;
@@ -249,6 +250,11 @@ public class DefBook extends ValueFreezer<MarketBook> implements MarketBook {
 	@Override
 	public Time lastUpdateTime() {
 		return null;
+	}
+
+	@Override
+	public OrderBook copy() {
+		return this.freeze();
 	}
 
 }

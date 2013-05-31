@@ -13,6 +13,7 @@ import static com.barchart.feed.base.provider.MarketConst.NULL_BOOK_ENTRY;
 
 import java.util.List;
 
+import com.barchart.feed.api.data.OrderBook;
 import com.barchart.feed.api.data.PriceLevel;
 import com.barchart.feed.api.enums.BookLiquidityType;
 import com.barchart.feed.api.enums.MarketSide;
@@ -163,6 +164,11 @@ public final class VarBook extends UniBook<MarketBook> implements MarketDoBook {
 	public Time lastUpdateTime() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public OrderBook copy() {
+		return this.freeze();
 	}
 
 }

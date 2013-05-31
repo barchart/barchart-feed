@@ -17,7 +17,7 @@ import com.barchart.util.value.api.TimeInterval;
 import com.barchart.util.values.api.Fraction;
 import com.barchart.util.values.api.Value;
 
-public interface Instrument extends MarketData, Comparable<Instrument>, Value<Instrument>, TagMap {
+public interface Instrument extends MarketData<Instrument>, Comparable<Instrument>, Value<Instrument>, TagMap {
 	
 	InstrumentGUID GUID();
 	
@@ -262,6 +262,12 @@ public interface Instrument extends MarketData, Comparable<Instrument>, Value<In
 		public int mapSize() {
 			// TODO Auto-generated method stub
 			return 0;
+		}
+
+		@Override
+		public Instrument copy() {
+			// TODO Auto-generated method stub
+			return null;
 		}
 		
 	};

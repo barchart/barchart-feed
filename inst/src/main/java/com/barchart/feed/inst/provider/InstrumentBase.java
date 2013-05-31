@@ -16,6 +16,7 @@ import com.barchart.feed.api.enums.SecurityType;
 import com.barchart.feed.api.inst.GuidList;
 import com.barchart.feed.api.inst.InstrumentGUID;
 import com.barchart.feed.inst.InstrumentField;
+import com.barchart.missive.core.ObjectMapFactory;
 import com.barchart.missive.core.ObjectMapSafe;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Schedule;
@@ -188,6 +189,12 @@ public abstract class InstrumentBase extends ObjectMapSafe implements Instrument
 	public Time lastUpdateTime() {
 		// Ignore
 		return null;
+	}
+	
+	@Override
+	public Instrument copy() {
+		// TODO Review
+		return InstrumentFactory.build(this);
 	}
 
 }

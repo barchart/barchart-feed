@@ -6,7 +6,7 @@ import com.barchart.util.value.api.Size;
 /**
  * Single order in a book price level.
  */
-public interface Order extends MarketData {
+public interface Order extends MarketData<Order> {
 
 	String id();
 

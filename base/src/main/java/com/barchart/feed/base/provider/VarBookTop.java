@@ -9,6 +9,7 @@ package com.barchart.feed.base.provider;
 
 import static com.barchart.feed.api.enums.MarketSide.*;
 
+import com.barchart.feed.api.data.TopOfBook;
 import com.barchart.feed.api.enums.MarketSide;
 import com.barchart.feed.base.book.api.MarketBookEntry;
 import com.barchart.feed.base.book.api.MarketBookTop;
@@ -50,6 +51,11 @@ final class VarBookTop extends ValueFreezer<MarketBookTop> implements
 	@Override
 	public Time lastUpdateTime() {
 		return null; //TODO
+	}
+
+	@Override
+	public TopOfBook copy() {
+		return this.freeze();
 	}
 
 }

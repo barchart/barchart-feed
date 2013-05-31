@@ -149,4 +149,10 @@ public class InstrumentFutureImpl extends InstrumentBase implements InstrumentFu
 		
 	}
 
+	@Override
+	public Instrument copy() {
+		populate();
+		return super.copy();
+	}
+
 }

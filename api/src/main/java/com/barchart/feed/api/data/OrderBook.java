@@ -7,7 +7,7 @@ import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Size;
 import com.barchart.util.value.api.Time;
 
-public interface OrderBook extends MarketData {
+public interface OrderBook extends MarketData<OrderBook> {
 
 	Price bestPrice(MarketSide side);
 

@@ -10,6 +10,7 @@ package com.barchart.feed.base.provider;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.barchart.feed.api.data.Cuvol;
 import com.barchart.feed.base.cuvol.api.MarketCuvol;
 import com.barchart.util.anno.NotMutable;
 import com.barchart.util.value.api.Price;
@@ -99,6 +100,11 @@ public class NulCuvol extends ValueFreezer<MarketCuvol> implements MarketCuvol {
 	@Override
 	public Time lastUpdateTime() {
 		return ValueConverter.time(ValueConst.NULL_TIME);
+	}
+
+	@Override
+	public Cuvol copy() {
+		return this.freeze();
 	}
 
 }

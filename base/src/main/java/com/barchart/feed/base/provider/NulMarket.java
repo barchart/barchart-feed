@@ -9,6 +9,7 @@ package com.barchart.feed.base.provider;
 
 import com.barchart.feed.api.data.Cuvol;
 import com.barchart.feed.api.data.Instrument;
+import com.barchart.feed.api.data.MarketData;
 import com.barchart.feed.api.data.OrderBook;
 import com.barchart.feed.api.data.PriceLevel;
 import com.barchart.feed.api.data.Session;
@@ -66,6 +67,11 @@ class NulMarket extends ValueFreezer<Market> implements Market {
 	}
 
 	@Override
+	public Market market() {
+		return this;
+	}
+	
+	@Override
 	public Instrument instrument() {
 		return null;
 	}
@@ -103,6 +109,44 @@ class NulMarket extends ValueFreezer<Market> implements Market {
 	@Override
 	public Time lastUpdateTime() {
 		return null;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public <V extends MarketData<V>> V get(MarketData.Type type) {
+		
+		switch(type) {
+		default:
+			throw new RuntimeException("Unknown Data Type " + type.name());
+		case MARKET:
+			return (V) market();
+		case INSTRUMENT:
+			return (V) instrument();
+		case LAST_TRADE: 
+			return (V) lastTrade();
+		case ORDER_BOOK:
+			return (V) orderBook();
+		case LAST_BOOK_UPDATE: 
+			return (V) lastBookUpdate();
+		case TOP_OF_BOOK: 
+			return (V) topOfBook();
+		case CUVOL: 
+			return (V) cuvol();
+		case SESSION_CURRENT:
+			return (V) session(SessionType.CURRENT);
+		case SESSION_CURRENT_EXT: 
+			return (V) session(SessionType.EXTENDED_CURRENT);
+		case SESSION_PREVIOUS:
+			return (V) session(SessionType.PREVIOUS);
+		case SESSION_PREVIOUS_EXT:
+			return (V) session(SessionType.EXTENDED_PREVIOUS);
+		}
+		
+	}
+
+	@Override
+	public Market copy() {
+		return this;
 	}
 
 }
