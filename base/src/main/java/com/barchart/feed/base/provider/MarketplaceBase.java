@@ -1,8 +1,6 @@
 package com.barchart.feed.base.provider;
 
-import java.lang.reflect.Method;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -20,18 +18,11 @@ import com.barchart.feed.api.AgentLifecycleHandler;
 import com.barchart.feed.api.FrameworkAgent;
 import com.barchart.feed.api.MarketCallback;
 import com.barchart.feed.api.SubscriptionManager;
-import com.barchart.feed.api.data.Cuvol;
 import com.barchart.feed.api.data.Exchange;
 import com.barchart.feed.api.data.Instrument;
 import com.barchart.feed.api.data.Market;
 import com.barchart.feed.api.data.MarketData;
-import com.barchart.feed.api.data.OrderBook;
-import com.barchart.feed.api.data.PriceLevel;
-import com.barchart.feed.api.data.Session;
-import com.barchart.feed.api.data.TopOfBook;
-import com.barchart.feed.api.data.Trade;
 import com.barchart.feed.api.enums.MarketEventType;
-import com.barchart.feed.api.enums.SessionType;
 import com.barchart.feed.api.inst.InstrumentService;
 import com.barchart.feed.base.market.api.MarketDo;
 import com.barchart.feed.base.market.api.MarketFactory;
@@ -48,25 +39,6 @@ import com.barchart.util.values.api.Value;
 public abstract class MarketplaceBase<Message extends MarketMessage> implements
 		MarketMakerProvider<Message>, AgentBuilder, AgentLifecycleHandler {
 
-	private static final Map<Class<?>, Method> methodMap = 
-			new HashMap<Class<?>, Method>();
-	
-	static {
-		
-		try {
-			methodMap.put(Market.class, Market.class.getMethod("market", new Class[0]));
-			methodMap.put(Instrument.class, Market.class.getMethod("instrument", new Class[0]));
-			methodMap.put(Trade.class, Market.class.getMethod("lastTrade", new Class[0]));
-			methodMap.put(OrderBook.class, Market.class.getMethod("orderBook", new Class[0]));
-			methodMap.put(PriceLevel.class, Market.class.getMethod("lastBookUpdate", new Class[0]));
-			methodMap.put(TopOfBook.class, Market.class.getMethod("topOfBook", new Class[0]));
-			methodMap.put(Cuvol.class, Market.class.getMethod("cuvol", new Class[0]));
-			methodMap.put(Session.class, Market.class.getMethod("session", new Class[]{SessionType.class}));
-		} catch (Exception e) {
-			e.printStackTrace();
-		} 
-	}
-	
 	protected final Logger log = LoggerFactory.getLogger(getClass());
 	
 	protected final MarketFactory factory;
