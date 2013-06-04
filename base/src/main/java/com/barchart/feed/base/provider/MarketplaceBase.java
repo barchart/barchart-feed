@@ -1,6 +1,8 @@
 package com.barchart.feed.base.provider;
 
 import java.util.Collections;
+import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -17,7 +19,9 @@ import com.barchart.feed.api.AgentBuilder;
 import com.barchart.feed.api.AgentLifecycleHandler;
 import com.barchart.feed.api.FrameworkAgent;
 import com.barchart.feed.api.MarketCallback;
-import com.barchart.feed.api.SubscriptionManager;
+import com.barchart.feed.api.connection.Subscription;
+import com.barchart.feed.api.connection.SubscriptionHandler;
+import com.barchart.feed.api.connection.SubscriptionType;
 import com.barchart.feed.api.data.Exchange;
 import com.barchart.feed.api.data.Instrument;
 import com.barchart.feed.api.data.Market;
@@ -43,7 +47,7 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 	
 	protected final MarketFactory factory;
 	protected final InstrumentService<CharSequence> instLookup;
-	protected final SubscriptionManager subManager = new SubscriptionManager();
+	protected final SubscriptionHandler subHandler;
 	
 	// TODO Review concurrency, only reason to use ConcurrentMap is for 
 	// putIfAbscent()
@@ -54,20 +58,21 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 		new ConcurrentHashMap<FrameworkAgent<?>, Boolean>();
 	
 	protected MarketplaceBase(final MarketFactory factory, 
-			final InstrumentService<CharSequence> instLookup) {
+			final InstrumentService<CharSequence> instLookup,
+			final SubscriptionHandler handler) {
 		
 		this.factory = factory;
 		this.instLookup = instLookup;
-		
+		this.subHandler = handler;
 	}
 	
-	// ########################
+	// #########################
 	
 	@Override
 	public <V extends MarketData<V>> Agent newAgent(final MarketData.Type type, 
 			final MarketCallback<V> callback, final MarketEventType... types) {
 		
-		final FrameworkAgent<V> agent = new BaseAgent<V>(null, type, callback, types);
+		final FrameworkAgent<V> agent = new BaseAgent<V>(this, type, callback, types);
 		
 		attachAgent(agent);
 		
@@ -152,18 +157,19 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 		}
 		
 		@Override
-		public Instrument[] instruments() {
-			return incInsts.toArray(new Instrument[0]);
-		}
-		
-		@Override
-		public Exchange[] exchanges() {
-			return incExchanges.toArray(new Exchange[0]);
-		}
-		
-		@Override
-		public boolean all() {
-			return allInstruments.get();
+		public Set<String> interests() {
+			
+			final Set<String> interests = new HashSet<String>();
+			
+			for(final Exchange e : incExchanges) {
+				interests.add(e.code());
+			}
+			
+			for(final Instrument i : incInsts) {
+				interests.add(i.symbol());
+			}
+			
+			return interests;
 		}
 
 		/* ***** ***** Consumer Methods ***** ***** */
@@ -190,46 +196,77 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 
 		@Override
 		public synchronized void includeAll() {
-			allInstruments.set(true);
-			agentHandler.updateAgent(this);
+			throw new UnsupportedOperationException();
+//			allInstruments.set(true);
+//			agentHandler.updateAgent(this);
 		}
 
 		@Override
 		public synchronized void include(final CharSequence... symbols) {
+			
 			final Set<CharSequence> symbSet = new HashSet<CharSequence>();
 			Collections.addAll(symbSet, symbols);
 			
 			final Map<CharSequence, Instrument> instMap = instLookup.lookup(symbSet);
+			final Set<String> newInterests = new HashSet<String>();
 			
 			for(final Entry<CharSequence, Instrument> e : instMap.entrySet()) {
 				final Instrument i = e.getValue();
 				exInsts.remove(i);
 				incInsts.add(i);
+				
+				newInterests.add(i.symbol());
 			}
 			
 			agentHandler.updateAgent(this);
+			
+			final Set<Subscription> newSubs = subscribe(this, newInterests);
+			if(!newSubs.isEmpty()) {
+				subHandler.subscribe(newSubs);
+			}
+			
 		}
 
 		@Override
 		public synchronized void include(final Instrument... instruments) {
 			
+			final Set<String> newInterests = new HashSet<String>();
+			
 			for(final Instrument i : instruments) {
 				exInsts.remove(i);
 				incInsts.add(i);
+				
+				newInterests.add(i.symbol());
 			}
 			
 			agentHandler.updateAgent(this);
+			
+			final Set<Subscription> newSubs = subscribe(this, newInterests);
+			if(!newSubs.isEmpty()) {
+				subHandler.subscribe(newSubs);
+			}
+			
 		}
 
 		@Override
 		public synchronized void include(final Exchange... exchanges) {
 			
+			final Set<String> newInterests = new HashSet<String>();
+			
 			for(final Exchange e : exchanges) {
 				exExchanges.remove(e);
 				incExchanges.add(e);
+				
+				newInterests.add(e.code());
 			}
 			
 			agentHandler.updateAgent(this);
+			
+			final Set<Subscription> newSubs = subscribe(this, newInterests);
+			if(!newSubs.isEmpty()) {
+				subHandler.subscribe(newSubs);
+			}
+			
 		}
 
 		@Override
@@ -240,35 +277,65 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 			
 			final Map<CharSequence, Instrument> instMap = instLookup.lookup(symbSet);
 			
+			final Set<String> oldInterests = new HashSet<String>();
+			
 			for(final Entry<CharSequence, Instrument> e : instMap.entrySet()) {
 				final Instrument i = e.getValue();
 				incInsts.remove(i);
 				exInsts.add(i);
+				
+				oldInterests.add(i.symbol());
 			}
 			
 			agentHandler.updateAgent(this);
+			
+			final Set<Subscription> oldSubs = unsubscribe(this, oldInterests);
+			if(!oldSubs.isEmpty()) {
+				subHandler.unsubscribe(oldSubs);
+			}
+			
 		}
 
 		@Override
 		public synchronized void exclude(final Instrument... instruments) {
 			
+			final Set<String> oldInterests = new HashSet<String>();
+			
 			for(final Instrument i : instruments) {
 				incInsts.remove(i);
 				exInsts.add(i);
+				
+				oldInterests.add(i.symbol());
 			}
 			
 			agentHandler.updateAgent(this);
+			
+			final Set<Subscription> oldSubs = unsubscribe(this, oldInterests);
+			if(!oldSubs.isEmpty()) {
+				subHandler.unsubscribe(oldSubs);
+			}
+			
 		}
 
 		@Override
 		public synchronized void exclude(final Exchange... exchanges) {
 			
+			final Set<String> oldInterests = new HashSet<String>();
+			
 			for(final Exchange e : exchanges) {
 				incExchanges.remove(e);
 				exExchanges.add(e);
+				
+				oldInterests.add(e.code());
 			}
 			
 			agentHandler.updateAgent(this);
+			
+			final Set<Subscription> oldSubs = unsubscribe(this, oldInterests);
+			if(!oldSubs.isEmpty()) {
+				subHandler.unsubscribe(oldSubs);
+			}
+			
 		}
 
 		@Override
@@ -285,7 +352,114 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 
 		
 	}
+	
+	/* ***** ***** Subscription Aggregation Methods ***** ***** */
+	
+	private final Map<String, Set<Set<SubscriptionType>>> subs = 
+			new HashMap<String, Set<Set<SubscriptionType>>>();
+	
+	private final Map<FrameworkAgent<?>, Set<SubscriptionType>> agentMap = 
+			new HashMap<FrameworkAgent<?>, Set<SubscriptionType>>();
+	
+	private Set<SubscriptionType> aggregate(final String interest) {
+		
+		final Set<SubscriptionType> agg = EnumSet.noneOf(SubscriptionType.class);
+		
+		for(final Set<SubscriptionType> set : subs.get(interest)) {
+			agg.addAll(set);
+		}
+		
+		return agg;
+	}
+	
+	private Subscription subscribe(final FrameworkAgent<?> agent, final String interest) {
+		
+		if(!agentMap.containsKey(agent)) {
+			agentMap.put(agent, SubscriptionType.mapMarketEvents(
+					agent.eventTypes()));
+		}
+		
+		final Set<SubscriptionType> newSubs = agentMap.get(agent);
+		
+		if(!subs.containsKey(interest) && !newSubs.isEmpty()) {
+			subs.put(interest, new HashSet<Set<SubscriptionType>>());
+		}
+		
+		final Set<SubscriptionType> stuffToAdd = EnumSet.copyOf(newSubs);
+		stuffToAdd.removeAll(aggregate(interest));
+		
+		if(!stuffToAdd.isEmpty()) {
+			return new SubscriptionBase(interest, stuffToAdd);
+		} else {
+			return Subscription.NULL_SUBSCRIPTION;
+		}
+		
+	}
 
+	private Set<Subscription> subscribe(final FrameworkAgent<?> agent, 
+			final Set<String> interests) {
+		
+		final Set<Subscription> newSubs = new HashSet<Subscription>();
+		
+		for(final String interest : interests) {
+			final Subscription sub = subscribe(agent, interest);
+			if(!sub.isNull()) {
+				newSubs.add(sub);
+			}
+		}
+		
+		return newSubs;
+		
+	}
+
+	private Subscription unsubscribe(final FrameworkAgent<?> agent, 
+			final String interest) {
+		
+		if(!agentMap.containsKey(agent)) {
+			return Subscription.NULL_SUBSCRIPTION;
+		}
+		
+		final Set<SubscriptionType> oldSubs = agentMap.remove(agent);
+		
+		subs.get(interest).remove(oldSubs);
+		
+		if(subs.get(interest).isEmpty()) {
+			subs.remove(interest);
+		}
+		
+		final Set<SubscriptionType> stuffToRemove = EnumSet.copyOf(oldSubs);
+		stuffToRemove.removeAll(aggregate(interest));
+		
+		if(!stuffToRemove.isEmpty()) {
+			return new SubscriptionBase(interest, stuffToRemove);
+		} else {
+			return Subscription.NULL_SUBSCRIPTION;
+		}
+		
+	}
+
+	private Set<Subscription> unsubscribe(final FrameworkAgent<?> agent, 
+			final Set<String> interests) {
+		
+		final Set<Subscription> newSubs = new HashSet<Subscription>();
+		
+		for(final String interest : interests) {
+			final Subscription sub = unsubscribe(agent, interest);
+			if(!sub.isNull()) {
+				newSubs.add(sub);
+			}
+		}
+		
+		return newSubs;
+		
+	}
+	
+	/* ***** ***** Agent Lifecycle Methods ***** ***** */
+
+	/*
+	 * TODO These only should be called from inside framework agents, so 
+	 * some re-structuring is needed
+	 */
 	@Override
 	public synchronized void attachAgent(final FrameworkAgent<?> agent) {
 		
@@ -296,7 +470,6 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 		} else {
 		
 			agents.put(agent, new Boolean(false));
-			subManager.attachAgent(agent);
 			
 			for(final Entry<Instrument, MarketDo> e : marketMap.entrySet()) {
 				e.getValue().attachAgent(agent);
@@ -305,6 +478,10 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 		}
 	}
 	
+	/*
+	 * TODO These only should be called from inside framework agents, so 
+	 * some re-structuring is needed
+	 */
 	@Override
 	public synchronized void updateAgent(final FrameworkAgent<?> agent) {
 		
@@ -314,8 +491,6 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 			
 		} else {
 			
-			subManager.updateAgent(agent);
-			
 			for(final Entry<Instrument, MarketDo> e : marketMap.entrySet()) {
 				e.getValue().updateAgent(agent);
 			}
@@ -324,6 +499,10 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 		
 	}
 	
+	/*
+	 * TODO These only should be called from inside framework agents, so 
+	 * some re-structuring is needed
+	 */
 	@Override
 	public synchronized void detachAgent(final FrameworkAgent<?> agent) {
 		
@@ -332,7 +511,6 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 		}
 		
 		agents.remove(agent);
-		subManager.detachAgent(agent);
 		
 		for(final Entry<Instrument, MarketDo> e : marketMap.entrySet()) {
 			e.getValue().detachAgent(agent);
@@ -394,10 +572,11 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 			return;
 		}
 
-		final MarketDo market = marketMap.get(instrument);
+		MarketDo market = marketMap.get(instrument);
 
 		if (!isValid(market)) {
-			return;
+			register(instrument);
+			market = marketMap.get(instrument);
 		}
 
 		market.runSafe(safeMake, message);

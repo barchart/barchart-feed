@@ -1,7 +1,9 @@
 package com.barchart.feed.api;
 
 
-import com.barchart.feed.api.data.Exchange;
+import java.util.Set;
+
+import com.barchart.feed.api.connection.Subscription;
 import com.barchart.feed.api.data.Instrument;
 import com.barchart.feed.api.data.Market;
 import com.barchart.feed.api.data.MarketData;
@@ -16,8 +18,6 @@ public interface FrameworkAgent<V extends MarketData> extends Agent {
 	/* Filter methods */
 	boolean accept(Instrument instrument);
 	
-	Instrument[] instruments();
-	Exchange[] exchanges();
-	boolean all();
+	Set<String> interests();
 	
 }
