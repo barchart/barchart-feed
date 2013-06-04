@@ -6,6 +6,7 @@ public enum MarketEventType {
 	
 	TRADE, 
 	SNAPSHOT, 
+	// No Update?
 	BOOK_UPDATE, 
 	BOOK_SNAPSHOT, 
 	CUVOL_UPDATE, 
