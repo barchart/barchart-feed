@@ -24,7 +24,7 @@ import com.barchart.util.value.api.Time;
 import com.barchart.util.value.api.TimeInterval;
 import com.barchart.util.value.impl.ValueConst;
 import com.barchart.util.value.provider.FactoryProvider;
-import com.barchart.util.values.api.Fraction;
+import com.barchart.util.value.api.Fraction;
 import com.barchart.util.values.api.PriceValue;
 
 public abstract class InstrumentBase extends ObjectMapSafe implements Instrument {
@@ -90,7 +90,8 @@ public abstract class InstrumentBase extends ObjectMapSafe implements Instrument
 
 	@Override
 	public Size maxBookDepth() {
-		return FactoryProvider.instance().newSize(get(InstrumentField.BOOK_DEPTH).asLong(), 0);
+		return FactoryProvider.instance().newSize(
+				get(InstrumentField.BOOK_DEPTH).asLong(), 0);
 	}
 	
 	@Override

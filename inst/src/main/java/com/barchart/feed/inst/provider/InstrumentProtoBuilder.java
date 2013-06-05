@@ -28,7 +28,6 @@ import static com.barchart.feed.inst.InstrumentField.TICK_SIZE;
 import static com.barchart.feed.inst.InstrumentField.TIME_ZONE_NAME;
 import static com.barchart.feed.inst.InstrumentField.TIME_ZONE_OFFSET;
 import static com.barchart.feed.inst.InstrumentField.VENDOR;
-import static com.barchart.util.values.provider.ValueBuilder.newFraction;
 import static com.barchart.util.values.provider.ValueBuilder.newPrice;
 import static com.barchart.util.values.provider.ValueBuilder.newSize;
 import static com.barchart.util.values.provider.ValueBuilder.newText;
@@ -58,6 +57,7 @@ import com.barchart.proto.buf.inst.Interval;
 import com.barchart.util.value.api.TimeInterval;
 import com.barchart.util.value.impl.BaseSchedule;
 import com.barchart.util.value.impl.ValueConst;
+import com.barchart.util.value.provider.FactoryProvider;
 import com.barchart.util.values.api.PriceValue;
 
 public final class InstrumentProtoBuilder {
@@ -287,7 +287,7 @@ public final class InstrumentProtoBuilder {
 
 		if (instDef.hasDisplayBase() && instDef.hasDisplayExponent()) {
 			map.set(DISPLAY_FRACTION,
-					newFraction(instDef.getDisplayBase(),
+					FactoryProvider.instance().newFraction(instDef.getDisplayBase(),
 							instDef.getDisplayExponent()));
 		}
 

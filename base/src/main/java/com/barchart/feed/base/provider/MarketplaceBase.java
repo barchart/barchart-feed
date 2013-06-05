@@ -37,7 +37,8 @@ import com.barchart.feed.base.market.api.MarketSafeRunner;
 import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.util.value.api.Price;
-import com.barchart.util.values.api.Fraction;
+import com.barchart.util.value.api.Fraction;
+import com.barchart.util.value.impl.ValueConst;
 import com.barchart.util.values.api.Value;
 
 public abstract class MarketplaceBase<Message extends MarketMessage> implements
@@ -705,7 +706,7 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 
 		final Fraction fraction = instrument.displayFraction();
 		
-		if(fraction == null || fraction.isNull()) {
+		if(fraction == null || fraction == ValueConst.NULL_FRACTION) {
 			log.error("fraction.isNull()");
 			return false;
 		}
