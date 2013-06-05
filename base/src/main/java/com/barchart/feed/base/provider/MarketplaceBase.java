@@ -223,6 +223,7 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 			
 			final Set<Subscription> newSubs = subscribe(this, newInterests);
 			if(!newSubs.isEmpty()) {
+				log.debug("Sending new subs to sub handler");
 				subHandler.subscribe(newSubs);
 			}
 			
@@ -244,6 +245,7 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 			
 			final Set<Subscription> newSubs = subscribe(this, newInterests);
 			if(!newSubs.isEmpty()) {
+				log.debug("Sending new subs to sub handler");
 				subHandler.subscribe(newSubs);
 			}
 			
@@ -265,6 +267,7 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 			
 			final Set<Subscription> newSubs = subscribe(this, newInterests);
 			if(!newSubs.isEmpty()) {
+				log.debug("Sending new subs to sub handler");
 				subHandler.subscribe(newSubs);
 			}
 			
@@ -292,6 +295,7 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 			
 			final Set<Subscription> oldSubs = unsubscribe(this, oldInterests);
 			if(!oldSubs.isEmpty()) {
+				log.debug("Sending new unsubs to sub handler");
 				subHandler.unsubscribe(oldSubs);
 			}
 			
@@ -313,6 +317,7 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 			
 			final Set<Subscription> oldSubs = unsubscribe(this, oldInterests);
 			if(!oldSubs.isEmpty()) {
+				log.debug("Sending new unsubs to sub handler");
 				subHandler.unsubscribe(oldSubs);
 			}
 			
@@ -334,6 +339,7 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 			
 			final Set<Subscription> oldSubs = unsubscribe(this, oldInterests);
 			if(!oldSubs.isEmpty()) {
+				log.debug("Sending new unsubs to sub handler");
 				subHandler.unsubscribe(oldSubs);
 			}
 			

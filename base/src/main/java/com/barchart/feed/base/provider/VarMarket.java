@@ -7,9 +7,18 @@
  */
 package com.barchart.feed.base.provider;
 
-import static com.barchart.feed.base.market.enums.MarketField.*;
+import static com.barchart.feed.base.market.enums.MarketField.BOOK;
+import static com.barchart.feed.base.market.enums.MarketField.BOOK_LAST;
+import static com.barchart.feed.base.market.enums.MarketField.BOOK_TOP;
+import static com.barchart.feed.base.market.enums.MarketField.CUVOL;
+import static com.barchart.feed.base.market.enums.MarketField.CUVOL_LAST;
+import static com.barchart.feed.base.market.enums.MarketField.INSTRUMENT;
+import static com.barchart.feed.base.market.enums.MarketField.MARKET;
+import static com.barchart.feed.base.market.enums.MarketField.STATE;
+import static com.barchart.feed.base.market.enums.MarketField.TRADE;
 
 import java.util.EnumMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -65,6 +74,10 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 
 		/** set self reference */
 		set(MARKET, this);
+		
+		for(final MarketEventType type : MarketEventType.vals()) {
+			agentMap.put(type, new HashSet<FrameworkAgent<?>>());
+		}
 
 	}
 

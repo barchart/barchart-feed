@@ -9,16 +9,16 @@ import com.barchart.feed.api.connection.SubscriptionType;
 public class SubscriptionBase implements Subscription {
 	
 	private final Set<SubscriptionType> subTypes;
-	private final String code;
+	private final String interest;
 	
-	SubscriptionBase(final String code, final Set<SubscriptionType> types) {
+	SubscriptionBase(final String interest, final Set<SubscriptionType> types) {
 		
-		if(code == null || types == null || types.isEmpty()) {
+		if(interest == null || types == null || types.isEmpty()) {
 			throw new IllegalArgumentException();
 		}
 		
 		this.subTypes = EnumSet.copyOf(types);
-		this.code = code;
+		this.interest = interest;
 	}
 
 	@Override
@@ -38,17 +38,12 @@ public class SubscriptionBase implements Subscription {
 
 	@Override
 	public String encode() {
-		return code;
+		return interest;
 	}
-
+	
 	@Override
-	public String subscribe() {
-		return "";
-	}
-
-	@Override
-	public String unsubscribe() {
-		return "";
+	public String interest() {
+		return interest;
 	}
 
 	@Override

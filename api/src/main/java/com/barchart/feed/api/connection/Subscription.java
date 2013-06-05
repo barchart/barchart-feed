@@ -18,10 +18,8 @@ public interface Subscription {
 	void addTypes(Set<SubscriptionType> types);
 	void removeTypes(Set<SubscriptionType> types);
 	
+	String interest();
 	String encode();
-	
-	String subscribe();
-	String unsubscribe();
 	
 	public static Subscription NULL_SUBSCRIPTION = new Subscription() {
 
@@ -51,12 +49,7 @@ public interface Subscription {
 		}
 
 		@Override
-		public String subscribe() {
-			return null;
-		}
-
-		@Override
-		public String unsubscribe() {
+		public String interest() {
 			return null;
 		}
 		
