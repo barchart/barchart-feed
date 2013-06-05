@@ -93,10 +93,10 @@ public abstract class InstrumentBase extends ObjectMapSafe implements Instrument
 
 	@Override
 	public Size maxBookDepth() {
-		return factory.newSize(
-				get(InstrumentField.BOOK_DEPTH).asLong(), 0);
+		return factory.newSize(get(InstrumentField.BOOK_DEPTH).asLong(), 1);
 	}
 	
+	// TODO Review
 	@Override
 	public long maxBookDepthLong() {
 		return get(InstrumentField.BOOK_DEPTH).asLong();
