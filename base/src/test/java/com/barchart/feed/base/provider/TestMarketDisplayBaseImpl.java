@@ -18,30 +18,33 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.barchart.feed.base.market.api.MarketDisplay;
+import com.barchart.util.value.api.Factory;
+import com.barchart.util.value.api.FactoryLoader;
 import com.barchart.util.value.api.Fraction;
-import com.barchart.util.value.provider.FactoryProvider;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.TimeValue;
 
 public class TestMarketDisplayBaseImpl {
-
+	
+	private static final Factory factory = FactoryLoader.load();
+	
 	public static MarketDisplay display = new MarketDisplayBaseImpl();
 	
-	public static Fraction BIN_Z00 = FactoryProvider.instance().newFraction(2, 0);
-	public static Fraction BIN_N01 = FactoryProvider.instance().newFraction(2, -1);
-	public static Fraction BIN_N02 = FactoryProvider.instance().newFraction(2, -2);
-	public static Fraction BIN_N03 = FactoryProvider.instance().newFraction(2, -3);
-	public static Fraction BIN_N04 = FactoryProvider.instance().newFraction(2, -4);
-	public static Fraction BIN_N07 = FactoryProvider.instance().newFraction(2, -7);
+	public static Fraction BIN_Z00 = factory.newFraction(2, 0);
+	public static Fraction BIN_N01 = factory.newFraction(2, -1);
+	public static Fraction BIN_N02 = factory.newFraction(2, -2);
+	public static Fraction BIN_N03 = factory.newFraction(2, -3);
+	public static Fraction BIN_N04 = factory.newFraction(2, -4);
+	public static Fraction BIN_N07 = factory.newFraction(2, -7);
 	
-	public static Fraction DEC_Z00 = FactoryProvider.instance().newFraction(10, 0);
-	public static Fraction DEC_N01 = FactoryProvider.instance().newFraction(10, -1);
-	public static Fraction DEC_N02 = FactoryProvider.instance().newFraction(10, -2);
-	public static Fraction DEC_N03 = FactoryProvider.instance().newFraction(10, -3);
-	public static Fraction DEC_N04 = FactoryProvider.instance().newFraction(10, -4);
-	public static Fraction DEC_N05 = FactoryProvider.instance().newFraction(10, -5);
-	public static Fraction DEC_N06 = FactoryProvider.instance().newFraction(10, -6);
-	public static Fraction DEC_N07 = FactoryProvider.instance().newFraction(10, -7);
+	public static Fraction DEC_Z00 = factory.newFraction(10, 0);
+	public static Fraction DEC_N01 = factory.newFraction(10, -1);
+	public static Fraction DEC_N02 = factory.newFraction(10, -2);
+	public static Fraction DEC_N03 = factory.newFraction(10, -3);
+	public static Fraction DEC_N04 = factory.newFraction(10, -4);
+	public static Fraction DEC_N05 = factory.newFraction(10, -5);
+	public static Fraction DEC_N06 = factory.newFraction(10, -6);
+	public static Fraction DEC_N07 = factory.newFraction(10, -7);
 	
 	@Before
 	public void setUp() throws Exception {
