@@ -51,13 +51,13 @@
 		<dependency>
 			<groupId>com.barchart.util</groupId>
 			<artifactId>barchart-util-value-api</artifactId>
-			<version>[4.0.0, 4.1.0)</version>
+			<version>[4.1.0-SNAPSHOT, 4.2.0)</version>
 		</dependency>
 		
 		<dependency>
 			<groupId>com.barchart.util</groupId>
 			<artifactId>barchart-util-value-impl</artifactId>
-			<version>[4.0.0, 4.1.0)</version>
+			<version>[4.1.0-SNAPSHOT, 4.2.0)</version>
 		</dependency>
 		
 		<dependency>
