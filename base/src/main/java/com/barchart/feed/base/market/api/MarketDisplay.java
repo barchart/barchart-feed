@@ -1,8 +1,8 @@
-package com.barchart.feed.api.market;
+package com.barchart.feed.base.market.api;
 
 import org.joda.time.DateTimeZone;
 
-import com.barchart.util.values.api.Fraction;
+import com.barchart.util.value.api.Fraction;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
 import com.barchart.util.values.api.TimeValue;

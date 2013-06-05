@@ -14,13 +14,13 @@ import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-import com.barchart.feed.api.market.MarketDisplay;
+import com.barchart.feed.base.market.api.MarketDisplay;
 import com.barchart.util.ascii.ASCII;
-import com.barchart.util.values.api.Fraction;
+import com.barchart.util.value.api.Fraction;
+import com.barchart.util.value.provider.FactoryProvider;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
 import com.barchart.util.values.api.TimeValue;
-import com.barchart.util.values.provider.ValueBuilder;
 import com.barchart.util.values.provider.ValueConst;
 
 public class MarketDisplayBaseImpl implements MarketDisplay {
@@ -122,11 +122,11 @@ public class MarketDisplayBaseImpl implements MarketDisplay {
 			price = ValueConst.NULL_PRICE;
 		}
 		
-		if(frac == null || frac.isNull()) {
-			frac = ValueBuilder.newFraction(10, 0);
+		if(frac == null || frac == com.barchart.util.value.impl.ValueConst.NULL_FRACTION) {
+			frac = FactoryProvider.instance().newFraction(10, 0);
 		}
 		
-		long value = frac.priceFraction(price);
+		long value = frac.priceFraction(price.mantissa(), price.exponent());
 		
 		final char[] array = new char[frac.places()];
 		

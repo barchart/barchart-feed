@@ -17,31 +17,31 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.barchart.feed.api.market.MarketDisplay;
-import com.barchart.util.values.api.Fraction;
+import com.barchart.feed.base.market.api.MarketDisplay;
+import com.barchart.util.value.api.Fraction;
+import com.barchart.util.value.provider.FactoryProvider;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.TimeValue;
-import com.barchart.util.values.provider.ValueBuilder;
 
 public class TestMarketDisplayBaseImpl {
 
 	public static MarketDisplay display = new MarketDisplayBaseImpl();
 	
-	public static Fraction BIN_Z00 = ValueBuilder.newFraction(2, 0);
-	public static Fraction BIN_N01 = ValueBuilder.newFraction(2, -1);
-	public static Fraction BIN_N02 = ValueBuilder.newFraction(2, -2);
-	public static Fraction BIN_N03 = ValueBuilder.newFraction(2, -3);
-	public static Fraction BIN_N04 = ValueBuilder.newFraction(2, -4);
-	public static Fraction BIN_N07 = ValueBuilder.newFraction(2, -7);
+	public static Fraction BIN_Z00 = FactoryProvider.instance().newFraction(2, 0);
+	public static Fraction BIN_N01 = FactoryProvider.instance().newFraction(2, -1);
+	public static Fraction BIN_N02 = FactoryProvider.instance().newFraction(2, -2);
+	public static Fraction BIN_N03 = FactoryProvider.instance().newFraction(2, -3);
+	public static Fraction BIN_N04 = FactoryProvider.instance().newFraction(2, -4);
+	public static Fraction BIN_N07 = FactoryProvider.instance().newFraction(2, -7);
 	
-	public static Fraction DEC_Z00 = ValueBuilder.newFraction(10, 0);
-	public static Fraction DEC_N01 = ValueBuilder.newFraction(10, -1);
-	public static Fraction DEC_N02 = ValueBuilder.newFraction(10, -2);
-	public static Fraction DEC_N03 = ValueBuilder.newFraction(10, -3);
-	public static Fraction DEC_N04 = ValueBuilder.newFraction(10, -4);
-	public static Fraction DEC_N05 = ValueBuilder.newFraction(10, -5);
-	public static Fraction DEC_N06 = ValueBuilder.newFraction(10, -6);
-	public static Fraction DEC_N07 = ValueBuilder.newFraction(10, -7);
+	public static Fraction DEC_Z00 = FactoryProvider.instance().newFraction(10, 0);
+	public static Fraction DEC_N01 = FactoryProvider.instance().newFraction(10, -1);
+	public static Fraction DEC_N02 = FactoryProvider.instance().newFraction(10, -2);
+	public static Fraction DEC_N03 = FactoryProvider.instance().newFraction(10, -3);
+	public static Fraction DEC_N04 = FactoryProvider.instance().newFraction(10, -4);
+	public static Fraction DEC_N05 = FactoryProvider.instance().newFraction(10, -5);
+	public static Fraction DEC_N06 = FactoryProvider.instance().newFraction(10, -6);
+	public static Fraction DEC_N07 = FactoryProvider.instance().newFraction(10, -7);
 	
 	@Before
 	public void setUp() throws Exception {
@@ -61,35 +61,35 @@ public class TestMarketDisplayBaseImpl {
 		
 		frac = BIN_N01;
 		price = newPrice(123500, -3);
-		fraction = frac.priceFraction(price);
+		fraction = frac.priceFraction(price.mantissa(), price.exponent());
 		assertEquals(1, fraction); // 1/2
 		string = display.priceFractionText(price, frac);
 		assertEquals("1", string); // 1/2
 
 		frac = BIN_N02;
 		price = newPrice(123500, -3);
-		fraction = frac.priceFraction(price);
+		fraction = frac.priceFraction(price.mantissa(), price.exponent());
 		assertEquals(2, fraction); // 2/4
 		string = display.priceFractionText(price, frac);
 		assertEquals("2", string); // 2/4
 
 		frac = BIN_N03;
 		price = newPrice(123500, -3);
-		fraction = frac.priceFraction(price);
+		fraction = frac.priceFraction(price.mantissa(), price.exponent());
 		assertEquals(4, fraction); // 4/8
 		string = display.priceFractionText(price, frac);
 		assertEquals("4", string); // 4/8
 
 		frac = BIN_N04;
 		price = newPrice(123500, -3);
-		fraction = frac.priceFraction(price);
+		fraction = frac.priceFraction(price.mantissa(), price.exponent());
 		assertEquals(8, fraction); // 8/16
 		string = display.priceFractionText(price, frac);
 		assertEquals("08", string); // 08/16
 
 		frac = BIN_N07;
 		price = newPrice(123500, -3);
-		fraction = frac.priceFraction(price);
+		fraction = frac.priceFraction(price.mantissa(), price.exponent());
 		assertEquals(64, fraction); // 64/128
 		string = display.priceFractionText(price, frac);
 		assertEquals("064", string); // 64/128
@@ -103,19 +103,19 @@ public class TestMarketDisplayBaseImpl {
 		long whole;
 
 		price = newPrice(1236998923, -6);
-		whole = DEC_Z00.priceWhole(price);
+		whole = DEC_Z00.priceWhole(price.mantissa(), price.exponent());
 		assertEquals(whole, 1236);
 		
 		price = newPrice(-1236998923, -6);
-		whole = DEC_Z00.priceWhole(price);
+		whole = DEC_Z00.priceWhole(price.mantissa(), price.exponent());
 		assertEquals(whole, -1236);
 		
 		price = newPrice(233469923, +5);
-		whole = DEC_Z00.priceWhole(price);
+		whole = DEC_Z00.priceWhole(price.mantissa(), price.exponent());
 		assertEquals(whole, 23346992300000L);
 		
 		price = newPrice(-233469923, +5);
-		whole = DEC_Z00.priceWhole(price);
+		whole = DEC_Z00.priceWhole(price.mantissa(), price.exponent());
 		assertEquals(whole, -23346992300000L);
 		
 	}
