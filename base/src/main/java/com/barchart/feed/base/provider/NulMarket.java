@@ -111,9 +111,9 @@ class NulMarket extends ValueFreezer<Market> implements Market {
 		return null;
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public <V extends MarketData<V>> V get(MarketData.Type type) {
+	public <V extends MarketData> V get(MarketData.Type type) {
 		
 		switch(type) {
 		default:

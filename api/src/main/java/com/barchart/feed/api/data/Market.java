@@ -4,7 +4,7 @@ import com.barchart.feed.api.enums.SessionType;
 
 public interface Market extends MarketData<Market> {
 
-	<V extends MarketData<V>> V get(MarketData.Type type);
+	<V extends MarketData> V get(MarketData.Type type);
 	
 	Market market();
 	
