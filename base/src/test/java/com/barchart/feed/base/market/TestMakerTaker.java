@@ -37,14 +37,10 @@ import com.barchart.feed.base.message.MockMsgTrade;
 import com.barchart.feed.inst.missive.BarchartFeedInstManifest;
 import com.barchart.feed.inst.provider.MockDefinitionService;
 import com.barchart.missive.core.ObjectMapFactory;
-import com.barchart.util.value.api.Factory;
-import com.barchart.util.value.api.FactoryLoader;
 import com.barchart.util.values.api.SizeValue;
 
 public class TestMakerTaker {
 
-	private static final Factory factory = FactoryLoader.load();
-	
 	InstrumentService<CharSequence> service;
 
 	private static final Logger log = LoggerFactory
