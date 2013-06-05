@@ -17,17 +17,20 @@ import com.barchart.feed.api.inst.GuidList;
 import com.barchart.feed.api.inst.InstrumentGUID;
 import com.barchart.feed.inst.InstrumentField;
 import com.barchart.missive.core.ObjectMapSafe;
+import com.barchart.util.value.api.Factory;
+import com.barchart.util.value.api.FactoryLoader;
+import com.barchart.util.value.api.Fraction;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Schedule;
 import com.barchart.util.value.api.Size;
 import com.barchart.util.value.api.Time;
 import com.barchart.util.value.api.TimeInterval;
 import com.barchart.util.value.impl.ValueConst;
-import com.barchart.util.value.provider.FactoryProvider;
-import com.barchart.util.value.api.Fraction;
 import com.barchart.util.values.api.PriceValue;
 
 public abstract class InstrumentBase extends ObjectMapSafe implements Instrument {
+	
+	private static final Factory factory = FactoryLoader.load();
 	
 	@Override
 	public int compareTo(final Instrument o) {
@@ -90,7 +93,7 @@ public abstract class InstrumentBase extends ObjectMapSafe implements Instrument
 
 	@Override
 	public Size maxBookDepth() {
-		return FactoryProvider.instance().newSize(
+		return factory.newSize(
 				get(InstrumentField.BOOK_DEPTH).asLong(), 0);
 	}
 	
@@ -137,7 +140,7 @@ public abstract class InstrumentBase extends ObjectMapSafe implements Instrument
 	@Override
 	public Price tickSize() {
 		final PriceValue temp = get(InstrumentField.TICK_SIZE);
-		return FactoryProvider.instance().newPrice(temp.mantissa(), temp.exponent());
+		return factory.newPrice(temp.mantissa(), temp.exponent());
 	}
 
 	@Override
@@ -148,7 +151,7 @@ public abstract class InstrumentBase extends ObjectMapSafe implements Instrument
 	@Override
 	public Price pointValue() {
 		final PriceValue temp = get(InstrumentField.POINT_VALUE);
-		return FactoryProvider.instance().newPrice(temp.mantissa(), temp.exponent());
+		return factory.newPrice(temp.mantissa(), temp.exponent());
 	}
 
 	@Override
