@@ -54,16 +54,19 @@ import com.barchart.proto.buf.inst.Decimal;
 import com.barchart.proto.buf.inst.InstrumentDefinition;
 import com.barchart.proto.buf.inst.InstrumentType;
 import com.barchart.proto.buf.inst.Interval;
+import com.barchart.util.value.api.Factory;
+import com.barchart.util.value.api.FactoryLoader;
 import com.barchart.util.value.api.TimeInterval;
 import com.barchart.util.value.impl.BaseSchedule;
 import com.barchart.util.value.impl.ValueConst;
-import com.barchart.util.value.provider.FactoryProvider;
 import com.barchart.util.values.api.PriceValue;
 
 public final class InstrumentProtoBuilder {
 	
 	private static final Logger log = LoggerFactory
 			.getLogger(InstrumentProtoBuilder.class);
+	
+	private static final Factory factory = FactoryLoader.load();
 
 	private static final BiEnumMap<SecurityType, InstrumentType> secTypeMap = new BiEnumMap<SecurityType, InstrumentType>(
 			new SecurityType[] { SecurityType.NULL_TYPE, SecurityType.FOREX,
@@ -287,7 +290,7 @@ public final class InstrumentProtoBuilder {
 
 		if (instDef.hasDisplayBase() && instDef.hasDisplayExponent()) {
 			map.set(DISPLAY_FRACTION,
-					FactoryProvider.instance().newFraction(instDef.getDisplayBase(),
+					factory.newFraction(instDef.getDisplayBase(),
 							instDef.getDisplayExponent()));
 		}
 
@@ -295,7 +298,7 @@ public final class InstrumentProtoBuilder {
 			final Interval i = instDef.getCalendar().getLifeTime();
 			
 			if(i.getTimeFinish() > 0) {
-				map.set(LIFETIME, com.barchart.util.value.impl.ValueBuilder.newTimeInterval(i.getTimeStart(), i.getTimeFinish()));
+				map.set(LIFETIME, factory.newTimeInterval(i.getTimeStart(), i.getTimeFinish()));
 			} else {
 				map.set(LIFETIME, ValueConst.NULL_TIME_INTERVAL);
 			}
@@ -304,7 +307,7 @@ public final class InstrumentProtoBuilder {
 					.getMarketHoursList();
 			final TimeInterval[] tints = new TimeInterval[ints.size()];
 			for (int n = 0; n < ints.size(); n++) {
-				tints[n] = com.barchart.util.value.impl.ValueBuilder.newTimeInterval(
+				tints[n] = factory.newTimeInterval(
 						ints.get(n).getTimeStart(), ints.get(n).getTimeFinish());
 			}
 			map.set(MARKET_HOURS, new BaseSchedule(tints));
