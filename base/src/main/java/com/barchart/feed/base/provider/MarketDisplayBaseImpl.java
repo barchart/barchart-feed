@@ -16,14 +16,17 @@ import org.joda.time.format.DateTimeFormatter;
 
 import com.barchart.feed.base.market.api.MarketDisplay;
 import com.barchart.util.ascii.ASCII;
+import com.barchart.util.value.api.Factory;
+import com.barchart.util.value.api.FactoryLoader;
 import com.barchart.util.value.api.Fraction;
-import com.barchart.util.value.provider.FactoryProvider;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
 import com.barchart.util.values.api.TimeValue;
 import com.barchart.util.values.provider.ValueConst;
 
 public class MarketDisplayBaseImpl implements MarketDisplay {
+	
+	private static final Factory factory = FactoryLoader.load();
 	
 	private static TimeValue filter(final TimeValue time) {
 		if (time == null) {
@@ -123,7 +126,7 @@ public class MarketDisplayBaseImpl implements MarketDisplay {
 		}
 		
 		if(frac == null || frac == com.barchart.util.value.impl.ValueConst.NULL_FRACTION) {
-			frac = FactoryProvider.instance().newFraction(10, 0);
+			frac = factory.newFraction(10, 0);
 		}
 		
 		long value = frac.priceFraction(price.mantissa(), price.exponent());
