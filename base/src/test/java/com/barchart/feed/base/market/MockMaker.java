@@ -27,7 +27,7 @@ import com.barchart.util.values.api.TimeValue;
 
 public class MockMaker extends MakerBase<MockMessage> implements
 		MockMessageVisitor<Void, MarketDo> {
-
+	
 	public MockMaker(final MarketFactory factory) {
 		super(factory);
 	}

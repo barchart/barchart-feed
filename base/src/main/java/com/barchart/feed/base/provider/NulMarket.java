@@ -110,7 +110,7 @@ class NulMarket extends ValueFreezer<Market> implements Market {
 	public Time lastUpdateTime() {
 		return null;
 	}
-
+	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public <V extends MarketData> V get(MarketData.Type type) {

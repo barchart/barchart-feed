@@ -9,6 +9,7 @@ package com.barchart.feed.base.message;
 
 import com.barchart.feed.api.data.Instrument;
 import com.barchart.feed.base.market.api.MarketMessage;
+import com.barchart.util.value.api.Time;
 import com.barchart.util.values.api.TimeValue;
 
 public abstract class MockMessage implements MarketMessage {
