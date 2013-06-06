@@ -11,17 +11,11 @@ public interface OrderBook extends MarketData<OrderBook> {
 
 	Price bestPrice(MarketSide side);
 
-	double bestPriceDouble(MarketSide side);
-
 	Size bestSize(MarketSide side);
-
-	long bestSizeLong(MarketSide side);
 
 	List<PriceLevel> entryList(MarketSide side);
 
 	Price lastPrice();
-
-	double lastPriceDouble();
 
 	Time timeUpdated();
 

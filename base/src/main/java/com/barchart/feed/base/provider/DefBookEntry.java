@@ -12,9 +12,6 @@ import static com.barchart.feed.base.book.enums.MarketBookAction.*;
 import static com.barchart.feed.base.provider.MarketConst.*;
 import static com.barchart.util.values.provider.ValueConst.*;
 
-import java.util.List;
-
-import com.barchart.feed.api.data.Order;
 import com.barchart.feed.api.data.PriceLevel;
 import com.barchart.feed.api.enums.BookLiquidityType;
 import com.barchart.feed.api.enums.MarketSide;
@@ -105,11 +102,6 @@ public class DefBookEntry extends ValueFreezer<MarketBookEntry> implements
 	}
 
 	@Override
-	public double priceDouble() {
-		return price.asDouble();
-	}
-
-	@Override
 	public final SizeValue sizeValue() {
 		return (size == null) ? NULL_SIZE : size;
 	}
@@ -122,11 +114,6 @@ public class DefBookEntry extends ValueFreezer<MarketBookEntry> implements
 		} else {
 			return factory.newSize(size.asLong(), 0);
 		}
-	}
-
-	@Override
-	public long sizeLong() {
-		return size.asLong();
 	}
 
 	//
@@ -184,11 +171,6 @@ public class DefBookEntry extends ValueFreezer<MarketBookEntry> implements
 	@Override
 	public int level() {
 		return place;
-	}
-
-	@Override
-	public List<Order> orderList() {
-		return null; //TODO
 	}
 
 	@Override

@@ -213,18 +213,8 @@ public class DefBook extends ValueFreezer<MarketBook> implements MarketBook {
 	}
 
 	@Override
-	public double bestPriceDouble(MarketSide side) {
-		return 0;
-	}
-
-	@Override
 	public Size bestSize(MarketSide side) {
 		return null;
-	}
-
-	@Override
-	public long bestSizeLong(MarketSide side) {
-		return 0;
 	}
 
 	@Override
@@ -235,11 +225,6 @@ public class DefBook extends ValueFreezer<MarketBook> implements MarketBook {
 	@Override
 	public Price lastPrice() {
 		return null;
-	}
-
-	@Override
-	public double lastPriceDouble() {
-		return 0;
 	}
 
 	@Override

@@ -31,7 +31,6 @@ public interface Instrument extends MarketData<Instrument>,
 	
 	BookStructureType bookStructure();
 	
-	long maxBookDepthLong();
 	Size maxBookDepth();
 	
 	String instrumentDataVendor();
@@ -47,10 +46,8 @@ public interface Instrument extends MarketData<Instrument>,
 	
 	MarketCurrency currency();
 	
-	double tickSizeDouble();
 	Price tickSize();
 	
-	double pointValueDouble();
 	Price pointValue();
 	
 	Fraction displayFraction();
@@ -108,11 +105,6 @@ public interface Instrument extends MarketData<Instrument>,
 		}
 
 		@Override
-		public long maxBookDepthLong() {
-			return 0;
-		}
-
-		@Override
 		public Size maxBookDepth() {
 			return ValueConst.NULL_SIZE;
 		}
@@ -153,18 +145,8 @@ public interface Instrument extends MarketData<Instrument>,
 		}
 
 		@Override
-		public double tickSizeDouble() {
-			return 0;
-		}
-
-		@Override
 		public Price tickSize() {
 			return ValueConst.NULL_PRICE;
-		}
-
-		@Override
-		public double pointValueDouble() {
-			return 0;
 		}
 
 		@Override

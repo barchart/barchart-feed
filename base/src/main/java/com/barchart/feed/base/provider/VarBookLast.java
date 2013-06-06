@@ -7,9 +7,6 @@
  */
 package com.barchart.feed.base.provider;
 
-import java.util.List;
-
-import com.barchart.feed.api.data.Order;
 import com.barchart.feed.api.data.PriceLevel;
 import com.barchart.feed.api.enums.MarketSide;
 import com.barchart.feed.base.book.api.MarketBookEntry;
@@ -69,28 +66,13 @@ final class VarBookLast extends ValueFreezer<MarketBookEntry> implements
 	}
 
 	@Override
-	public double priceDouble() {
-		return 0;
-	}
-
-	@Override
 	public Size size() {
 		return null;
 	}
 
 	@Override
-	public long sizeLong() {
-		return 0;
-	}
-
-	@Override
 	public int level() {
 		return 0;
-	}
-
-	@Override
-	public List<Order> orderList() {
-		return null;
 	}
 
 	@Override
