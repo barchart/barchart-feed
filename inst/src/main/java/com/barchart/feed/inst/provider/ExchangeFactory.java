@@ -52,6 +52,12 @@ private ExchangeFactory() {
 			public Exchange copy() {
 				return this;
 			}
+
+			@Override
+			public String name() {
+				// TODO Auto-generated method stub
+				return null;
+			}
 			
 		};
 		

@@ -96,12 +96,6 @@ public abstract class InstrumentBase extends ObjectMapSafe implements Instrument
 		return factory.newSize(get(InstrumentField.BOOK_DEPTH).asLong(), 1);
 	}
 	
-	// TODO Review
-	@Override
-	public long maxBookDepthLong() {
-		return get(InstrumentField.BOOK_DEPTH).asLong();
-	}
-
 	@Override
 	public String instrumentDataVendor() {
 		return get(InstrumentField.VENDOR).toString();
@@ -144,19 +138,9 @@ public abstract class InstrumentBase extends ObjectMapSafe implements Instrument
 	}
 
 	@Override
-	public double tickSizeDouble() {
-		return get(InstrumentField.TICK_SIZE).asDouble();
-	}
-	
-	@Override
 	public Price pointValue() {
 		final PriceValue temp = get(InstrumentField.POINT_VALUE);
 		return factory.newPrice(temp.mantissa(), temp.exponent());
-	}
-
-	@Override
-	public double pointValueDouble() {
-		return get(InstrumentField.POINT_VALUE).asDouble();
 	}
 
 	@Override
