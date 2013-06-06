@@ -22,9 +22,12 @@ import com.barchart.feed.base.book.api.MarketBookEntry;
 import com.barchart.feed.base.book.api.MarketDoBookEntry;
 import com.barchart.feed.base.book.enums.MarketBookAction;
 import com.barchart.util.math.MathExtra;
+import com.barchart.util.value.api.Factory;
+import com.barchart.util.value.api.FactoryLoader;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Size;
 import com.barchart.util.value.api.Time;
+import com.barchart.util.value.impl.ValueConst;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
 import com.barchart.util.values.provider.ValueFreezer;
@@ -32,6 +35,8 @@ import com.barchart.util.values.provider.ValueFreezer;
 // JavaSize this = 8(obj) 4 * 1(byte) + 4(priceRef) + 4(sizeRef) = 24
 public class DefBookEntry extends ValueFreezer<MarketBookEntry> implements
 		MarketDoBookEntry {
+	
+	private static final Factory factory = FactoryLoader.load();
 
 	private final static byte nulAct = NOOP.ord;
 	private final static byte nulSide = GAP.ord;
@@ -90,8 +95,38 @@ public class DefBookEntry extends ValueFreezer<MarketBookEntry> implements
 	}
 
 	@Override
+	public Price price() {
+		
+		if(price == null) {
+			return ValueConst.NULL_PRICE;
+		} else {
+			return factory.newPrice(price.mantissa(), price.exponent());
+		}
+	}
+
+	@Override
+	public double priceDouble() {
+		return price.asDouble();
+	}
+
+	@Override
 	public final SizeValue sizeValue() {
 		return (size == null) ? NULL_SIZE : size;
+	}
+	
+	@Override
+	public Size size() {
+		
+		if(size == null) {
+			return ValueConst.NULL_SIZE;
+		} else {
+			return factory.newSize(size.asLong(), 0);
+		}
+	}
+
+	@Override
+	public long sizeLong() {
+		return size.asLong();
 	}
 
 	//
@@ -144,26 +179,6 @@ public class DefBookEntry extends ValueFreezer<MarketBookEntry> implements
 	@Override
 	public final boolean isNull() {
 		return this == NULL_BOOK_ENTRY;
-	}
-
-	@Override
-	public Price price() {
-		return null; //TODO
-	}
-
-	@Override
-	public double priceDouble() {
-		return price.asDouble();
-	}
-
-	@Override
-	public Size size() {
-		return null; //TODO
-	}
-
-	@Override
-	public long sizeLong() {
-		return size.asLong();
 	}
 
 	@Override
