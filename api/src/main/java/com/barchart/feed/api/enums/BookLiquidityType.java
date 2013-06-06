@@ -7,8 +7,6 @@
  */
 package com.barchart.feed.api.enums;
 
-import com.barchart.util.values.api.TextValue;
-
 public enum BookLiquidityType {
 
 	/** no size book */
@@ -33,7 +31,7 @@ public enum BookLiquidityType {
 		return ENUM_VALUES[ord];
 	}
 
-	public static final BookLiquidityType fromText(final TextValue type) {
+	public static final BookLiquidityType fromText(final String type) {
 		for (final BookLiquidityType t : values()) {
 			if (type.compareTo(t.name()) == 0) {
 				return t;

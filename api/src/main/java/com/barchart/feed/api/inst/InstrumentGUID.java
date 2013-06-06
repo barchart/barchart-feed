@@ -7,25 +7,33 @@
  */
 package com.barchart.feed.api.inst;
 
-import com.barchart.util.values.api.TextValue;
 import com.barchart.util.values.api.Value;
-import com.barchart.util.values.provider.ValueBuilder;
 
-public final class InstrumentGUID implements Comparable<InstrumentGUID>, Value<InstrumentGUID>, CharSequence {
+public final class InstrumentGUID implements Comparable<InstrumentGUID>, 
+		Value<InstrumentGUID>, CharSequence {
 
-	private final TextValue guid;
+	private final CharSequence guid;
 	
-	public InstrumentGUID(final TextValue guid) {
+	public InstrumentGUID(final CharSequence guid) {
 		this.guid = guid;
-	}
-	
-	public InstrumentGUID(final String seq) {
-		this.guid = ValueBuilder.newText(seq);
 	}
 	
 	@Override
 	public int compareTo(final InstrumentGUID thatGUID) {
-		return guid.compareTo(thatGUID);
+		final CharSequence that = thatGUID.guid;
+		final int s1 = this.length();
+		final int s2 = that.length();
+		final int size = Math.min(s1, s2);
+		for (int k = 1; k < size; k++) {
+			final int c1 = this.charAt(k);
+			final int c2 = that.charAt(k);
+			if (c1 == c2) {
+				continue;
+			} else {
+				return c1 - c2;
+			}
+		}
+		return s1 - s2;
 	}
 
 	@Override

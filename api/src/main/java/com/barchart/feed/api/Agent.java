@@ -1,7 +1,5 @@
 package com.barchart.feed.api;
 
-import java.util.Collection;
-
 import com.barchart.feed.api.data.Exchange;
 import com.barchart.feed.api.data.Instrument;
 
@@ -37,11 +35,6 @@ public interface Agent {
 	 * Activating a dismissed agent will have no effect.
 	 */
 	void dismiss();
-	
-	/**
-	 * Subscribes to and attaches agent to all available instruments.
-	 */
-	void includeAll();
 	
 	/**
 	 * Subscribes to and attaches agent to provided symbols.

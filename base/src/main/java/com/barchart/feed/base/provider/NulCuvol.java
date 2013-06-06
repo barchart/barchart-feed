@@ -73,28 +73,13 @@ public class NulCuvol extends ValueFreezer<MarketCuvol> implements MarketCuvol {
 	}
 
 	@Override
-	public double firstPriceDouble() {
-		return 0;
-	}
-
-	@Override
 	public Price tickSize() {
 		return ValueConverter.price(ValueConst.NULL_PRICE);
 	}
 
 	@Override
-	public double tickSizeDouble() {
-		return 0;
-	}
-
-	@Override
 	public List<Size> cuvolList() {
 		return new ArrayList<Size>(0);
-	}
-
-	@Override
-	public List<Long> cuvolListLong() {
-		return new ArrayList<Long>(0);
 	}
 
 	@Override

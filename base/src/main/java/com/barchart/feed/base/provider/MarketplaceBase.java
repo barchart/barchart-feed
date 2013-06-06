@@ -196,13 +196,6 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 		}
 
 		@Override
-		public synchronized void includeAll() {
-			throw new UnsupportedOperationException();
-//			allInstruments.set(true);
-//			agentHandler.updateAgent(this);
-		}
-
-		@Override
 		public synchronized void include(final CharSequence... symbols) {
 			
 			final Set<CharSequence> symbSet = new HashSet<CharSequence>();
