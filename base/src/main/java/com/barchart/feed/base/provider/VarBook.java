@@ -114,56 +114,47 @@ public final class VarBook extends UniBook<MarketBook> implements MarketDoBook {
 
 	@Override
 	public Price bestPrice(MarketSide side) {
-		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException("UNUSED");
 	}
 
 	@Override
 	public double bestPriceDouble(MarketSide side) {
-		// TODO Auto-generated method stub
-		return 0;
+		throw new UnsupportedOperationException("UNUSED");
 	}
 
 	@Override
 	public Size bestSize(MarketSide side) {
-		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException("UNUSED");
 	}
 
 	@Override
 	public long bestSizeLong(MarketSide side) {
-		// TODO Auto-generated method stub
-		return 0;
+		throw new UnsupportedOperationException("UNUSED");
 	}
 
 	@Override
 	public List<PriceLevel> entryList(MarketSide side) {
-		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException("UNUSED");
 	}
 
 	@Override
 	public Price lastPrice() {
-		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException("UNUSED");
 	}
 
 	@Override
 	public double lastPriceDouble() {
-		// TODO Auto-generated method stub
-		return 0;
+		throw new UnsupportedOperationException("UNUSED");
 	}
 
 	@Override
 	public Time timeUpdated() {
-		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException("UNUSED");
 	}
 
 	@Override
 	public Time lastUpdateTime() {
-		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException("UNUSED");
 	}
 
 	@Override

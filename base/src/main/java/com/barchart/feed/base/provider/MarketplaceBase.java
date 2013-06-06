@@ -372,6 +372,10 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 		
 		final Set<SubscriptionType> agg = EnumSet.noneOf(SubscriptionType.class);
 		
+		if(!subs.containsKey(interest)) {
+			return agg;
+		}
+		
 		for(final Set<SubscriptionType> set : subs.get(interest)) {
 			agg.addAll(set);
 		}
@@ -584,6 +588,8 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 		if (!isValid(market)) {
 			register(instrument);
 			market = marketMap.get(instrument);
+			
+			log.debug("Registering new instrument " + instrument.symbol());
 		}
 
 		market.runSafe(safeMake, message);

@@ -65,7 +65,6 @@ public interface Instrument extends MarketData<Instrument>,
 	
 	GuidList componentLegs();
 	
-	// TODO
 	public static Instrument NULL_INSTRUMENT = new Instrument() {
 
 		@Override
