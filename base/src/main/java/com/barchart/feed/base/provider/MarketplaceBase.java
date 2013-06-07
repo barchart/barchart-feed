@@ -462,7 +462,7 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 
 	/*
 	 * TODO These only should be called from inside framework agents, so 
-	 * some re-structuring is needed
+	 * some re-structuring may be needed
 	 */
 	@Override
 	public synchronized void attachAgent(final FrameworkAgent<?> agent) {
@@ -484,7 +484,7 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 	
 	/*
 	 * TODO These only should be called from inside framework agents, so 
-	 * some re-structuring is needed
+	 * some re-structuring may be needed
 	 */
 	@Override
 	public synchronized void updateAgent(final FrameworkAgent<?> agent) {
@@ -505,7 +505,7 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 	
 	/*
 	 * TODO These only should be called from inside framework agents, so 
-	 * some re-structuring is needed
+	 * some re-structuring may be needed
 	 */
 	@Override
 	public synchronized void detachAgent(final FrameworkAgent<?> agent) {

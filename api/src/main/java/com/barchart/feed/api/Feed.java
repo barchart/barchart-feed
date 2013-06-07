@@ -47,5 +47,13 @@ public interface Feed extends ConnectionLifecycle, InstrumentService<CharSequenc
 	<V extends MarketData<V>> Agent newAgent(MarketData.Type type, 
 			MarketCallback<V> callback,	MarketEventType... types);
 	
+	/* ***** ***** Helper subscribe methods ***** ***** */
+	
+	
+	// Agent a = feed.subscribe(new String[] { "IBM", "MSFT" }, MARKET, callback);
+	
+	<V extends MarketData<V>> Agent subscribe(MarketData.Type type, 
+			MarketCallback<V> callback, String... instruments);
+	
 	
 }

@@ -7,6 +7,7 @@
  */
 package com.barchart.feed.base.provider;
 
+import com.barchart.feed.api.data.PriceLevel;
 import com.barchart.feed.api.data.TopOfBook;
 import com.barchart.feed.api.enums.MarketSide;
 import com.barchart.feed.base.book.api.MarketBookEntry;
@@ -84,6 +85,16 @@ public class DefBookTop extends ValueFreezer<MarketBookTop> implements
 	@Override
 	public TopOfBook copy() {
 		return this.freeze();
+	}
+
+	@Override
+	public PriceLevel bid() {
+		return bid;
+	}
+
+	@Override
+	public PriceLevel ask() {
+		return ask;
 	}
 
 }
