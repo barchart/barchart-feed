@@ -59,6 +59,10 @@ public class TestMakerTaker {
 	@Test
 	public void testTakerMarket() {
 
+		if(MockDefinitionService.INST_GUID_1.equals(MockDefinitionService.INST_GUID_1)) {
+			System.out.println("check");
+		}
+		
 		final MockMaker maker = new MockMaker(new MockMarketFactory());
 
 		final Instrument inst;

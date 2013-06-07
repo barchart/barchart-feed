@@ -90,8 +90,6 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 		private final MarketEventType[] types;
 		
 		// Review concurrency
-		private final AtomicBoolean allInstruments = new AtomicBoolean(false);
-		
 		private final Set<Exchange> incExchanges = new HashSet<Exchange>();
 		private final Set<Exchange> exExchanges = new HashSet<Exchange>();
 		
@@ -148,10 +146,6 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 			
 			if(exExchanges.contains(instrument.exchange())) {
 				return false;
-			}
-			
-			if(allInstruments.get()) {
-				return true;
 			}
 			
 			return false;
@@ -341,7 +335,6 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 		@Override
 		public synchronized void clear() {
 			
-			allInstruments.set(false);
 			incInsts.clear();
 			exInsts.clear();
 			incExchanges.clear();

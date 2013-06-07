@@ -74,7 +74,7 @@ public final class InstrumentGUID implements Comparable<InstrumentGUID>,
 		}
 		
 		if(o instanceof InstrumentGUID) {
-			if(guid.equals(o)) {
+			if(compareTo((InstrumentGUID) o) == 0) {
 				return true;
 			} else {
 				return false;
@@ -95,8 +95,7 @@ public final class InstrumentGUID implements Comparable<InstrumentGUID>,
 		return guid.toString();
 	}
 	
-	
-	/** null instrument */
+	/** null instrument GUID */
 	public static final InstrumentGUID NULL_INSTRUMENT_GUID = new InstrumentGUID("NULL"); 
 
 }
