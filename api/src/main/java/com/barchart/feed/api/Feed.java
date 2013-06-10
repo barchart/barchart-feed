@@ -34,12 +34,26 @@ public interface Feed extends ConnectionLifecycle, InstrumentService<CharSequenc
 	
 	/* ***** ***** InstrumentService ***** ***** */
 	
+	/**
+	 * Retrieves the instrument object denoted by symbol. The local instrument
+	 * cache will be checked first. If the instrument is not stored locally, a
+	 * remote call to the instrument service is made.
+	 * 
+	 * @return NULL_INSTRUMENT if the symbol is not resolved.
+	 */
 	@Override
 	Instrument lookup(CharSequence symbol);
 	
 	@Override
 	InstrumentFuture lookupAsync(CharSequence symbol);
 	
+	/**
+	 * Retrieves a list of instrument objects denoted by symbols provided. The
+	 * local instrument cache will be checked first. If any instruments are not
+	 * stored locally, a remote call to the instrument service is made.
+	 * 
+	 * @return An empty list if no symbols can be resolved.
+	 */
 	@Override
 	Map<CharSequence, Instrument> lookup(
 			Collection<? extends CharSequence> symbols);
@@ -61,7 +75,7 @@ public interface Feed extends ConnectionLifecycle, InstrumentService<CharSequenc
 	
 	<V extends MarketData<V>> Agent subscribe(Class<V> clazz, 
 			MarketCallback<V> callback, MarketEventType[] types,
-			String... instruments);
+			String... symbols);
 	
 	<V extends MarketData<V>> Agent subscribe(Class<V> clazz, 
 			MarketCallback<V> callback, MarketEventType[] types,
@@ -69,7 +83,7 @@ public interface Feed extends ConnectionLifecycle, InstrumentService<CharSequenc
 	
 	<V extends MarketData<V>> Agent subscribe(Class<V> clazz, 
 			MarketCallback<V> callback, MarketEventType[] types,
-			Exchange... instruments);
+			Exchange... exchanges);
 	
 	/**
 	 * Fires on ALL
