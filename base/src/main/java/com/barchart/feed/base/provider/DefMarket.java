@@ -15,6 +15,7 @@ import com.barchart.feed.api.data.Session;
 import com.barchart.feed.api.data.TopOfBook;
 import com.barchart.feed.api.data.Trade;
 import com.barchart.feed.base.market.enums.MarketField;
+import com.barchart.feed.base.state.enums.MarketStateEntry;
 import com.barchart.util.anno.NotMutable;
 import com.barchart.util.value.api.Time;
 import com.barchart.util.value.impl.ValueConst;
@@ -82,7 +83,9 @@ public class DefMarket extends NulMarket {
 	@Override
 	public Session session() {
 		
-		return new FrozenSession(get(MarketField.BAR_CURRENT), 
+		return new FrozenSession(
+				get(MarketField.STATE).contains(MarketStateEntry.IS_SETTLED),
+				get(MarketField.BAR_CURRENT), 
 				get(MarketField.BAR_CURRENT_EXT),
 				get(MarketField.BAR_PREVIOUS), 
 				get(MarketField.BAR_PREVIOUS_EXT));	

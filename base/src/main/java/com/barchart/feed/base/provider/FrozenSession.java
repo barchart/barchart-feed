@@ -8,23 +8,26 @@ import com.barchart.util.value.api.Time;
 
 class FrozenSession implements Session {
 	
+	private final boolean isSettled;
 	private final SessionData current;
 	private final SessionData currentExtended;
 	private final SessionData previous;
 	private final SessionData previousExtended;
 	
-	FrozenSession(final SessionData current, final SessionData currentExtended,
-			final SessionData previous, final SessionData previousExtended) {
+	FrozenSession(final boolean isSettled, final SessionData current, 
+			final SessionData currentExtended,
+			final SessionData previous, 
+			final SessionData previousExtended) {
+		this.isSettled = isSettled;
 		this.current = current;
 		this.currentExtended = currentExtended;
 		this.previous = previous;
 		this.previousExtended = previousExtended;
 	}
 
-	// TODO ???????????
 	@Override
 	public boolean isSettled() {
-		return false;
+		return isSettled;
 	}
 	
 	@Override
