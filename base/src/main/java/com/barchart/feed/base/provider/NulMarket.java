@@ -9,13 +9,11 @@ package com.barchart.feed.base.provider;
 
 import com.barchart.feed.api.data.Cuvol;
 import com.barchart.feed.api.data.Instrument;
-import com.barchart.feed.api.data.MarketData;
 import com.barchart.feed.api.data.OrderBook;
 import com.barchart.feed.api.data.PriceLevel;
 import com.barchart.feed.api.data.Session;
 import com.barchart.feed.api.data.TopOfBook;
 import com.barchart.feed.api.data.Trade;
-import com.barchart.feed.api.enums.SessionType;
 import com.barchart.feed.base.market.api.Market;
 import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.util.anno.NotMutable;
@@ -102,7 +100,7 @@ class NulMarket extends ValueFreezer<Market> implements Market {
 	}
 
 	@Override
-	public Session session(SessionType type) {
+	public Session session() {
 		return null;
 	}
 

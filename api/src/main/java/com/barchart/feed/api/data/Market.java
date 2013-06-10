@@ -1,7 +1,5 @@
 package com.barchart.feed.api.data;
 
-import com.barchart.feed.api.enums.SessionType;
-
 public interface Market extends MarketData<Market> {
 
 	Market market();
@@ -18,7 +16,6 @@ public interface Market extends MarketData<Market> {
 
 	Cuvol cuvol();
 	
-	// TODO
-	Session session(SessionType type);
+	Session session();
 
 }

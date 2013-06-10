@@ -1,32 +1,16 @@
 package com.barchart.feed.api.data;
 
-import com.barchart.util.value.api.Price;
-import com.barchart.util.value.api.Size;
-import com.barchart.util.value.api.Time;
-
 /**
  * document object and primitive
  */
-public interface Session extends MarketData<Session> {
+public interface Session extends MarketData<Session>, SessionData {
 
-	Price open();
-
-	Price high();
-
-	Price low();
+	SessionData extended();
 	
-	Price close();
-
-	Price settle();
+	SessionData previous();
 	
-	Size volume();
-
-	Size interest();
-
-	Time timeOpened();
-
-	Time timeUpdated();
-
-	Time timeClosed();
-
+	SessionData previousExtended();
+	
+	boolean isSettled();
+	
 }

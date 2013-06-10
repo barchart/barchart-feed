@@ -6,8 +6,14 @@ import java.util.concurrent.Future;
 
 import com.barchart.feed.api.connection.ConnectionLifecycle;
 import com.barchart.feed.api.connection.ConnectionStateListener;
+import com.barchart.feed.api.data.Cuvol;
+import com.barchart.feed.api.data.Exchange;
 import com.barchart.feed.api.data.Instrument;
+import com.barchart.feed.api.data.Market;
 import com.barchart.feed.api.data.MarketData;
+import com.barchart.feed.api.data.OrderBook;
+import com.barchart.feed.api.data.TopOfBook;
+import com.barchart.feed.api.data.Trade;
 import com.barchart.feed.api.enums.MarketEventType;
 import com.barchart.feed.api.inst.InstrumentService;
 
@@ -52,13 +58,61 @@ public interface Feed extends ConnectionLifecycle, InstrumentService<CharSequenc
 	
 	// Agent a = feed.subscribe(new String[] { "IBM", "MSFT" }, MARKET, callback);
 	
-	<V extends MarketData<V>> Agent subscribe(MarketData.Type type, 
-			MarketCallback<V> callback, String... instruments);
+	<V extends MarketData<V>> Agent subscribe(Class<V> clazz, 
+			MarketCallback<V> callback, MarketEventType[] types,
+			String... instruments);
 	
-	// subscribeMarket
-	// subscribeCuvol
-	// subscribeBook
+	<V extends MarketData<V>> Agent subscribe(Class<V> clazz, 
+			MarketCallback<V> callback, MarketEventType[] types,
+			Instrument... instruments);
 	
+	<V extends MarketData<V>> Agent subscribe(Class<V> clazz, 
+			MarketCallback<V> callback, MarketEventType[] types,
+			Exchange... instruments);
 	
+	/**
+	 * Fires on ALL
+	 * 
+	 * @param callback
+	 * @param instruments
+	 * @return
+	 */
+	Agent subscribeMarket(MarketCallback<Market> callback, String... instruments);
+	
+	/**
+	 * Fires on TRADE
+	 * 
+	 * @param lastTrade
+	 * @param instruments
+	 * @return
+	 */
+	Agent subscribeTrade(MarketCallback<Trade> lastTrade, String... instruments);
+	
+	/**
+	 * Fires on BOOK_UPDATE and BOOK_SNAPSHOT
+	 * 
+	 * @param book
+	 * @param instruments
+	 * @return
+	 */
+	Agent subscribeBook(MarketCallback<OrderBook> book, String... instruments);
+	
+	/**
+	 * Fires on BOOK_UPDATE and BOOK_SNAPSHOT
+	 * 
+	 * @param book
+	 * @param instruments
+	 * @return
+	 */
+	Agent subscribeTopOfBook(MarketCallback<TopOfBook> top, String... instruments);
+	
+	/**
+	 * Fires on CUVOL_UPDATE and CUVOL_SNAPSHOT
+	 * 
+	 * @param cuvol
+	 * @param instruments
+	 * @return
+	 */
+	Agent subscribeCuvol(MarketCallback<Cuvol> cuvol, String... instruments);
 	
 }

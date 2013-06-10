@@ -8,6 +8,7 @@
 package com.barchart.feed.base.provider;
 
 import com.barchart.feed.api.data.Session;
+import com.barchart.feed.api.data.SessionData;
 import com.barchart.feed.base.bar.api.MarketBar;
 import com.barchart.feed.base.bar.enums.MarketBarField;
 import com.barchart.util.anno.NotMutable;
@@ -105,16 +106,6 @@ public class NulBar extends ValueFreezer<MarketBar> implements MarketBar {
 	@Override
 	public Time timeClosed() {
 		return ValueConverter.time(get(MarketBarField.TRADE_DATE));
-	}
-
-	@Override
-	public Time lastUpdateTime() {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public Session copy() {
-		return this.freeze();
 	}
 
 }

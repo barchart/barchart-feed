@@ -14,7 +14,6 @@ import com.barchart.feed.api.data.PriceLevel;
 import com.barchart.feed.api.data.Session;
 import com.barchart.feed.api.data.TopOfBook;
 import com.barchart.feed.api.data.Trade;
-import com.barchart.feed.api.enums.SessionType;
 import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.util.anno.NotMutable;
 import com.barchart.util.value.api.Time;
@@ -81,20 +80,13 @@ public class DefMarket extends NulMarket {
 	}
 
 	@Override
-	public Session session(SessionType type) {
-		switch(type) {
-			default:
-				throw new UnsupportedOperationException(
-						"Session type not supported: " + type.name());
-			case CURRENT:
-				return get(MarketField.BAR_CURRENT);
-			case PREVIOUS:
-				return get(MarketField.BAR_PREVIOUS);
-			case EXTENDED_CURRENT:
-				return get(MarketField.BAR_CURRENT_EXT);
-			case EXTENDED_PREVIOUS:
-				return get(MarketField.BAR_PREVIOUS_EXT);
-		}
+	public Session session() {
+		
+		return new FrozenSession(get(MarketField.BAR_CURRENT), 
+				get(MarketField.BAR_CURRENT_EXT),
+				get(MarketField.BAR_PREVIOUS), 
+				get(MarketField.BAR_PREVIOUS_EXT));	
+		
 	}
 
 	@Override
