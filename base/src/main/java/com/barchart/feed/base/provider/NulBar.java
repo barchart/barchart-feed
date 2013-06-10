@@ -63,18 +63,8 @@ public class NulBar extends ValueFreezer<MarketBar> implements MarketBar {
 	}
 
 	@Override
-	public double openDouble() {
-		return get(MarketBarField.OPEN).asDouble();
-	}
-
-	@Override
 	public Price high() {
 		return ValueConverter.price(get(MarketBarField.HIGH));
-	}
-
-	@Override
-	public double highDouble() {
-		return get(MarketBarField.HIGH).asDouble();
 	}
 
 	@Override
@@ -83,18 +73,8 @@ public class NulBar extends ValueFreezer<MarketBar> implements MarketBar {
 	}
 	
 	@Override
-	public double lowDouble() {
-		return get(MarketBarField.LOW).asDouble();
-	}
-
-	@Override
 	public Price close() {
 		return ValueConverter.price(get(MarketBarField.CLOSE));
-	}
-
-	@Override
-	public double closeDouble() {
-		return get(MarketBarField.CLOSE).asDouble();
 	}
 
 	@Override
@@ -103,18 +83,8 @@ public class NulBar extends ValueFreezer<MarketBar> implements MarketBar {
 	}
 
 	@Override
-	public double settleDouble() {
-		return get(MarketBarField.SETTLE).asDouble();
-	}
-	
-	@Override
 	public Size volume() {
 		return ValueConverter.size(get(MarketBarField.VOLUME));
-	}
-
-	@Override
-	public long volumeLong() {
-		return get(MarketBarField.VOLUME).asLong();
 	}
 
 	@Override
@@ -123,17 +93,7 @@ public class NulBar extends ValueFreezer<MarketBar> implements MarketBar {
 	}
 
 	@Override
-	public long interestLong() {
-		return get(MarketBarField.INTEREST).asLong();
-	}
-
-	@Override
 	public Time timeOpened() {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public long timeOpenedLong() {
 		throw new UnsupportedOperationException();
 	}
 
@@ -143,18 +103,8 @@ public class NulBar extends ValueFreezer<MarketBar> implements MarketBar {
 	}
 
 	@Override
-	public long timeUpdatedLong() {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
 	public Time timeClosed() {
 		return ValueConverter.time(get(MarketBarField.TRADE_DATE));
-	}
-
-	@Override
-	public long timeClosedLong() {
-		return get(MarketBarField.TRADE_DATE).asMillisUTC();
 	}
 
 	@Override

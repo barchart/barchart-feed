@@ -11,42 +11,22 @@ public interface Session extends MarketData<Session> {
 
 	Price open();
 
-	double openDouble();
-
 	Price high();
-
-	double highDouble();
 
 	Price low();
 	
-	double lowDouble();
-
 	Price close();
-
-	double closeDouble();
 
 	Price settle();
 	
-	double settleDouble();
-
 	Size volume();
-
-	long volumeLong();
 
 	Size interest();
 
-	long interestLong();
-
 	Time timeOpened();
-
-	long timeOpenedLong();
 
 	Time timeUpdated();
 
-	long timeUpdatedLong();
-
 	Time timeClosed();
-
-	long timeClosedLong();
 
 }

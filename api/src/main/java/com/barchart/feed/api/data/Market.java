@@ -4,9 +4,6 @@ import com.barchart.feed.api.enums.SessionType;
 
 public interface Market extends MarketData<Market> {
 
-	// TODO Review
-	<V extends MarketData> V get(MarketData.Type type);
-	
 	Market market();
 	
 	Instrument instrument();
@@ -21,6 +18,7 @@ public interface Market extends MarketData<Market> {
 
 	Cuvol cuvol();
 	
+	// TODO
 	Session session(SessionType type);
 
 }

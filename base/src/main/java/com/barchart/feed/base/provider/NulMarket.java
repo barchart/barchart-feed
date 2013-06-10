@@ -111,39 +111,6 @@ class NulMarket extends ValueFreezer<Market> implements Market {
 		return null;
 	}
 	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@Override
-	public <V extends MarketData> V get(MarketData.Type type) {
-		
-		switch(type) {
-		default:
-			throw new RuntimeException("Unknown Data Type " + type.name());
-		case MARKET:
-			return (V) market();
-		case INSTRUMENT:
-			return (V) instrument();
-		case LAST_TRADE: 
-			return (V) lastTrade();
-		case ORDER_BOOK:
-			return (V) orderBook();
-		case LAST_BOOK_UPDATE: 
-			return (V) lastBookUpdate();
-		case TOP_OF_BOOK: 
-			return (V) topOfBook();
-		case CUVOL: 
-			return (V) cuvol();
-		case SESSION_CURRENT:
-			return (V) session(SessionType.CURRENT);
-		case SESSION_CURRENT_EXT: 
-			return (V) session(SessionType.EXTENDED_CURRENT);
-		case SESSION_PREVIOUS:
-			return (V) session(SessionType.PREVIOUS);
-		case SESSION_PREVIOUS_EXT:
-			return (V) session(SessionType.EXTENDED_PREVIOUS);
-		}
-		
-	}
-
 	@Override
 	public Market copy() {
 		return this;

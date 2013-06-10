@@ -118,7 +118,7 @@ public abstract class InstrumentBase extends ObjectMapSafe implements Instrument
 	
 	@Override
 	public Exchange exchange() {
-		return ExchangeFactory.fromCode(exchangeCode());
+		return ExchangeFactory.fromName(exchangeCode());
 	}
 
 	@Override
