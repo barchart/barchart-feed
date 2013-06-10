@@ -80,6 +80,7 @@ public class DefMarket extends NulMarket {
 		return get(MarketField.CUVOL);
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public Session session() {
 		

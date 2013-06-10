@@ -20,13 +20,13 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.api.data.Instrument;
 import com.barchart.feed.api.inst.InstrumentFuture;
+import com.barchart.feed.api.inst.InstrumentFutureMap;
 import com.barchart.feed.api.inst.InstrumentGUID;
 import com.barchart.feed.api.inst.InstrumentService;
 import com.barchart.feed.api.inst.MetadataContext;
@@ -111,12 +111,15 @@ public class MockDefinitionService implements InstrumentService<CharSequence> {
 	@Override
 	public InstrumentFuture lookupAsync(final CharSequence symbol) {
 		
-		InstrumentGUID guid = symbolMap.get(symbol);
-		if(guid == null) {
-			guid = InstrumentGUID.NULL_INSTRUMENT_GUID;
-		}
+		// TODO
+		throw new UnsupportedOperationException();
 		
-		return new InstrumentFutureImpl(guid, randomDelayContext, executor);
+//		InstrumentGUID guid = symbolMap.get(symbol);
+//		if(guid == null) {
+//			guid = InstrumentGUID.NULL_INSTRUMENT_GUID;
+//		}
+//		
+//		return new InstrumentFutureImpl(guid, randomDelayContext, executor);
 		
 	}
 
@@ -132,9 +135,9 @@ public class MockDefinitionService implements InstrumentService<CharSequence> {
 	}
 
 	@Override
-	public Map<CharSequence, Future<Instrument>> lookupAsync(
+	public InstrumentFutureMap<CharSequence> lookupAsync(
 			final Collection<? extends CharSequence> symbols) {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 	

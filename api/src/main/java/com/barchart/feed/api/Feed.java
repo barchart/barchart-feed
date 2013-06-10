@@ -2,7 +2,6 @@ package com.barchart.feed.api;
 
 import java.util.Collection;
 import java.util.Map;
-import java.util.concurrent.Future;
 
 import com.barchart.feed.api.connection.ConnectionLifecycle;
 import com.barchart.feed.api.connection.ConnectionStateListener;
@@ -15,6 +14,8 @@ import com.barchart.feed.api.data.OrderBook;
 import com.barchart.feed.api.data.TopOfBook;
 import com.barchart.feed.api.data.Trade;
 import com.barchart.feed.api.enums.MarketEventType;
+import com.barchart.feed.api.inst.InstrumentFuture;
+import com.barchart.feed.api.inst.InstrumentFutureMap;
 import com.barchart.feed.api.inst.InstrumentService;
 
 public interface Feed extends ConnectionLifecycle, InstrumentService<CharSequence>,
@@ -37,14 +38,14 @@ public interface Feed extends ConnectionLifecycle, InstrumentService<CharSequenc
 	Instrument lookup(CharSequence symbol);
 	
 	@Override
-	Future<Instrument> lookupAsync(CharSequence symbol);
+	InstrumentFuture lookupAsync(CharSequence symbol);
 	
 	@Override
 	Map<CharSequence, Instrument> lookup(
 			Collection<? extends CharSequence> symbols);
 	
 	@Override
-	Map<CharSequence, Future<Instrument>> lookupAsync(
+	InstrumentFutureMap<CharSequence> lookupAsync(
 			Collection<? extends CharSequence> symbols);
 	
 	/* ***** ***** AgentBuilder ***** ***** */

@@ -9,6 +9,7 @@ import com.barchart.feed.api.data.Market;
 import com.barchart.feed.api.data.MarketData;
 import com.barchart.feed.api.data.OrderBook;
 import com.barchart.feed.api.data.PriceLevel;
+import com.barchart.feed.api.data.Session;
 import com.barchart.feed.api.data.TopOfBook;
 import com.barchart.feed.api.data.Trade;
 
@@ -36,7 +37,7 @@ public final class MarketDataGetters {
 				put(Instrument.class, new MDGetter<Instrument>(){
 
 					@Override
-					public Instrument get(Market market) {
+					public Instrument get(final Market market) {
 						return market.instrument();
 					}
 					
@@ -45,7 +46,7 @@ public final class MarketDataGetters {
 				put(Trade.class, new MDGetter<Trade>(){
 
 					@Override
-					public Trade get(Market market) {
+					public Trade get(final Market market) {
 						return market.lastTrade();
 					}
 					
@@ -54,7 +55,7 @@ public final class MarketDataGetters {
 				put(OrderBook.class, new MDGetter<OrderBook>(){
 
 					@Override
-					public OrderBook get(Market market) {
+					public OrderBook get(final Market market) {
 						return market.orderBook();
 					}
 					
@@ -63,7 +64,7 @@ public final class MarketDataGetters {
 				put(PriceLevel.class, new MDGetter<PriceLevel>(){
 
 					@Override
-					public PriceLevel get(Market market) {
+					public PriceLevel get(final Market market) {
 						return market.lastBookUpdate();
 					}
 					
@@ -72,7 +73,7 @@ public final class MarketDataGetters {
 				put(TopOfBook.class, new MDGetter<TopOfBook>(){
 
 					@Override
-					public TopOfBook get(Market market) {
+					public TopOfBook get(final Market market) {
 						return market.topOfBook();
 					}
 					
@@ -87,7 +88,14 @@ public final class MarketDataGetters {
 					
 				});
 				
-				// TODO Session
+				put(Session.class, new MDGetter<Session>(){
+
+					@Override
+					public Session get(final Market market) {
+						return market.session();
+					}
+					
+				});
 				
 			}};
 	
