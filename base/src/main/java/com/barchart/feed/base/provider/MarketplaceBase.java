@@ -36,6 +36,7 @@ import com.barchart.feed.base.market.api.MarketRegListener;
 import com.barchart.feed.base.market.api.MarketSafeRunner;
 import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketField;
+import com.barchart.feed.base.provider.MarketDataGetters.MDGetter;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Fraction;
 import com.barchart.util.value.impl.ValueConst;
@@ -70,10 +71,16 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 	// #########################
 	
 	@Override
-	public <V extends MarketData<V>> Agent newAgent(final MarketData.Type type, 
+	public <V extends MarketData<V>> Agent newAgent(final Class<V> clazz, 
 			final MarketCallback<V> callback, final MarketEventType... types) {
 		
-		final FrameworkAgent<V> agent = new BaseAgent<V>(this, type, callback, types);
+		final MDGetter<V> getter = MarketDataGetters.get(clazz);
+		
+		if(getter == null) {
+			throw new IllegalArgumentException("Illegal class type " + clazz.getName());
+		}
+		
+		final FrameworkAgent<V> agent = new BaseAgent<V>(this, getter, callback, types);
 		
 		attachAgent(agent);
 		
@@ -84,7 +91,7 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 		
 		private final AtomicBoolean isActive = new AtomicBoolean(true);
 		
-		private final MarketData.Type dataType;
+		private final MDGetter<V> getter;
 		private final AgentLifecycleHandler agentHandler;
 		private final MarketCallback<V> callback;
 		private final MarketEventType[] types;
@@ -96,11 +103,11 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 		private final Set<Instrument> incInsts = new HashSet<Instrument>();
 		private final Set<Instrument> exInsts = new HashSet<Instrument>();
 		
-		BaseAgent(final AgentLifecycleHandler agentHandler, final MarketData.Type type, 
+		BaseAgent(final AgentLifecycleHandler agentHandler, final MDGetter<V> getter, 
 				final MarketCallback<V> callback, final MarketEventType... types) {
 			
 			this.agentHandler = agentHandler;
-			dataType = type;
+			this.getter = getter;
 			this.callback = callback;
 			this.types = types;
 			
@@ -120,7 +127,7 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 
 		@Override
 		public V data(final Market market) {
-			return market.get(dataType);
+			return getter.get(market);
 		}
 		
 		/* ***** ***** Filter Methods ***** ***** */

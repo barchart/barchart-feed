@@ -124,7 +124,8 @@ public enum ExchangeCode {
 		return code;
 	}
 	
-	/*<exchange id="AMEX" ddfcode="A" delay="15" description="American Stock Exchange" data_frequency="13" codes="AMEX" feewaiver="no" freedelayed="yes"/>
+	/*
+	<exchange id="AMEX" ddfcode="A" delay="15" description="American Stock Exchange" data_frequency="13" codes="AMEX" feewaiver="no" freedelayed="yes"/>
 	<exchange id="ASX" ddfcode="v" delay="15" description="Austrailian Stock Exchange" data_frequency="13" codes="ASX" feewaiver="no" freedelayed="yes"/>
 	<exchange id="BATS" ddfcode="X" delay="0" description="BATS" data_frequency="13" codes="BATS" feewaiver="yes" freedelayed="yes"/>
 	<exchange id="BMF" ddfcode="2" delay="15" description="BM&F Bovespa S.A. - Bolsa De Valores, Mercadorias e Futuros" data_frequency="13" codes="BMF" feewaiver="no" freedelayed="yes"/>
@@ -178,4 +179,5 @@ public enum ExchangeCode {
 	<exchange id="TSXV" ddfcode="V" delay="15" description="Toronto Stock Exchange Venture" data_frequency="13" codes="TSXV,TSX-V" feewaiver="no" freedelayed="yes"/>
 	<exchange id="WPG" ddfcode="W" delay="10" description="ICE Canada" data_frequency="13" codes="WPG,WCE,ICECA" feewaiver="no" freedelayed="yes"/>
 	*/
+	
 }

@@ -6,7 +6,7 @@ import com.barchart.util.value.impl.ValueConst;
 
 public final class ExchangeFactory {
 
-private ExchangeFactory() {
+	private ExchangeFactory() {
 		
 	}
 	

@@ -3,7 +3,6 @@ package com.barchart.feed.api.examples;
 import com.barchart.feed.api.Agent;
 import com.barchart.feed.api.AgentBuilder;
 import com.barchart.feed.api.MarketCallback;
-import com.barchart.feed.api.data.MarketData;
 import com.barchart.feed.api.data.Session;
 import com.barchart.feed.api.enums.MarketEventType;
 import com.barchart.util.value.api.Price;
@@ -23,7 +22,7 @@ public class DoubleDownTrader {
 
 		/* User just wants to trade front month S&P future */
 		//agent = marketplace.agentBuilder().filter("ESM3").build(new DoubleDown());
-		agent = marketplace.newAgent(MarketData.Type.SESSION_CURRENT, new DoubleDown(), 
+		agent = marketplace.newAgent(Session.class, new DoubleDown(), 
 				MarketEventType.ALL);
 	}
 

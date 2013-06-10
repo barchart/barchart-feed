@@ -44,7 +44,7 @@ public interface Feed extends ConnectionLifecycle, InstrumentService<CharSequenc
 	/* ***** ***** AgentBuilder ***** ***** */
 	
 	@Override
-	<V extends MarketData<V>> Agent newAgent(MarketData.Type type, 
+	<V extends MarketData<V>> Agent newAgent(Class<V> clazz, 
 			MarketCallback<V> callback,	MarketEventType... types);
 	
 	/* ***** ***** Helper subscribe methods ***** ***** */
@@ -54,6 +54,11 @@ public interface Feed extends ConnectionLifecycle, InstrumentService<CharSequenc
 	
 	<V extends MarketData<V>> Agent subscribe(MarketData.Type type, 
 			MarketCallback<V> callback, String... instruments);
+	
+	// subscribeMarket
+	// subscribeCuvol
+	// subscribeBook
+	
 	
 	
 }
