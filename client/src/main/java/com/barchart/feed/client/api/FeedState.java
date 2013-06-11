@@ -8,12 +8,12 @@
 /**
  * 
  */
-package com.barchart.feed.client.enums;
+package com.barchart.feed.client.api;
 
 /**
  * Enum denoting the connection state of the data feed.
  */
-public enum FeedState {
+enum FeedState {
 
 	LOGGED_OUT, ATTEMPTING_LOGIN, LOGGED_IN;
 

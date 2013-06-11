@@ -17,7 +17,7 @@ import com.barchart.util.values.api.TimeValue;
  * stamp message from a data source.
  * 
  */
-public interface TimestampListener {
+interface TimestampListener {
 
 	public void handleTimestamp(TimeValue timestamp);
 

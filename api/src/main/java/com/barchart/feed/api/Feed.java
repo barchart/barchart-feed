@@ -3,8 +3,10 @@ package com.barchart.feed.api;
 import java.util.Collection;
 import java.util.Map;
 
+import com.barchart.feed.api.connection.ConnectionFuture;
 import com.barchart.feed.api.connection.ConnectionLifecycle;
 import com.barchart.feed.api.connection.ConnectionStateListener;
+import com.barchart.feed.api.connection.TimestampListener;
 import com.barchart.feed.api.data.Cuvol;
 import com.barchart.feed.api.data.Exchange;
 import com.barchart.feed.api.data.Instrument;
@@ -18,19 +20,36 @@ import com.barchart.feed.api.inst.InstrumentFuture;
 import com.barchart.feed.api.inst.InstrumentFutureMap;
 import com.barchart.feed.api.inst.InstrumentService;
 
-public interface Feed extends ConnectionLifecycle, InstrumentService<CharSequence>,
+public interface Feed extends ConnectionLifecycle<Feed>, InstrumentService<CharSequence>,
 		AgentBuilder {
 
 	/* ***** ***** ConnectionLifecycle ***** ***** */
 	
 	@Override
-	void startup();
+	ConnectionFuture<Feed> startup();
 	
 	@Override
-	void shutdown();
+	ConnectionFuture<Feed> shutdown();
 	
+	/**
+	 * Applications which need to react to the connectivity state of the feed
+	 * instantiate a FeedStateListener and bind it to the client.
+	 * 
+	 * @param listener
+	 *            The listener to be bound.
+	 */
 	@Override
 	void bindConnectionStateListener(ConnectionStateListener listener);
+	
+	/**
+	 * Applications which require time-stamp or heart-beat messages from the
+	 * data server instantiate a DDF_TimestampListener and bind it to the
+	 * client.
+	 * 
+	 * @param listener
+	 */
+	@Override
+	void bindTimestampListener(TimestampListener listener);
 	
 	/* ***** ***** InstrumentService ***** ***** */
 	
@@ -92,7 +111,7 @@ public interface Feed extends ConnectionLifecycle, InstrumentService<CharSequenc
 	 * @param instruments
 	 * @return
 	 */
-	Agent subscribeMarket(MarketCallback<Market> callback, String... instruments);
+	Agent subscribeMarket(MarketCallback<Market> callback, String... symbols);
 	
 	/**
 	 * Fires on TRADE
@@ -101,7 +120,7 @@ public interface Feed extends ConnectionLifecycle, InstrumentService<CharSequenc
 	 * @param instruments
 	 * @return
 	 */
-	Agent subscribeTrade(MarketCallback<Trade> lastTrade, String... instruments);
+	Agent subscribeTrade(MarketCallback<Trade> lastTrade, String... symbols);
 	
 	/**
 	 * Fires on BOOK_UPDATE and BOOK_SNAPSHOT
@@ -110,7 +129,7 @@ public interface Feed extends ConnectionLifecycle, InstrumentService<CharSequenc
 	 * @param instruments
 	 * @return
 	 */
-	Agent subscribeBook(MarketCallback<OrderBook> book, String... instruments);
+	Agent subscribeBook(MarketCallback<OrderBook> book, String... symbols);
 	
 	/**
 	 * Fires on BOOK_UPDATE and BOOK_SNAPSHOT
@@ -119,7 +138,7 @@ public interface Feed extends ConnectionLifecycle, InstrumentService<CharSequenc
 	 * @param instruments
 	 * @return
 	 */
-	Agent subscribeTopOfBook(MarketCallback<TopOfBook> top, String... instruments);
+	Agent subscribeTopOfBook(MarketCallback<TopOfBook> top, String... symbols);
 	
 	/**
 	 * Fires on CUVOL_UPDATE and CUVOL_SNAPSHOT
@@ -128,6 +147,6 @@ public interface Feed extends ConnectionLifecycle, InstrumentService<CharSequenc
 	 * @param instruments
 	 * @return
 	 */
-	Agent subscribeCuvol(MarketCallback<Cuvol> cuvol, String... instruments);
+	Agent subscribeCuvol(MarketCallback<Cuvol> cuvol, String... symbols);
 	
 }

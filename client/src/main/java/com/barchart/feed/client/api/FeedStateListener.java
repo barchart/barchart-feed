@@ -10,7 +10,6 @@
  */
 package com.barchart.feed.client.api;
 
-import com.barchart.feed.client.enums.FeedState;
 
 /**
  * Provides a callback method for changes in the 'logged-in' state of a data
@@ -21,7 +20,7 @@ import com.barchart.feed.client.enums.FeedState;
  * listener is bound to a feed after login, no login state event will fire.
  * 
  */
-public interface FeedStateListener {
+interface FeedStateListener {
 
 	public void stateUpdate(FeedState state);
 

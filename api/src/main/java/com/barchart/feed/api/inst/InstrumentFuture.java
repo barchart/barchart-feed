@@ -8,8 +8,8 @@
 package com.barchart.feed.api.inst;
 
 import com.barchart.feed.api.data.Instrument;
-import com.barchart.util.concurrent.ListenableFuture;
+import com.barchart.util.concurrent.FutureNotifierBase;
 
-public interface InstrumentFuture extends ListenableFuture<Instrument, InstrumentFuture> {
-
+public class InstrumentFuture extends FutureNotifierBase<Instrument, InstrumentFuture> {
+	
 }
