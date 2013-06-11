@@ -23,27 +23,33 @@ public final class ExchangeFactory {
 		
 		temp = new ExchangeImpl("ASX", "v");
 		names.put("ASX", temp);
+		names.put("Fix_Me_V", temp); // LOL
 		codes.put("v", temp);
 		
 		temp = new ExchangeImpl("BATS", "X");
 		names.put("BATS", temp);
+		names.put("Fix_Me_X", temp); // LOL
 		codes.put("X", temp);
 		
 		temp = new ExchangeImpl("BMF", "2");
 		names.put("BMF", temp);
+		names.put("Fix_Me_2", temp); // LOL
 		codes.put("2", temp);
 		
 		temp = new ExchangeImpl("CBOT", "B");
 		names.put("CBOT", temp);
 		names.put("CBOTM", temp);
+		names.put("CME_CBOT", temp);
 		codes.put("B", temp);
 		
 		temp = new ExchangeImpl("CFE", "R");
 		names.put("CFE", temp);
+		names.put("CBOE_Futures", temp);
 		codes.put("R", temp);
 		
 		temp = new ExchangeImpl("CME", "M");
 		names.put("CME", temp);
+		names.put("CME_Main", temp);
 		names.put("IMM", temp);
 		names.put("IOM", temp);
 		names.put("WEA", temp);
@@ -57,6 +63,7 @@ public final class ExchangeFactory {
 		temp = new ExchangeImpl("COMEX", "E");
 		names.put("COMEX", temp);
 		names.put("CXMI", temp);
+		names.put("CME_COMEX", temp);
 		codes.put("E", temp);
 		
 		temp = new ExchangeImpl("EUREX", "w");
@@ -65,6 +72,7 @@ public final class ExchangeFactory {
 		
 		temp = new ExchangeImpl("FOREX", "$");
 		names.put("FOREX", temp);
+		names.put("Forex", temp);
 		codes.put("$", temp);
 		
 		temp = new ExchangeImpl("FUND", "v");
@@ -73,11 +81,13 @@ public final class ExchangeFactory {
 		
 		temp = new ExchangeImpl("ICE", "L");
 		names.put("ICE", temp);
+		names.put("ICE_EU", temp);
 		codes.put("L", temp);
 		
 		temp = new ExchangeImpl("INDEX", "I");
 		names.put("INDEX", temp);
 		names.put("IDX", temp);
+		names.put("Index_NO_DOW_NO_SP", temp);
 		codes.put("I", temp);
 		
 		temp = new ExchangeImpl("IDX_CFE", "r");
@@ -166,20 +176,24 @@ public final class ExchangeFactory {
 		
 		temp = new ExchangeImpl("NLIF", "Y");
 		names.put("NLIF", temp);
+		names.put("NYSE_Metals", temp);
 		codes.put("Y", temp);
 		
 		temp = new ExchangeImpl("ICEFI", "C");
 		names.put("ICEFI", temp);
 		names.put("ICEUS", temp);
+		names.put("ICE_US", temp);
 		names.put("NYBOT", temp);
 		codes.put("C", temp);
 		
 		temp = new ExchangeImpl("NYMEX", "J");
 		names.put("NYMEX", temp);
+		names.put("CME_NYMEX", temp);
 		names.put("NYMI", temp);
 		codes.put("J", temp);
 		
 		temp = new ExchangeImpl("NYSE", "N");
+		names.put("NYSE", temp);
 		codes.put("N", temp);
 		
 		temp = new ExchangeImpl("OTCBB", "D");
@@ -198,6 +212,7 @@ public final class ExchangeFactory {
 		
 		temp = new ExchangeImpl("TSX", "S");
 		names.put("TSX", temp);
+		names.put("Fix_Me_S", temp);
 		codes.put("S", temp);
 		
 		temp = new ExchangeImpl("TSXV", "V");

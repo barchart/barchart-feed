@@ -147,6 +147,11 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 				return false;
 			}
 			
+			if(instrument.exchange().isNull()) {
+				log.debug("Exchange is NULL for " + instrument.symbol() + " " + 
+						instrument.exchangeCode());
+			}
+			
 			if(incExchanges.contains(instrument.exchange())) {
 				return true;
 			}
@@ -682,7 +687,6 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 	protected boolean isValid(final MarketDo market) {
 
 		if (market == null) {
-			log.debug("market == null");
 			return false;
 		}
 
@@ -698,7 +702,6 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 		}
 
 		if (instrument.isNull()) {
-			log.error("instrument.isNull()");
 			return false;
 		}
 
