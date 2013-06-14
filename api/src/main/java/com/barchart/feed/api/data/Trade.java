@@ -8,14 +8,8 @@ public interface Trade extends MarketData<Trade> {
 
 	Price price();
 
-	double priceDouble();
-
 	Size size();
 
-	long sizeLong();
-
 	Time time();
-
-	long timeLong();
 
 }

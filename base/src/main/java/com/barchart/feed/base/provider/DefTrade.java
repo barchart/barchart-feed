@@ -73,28 +73,13 @@ class DefTrade extends NulTrade {
 	}
 
 	@Override
-	public double priceDouble() {
-		return 0;
-	}
-
-	@Override
 	public Size size() {
 		return ValueConst.NULL_SIZE;
 	}
 
 	@Override
-	public long sizeLong() {
-		return 0;
-	}
-
-	@Override
 	public Time time() {
 		return ValueConst.NULL_TIME;
-	}
-
-	@Override
-	public long timeLong() {
-		return 0;
 	}
 
 	@Override
