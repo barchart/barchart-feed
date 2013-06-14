@@ -15,7 +15,6 @@ import com.barchart.feed.api.data.MarketData;
 import com.barchart.feed.api.data.OrderBook;
 import com.barchart.feed.api.data.TopOfBook;
 import com.barchart.feed.api.data.Trade;
-import com.barchart.feed.api.enums.MarketEventType;
 import com.barchart.feed.api.inst.InstrumentFuture;
 import com.barchart.feed.api.inst.InstrumentFutureMap;
 import com.barchart.feed.api.inst.InstrumentService;
@@ -85,7 +84,7 @@ public interface Feed extends ConnectionLifecycle<Feed>, InstrumentService<CharS
 	
 	@Override
 	<V extends MarketData<V>> Agent newAgent(Class<V> clazz, 
-			MarketCallback<V> callback,	MarketEventType... types);
+			MarketCallback<V> callback);
 	
 	/* ***** ***** Helper subscribe methods ***** ***** */
 	
@@ -93,16 +92,13 @@ public interface Feed extends ConnectionLifecycle<Feed>, InstrumentService<CharS
 	// Agent a = feed.subscribe(new String[] { "IBM", "MSFT" }, MARKET, callback);
 	
 	<V extends MarketData<V>> Agent subscribe(Class<V> clazz, 
-			MarketCallback<V> callback, MarketEventType[] types,
-			String... symbols);
+			MarketCallback<V> callback,	String... symbols);
 	
 	<V extends MarketData<V>> Agent subscribe(Class<V> clazz, 
-			MarketCallback<V> callback, MarketEventType[] types,
-			Instrument... instruments);
+			MarketCallback<V> callback, Instrument... instruments);
 	
 	<V extends MarketData<V>> Agent subscribe(Class<V> clazz, 
-			MarketCallback<V> callback, MarketEventType[] types,
-			Exchange... exchanges);
+			MarketCallback<V> callback, Exchange... exchanges);
 	
 	/**
 	 * Fires on ALL

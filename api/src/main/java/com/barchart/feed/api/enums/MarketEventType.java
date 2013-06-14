@@ -1,6 +1,6 @@
 package com.barchart.feed.api.enums;
 
-public enum MarketEventType {
+enum MarketEventType {
 
 	UNKNOWN,
 	

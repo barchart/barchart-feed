@@ -17,9 +17,10 @@ import static com.barchart.feed.base.market.enums.MarketField.MARKET;
 import static com.barchart.feed.base.market.enums.MarketField.STATE;
 import static com.barchart.feed.base.market.enums.MarketField.TRADE;
 
-import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -28,9 +29,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.api.FrameworkAgent;
+import com.barchart.feed.api.data.Cuvol;
 import com.barchart.feed.api.data.Instrument;
+import com.barchart.feed.api.data.MarketData;
+import com.barchart.feed.api.data.OrderBook;
+import com.barchart.feed.api.data.PriceLevel;
+import com.barchart.feed.api.data.Session;
+import com.barchart.feed.api.data.TopOfBook;
+import com.barchart.feed.api.data.Trade;
 import com.barchart.feed.api.enums.BookLiquidityType;
-import com.barchart.feed.api.enums.MarketEventType;
 import com.barchart.feed.base.bar.api.MarketBar;
 import com.barchart.feed.base.bar.api.MarketDoBar;
 import com.barchart.feed.base.book.api.MarketBook;
@@ -59,8 +66,8 @@ import com.barchart.util.values.provider.ValueBuilder;
 @ThreadSafe(rule = "must use runSafe()")
 public abstract class VarMarket extends DefMarket implements MarketDo {
 	
-	protected final EnumMap<MarketEventType, Set<FrameworkAgent<?>>> agentMap =
-		new EnumMap<MarketEventType, Set<FrameworkAgent<?>>>(MarketEventType.class);
+	protected final Map<Class<? extends MarketData<?>>, Set<FrameworkAgent<?>>> agentMap =
+		new HashMap<Class<? extends MarketData<?>>, Set<FrameworkAgent<?>>>();
 	
 	private final ConcurrentMap<FrameworkAgent<?>, Boolean> agentSet = 
 			new ConcurrentHashMap<FrameworkAgent<?>, Boolean>();
@@ -75,9 +82,15 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 		/** set self reference */
 		set(MARKET, this);
 		
-		for(final MarketEventType type : MarketEventType.vals()) {
-			agentMap.put(type, new HashSet<FrameworkAgent<?>>());
-		}
+		agentMap.put(com.barchart.feed.api.data.Market.class, 
+				new HashSet<FrameworkAgent<?>>());
+		agentMap.put(Instrument.class, new HashSet<FrameworkAgent<?>>());
+		agentMap.put(Trade.class, new HashSet<FrameworkAgent<?>>());
+		agentMap.put(OrderBook.class, new HashSet<FrameworkAgent<?>>());
+		agentMap.put(PriceLevel.class, new HashSet<FrameworkAgent<?>>());
+		agentMap.put(TopOfBook.class, new HashSet<FrameworkAgent<?>>());
+		agentMap.put(Cuvol.class, new HashSet<FrameworkAgent<?>>());
+		agentMap.put(Session.class, new HashSet<FrameworkAgent<?>>());
 
 	}
 
@@ -97,9 +110,7 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 		
 		agentSet.put(agent, new Boolean(false));
 		
-		for(final MarketEventType type : agent.eventTypes()) {
-			agentMap.get(type).add(agent);
-		}
+		agentMap.get(agent.type()).add(agent);
 		
 	}
 	
@@ -126,9 +137,7 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 		
 		agentSet.remove(agent);
 		
-		for(final MarketEventType type : agent.eventTypes()) {
-			agentMap.get(type).remove(agent);
-		}
+		agentMap.get(agent.type()).remove(agent);
 		
 	}
 	

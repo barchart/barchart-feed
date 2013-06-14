@@ -35,8 +35,7 @@ public class SubManager {
 	public Subscription subscribe(final FrameworkAgent<?> agent, final String interest) {
 		
 		if(!agentMap.containsKey(agent)) {
-			agentMap.put(agent, SubscriptionType.mapMarketEvents(
-					agent.eventTypes()));
+			agentMap.put(agent, SubscriptionType.mapMarketEvent(agent.type()));
 		}
 		
 		final Set<SubscriptionType> newSubs = agentMap.get(agent);

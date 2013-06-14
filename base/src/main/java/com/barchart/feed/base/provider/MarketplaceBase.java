@@ -26,7 +26,6 @@ import com.barchart.feed.api.data.Exchange;
 import com.barchart.feed.api.data.Instrument;
 import com.barchart.feed.api.data.Market;
 import com.barchart.feed.api.data.MarketData;
-import com.barchart.feed.api.enums.MarketEventType;
 import com.barchart.feed.api.inst.InstrumentService;
 import com.barchart.feed.base.market.api.MarketDo;
 import com.barchart.feed.base.market.api.MarketFactory;
@@ -72,7 +71,7 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 	
 	@Override
 	public <V extends MarketData<V>> Agent newAgent(final Class<V> clazz, 
-			final MarketCallback<V> callback, final MarketEventType... types) {
+			final MarketCallback<V> callback) {
 		
 		final MDGetter<V> getter = MarketDataGetters.get(clazz);
 		
@@ -80,7 +79,7 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 			throw new IllegalArgumentException("Illegal class type " + clazz.getName());
 		}
 		
-		final FrameworkAgent<V> agent = new BaseAgent<V>(this, getter, callback, types);
+		final FrameworkAgent<V> agent = new BaseAgent<V>(this, clazz, getter, callback);
 		
 		attachAgent(agent);
 		
@@ -91,10 +90,10 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 		
 		private final AtomicBoolean isActive = new AtomicBoolean(true);
 		
+		private final Class<V> clazz;
 		private final MDGetter<V> getter;
 		private final AgentLifecycleHandler agentHandler;
 		private final MarketCallback<V> callback;
-		private final MarketEventType[] types;
 		
 		// Review concurrency
 		private final Set<Exchange> incExchanges = new HashSet<Exchange>();
@@ -103,23 +102,23 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 		private final Set<Instrument> incInsts = new HashSet<Instrument>();
 		private final Set<Instrument> exInsts = new HashSet<Instrument>();
 		
-		BaseAgent(final AgentLifecycleHandler agentHandler, final MDGetter<V> getter, 
-				final MarketCallback<V> callback, final MarketEventType... types) {
+		BaseAgent(final AgentLifecycleHandler agentHandler, final Class<V> clazz, 
+				final MDGetter<V> getter, final MarketCallback<V> callback) {
 			
 			this.agentHandler = agentHandler;
+			this.clazz = clazz;
 			this.getter = getter;
 			this.callback = callback;
-			this.types = types;
 			
 		}
 		
 		/* ***** ***** Framework Methods ***** ***** */
 		
 		@Override
-		public MarketEventType[] eventTypes() {
-			return types;
+		public Class<V> type() {
+			return clazz;
 		}
-
+		
 		@Override
 		public MarketCallback<V> callback() {
 			return callback;
@@ -384,8 +383,8 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 	private Subscription subscribe(final FrameworkAgent<?> agent, final String interest) {
 		
 		if(!agentMap.containsKey(agent)) {
-			agentMap.put(agent, SubscriptionType.mapMarketEvents(
-					agent.eventTypes()));
+			agentMap.put(agent, SubscriptionType.mapMarketEvent(
+					agent.type()));
 		}
 		
 		final Set<SubscriptionType> newSubs = agentMap.get(agent);
