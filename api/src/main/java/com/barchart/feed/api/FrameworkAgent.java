@@ -1,6 +1,5 @@
 package com.barchart.feed.api;
 
-
 import java.util.Set;
 
 import com.barchart.feed.api.connection.Subscription;

@@ -89,5 +89,9 @@ public class LocalInstDefDB implements MetadataContext {
 		log.debug("Database currently has {} entries", db.count());
 		
 	}
+	
+	public void close() {
+		db.close();
+	}
 
 }
