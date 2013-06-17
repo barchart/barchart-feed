@@ -7,10 +7,8 @@
  */
 package com.barchart.feed.api.inst;
 
-import com.barchart.util.values.api.Value;
-
 public final class InstrumentGUID implements Comparable<InstrumentGUID>, 
-		Value<InstrumentGUID>, CharSequence {
+		CharSequence {
 
 	private final CharSequence guid;
 	
@@ -36,17 +34,6 @@ public final class InstrumentGUID implements Comparable<InstrumentGUID>,
 		return s1 - s2;
 	}
 
-	@Override
-	public InstrumentGUID freeze() {
-		return this;
-	}
-
-	@Override
-	public boolean isFrozen() {
-		return true;
-	}
-
-	@Override
 	public boolean isNull() {
 		return this == NULL_INSTRUMENT_GUID;
 	}

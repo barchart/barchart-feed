@@ -7,9 +7,7 @@
  */
 package com.barchart.feed.api.enums;
 
-import com.barchart.util.values.api.Value;
-
-public enum MarketSide implements Value<MarketSide> {
+public enum MarketSide  {
 
 	/** price gap between bids and asks */
 	GAP, //
@@ -28,21 +26,6 @@ public enum MarketSide implements Value<MarketSide> {
 
 	public static final MarketSide fromOrd(final byte ord) {
 		return ENUM_VALUES[ord];
-	}
-
-	@Override
-	public MarketSide freeze() {
-		return this;
-	}
-
-	@Override
-	public boolean isFrozen() {
-		return true;
-	}
-
-	@Override
-	public boolean isNull() {
-		return this == GAP;
 	}
 
 }
