@@ -214,7 +214,8 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 				exInsts.remove(i);
 				incInsts.add(i);
 				
-				newInterests.add(i.symbol());
+				// Modify subscription????
+				newInterests.add(formatForJERQ(i.symbol()));
 			}
 			
 			agentHandler.updateAgent(this);
@@ -236,7 +237,7 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 				exInsts.remove(i);
 				incInsts.add(i);
 				
-				newInterests.add(i.symbol());
+				newInterests.add(formatForJERQ(i.symbol()));
 			}
 			
 			agentHandler.updateAgent(this);
@@ -460,6 +461,34 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 		
 		return newSubs;
 		
+	}
+	
+	public static void main(final String[] args) {
+		System.out.println(formatForJERQ("CLM2013"));
+	}
+	
+	private static String formatForJERQ(String symbol) {
+		
+		if(symbol == null) {
+			return "";
+		}
+		
+		if(symbol.length() < 3) {
+			return symbol;
+		}
+		
+		/* e.g. GOOG */
+		if(!Character.isDigit(symbol.charAt(symbol.length() - 1))) {
+			return symbol;
+		}
+		
+		/* e.g. ESH2013 */
+		if(Character.isDigit(symbol.charAt(symbol.length() - 4))) {
+			return new StringBuilder(symbol).delete(
+					symbol.length() - 4, symbol.length() - 1).toString();
+		}
+		
+		return symbol;
 	}
 	
 	/* ***** ***** Agent Lifecycle Methods ***** ***** */
