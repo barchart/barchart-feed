@@ -26,9 +26,7 @@
 		<module>api</module>
 		<module>inst</module>
 		<module>base</module>
-		<module>client</module>
 		<module>archon</module>
-		<module>market</module>
 	</modules>
 
 	<url>https://github.com/barchart/barchart-feed</url>
