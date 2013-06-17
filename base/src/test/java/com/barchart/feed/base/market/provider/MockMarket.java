@@ -59,14 +59,7 @@ public class MockMarket extends VarMarket {
 
 	@Override
 	public void setInstrument(final Instrument symbol) {
-
-		final Instrument oldInst = instrument;
-
-		if (Instrument.NULL_INSTRUMENT.equals(oldInst)) {
-			instrument = symbol;
-		} else {
-			throw new IllegalStateException("symbol can be set only once");
-		}
+		instrument = symbol;
 	}
 
 	@Override
