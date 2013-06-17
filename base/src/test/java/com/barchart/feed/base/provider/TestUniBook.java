@@ -102,7 +102,7 @@ public class TestUniBook {
 		final UniBook book = new UniBook(Instrument.NULL_INSTRUMENT,
 				BookLiquidityType.COMBINED, size, step);
 		final int bookSize = JavaSize.of(book);
-		assertEquals(bookSize, 288);
+		assertEquals(bookSize, 304);
 	}
 
 	@Test()
@@ -112,7 +112,7 @@ public class TestUniBook {
 		final UniBook book = new UniBook(Instrument.NULL_INSTRUMENT,
 				BookLiquidityType.DEFAULT, size, step);
 		final int bookSize = JavaSize.of(book);
-		assertEquals(bookSize, 192);
+		assertEquals(bookSize, 208);
 	}
 
 	@Test()
@@ -122,7 +122,7 @@ public class TestUniBook {
 		final UniBook book = new UniBook(Instrument.NULL_INSTRUMENT,
 				BookLiquidityType.NONE, size, step);
 		final int bookSize = JavaSize.of(book);
-		assertEquals(bookSize, 96);
+		assertEquals(bookSize, 112);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
