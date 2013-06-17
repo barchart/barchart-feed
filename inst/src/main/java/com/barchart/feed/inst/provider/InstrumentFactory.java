@@ -32,7 +32,7 @@ public final class InstrumentFactory {
 		return InstrumentProtoBuilder.buildInstrument(instDef);
 	}
 	
-	public static InstrumentDefinition buildProtoBuff(Instrument inst) {
+	public static InstrumentDefinition buildProtoBuff(InstrumentBase inst) {
 		return InstrumentProtoBuilder.buildInstDef(inst);
 	}
 	

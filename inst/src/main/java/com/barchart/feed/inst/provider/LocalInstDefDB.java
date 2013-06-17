@@ -77,7 +77,7 @@ public class LocalInstDefDB implements MetadataContext {
 		
 	}
 	
-	public void store(final InstrumentGUID guid, final Instrument inst) {
+	public void store(final InstrumentGUID guid, final InstrumentBase inst) {
 		
 		Transaction txn = env.beginTransaction(null, null);
 		byte[] key = guid.toString().getBytes(); 

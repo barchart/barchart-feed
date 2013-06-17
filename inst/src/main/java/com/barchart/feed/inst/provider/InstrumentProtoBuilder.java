@@ -101,7 +101,7 @@ public final class InstrumentProtoBuilder {
 
 	}
 
-	public static InstrumentDefinition buildInstDef(final Instrument inst) {
+	public static InstrumentDefinition buildInstDef(final InstrumentBase inst) {
 
 		if (inst == null || inst.equals(Instrument.NULL_INSTRUMENT)) {
 			return null; // Return empty instrument def

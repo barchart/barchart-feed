@@ -6,9 +6,6 @@ import com.barchart.feed.api.enums.MarketCurrency;
 import com.barchart.feed.api.enums.SecurityType;
 import com.barchart.feed.api.inst.GuidList;
 import com.barchart.feed.api.inst.InstrumentGUID;
-import com.barchart.missive.api.Tag;
-import com.barchart.missive.api.TagMap;
-import com.barchart.missive.core.MissiveException;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Schedule;
 import com.barchart.util.value.api.Size;
@@ -19,7 +16,7 @@ import com.barchart.util.value.api.Fraction;
 import com.barchart.util.values.api.Value;
 
 public interface Instrument extends MarketData<Instrument>, 
-		Comparable<Instrument>, Value<Instrument>, TagMap {
+		Comparable<Instrument>, Value<Instrument> {
 	
 	InstrumentGUID GUID();
 	
@@ -192,26 +189,6 @@ public interface Instrument extends MarketData<Instrument>,
 		@Override
 		public boolean isFrozen() {
 			return true;
-		}
-
-		@Override
-		public <V> V get(Tag<V> tag) throws MissiveException {
-			throw new UnsupportedOperationException();
-		}
-
-		@Override
-		public boolean contains(Tag<?> tag) {
-			return false;
-		}
-
-		@Override
-		public Tag<?>[] tagsList() {
-			return new Tag<?>[0];
-		}
-
-		@Override
-		public int mapSize() {
-			return 0;
 		}
 
 		@Override
