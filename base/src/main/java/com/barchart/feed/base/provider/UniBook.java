@@ -18,6 +18,7 @@ import static com.barchart.feed.base.provider.UniBookRing.CLUE_NONE;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.barchart.feed.api.data.Instrument;
 import com.barchart.feed.api.enums.BookLiquidityType;
 import com.barchart.feed.api.enums.MarketSide;
 import com.barchart.feed.base.book.api.MarketDoBookEntry;
@@ -35,6 +36,7 @@ import com.barchart.util.values.provider.ValueFreezer;
 // javaSize = 320
 class UniBook<V extends Value<V>> extends ValueFreezer<V> {
 
+	@SuppressWarnings("unused")
 	private static Logger log = LoggerFactory.getLogger(UniBook.class);
 
 	protected final byte size;
@@ -43,11 +45,15 @@ class UniBook<V extends Value<V>> extends ValueFreezer<V> {
 
 	protected final UniBookRing bids;
 	protected final UniBookRing asks;
+	
+	protected final Instrument instrument;
 
-	public UniBook(final BookLiquidityType type, final SizeValue size,
-			final PriceValue step) throws IllegalArgumentException,
-			ArithmeticException {
+	public UniBook(final Instrument instrument, final BookLiquidityType type, 
+			final SizeValue size, final PriceValue step) 
+					throws IllegalArgumentException, ArithmeticException {
 
+		this.instrument = instrument;
+		
 		this.size = MathExtra.castLongToByte(size.asLong());
 
 		this.step = step;
@@ -303,7 +309,8 @@ class UniBook<V extends Value<V>> extends ValueFreezer<V> {
 	}
 
 	private final DefBookEntry nullEntry(final int index) {
-		return new DefBookEntry(null, GAP, BookLiquidityType.COMBINED, 0, step.mult(index), null);
+		return new DefBookEntry(instrument, null, GAP, BookLiquidityType.COMBINED, 
+				0, step.mult(index), null);
 	}
 
 	@Override

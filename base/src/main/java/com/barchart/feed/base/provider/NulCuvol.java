@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.barchart.feed.api.data.Cuvol;
+import com.barchart.feed.api.data.Instrument;
 import com.barchart.feed.base.cuvol.api.MarketCuvol;
 import com.barchart.util.anno.NotMutable;
 import com.barchart.util.value.api.Price;
@@ -90,6 +91,11 @@ public class NulCuvol extends ValueFreezer<MarketCuvol> implements MarketCuvol {
 	@Override
 	public Cuvol copy() {
 		return this.freeze();
+	}
+
+	@Override
+	public Instrument instrument() {
+		return Instrument.NULL_INSTRUMENT;
 	}
 
 }

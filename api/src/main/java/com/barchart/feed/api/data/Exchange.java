@@ -3,7 +3,7 @@ package com.barchart.feed.api.data;
 import com.barchart.util.value.api.Time;
 import com.barchart.util.value.impl.ValueConst;
 
-public interface Exchange extends MarketData<Exchange> {
+public interface Exchange extends MarketData<Exchange>, Metadata {
 	
 	String name();
 	
@@ -34,6 +34,11 @@ public interface Exchange extends MarketData<Exchange> {
 		@Override
 		public String code() {
 			return "NULL_EXCHANGE";
+		}
+
+		@Override
+		public Instrument instrument() {
+			return Instrument.NULL_INSTRUMENT;
 		}
 		
 	};

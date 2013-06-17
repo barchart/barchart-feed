@@ -11,6 +11,7 @@ import static com.barchart.feed.base.provider.MarketConst.NULL_BOOK_ENTRY;
 
 import java.util.List;
 
+import com.barchart.feed.api.data.Instrument;
 import com.barchart.feed.api.data.OrderBook;
 import com.barchart.feed.api.data.PriceLevel;
 import com.barchart.feed.api.enums.MarketSide;
@@ -29,18 +30,22 @@ import com.barchart.util.values.provider.ValueFreezer;
 @NotMutable
 public class DefBook extends ValueFreezer<MarketBook> implements MarketBook {
 
+	private final Instrument instrument;
+	
 	private final TimeValue time;
 
 	private final MarketBookEntry[] bids;
 	private final MarketBookEntry[] asks;
 
-	public DefBook(final TimeValue time, final MarketBookEntry[] bids,
-			final MarketBookEntry[] asks, final SizeValue[] bidSizes,
-			final SizeValue[] askSizes) {
+	public DefBook(final Instrument instrument, final TimeValue time, 
+			final MarketBookEntry[] bids, final MarketBookEntry[] asks, 
+			final SizeValue[] bidSizes, final SizeValue[] askSizes) {
 
 		assert time != null;
 		assert bids != null;
 		assert asks != null;
+		
+		this.instrument = instrument;
 
 		this.time = time;
 
@@ -209,37 +214,46 @@ public class DefBook extends ValueFreezer<MarketBook> implements MarketBook {
 
 	@Override
 	public Price bestPrice(MarketSide side) {
-		return null;
+		return ValueConverter.price(priceTop(side));
 	}
 
 	@Override
 	public Size bestSize(MarketSide side) {
-		return null;
+		return ValueConverter.size(sizeTop(side));
 	}
 
 	@Override
 	public List<PriceLevel> entryList(MarketSide side) {
+		// TODO
 		return null;
 	}
 
 	@Override
 	public Price lastPrice() {
+		// TODO
 		return null;
 	}
 
 	@Override
 	public Time timeUpdated() {
+		// TODO
 		return null;
 	}
 
 	@Override
 	public Time lastUpdateTime() {
+		// TODO
 		return null;
 	}
 
 	@Override
 	public OrderBook copy() {
 		return this.freeze();
+	}
+
+	@Override
+	public Instrument instrument() {
+		return instrument;
 	}
 
 }

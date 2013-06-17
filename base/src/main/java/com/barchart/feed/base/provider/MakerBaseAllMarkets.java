@@ -174,7 +174,7 @@ public abstract class MakerBaseAllMarkets<Message extends MarketMessage>
 		for (final RegTaker taker : takers) {
 
 			taker.getTaker().onMarketEvent(event,
-					market.get(MarketField.INSTRUMENT),
+					market.instrument(),
 					market.get(taker.getField()));
 
 		}

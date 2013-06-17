@@ -151,7 +151,8 @@ public class VarCuvolMap extends NulCuvolMap implements MarketDoCuvolMap {
 
 		final int index = map.getIndex(price);
 
-		final MarketCuvolEntry entry = new DefCuvolEntry(index, price, size);
+		// TODO  null should be instrument reference
+		final MarketCuvolEntry entry = new DefCuvolEntry(null, index, price, size);
 
 		return entry;
 		

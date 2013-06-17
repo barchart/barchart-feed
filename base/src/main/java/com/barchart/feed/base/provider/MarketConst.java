@@ -15,6 +15,7 @@ import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.barchart.feed.api.data.Instrument;
 import com.barchart.feed.base.bar.api.MarketBar;
 import com.barchart.feed.base.book.api.MarketBook;
 import com.barchart.feed.base.book.api.MarketBookEntry;
@@ -52,10 +53,10 @@ public final class MarketConst {
 	//
 
 	public static final MarketBookEntry NULL_BOOK_ENTRY = //
-	new DefBookEntry(null, null, null, 0, null, null).freeze();
+	new DefBookEntry(Instrument.NULL_INSTRUMENT, null, null, null, 0, null, null).freeze();
 
 	public static final MarketCuvolEntry NULL_CUVOL_ENTRY = //
-	new DefCuvolEntry(0, NULL_PRICE, NULL_SIZE).freeze();
+	new DefCuvolEntry(Instrument.NULL_INSTRUMENT, 0, NULL_PRICE, NULL_SIZE).freeze();
 
 	public static final MarketBookEntry[] NULL_ENTRIES = //
 	new MarketBookEntry[] { NULL_BOOK_ENTRY };
@@ -64,11 +65,11 @@ public final class MarketConst {
 	new SizeValue[0];
 
 	public static final MarketBook NULL_BOOK = //
-	new DefBook(NULL_TIME, NULL_ENTRIES, NULL_ENTRIES, NULL_SIZES, NULL_SIZES)
+	new DefBook(Instrument.NULL_INSTRUMENT, NULL_TIME, NULL_ENTRIES, NULL_ENTRIES, NULL_SIZES, NULL_SIZES)
 			.freeze();
 
 	public static final MarketBookTop NULL_BOOK_TOP = //
-	new DefBookTop(NULL_TIME, NULL_BOOK_ENTRY, NULL_BOOK_ENTRY).freeze();
+	new DefBookTop(Instrument.NULL_INSTRUMENT, NULL_TIME, NULL_BOOK_ENTRY, NULL_BOOK_ENTRY).freeze();
 
 	//
 

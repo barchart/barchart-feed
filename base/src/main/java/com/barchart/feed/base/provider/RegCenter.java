@@ -14,6 +14,7 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.barchart.feed.api.data.Instrument;
 import com.barchart.feed.base.market.api.Market;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.base.market.enums.MarketField;
@@ -54,6 +55,10 @@ class RegCenter {
 
 	RegCenter(final Market market) {
 		this.market = market;
+	}
+	
+	final Instrument instrument() {
+		return market.instrument();
 	}
 
 	final void eventsClear() {

@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.barchart.feed.api.data.Exchange;
+import com.barchart.feed.api.data.Instrument;
 import com.barchart.util.value.api.Time;
 import com.barchart.util.value.impl.ValueConst;
 
@@ -298,6 +299,11 @@ public final class ExchangeFactory {
 			
 			return (name.equals(that.name()) && code.equals(that.code()));
 			
+		}
+
+		@Override
+		public Instrument instrument() {
+			return null;
 		}
 		
 	}

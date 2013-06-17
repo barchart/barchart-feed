@@ -29,8 +29,12 @@ public class DefMarket extends NulMarket {
 	protected final Value<?>[] valueArray;
 	
 	protected volatile Time lastUpdateTime = ValueConst.NULL_TIME;
+	
+	protected volatile Instrument instrument;
 
-	public DefMarket() {
+	public DefMarket(final Instrument instrument) {
+		
+		this.instrument = instrument;
 		valueArray = new Value<?>[ARRAY_SIZE];
 	}
 
@@ -52,7 +56,7 @@ public class DefMarket extends NulMarket {
 	
 	@Override
 	public Instrument instrument() {
-		return get(MarketField.INSTRUMENT);
+		return instrument;
 	}
 
 	@Override
@@ -85,6 +89,7 @@ public class DefMarket extends NulMarket {
 	public Session session() {
 		
 		return new FrozenSession(
+				instrument, 
 				get(MarketField.STATE).contains(MarketStateEntry.IS_SETTLED),
 				get(MarketField.BAR_CURRENT), 
 				get(MarketField.BAR_CURRENT_EXT),

@@ -13,10 +13,9 @@ import com.barchart.util.value.api.Time;
 import com.barchart.util.value.api.TimeInterval;
 import com.barchart.util.value.impl.ValueConst;
 import com.barchart.util.value.api.Fraction;
-import com.barchart.util.values.api.Value;
 
 public interface Instrument extends MarketData<Instrument>, 
-		Comparable<Instrument>, Value<Instrument> {
+		Comparable<Instrument>, Metadata {
 	
 	InstrumentGUID GUID();
 	
@@ -182,17 +181,12 @@ public interface Instrument extends MarketData<Instrument>,
 		}
 
 		@Override
-		public Instrument freeze() {
+		public Instrument copy() {
 			return this;
 		}
 
 		@Override
-		public boolean isFrozen() {
-			return true;
-		}
-
-		@Override
-		public Instrument copy() {
+		public Instrument instrument() {
 			return this;
 		}
 		

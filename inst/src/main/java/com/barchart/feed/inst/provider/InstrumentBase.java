@@ -52,16 +52,6 @@ public abstract class InstrumentBase extends ObjectMapSafe implements Instrument
 	}
 	
 	@Override
-	public boolean isFrozen() {
-		return true;
-	}
-	
-	@Override
-	public Instrument freeze() {
-		return this;
-	}
-
-	@Override
 	public final boolean isNull() {
 		return this == Instrument.NULL_INSTRUMENT;
 	}
@@ -181,6 +171,11 @@ public abstract class InstrumentBase extends ObjectMapSafe implements Instrument
 	@Override
 	public Instrument copy() {
 		return InstrumentFactory.build(this);
+	}
+	
+	@Override 
+	public Instrument instrument() {
+		return this;
 	}
 
 }

@@ -635,7 +635,7 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 		final boolean wasAdded = (market == null);
 
 		while (market == null) {
-			market = factory.newMarket();
+			market = factory.newMarket(instrument);
 			market.setInstrument(instrument);
 			marketMap.putIfAbsent(instrument, market);
 			market = marketMap.get(instrument);

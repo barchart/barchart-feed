@@ -7,6 +7,7 @@
  */
 package com.barchart.feed.base.provider;
 
+import com.barchart.feed.api.data.Instrument;
 import com.barchart.feed.api.data.PriceLevel;
 import com.barchart.feed.api.data.TopOfBook;
 import com.barchart.feed.api.enums.MarketSide;
@@ -21,18 +22,22 @@ import com.barchart.util.values.provider.ValueFreezer;
 public class DefBookTop extends ValueFreezer<MarketBookTop> implements
 		MarketBookTop {
 
+	private final Instrument instrument;
+	
 	private final TimeValue time;
 
 	private final MarketBookEntry bid;
 	private final MarketBookEntry ask;
 
-	public DefBookTop(final TimeValue time, final MarketBookEntry bid,
-			final MarketBookEntry ask) {
+	public DefBookTop(final Instrument instrument, final TimeValue time, 
+			final MarketBookEntry bid, final MarketBookEntry ask) {
 
 		assert time != null;
 
 		assert bid != null;
 		assert ask != null;
+		
+		this.instrument = instrument;
 
 		this.time = time;
 
@@ -60,7 +65,7 @@ public class DefBookTop extends ValueFreezer<MarketBookTop> implements
 
 		final MarketBookEntry[] askEntries = new MarketBookEntry[] { ask };
 
-		final DefBook book = new DefBook(time, bidEntries, askEntries,
+		final DefBook book = new DefBook(instrument, time, bidEntries, askEntries,
 				MarketConst.NULL_SIZES, MarketConst.NULL_SIZES);
 
 		return book.toString();
@@ -95,6 +100,11 @@ public class DefBookTop extends ValueFreezer<MarketBookTop> implements
 	@Override
 	public PriceLevel ask() {
 		return ask;
+	}
+
+	@Override
+	public Instrument instrument() {
+		return instrument;
 	}
 
 }

@@ -13,6 +13,7 @@ import static com.barchart.feed.base.provider.MarketConst.NULL_BOOK_ENTRY;
 
 import java.util.List;
 
+import com.barchart.feed.api.data.Instrument;
 import com.barchart.feed.api.data.OrderBook;
 import com.barchart.feed.api.data.PriceLevel;
 import com.barchart.feed.api.enums.BookLiquidityType;
@@ -37,10 +38,10 @@ import com.barchart.util.values.provider.ValueBuilder;
 public final class VarBook extends UniBook<MarketBook> implements MarketDoBook {
 
 	private long millisUTC;
-
-	public VarBook(final BookLiquidityType type, final SizeValue size,
-			final PriceValue step) {
-		super(type, size, step);
+	
+	public VarBook(final Instrument instrument, final BookLiquidityType type, 
+			final SizeValue size, final PriceValue step) {
+		super(instrument, type, size, step);
 	}
 
 	@Override
@@ -55,7 +56,8 @@ public final class VarBook extends UniBook<MarketBook> implements MarketDoBook {
 
 	@Override
 	public final DefBook freeze() {
-		return new DefBook(time(), entries(BID), entries(ASK), null, null);
+		return new DefBook(instrument, time(), entries(BID), entries(ASK), 
+				null, null);
 	}
 
 	@Override
@@ -145,6 +147,11 @@ public final class VarBook extends UniBook<MarketBook> implements MarketDoBook {
 	@Override
 	public OrderBook copy() {
 		return this.freeze();
+	}
+
+	@Override
+	public Instrument instrument() {
+		return instrument;
 	}
 
 }

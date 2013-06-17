@@ -7,8 +7,6 @@
  */
 package com.barchart.feed.base.provider;
 
-import static com.barchart.feed.base.market.enums.MarketField.*;
-
 import java.util.Arrays;
 import java.util.List;
 
@@ -63,11 +61,9 @@ public class RegTaker<V extends Value<V>> implements RunnerLoop<MarketEvent> {
 
 	final void fire(final RegCenter regCenter, final MarketEvent event) {
 
-		final Instrument inst = regCenter.cache(INSTRUMENT);
-
 		final V value = regCenter.cache(field);
 
-		taker.onMarketEvent(event, inst, value);
+		taker.onMarketEvent(event, regCenter.instrument(), value);
 
 	}
 

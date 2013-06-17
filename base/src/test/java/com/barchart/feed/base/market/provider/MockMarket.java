@@ -25,7 +25,6 @@ import static com.barchart.feed.base.market.enums.MarketEvent.NEW_CUVOL_SNAPSHOT
 import static com.barchart.feed.base.market.enums.MarketEvent.NEW_CUVOL_UPDATE;
 import static com.barchart.feed.base.market.enums.MarketEvent.NEW_VOLUME;
 import static com.barchart.feed.base.market.enums.MarketField.BOOK;
-import static com.barchart.feed.base.market.enums.MarketField.INSTRUMENT;
 import static com.barchart.feed.base.market.enums.MarketField.MARKET_TIME;
 import static com.barchart.feed.base.trade.enums.MarketTradeField.PRICE;
 import static com.barchart.feed.base.trade.enums.MarketTradeField.SIZE;
@@ -54,13 +53,17 @@ import com.barchart.util.values.api.TimeValue;
 
 public class MockMarket extends VarMarket {
 
+	public MockMarket(Instrument instrument) {
+		super(instrument);
+	}
+
 	@Override
 	public void setInstrument(final Instrument symbol) {
 
-		final Instrument oldInst = get(INSTRUMENT);
+		final Instrument oldInst = instrument;
 
 		if (Instrument.NULL_INSTRUMENT.equals(oldInst)) {
-			set(INSTRUMENT, symbol);
+			instrument = symbol;
 		} else {
 			throw new IllegalStateException("symbol can be set only once");
 		}

@@ -8,6 +8,7 @@
 package com.barchart.feed.base.provider;
 
 import com.barchart.feed.api.data.CuvolEntry;
+import com.barchart.feed.api.data.Instrument;
 import com.barchart.feed.base.book.api.MarketBookEntry;
 import com.barchart.feed.base.cuvol.api.MarketCuvolEntry;
 import com.barchart.feed.base.cuvol.api.MarketDoCuvolEntry;
@@ -23,16 +24,20 @@ import com.barchart.util.values.provider.ValueFreezer;
 public class DefCuvolEntry extends ValueFreezer<MarketCuvolEntry> implements
 		MarketDoCuvolEntry {
 
+	private final Instrument instrument;
+	
 	private final int place;
 	private final PriceValue price;
 	private final SizeValue size;
 
-	public DefCuvolEntry(final int place, final PriceValue price,
-			final SizeValue size) {
+	public DefCuvolEntry(final Instrument instrument, final int place, 
+			final PriceValue price, final SizeValue size) {
 
 		assert price != null;
 		assert size != null;
 
+		this.instrument = instrument;
+		
 		this.place = place;
 		this.price = price;
 		this.size = size;
@@ -40,7 +45,8 @@ public class DefCuvolEntry extends ValueFreezer<MarketCuvolEntry> implements
 	}
 
 	DefCuvolEntry(final MarketBookEntry entry) {
-		this(entry.place(), entry.priceValue(), entry.sizeValue());
+		this(entry.instrument(), entry.place(), entry.priceValue(), 
+				entry.sizeValue());
 	}
 
 	@Override
@@ -98,6 +104,11 @@ public class DefCuvolEntry extends ValueFreezer<MarketCuvolEntry> implements
 	@Override
 	public CuvolEntry copy() {
 		return this.freeze();
+	}
+
+	@Override
+	public Instrument instrument() {
+		return instrument;
 	}
 
 }

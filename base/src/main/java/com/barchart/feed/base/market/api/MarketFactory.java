@@ -7,8 +7,10 @@
  */
 package com.barchart.feed.base.market.api;
 
+import com.barchart.feed.api.data.Instrument;
+
 public interface MarketFactory {
 
-	MarketDo newMarket();
+	MarketDo newMarket(final Instrument instrument);
 
 }

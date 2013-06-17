@@ -8,6 +8,7 @@
 package com.barchart.feed.base.provider;
 
 import com.barchart.feed.api.data.CuvolEntry;
+import com.barchart.feed.api.data.Instrument;
 import com.barchart.feed.base.cuvol.api.MarketCuvolEntry;
 import com.barchart.util.anno.ProxyTo;
 import com.barchart.util.value.api.Price;
@@ -72,6 +73,11 @@ public final class VarCuvolLast extends ValueFreezer<MarketCuvolEntry>
 	@Override
 	public CuvolEntry copy() {
 		return this.freeze();
+	}
+
+	@Override
+	public Instrument instrument() {
+		return cuvol.instrument();
 	}
 
 }

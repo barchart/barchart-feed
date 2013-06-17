@@ -71,7 +71,7 @@ class NulMarket extends ValueFreezer<Market> implements Market {
 	
 	@Override
 	public Instrument instrument() {
-		return null;
+		return Instrument.NULL_INSTRUMENT;
 	}
 
 	@Override

@@ -17,5 +17,5 @@ public interface Market extends Value<Market>,
 		com.barchart.feed.api.data.Market {
 
 	<V extends Value<V>> V get(MarketField<V> field);
-	
+
 }

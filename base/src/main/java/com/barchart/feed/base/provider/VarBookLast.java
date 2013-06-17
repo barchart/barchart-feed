@@ -7,6 +7,7 @@
  */
 package com.barchart.feed.base.provider;
 
+import com.barchart.feed.api.data.Instrument;
 import com.barchart.feed.api.data.PriceLevel;
 import com.barchart.feed.api.enums.MarketSide;
 import com.barchart.feed.base.book.api.MarketBookEntry;
@@ -83,6 +84,11 @@ final class VarBookLast extends ValueFreezer<MarketBookEntry> implements
 	@Override
 	public PriceLevel copy() {
 		return this.freeze();
+	}
+
+	@Override
+	public Instrument instrument() {
+		return book.instrument;
 	}
 
 }

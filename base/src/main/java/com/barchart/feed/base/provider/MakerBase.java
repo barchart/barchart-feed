@@ -438,7 +438,7 @@ public abstract class MakerBase<Message extends MarketMessage> implements
 		final boolean wasAdded = (market == null);
 
 		while (market == null) {
-			market = factory.newMarket();
+			market = factory.newMarket(instrument);
 			market.setInstrument(instrument);
 			marketMap.putIfAbsent(instrument, market);
 			market = marketMap.get(instrument);
@@ -489,7 +489,7 @@ public abstract class MakerBase<Message extends MarketMessage> implements
 
 	protected final void notifyRegListeners(final MarketDo market) {
 
-		final Instrument inst = market.get(MarketField.INSTRUMENT);
+		final Instrument inst = market.instrument();
 
 		final Set<MarketEvent> events = market.regEvents();
 

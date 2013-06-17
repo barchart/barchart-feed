@@ -9,6 +9,7 @@ package com.barchart.feed.base.provider;
 
 import static com.barchart.feed.api.enums.MarketSide.*;
 
+import com.barchart.feed.api.data.Instrument;
 import com.barchart.feed.api.data.PriceLevel;
 import com.barchart.feed.api.data.TopOfBook;
 import com.barchart.feed.api.enums.MarketSide;
@@ -31,7 +32,7 @@ final class VarBookTop extends ValueFreezer<MarketBookTop> implements
 
 	@Override
 	public final DefBookTop freeze() {
-		return new DefBookTop(time(), side(BID), side(ASK));
+		return new DefBookTop(book.instrument, time(), side(BID), side(ASK));
 	}
 
 	@Override
@@ -67,6 +68,11 @@ final class VarBookTop extends ValueFreezer<MarketBookTop> implements
 	@Override
 	public PriceLevel ask() {
 		return book.top(ASK);
+	}
+
+	@Override
+	public Instrument instrument() {
+		return book.instrument;
 	}
 
 }

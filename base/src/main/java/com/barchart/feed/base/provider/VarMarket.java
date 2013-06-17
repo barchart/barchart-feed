@@ -12,7 +12,6 @@ import static com.barchart.feed.base.market.enums.MarketField.BOOK_LAST;
 import static com.barchart.feed.base.market.enums.MarketField.BOOK_TOP;
 import static com.barchart.feed.base.market.enums.MarketField.CUVOL;
 import static com.barchart.feed.base.market.enums.MarketField.CUVOL_LAST;
-import static com.barchart.feed.base.market.enums.MarketField.INSTRUMENT;
 import static com.barchart.feed.base.market.enums.MarketField.MARKET;
 import static com.barchart.feed.base.market.enums.MarketField.STATE;
 import static com.barchart.feed.base.market.enums.MarketField.TRADE;
@@ -77,7 +76,9 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 
 	RegCenter reg = new RegCenter(this);
 
-	public VarMarket() {
+	public VarMarket(final Instrument instrument) {
+		
+		super(instrument);
 
 		/** set self reference */
 		set(MARKET, this);
@@ -238,7 +239,7 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 
 		// log.info("### freeze!");
 
-		final DefMarket that = new DefMarket();
+		final DefMarket that = new DefMarket(instrument);
 
 		final Value<?>[] source = this.valueArray;
 		final Value<?>[] target = that.valueArray;
@@ -315,11 +316,12 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 
 		if (cuvol.isFrozen()) {
 
-			final Instrument inst = get(INSTRUMENT);
-			final PriceValue priceStep = ValueBuilder.newPrice(inst.tickSize().mantissa(), 
-					inst.tickSize().exponent());
+			// TODO Value Converter
+			final PriceValue priceStep = ValueBuilder.newPrice(
+					instrument.tickSize().mantissa(), 
+					instrument.tickSize().exponent());
 
-			final VarCuvol varCuvol = new VarCuvol(priceStep);
+			final VarCuvol varCuvol = new VarCuvol(instrument, priceStep);
 			final VarCuvolLast varCuvolLast = new VarCuvolLast(varCuvol);
 
 			set(CUVOL, varCuvol);
@@ -360,15 +362,16 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 
 		if (book.isFrozen()) {
 
-			final Instrument inst = get(INSTRUMENT);
-
-			final BookLiquidityType type = inst.liquidityType();
+			final BookLiquidityType type = instrument.liquidityType();
 
 			final SizeValue size = LIMIT; // inst.get(BOOK_SIZE);
-			final PriceValue step = ValueBuilder.newPrice(inst.tickSize().mantissa(), 
-					inst.tickSize().exponent());
+			
+			// ValueConverter
+			final PriceValue step = ValueBuilder.newPrice(
+					instrument.tickSize().mantissa(), 
+					instrument.tickSize().exponent());
 
-			final VarBook varBook = new VarBook(type, size, step);
+			final VarBook varBook = new VarBook(instrument, type, size, step);
 			final VarBookLast varBookLast = new VarBookLast(varBook);
 			final VarBookTop varBookTop = new VarBookTop(varBook);
 
@@ -386,10 +389,10 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 
 	protected final boolean isValidPrice(final PriceValue price) {
 
-		final Instrument inst = get(INSTRUMENT);
-
-		final PriceValue priceStep = ValueBuilder.newPrice(inst.tickSize().mantissa(), 
-				inst.tickSize().exponent());
+		//TODO Value Converter
+		final PriceValue priceStep = ValueBuilder.newPrice(
+				instrument.tickSize().mantissa(), 
+				instrument.tickSize().exponent());
 
 		if (!price.equalsScale(priceStep)) {
 			log.error("not normalized");
