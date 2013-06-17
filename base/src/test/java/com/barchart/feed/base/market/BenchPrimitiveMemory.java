@@ -13,7 +13,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.feed.api.data.Instrument;
+import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.provider.DefBookEntry;
 import com.barchart.feed.base.provider.DefMarket;
 import com.barchart.feed.base.provider.VarMarket;

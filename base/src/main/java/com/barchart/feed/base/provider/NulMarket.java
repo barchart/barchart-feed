@@ -7,13 +7,11 @@
  */
 package com.barchart.feed.base.provider;
 
-import com.barchart.feed.api.data.Cuvol;
-import com.barchart.feed.api.data.Instrument;
-import com.barchart.feed.api.data.OrderBook;
-import com.barchart.feed.api.data.PriceLevel;
-import com.barchart.feed.api.data.Session;
-import com.barchart.feed.api.data.TopOfBook;
-import com.barchart.feed.api.data.Trade;
+import com.barchart.feed.api.model.data.Cuvol;
+import com.barchart.feed.api.model.data.OrderBook;
+import com.barchart.feed.api.model.data.Session;
+import com.barchart.feed.api.model.data.Trade;
+import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.market.api.Market;
 import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.util.anno.NotMutable;
@@ -65,11 +63,6 @@ class NulMarket extends ValueFreezer<Market> implements Market {
 	}
 
 	@Override
-	public Market market() {
-		return this;
-	}
-	
-	@Override
 	public Instrument instrument() {
 		return Instrument.NULL_INSTRUMENT;
 	}
@@ -85,16 +78,6 @@ class NulMarket extends ValueFreezer<Market> implements Market {
 	}
 
 	@Override
-	public PriceLevel lastBookUpdate() {
-		return null;
-	}
-
-	@Override
-	public TopOfBook topOfBook() {
-		return null;
-	}
-
-	@Override
 	public Cuvol cuvol() {
 		return null;
 	}
@@ -105,7 +88,7 @@ class NulMarket extends ValueFreezer<Market> implements Market {
 	}
 
 	@Override
-	public Time lastUpdateTime() {
+	public Time updated() {
 		return null;
 	}
 	

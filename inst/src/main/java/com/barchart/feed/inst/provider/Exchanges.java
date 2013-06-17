@@ -3,12 +3,12 @@ package com.barchart.feed.inst.provider;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.barchart.feed.api.data.Exchange;
-import com.barchart.feed.api.data.Instrument;
+import com.barchart.feed.api.model.meta.Exchange;
+import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.util.value.api.Time;
 import com.barchart.util.value.impl.ValueConst;
 
-public final class ExchangeFactory {
+public final class Exchanges {
 
 	private static final Map<String, Exchange> names =
 			new HashMap<String, Exchange>();
@@ -229,7 +229,7 @@ public final class ExchangeFactory {
 		
 	}
 	
-	private ExchangeFactory() {
+	private Exchanges() {
 		
 	}
 	
@@ -264,7 +264,7 @@ public final class ExchangeFactory {
 		}
 
 		@Override
-		public Time lastUpdateTime() {
+		public Time updated() {
 			return ValueConst.NULL_TIME;
 		}
 

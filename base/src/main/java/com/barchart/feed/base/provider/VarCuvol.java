@@ -7,7 +7,7 @@
  */
 package com.barchart.feed.base.provider;
 
-import com.barchart.feed.api.data.Instrument;
+import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.cuvol.api.MarketCuvolEntry;
 import com.barchart.feed.base.cuvol.api.MarketDoCuvol;
 import com.barchart.util.anno.Mutable;
@@ -26,7 +26,7 @@ public final class VarCuvol extends NulCuvol implements MarketDoCuvol {
 	private PriceValue priceLast;
 	
 	private final Instrument instrument;
-
+	
 	public VarCuvol(final Instrument instrument, final PriceValue priceStep) {
 		this.instrument = instrument;
 		this.map = new PriceArrayMap<SizeValue>(priceStep);
@@ -65,7 +65,8 @@ public final class VarCuvol extends NulCuvol implements MarketDoCuvol {
 			entries[k] = volume.freeze();
 		}
 
-		final DefCuvol that = new DefCuvol(entries, priceFirst(), priceStep());
+		final DefCuvol that = new DefCuvol(instrument, entries, 
+				priceFirst(), priceStep());
 
 		return that;
 
@@ -124,7 +125,7 @@ public final class VarCuvol extends NulCuvol implements MarketDoCuvol {
 
 		final int index = map.getIndex(price);
 
-		final MarketCuvolEntry entry = new DefCuvolEntry(instrument, index, 
+		final MarketCuvolEntry entry = new DefCuvolEntry(index, 
 				price, size);
 
 		return entry;

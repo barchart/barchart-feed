@@ -1,7 +1,7 @@
 package com.barchart.feed.api;
 
-import com.barchart.feed.api.data.Exchange;
-import com.barchart.feed.api.data.Instrument;
+import com.barchart.feed.api.model.meta.Exchange;
+import com.barchart.feed.api.model.meta.Instrument;
 
 /**
  * Filter hierarchy:

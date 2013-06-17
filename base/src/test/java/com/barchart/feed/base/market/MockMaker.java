@@ -7,7 +7,6 @@
  */
 package com.barchart.feed.base.market;
 
-import com.barchart.feed.api.data.Instrument;
 import com.barchart.feed.api.enums.BookLiquidityType;
 import com.barchart.feed.api.enums.MarketSide;
 import com.barchart.feed.base.book.enums.MarketBookAction;
@@ -66,7 +65,7 @@ public class MockMaker extends MakerBase<MockMessage> implements
 		final SizeValue size = message.size;
 		final TimeValue time = message.time;
 
-		final DefBookEntry entry = new DefBookEntry(Instrument.NULL_INSTRUMENT, 
+		final DefBookEntry entry = new DefBookEntry( 
 				act, side, type, place, price, size);
 
 		market.setBookUpdate(entry, time);

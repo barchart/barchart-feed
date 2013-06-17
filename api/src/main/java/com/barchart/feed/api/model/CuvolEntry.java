@@ -1,9 +1,9 @@
-package com.barchart.feed.api.data;
+package com.barchart.feed.api.model;
 
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Size;
 
-public interface CuvolEntry extends MarketData<CuvolEntry> {
+public interface CuvolEntry {
 	
 	Price price();
 	

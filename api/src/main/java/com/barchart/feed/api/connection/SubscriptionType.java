@@ -6,15 +6,15 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.feed.api.data.Cuvol;
-import com.barchart.feed.api.data.Instrument;
-import com.barchart.feed.api.data.Market;
-import com.barchart.feed.api.data.MarketData;
-import com.barchart.feed.api.data.OrderBook;
-import com.barchart.feed.api.data.PriceLevel;
-import com.barchart.feed.api.data.Session;
-import com.barchart.feed.api.data.TopOfBook;
-import com.barchart.feed.api.data.Trade;
+import com.barchart.feed.api.model.MarketData;
+import com.barchart.feed.api.model.PriceLevel;
+import com.barchart.feed.api.model.data.Cuvol;
+import com.barchart.feed.api.model.data.Market;
+import com.barchart.feed.api.model.data.OrderBook;
+import com.barchart.feed.api.model.data.Session;
+import com.barchart.feed.api.model.data.TopOfBook;
+import com.barchart.feed.api.model.data.Trade;
+import com.barchart.feed.api.model.meta.Instrument;
 
 public enum SubscriptionType {
 	

@@ -2,9 +2,9 @@ package com.barchart.feed.api;
 
 import java.util.Set;
 
-import com.barchart.feed.api.data.Instrument;
-import com.barchart.feed.api.data.Market;
-import com.barchart.feed.api.data.MarketData;
+import com.barchart.feed.api.model.MarketData;
+import com.barchart.feed.api.model.data.Market;
+import com.barchart.feed.api.model.meta.Instrument;
 
 public interface FrameworkAgent<V extends MarketData<V>> extends Agent {
 	

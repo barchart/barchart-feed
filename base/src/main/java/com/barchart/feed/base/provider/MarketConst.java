@@ -15,15 +15,13 @@ import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.feed.api.data.Instrument;
+import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.bar.api.MarketBar;
 import com.barchart.feed.base.book.api.MarketBook;
 import com.barchart.feed.base.book.api.MarketBookEntry;
 import com.barchart.feed.base.book.api.MarketBookTop;
 import com.barchart.feed.base.cuvol.api.MarketCuvol;
 import com.barchart.feed.base.cuvol.api.MarketCuvolEntry;
-import com.barchart.feed.base.cuvol.map.api.MarketCuvolMap;
-import com.barchart.feed.base.cuvol.map.provider.NulCuvolMap;
 import com.barchart.feed.base.market.api.Market;
 import com.barchart.feed.base.state.api.MarketState;
 import com.barchart.feed.base.trade.api.MarketTrade;
@@ -43,8 +41,6 @@ public final class MarketConst {
 	public static final MarketCuvol NULL_CUVOL = //
 	new NulCuvol().freeze();
 
-	public static final MarketCuvolMap NULL_CUVOL_MAP = //
-	new NulCuvolMap().freeze();
 	//
 
 	public static final MarketTrade NULL_TRADE = //
@@ -53,10 +49,10 @@ public final class MarketConst {
 	//
 
 	public static final MarketBookEntry NULL_BOOK_ENTRY = //
-	new DefBookEntry(Instrument.NULL_INSTRUMENT, null, null, null, 0, null, null).freeze();
+	new DefBookEntry(null, null, null, 0, null, null).freeze();
 
 	public static final MarketCuvolEntry NULL_CUVOL_ENTRY = //
-	new DefCuvolEntry(Instrument.NULL_INSTRUMENT, 0, NULL_PRICE, NULL_SIZE).freeze();
+	new DefCuvolEntry(0, NULL_PRICE, NULL_SIZE).freeze();
 
 	public static final MarketBookEntry[] NULL_ENTRIES = //
 	new MarketBookEntry[] { NULL_BOOK_ENTRY };

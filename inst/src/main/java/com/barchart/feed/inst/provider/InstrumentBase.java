@@ -7,14 +7,14 @@
  */
 package com.barchart.feed.inst.provider;
 
-import com.barchart.feed.api.data.Exchange;
-import com.barchart.feed.api.data.Instrument;
 import com.barchart.feed.api.enums.BookLiquidityType;
 import com.barchart.feed.api.enums.BookStructureType;
 import com.barchart.feed.api.enums.MarketCurrency;
 import com.barchart.feed.api.enums.SecurityType;
 import com.barchart.feed.api.inst.GuidList;
 import com.barchart.feed.api.inst.InstrumentGUID;
+import com.barchart.feed.api.model.meta.Exchange;
+import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.inst.InstrumentField;
 import com.barchart.missive.core.ObjectMapSafe;
 import com.barchart.util.value.api.Factory;
@@ -108,7 +108,7 @@ public abstract class InstrumentBase extends ObjectMapSafe implements Instrument
 	
 	@Override
 	public Exchange exchange() {
-		return ExchangeFactory.fromName(exchangeCode());
+		return Exchanges.fromName(exchangeCode());
 	}
 
 	@Override
@@ -164,7 +164,7 @@ public abstract class InstrumentBase extends ObjectMapSafe implements Instrument
 	}
 
 	@Override
-	public Time lastUpdateTime() {
+	public Time updated() {
 		return ValueConst.NULL_TIME;
 	}
 	

@@ -7,13 +7,10 @@
  */
 package com.barchart.feed.base.provider;
 
-import com.barchart.feed.api.data.CuvolEntry;
-import com.barchart.feed.api.data.Instrument;
 import com.barchart.feed.base.cuvol.api.MarketCuvolEntry;
 import com.barchart.util.anno.ProxyTo;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Size;
-import com.barchart.util.value.api.Time;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
 import com.barchart.util.values.provider.ValueFreezer;
@@ -63,21 +60,6 @@ public final class VarCuvolLast extends ValueFreezer<MarketCuvolEntry>
 	@Override
 	public Size volume() {
 		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public Time lastUpdateTime() {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public CuvolEntry copy() {
-		return this.freeze();
-	}
-
-	@Override
-	public Instrument instrument() {
-		return cuvol.instrument();
 	}
 
 }

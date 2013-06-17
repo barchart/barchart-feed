@@ -7,13 +7,13 @@
  */
 package com.barchart.feed.inst;
 
-import com.barchart.feed.api.data.Exchange;
 import com.barchart.feed.api.enums.BookLiquidityType;
 import com.barchart.feed.api.enums.BookStructureType;
 import com.barchart.feed.api.enums.MarketCurrency;
 import com.barchart.feed.api.enums.SecurityType;
 import com.barchart.feed.api.inst.GuidList;
 import com.barchart.feed.api.inst.InstrumentGUID;
+import com.barchart.feed.api.model.meta.Exchange;
 import com.barchart.missive.api.Tag;
 import com.barchart.missive.core.TagFactory;
 import com.barchart.util.value.api.Fraction;

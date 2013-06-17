@@ -165,7 +165,7 @@ abstract class UniBookRing extends
 			final int place = placeFromClue(clue);
 			final PriceValue price = keyStep().mult(indexFromClue(clue));
 			final SizeValue size = newSize(sizeCombo);
-			entry = new DefBookEntry(book.instrument, RET_ACT, side(), RET_TYPE, place, price,
+			entry = new DefBookEntry(RET_ACT, side(), RET_TYPE, place, price,
 					size);
 		}
 		return entry;
@@ -266,7 +266,7 @@ abstract class UniBookRing extends
 		if (entry == null) {
 			final int index = indexFromClue(clue);
 			final PriceValue price = keyStep().mult(index);
-			return new DefBookEntry(book.instrument, RET_ACT, side(), RET_TYPE, 0, price, null);
+			return new DefBookEntry(RET_ACT, side(), RET_TYPE, 0, price, null);
 		} else {
 			return entry;
 		}

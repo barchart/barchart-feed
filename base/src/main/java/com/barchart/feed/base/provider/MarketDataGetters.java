@@ -3,15 +3,13 @@ package com.barchart.feed.base.provider;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.barchart.feed.api.data.Cuvol;
-import com.barchart.feed.api.data.Instrument;
-import com.barchart.feed.api.data.Market;
-import com.barchart.feed.api.data.MarketData;
-import com.barchart.feed.api.data.OrderBook;
-import com.barchart.feed.api.data.PriceLevel;
-import com.barchart.feed.api.data.Session;
-import com.barchart.feed.api.data.TopOfBook;
-import com.barchart.feed.api.data.Trade;
+import com.barchart.feed.api.model.MarketData;
+import com.barchart.feed.api.model.data.Cuvol;
+import com.barchart.feed.api.model.data.Market;
+import com.barchart.feed.api.model.data.OrderBook;
+import com.barchart.feed.api.model.data.Session;
+import com.barchart.feed.api.model.data.Trade;
+import com.barchart.feed.api.model.meta.Instrument;
 
 public final class MarketDataGetters {
 
@@ -57,24 +55,6 @@ public final class MarketDataGetters {
 					@Override
 					public OrderBook get(final Market market) {
 						return market.orderBook();
-					}
-					
-				});
-				
-				put(PriceLevel.class, new MDGetter<PriceLevel>(){
-
-					@Override
-					public PriceLevel get(final Market market) {
-						return market.lastBookUpdate();
-					}
-					
-				});
-				
-				put(TopOfBook.class, new MDGetter<TopOfBook>(){
-
-					@Override
-					public TopOfBook get(final Market market) {
-						return market.topOfBook();
 					}
 					
 				});

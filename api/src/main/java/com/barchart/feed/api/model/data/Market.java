@@ -1,16 +1,12 @@
-package com.barchart.feed.api.data;
+package com.barchart.feed.api.model.data;
+
+import com.barchart.feed.api.model.MarketData;
 
 public interface Market extends MarketData<Market> {
 
-	Market market();
-	
 	Trade lastTrade();
 
 	OrderBook orderBook();
-
-	PriceLevel lastBookUpdate();
-
-	TopOfBook topOfBook();
 
 	Cuvol cuvol();
 	

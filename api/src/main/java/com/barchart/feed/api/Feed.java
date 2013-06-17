@@ -7,17 +7,16 @@ import com.barchart.feed.api.connection.ConnectionFuture;
 import com.barchart.feed.api.connection.ConnectionLifecycle;
 import com.barchart.feed.api.connection.ConnectionStateListener;
 import com.barchart.feed.api.connection.TimestampListener;
-import com.barchart.feed.api.data.Cuvol;
-import com.barchart.feed.api.data.Exchange;
-import com.barchart.feed.api.data.Instrument;
-import com.barchart.feed.api.data.Market;
-import com.barchart.feed.api.data.MarketData;
-import com.barchart.feed.api.data.OrderBook;
-import com.barchart.feed.api.data.TopOfBook;
-import com.barchart.feed.api.data.Trade;
 import com.barchart.feed.api.inst.InstrumentFuture;
 import com.barchart.feed.api.inst.InstrumentFutureMap;
 import com.barchart.feed.api.inst.InstrumentService;
+import com.barchart.feed.api.model.MarketData;
+import com.barchart.feed.api.model.data.Cuvol;
+import com.barchart.feed.api.model.data.Market;
+import com.barchart.feed.api.model.data.OrderBook;
+import com.barchart.feed.api.model.data.Trade;
+import com.barchart.feed.api.model.meta.Exchange;
+import com.barchart.feed.api.model.meta.Instrument;
 
 public interface Feed extends ConnectionLifecycle<Feed>, InstrumentService<CharSequence>,
 		AgentBuilder {
@@ -126,15 +125,6 @@ public interface Feed extends ConnectionLifecycle<Feed>, InstrumentService<CharS
 	 * @return
 	 */
 	Agent subscribeBook(MarketCallback<OrderBook> book, String... symbols);
-	
-	/**
-	 * Fires on BOOK_UPDATE and BOOK_SNAPSHOT
-	 * 
-	 * @param book
-	 * @param instruments
-	 * @return
-	 */
-	Agent subscribeTopOfBook(MarketCallback<TopOfBook> top, String... symbols);
 	
 	/**
 	 * Fires on CUVOL_UPDATE and CUVOL_SNAPSHOT

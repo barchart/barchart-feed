@@ -33,7 +33,7 @@ public class TestDefBookEntry {
 	@Test
 	public void testJavaSize1() {
 
-		final DefBookEntry entry = new DefBookEntry(null, null, null, null, 
+		final DefBookEntry entry = new DefBookEntry(null, null, null, 
 				0, null, null);
 
 		final int entrySize = JavaSize.of(entry);
@@ -47,7 +47,7 @@ public class TestDefBookEntry {
 	@Test
 	public void testNullDefaults() {
 
-		final DefBookEntry entry = new DefBookEntry(null, null, null, null, 
+		final DefBookEntry entry = new DefBookEntry(null, null, null, 
 				0, null, null);
 
 		assertEquals(entry.act(), MarketBookAction.NOOP);
@@ -62,12 +62,12 @@ public class TestDefBookEntry {
 
 	@Test(expected = ArithmeticException.class)
 	public void testPlaceRange1() {
-		new DefBookEntry(null, null, null, null, +200, null, null);
+		new DefBookEntry(null, null, null, +200, null, null);
 	}
 
 	@Test(expected = ArithmeticException.class)
 	public void testPlaceRange2() {
-		new DefBookEntry(null, null, null, null, -200, null, null);
+		new DefBookEntry(null, null, null, -200, null, null);
 	}
 
 }

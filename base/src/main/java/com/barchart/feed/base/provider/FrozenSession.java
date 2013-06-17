@@ -1,8 +1,8 @@
 package com.barchart.feed.base.provider;
 
-import com.barchart.feed.api.data.Instrument;
-import com.barchart.feed.api.data.Session;
-import com.barchart.feed.api.data.SessionData;
+import com.barchart.feed.api.model.data.Session;
+import com.barchart.feed.api.model.data.SessionData;
+import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Size;
 import com.barchart.util.value.api.Time;
@@ -50,7 +50,7 @@ class FrozenSession implements Session {
 	}
 
 	@Override
-	public Time lastUpdateTime() {
+	public Time updated() {
 		return null;
 	}
 

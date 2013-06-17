@@ -10,7 +10,7 @@ package com.barchart.feed.api.inst;
 import java.util.Collection;
 import java.util.Map;
 
-import com.barchart.feed.api.data.Instrument;
+import com.barchart.feed.api.model.meta.Instrument;
 
 public interface InstrumentService<V> {
 	

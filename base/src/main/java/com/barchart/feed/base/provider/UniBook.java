@@ -18,9 +18,9 @@ import static com.barchart.feed.base.provider.UniBookRing.CLUE_NONE;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.feed.api.data.Instrument;
 import com.barchart.feed.api.enums.BookLiquidityType;
 import com.barchart.feed.api.enums.MarketSide;
+import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.book.api.MarketDoBookEntry;
 import com.barchart.feed.base.book.enums.UniBookResult;
 import com.barchart.util.anno.NotThreadSafe;
@@ -309,7 +309,7 @@ class UniBook<V extends Value<V>> extends ValueFreezer<V> {
 	}
 
 	private final DefBookEntry nullEntry(final int index) {
-		return new DefBookEntry(instrument, null, GAP, BookLiquidityType.COMBINED, 
+		return new DefBookEntry(null, GAP, BookLiquidityType.COMBINED, 
 				0, step.mult(index), null);
 	}
 

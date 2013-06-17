@@ -9,14 +9,11 @@ package com.barchart.feed.base.provider;
 
 import static com.barchart.feed.api.enums.MarketSide.*;
 
-import com.barchart.feed.api.data.Instrument;
-import com.barchart.feed.api.data.PriceLevel;
-import com.barchart.feed.api.data.TopOfBook;
 import com.barchart.feed.api.enums.MarketSide;
+import com.barchart.feed.api.model.PriceLevel;
 import com.barchart.feed.base.book.api.MarketBookEntry;
 import com.barchart.feed.base.book.api.MarketBookTop;
 import com.barchart.util.anno.ProxyTo;
-import com.barchart.util.value.api.Time;
 import com.barchart.util.values.api.TimeValue;
 import com.barchart.util.values.provider.ValueFreezer;
 
@@ -51,16 +48,6 @@ final class VarBookTop extends ValueFreezer<MarketBookTop> implements
 	}
 
 	@Override
-	public Time lastUpdateTime() {
-		return null; //TODO
-	}
-
-	@Override
-	public TopOfBook copy() {
-		return this.freeze();
-	}
-
-	@Override
 	public PriceLevel bid() {
 		return book.top(BID);
 	}
@@ -68,11 +55,6 @@ final class VarBookTop extends ValueFreezer<MarketBookTop> implements
 	@Override
 	public PriceLevel ask() {
 		return book.top(ASK);
-	}
-
-	@Override
-	public Instrument instrument() {
-		return book.instrument;
 	}
 
 }

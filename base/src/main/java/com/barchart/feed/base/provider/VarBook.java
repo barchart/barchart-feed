@@ -13,11 +13,12 @@ import static com.barchart.feed.base.provider.MarketConst.NULL_BOOK_ENTRY;
 
 import java.util.List;
 
-import com.barchart.feed.api.data.Instrument;
-import com.barchart.feed.api.data.OrderBook;
-import com.barchart.feed.api.data.PriceLevel;
 import com.barchart.feed.api.enums.BookLiquidityType;
 import com.barchart.feed.api.enums.MarketSide;
+import com.barchart.feed.api.model.PriceLevel;
+import com.barchart.feed.api.model.data.OrderBook;
+import com.barchart.feed.api.model.data.TopOfBook;
+import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.book.api.MarketBook;
 import com.barchart.feed.base.book.api.MarketBookEntry;
 import com.barchart.feed.base.book.api.MarketDoBook;
@@ -25,8 +26,6 @@ import com.barchart.feed.base.book.api.MarketDoBookEntry;
 import com.barchart.feed.base.book.enums.UniBookResult;
 import com.barchart.util.anno.Mutable;
 import com.barchart.util.anno.ThreadSafe;
-import com.barchart.util.value.api.Price;
-import com.barchart.util.value.api.Size;
 import com.barchart.util.value.api.Time;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
@@ -115,32 +114,7 @@ public final class VarBook extends UniBook<MarketBook> implements MarketDoBook {
 	}
 
 	@Override
-	public Price bestPrice(MarketSide side) {
-		throw new UnsupportedOperationException("UNUSED");
-	}
-
-	@Override
-	public Size bestSize(MarketSide side) {
-		throw new UnsupportedOperationException("UNUSED");
-	}
-
-	@Override
 	public List<PriceLevel> entryList(MarketSide side) {
-		throw new UnsupportedOperationException("UNUSED");
-	}
-
-	@Override
-	public Price lastPrice() {
-		throw new UnsupportedOperationException("UNUSED");
-	}
-
-	@Override
-	public Time timeUpdated() {
-		throw new UnsupportedOperationException("UNUSED");
-	}
-
-	@Override
-	public Time lastUpdateTime() {
 		throw new UnsupportedOperationException("UNUSED");
 	}
 
@@ -152,6 +126,21 @@ public final class VarBook extends UniBook<MarketBook> implements MarketDoBook {
 	@Override
 	public Instrument instrument() {
 		return instrument;
+	}
+
+	@Override
+	public TopOfBook topOfBook() {
+		throw new UnsupportedOperationException("UNUSED");
+	}
+
+	@Override
+	public PriceLevel lastBookUpdate() {
+		throw new UnsupportedOperationException("UNUSED");
+	}
+
+	@Override
+	public Time updated() {
+		throw new UnsupportedOperationException("UNUSED");
 	}
 
 }

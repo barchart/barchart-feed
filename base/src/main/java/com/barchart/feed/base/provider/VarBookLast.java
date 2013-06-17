@@ -7,14 +7,11 @@
  */
 package com.barchart.feed.base.provider;
 
-import com.barchart.feed.api.data.Instrument;
-import com.barchart.feed.api.data.PriceLevel;
 import com.barchart.feed.api.enums.MarketSide;
 import com.barchart.feed.base.book.api.MarketBookEntry;
 import com.barchart.util.anno.ProxyTo;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Size;
-import com.barchart.util.value.api.Time;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
 import com.barchart.util.values.provider.ValueFreezer;
@@ -74,21 +71,6 @@ final class VarBookLast extends ValueFreezer<MarketBookEntry> implements
 	@Override
 	public int level() {
 		return 0;
-	}
-
-	@Override
-	public Time lastUpdateTime() {
-		return null;
-	}
-
-	@Override
-	public PriceLevel copy() {
-		return this.freeze();
-	}
-
-	@Override
-	public Instrument instrument() {
-		return book.instrument;
 	}
 
 }

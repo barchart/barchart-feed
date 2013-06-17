@@ -7,6 +7,7 @@
  */
 package com.barchart.feed.base.provider;
 
+import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.util.anno.NotMutable;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
@@ -18,15 +19,19 @@ class DefCuvol extends NulCuvol {
 
 	private final PriceValue priceFirst;
 	private final PriceValue priceStep;
+	
+	private final Instrument instrument;
 
-	DefCuvol(final SizeValue[] entries, final PriceValue priceFirst,
-			final PriceValue priceStep) {
+	DefCuvol(final Instrument instrument, final SizeValue[] entries, 
+			final PriceValue priceFirst, final PriceValue priceStep) {
 
 		assert entries != null;
 		assert priceFirst != null;
 		assert priceStep != null;
 		assert priceStep.mantissa() != 0;
 
+		this.instrument = instrument;
+		
 		this.entries = entries;
 		this.priceFirst = priceFirst;
 		this.priceStep = priceStep;
@@ -48,4 +53,8 @@ class DefCuvol extends NulCuvol {
 		return entries;
 	}
 	
+	@Override
+	public Instrument instrument() {
+		return instrument;
+	}
 }

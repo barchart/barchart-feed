@@ -7,7 +7,7 @@
  */
 package com.barchart.feed.api.inst;
 
-import com.barchart.feed.api.data.Instrument;
+import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.util.concurrent.FutureNotifierBase;
 
 public class InstrumentFuture extends FutureNotifierBase<Instrument, InstrumentFuture> {

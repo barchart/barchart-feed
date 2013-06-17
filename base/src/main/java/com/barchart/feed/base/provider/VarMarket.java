@@ -28,15 +28,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.api.FrameworkAgent;
-import com.barchart.feed.api.data.Cuvol;
-import com.barchart.feed.api.data.Instrument;
-import com.barchart.feed.api.data.MarketData;
-import com.barchart.feed.api.data.OrderBook;
-import com.barchart.feed.api.data.PriceLevel;
-import com.barchart.feed.api.data.Session;
-import com.barchart.feed.api.data.TopOfBook;
-import com.barchart.feed.api.data.Trade;
 import com.barchart.feed.api.enums.BookLiquidityType;
+import com.barchart.feed.api.model.MarketData;
+import com.barchart.feed.api.model.data.Cuvol;
+import com.barchart.feed.api.model.data.OrderBook;
+import com.barchart.feed.api.model.data.Session;
+import com.barchart.feed.api.model.data.Trade;
+import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.bar.api.MarketBar;
 import com.barchart.feed.base.bar.api.MarketDoBar;
 import com.barchart.feed.base.book.api.MarketBook;
@@ -83,13 +81,11 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 		/** set self reference */
 		set(MARKET, this);
 		
-		agentMap.put(com.barchart.feed.api.data.Market.class, 
+		agentMap.put(com.barchart.feed.api.model.data.Market.class, 
 				new HashSet<FrameworkAgent<?>>());
 		agentMap.put(Instrument.class, new HashSet<FrameworkAgent<?>>());
 		agentMap.put(Trade.class, new HashSet<FrameworkAgent<?>>());
 		agentMap.put(OrderBook.class, new HashSet<FrameworkAgent<?>>());
-		agentMap.put(PriceLevel.class, new HashSet<FrameworkAgent<?>>());
-		agentMap.put(TopOfBook.class, new HashSet<FrameworkAgent<?>>());
 		agentMap.put(Cuvol.class, new HashSet<FrameworkAgent<?>>());
 		agentMap.put(Session.class, new HashSet<FrameworkAgent<?>>());
 

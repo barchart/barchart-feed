@@ -1,10 +1,10 @@
-package com.barchart.feed.api.data;
+package com.barchart.feed.api.model;
 
 import com.barchart.feed.api.enums.MarketSide;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Size;
 
-public interface PriceLevel extends MarketData<PriceLevel> {
+public interface PriceLevel {
 
 	Price price();
 

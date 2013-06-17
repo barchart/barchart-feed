@@ -1,4 +1,4 @@
-package com.barchart.feed.api.data;
+package com.barchart.feed.api.model.meta;
 
 import com.barchart.feed.api.enums.BookLiquidityType;
 import com.barchart.feed.api.enums.BookStructureType;
@@ -6,6 +6,8 @@ import com.barchart.feed.api.enums.MarketCurrency;
 import com.barchart.feed.api.enums.SecurityType;
 import com.barchart.feed.api.inst.GuidList;
 import com.barchart.feed.api.inst.InstrumentGUID;
+import com.barchart.feed.api.model.MarketData;
+import com.barchart.feed.api.model.Metadata;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Schedule;
 import com.barchart.util.value.api.Size;
@@ -61,7 +63,7 @@ public interface Instrument extends MarketData<Instrument>,
 	public static Instrument NULL_INSTRUMENT = new Instrument() {
 
 		@Override
-		public Time lastUpdateTime() {
+		public Time updated() {
 			return ValueConst.NULL_TIME;
 		}
 

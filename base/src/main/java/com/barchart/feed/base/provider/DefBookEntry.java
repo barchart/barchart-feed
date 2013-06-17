@@ -12,8 +12,6 @@ import static com.barchart.feed.base.book.enums.MarketBookAction.*;
 import static com.barchart.feed.base.provider.MarketConst.*;
 import static com.barchart.util.values.provider.ValueConst.*;
 
-import com.barchart.feed.api.data.Instrument;
-import com.barchart.feed.api.data.PriceLevel;
 import com.barchart.feed.api.enums.BookLiquidityType;
 import com.barchart.feed.api.enums.MarketSide;
 import com.barchart.feed.base.book.api.MarketBookEntry;
@@ -24,7 +22,6 @@ import com.barchart.util.value.api.Factory;
 import com.barchart.util.value.api.FactoryLoader;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Size;
-import com.barchart.util.value.api.Time;
 import com.barchart.util.value.impl.ValueConst;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
@@ -52,14 +49,10 @@ public class DefBookEntry extends ValueFreezer<MarketBookEntry> implements
 	private final PriceValue price;
 	private final SizeValue size;
 	
-	private final Instrument instrument;
-
-	public DefBookEntry(final Instrument instrument, final MarketBookAction act, 
+	public DefBookEntry(final MarketBookAction act, 
 			final MarketSide side, final BookLiquidityType type, final int place, 
 			final PriceValue price,	final SizeValue size) throws ArithmeticException {
 
-		this.instrument = instrument;
-		
 		this.ordAct = (act == null ? nulAct : act.ord);
 		this.ordSide = (side == null ? nulSide : side.ord);
 		this.ordType = (type == null ? nulType : type.ord);
@@ -141,7 +134,7 @@ public class DefBookEntry extends ValueFreezer<MarketBookEntry> implements
 	}
 
 	static {
-		final DefBookEntry entry = new DefBookEntry(null, null, null, null, 0, null,
+		final DefBookEntry entry = new DefBookEntry(null, null, null, 0, null,
 				null);
 		checkNull(entry.act());
 		checkNull(entry.side());
@@ -176,21 +169,6 @@ public class DefBookEntry extends ValueFreezer<MarketBookEntry> implements
 	@Override
 	public int level() {
 		return place;
-	}
-
-	@Override
-	public Time lastUpdateTime() {
-		return null; //TODO
-	}
-
-	@Override
-	public PriceLevel copy() {
-		return this.freeze();
-	}
-
-	@Override
-	public Instrument instrument() {
-		return instrument;
 	}
 
 }

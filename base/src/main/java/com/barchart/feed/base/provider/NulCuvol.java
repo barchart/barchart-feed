@@ -10,8 +10,9 @@ package com.barchart.feed.base.provider;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.barchart.feed.api.data.Cuvol;
-import com.barchart.feed.api.data.Instrument;
+import com.barchart.feed.api.model.CuvolEntry;
+import com.barchart.feed.api.model.data.Cuvol;
+import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.cuvol.api.MarketCuvol;
 import com.barchart.util.anno.NotMutable;
 import com.barchart.util.value.api.Price;
@@ -84,7 +85,7 @@ public class NulCuvol extends ValueFreezer<MarketCuvol> implements MarketCuvol {
 	}
 
 	@Override
-	public Time lastUpdateTime() {
+	public Time updated() {
 		return ValueConverter.time(ValueConst.NULL_TIME);
 	}
 
@@ -96,6 +97,12 @@ public class NulCuvol extends ValueFreezer<MarketCuvol> implements MarketCuvol {
 	@Override
 	public Instrument instrument() {
 		return Instrument.NULL_INSTRUMENT;
+	}
+
+	@Override
+	public CuvolEntry lastCuvolUpdate() {
+		// TODO
+		return null;
 	}
 
 }

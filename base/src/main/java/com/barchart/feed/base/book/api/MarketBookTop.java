@@ -7,8 +7,8 @@
  */
 package com.barchart.feed.base.book.api;
 
-import com.barchart.feed.api.data.TopOfBook;
 import com.barchart.feed.api.enums.MarketSide;
+import com.barchart.feed.api.model.data.TopOfBook;
 import com.barchart.util.anno.NotMutable;
 import com.barchart.util.values.api.TimeValue;
 import com.barchart.util.values.api.Value;

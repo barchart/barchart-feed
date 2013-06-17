@@ -83,7 +83,7 @@ class DefTrade extends NulTrade {
 	}
 
 	@Override
-	public Time lastUpdateTime() {
+	public Time updated() {
 		return ValueConst.NULL_TIME;
 	}
 	
