@@ -8,4 +8,18 @@ public interface TopOfBook {
 	
 	PriceLevel ask();
 	
+	public static final TopOfBook NULL_TOP_OF_BOOK = new TopOfBook() {
+
+		@Override
+		public PriceLevel bid() {
+			return PriceLevel.NULL_PRICE_LEVEL;
+		}
+
+		@Override
+		public PriceLevel ask() {
+			return PriceLevel.NULL_PRICE_LEVEL;
+		}
+		
+	};
+	
 }

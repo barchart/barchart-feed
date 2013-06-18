@@ -7,6 +7,10 @@
  */
 package com.barchart.feed.base.provider;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.barchart.feed.api.model.CuvolEntry;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.util.anno.NotMutable;
 import com.barchart.util.values.api.PriceValue;
@@ -56,5 +60,27 @@ class DefCuvol extends NulCuvol {
 	@Override
 	public Instrument instrument() {
 		return instrument;
+	}
+	
+	@Override
+	public List<CuvolEntry> cuvolList() {
+		
+		final List<CuvolEntry> result = new ArrayList<CuvolEntry>();
+		
+		int counter = 0;
+		for(final SizeValue size : entries) {
+			
+			PriceValue newPrice = priceFirst.freeze();
+			PriceValue newStep = priceStep.freeze();
+			
+			result.add(new DefCuvolEntry(counter, 
+					newPrice.add(newStep.mult(counter)), size));
+			
+			counter++;
+		}
+			
+		
+		return result;
+		
 	}
 }

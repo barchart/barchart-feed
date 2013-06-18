@@ -7,6 +7,7 @@
  */
 package com.barchart.feed.base.provider;
 
+import com.barchart.feed.api.model.CuvolEntry;
 import com.barchart.feed.base.book.api.MarketBookEntry;
 import com.barchart.feed.base.cuvol.api.MarketCuvolEntry;
 import com.barchart.feed.base.cuvol.api.MarketDoCuvolEntry;
@@ -19,7 +20,7 @@ import com.barchart.util.values.provider.ValueFreezer;
 
 @NotMutable
 public class DefCuvolEntry extends ValueFreezer<MarketCuvolEntry> implements
-		MarketDoCuvolEntry {
+		MarketDoCuvolEntry, CuvolEntry {
 
 	private final int place;
 	private final PriceValue price;

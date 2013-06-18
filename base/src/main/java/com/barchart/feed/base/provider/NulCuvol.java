@@ -16,7 +16,6 @@ import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.cuvol.api.MarketCuvol;
 import com.barchart.util.anno.NotMutable;
 import com.barchart.util.value.api.Price;
-import com.barchart.util.value.api.Size;
 import com.barchart.util.value.api.Time;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
@@ -80,8 +79,8 @@ public class NulCuvol extends ValueFreezer<MarketCuvol> implements MarketCuvol {
 	}
 
 	@Override
-	public List<Size> cuvolList() {
-		return new ArrayList<Size>(0);
+	public List<CuvolEntry> cuvolList() {
+		return new ArrayList<CuvolEntry>(0);
 	}
 
 	@Override

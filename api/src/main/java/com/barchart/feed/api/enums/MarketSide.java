@@ -17,6 +17,8 @@ public enum MarketSide  {
 
 	/** offer side */
 	ASK, //
+	
+	NULL
 
 	;
 
