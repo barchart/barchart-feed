@@ -9,6 +9,8 @@ package com.barchart.feed.base.provider;
 
 import static com.barchart.feed.base.provider.MarketConst.NULL_BOOK_ENTRY;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.barchart.feed.api.enums.MarketSide;
@@ -35,9 +37,12 @@ public class DefBook extends ValueFreezer<MarketBook> implements MarketBook {
 
 	private final MarketBookEntry[] bids;
 	private final MarketBookEntry[] asks;
+	
+	private final MarketBookEntry lastUpdate; 
 
 	public DefBook(final Instrument instrument, final TimeValue time, 
-			final MarketBookEntry[] bids, final MarketBookEntry[] asks) {
+			final MarketBookEntry[] bids, final MarketBookEntry[] asks,
+			final MarketBookEntry lastUpdate) {
 
 		assert time != null;
 		assert bids != null;
@@ -49,6 +54,8 @@ public class DefBook extends ValueFreezer<MarketBook> implements MarketBook {
 
 		this.bids = bids;
 		this.asks = asks;
+		
+		this.lastUpdate = lastUpdate;
 
 	}
 
@@ -231,15 +238,25 @@ public class DefBook extends ValueFreezer<MarketBook> implements MarketBook {
 	}
 
 	@Override
-	public List<PriceLevel> entryList(MarketSide side) {
-		// TODO
-		throw new UnsupportedOperationException("FIXME");
+	public List<PriceLevel> entryList(final MarketSide side) {
+		
+		final List<PriceLevel> result = new ArrayList<PriceLevel>();
+		
+		final MarketBookEntry[] e = entries(side);
+		
+		if(e == null || e.length == 0) {
+			return result;
+		}
+		
+		Collections.addAll(result, e);
+		
+		return Collections.unmodifiableList(result);
+		
 	}
 	
 	@Override
 	public PriceLevel lastBookUpdate() {
-		// TODO
-		throw new UnsupportedOperationException("FIXME");
+		return lastUpdate;
 	}
 
 	@Override

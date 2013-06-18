@@ -63,7 +63,8 @@ public class DefBookTop extends ValueFreezer<MarketBookTop> implements
 
 		final MarketBookEntry[] askEntries = new MarketBookEntry[] { ask };
 
-		final DefBook book = new DefBook(instrument, time, bidEntries, askEntries);
+		final DefBook book = new DefBook(instrument, time, bidEntries, askEntries, 
+				MarketConst.NULL_BOOK_ENTRY);
 
 		return book.toString();
 

@@ -38,6 +38,8 @@ public final class VarBook extends UniBook<MarketBook> implements MarketDoBook {
 
 	private long millisUTC;
 	
+	protected volatile MarketBookEntry lastEntry = MarketConst.NULL_BOOK_ENTRY;
+	
 	public VarBook(final Instrument instrument, final BookLiquidityType type, 
 			final SizeValue size, final PriceValue step) {
 		super(instrument, type, size, step);
@@ -45,6 +47,7 @@ public final class VarBook extends UniBook<MarketBook> implements MarketDoBook {
 
 	@Override
 	public final UniBookResult setEntry(final MarketDoBookEntry entry) {
+		lastEntry = entry.freeze();
 		return make(entry);
 	}
 
@@ -55,7 +58,7 @@ public final class VarBook extends UniBook<MarketBook> implements MarketDoBook {
 
 	@Override
 	public final DefBook freeze() {
-		return new DefBook(instrument, time(), entries(BID), entries(ASK));
+		return new DefBook(instrument, time(), entries(BID), entries(ASK), lastEntry);
 	}
 
 	@Override
