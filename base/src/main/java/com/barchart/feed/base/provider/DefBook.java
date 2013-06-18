@@ -37,8 +37,7 @@ public class DefBook extends ValueFreezer<MarketBook> implements MarketBook {
 	private final MarketBookEntry[] asks;
 
 	public DefBook(final Instrument instrument, final TimeValue time, 
-			final MarketBookEntry[] bids, final MarketBookEntry[] asks, 
-			final SizeValue[] bidSizes, final SizeValue[] askSizes) {
+			final MarketBookEntry[] bids, final MarketBookEntry[] asks) {
 
 		assert time != null;
 		assert bids != null;
@@ -195,6 +194,26 @@ public class DefBook extends ValueFreezer<MarketBook> implements MarketBook {
 	}
 
 	@Override
+	public TopOfBook topOfBook() {
+		
+		final MarketBookEntry bid;
+		if(bids.length == 0 || bids[0] == null || bids[0].isNull()) {
+			bid = NULL_BOOK_ENTRY;
+		} else {
+			bid = bids[0];
+		}
+		
+		final MarketBookEntry ask;
+		if(asks.length == 0 || asks[0] == null || asks[0].isNull()) {
+			ask = NULL_BOOK_ENTRY;
+		} else {
+			ask = asks[0];
+		}
+		
+		return new DefBookTop(instrument, time,	bid, ask);
+	}
+	
+	@Override
 	public PriceValue priceGap() {
 
 		final PriceValue priceBid = priceTop(MarketSide.BID);
@@ -214,7 +233,13 @@ public class DefBook extends ValueFreezer<MarketBook> implements MarketBook {
 	@Override
 	public List<PriceLevel> entryList(MarketSide side) {
 		// TODO
-		return null;
+		throw new UnsupportedOperationException("FIXME");
+	}
+	
+	@Override
+	public PriceLevel lastBookUpdate() {
+		// TODO
+		throw new UnsupportedOperationException("FIXME");
 	}
 
 	@Override
@@ -225,17 +250,6 @@ public class DefBook extends ValueFreezer<MarketBook> implements MarketBook {
 	@Override
 	public Instrument instrument() {
 		return instrument;
-	}
-
-	@Override
-	public TopOfBook topOfBook() {
-		return new DefBookTop(instrument, time,	bids[0], asks[0]);
-	}
-
-	@Override
-	public PriceLevel lastBookUpdate() {
-		// TODO
-		return null;
 	}
 
 	@Override

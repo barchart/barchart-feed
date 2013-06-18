@@ -55,8 +55,7 @@ public final class VarBook extends UniBook<MarketBook> implements MarketDoBook {
 
 	@Override
 	public final DefBook freeze() {
-		return new DefBook(instrument, time(), entries(BID), entries(ASK), 
-				null, null);
+		return new DefBook(instrument, time(), entries(BID), entries(ASK));
 	}
 
 	@Override

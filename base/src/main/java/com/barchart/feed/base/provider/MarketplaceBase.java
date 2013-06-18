@@ -126,7 +126,7 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 
 		@Override
 		public V data(final Market market) {
-			return getter.get(market);
+			return getter.get(market.copy());
 		}
 		
 		/* ***** ***** Filter Methods ***** ***** */

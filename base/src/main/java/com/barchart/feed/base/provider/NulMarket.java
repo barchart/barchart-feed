@@ -69,32 +69,37 @@ class NulMarket extends ValueFreezer<Market> implements Market {
 
 	@Override
 	public Trade lastTrade() {
+		// TODO make null
 		return null;
 	}
 
 	@Override
 	public OrderBook orderBook() {
+		// TODO make null
 		return null;
 	}
 
 	@Override
 	public Cuvol cuvol() {
+		// TODO make null
 		return null;
 	}
 
 	@Override
 	public Session session() {
+		// TODO make null
 		return null;
 	}
 
 	@Override
 	public Time updated() {
+		// TODO make null
 		return null;
 	}
 	
 	@Override
 	public Market copy() {
-		return this;
+		return this.freeze();
 	}
 
 }
