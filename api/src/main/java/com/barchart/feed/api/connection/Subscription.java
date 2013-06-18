@@ -6,6 +6,9 @@ import java.util.Set;
  * Subscription are for either instruments or exchanges
  * 
  *  All?
+ *  
+ *  This is pretty ad-hoc atm, needs to be looked at again
+ *  should use MetaData interface now
  * 
  * @author Gavin M Litchfield
  *

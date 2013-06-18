@@ -210,12 +210,17 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 			final Set<String> newInterests = new HashSet<String>();
 			
 			for(final Entry<CharSequence, Instrument> e : instMap.entrySet()) {
-				final Instrument i = e.getValue();
-				exInsts.remove(i);
-				incInsts.add(i);
 				
-				// Modify subscription????
-				newInterests.add(formatForJERQ(i.symbol()));
+				final Instrument i = e.getValue();
+				
+				if(!i.isNull()) {
+					
+					exInsts.remove(i);
+					incInsts.add(i);
+					
+					newInterests.add(formatForJERQ(i.symbol()));
+					
+				}
 			}
 			
 			agentHandler.updateAgent(this);
@@ -234,10 +239,15 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 			final Set<String> newInterests = new HashSet<String>();
 			
 			for(final Instrument i : instruments) {
-				exInsts.remove(i);
-				incInsts.add(i);
 				
-				newInterests.add(formatForJERQ(i.symbol()));
+				if(!i.isNull()) {
+					
+					exInsts.remove(i);
+					incInsts.add(i);
+				
+					newInterests.add(formatForJERQ(i.symbol()));
+				
+				}
 			}
 			
 			agentHandler.updateAgent(this);
@@ -256,10 +266,16 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 			final Set<String> newInterests = new HashSet<String>();
 			
 			for(final Exchange e : exchanges) {
-				exExchanges.remove(e);
-				incExchanges.add(e);
 				
-				newInterests.add(e.code());
+				if(!e.isNull()) {
+				
+					exExchanges.remove(e);
+					incExchanges.add(e);
+					
+					newInterests.add(e.code());
+					
+				}
+				
 			}
 			
 			agentHandler.updateAgent(this);
@@ -283,11 +299,18 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 			final Set<String> oldInterests = new HashSet<String>();
 			
 			for(final Entry<CharSequence, Instrument> e : instMap.entrySet()) {
-				final Instrument i = e.getValue();
-				incInsts.remove(i);
-				exInsts.add(i);
 				
-				oldInterests.add(i.symbol());
+				final Instrument i = e.getValue();
+				
+				if(!i.isNull()) {
+					
+					incInsts.remove(i);
+					exInsts.add(i);
+					
+					oldInterests.add(i.symbol());
+				
+				}
+				
 			}
 			
 			agentHandler.updateAgent(this);
@@ -306,10 +329,15 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 			final Set<String> oldInterests = new HashSet<String>();
 			
 			for(final Instrument i : instruments) {
-				incInsts.remove(i);
-				exInsts.add(i);
 				
-				oldInterests.add(i.symbol());
+				if(!i.isNull()) {
+					
+					incInsts.remove(i);
+					exInsts.add(i);
+					
+					oldInterests.add(i.symbol());
+					
+				}
 			}
 			
 			agentHandler.updateAgent(this);
@@ -328,10 +356,15 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 			final Set<String> oldInterests = new HashSet<String>();
 			
 			for(final Exchange e : exchanges) {
-				incExchanges.remove(e);
-				exExchanges.add(e);
 				
-				oldInterests.add(e.code());
+				if(!e.isNull()) {				
+					
+					incExchanges.remove(e);
+					exExchanges.add(e);
+					
+					oldInterests.add(e.code());
+					
+				}
 			}
 			
 			agentHandler.updateAgent(this);
@@ -353,6 +386,7 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 			exExchanges.clear();
 			
 			agentHandler.updateAgent(this);
+			
 		}
 
 		
