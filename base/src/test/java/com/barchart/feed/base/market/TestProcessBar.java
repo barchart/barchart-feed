@@ -48,6 +48,7 @@ public class TestProcessBar {
 
 	InstrumentService<CharSequence> service;
 
+	@SuppressWarnings("unused")
 	private static final Logger log = LoggerFactory
 			.getLogger(TestProcessBar.class);
 
