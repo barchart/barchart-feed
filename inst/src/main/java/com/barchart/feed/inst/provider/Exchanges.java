@@ -4,9 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.barchart.feed.api.model.meta.Exchange;
-import com.barchart.feed.api.model.meta.Instrument;
-import com.barchart.util.value.api.Time;
-import com.barchart.util.value.impl.ValueConst;
 
 public final class Exchanges {
 
@@ -264,18 +261,8 @@ public final class Exchanges {
 		}
 
 		@Override
-		public Time updated() {
-			return ValueConst.NULL_TIME;
-		}
-
-		@Override
 		public boolean isNull() {
 			return this == Exchange.NULL_EXCHANGE;
-		}
-
-		@Override
-		public Exchange copy() {
-			return this;
 		}
 
 		@Override
@@ -301,11 +288,6 @@ public final class Exchanges {
 			
 		}
 
-		@Override
-		public Instrument instrument() {
-			return null;
-		}
-		
 	}
 	
 	

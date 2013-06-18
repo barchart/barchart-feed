@@ -8,5 +8,7 @@ package com.barchart.feed.api.model;
  *
  */
 public interface Metadata {
+	
+	boolean isNull();
 
 }

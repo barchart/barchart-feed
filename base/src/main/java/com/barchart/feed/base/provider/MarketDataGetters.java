@@ -9,7 +9,6 @@ import com.barchart.feed.api.model.data.Market;
 import com.barchart.feed.api.model.data.OrderBook;
 import com.barchart.feed.api.model.data.Session;
 import com.barchart.feed.api.model.data.Trade;
-import com.barchart.feed.api.model.meta.Instrument;
 
 public final class MarketDataGetters {
 
@@ -30,15 +29,6 @@ public final class MarketDataGetters {
 						return market;
 					}
 			
-				});
-				
-				put(Instrument.class, new MDGetter<Instrument>(){
-
-					@Override
-					public Instrument get(final Market market) {
-						return market.instrument();
-					}
-					
 				});
 				
 				put(Trade.class, new MDGetter<Trade>(){

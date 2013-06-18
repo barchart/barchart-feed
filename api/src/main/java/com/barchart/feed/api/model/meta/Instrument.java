@@ -6,18 +6,15 @@ import com.barchart.feed.api.enums.MarketCurrency;
 import com.barchart.feed.api.enums.SecurityType;
 import com.barchart.feed.api.inst.GuidList;
 import com.barchart.feed.api.inst.InstrumentGUID;
-import com.barchart.feed.api.model.MarketData;
 import com.barchart.feed.api.model.Metadata;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Schedule;
 import com.barchart.util.value.api.Size;
-import com.barchart.util.value.api.Time;
 import com.barchart.util.value.api.TimeInterval;
 import com.barchart.util.value.impl.ValueConst;
 import com.barchart.util.value.api.Fraction;
 
-public interface Instrument extends MarketData<Instrument>, 
-		Comparable<Instrument>, Metadata {
+public interface Instrument extends Comparable<Instrument>, Metadata {
 	
 	InstrumentGUID GUID();
 	
@@ -61,11 +58,6 @@ public interface Instrument extends MarketData<Instrument>,
 	GuidList componentLegs();
 	
 	public static Instrument NULL_INSTRUMENT = new Instrument() {
-
-		@Override
-		public Time updated() {
-			return ValueConst.NULL_TIME;
-		}
 
 		@Override
 		public boolean isNull() {
@@ -182,16 +174,6 @@ public interface Instrument extends MarketData<Instrument>,
 			return new GuidList();
 		}
 
-		@Override
-		public Instrument copy() {
-			return this;
-		}
-
-		@Override
-		public Instrument instrument() {
-			return this;
-		}
-		
 	};
 	
 }

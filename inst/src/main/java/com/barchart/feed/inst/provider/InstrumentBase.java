@@ -23,9 +23,7 @@ import com.barchart.util.value.api.Fraction;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Schedule;
 import com.barchart.util.value.api.Size;
-import com.barchart.util.value.api.Time;
 import com.barchart.util.value.api.TimeInterval;
-import com.barchart.util.value.impl.ValueConst;
 import com.barchart.util.values.api.PriceValue;
 
 public abstract class InstrumentBase extends ObjectMapSafe implements Instrument {
@@ -161,21 +159,6 @@ public abstract class InstrumentBase extends ObjectMapSafe implements Instrument
 	@Override
 	public GuidList componentLegs() {
 		return get(InstrumentField.COMPONENT_LEGS);
-	}
-
-	@Override
-	public Time updated() {
-		return ValueConst.NULL_TIME;
-	}
-	
-	@Override
-	public Instrument copy() {
-		return InstrumentFactory.build(this);
-	}
-	
-	@Override 
-	public Instrument instrument() {
-		return this;
 	}
 
 }

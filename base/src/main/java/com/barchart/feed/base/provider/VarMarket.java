@@ -83,7 +83,6 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 		
 		agentMap.put(com.barchart.feed.api.model.data.Market.class, 
 				new HashSet<FrameworkAgent<?>>());
-		agentMap.put(Instrument.class, new HashSet<FrameworkAgent<?>>());
 		agentMap.put(Trade.class, new HashSet<FrameworkAgent<?>>());
 		agentMap.put(OrderBook.class, new HashSet<FrameworkAgent<?>>());
 		agentMap.put(Cuvol.class, new HashSet<FrameworkAgent<?>>());
