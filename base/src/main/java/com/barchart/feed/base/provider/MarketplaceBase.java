@@ -52,7 +52,7 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 	
 	// TODO Review concurrency, only reason to use ConcurrentMap is for 
 	// putIfAbscent()
-	private final ConcurrentMap<Instrument, MarketDo> marketMap = 
+	protected final ConcurrentMap<Instrument, MarketDo> marketMap = 
 		new ConcurrentHashMap<Instrument, MarketDo>();
 	
 	private final ConcurrentMap<FrameworkAgent<?>, Boolean> agents = 
@@ -495,10 +495,6 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 		
 		return newSubs;
 		
-	}
-	
-	public static void main(final String[] args) {
-		System.out.println(formatForJERQ("CLM2013"));
 	}
 	
 	private static String formatForJERQ(String symbol) {

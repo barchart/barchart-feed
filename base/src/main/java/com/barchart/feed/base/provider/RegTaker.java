@@ -45,7 +45,7 @@ public class RegTaker<V extends Value<V>> implements RunnerLoop<MarketEvent> {
 
 	}
 
-	final void bind() {
+	public final void bind() {
 
 		this.field = taker.bindField();
 
@@ -83,7 +83,7 @@ public class RegTaker<V extends Value<V>> implements RunnerLoop<MarketEvent> {
 		return field;
 	}
 
-	final Instrument[] getInstruments() {
+	public final Instrument[] getInstruments() {
 		return instruments;
 	}
 
