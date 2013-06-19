@@ -5,6 +5,6 @@ import com.barchart.feed.api.model.MarketData;
 public interface AgentBuilder {
 
 	<V extends MarketData<V>> Agent newAgent(Class<V> clazz, 
-			MarketCallback<V> callback);
+			MarketObserver<V> callback);
 	
 }

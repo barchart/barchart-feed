@@ -9,7 +9,7 @@ import com.barchart.feed.api.model.meta.Instrument;
 public interface FrameworkAgent<V extends MarketData<V>> extends Agent {
 	
 	Class<V> type();
-	MarketCallback<V> callback();
+	MarketObserver<V> callback();
 	V data(Market market);
 	
 	/* Filter methods */

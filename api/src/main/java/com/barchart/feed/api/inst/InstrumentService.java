@@ -8,17 +8,18 @@
 package com.barchart.feed.api.inst;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 import com.barchart.feed.api.model.meta.Instrument;
 
 public interface InstrumentService<V> {
 	
-	Instrument lookup(V symbol);
+	List<Instrument> lookup(V symbol);
 	
 	InstrumentFuture lookupAsync(V symbol);
 	
-	Map<V, Instrument> lookup(Collection<? extends V> symbols);
+	Map<V, List<Instrument>> lookup(Collection<? extends V> symbols);
 	
 	InstrumentFutureMap<V> lookupAsync(Collection<? extends V> symbols);
 	

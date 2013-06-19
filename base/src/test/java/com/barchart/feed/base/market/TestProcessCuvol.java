@@ -61,7 +61,7 @@ public class TestProcessCuvol {
 
 		final MockMaker maker = new MockMaker(new MockMarketFactory());
 
-		final Instrument inst = service.lookup(MockDefinitionService.INST_SYMBOL_3);
+		final Instrument inst = service.lookup(MockDefinitionService.INST_SYMBOL_3).get(0);
 
 		final Instrument[] insts = new Instrument[] { inst };
 

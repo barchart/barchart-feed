@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -18,7 +19,7 @@ import com.barchart.feed.api.Agent;
 import com.barchart.feed.api.AgentBuilder;
 import com.barchart.feed.api.AgentLifecycleHandler;
 import com.barchart.feed.api.FrameworkAgent;
-import com.barchart.feed.api.MarketCallback;
+import com.barchart.feed.api.MarketObserver;
 import com.barchart.feed.api.connection.Subscription;
 import com.barchart.feed.api.connection.SubscriptionHandler;
 import com.barchart.feed.api.connection.SubscriptionType;
@@ -71,7 +72,7 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 	
 	@Override
 	public <V extends MarketData<V>> Agent newAgent(final Class<V> clazz, 
-			final MarketCallback<V> callback) {
+			final MarketObserver<V> callback) {
 		
 		final MDGetter<V> getter = MarketDataGetters.get(clazz);
 		
@@ -93,7 +94,7 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 		private final Class<V> clazz;
 		private final MDGetter<V> getter;
 		private final AgentLifecycleHandler agentHandler;
-		private final MarketCallback<V> callback;
+		private final MarketObserver<V> callback;
 		
 		// Review concurrency
 		private final Set<Exchange> incExchanges = new HashSet<Exchange>();
@@ -103,7 +104,7 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 		private final Set<Instrument> exInsts = new HashSet<Instrument>();
 		
 		BaseAgent(final AgentLifecycleHandler agentHandler, final Class<V> clazz, 
-				final MDGetter<V> getter, final MarketCallback<V> callback) {
+				final MDGetter<V> getter, final MarketObserver<V> callback) {
 			
 			this.agentHandler = agentHandler;
 			this.clazz = clazz;
@@ -120,7 +121,7 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 		}
 		
 		@Override
-		public MarketCallback<V> callback() {
+		public MarketObserver<V> callback() {
 			return callback;
 		}
 
@@ -206,19 +207,21 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 			final Set<CharSequence> symbSet = new HashSet<CharSequence>();
 			Collections.addAll(symbSet, symbols);
 			
-			final Map<CharSequence, Instrument> instMap = instLookup.lookup(symbSet);
+			final Map<CharSequence, List<Instrument>> instMap = instLookup.lookup(symbSet);
 			final Set<String> newInterests = new HashSet<String>();
 			
-			for(final Entry<CharSequence, Instrument> e : instMap.entrySet()) {
+			for(final Entry<CharSequence, List<Instrument>> e : instMap.entrySet()) {
 				
-				final Instrument i = e.getValue();
+				final List<Instrument> i = e.getValue();
 				
-				if(!i.isNull()) {
+				if(!i.isEmpty()) {
 					
 					exInsts.remove(i);
-					incInsts.add(i);
+					incInsts.addAll(i);
 					
-					newInterests.add(formatForJERQ(i.symbol()));
+					for(final Instrument in : i) {
+						newInterests.add(formatForJERQ(in.symbol()));
+					}
 					
 				}
 			}
@@ -294,20 +297,22 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 			final Set<CharSequence> symbSet = new HashSet<CharSequence>();
 			Collections.addAll(symbSet, symbols);
 			
-			final Map<CharSequence, Instrument> instMap = instLookup.lookup(symbSet);
+			final Map<CharSequence, List<Instrument>> instMap = instLookup.lookup(symbSet);
 			
 			final Set<String> oldInterests = new HashSet<String>();
 			
-			for(final Entry<CharSequence, Instrument> e : instMap.entrySet()) {
+			for(final Entry<CharSequence, List<Instrument>> e : instMap.entrySet()) {
 				
-				final Instrument i = e.getValue();
+				final List<Instrument> i = e.getValue();
 				
-				if(!i.isNull()) {
+				if(!i.isEmpty()) {
 					
 					incInsts.remove(i);
-					exInsts.add(i);
+					exInsts.addAll(i);
 					
-					oldInterests.add(i.symbol());
+					for(final Instrument in : i) {
+						oldInterests.add(in.symbol());
+					}
 				
 				}
 				

@@ -33,8 +33,10 @@ public class BenchMarketMemory {
 
 			final TextValue id = ValueBuilder.newText("market-" + k);
 
-			inst = new Instrument[] { service.lookup(id) };
+			//inst = new Instrument[] { service.lookup(id) };
 
+			inst = (Instrument[]) service.lookup(id).toArray(new Instrument[0]);
+			
 			taker = new MockTaker<Market>(inst);
 
 			maker.register(taker);

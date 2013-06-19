@@ -7,9 +7,12 @@
  */
 package com.barchart.feed.api.inst;
 
+import java.util.List;
+
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.util.concurrent.FutureNotifierBase;
 
-public class InstrumentFuture extends FutureNotifierBase<Instrument, InstrumentFuture> {
+public class InstrumentFuture extends FutureNotifierBase<
+		List<Instrument>, InstrumentFuture> {
 	
 }

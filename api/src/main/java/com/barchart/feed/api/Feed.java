@@ -1,6 +1,7 @@
 package com.barchart.feed.api;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 import com.barchart.feed.api.connection.ConnectionFuture;
@@ -59,7 +60,7 @@ public interface Feed extends ConnectionLifecycle<Feed>, InstrumentService<CharS
 	 * @return NULL_INSTRUMENT if the symbol is not resolved.
 	 */
 	@Override
-	Instrument lookup(CharSequence symbol);
+	List<Instrument> lookup(CharSequence symbol);
 	
 	@Override
 	InstrumentFuture lookupAsync(CharSequence symbol);
@@ -72,7 +73,7 @@ public interface Feed extends ConnectionLifecycle<Feed>, InstrumentService<CharS
 	 * @return An empty list if no symbols can be resolved.
 	 */
 	@Override
-	Map<CharSequence, Instrument> lookup(
+	Map<CharSequence, List<Instrument>> lookup(
 			Collection<? extends CharSequence> symbols);
 	
 	@Override
@@ -83,7 +84,7 @@ public interface Feed extends ConnectionLifecycle<Feed>, InstrumentService<CharS
 	
 	@Override
 	<V extends MarketData<V>> Agent newAgent(Class<V> clazz, 
-			MarketCallback<V> callback);
+			MarketObserver<V> callback);
 	
 	/* ***** ***** Helper subscribe methods ***** ***** */
 	
@@ -91,13 +92,13 @@ public interface Feed extends ConnectionLifecycle<Feed>, InstrumentService<CharS
 	// Agent a = feed.subscribe(new String[] { "IBM", "MSFT" }, MARKET, callback);
 	
 	<V extends MarketData<V>> Agent subscribe(Class<V> clazz, 
-			MarketCallback<V> callback,	String... symbols);
+			MarketObserver<V> callback,	String... symbols);
 	
 	<V extends MarketData<V>> Agent subscribe(Class<V> clazz, 
-			MarketCallback<V> callback, Instrument... instruments);
+			MarketObserver<V> callback, Instrument... instruments);
 	
 	<V extends MarketData<V>> Agent subscribe(Class<V> clazz, 
-			MarketCallback<V> callback, Exchange... exchanges);
+			MarketObserver<V> callback, Exchange... exchanges);
 	
 	/**
 	 * Fires on ALL
@@ -106,7 +107,7 @@ public interface Feed extends ConnectionLifecycle<Feed>, InstrumentService<CharS
 	 * @param instruments
 	 * @return
 	 */
-	Agent subscribeMarket(MarketCallback<Market> callback, String... symbols);
+	Agent subscribeMarket(MarketObserver<Market> callback, String... symbols);
 	
 	/**
 	 * Fires on TRADE
@@ -115,7 +116,7 @@ public interface Feed extends ConnectionLifecycle<Feed>, InstrumentService<CharS
 	 * @param instruments
 	 * @return
 	 */
-	Agent subscribeTrade(MarketCallback<Trade> lastTrade, String... symbols);
+	Agent subscribeTrade(MarketObserver<Trade> lastTrade, String... symbols);
 	
 	/**
 	 * Fires on BOOK_UPDATE and BOOK_SNAPSHOT
@@ -124,7 +125,7 @@ public interface Feed extends ConnectionLifecycle<Feed>, InstrumentService<CharS
 	 * @param instruments
 	 * @return
 	 */
-	Agent subscribeBook(MarketCallback<OrderBook> book, String... symbols);
+	Agent subscribeBook(MarketObserver<OrderBook> book, String... symbols);
 	
 	/**
 	 * Fires on CUVOL_UPDATE and CUVOL_SNAPSHOT
@@ -133,6 +134,6 @@ public interface Feed extends ConnectionLifecycle<Feed>, InstrumentService<CharS
 	 * @param instruments
 	 * @return
 	 */
-	Agent subscribeCuvol(MarketCallback<Cuvol> cuvol, String... symbols);
+	Agent subscribeCuvol(MarketObserver<Cuvol> cuvol, String... symbols);
 	
 }

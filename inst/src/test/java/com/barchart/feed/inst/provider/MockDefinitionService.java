@@ -14,8 +14,11 @@ import static com.barchart.feed.inst.InstrumentField.MARKET_GUID;
 import static com.barchart.feed.inst.InstrumentField.SYMBOL;
 import static com.barchart.feed.inst.InstrumentField.TICK_SIZE;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
@@ -101,11 +104,11 @@ public class MockDefinitionService implements InstrumentService<CharSequence> {
 	}
 	
 	@Override
-	public Instrument lookup(final CharSequence symbol) {
+	public List<Instrument> lookup(final CharSequence symbol) {
 		if(symbolMap.containsKey(symbol)) {
-			return guidMap.get(symbolMap.get(symbol));
+			return Collections.singletonList(guidMap.get(symbolMap.get(symbol)));
 		}
-		return Instrument.NULL_INSTRUMENT;
+		return Collections.emptyList();
 	}
 
 	@Override
@@ -124,9 +127,12 @@ public class MockDefinitionService implements InstrumentService<CharSequence> {
 	}
 
 	@Override
-	public Map<CharSequence, Instrument> lookup(final Collection<? extends CharSequence> symbols) {
+	public Map<CharSequence, List<Instrument>> lookup(
+			final Collection<? extends CharSequence> symbols) {
 		
-		final Map<CharSequence, Instrument> insts = new HashMap<CharSequence, Instrument>();
+		final Map<CharSequence, List<Instrument>> insts = 
+				new HashMap<CharSequence, List<Instrument>>();
+		
 		for(final CharSequence symbol : symbols) {
 			insts.put(symbol,lookup(symbol));
 		}

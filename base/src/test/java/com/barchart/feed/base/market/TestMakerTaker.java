@@ -67,7 +67,7 @@ public class TestMakerTaker {
 
 		final Instrument inst;
 
-		inst = service.lookup(MockDefinitionService.INST_SYMBOL_1);
+		inst = service.lookup(MockDefinitionService.INST_SYMBOL_1).get(0);
 
 		final Instrument[] insts = new Instrument[] { inst };
 
@@ -152,7 +152,7 @@ public class TestMakerTaker {
 
 		final Instrument inst;
 
-		inst = service.lookup(MockDefinitionService.INST_SYMBOL_1);
+		inst = service.lookup(MockDefinitionService.INST_SYMBOL_1).get(0);
 
 		final Instrument[] insts = new Instrument[] { inst };
 
