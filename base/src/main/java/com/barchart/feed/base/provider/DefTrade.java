@@ -7,6 +7,7 @@
  */
 package com.barchart.feed.base.provider;
 
+import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.trade.enums.MarketTradeField;
 import com.barchart.feed.base.trade.enums.MarketTradeSequencing;
 import com.barchart.feed.base.trade.enums.MarketTradeSession;
@@ -22,16 +23,20 @@ class DefTrade extends NulTrade {
 	protected final static int ARRAY_SIZE = MarketTradeField.size();
 
 	protected final Value<?>[] valueArray;
+	
+	protected final Instrument instrument;
 
-	DefTrade() {
+	DefTrade(final Instrument instrument) {
+		this.instrument = instrument;
 		this.valueArray = new Value<?>[ARRAY_SIZE];
 	}
 
-	DefTrade(final Value<?>[] valueArray) {
+	DefTrade(final Instrument instrument, final Value<?>[] valueArray) {
 
 		assert valueArray != null;
 		assert valueArray.length == ARRAY_SIZE;
 
+		this.instrument = instrument;
 		this.valueArray = valueArray;
 
 	}
@@ -69,22 +74,28 @@ class DefTrade extends NulTrade {
 	
 	@Override
 	public Price price() {
-		return ValueConst.NULL_PRICE;
+		return ValueConverter.price(get(MarketTradeField.PRICE));
 	}
 
 	@Override
 	public Size size() {
-		return ValueConst.NULL_SIZE;
+		return ValueConverter.size(get(MarketTradeField.SIZE));
 	}
 
 	@Override
 	public Time time() {
-		return ValueConst.NULL_TIME;
+		return ValueConverter.time(get(MarketTradeField.TRADE_TIME));
 	}
 
 	@Override
 	public Time updated() {
+		// TODO
 		return ValueConst.NULL_TIME;
+	}
+	
+	@Override
+	public Instrument instrument() {
+		return instrument;
 	}
 	
 }

@@ -284,7 +284,7 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 		MarketTrade trade = get(TRADE);
 
 		if (trade.isFrozen()) {
-			trade = new VarTrade();
+			trade = new VarTrade(instrument);
 			set(TRADE, trade);
 		}
 

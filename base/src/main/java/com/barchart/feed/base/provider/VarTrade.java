@@ -7,6 +7,7 @@
  */
 package com.barchart.feed.base.provider;
 
+import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.trade.api.MarketDoTrade;
 import com.barchart.feed.base.trade.enums.MarketTradeField;
 import com.barchart.feed.base.trade.enums.MarketTradeSequencing;
@@ -18,6 +19,10 @@ import com.barchart.util.values.api.Value;
 @Mutable
 public final class VarTrade extends DefTrade implements MarketDoTrade {
 
+	public VarTrade(final Instrument instrument) {
+		super(instrument);
+	}
+	
 	@Override
 	public <V extends Value<V>> void set(final MarketTradeField<V> field,
 			final V value) {
@@ -32,7 +37,7 @@ public final class VarTrade extends DefTrade implements MarketDoTrade {
 	@Override
 	public final DefTrade freeze() {
 
-		final DefTrade that = new DefTrade();
+		final DefTrade that = new DefTrade(instrument);
 
 		final int size = ARRAY_SIZE;
 
