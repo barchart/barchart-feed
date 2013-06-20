@@ -14,7 +14,6 @@ import static com.barchart.feed.inst.InstrumentField.MARKET_GUID;
 import static com.barchart.feed.inst.InstrumentField.SYMBOL;
 import static com.barchart.feed.inst.InstrumentField.TICK_SIZE;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -27,12 +26,12 @@ import java.util.concurrent.Executors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.feed.api.inst.InstrumentFuture;
-import com.barchart.feed.api.inst.InstrumentFutureMap;
 import com.barchart.feed.api.inst.InstrumentGUID;
-import com.barchart.feed.api.inst.InstrumentService;
-import com.barchart.feed.api.inst.MetadataContext;
 import com.barchart.feed.api.model.meta.Instrument;
+import com.barchart.feed.inst.InstrumentFuture;
+import com.barchart.feed.inst.InstrumentFutureMap;
+import com.barchart.feed.inst.InstrumentService;
+import com.barchart.feed.inst.MetadataContext;
 import com.barchart.missive.api.Tag;
 import com.barchart.util.value.api.Factory;
 import com.barchart.util.value.api.FactoryLoader;

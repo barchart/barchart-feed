@@ -1,16 +1,9 @@
 package com.barchart.feed.api;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-
 import com.barchart.feed.api.connection.ConnectionFuture;
 import com.barchart.feed.api.connection.ConnectionLifecycle;
 import com.barchart.feed.api.connection.ConnectionStateListener;
 import com.barchart.feed.api.connection.TimestampListener;
-import com.barchart.feed.api.inst.InstrumentFuture;
-import com.barchart.feed.api.inst.InstrumentFutureMap;
-import com.barchart.feed.api.inst.InstrumentService;
 import com.barchart.feed.api.model.MarketData;
 import com.barchart.feed.api.model.data.Cuvol;
 import com.barchart.feed.api.model.data.Market;
@@ -19,8 +12,7 @@ import com.barchart.feed.api.model.data.Trade;
 import com.barchart.feed.api.model.meta.Exchange;
 import com.barchart.feed.api.model.meta.Instrument;
 
-public interface Feed extends ConnectionLifecycle<Feed>, InstrumentService<CharSequence>,
-		AgentBuilder {
+public interface Feed extends ConnectionLifecycle<Feed>, AgentBuilder {
 
 	/* ***** ***** ConnectionLifecycle ***** ***** */
 	
@@ -49,36 +41,6 @@ public interface Feed extends ConnectionLifecycle<Feed>, InstrumentService<CharS
 	 */
 	@Override
 	void bindTimestampListener(TimestampListener listener);
-	
-	/* ***** ***** InstrumentService ***** ***** */
-	
-	/**
-	 * Retrieves the instrument object denoted by symbol. The local instrument
-	 * cache will be checked first. If the instrument is not stored locally, a
-	 * remote call to the instrument service is made.
-	 * 
-	 * @return NULL_INSTRUMENT if the symbol is not resolved.
-	 */
-	@Override
-	List<Instrument> lookup(CharSequence symbol);
-	
-	@Override
-	InstrumentFuture lookupAsync(CharSequence symbol);
-	
-	/**
-	 * Retrieves a list of instrument objects denoted by symbols provided. The
-	 * local instrument cache will be checked first. If any instruments are not
-	 * stored locally, a remote call to the instrument service is made.
-	 * 
-	 * @return An empty list if no symbols can be resolved.
-	 */
-	@Override
-	Map<CharSequence, List<Instrument>> lookup(
-			Collection<? extends CharSequence> symbols);
-	
-	@Override
-	InstrumentFutureMap<CharSequence> lookupAsync(
-			Collection<? extends CharSequence> symbols);
 	
 	/* ***** ***** AgentBuilder ***** ***** */
 	

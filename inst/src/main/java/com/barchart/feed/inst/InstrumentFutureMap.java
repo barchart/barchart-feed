@@ -1,4 +1,4 @@
-package com.barchart.feed.api.inst;
+package com.barchart.feed.inst;
 
 import java.util.List;
 import java.util.Map;

@@ -5,13 +5,13 @@
  *
  * http://www.opensource.org/licenses/bsd-license.php
  */
-package com.barchart.feed.api.inst;
+package com.barchart.feed.inst;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-
+import com.barchart.feed.api.inst.InstrumentGUID;
 
 public interface SymbologyContext<V> {
 

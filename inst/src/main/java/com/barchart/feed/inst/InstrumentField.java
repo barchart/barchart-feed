@@ -11,7 +11,6 @@ import com.barchart.feed.api.enums.BookLiquidityType;
 import com.barchart.feed.api.enums.BookStructureType;
 import com.barchart.feed.api.enums.MarketCurrency;
 import com.barchart.feed.api.enums.SecurityType;
-import com.barchart.feed.api.inst.GuidList;
 import com.barchart.feed.api.inst.InstrumentGUID;
 import com.barchart.feed.api.model.meta.Exchange;
 import com.barchart.missive.api.Tag;
@@ -90,10 +89,6 @@ public interface InstrumentField {
 
 	/** time zone name as text */
 	Tag<TextValue> TIME_ZONE_NAME = TagFactory.create(TextValue.class);
-
-	/** ordered list of component guids */
-	public static final Tag<GuidList> COMPONENT_LEGS = TagFactory
-			.create(GuidList.class);
 
 	// keep last
 	Tag<?>[] FIELDS = TagFactory.collectTop(InstrumentField.class);

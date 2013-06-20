@@ -1,4 +1,4 @@
-package com.barchart.feed.api.inst.rx;
+package rt;
 
 import java.util.Collection;
 
@@ -12,10 +12,10 @@ public interface InstrumentService<T> {
 		
 	}
 	
-	
 	void lookup(T t);
 	
-	void lookup(Collection<T> t);
+	void lookup(T[] t);
 	
+	void lookup(Collection<T> t);
 	
 }

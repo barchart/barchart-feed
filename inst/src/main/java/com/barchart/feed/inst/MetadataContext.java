@@ -5,8 +5,9 @@
  *
  * http://www.opensource.org/licenses/bsd-license.php
  */
-package com.barchart.feed.api.inst;
+package com.barchart.feed.inst;
 
+import com.barchart.feed.api.inst.InstrumentGUID;
 import com.barchart.feed.api.model.meta.Instrument;
 
 public interface MetadataContext {

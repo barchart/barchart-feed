@@ -7,11 +7,14 @@
  */
 package com.barchart.feed.inst.provider;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import com.barchart.feed.api.enums.BookLiquidityType;
 import com.barchart.feed.api.enums.BookStructureType;
 import com.barchart.feed.api.enums.MarketCurrency;
 import com.barchart.feed.api.enums.SecurityType;
-import com.barchart.feed.api.inst.GuidList;
 import com.barchart.feed.api.inst.InstrumentGUID;
 import com.barchart.feed.api.model.meta.Exchange;
 import com.barchart.feed.api.model.meta.Instrument;
@@ -29,6 +32,9 @@ import com.barchart.util.values.api.PriceValue;
 public abstract class InstrumentBase extends ObjectMapSafe implements Instrument {
 	
 	private static final Factory factory = FactoryLoader.load();
+	
+	public final List<InstrumentGUID> componentLegs = 
+			new ArrayList<InstrumentGUID>();
 	
 	@Override
 	public int compareTo(final Instrument o) {
@@ -157,8 +163,8 @@ public abstract class InstrumentBase extends ObjectMapSafe implements Instrument
 	}
 
 	@Override
-	public GuidList componentLegs() {
-		return get(InstrumentField.COMPONENT_LEGS);
+	public List<InstrumentGUID> componentLegs() {
+		return Collections.unmodifiableList(componentLegs);
 	}
 
 }

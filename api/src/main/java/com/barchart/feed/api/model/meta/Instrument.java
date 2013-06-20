@@ -1,10 +1,12 @@
 package com.barchart.feed.api.model.meta;
 
+import java.util.Collections;
+import java.util.List;
+
 import com.barchart.feed.api.enums.BookLiquidityType;
 import com.barchart.feed.api.enums.BookStructureType;
 import com.barchart.feed.api.enums.MarketCurrency;
 import com.barchart.feed.api.enums.SecurityType;
-import com.barchart.feed.api.inst.GuidList;
 import com.barchart.feed.api.inst.InstrumentGUID;
 import com.barchart.feed.api.model.Metadata;
 import com.barchart.util.value.api.Price;
@@ -55,7 +57,7 @@ public interface Instrument extends Comparable<Instrument>, Metadata {
 	
 	String timeZoneName();
 	
-	GuidList componentLegs();
+	List<InstrumentGUID> componentLegs();
 	
 	public static Instrument NULL_INSTRUMENT = new Instrument() {
 
@@ -170,8 +172,8 @@ public interface Instrument extends Comparable<Instrument>, Metadata {
 		}
 
 		@Override
-		public GuidList componentLegs() {
-			return new GuidList();
+		public List<InstrumentGUID> componentLegs() {
+			return Collections.emptyList();
 		}
 
 	};

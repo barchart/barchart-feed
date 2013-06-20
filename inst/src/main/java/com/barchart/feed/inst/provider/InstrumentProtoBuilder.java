@@ -11,7 +11,6 @@ import static com.barchart.feed.inst.InstrumentField.BOOK_DEPTH;
 import static com.barchart.feed.inst.InstrumentField.BOOK_LIQUIDITY;
 import static com.barchart.feed.inst.InstrumentField.BOOK_STRUCTURE;
 import static com.barchart.feed.inst.InstrumentField.CFI_CODE;
-import static com.barchart.feed.inst.InstrumentField.COMPONENT_LEGS;
 import static com.barchart.feed.inst.InstrumentField.CURRENCY_CODE;
 import static com.barchart.feed.inst.InstrumentField.DESCRIPTION;
 import static com.barchart.feed.inst.InstrumentField.DISPLAY_FRACTION;
@@ -41,7 +40,6 @@ import com.barchart.feed.api.enums.BookLiquidityType;
 import com.barchart.feed.api.enums.BookStructureType;
 import com.barchart.feed.api.enums.MarketCurrency;
 import com.barchart.feed.api.enums.SecurityType;
-import com.barchart.feed.api.inst.GuidList;
 import com.barchart.feed.api.inst.InstrumentGUID;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.missive.api.TagMapSafe;
@@ -321,20 +319,14 @@ public final class InstrumentProtoBuilder {
 			map.set(TIME_ZONE_NAME, newText(instDef.getTimeZoneName()));
 		}
 		
+		InstrumentImpl inst = ObjectMapFactory.build(InstrumentImpl.class, map);
+		
 		final List<Long> ids = instDef.getComponentIdList();
-		if(ids.isEmpty()) {
-			map.set(COMPONENT_LEGS, new GuidList());
-		} else {
-			GuidList idvs = new GuidList();
-			
-			for(int i = 0; i < ids.size(); i++) {
-				idvs.add(new InstrumentGUID(String.valueOf(ids.get(i))));
-			}
-			
-			map.set(COMPONENT_LEGS, idvs);
+		for(final Long id : ids) {
+			inst.componentLegs.add(new InstrumentGUID(String.valueOf(id)));
 		}
-
-		return ObjectMapFactory.build(InstrumentImpl.class, map);
+		
+		return inst;
 	}
 
 	static PriceValue priceFromDecimal(final Decimal d) {
