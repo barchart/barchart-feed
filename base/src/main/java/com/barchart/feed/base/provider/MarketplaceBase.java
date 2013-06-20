@@ -45,7 +45,7 @@ import com.barchart.util.values.api.Value;
 public abstract class MarketplaceBase<Message extends MarketMessage> implements
 		MarketMakerProvider<Message>, AgentBuilder, AgentLifecycleHandler {
 
-	protected final Logger log = LoggerFactory.getLogger(getClass());
+	protected static final Logger log = LoggerFactory.getLogger(MarketplaceBase.class);
 	
 	protected final MarketFactory factory;
 	protected final InstrumentService<CharSequence> instLookup;
@@ -127,7 +127,8 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 
 		@Override
 		public V data(final Market market) {
-			return getter.get(market.copy());
+			/* getter calling copy() */
+			return getter.get(market);
 		}
 		
 		/* ***** ***** Filter Methods ***** ***** */
@@ -503,6 +504,8 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 	}
 	
 	private static String formatForJERQ(String symbol) {
+		
+		log.debug("Formatting {} for JERQ", symbol);
 		
 		if(symbol == null) {
 			return "";

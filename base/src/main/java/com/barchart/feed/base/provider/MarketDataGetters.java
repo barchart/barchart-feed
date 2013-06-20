@@ -26,25 +26,25 @@ public final class MarketDataGetters {
 
 					@Override
 					public Market get(final Market market) {
-						return market;
+						return market.copy();
 					}
 			
 				});
 				
-				put(Trade.class, new MDGetter<Trade>(){
+				put(Trade.class, new MDGetter<Trade>() {
 
 					@Override
 					public Trade get(final Market market) {
-						return market.lastTrade();
+						return market.lastTrade().copy();
 					}
 					
 				});
 				
-				put(OrderBook.class, new MDGetter<OrderBook>(){
+				put(OrderBook.class, new MDGetter<OrderBook>() {
 
 					@Override
 					public OrderBook get(final Market market) {
-						return market.orderBook();
+						return market.orderBook().copy();
 					}
 					
 				});
@@ -53,16 +53,16 @@ public final class MarketDataGetters {
 					
 					@Override
 					public Cuvol get(final Market market) {
-						return market.cuvol();
+						return market.cuvol().copy();
 					}
 					
 				});
 				
-				put(Session.class, new MDGetter<Session>(){
+				put(Session.class, new MDGetter<Session>() {
 
 					@Override
 					public Session get(final Market market) {
-						return market.session();
+						return market.session().copy();
 					}
 					
 				});
