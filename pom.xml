@@ -14,7 +14,8 @@
 	<parent>
 		<groupId>com.barchart.base</groupId>
 		<artifactId>barchart-archon</artifactId>
-		<version>2.5.6</version>
+		<version>2.5.12</version>
+		<relativePath/>
 	</parent>
 
 	<groupId>com.barchart.feed</groupId>
@@ -23,10 +24,13 @@
 	<packaging>pom</packaging>
 
 	<modules>
+	
+		<module>archon</module>
+		
 		<module>api</module>
 		<module>inst</module>
 		<module>base</module>
-		<module>archon</module>
+		
 	</modules>
 
 	<url>https://github.com/barchart/barchart-feed</url>
