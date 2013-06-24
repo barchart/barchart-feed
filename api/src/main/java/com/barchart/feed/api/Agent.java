@@ -50,8 +50,6 @@ public interface Agent {
 	 */
 	void include(Instrument...instruments);
 	
-	//TODO collection methods
-	//void include(Collection<Instrument> instruments);
 	
 	/**
 	 * Subscribes to and attaches agent to all instruments from provided

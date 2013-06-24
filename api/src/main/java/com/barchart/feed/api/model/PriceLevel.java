@@ -15,6 +15,8 @@ public interface PriceLevel {
 
 	int level();
 	
+	boolean isNull();
+	
 	public static final PriceLevel NULL_PRICE_LEVEL = new PriceLevel() {
 
 		@Override
@@ -35,6 +37,11 @@ public interface PriceLevel {
 		@Override
 		public int level() {
 			return 0;
+		}
+
+		@Override
+		public boolean isNull() {
+			return true;
 		}
 		
 	};
