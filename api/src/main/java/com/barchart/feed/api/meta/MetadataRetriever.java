@@ -34,7 +34,6 @@ public interface MetadataRetriever<V extends Metadata> {
 	 * Attempts to retrieve a Metadata object from some service and returns
 	 * a result to the user's observer.  
 	 * 
-	 * @param id the GUID of a MetaData o
 	 * @param id the GUID of a MetaData object
 	 * @param timeout time in milliseconds before operation times out
 	 */

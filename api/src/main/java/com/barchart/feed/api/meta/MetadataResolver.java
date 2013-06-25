@@ -21,6 +21,8 @@ public interface MetadataResolver<V extends Metadata> {
 	 */
 	interface Builder<V extends Metadata> {
 		
+		// Other options here
+		
 		MetadataResolver<V> build(Observer<Result<List<V>>> observer);
 		
 	}
@@ -38,6 +40,5 @@ public interface MetadataResolver<V extends Metadata> {
 	 *  			result paging: limit number of returned entries
 	 */
 	void resolve(String expression, int offset, int limit, long timeout);
-	
 	
 }
