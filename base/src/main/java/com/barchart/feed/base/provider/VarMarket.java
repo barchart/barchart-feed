@@ -31,7 +31,7 @@ import com.barchart.feed.api.FrameworkAgent;
 import com.barchart.feed.api.enums.BookLiquidityType;
 import com.barchart.feed.api.model.MarketData;
 import com.barchart.feed.api.model.data.Cuvol;
-import com.barchart.feed.api.model.data.OrderBook;
+import com.barchart.feed.api.model.data.Book;
 import com.barchart.feed.api.model.data.Session;
 import com.barchart.feed.api.model.data.Trade;
 import com.barchart.feed.api.model.meta.Instrument;
@@ -84,7 +84,7 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 		agentMap.put(com.barchart.feed.api.model.data.Market.class, 
 				new HashSet<FrameworkAgent<?>>());
 		agentMap.put(Trade.class, new HashSet<FrameworkAgent<?>>());
-		agentMap.put(OrderBook.class, new HashSet<FrameworkAgent<?>>());
+		agentMap.put(Book.class, new HashSet<FrameworkAgent<?>>());
 		agentMap.put(Cuvol.class, new HashSet<FrameworkAgent<?>>());
 		agentMap.put(Session.class, new HashSet<FrameworkAgent<?>>());
 

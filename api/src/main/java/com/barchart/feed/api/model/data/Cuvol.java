@@ -12,14 +12,19 @@ import com.barchart.util.value.impl.ValueConst;
 
 public interface Cuvol extends MarketData<Cuvol> {
 
+	// interface Entry {
+	// }
+
+	// List<Entry> entryList();
+
 	Price firstPrice();
-	
+
 	Price tickSize();
-	
+
 	List<CuvolEntry> cuvolList();
-	
+
 	CuvolEntry lastCuvolUpdate();
-	
+
 	public static final Cuvol NULL_CUVOL = new Cuvol() {
 
 		@Override
@@ -61,7 +66,7 @@ public interface Cuvol extends MarketData<Cuvol> {
 		public CuvolEntry lastCuvolUpdate() {
 			return CuvolEntry.NULL_CUVOL_ENTRY;
 		}
-		
+
 	};
-	
+
 }

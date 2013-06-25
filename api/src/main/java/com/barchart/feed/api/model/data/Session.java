@@ -12,13 +12,20 @@ import com.barchart.util.value.impl.ValueConst;
  */
 public interface Session extends MarketData<Session>, SessionData {
 
+	/** FIXME kill */
 	SessionData extended();
-	
+
+	/** FIXME kill */
 	SessionData previous();
-	
+
+	/** FIXME kill */
 	SessionData previousExtended();
-	
+
+	/** FIXME kill */
 	boolean isSettled();
+
+	/** FIXME report change set. */
+	// Set<Component> change();
 
 	public static final Session NULL_SESSION = new Session() {
 
@@ -111,7 +118,7 @@ public interface Session extends MarketData<Session>, SessionData {
 		public boolean isSettled() {
 			return false;
 		}
-		
+
 	};
-	
+
 }

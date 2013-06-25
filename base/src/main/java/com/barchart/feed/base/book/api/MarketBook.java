@@ -11,7 +11,7 @@
 package com.barchart.feed.base.book.api;
 
 import com.barchart.feed.api.enums.MarketSide;
-import com.barchart.feed.api.model.data.OrderBook;
+import com.barchart.feed.api.model.data.Book;
 import com.barchart.util.anno.NotMutable;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
@@ -19,7 +19,7 @@ import com.barchart.util.values.api.TimeValue;
 import com.barchart.util.values.api.Value;
 
 @NotMutable
-public interface MarketBook extends Value<MarketBook>, OrderBook {
+public interface MarketBook extends Value<MarketBook>, Book {
 
 	/**
 	 * starting value for place() on bid or ask side; book entry place() can be

@@ -5,12 +5,15 @@ import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Size;
 import com.barchart.util.value.api.Time;
+import com.barchart.util.value.api.Tuple;
 import com.barchart.util.value.impl.ValueConst;
 
-public interface Trade extends MarketData<Trade> {
+public interface Trade extends MarketData<Trade>, Tuple {
 
+	@Override
 	Price price();
 
+	@Override
 	Size size();
 
 	/**
@@ -55,7 +58,7 @@ public interface Trade extends MarketData<Trade> {
 		public Time time() {
 			return ValueConst.NULL_TIME;
 		}
-		
+
 	};
-	
+
 }

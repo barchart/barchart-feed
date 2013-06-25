@@ -8,7 +8,7 @@
 package com.barchart.feed.base.provider;
 
 import com.barchart.feed.api.model.data.Cuvol;
-import com.barchart.feed.api.model.data.OrderBook;
+import com.barchart.feed.api.model.data.Book;
 import com.barchart.feed.api.model.data.Session;
 import com.barchart.feed.api.model.data.Trade;
 import com.barchart.feed.api.model.meta.Instrument;
@@ -58,12 +58,12 @@ public class DefMarket extends NulMarket {
 	}
 
 	@Override
-	public Trade lastTrade() {
+	public Trade trade() {
 		return get(MarketField.TRADE);
 	}
 
 	@Override
-	public OrderBook orderBook() {
+	public Book book() {
 		return get(MarketField.BOOK);
 	}
 

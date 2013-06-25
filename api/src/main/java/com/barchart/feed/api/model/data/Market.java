@@ -7,14 +7,15 @@ import com.barchart.util.value.impl.ValueConst;
 
 public interface Market extends MarketData<Market> {
 
-	Trade lastTrade();
+	/** Last trade. */
+	Trade trade();
 
-	OrderBook orderBook();
+	Book book();
 
 	Cuvol cuvol();
-	
+
 	Session session();
-	
+
 	public static final Market NULL_MARKET = new Market() {
 
 		@Override
@@ -38,13 +39,13 @@ public interface Market extends MarketData<Market> {
 		}
 
 		@Override
-		public Trade lastTrade() {
+		public Trade trade() {
 			return Trade.NULL_TRADE;
 		}
 
 		@Override
-		public OrderBook orderBook() {
-			return OrderBook.NULL_ORDERBOOK;
+		public Book book() {
+			return Book.NULL_ORDERBOOK;
 		}
 
 		@Override
@@ -56,7 +57,7 @@ public interface Market extends MarketData<Market> {
 		public Session session() {
 			return Session.NULL_SESSION;
 		}
-		
+
 	};
 
 }

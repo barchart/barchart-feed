@@ -6,7 +6,7 @@ import java.util.Map;
 import com.barchart.feed.api.model.MarketData;
 import com.barchart.feed.api.model.data.Cuvol;
 import com.barchart.feed.api.model.data.Market;
-import com.barchart.feed.api.model.data.OrderBook;
+import com.barchart.feed.api.model.data.Book;
 import com.barchart.feed.api.model.data.Session;
 import com.barchart.feed.api.model.data.Trade;
 
@@ -35,16 +35,16 @@ public final class MarketDataGetters {
 
 					@Override
 					public Trade get(final Market market) {
-						return market.lastTrade().copy();
+						return market.trade().copy();
 					}
 					
 				});
 				
-				put(OrderBook.class, new MDGetter<OrderBook>() {
+				put(Book.class, new MDGetter<Book>() {
 
 					@Override
-					public OrderBook get(final Market market) {
-						return market.orderBook().copy();
+					public Book get(final Market market) {
+						return market.book().copy();
 					}
 					
 				});

@@ -4,15 +4,16 @@ import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Size;
 import com.barchart.util.value.impl.ValueConst;
 
+/** FIXME move inside cuvol */
 public interface CuvolEntry {
-	
+
 	Price price();
-	
+
 	Size volume();
-	
+
 	int place();
 
-	public static CuvolEntry NULL_CUVOL_ENTRY = new CuvolEntry() {
+	CuvolEntry NULL_CUVOL_ENTRY = new CuvolEntry() {
 
 		@Override
 		public Price price() {
@@ -28,7 +29,7 @@ public interface CuvolEntry {
 		public int place() {
 			return 0;
 		}
-		
+
 	};
-	
+
 }

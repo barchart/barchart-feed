@@ -8,7 +8,7 @@
 package com.barchart.feed.base.provider;
 
 import com.barchart.feed.api.model.data.Cuvol;
-import com.barchart.feed.api.model.data.OrderBook;
+import com.barchart.feed.api.model.data.Book;
 import com.barchart.feed.api.model.data.Session;
 import com.barchart.feed.api.model.data.Trade;
 import com.barchart.feed.api.model.meta.Instrument;
@@ -68,13 +68,13 @@ class NulMarket extends ValueFreezer<Market> implements Market {
 	}
 
 	@Override
-	public Trade lastTrade() {
+	public Trade trade() {
 		// TODO make null
 		return null;
 	}
 
 	@Override
-	public OrderBook orderBook() {
+	public Book book() {
 		// TODO make null
 		return null;
 	}

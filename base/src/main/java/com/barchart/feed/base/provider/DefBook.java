@@ -15,7 +15,7 @@ import java.util.List;
 
 import com.barchart.feed.api.enums.MarketSide;
 import com.barchart.feed.api.model.PriceLevel;
-import com.barchart.feed.api.model.data.OrderBook;
+import com.barchart.feed.api.model.data.Book;
 import com.barchart.feed.api.model.data.TopOfBook;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.book.api.MarketBook;
@@ -260,7 +260,7 @@ public class DefBook extends ValueFreezer<MarketBook> implements MarketBook {
 	}
 
 	@Override
-	public OrderBook copy() {
+	public Book copy() {
 		return this.freeze();
 	}
 

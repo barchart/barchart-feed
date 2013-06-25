@@ -10,15 +10,19 @@ import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.util.value.api.Time;
 import com.barchart.util.value.impl.ValueConst;
 
-public interface OrderBook extends MarketData<OrderBook> {
+public interface Book extends MarketData<Book> {
+
+	interface Top {
+
+	}
 
 	TopOfBook topOfBook();
 
 	List<PriceLevel> entryList(MarketSide side);
 
 	PriceLevel lastBookUpdate();
-	
-	public static final OrderBook NULL_ORDERBOOK = new OrderBook() {
+
+	public static final Book NULL_ORDERBOOK = new Book() {
 
 		@Override
 		public Instrument instrument() {
@@ -36,7 +40,7 @@ public interface OrderBook extends MarketData<OrderBook> {
 		}
 
 		@Override
-		public OrderBook copy() {
+		public Book copy() {
 			return this;
 		}
 
@@ -46,7 +50,7 @@ public interface OrderBook extends MarketData<OrderBook> {
 		}
 
 		@Override
-		public List<PriceLevel> entryList(MarketSide side) {
+		public List<PriceLevel> entryList(final MarketSide side) {
 			return new ArrayList<PriceLevel>();
 		}
 
@@ -54,7 +58,7 @@ public interface OrderBook extends MarketData<OrderBook> {
 		public PriceLevel lastBookUpdate() {
 			return PriceLevel.NULL_PRICE_LEVEL;
 		}
-		
+
 	};
 
 }

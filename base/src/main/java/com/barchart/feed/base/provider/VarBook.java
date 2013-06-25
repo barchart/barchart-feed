@@ -16,7 +16,7 @@ import java.util.List;
 import com.barchart.feed.api.enums.BookLiquidityType;
 import com.barchart.feed.api.enums.MarketSide;
 import com.barchart.feed.api.model.PriceLevel;
-import com.barchart.feed.api.model.data.OrderBook;
+import com.barchart.feed.api.model.data.Book;
 import com.barchart.feed.api.model.data.TopOfBook;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.book.api.MarketBook;
@@ -121,7 +121,7 @@ public final class VarBook extends UniBook<MarketBook> implements MarketDoBook {
 	}
 
 	@Override
-	public OrderBook copy() {
+	public Book copy() {
 		return this.freeze();
 	}
 

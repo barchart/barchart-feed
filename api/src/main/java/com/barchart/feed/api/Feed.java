@@ -5,9 +5,9 @@ import com.barchart.feed.api.connection.ConnectionLifecycle;
 import com.barchart.feed.api.connection.ConnectionStateListener;
 import com.barchart.feed.api.connection.TimestampListener;
 import com.barchart.feed.api.model.MarketData;
+import com.barchart.feed.api.model.data.Book;
 import com.barchart.feed.api.model.data.Cuvol;
 import com.barchart.feed.api.model.data.Market;
-import com.barchart.feed.api.model.data.OrderBook;
 import com.barchart.feed.api.model.data.Trade;
 import com.barchart.feed.api.model.meta.Exchange;
 import com.barchart.feed.api.model.meta.Instrument;
@@ -15,13 +15,13 @@ import com.barchart.feed.api.model.meta.Instrument;
 public interface Feed extends ConnectionLifecycle<Feed>, AgentBuilder {
 
 	/* ***** ***** ConnectionLifecycle ***** ***** */
-	
+
 	@Override
 	ConnectionFuture<Feed> startup();
-	
+
 	@Override
 	ConnectionFuture<Feed> shutdown();
-	
+
 	/**
 	 * Applications which need to react to the connectivity state of the feed
 	 * instantiate a FeedStateListener and bind it to the client.
@@ -31,7 +31,7 @@ public interface Feed extends ConnectionLifecycle<Feed>, AgentBuilder {
 	 */
 	@Override
 	void bindConnectionStateListener(ConnectionStateListener listener);
-	
+
 	/**
 	 * Applications which require time-stamp or heart-beat messages from the
 	 * data server instantiate a DDF_TimestampListener and bind it to the
@@ -41,27 +41,28 @@ public interface Feed extends ConnectionLifecycle<Feed>, AgentBuilder {
 	 */
 	@Override
 	void bindTimestampListener(TimestampListener listener);
-	
+
 	/* ***** ***** AgentBuilder ***** ***** */
-	
+
 	@Override
-	<V extends MarketData<V>> Agent newAgent(Class<V> clazz, 
+	<V extends MarketData<V>> Agent newAgent(Class<V> clazz,
 			MarketObserver<V> callback);
-	
+
 	/* ***** ***** Helper subscribe methods ***** ***** */
-	
-	
-	// Agent a = feed.subscribe(new String[] { "IBM", "MSFT" }, MARKET, callback);
-	
-	<V extends MarketData<V>> Agent subscribe(Class<V> clazz, 
-			MarketObserver<V> callback,	String... symbols);
-	
-	<V extends MarketData<V>> Agent subscribe(Class<V> clazz, 
+
+	// Agent a = feed.subscribe(new String[] { "IBM", "MSFT" }, MARKET,
+	// callback);
+
+	/** FIXME document */
+	<V extends MarketData<V>> Agent subscribe(Class<V> clazz,
+			MarketObserver<V> callback, String... symbols);
+
+	<V extends MarketData<V>> Agent subscribe(Class<V> clazz,
 			MarketObserver<V> callback, Instrument... instruments);
-	
-	<V extends MarketData<V>> Agent subscribe(Class<V> clazz, 
+
+	<V extends MarketData<V>> Agent subscribe(Class<V> clazz,
 			MarketObserver<V> callback, Exchange... exchanges);
-	
+
 	/**
 	 * Fires on ALL
 	 * 
@@ -70,7 +71,7 @@ public interface Feed extends ConnectionLifecycle<Feed>, AgentBuilder {
 	 * @return
 	 */
 	Agent subscribeMarket(MarketObserver<Market> callback, String... symbols);
-	
+
 	/**
 	 * Fires on TRADE
 	 * 
@@ -79,7 +80,7 @@ public interface Feed extends ConnectionLifecycle<Feed>, AgentBuilder {
 	 * @return
 	 */
 	Agent subscribeTrade(MarketObserver<Trade> lastTrade, String... symbols);
-	
+
 	/**
 	 * Fires on BOOK_UPDATE and BOOK_SNAPSHOT
 	 * 
@@ -87,8 +88,8 @@ public interface Feed extends ConnectionLifecycle<Feed>, AgentBuilder {
 	 * @param instruments
 	 * @return
 	 */
-	Agent subscribeBook(MarketObserver<OrderBook> book, String... symbols);
-	
+	Agent subscribeBook(MarketObserver<Book> book, String... symbols);
+
 	/**
 	 * Fires on CUVOL_UPDATE and CUVOL_SNAPSHOT
 	 * 
@@ -97,5 +98,5 @@ public interface Feed extends ConnectionLifecycle<Feed>, AgentBuilder {
 	 * @return
 	 */
 	Agent subscribeCuvol(MarketObserver<Cuvol> cuvol, String... symbols);
-	
+
 }

@@ -14,10 +14,10 @@ public interface PriceLevel {
 	MarketSide side();
 
 	int level();
-	
+
 	boolean isNull();
-	
-	public static final PriceLevel NULL_PRICE_LEVEL = new PriceLevel() {
+
+	final PriceLevel NULL_PRICE_LEVEL = new PriceLevel() {
 
 		@Override
 		public Price price() {
@@ -43,7 +43,7 @@ public interface PriceLevel {
 		public boolean isNull() {
 			return true;
 		}
-		
+
 	};
 
 }
