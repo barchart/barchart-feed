@@ -39,12 +39,6 @@
 	
   	<dependencies>
   	
-  		<dependency>
-			<groupId>com.barchart.missive</groupId>
-			<artifactId>barchart-missive</artifactId>
-			<version>[2-SNAPSHOT, 3-SNAPSHOT)</version>
-		</dependency>
-		
 		<dependency>
 			<groupId>joda-time</groupId>
 			<artifactId>joda-time</artifactId>

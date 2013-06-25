@@ -6,17 +6,17 @@ import com.barchart.util.value.api.Time;
 import com.barchart.util.value.impl.ValueConst;
 
 public interface SessionData {
-	
+
 	Price open();
 
 	Price high();
 
 	Price low();
-	
+
 	Price close();
 
 	Price settle();
-	
+
 	Size volume();
 
 	Size interest();
@@ -78,7 +78,7 @@ public interface SessionData {
 		public Time timeClosed() {
 			return ValueConst.NULL_TIME;
 		}
-		
+
 	};
-	
+
 }

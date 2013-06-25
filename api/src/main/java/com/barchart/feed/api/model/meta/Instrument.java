@@ -9,56 +9,57 @@ import com.barchart.feed.api.enums.MarketCurrency;
 import com.barchart.feed.api.enums.SecurityType;
 import com.barchart.feed.api.inst.InstrumentGUID;
 import com.barchart.feed.api.model.Metadata;
+import com.barchart.util.value.api.Fraction;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Schedule;
 import com.barchart.util.value.api.Size;
 import com.barchart.util.value.api.TimeInterval;
 import com.barchart.util.value.impl.ValueConst;
-import com.barchart.util.value.api.Fraction;
 
 public interface Instrument extends Comparable<Instrument>, Metadata {
-	
+
 	InstrumentGUID GUID();
-	
+
 	String marketGUID();
-	
+
 	SecurityType securityType();
-	
+
 	BookLiquidityType liquidityType();
-	
+
 	BookStructureType bookStructure();
-	
+
 	Size maxBookDepth();
-	
+
 	String instrumentDataVendor();
-	
+
 	String symbol();
-	
+
 	String description();
-	
+
 	String CFICode();
-	
+
 	Exchange exchange();
+
 	String exchangeCode();
-	
+
 	MarketCurrency currency();
-	
+
 	Price tickSize();
-	
+
 	Price pointValue();
-	
+
 	Fraction displayFraction();
-	
+
 	TimeInterval lifetime();
-	
+
 	Schedule marketHours();
-	
+
 	long timeZoneOffset();
-	
+
 	String timeZoneName();
-	
+
 	List<InstrumentGUID> componentLegs();
-	
+
 	public static Instrument NULL_INSTRUMENT = new Instrument() {
 
 		@Override
@@ -67,7 +68,7 @@ public interface Instrument extends Comparable<Instrument>, Metadata {
 		}
 
 		@Override
-		public int compareTo(Instrument o) {
+		public int compareTo(final Instrument o) {
 			return 0;
 		}
 
@@ -177,5 +178,5 @@ public interface Instrument extends Comparable<Instrument>, Metadata {
 		}
 
 	};
-	
+
 }
