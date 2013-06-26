@@ -8,13 +8,12 @@
 package com.barchart.feed.base.book.api;
 
 import com.barchart.feed.api.model.data.Book;
-import com.barchart.feed.api.model.data.TopOfBook;
 import com.barchart.util.anno.NotMutable;
 import com.barchart.util.values.api.TimeValue;
 import com.barchart.util.values.api.Value;
 
 @NotMutable
-public interface MarketBookTop extends Value<MarketBookTop>, TopOfBook {
+public interface MarketBookTop extends Value<MarketBookTop>, Book.Top {
 
 	/** last time top update on either side */
 	TimeValue time();

@@ -7,12 +7,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.api.model.MarketData;
-import com.barchart.feed.api.model.PriceLevel;
 import com.barchart.feed.api.model.data.Cuvol;
 import com.barchart.feed.api.model.data.Market;
 import com.barchart.feed.api.model.data.Book;
 import com.barchart.feed.api.model.data.Session;
-import com.barchart.feed.api.model.data.TopOfBook;
 import com.barchart.feed.api.model.data.Trade;
 import com.barchart.feed.api.model.meta.Instrument;
 
@@ -51,12 +49,6 @@ public enum SubscriptionType {
 			result.add(QUOTE_UPDATE);
 			result.add(QUOTE_SNAPSHOT);
 		} else if(clazz.equals(Book.class)) {
-			result.add(BOOK_UPDATE);
-			result.add(BOOK_SNAPSHOT);
-		} else if(clazz.equals(PriceLevel.class)) {
-			result.add(BOOK_UPDATE);
-			result.add(BOOK_SNAPSHOT);
-		} else if(clazz.equals(TopOfBook.class)) {
 			result.add(BOOK_UPDATE);
 			result.add(BOOK_SNAPSHOT);
 		} else if(clazz.equals(Cuvol.class)) {

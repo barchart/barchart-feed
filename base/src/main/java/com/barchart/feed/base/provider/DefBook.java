@@ -13,9 +13,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import com.barchart.feed.api.model.PriceLevel;
 import com.barchart.feed.api.model.data.Book;
-import com.barchart.feed.api.model.data.TopOfBook;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.book.api.MarketBook;
 import com.barchart.feed.base.book.api.MarketBookEntry;
@@ -200,7 +198,7 @@ public class DefBook extends ValueFreezer<MarketBook> implements MarketBook {
 	}
 
 	@Override
-	public TopOfBook topOfBook() {
+	public Top top() {
 		
 		final MarketBookEntry bid;
 		if(bids.length == 0 || bids[0] == null || bids[0].isNull()) {

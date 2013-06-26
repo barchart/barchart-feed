@@ -7,7 +7,6 @@
  */
 package com.barchart.feed.base.provider;
 
-import com.barchart.feed.api.model.PriceLevel;
 import com.barchart.feed.api.model.data.Book;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.book.api.MarketBookEntry;
@@ -81,12 +80,12 @@ public class DefBookTop extends ValueFreezer<MarketBookTop> implements
 	}
 
 	@Override
-	public PriceLevel bid() {
+	public Book.PriceLevel bid() {
 		return bid;
 	}
 
 	@Override
-	public PriceLevel ask() {
+	public Book.PriceLevel ask() {
 		return ask;
 	}
 

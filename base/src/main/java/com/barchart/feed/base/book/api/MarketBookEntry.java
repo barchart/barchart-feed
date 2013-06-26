@@ -7,13 +7,14 @@
  */
 package com.barchart.feed.base.book.api;
 
-import com.barchart.feed.api.model.PriceLevel;
+import com.barchart.feed.api.model.data.Book;
 import com.barchart.feed.base.market.api.MarketEntry;
 import com.barchart.util.anno.NotMutable;
 import com.barchart.util.values.api.Value;
 
 @NotMutable
-public interface MarketBookEntry extends Value<MarketBookEntry>, MarketEntry, PriceLevel {
+public interface MarketBookEntry extends Value<MarketBookEntry>, MarketEntry, 
+		Book.PriceLevel {
 
 	/**
 	 * logical position in the bid or ask side;

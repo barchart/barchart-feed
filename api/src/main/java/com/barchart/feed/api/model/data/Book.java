@@ -4,13 +4,88 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.barchart.feed.api.model.MarketData;
-import com.barchart.feed.api.model.PriceLevel;
 import com.barchart.feed.api.model.meta.Instrument;
+import com.barchart.util.value.api.Existential;
+import com.barchart.util.value.api.Price;
+import com.barchart.util.value.api.Size;
 import com.barchart.util.value.api.Time;
+import com.barchart.util.value.api.Tuple;
 
 public interface Book extends MarketData<Book> {
 
-	interface Top {
+	interface Top extends Existential {
+
+		PriceLevel bid();
+
+		PriceLevel ask();
+
+		@Override
+		boolean isNull();
+		
+		public static final Top NULL_TOP_OF_BOOK = new Top() {
+
+			@Override
+			public PriceLevel bid() {
+				return PriceLevel.NULL_PRICE_LEVEL;
+			}
+
+			@Override
+			public PriceLevel ask() {
+				return PriceLevel.NULL_PRICE_LEVEL;
+			}
+
+			@Override
+			public boolean isNull() {
+				return true;
+			}
+
+		};
+
+	}
+	
+	interface PriceLevel extends Existential, Tuple {
+
+		@Override
+		Price price();
+
+		@Override
+		Size size();
+
+		Book.Side side();
+
+		int level();
+
+		@Override
+		boolean isNull();
+
+		final PriceLevel NULL_PRICE_LEVEL = new PriceLevel() {
+
+			@Override
+			public Price price() {
+				return Price.NULL;
+			}
+
+			@Override
+			public Size size() {
+				return Size.NULL;
+			}
+
+			@Override
+			public Book.Side side() {
+				return Book.Side.NULL;
+			}
+
+			@Override
+			public int level() {
+				return 0;
+			}
+
+			@Override
+			public boolean isNull() {
+				return true;
+			}
+
+		};
 
 	}
 
@@ -72,7 +147,7 @@ public interface Book extends MarketData<Book> {
 		
 	}
 	
-	TopOfBook topOfBook();
+	Top top();
 
 	List<PriceLevel> entryList(Side side);
 
@@ -101,8 +176,8 @@ public interface Book extends MarketData<Book> {
 		}
 
 		@Override
-		public TopOfBook topOfBook() {
-			return TopOfBook.NULL_TOP_OF_BOOK;
+		public Top top() {
+			return Top.NULL_TOP_OF_BOOK;
 		}
 
 		@Override

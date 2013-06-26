@@ -11,9 +11,7 @@ import static com.barchart.feed.base.provider.MarketConst.NULL_BOOK_ENTRY;
 
 import java.util.List;
 
-import com.barchart.feed.api.model.PriceLevel;
 import com.barchart.feed.api.model.data.Book;
-import com.barchart.feed.api.model.data.TopOfBook;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.book.api.MarketBook;
 import com.barchart.feed.base.book.api.MarketBookEntry;
@@ -128,7 +126,7 @@ public final class VarBook extends UniBook<MarketBook> implements MarketDoBook {
 	}
 
 	@Override
-	public TopOfBook topOfBook() {
+	public Top top() {
 		throw new UnsupportedOperationException("UNUSED");
 	}
 
