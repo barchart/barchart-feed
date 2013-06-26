@@ -7,7 +7,6 @@
  */
 package com.barchart.feed.base.provider;
 
-import com.barchart.feed.api.enums.MarketSide;
 import com.barchart.feed.api.model.data.Book;
 import com.barchart.feed.base.book.api.MarketDoBookEntry;
 
@@ -45,8 +44,8 @@ class UniBookRingAsks extends UniBookRing {
 	}
 
 	@Override
-	protected final MarketSide side() {
-		return MarketSide.ASK;
+	protected final Book.Side side() {
+		return Book.Side.ASK;
 	}
 
 	@Override

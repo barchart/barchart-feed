@@ -10,7 +10,6 @@ package com.barchart.feed.base.provider;
 import static com.barchart.feed.base.book.enums.MarketBookAction.*;
 import static com.barchart.util.values.provider.ValueBuilder.*;
 
-import com.barchart.feed.api.enums.MarketSide;
 import com.barchart.feed.api.model.data.Book;
 import com.barchart.feed.base.book.api.MarketDoBookEntry;
 import com.barchart.feed.base.book.enums.MarketBookAction;
@@ -34,7 +33,7 @@ abstract class UniBookRing extends
 
 	// book side-dependent operations
 
-	protected abstract MarketSide side();
+	protected abstract Book.Side side();
 
 	protected abstract int indexTop();
 

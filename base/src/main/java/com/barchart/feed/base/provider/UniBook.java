@@ -17,7 +17,6 @@ import static com.barchart.feed.base.provider.UniBookRing.CLUE_NONE;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.feed.api.enums.MarketSide;
 import com.barchart.feed.api.model.data.Book;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.book.api.MarketDoBookEntry;
@@ -71,7 +70,7 @@ class UniBook<V extends Value<V>> extends ValueFreezer<V> {
 	}
 
 	// XXX returns null
-	private final UniBookRing ringFor(final MarketSide side) {
+	private final UniBookRing ringFor(final Book.Side side) {
 		switch (side) {
 		case BID:
 			return bids;
@@ -137,13 +136,13 @@ class UniBook<V extends Value<V>> extends ValueFreezer<V> {
 
 	// last updated entry signature
 	private byte lastClue;
-	private byte lastSide = MarketSide.NULL.ord;
+	private byte lastSide = Book.Side.NULL.ord;
 
 	private final void saveLastClue(final int clue) {
 		lastClue = MathExtra.castIntToByte(clue);
 	}
 
-	private void saveLastSide(final MarketSide side) {
+	private void saveLastSide(final Book.Side side) {
 		lastSide = side.ord;
 	}
 
@@ -152,7 +151,7 @@ class UniBook<V extends Value<V>> extends ValueFreezer<V> {
 	 * modification;
 	 */
 	protected final DefBookEntry lastEntry() {
-		final MarketSide side = MarketSide.fromOrd(lastSide);
+		final Book.Side side = Book.Side.fromOrd(lastSide);
 		final UniBookRing ring = ringFor(side);
 		if (ring == null) {
 			return null;
@@ -289,7 +288,7 @@ class UniBook<V extends Value<V>> extends ValueFreezer<V> {
 	/**
 	 * can return null
 	 **/
-	protected final MarketDoBookEntry topFor(final MarketSide side) {
+	protected final MarketDoBookEntry topFor(final Book.Side side) {
 
 		final UniBookRing ring = ringFor(side);
 
@@ -308,7 +307,7 @@ class UniBook<V extends Value<V>> extends ValueFreezer<V> {
 	}
 
 	private final DefBookEntry nullEntry(final int index) {
-		return new DefBookEntry(null, MarketSide.NULL, Book.Type.COMBINED, 
+		return new DefBookEntry(null, Book.Side.NULL, Book.Type.COMBINED, 
 				0, step.mult(index), null);
 	}
 
@@ -358,7 +357,7 @@ class UniBook<V extends Value<V>> extends ValueFreezer<V> {
 		return false;
 	}
 
-	protected final boolean isEmpty(final MarketSide side) {
+	protected final boolean isEmpty(final Book.Side side) {
 		final UniBookRing ring = ringFor(side);
 		if (ring == null) {
 			return true;
@@ -373,7 +372,7 @@ class UniBook<V extends Value<V>> extends ValueFreezer<V> {
 	}
 
 	// non null entries only, ordered by logical offset
-	protected final DefBookEntry[] entriesFor(final MarketSide side) {
+	protected final DefBookEntry[] entriesFor(final Book.Side side) {
 		final UniBookRing ring = ringFor(side);
 		if (ring == null) {
 			throw new IllegalArgumentException("invalid book side=" + side);
@@ -382,7 +381,7 @@ class UniBook<V extends Value<V>> extends ValueFreezer<V> {
 		}
 	}
 
-	protected final SizeValue[] sizesFor(final MarketSide side) {
+	protected final SizeValue[] sizesFor(final Book.Side side) {
 		final UniBookRing ring = ringFor(side);
 		if (ring == null) {
 			throw new IllegalArgumentException("invalid book side=" + side);

@@ -7,8 +7,6 @@
  */
 package com.barchart.feed.base.market;
 
-import static com.barchart.feed.api.enums.MarketSide.ASK;
-import static com.barchart.feed.api.enums.MarketSide.BID;
 import static com.barchart.feed.base.bar.enums.MarketBarField.VOLUME;
 import static com.barchart.feed.base.book.enums.MarketBookAction.MODIFY;
 import static com.barchart.feed.base.book.enums.MarketBookAction.REMOVE;
@@ -107,8 +105,8 @@ public class TestProcessBook {
 
 		book = market.get(BOOK); // null book
 		// System.out.println(book);
-		assertEquals(1, book.entries(BID).length);
-		assertEquals(1, book.entries(ASK).length);
+		assertEquals(1, book.entries(Book.Side.BID).length);
+		assertEquals(1, book.entries(Book.Side.ASK).length);
 
 		//
 
@@ -117,7 +115,7 @@ public class TestProcessBook {
 		//
 
 		msgBook.act = MODIFY;
-		msgBook.side = BID;
+		msgBook.side = Book.Side.BID;
 		msgBook.type = Book.Type.DEFAULT;
 		msgBook.place = 0;
 		msgBook.price = newPrice(1000, -2);
@@ -133,12 +131,12 @@ public class TestProcessBook {
 		assertTrue(book.isFrozen());
 		assertEquals(newTime(123), book.time());
 
-		bids = book.entries(BID);
+		bids = book.entries(Book.Side.BID);
 		assertEquals(1, bids.length);
 
 		top = market.get(BOOK_TOP);
 		assertTrue(top.isFrozen());
-		entry = top.side(BID);
+		entry = top.side(Book.Side.BID);
 		assertEquals(1, entry.place());
 		assertEquals(newPrice(1000, -2), entry.priceValue());
 		assertEquals(newSize(11), entry.sizeValue());
@@ -146,7 +144,7 @@ public class TestProcessBook {
 		//
 
 		msgBook.act = MODIFY;
-		msgBook.side = BID;
+		msgBook.side = Book.Side.BID;
 		msgBook.type = Book.Type.DEFAULT;
 		msgBook.place = 0;
 		msgBook.price = newPrice(1100, -2);
@@ -158,7 +156,7 @@ public class TestProcessBook {
 		book = market.get(BOOK);
 		// System.out.println(book);
 
-		bids = book.entries(BID);
+		bids = book.entries(Book.Side.BID);
 
 		assertEquals(2, bids.length);
 		assertEquals(newTime(125), book.time());
@@ -166,7 +164,7 @@ public class TestProcessBook {
 		//
 
 		msgBook.act = MODIFY;
-		msgBook.side = ASK;
+		msgBook.side = Book.Side.ASK;
 		msgBook.type = Book.Type.DEFAULT;
 		msgBook.place = 0;
 		msgBook.price = newPrice(1225, -2);
@@ -179,7 +177,7 @@ public class TestProcessBook {
 		// System.out.println(book);
 
 		top = market.get(BOOK_TOP);
-		entry = top.side(ASK);
+		entry = top.side(Book.Side.ASK);
 		assertEquals(1, entry.place());
 		assertEquals(newPrice(1225, -2), entry.priceValue());
 		assertEquals(newSize(15), entry.sizeValue());
@@ -187,7 +185,7 @@ public class TestProcessBook {
 		//
 
 		msgBook.act = MODIFY;
-		msgBook.side = ASK;
+		msgBook.side = Book.Side.ASK;
 		msgBook.type = Book.Type.DEFAULT;
 		msgBook.place = 0;
 		msgBook.price = newPrice(1300, -2);
@@ -201,7 +199,7 @@ public class TestProcessBook {
 
 		//
 
-		bids = book.entries(BID);
+		bids = book.entries(Book.Side.BID);
 
 		entry = bids[0];
 		assertEquals(2, entry.place());
@@ -215,7 +213,7 @@ public class TestProcessBook {
 
 		//
 
-		asks = book.entries(ASK);
+		asks = book.entries(Book.Side.ASK);
 
 		entry = asks[0];
 		assertEquals(1, entry.place());
@@ -230,7 +228,7 @@ public class TestProcessBook {
 		//
 
 		msgBook.act = REMOVE;
-		msgBook.side = ASK;
+		msgBook.side = Book.Side.ASK;
 		msgBook.type = Book.Type.DEFAULT;
 		msgBook.place = 1;
 		msgBook.price = null;
@@ -243,7 +241,7 @@ public class TestProcessBook {
 		System.out.println(book);
 
 		top = market.get(BOOK_TOP);
-		entry = top.side(ASK);
+		entry = top.side(Book.Side.ASK);
 		assertEquals(1, entry.place());
 		assertEquals(newPrice(1300, -2), entry.priceValue());
 		assertEquals(newSize(17), entry.sizeValue());
@@ -251,7 +249,7 @@ public class TestProcessBook {
 		//
 
 		msgBook.act = REMOVE;
-		msgBook.side = BID;
+		msgBook.side = Book.Side.BID;
 		msgBook.type = Book.Type.DEFAULT;
 		msgBook.place = 0;
 		msgBook.price = newPrice(1200, -2);
@@ -264,7 +262,7 @@ public class TestProcessBook {
 		System.out.println(book);
 
 		top = market.get(BOOK_TOP);
-		entry = top.side(BID);
+		entry = top.side(Book.Side.BID);
 		assertEquals(1, entry.place());
 		assertEquals(newPrice(1100, -2), entry.priceValue());
 		assertEquals(newSize(13), entry.sizeValue());

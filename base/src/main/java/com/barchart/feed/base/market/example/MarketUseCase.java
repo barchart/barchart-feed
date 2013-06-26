@@ -21,7 +21,7 @@ import static com.barchart.feed.base.market.enums.MarketField.CUVOL;
 import static com.barchart.feed.base.market.enums.MarketField.MARKET;
 import static com.barchart.feed.base.market.enums.MarketField.TRADE;
 
-import com.barchart.feed.api.enums.MarketSide;
+import com.barchart.feed.api.model.data.Book;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.bar.api.MarketBar;
 import com.barchart.feed.base.book.api.MarketBook;
@@ -93,7 +93,7 @@ abstract class MarketUseCase {
 			final int volume = bar.get(VOLUME).asInt();
 
 			final MarketBook book = market.get(BOOK);
-			final MarketBookEntry[] bookBids = book.entries(MarketSide.BID);
+			final MarketBookEntry[] bookBids = book.entries(Book.Side.BID);
 
 			final MarketCuvol cumVol = market.get(CUVOL);
 			final PriceValue priveFirst = cumVol.priceFirst();

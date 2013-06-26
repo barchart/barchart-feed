@@ -7,13 +7,13 @@
  */
 package com.barchart.feed.base.book;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.barchart.feed.api.enums.MarketSide;
+import com.barchart.feed.api.model.data.Book;
 import com.barchart.util.math.MathExtra;
 
 public class TestMarketBookSide {
@@ -29,11 +29,11 @@ public class TestMarketBookSide {
 	@Test
 	public void testFrom() {
 
-		MathExtra.castIntToByte(MarketSide.values().length);
+		MathExtra.castIntToByte(Book.Side.values().length);
 
-		for (final MarketSide side : MarketSide.values()) {
+		for (final Book.Side side : Book.Side.values()) {
 			final byte ord = MathExtra.castIntToByte(side.ordinal());
-			assertEquals(side, MarketSide.fromOrd(ord));
+			assertEquals(side, Book.Side.fromOrd(ord));
 		}
 
 	}

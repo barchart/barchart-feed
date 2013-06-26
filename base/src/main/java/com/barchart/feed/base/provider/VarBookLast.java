@@ -7,7 +7,7 @@
  */
 package com.barchart.feed.base.provider;
 
-import com.barchart.feed.api.enums.MarketSide;
+import com.barchart.feed.api.model.data.Book;
 import com.barchart.feed.base.book.api.MarketBookEntry;
 import com.barchart.util.anno.ProxyTo;
 import com.barchart.util.value.api.Price;
@@ -39,7 +39,7 @@ final class VarBookLast extends ValueFreezer<MarketBookEntry> implements
 	//
 
 	@Override
-	public MarketSide side() {
+	public Book.Side side() {
 		throw new UnsupportedOperationException();
 	}
 

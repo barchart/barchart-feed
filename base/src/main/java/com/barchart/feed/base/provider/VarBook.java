@@ -7,13 +7,10 @@
  */
 package com.barchart.feed.base.provider;
 
-import static com.barchart.feed.api.enums.MarketSide.ASK;
-import static com.barchart.feed.api.enums.MarketSide.BID;
 import static com.barchart.feed.base.provider.MarketConst.NULL_BOOK_ENTRY;
 
 import java.util.List;
 
-import com.barchart.feed.api.enums.MarketSide;
 import com.barchart.feed.api.model.PriceLevel;
 import com.barchart.feed.api.model.data.Book;
 import com.barchart.feed.api.model.data.TopOfBook;
@@ -51,13 +48,14 @@ public final class VarBook extends UniBook<MarketBook> implements MarketDoBook {
 	}
 
 	@Override
-	public final MarketBookEntry[] entries(final MarketSide side) {
+	public final MarketBookEntry[] entries(final Book.Side side) {
 		return entriesFor(side);
 	}
 
 	@Override
 	public final DefBook freeze() {
-		return new DefBook(instrument, time(), entries(BID), entries(ASK), lastEntry);
+		return new DefBook(instrument, time(), entries(Book.Side.BID), 
+				entries(Book.Side.ASK), lastEntry);
 	}
 
 	@Override
@@ -82,7 +80,7 @@ public final class VarBook extends UniBook<MarketBook> implements MarketDoBook {
 	}
 
 	@Override
-	public final MarketBookEntry top(final MarketSide side) {
+	public final MarketBookEntry top(final Book.Side side) {
 		final MarketDoBookEntry entry = topFor(side);
 		return entry == null ? NULL_BOOK_ENTRY : entry;
 	}
@@ -95,17 +93,17 @@ public final class VarBook extends UniBook<MarketBook> implements MarketDoBook {
 	}
 
 	@Override
-	public final SizeValue[] sizes(final MarketSide side) {
+	public final SizeValue[] sizes(final Book.Side side) {
 		throw new UnsupportedOperationException("UNUSED");
 	}
 
 	@Override
-	public PriceValue priceTop(final MarketSide side) {
+	public PriceValue priceTop(final Book.Side side) {
 		throw new UnsupportedOperationException("UNUSED");
 	}
 
 	@Override
-	public SizeValue sizeTop(final MarketSide side) {
+	public SizeValue sizeTop(final Book.Side side) {
 		throw new UnsupportedOperationException("UNUSED");
 	}
 
@@ -115,7 +113,7 @@ public final class VarBook extends UniBook<MarketBook> implements MarketDoBook {
 	}
 
 	@Override
-	public List<PriceLevel> entryList(MarketSide side) {
+	public List<PriceLevel> entryList(Book.Side side) {
 		throw new UnsupportedOperationException("UNUSED");
 	}
 

@@ -7,7 +7,7 @@
  */
 package com.barchart.feed.api.enums;
 
-public enum MarketSide  {
+enum MarketSide  {
 
 	/** buy side */
 	BID, //

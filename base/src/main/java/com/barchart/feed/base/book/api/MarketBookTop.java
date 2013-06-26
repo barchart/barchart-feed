@@ -7,7 +7,7 @@
  */
 package com.barchart.feed.base.book.api;
 
-import com.barchart.feed.api.enums.MarketSide;
+import com.barchart.feed.api.model.data.Book;
 import com.barchart.feed.api.model.data.TopOfBook;
 import com.barchart.util.anno.NotMutable;
 import com.barchart.util.values.api.TimeValue;
@@ -20,6 +20,6 @@ public interface MarketBookTop extends Value<MarketBookTop>, TopOfBook {
 	TimeValue time();
 
 	/** @return price, size, place for a side */
-	MarketBookEntry side(MarketSide side);
+	MarketBookEntry side(Book.Side side);
 
 }

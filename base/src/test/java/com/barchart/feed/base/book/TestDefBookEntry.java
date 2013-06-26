@@ -13,7 +13,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.barchart.feed.api.enums.MarketSide;
 import com.barchart.feed.api.model.data.Book;
 import com.barchart.feed.base.book.enums.MarketBookAction;
 import com.barchart.feed.base.provider.DefBookEntry;
@@ -51,7 +50,7 @@ public class TestDefBookEntry {
 				0, null, null);
 
 		assertEquals(entry.act(), MarketBookAction.NOOP);
-		assertEquals(entry.side(), MarketSide.NULL);
+		assertEquals(entry.side(), Book.Side.NULL);
 		assertEquals(entry.type(), Book.Type.NONE);
 
 		assertEquals(entry.place(), 0);

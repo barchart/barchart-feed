@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import com.barchart.feed.api.enums.MarketSide;
 import com.barchart.feed.api.model.PriceLevel;
 import com.barchart.feed.api.model.data.Book;
 import com.barchart.feed.api.model.data.TopOfBook;
@@ -60,7 +59,7 @@ public class DefBook extends ValueFreezer<MarketBook> implements MarketBook {
 	}
 
 	@Override
-	public MarketBookEntry[] entries(final MarketSide side) {
+	public MarketBookEntry[] entries(final Book.Side side) {
 		switch (side) {
 		case BID:
 			return bids;
@@ -132,7 +131,7 @@ public class DefBook extends ValueFreezer<MarketBook> implements MarketBook {
 	}
 
 	@Override
-	public PriceValue priceTop(final MarketSide side) {
+	public PriceValue priceTop(final Book.Side side) {
 		switch (side) {
 		default:
 		case BID:
@@ -151,7 +150,7 @@ public class DefBook extends ValueFreezer<MarketBook> implements MarketBook {
 	}
 
 	@Override
-	public SizeValue sizeTop(final MarketSide side) {
+	public SizeValue sizeTop(final Book.Side side) {
 		switch (side) {
 		default:
 		case BID:
@@ -170,7 +169,7 @@ public class DefBook extends ValueFreezer<MarketBook> implements MarketBook {
 	}
 
 	@Override
-	public SizeValue[] sizes(final MarketSide side) {
+	public SizeValue[] sizes(final Book.Side side) {
 
 		final int limit = MarketBook.ENTRY_LIMIT;
 
@@ -223,12 +222,12 @@ public class DefBook extends ValueFreezer<MarketBook> implements MarketBook {
 	@Override
 	public PriceValue priceGap() {
 
-		final PriceValue priceBid = priceTop(MarketSide.BID);
+		final PriceValue priceBid = priceTop(Book.Side.BID);
 		if (priceBid.isNull()) {
 			return ValueConst.NULL_PRICE;
 		}
 
-		final PriceValue priceAsk = priceTop(MarketSide.ASK);
+		final PriceValue priceAsk = priceTop(Book.Side.ASK);
 		if (priceAsk.isNull()) {
 			return ValueConst.NULL_PRICE;
 		}
@@ -238,7 +237,7 @@ public class DefBook extends ValueFreezer<MarketBook> implements MarketBook {
 	}
 
 	@Override
-	public List<PriceLevel> entryList(final MarketSide side) {
+	public List<PriceLevel> entryList(final Book.Side side) {
 		
 		final List<PriceLevel> result = new ArrayList<PriceLevel>();
 		

@@ -3,7 +3,6 @@ package com.barchart.feed.api.model.data;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.barchart.feed.api.enums.MarketSide;
 import com.barchart.feed.api.model.MarketData;
 import com.barchart.feed.api.model.PriceLevel;
 import com.barchart.feed.api.model.meta.Instrument;
@@ -15,6 +14,28 @@ public interface Book extends MarketData<Book> {
 
 	}
 
+	enum Side  {
+
+		/** buy side */
+		BID, //
+
+		/** offer side */
+		ASK, //
+		
+		NULL
+
+		;
+
+		public final byte ord = (byte) ordinal();
+
+		private static final Side[] ENUM_VALUES = values();
+
+		public static final Side fromOrd(final byte ord) {
+			return ENUM_VALUES[ord];
+		}
+
+	}
+	
 	/**
 	 * Book liquidity type.
 	 */
@@ -51,17 +72,9 @@ public interface Book extends MarketData<Book> {
 		
 	}
 	
-	/**
-	 * Book side.
-	 */
-	enum Side {
-		BID, //
-		ASK, //
-	}
-	
 	TopOfBook topOfBook();
 
-	List<PriceLevel> entryList(MarketSide side);
+	List<PriceLevel> entryList(Side side);
 
 	PriceLevel lastBookUpdate();
 
@@ -93,7 +106,7 @@ public interface Book extends MarketData<Book> {
 		}
 
 		@Override
-		public List<PriceLevel> entryList(final MarketSide side) {
+		public List<PriceLevel> entryList(final Side side) {
 			return new ArrayList<PriceLevel>();
 		}
 

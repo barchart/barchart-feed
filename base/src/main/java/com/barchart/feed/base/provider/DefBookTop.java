@@ -7,8 +7,8 @@
  */
 package com.barchart.feed.base.provider;
 
-import com.barchart.feed.api.enums.MarketSide;
 import com.barchart.feed.api.model.PriceLevel;
+import com.barchart.feed.api.model.data.Book;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.book.api.MarketBookEntry;
 import com.barchart.feed.base.book.api.MarketBookTop;
@@ -45,7 +45,7 @@ public class DefBookTop extends ValueFreezer<MarketBookTop> implements
 	}
 
 	@Override
-	public MarketBookEntry side(final MarketSide side) {
+	public MarketBookEntry side(final Book.Side side) {
 		switch (side) {
 		case BID:
 			return bid;

@@ -10,7 +10,6 @@
  */
 package com.barchart.feed.base.book.api;
 
-import com.barchart.feed.api.enums.MarketSide;
 import com.barchart.feed.api.model.data.Book;
 import com.barchart.util.anno.NotMutable;
 import com.barchart.util.values.api.PriceValue;
@@ -54,17 +53,17 @@ public interface MarketBook extends Value<MarketBook>, Book {
 	 * @throws IllegalArgumentException
 	 *             when side is not BID nor ASK
 	 */
-	MarketBookEntry[] entries(MarketSide side) throws NullPointerException,
+	MarketBookEntry[] entries(Book.Side side) throws NullPointerException,
 			IllegalArgumentException;
 
 	/** top price: bid or ask; or NULL_PRICE if invalid */
-	PriceValue priceTop(final MarketSide side);
+	PriceValue priceTop(final Book.Side side);
 
 	/** top size: bid or ask; or NULL_SIZE if invalid */
-	SizeValue sizeTop(final MarketSide side);
+	SizeValue sizeTop(final Book.Side side);
 
 	/** price-ladder spaced size array */
-	SizeValue[] sizes(MarketSide side) throws NullPointerException;
+	SizeValue[] sizes(Book.Side side) throws NullPointerException;
 
 	/** top ask - top bid; or NULL_PRICE if there is no gap */
 	PriceValue priceGap();

@@ -1,6 +1,6 @@
 package com.barchart.feed.api.model;
 
-import com.barchart.feed.api.enums.MarketSide;
+import com.barchart.feed.api.model.data.Book;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Size;
 
@@ -10,7 +10,7 @@ public interface PriceLevel {
 
 	Size size();
 
-	MarketSide side();
+	Book.Side side();
 
 	int level();
 
@@ -29,8 +29,8 @@ public interface PriceLevel {
 		}
 
 		@Override
-		public MarketSide side() {
-			return MarketSide.NULL;
+		public Book.Side side() {
+			return Book.Side.NULL;
 		}
 
 		@Override
