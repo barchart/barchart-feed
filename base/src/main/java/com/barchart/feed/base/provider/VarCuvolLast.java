@@ -58,7 +58,7 @@ public final class VarCuvolLast extends ValueFreezer<MarketCuvolEntry>
 	}
 
 	@Override
-	public Size volume() {
+	public Size size() {
 		throw new UnsupportedOperationException();
 	}
 

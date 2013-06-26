@@ -4,7 +4,7 @@ import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Size;
 
 /** FIXME move inside cuvol */
-public interface CuvolEntry {
+interface CuvolEntry {
 
 	Price price();
 

@@ -3,26 +3,53 @@ package com.barchart.feed.api.model.data;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.barchart.feed.api.model.CuvolEntry;
 import com.barchart.feed.api.model.MarketData;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.util.value.api.Price;
+import com.barchart.util.value.api.Size;
 import com.barchart.util.value.api.Time;
+import com.barchart.util.value.api.Tuple;
 
 public interface Cuvol extends MarketData<Cuvol> {
 
-	// interface Entry {
-	// }
+	interface Entry extends Tuple {
 
-	// List<Entry> entryList();
+		@Override
+		Price price();
+
+		@Override
+		Size size();
+
+		int place();
+
+		Entry NULL_CUVOL_ENTRY = new Entry() {
+
+			@Override
+			public Price price() {
+				return Price.NULL;
+			}
+
+			@Override
+			public Size size() {
+				return Size.NULL;
+			}
+
+			@Override
+			public int place() {
+				return 0;
+			}
+
+		};
+
+	}
 
 	Price firstPrice();
 
 	Price tickSize();
 
-	List<CuvolEntry> cuvolList();
+	List<Entry> entryList();
 
-	CuvolEntry lastCuvolUpdate();
+	Entry lastCuvolUpdate();
 
 	public static final Cuvol NULL_CUVOL = new Cuvol() {
 
@@ -57,13 +84,13 @@ public interface Cuvol extends MarketData<Cuvol> {
 		}
 
 		@Override
-		public List<CuvolEntry> cuvolList() {
-			return new ArrayList<CuvolEntry>();
+		public List<Entry> entryList() {
+			return new ArrayList<Entry>();
 		}
 
 		@Override
-		public CuvolEntry lastCuvolUpdate() {
-			return CuvolEntry.NULL_CUVOL_ENTRY;
+		public Entry lastCuvolUpdate() {
+			return Entry.NULL_CUVOL_ENTRY;
 		}
 
 	};

@@ -9,6 +9,8 @@ package com.barchart.feed.api.enums;
 
 public enum MarketCurrency {
 
+	// TODO Move
+	
 	NULL_CURRENCY, //
 
 	ADE, // United Arab Emirates
