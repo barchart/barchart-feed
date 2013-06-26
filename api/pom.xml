@@ -37,13 +37,6 @@
 			<version>[7-SNAPSHOT,8-SNAPSHOT)</version>
 		</dependency>
 
-		<!-- FIXME move NULL and remove -->
-		<!-- <dependency>
-			<groupId>com.barchart.util</groupId>
-			<artifactId>barchart-util-value-impl</artifactId>
-			<version>[7-SNAPSHOT,8-SNAPSHOT)</version>
-		</dependency> -->
-
 	</dependencies>
 
 </project>
