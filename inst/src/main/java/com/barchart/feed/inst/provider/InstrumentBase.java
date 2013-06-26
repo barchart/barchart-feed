@@ -12,7 +12,6 @@ import java.util.Collections;
 import java.util.List;
 
 import com.barchart.feed.api.enums.MarketCurrency;
-import com.barchart.feed.api.enums.SecurityType;
 import com.barchart.feed.api.inst.InstrumentGUID;
 import com.barchart.feed.api.model.meta.Exchange;
 import com.barchart.feed.api.model.meta.Instrument;

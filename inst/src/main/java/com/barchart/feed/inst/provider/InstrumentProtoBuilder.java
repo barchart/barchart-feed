@@ -37,7 +37,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.api.enums.MarketCurrency;
-import com.barchart.feed.api.enums.SecurityType;
 import com.barchart.feed.api.inst.InstrumentGUID;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.missive.api.TagMapSafe;
@@ -62,11 +61,11 @@ public final class InstrumentProtoBuilder {
 	
 	private static final Factory factory = FactoryLoader.load();
 
-	private static final BiEnumMap<SecurityType, InstrumentType> secTypeMap = new BiEnumMap<SecurityType, InstrumentType>(
-			new SecurityType[] { SecurityType.NULL_TYPE, SecurityType.FOREX,
-					SecurityType.INDEX, SecurityType.EQUITY,
-					SecurityType.FUTURE, SecurityType.OPTION,
-					SecurityType.SPREAD }, new InstrumentType[] {
+	private static final BiEnumMap<Instrument.SecurityType, InstrumentType> secTypeMap = new BiEnumMap<Instrument.SecurityType, InstrumentType>(
+			new Instrument.SecurityType[] { Instrument.SecurityType.NULL_TYPE, Instrument.SecurityType.FOREX,
+					Instrument.SecurityType.INDEX, Instrument.SecurityType.EQUITY,
+					Instrument.SecurityType.FUTURE, Instrument.SecurityType.OPTION,
+					Instrument.SecurityType.SPREAD }, new InstrumentType[] {
 					InstrumentType.NO_TYPE_INST, InstrumentType.FOREX_INST,
 					InstrumentType.INDEX_INST, InstrumentType.EQUITY_INST,
 					InstrumentType.FUTURE_INST, InstrumentType.OPTION_INST,

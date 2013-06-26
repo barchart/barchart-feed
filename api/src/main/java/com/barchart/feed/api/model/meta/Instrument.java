@@ -4,7 +4,6 @@ import java.util.Collections;
 import java.util.List;
 
 import com.barchart.feed.api.enums.MarketCurrency;
-import com.barchart.feed.api.enums.SecurityType;
 import com.barchart.feed.api.inst.InstrumentGUID;
 import com.barchart.feed.api.model.Metadata;
 import com.barchart.util.value.api.Fraction;
@@ -73,6 +72,19 @@ public interface Instrument extends Comparable<Instrument>, Metadata {
 			}
 			return NONE;
 		}
+
+	}
+	
+	enum SecurityType {
+
+		NULL_TYPE, //
+		FOREX, //
+		INDEX, //
+		EQUITY, //
+		FUTURE, //
+		OPTION, //
+		SPREAD, //
+		;
 
 	}
 	

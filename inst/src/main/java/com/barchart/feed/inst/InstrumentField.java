@@ -8,7 +8,6 @@
 package com.barchart.feed.inst;
 
 import com.barchart.feed.api.enums.MarketCurrency;
-import com.barchart.feed.api.enums.SecurityType;
 import com.barchart.feed.api.inst.InstrumentGUID;
 import com.barchart.feed.api.model.meta.Exchange;
 import com.barchart.feed.api.model.meta.Instrument;
@@ -30,7 +29,7 @@ public interface InstrumentField {
 	Tag<TextValue> MARKET_GUID = TagFactory.create(TextValue.class);
 
 	/** type of security, Forex, Equity, etc. */
-	Tag<SecurityType> SECURITY_TYPE = TagFactory.create(SecurityType.class);
+	Tag<Instrument.SecurityType> SECURITY_TYPE = TagFactory.create(Instrument.SecurityType.class);
 	
 	/** liquidy type, default / implied / combined */
 	Tag<Instrument.BookLiquidityType> BOOK_LIQUIDITY = TagFactory.create(Instrument.BookLiquidityType.class);

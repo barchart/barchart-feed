@@ -7,7 +7,7 @@
  */
 package com.barchart.feed.api.enums;
 
-public enum SecurityType {
+enum SecurityType {
 
 	NULL_TYPE, //
 	FOREX, //
