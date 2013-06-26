@@ -28,7 +28,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.api.FrameworkAgent;
-import com.barchart.feed.api.enums.BookLiquidityType;
 import com.barchart.feed.api.model.MarketData;
 import com.barchart.feed.api.model.data.Cuvol;
 import com.barchart.feed.api.model.data.Book;
@@ -357,7 +356,24 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 
 		if (book.isFrozen()) {
 
-			final BookLiquidityType type = instrument.liquidityType();
+			Book.Type type = null;
+			switch(instrument.liquidityType()) {
+			default :
+				type = Book.Type.NONE;
+				break;
+			case NONE:
+				type = Book.Type.NONE;
+				break;
+			case DEFAULT:
+				type = Book.Type.DEFAULT;
+				break;
+			case IMPLIED:
+				type = Book.Type.IMPLIED;
+				break;
+			case COMBINED:
+				type = Book.Type.COMBINED;
+				break;
+			}
 
 			final SizeValue size = LIMIT; // inst.get(BOOK_SIZE);
 			

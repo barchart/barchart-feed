@@ -36,7 +36,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.feed.api.enums.BookLiquidityType;
+import com.barchart.feed.api.model.data.Book;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.bar.api.MarketBar;
 import com.barchart.feed.base.book.api.MarketBook;
@@ -118,7 +118,7 @@ public class TestProcessBook {
 
 		msgBook.act = MODIFY;
 		msgBook.side = BID;
-		msgBook.type = BookLiquidityType.DEFAULT;
+		msgBook.type = Book.Type.DEFAULT;
 		msgBook.place = 0;
 		msgBook.price = newPrice(1000, -2);
 		msgBook.size = newSize(11);
@@ -147,7 +147,7 @@ public class TestProcessBook {
 
 		msgBook.act = MODIFY;
 		msgBook.side = BID;
-		msgBook.type = BookLiquidityType.DEFAULT;
+		msgBook.type = Book.Type.DEFAULT;
 		msgBook.place = 0;
 		msgBook.price = newPrice(1100, -2);
 		msgBook.size = newSize(13);
@@ -167,7 +167,7 @@ public class TestProcessBook {
 
 		msgBook.act = MODIFY;
 		msgBook.side = ASK;
-		msgBook.type = BookLiquidityType.DEFAULT;
+		msgBook.type = Book.Type.DEFAULT;
 		msgBook.place = 0;
 		msgBook.price = newPrice(1225, -2);
 		msgBook.size = newSize(15);
@@ -188,7 +188,7 @@ public class TestProcessBook {
 
 		msgBook.act = MODIFY;
 		msgBook.side = ASK;
-		msgBook.type = BookLiquidityType.DEFAULT;
+		msgBook.type = Book.Type.DEFAULT;
 		msgBook.place = 0;
 		msgBook.price = newPrice(1300, -2);
 		msgBook.size = newSize(17);
@@ -231,7 +231,7 @@ public class TestProcessBook {
 
 		msgBook.act = REMOVE;
 		msgBook.side = ASK;
-		msgBook.type = BookLiquidityType.DEFAULT;
+		msgBook.type = Book.Type.DEFAULT;
 		msgBook.place = 1;
 		msgBook.price = null;
 		msgBook.size = null;
@@ -252,7 +252,7 @@ public class TestProcessBook {
 
 		msgBook.act = REMOVE;
 		msgBook.side = BID;
-		msgBook.type = BookLiquidityType.DEFAULT;
+		msgBook.type = Book.Type.DEFAULT;
 		msgBook.place = 0;
 		msgBook.price = newPrice(1200, -2);
 		msgBook.size = null;

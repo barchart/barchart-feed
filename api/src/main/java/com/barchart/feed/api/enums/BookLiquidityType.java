@@ -7,7 +7,7 @@
  */
 package com.barchart.feed.api.enums;
 
-public enum BookLiquidityType {
+enum BookLiquidityType {
 
 	/** no size book */
 	NONE, //

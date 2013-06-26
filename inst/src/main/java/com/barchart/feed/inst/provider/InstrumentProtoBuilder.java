@@ -36,8 +36,6 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.feed.api.enums.BookLiquidityType;
-import com.barchart.feed.api.enums.BookStructureType;
 import com.barchart.feed.api.enums.MarketCurrency;
 import com.barchart.feed.api.enums.SecurityType;
 import com.barchart.feed.api.inst.InstrumentGUID;
@@ -74,20 +72,20 @@ public final class InstrumentProtoBuilder {
 					InstrumentType.FUTURE_INST, InstrumentType.OPTION_INST,
 					InstrumentType.SPREAD_INST });
 
-	private static final BiEnumMap<BookLiquidityType, BookLiquidity> liqidityTypeMap = new BiEnumMap<BookLiquidityType, BookLiquidity>(
-			new BookLiquidityType[] { BookLiquidityType.NONE,
-					BookLiquidityType.DEFAULT, BookLiquidityType.IMPLIED,
-					BookLiquidityType.COMBINED }, new BookLiquidity[] {
+	private static final BiEnumMap<Instrument.BookLiquidityType, BookLiquidity> liqidityTypeMap = new BiEnumMap<Instrument.BookLiquidityType, BookLiquidity>(
+			new Instrument.BookLiquidityType[] { Instrument.BookLiquidityType.NONE,
+					Instrument.BookLiquidityType.DEFAULT, Instrument.BookLiquidityType.IMPLIED,
+					Instrument.BookLiquidityType.COMBINED }, new BookLiquidity[] {
 					BookLiquidity.NO_BOOK_LIQUIDITY,
 					BookLiquidity.DEFAULT_LIQUIDITY,
 					BookLiquidity.IMPLIED_LIQUIDITY,
 					BookLiquidity.COMBINED_LIQUIDITY });
 
-	private static final BiEnumMap<BookStructureType, BookStructure> structTypeMap = new BiEnumMap<BookStructureType, BookStructure>(
-			new BookStructureType[] { BookStructureType.NONE,
-					BookStructureType.PRICE_LEVEL,
-					BookStructureType.PRICE_VALUE,
-					BookStructureType.ORDER_NUMBER }, new BookStructure[] {
+	private static final BiEnumMap<Instrument.BookStructureType, BookStructure> structTypeMap = new BiEnumMap<Instrument.BookStructureType, BookStructure>(
+			new Instrument.BookStructureType[] { Instrument.BookStructureType.NONE,
+					Instrument.BookStructureType.PRICE_LEVEL,
+					Instrument.BookStructureType.PRICE_VALUE,
+					Instrument.BookStructureType.ORDER_NUMBER }, new BookStructure[] {
 					BookStructure.NO_BOOK_STRUCTURE,
 					BookStructure.PRICE_LEVEL_STRUCTURE,
 					BookStructure.PRICE_VALUE_STRUCTURE,

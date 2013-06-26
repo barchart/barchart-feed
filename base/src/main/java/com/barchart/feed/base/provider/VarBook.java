@@ -13,7 +13,6 @@ import static com.barchart.feed.base.provider.MarketConst.NULL_BOOK_ENTRY;
 
 import java.util.List;
 
-import com.barchart.feed.api.enums.BookLiquidityType;
 import com.barchart.feed.api.enums.MarketSide;
 import com.barchart.feed.api.model.PriceLevel;
 import com.barchart.feed.api.model.data.Book;
@@ -40,7 +39,7 @@ public final class VarBook extends UniBook<MarketBook> implements MarketDoBook {
 	
 	protected volatile MarketBookEntry lastEntry = MarketConst.NULL_BOOK_ENTRY;
 	
-	public VarBook(final Instrument instrument, final BookLiquidityType type, 
+	public VarBook(final Instrument instrument, final Book.Type type, 
 			final SizeValue size, final PriceValue step) {
 		super(instrument, type, size, step);
 	}

@@ -7,12 +7,11 @@
  */
 package com.barchart.feed.inst;
 
-import com.barchart.feed.api.enums.BookLiquidityType;
-import com.barchart.feed.api.enums.BookStructureType;
 import com.barchart.feed.api.enums.MarketCurrency;
 import com.barchart.feed.api.enums.SecurityType;
 import com.barchart.feed.api.inst.InstrumentGUID;
 import com.barchart.feed.api.model.meta.Exchange;
+import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.missive.api.Tag;
 import com.barchart.missive.core.TagFactory;
 import com.barchart.util.value.api.Fraction;
@@ -34,10 +33,10 @@ public interface InstrumentField {
 	Tag<SecurityType> SECURITY_TYPE = TagFactory.create(SecurityType.class);
 	
 	/** liquidy type, default / implied / combined */
-	Tag<BookLiquidityType> BOOK_LIQUIDITY = TagFactory.create(BookLiquidityType.class);
+	Tag<Instrument.BookLiquidityType> BOOK_LIQUIDITY = TagFactory.create(Instrument.BookLiquidityType.class);
 
 	/** structure of book  */
-	Tag<BookStructureType> BOOK_STRUCTURE = TagFactory.create(BookStructureType.class);
+	Tag<Instrument.BookStructureType> BOOK_STRUCTURE = TagFactory.create(Instrument.BookStructureType.class);
 	
 	/** book depth */
 	Tag<SizeValue> BOOK_DEPTH = TagFactory.create(SizeValue.class);

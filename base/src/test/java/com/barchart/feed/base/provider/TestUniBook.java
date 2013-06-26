@@ -27,8 +27,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.barchart.feed.api.enums.BookLiquidityType;
 import com.barchart.feed.api.enums.MarketSide;
+import com.barchart.feed.api.model.data.Book;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.book.api.MarketDoBookEntry;
 import com.barchart.feed.base.book.enums.UniBookResult;
@@ -51,7 +51,7 @@ public class TestUniBook {
 		final SizeValue size = newSize(10);
 		final PriceValue priceStep = newPrice(25, -2);
 		final UniBook book = new UniBook(Instrument.NULL_INSTRUMENT, 
-				BookLiquidityType.COMBINED, size, priceStep);
+				Book.Type.COMBINED, size, priceStep);
 		UniBookResult result;
 		result = book.make(null);
 		assertEquals(result, ERROR);
@@ -65,30 +65,30 @@ public class TestUniBook {
 		final SizeValue size = newSize(10);
 		final PriceValue step = newPrice(25, -2);
 		final UniBook book = new UniBook(Instrument.NULL_INSTRUMENT, 
-				BookLiquidityType.COMBINED, size, step);
+				Book.Type.COMBINED, size, step);
 		DefBookEntry entry;
 		UniBookResult result;
 
 		entry = new DefBookEntry(
-				NOOP, MarketSide.NULL, BookLiquidityType.NONE, 0, newPrice(1000, -2),
+				NOOP, MarketSide.NULL, Book.Type.NONE, 0, newPrice(1000, -2),
 				NULL_SIZE);
 		result = book.make(entry);
 		assertEquals(result, ERROR);
 
 		entry = new DefBookEntry(
-				MODIFY, MarketSide.NULL, BookLiquidityType.NONE, 0, newPrice(1000, -2),
+				MODIFY, MarketSide.NULL, Book.Type.NONE, 0, newPrice(1000, -2),
 				NULL_SIZE);
 		result = book.make(entry);
 		assertEquals(result, ERROR);
 
 		entry = new DefBookEntry(
-				MODIFY, BID, BookLiquidityType.NONE, 0, newPrice(1000, -2),
+				MODIFY, BID, Book.Type.NONE, 0, newPrice(1000, -2),
 				NULL_SIZE);
 		result = book.make(entry);
 		assertEquals(result, ERROR);
 
 		entry = new DefBookEntry(
-				MODIFY, BID, BookLiquidityType.DEFAULT, 0, newPrice(1000, -2),
+				MODIFY, BID, Book.Type.DEFAULT, 0, newPrice(1000, -2),
 				NULL_SIZE);
 		result = book.make(entry);
 		assertEquals(result, TOP);
@@ -100,7 +100,7 @@ public class TestUniBook {
 		final SizeValue size = newSize(10);
 		final PriceValue step = newPrice(25, -2);
 		final UniBook book = new UniBook(Instrument.NULL_INSTRUMENT,
-				BookLiquidityType.COMBINED, size, step);
+				Book.Type.COMBINED, size, step);
 		final int bookSize = JavaSize.of(book);
 		assertEquals(bookSize, 304);
 	}
@@ -110,7 +110,7 @@ public class TestUniBook {
 		final SizeValue size = newSize(10);
 		final PriceValue step = newPrice(25, -2);
 		final UniBook book = new UniBook(Instrument.NULL_INSTRUMENT,
-				BookLiquidityType.DEFAULT, size, step);
+				Book.Type.DEFAULT, size, step);
 		final int bookSize = JavaSize.of(book);
 		assertEquals(bookSize, 208);
 	}
@@ -120,7 +120,7 @@ public class TestUniBook {
 		final SizeValue size = newSize(10);
 		final PriceValue step = newPrice(25, -2);
 		final UniBook book = new UniBook(Instrument.NULL_INSTRUMENT,
-				BookLiquidityType.NONE, size, step);
+				Book.Type.NONE, size, step);
 		final int bookSize = JavaSize.of(book);
 		assertEquals(bookSize, 112);
 	}
@@ -130,7 +130,7 @@ public class TestUniBook {
 		final SizeValue size = newSize(UniBookRing.PLACE_SIZE + 1); // invalid
 		final PriceValue step = newPrice(25, -2);
 		final UniBook book = new UniBook(Instrument.NULL_INSTRUMENT,
-				BookLiquidityType.COMBINED, size, step);
+				Book.Type.COMBINED, size, step);
 		System.out.println(book);
 	}
 
@@ -139,7 +139,7 @@ public class TestUniBook {
 		final SizeValue size = newSize(10);
 		final PriceValue step = ZERO_PRICE; // invalid
 		final UniBook book = new UniBook(Instrument.NULL_INSTRUMENT,
-				BookLiquidityType.COMBINED, size, step);
+				Book.Type.COMBINED, size, step);
 		System.out.println(book);
 	}
 
@@ -149,7 +149,7 @@ public class TestUniBook {
 		final SizeValue size = newSize(10);
 		final PriceValue step = newPrice(25, -2);
 		final UniBook book = new UniBook(Instrument.NULL_INSTRUMENT,
-				BookLiquidityType.DEFAULT, size, step);
+				Book.Type.DEFAULT, size, step);
 		final UniBookRing bids = book.bids;
 		final UniBookRing asks = book.asks;
 		MarketDoBookEntry entry;
@@ -161,7 +161,7 @@ public class TestUniBook {
 		//
 
 		entry = new DefBookEntry(
-				MODIFY, BID, BookLiquidityType.DEFAULT, 0, newPrice(1000, -2),
+				MODIFY, BID, Book.Type.DEFAULT, 0, newPrice(1000, -2),
 				newSize(13));
 		result = book.make(entry);
 		// System.out.println(book);
@@ -175,7 +175,7 @@ public class TestUniBook {
 		//
 
 		entry = new DefBookEntry(
-				MODIFY, ASK, BookLiquidityType.DEFAULT, 1, newPrice(1100, -2),
+				MODIFY, ASK, Book.Type.DEFAULT, 1, newPrice(1100, -2),
 				newSize(17));
 		result = book.make(entry);
 		// System.out.println(book);
@@ -189,7 +189,7 @@ public class TestUniBook {
 		//
 
 		entry = new DefBookEntry(
-				MODIFY, BID, BookLiquidityType.DEFAULT, 0, newPrice(900, -2),
+				MODIFY, BID, Book.Type.DEFAULT, 0, newPrice(900, -2),
 				newSize(9));
 		result = book.make(entry);
 		// System.out.println(book);
@@ -203,7 +203,7 @@ public class TestUniBook {
 		//
 
 		entry = new DefBookEntry(
-				MODIFY, ASK, BookLiquidityType.DEFAULT, 0, newPrice(1200, -2),
+				MODIFY, ASK, Book.Type.DEFAULT, 0, newPrice(1200, -2),
 				newSize(21));
 		result = book.make(entry);
 		// System.out.println(book);
@@ -217,7 +217,7 @@ public class TestUniBook {
 		//
 
 		entry = new DefBookEntry(
-				REMOVE, ASK, BookLiquidityType.DEFAULT, 2, null, null);
+				REMOVE, ASK, Book.Type.DEFAULT, 2, null, null);
 		result = book.make(entry);
 		// System.out.println(book);
 		entry = asks.get(newPrice(1200, -2));
@@ -228,7 +228,7 @@ public class TestUniBook {
 		//
 
 		entry = new DefBookEntry(
-				REMOVE, BID, BookLiquidityType.DEFAULT, 1, null, null);
+				REMOVE, BID, Book.Type.DEFAULT, 1, null, null);
 		result = book.make(entry);
 		// System.out.println(book);
 		entry = bids.get(newPrice(1000, -2));
@@ -239,7 +239,7 @@ public class TestUniBook {
 		//
 
 		entry = new DefBookEntry(
-				REMOVE, BID, BookLiquidityType.DEFAULT, 1, null, null);
+				REMOVE, BID, Book.Type.DEFAULT, 1, null, null);
 		result = book.make(entry);
 		// System.out.println(book);
 		entry = bids.get(newPrice(900, -2));
@@ -251,7 +251,7 @@ public class TestUniBook {
 		//
 
 		entry = new DefBookEntry(
-				REMOVE, ASK, BookLiquidityType.DEFAULT, 1, null, null);
+				REMOVE, ASK, Book.Type.DEFAULT, 1, null, null);
 		result = book.make(entry);
 		// System.out.println(book);
 		entry = asks.get(newPrice(1100, -2));
@@ -268,7 +268,7 @@ public class TestUniBook {
 		final SizeValue size = newSize(16);
 		final PriceValue step = newPrice(25, -2);
 		final UniBook book = new UniBook(Instrument.NULL_INSTRUMENT,
-				BookLiquidityType.COMBINED, size, step);
+				Book.Type.COMBINED, size, step);
 		final UniBookRing asks = book.asks;
 		final UniBookRing bids = book.bids;
 		UniBookResult result;
@@ -281,7 +281,7 @@ public class TestUniBook {
 		assertEquals(0, asks.placeFromOffset(16 - 1));
 
 		entry = new DefBookEntry(
-				MODIFY, ASK, BookLiquidityType.DEFAULT, 1, newPrice(1000, -2),
+				MODIFY, ASK, Book.Type.DEFAULT, 1, newPrice(1000, -2),
 				newSize(13));
 		book.make(entry);
 		// System.out.println(book);
@@ -289,7 +289,7 @@ public class TestUniBook {
 		assertEquals(1, asks.placeFromOffset(16 - 1));
 
 		entry = new DefBookEntry(
-				MODIFY, ASK, BookLiquidityType.DEFAULT, 0, newPrice(1200, -2),
+				MODIFY, ASK, Book.Type.DEFAULT, 0, newPrice(1200, -2),
 				newSize(15));
 		book.make(entry);
 		// System.out.println(book);
@@ -297,7 +297,7 @@ public class TestUniBook {
 		assertEquals(2, asks.placeFromOffset(16 - 1));
 
 		entry = new DefBookEntry(
-				MODIFY, ASK, BookLiquidityType.DEFAULT, 0, newPrice(1100, -2),
+				MODIFY, ASK, Book.Type.DEFAULT, 0, newPrice(1100, -2),
 				newSize(17));
 		book.make(entry);
 		// System.out.println(book);
@@ -310,7 +310,7 @@ public class TestUniBook {
 		assertEquals(3, asks.placeFromOffset(10));
 
 		entry = new DefBookEntry(
-				MODIFY, ASK, BookLiquidityType.DEFAULT, 1, newPrice(1050, -2),
+				MODIFY, ASK, Book.Type.DEFAULT, 1, newPrice(1050, -2),
 				newSize(19));
 		book.make(entry);
 		// System.out.println(book);
@@ -320,7 +320,7 @@ public class TestUniBook {
 		assertEquals(3, asks.placeFromOffset(16 - 1));
 
 		entry = new DefBookEntry(
-				MODIFY, ASK, BookLiquidityType.DEFAULT, 0, newPrice(1425, -2),
+				MODIFY, ASK, Book.Type.DEFAULT, 0, newPrice(1425, -2),
 				newSize(21));
 		book.make(entry);
 		// System.out.println(book);
@@ -328,7 +328,7 @@ public class TestUniBook {
 		assertEquals(4, asks.placeFromOffset(16 - 1));
 
 		entry = new DefBookEntry(
-				MODIFY, ASK, BookLiquidityType.DEFAULT, 0, newPrice(1400, -2),
+				MODIFY, ASK, Book.Type.DEFAULT, 0, newPrice(1400, -2),
 				newSize(23));
 		book.make(entry);
 		// System.out.println(book);
@@ -337,7 +337,7 @@ public class TestUniBook {
 		assertEquals(5, asks.placeFromOffset(16 - 1));
 
 		entry = new DefBookEntry(
-				MODIFY, ASK, BookLiquidityType.DEFAULT, 1, newPrice(1275, -2),
+				MODIFY, ASK, Book.Type.DEFAULT, 1, newPrice(1275, -2),
 				newSize(25));
 		book.make(entry);
 		// System.out.println(book);
@@ -353,7 +353,7 @@ public class TestUniBook {
 		assertTrue(book.isEmpty(BID));
 
 		entry = new DefBookEntry(
-				MODIFY, BID, BookLiquidityType.DEFAULT, 1, newPrice(3275, -2),
+				MODIFY, BID, Book.Type.DEFAULT, 1, newPrice(3275, -2),
 				newSize(11));
 		result = book.make(entry);
 		// System.out.println(book);
@@ -363,7 +363,7 @@ public class TestUniBook {
 		assertEquals(1, bids.placeFromOffset(16 - 1));
 
 		entry = new DefBookEntry(
-				MODIFY, BID, BookLiquidityType.DEFAULT, 9, newPrice(3150, -2),
+				MODIFY, BID, Book.Type.DEFAULT, 9, newPrice(3150, -2),
 				newSize(13));
 		result = book.make(entry);
 		// System.out.println(book);
@@ -375,7 +375,7 @@ public class TestUniBook {
 		assertEquals(1, bids.placeFromOffset(16 - 1));
 
 		entry = new DefBookEntry(
-				MODIFY, BID, BookLiquidityType.DEFAULT, -1, newPrice(3350, -2),
+				MODIFY, BID, Book.Type.DEFAULT, -1, newPrice(3350, -2),
 				newSize(15));
 		result = book.make(entry);
 		// System.out.println(book);
@@ -387,7 +387,7 @@ public class TestUniBook {
 		assertEquals(1, bids.placeFromOffset(16 - 1));
 
 		entry = new DefBookEntry(
-				REMOVE, BID, BookLiquidityType.DEFAULT, 1, NULL_PRICE, null);
+				REMOVE, BID, Book.Type.DEFAULT, 1, NULL_PRICE, null);
 		result = book.make(entry);
 		// System.out.println(book);
 		assertEquals(result, TOP);
@@ -399,7 +399,7 @@ public class TestUniBook {
 
 		entry = book.topFor(BID);
 		assertEquals(entry.side(), BID);
-		assertEquals(entry.type(), BookLiquidityType.COMBINED);
+		assertEquals(entry.type(), Book.Type.COMBINED);
 		assertEquals(entry.place(), 1);
 		assertEquals(entry.priceValue(), newPrice(3275, -2));
 		assertEquals(entry.sizeValue(), newSize(11));
@@ -412,34 +412,34 @@ public class TestUniBook {
 		final SizeValue size = newSize(5);
 		final PriceValue step = newPrice(25, -2);
 		final UniBook book = new UniBook(Instrument.NULL_INSTRUMENT,
-				BookLiquidityType.COMBINED, size, step);
+				Book.Type.COMBINED, size, step);
 		final UniBookRing asks = book.asks;
 		final UniBookRing bids = book.bids;
 		UniBookResult result;
 		MarketDoBookEntry entry;
 
 		entry = new DefBookEntry(
-				MODIFY, BID, BookLiquidityType.DEFAULT, -1, newPrice(3275, -2),
+				MODIFY, BID, Book.Type.DEFAULT, -1, newPrice(3275, -2),
 				newSize(11));
 		result = book.make(entry);
 		// System.out.println(book);
 		entry = book.topFor(BID);
 		assertEquals(result, TOP);
 		assertEquals(entry.side(), BID);
-		assertEquals(entry.type(), BookLiquidityType.COMBINED);
+		assertEquals(entry.type(), Book.Type.COMBINED);
 		assertEquals(entry.place(), 1);
 		assertEquals(entry.priceValue(), newPrice(3275, -2));
 		assertEquals(entry.sizeValue(), newSize(11));
 
 		entry = new DefBookEntry(
-				MODIFY, ASK, BookLiquidityType.DEFAULT, -1, newPrice(3300, -2),
+				MODIFY, ASK, Book.Type.DEFAULT, -1, newPrice(3300, -2),
 				newSize(13));
 		result = book.make(entry);
 		// System.out.println(book);
 		entry = book.topFor(ASK);
 		assertEquals(result, TOP);
 		assertEquals(entry.side(), ASK);
-		assertEquals(entry.type(), BookLiquidityType.COMBINED);
+		assertEquals(entry.type(), Book.Type.COMBINED);
 		assertEquals(entry.place(), 1);
 		assertEquals(entry.priceValue(), newPrice(3300, -2));
 		assertEquals(entry.sizeValue(), newSize(13));
@@ -447,27 +447,27 @@ public class TestUniBook {
 		//
 
 		entry = new DefBookEntry(
-				MODIFY, BID, BookLiquidityType.IMPLIED, -1, newPrice(3275, -2),
+				MODIFY, BID, Book.Type.IMPLIED, -1, newPrice(3275, -2),
 				newSize(15));
 		result = book.make(entry);
 		// System.out.println(book);
 		entry = book.topFor(BID);
 		assertEquals(result, NORMAL);
 		assertEquals(entry.side(), BID);
-		assertEquals(entry.type(), BookLiquidityType.COMBINED);
+		assertEquals(entry.type(), Book.Type.COMBINED);
 		assertEquals(entry.place(), 1);
 		assertEquals(entry.priceValue(), newPrice(3275, -2));
 		assertEquals(entry.sizeValue(), newSize(11 + 15));
 
 		entry = new DefBookEntry(
-				MODIFY, ASK, BookLiquidityType.IMPLIED, -1, newPrice(3300, -2),
+				MODIFY, ASK, Book.Type.IMPLIED, -1, newPrice(3300, -2),
 				newSize(17));
 		result = book.make(entry);
 		// System.out.println(book);
 		entry = book.topFor(ASK);
 		assertEquals(result, NORMAL);
 		assertEquals(entry.side(), ASK);
-		assertEquals(entry.type(), BookLiquidityType.COMBINED);
+		assertEquals(entry.type(), Book.Type.COMBINED);
 		assertEquals(entry.place(), 1);
 		assertEquals(entry.priceValue(), newPrice(3300, -2));
 		assertEquals(entry.sizeValue(), newSize(13 + 17));
@@ -475,27 +475,27 @@ public class TestUniBook {
 		//
 
 		entry = new DefBookEntry(
-				MODIFY, BID, BookLiquidityType.IMPLIED, -1, newPrice(3200, -2),
+				MODIFY, BID, Book.Type.IMPLIED, -1, newPrice(3200, -2),
 				newSize(19));
 		result = book.make(entry);
 		// System.out.println(book);
 		entry = bids.get(newPrice(3200, -2));
 		assertEquals(result, NORMAL);
 		assertEquals(entry.side(), BID);
-		assertEquals(entry.type(), BookLiquidityType.COMBINED);
+		assertEquals(entry.type(), Book.Type.COMBINED);
 		assertEquals(entry.place(), 2);
 		assertEquals(entry.priceValue(), newPrice(3200, -2));
 		assertEquals(entry.sizeValue(), newSize(19));
 
 		entry = new DefBookEntry(
-				MODIFY, ASK, BookLiquidityType.IMPLIED, -1, newPrice(3400, -2),
+				MODIFY, ASK, Book.Type.IMPLIED, -1, newPrice(3400, -2),
 				newSize(21));
 		result = book.make(entry);
 		// System.out.println(book);
 		entry = asks.get(newPrice(3400, -2));
 		assertEquals(result, NORMAL);
 		assertEquals(entry.side(), ASK);
-		assertEquals(entry.type(), BookLiquidityType.COMBINED);
+		assertEquals(entry.type(), Book.Type.COMBINED);
 		assertEquals(entry.place(), 2);
 		assertEquals(entry.priceValue(), newPrice(3400, -2));
 		assertEquals(entry.sizeValue(), newSize(21));
@@ -503,14 +503,14 @@ public class TestUniBook {
 		//
 
 		entry = new DefBookEntry(
-				MODIFY, BID, BookLiquidityType.IMPLIED, 1, newPrice(3250, -2),
+				MODIFY, BID, Book.Type.IMPLIED, 1, newPrice(3250, -2),
 				newSize(23));
 		result = book.make(entry);
 		// System.out.println(book);
 		assertEquals(result, TOP);
 
 		entry = new DefBookEntry(
-				MODIFY, ASK, BookLiquidityType.IMPLIED, 1, newPrice(3325, -2),
+				MODIFY, ASK, Book.Type.IMPLIED, 1, newPrice(3325, -2),
 				newSize(25));
 		result = book.make(entry);
 		// System.out.println(book);
@@ -519,7 +519,7 @@ public class TestUniBook {
 		//
 
 		entry = new DefBookEntry(
-				MODIFY, BID, BookLiquidityType.DEFAULT, 0, newPrice(3200, -2),
+				MODIFY, BID, Book.Type.DEFAULT, 0, newPrice(3200, -2),
 				newSize(27));
 		result = book.make(entry);
 		// System.out.println(book);
@@ -528,7 +528,7 @@ public class TestUniBook {
 		assertEquals(entry.sizeValue(), newSize(19 + 27));
 
 		entry = new DefBookEntry(
-				MODIFY, ASK, BookLiquidityType.DEFAULT, 0, newPrice(3325, -2),
+				MODIFY, ASK, Book.Type.DEFAULT, 0, newPrice(3325, -2),
 				newSize(29));
 		result = book.make(entry);
 		// System.out.println(book);
@@ -546,7 +546,7 @@ public class TestUniBook {
 		final SizeValue size = newSize(5);
 		final PriceValue step = newPrice(25, -2);
 		final UniBook book = new UniBook(Instrument.NULL_INSTRUMENT,
-				BookLiquidityType.COMBINED, size, step);
+				Book.Type.COMBINED, size, step);
 		UniBookResult result;
 		DefBookEntry entry;
 
@@ -562,14 +562,14 @@ public class TestUniBook {
 		//
 
 		entry = new DefBookEntry(
-				MODIFY, BID, BookLiquidityType.DEFAULT, 0, newPrice(3200, -2),
+				MODIFY, BID, Book.Type.DEFAULT, 0, newPrice(3200, -2),
 				newSize(27));
 		result = book.make(entry);
 		// System.out.println(book);
 		assertEquals(result, TOP);
 
 		entry = new DefBookEntry(
-				MODIFY, BID, BookLiquidityType.DEFAULT, 0, newPrice(3125, -2),
+				MODIFY, BID, Book.Type.DEFAULT, 0, newPrice(3125, -2),
 				newSize(29));
 		result = book.make(entry);
 		// System.out.println(book);
@@ -581,14 +581,14 @@ public class TestUniBook {
 		//
 
 		entry = new DefBookEntry(
-				MODIFY, ASK, BookLiquidityType.IMPLIED, 0, newPrice(3225, -2),
+				MODIFY, ASK, Book.Type.IMPLIED, 0, newPrice(3225, -2),
 				newSize(31));
 		result = book.make(entry);
 		// System.out.println(book);
 		assertEquals(result, TOP);
 
 		entry = new DefBookEntry(
-				MODIFY, ASK, BookLiquidityType.IMPLIED, 0, newPrice(3325, -2),
+				MODIFY, ASK, Book.Type.IMPLIED, 0, newPrice(3325, -2),
 				newSize(33));
 		result = book.make(entry);
 		// System.out.println(book);
@@ -600,24 +600,24 @@ public class TestUniBook {
 		//
 
 		entry = new DefBookEntry(
-				NOOP, BID, BookLiquidityType.COMBINED, 2, newPrice(3125, -2),
+				NOOP, BID, Book.Type.COMBINED, 2, newPrice(3125, -2),
 				newSize(29));
 		assertEquals(entry, entriesBid[0]);
 
 		entry = new DefBookEntry(
-				NOOP, BID, BookLiquidityType.COMBINED, 1, newPrice(3200, -2),
+				NOOP, BID, Book.Type.COMBINED, 1, newPrice(3200, -2),
 				newSize(27));
 		assertEquals(entry, entriesBid[1]);
 
 		//
 
 		entry = new DefBookEntry(
-				NOOP, ASK, BookLiquidityType.COMBINED, 1, newPrice(3225, -2),
+				NOOP, ASK, Book.Type.COMBINED, 1, newPrice(3225, -2),
 				newSize(31));
 		assertEquals(entry, entriesAsk[0]);
 
 		entry = new DefBookEntry(
-				NOOP, ASK, BookLiquidityType.COMBINED, 2, newPrice(3325, -2),
+				NOOP, ASK, Book.Type.COMBINED, 2, newPrice(3325, -2),
 				newSize(33));
 		assertEquals(entry, entriesAsk[1]);
 

@@ -7,8 +7,8 @@
  */
 package com.barchart.feed.base.message;
 
-import com.barchart.feed.api.enums.BookLiquidityType;
 import com.barchart.feed.api.enums.MarketSide;
+import com.barchart.feed.api.model.data.Book;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.book.enums.MarketBookAction;
 import com.barchart.util.values.api.PriceValue;
@@ -31,7 +31,7 @@ public class MockMsgBook extends MockMessage {
 
 	public MarketSide side;
 
-	public BookLiquidityType type;
+	public Book.Type type;
 
 	public int place;
 

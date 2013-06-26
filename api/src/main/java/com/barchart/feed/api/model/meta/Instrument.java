@@ -3,8 +3,6 @@ package com.barchart.feed.api.model.meta;
 import java.util.Collections;
 import java.util.List;
 
-import com.barchart.feed.api.enums.BookLiquidityType;
-import com.barchart.feed.api.enums.BookStructureType;
 import com.barchart.feed.api.enums.MarketCurrency;
 import com.barchart.feed.api.enums.SecurityType;
 import com.barchart.feed.api.inst.InstrumentGUID;
@@ -17,6 +15,67 @@ import com.barchart.util.value.api.TimeInterval;
 
 public interface Instrument extends Comparable<Instrument>, Metadata {
 
+	enum BookStructureType {
+
+		/** no size book */
+		NONE, //
+
+		/**  */
+		PRICE_LEVEL, //
+
+		/**  */
+		PRICE_VALUE, //
+
+		/**  */
+		ORDER_NUMBER, //
+
+		;
+
+		public final byte ord = (byte) ordinal();
+
+		private static final BookStructureType[] ENUM_VALUES = values();
+
+		public static final BookStructureType fromOrd(final byte ord) {
+			return ENUM_VALUES[ord];
+		}
+
+	}
+	
+	enum BookLiquidityType {
+
+		/** no size book */
+		NONE, //
+
+		/** only default sizes */
+		DEFAULT, //
+
+		/** only implied sizes */
+		IMPLIED, //
+
+		/** both default + implied sizes */
+		COMBINED, //
+
+		;
+
+		public final byte ord = (byte) ordinal();
+
+		private static final BookLiquidityType[] ENUM_VALUES = values();
+
+		public static final BookLiquidityType fromOrd(final byte ord) {
+			return ENUM_VALUES[ord];
+		}
+
+		public static final BookLiquidityType fromText(final String type) {
+			for (final BookLiquidityType t : values()) {
+				if (type.compareTo(t.name()) == 0) {
+					return t;
+				}
+			}
+			return NONE;
+		}
+
+	}
+	
 	InstrumentGUID GUID();
 
 	String marketGUID();

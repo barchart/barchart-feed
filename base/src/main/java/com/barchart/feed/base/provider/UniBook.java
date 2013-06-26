@@ -17,8 +17,8 @@ import static com.barchart.feed.base.provider.UniBookRing.CLUE_NONE;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.feed.api.enums.BookLiquidityType;
 import com.barchart.feed.api.enums.MarketSide;
+import com.barchart.feed.api.model.data.Book;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.book.api.MarketDoBookEntry;
 import com.barchart.feed.base.book.enums.UniBookResult;
@@ -47,7 +47,7 @@ class UniBook<V extends Value<V>> extends ValueFreezer<V> {
 	
 	protected final Instrument instrument;
 
-	public UniBook(final Instrument instrument, final BookLiquidityType type, 
+	public UniBook(final Instrument instrument, final Book.Type type, 
 			final SizeValue size, final PriceValue step) 
 					throws IllegalArgumentException, ArithmeticException {
 
@@ -308,7 +308,7 @@ class UniBook<V extends Value<V>> extends ValueFreezer<V> {
 	}
 
 	private final DefBookEntry nullEntry(final int index) {
-		return new DefBookEntry(null, MarketSide.NULL, BookLiquidityType.COMBINED, 
+		return new DefBookEntry(null, MarketSide.NULL, Book.Type.COMBINED, 
 				0, step.mult(index), null);
 	}
 

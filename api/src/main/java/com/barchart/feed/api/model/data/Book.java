@@ -15,6 +15,50 @@ public interface Book extends MarketData<Book> {
 
 	}
 
+	/**
+	 * Book liquidity type.
+	 */
+	enum Type {
+
+		/** 	*/
+		NONE,
+		
+		/**		 */
+		DEFAULT, //
+
+		/**		 */
+		IMPLIED, //
+
+		/**		 */
+		COMBINED; //
+
+		public final byte ord = (byte) ordinal();
+		
+		private static final Type[] ENUM_VALUES = values();
+		
+		public static final Type fromOrd(final byte ord) {
+			return ENUM_VALUES[ord];
+		}
+
+		public static final Type fromText(final String type) {
+			for (final Type t : values()) {
+				if (type.compareTo(t.name()) == 0) {
+					return t;
+				}
+			}
+			return NONE;
+		}
+		
+	}
+	
+	/**
+	 * Book side.
+	 */
+	enum Side {
+		BID, //
+		ASK, //
+	}
+	
 	TopOfBook topOfBook();
 
 	List<PriceLevel> entryList(MarketSide side);

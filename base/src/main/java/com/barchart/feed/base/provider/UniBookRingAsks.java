@@ -7,13 +7,13 @@
  */
 package com.barchart.feed.base.provider;
 
-import com.barchart.feed.api.enums.BookLiquidityType;
 import com.barchart.feed.api.enums.MarketSide;
+import com.barchart.feed.api.model.data.Book;
 import com.barchart.feed.base.book.api.MarketDoBookEntry;
 
 class UniBookRingAsks extends UniBookRing {
 
-	public UniBookRingAsks(final UniBook<?> book, final BookLiquidityType type)
+	public UniBookRingAsks(final UniBook<?> book, final Book.Type type)
 			throws IllegalArgumentException {
 		super(book, type);
 	}
