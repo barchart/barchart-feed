@@ -7,8 +7,8 @@ import java.util.Map;
 import java.util.Set;
 
 import com.barchart.feed.api.FrameworkAgent;
-import com.barchart.feed.api.connection.Subscription;
-import com.barchart.feed.api.connection.SubscriptionType;
+import com.barchart.feed.base.sub.Subscription;
+import com.barchart.feed.base.sub.SubscriptionType;
 
 /*
  * This was a work up class, currently broken down inside MarketplaceBase

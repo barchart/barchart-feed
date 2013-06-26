@@ -1,4 +1,4 @@
-package com.barchart.feed.api.connection;
+package com.barchart.feed.base.sub;
 
 import java.util.Set;
 import java.util.concurrent.Future;
