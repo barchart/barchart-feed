@@ -9,9 +9,6 @@ package com.barchart.feed.api.enums;
 
 public enum MarketSide  {
 
-	/** price gap between bids and asks */
-	GAP, //
-
 	/** buy side */
 	BID, //
 

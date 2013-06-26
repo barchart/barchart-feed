@@ -7,7 +7,6 @@
  */
 package com.barchart.feed.base.provider;
 
-import static com.barchart.feed.api.enums.MarketSide.GAP;
 import static com.barchart.feed.base.book.api.MarketBook.ENTRY_TOP;
 import static com.barchart.feed.base.book.enums.UniBookResult.DISCARD;
 import static com.barchart.feed.base.book.enums.UniBookResult.ERROR;
@@ -138,7 +137,7 @@ class UniBook<V extends Value<V>> extends ValueFreezer<V> {
 
 	// last updated entry signature
 	private byte lastClue;
-	private byte lastSide = GAP.ord;
+	private byte lastSide = MarketSide.NULL.ord;
 
 	private final void saveLastClue(final int clue) {
 		lastClue = MathExtra.castIntToByte(clue);
@@ -309,7 +308,7 @@ class UniBook<V extends Value<V>> extends ValueFreezer<V> {
 	}
 
 	private final DefBookEntry nullEntry(final int index) {
-		return new DefBookEntry(null, GAP, BookLiquidityType.COMBINED, 
+		return new DefBookEntry(null, MarketSide.NULL, BookLiquidityType.COMBINED, 
 				0, step.mult(index), null);
 	}
 

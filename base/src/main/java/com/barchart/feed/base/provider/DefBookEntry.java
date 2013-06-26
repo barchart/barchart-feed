@@ -34,7 +34,7 @@ public class DefBookEntry extends ValueFreezer<MarketBookEntry> implements
 	private static final Factory factory = FactoryLoader.load();
 
 	private final static byte nulAct = NOOP.ord;
-	private final static byte nulSide = GAP.ord;
+	private final static byte nulSide = NULL.ord;
 	private final static byte nulType = BookLiquidityType.NONE.ord;
 
 	// store byte ordinal to save heap

@@ -9,7 +9,6 @@ package com.barchart.feed.base.provider;
 
 import static com.barchart.feed.api.enums.MarketSide.ASK;
 import static com.barchart.feed.api.enums.MarketSide.BID;
-import static com.barchart.feed.api.enums.MarketSide.GAP;
 import static com.barchart.feed.base.book.enums.MarketBookAction.MODIFY;
 import static com.barchart.feed.base.book.enums.MarketBookAction.NOOP;
 import static com.barchart.feed.base.book.enums.MarketBookAction.REMOVE;
@@ -29,6 +28,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.barchart.feed.api.enums.BookLiquidityType;
+import com.barchart.feed.api.enums.MarketSide;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.book.api.MarketDoBookEntry;
 import com.barchart.feed.base.book.enums.UniBookResult;
@@ -70,13 +70,13 @@ public class TestUniBook {
 		UniBookResult result;
 
 		entry = new DefBookEntry(
-				NOOP, GAP, BookLiquidityType.NONE, 0, newPrice(1000, -2),
+				NOOP, MarketSide.NULL, BookLiquidityType.NONE, 0, newPrice(1000, -2),
 				NULL_SIZE);
 		result = book.make(entry);
 		assertEquals(result, ERROR);
 
 		entry = new DefBookEntry(
-				MODIFY, GAP, BookLiquidityType.NONE, 0, newPrice(1000, -2),
+				MODIFY, MarketSide.NULL, BookLiquidityType.NONE, 0, newPrice(1000, -2),
 				NULL_SIZE);
 		result = book.make(entry);
 		assertEquals(result, ERROR);

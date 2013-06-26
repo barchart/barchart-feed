@@ -51,7 +51,7 @@ public class TestDefBookEntry {
 				0, null, null);
 
 		assertEquals(entry.act(), MarketBookAction.NOOP);
-		assertEquals(entry.side(), MarketSide.GAP);
+		assertEquals(entry.side(), MarketSide.NULL);
 		assertEquals(entry.type(), BookLiquidityType.NONE);
 
 		assertEquals(entry.place(), 0);
