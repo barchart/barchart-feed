@@ -55,8 +55,6 @@ import com.barchart.proto.buf.inst.Interval;
 import com.barchart.util.value.api.Factory;
 import com.barchart.util.value.api.FactoryLoader;
 import com.barchart.util.value.api.TimeInterval;
-import com.barchart.util.value.impl.BaseSchedule;
-import com.barchart.util.value.impl.ValueConst;
 import com.barchart.util.values.api.PriceValue;
 
 public final class InstrumentProtoBuilder {
@@ -298,7 +296,7 @@ public final class InstrumentProtoBuilder {
 			if(i.getTimeFinish() > 0) {
 				map.set(LIFETIME, factory.newTimeInterval(i.getTimeStart(), i.getTimeFinish()));
 			} else {
-				map.set(LIFETIME, ValueConst.NULL_TIME_INTERVAL);
+				map.set(LIFETIME, TimeInterval.NULL);
 			}
 			
 			final List<Interval> ints = instDef.getCalendar()
@@ -308,7 +306,7 @@ public final class InstrumentProtoBuilder {
 				tints[n] = factory.newTimeInterval(
 						ints.get(n).getTimeStart(), ints.get(n).getTimeFinish());
 			}
-			map.set(MARKET_HOURS, new BaseSchedule(tints));
+			map.set(MARKET_HOURS, factory.newSchedule(tints));
 		}
 
 		if (instDef.hasTimeZoneOffset()) {

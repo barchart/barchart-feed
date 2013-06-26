@@ -8,7 +8,6 @@ import com.barchart.feed.api.model.MarketData;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Time;
-import com.barchart.util.value.impl.ValueConst;
 
 public interface Cuvol extends MarketData<Cuvol> {
 
@@ -34,7 +33,7 @@ public interface Cuvol extends MarketData<Cuvol> {
 
 		@Override
 		public Time updated() {
-			return ValueConst.NULL_TIME;
+			return Time.NULL;
 		}
 
 		@Override
@@ -49,12 +48,12 @@ public interface Cuvol extends MarketData<Cuvol> {
 
 		@Override
 		public Price firstPrice() {
-			return ValueConst.NULL_PRICE;
+			return Price.NULL;
 		}
 
 		@Override
 		public Price tickSize() {
-			return ValueConst.NULL_PRICE;
+			return Price.NULL;
 		}
 
 		@Override

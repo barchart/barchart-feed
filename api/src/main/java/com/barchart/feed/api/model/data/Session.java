@@ -5,7 +5,6 @@ import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Size;
 import com.barchart.util.value.api.Time;
-import com.barchart.util.value.impl.ValueConst;
 
 /**
  * document object and primitive
@@ -36,7 +35,7 @@ public interface Session extends MarketData<Session>, SessionData {
 
 		@Override
 		public Time updated() {
-			return ValueConst.NULL_TIME;
+			return Time.NULL;
 		}
 
 		@Override
@@ -51,52 +50,52 @@ public interface Session extends MarketData<Session>, SessionData {
 
 		@Override
 		public Price open() {
-			return ValueConst.NULL_PRICE;
+			return Price.NULL;
 		}
 
 		@Override
 		public Price high() {
-			return ValueConst.NULL_PRICE;
+			return Price.NULL;
 		}
 
 		@Override
 		public Price low() {
-			return ValueConst.NULL_PRICE;
+			return Price.NULL;
 		}
 
 		@Override
 		public Price close() {
-			return ValueConst.NULL_PRICE;
+			return Price.NULL;
 		}
 
 		@Override
 		public Price settle() {
-			return ValueConst.NULL_PRICE;
+			return Price.NULL;
 		}
 
 		@Override
 		public Size volume() {
-			return ValueConst.NULL_SIZE;
+			return Size.NULL;
 		}
 
 		@Override
 		public Size interest() {
-			return ValueConst.NULL_SIZE;
+			return Size.NULL;
 		}
 
 		@Override
 		public Time timeOpened() {
-			return ValueConst.NULL_TIME;
+			return Time.NULL;
 		}
 
 		@Override
 		public Time timeUpdated() {
-			return ValueConst.NULL_TIME;
+			return Time.NULL;
 		}
 
 		@Override
 		public Time timeClosed() {
-			return ValueConst.NULL_TIME;
+			return Time.NULL;
 		}
 
 		@Override

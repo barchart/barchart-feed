@@ -11,7 +11,7 @@ import com.barchart.feed.api.util.Observer;
  *
  * @param <V>
  */
-public interface MetadataResolver<V extends Metadata> {
+public interface Resolver<V extends Metadata> {
 	
 	/**
 	 * Returns a builder which executes an observer with 
@@ -23,7 +23,7 @@ public interface MetadataResolver<V extends Metadata> {
 		
 		// Other options here
 		
-		MetadataResolver<V> build(Observer<Result<List<V>>> observer);
+		Resolver<V> build(Observer<Result<List<V>>> observer);
 		
 	}
 

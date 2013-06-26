@@ -38,11 +38,11 @@
 		</dependency>
 
 		<!-- FIXME move NULL and remove -->
-		<dependency>
+		<!-- <dependency>
 			<groupId>com.barchart.util</groupId>
 			<artifactId>barchart-util-value-impl</artifactId>
 			<version>[7-SNAPSHOT,8-SNAPSHOT)</version>
-		</dependency>
+		</dependency> -->
 
 	</dependencies>
 

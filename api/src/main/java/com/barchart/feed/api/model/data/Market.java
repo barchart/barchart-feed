@@ -3,7 +3,6 @@ package com.barchart.feed.api.model.data;
 import com.barchart.feed.api.model.MarketData;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.util.value.api.Time;
-import com.barchart.util.value.impl.ValueConst;
 
 public interface Market extends MarketData<Market> {
 
@@ -25,7 +24,7 @@ public interface Market extends MarketData<Market> {
 
 		@Override
 		public Time updated() {
-			return ValueConst.NULL_TIME;
+			return Time.NULL;
 		}
 
 		@Override

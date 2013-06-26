@@ -14,7 +14,6 @@ import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Schedule;
 import com.barchart.util.value.api.Size;
 import com.barchart.util.value.api.TimeInterval;
-import com.barchart.util.value.impl.ValueConst;
 
 public interface Instrument extends Comparable<Instrument>, Metadata {
 
@@ -99,7 +98,7 @@ public interface Instrument extends Comparable<Instrument>, Metadata {
 
 		@Override
 		public Size maxBookDepth() {
-			return ValueConst.NULL_SIZE;
+			return Size.NULL;
 		}
 
 		@Override
@@ -139,27 +138,27 @@ public interface Instrument extends Comparable<Instrument>, Metadata {
 
 		@Override
 		public Price tickSize() {
-			return ValueConst.NULL_PRICE;
+			return Price.NULL;
 		}
 
 		@Override
 		public Price pointValue() {
-			return ValueConst.NULL_PRICE;
+			return Price.NULL;
 		}
 
 		@Override
 		public Fraction displayFraction() {
-			return ValueConst.NULL_FRACTION;
+			return Fraction.NULL;
 		}
 
 		@Override
 		public TimeInterval lifetime() {
-			return ValueConst.NULL_TIME_INTERVAL;
+			return TimeInterval.NULL;
 		}
 
 		@Override
 		public Schedule marketHours() {
-			return ValueConst.NULL_SCHEDULE;
+			return Schedule.NULL;
 		}
 
 		@Override

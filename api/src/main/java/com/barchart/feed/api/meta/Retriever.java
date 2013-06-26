@@ -10,13 +10,13 @@ import com.barchart.feed.api.util.Observer;
  *
  * @param <V>
  */
-public interface MetadataRetriever<V extends Metadata> {
+public interface Retriever<V extends Metadata> {
 
 	interface Builder<V extends Metadata> {
 		
 		// Other options here
 		
-		MetadataRetriever<V> build(Observer<Result<V>> observer);
+		Retriever<V> build(Observer<Result<V>> observer);
 		
 	}
 	

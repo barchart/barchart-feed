@@ -8,7 +8,6 @@ import com.barchart.feed.api.model.MarketData;
 import com.barchart.feed.api.model.PriceLevel;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.util.value.api.Time;
-import com.barchart.util.value.impl.ValueConst;
 
 public interface Book extends MarketData<Book> {
 
@@ -31,7 +30,7 @@ public interface Book extends MarketData<Book> {
 
 		@Override
 		public Time updated() {
-			return ValueConst.NULL_TIME;
+			return Time.NULL;
 		}
 
 		@Override

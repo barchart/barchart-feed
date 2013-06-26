@@ -6,7 +6,6 @@ import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Size;
 import com.barchart.util.value.api.Time;
 import com.barchart.util.value.api.Tuple;
-import com.barchart.util.value.impl.ValueConst;
 
 public interface Trade extends MarketData<Trade>, Tuple {
 
@@ -31,7 +30,7 @@ public interface Trade extends MarketData<Trade>, Tuple {
 
 		@Override
 		public Time updated() {
-			return ValueConst.NULL_TIME;
+			return Time.NULL;
 		}
 
 		@Override
@@ -46,17 +45,17 @@ public interface Trade extends MarketData<Trade>, Tuple {
 
 		@Override
 		public Price price() {
-			return ValueConst.NULL_PRICE;
+			return Price.NULL;
 		}
 
 		@Override
 		public Size size() {
-			return ValueConst.NULL_SIZE;
+			return Size.NULL;
 		}
 
 		@Override
 		public Time time() {
-			return ValueConst.NULL_TIME;
+			return Time.NULL;
 		}
 
 	};
