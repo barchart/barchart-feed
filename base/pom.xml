@@ -7,13 +7,14 @@
 
 	<parent>
 		<groupId>com.barchart.feed</groupId>
-		<artifactId>barchart-feed-archon</artifactId>
+		<artifactId>barchart-feed-a</artifactId>
 		<version>2.0.4-SNAPSHOT</version>
 		<relativePath>../archon</relativePath>
 	</parent>
 
+	<groupId>com.barchart.feed</groupId>
 	<artifactId>barchart-feed-base</artifactId>
-	<version>2.0.2-SNAPSHOT</version>
+	<version>2.0.4-SNAPSHOT</version>
 	<packaging>bundle</packaging>
 
 	<url>https://github.com/barchart/barchart-feed</url>
@@ -39,6 +40,11 @@
 			<artifactId>barchart-feed-api</artifactId>
 			<version>[2-SNAPSHOT,3-SNAPSHOT)</version>
 		</dependency>
+		<dependency>
+			<groupId>com.barchart.feed</groupId>
+			<artifactId>barchart-feed-inst</artifactId>
+			<version>[2-SNAPSHOT, 3-SNAPSHOT)</version>
+		</dependency>
 
 		<dependency>
 			<groupId>com.barchart.util</groupId>
@@ -48,24 +54,7 @@
 
 		<dependency>
 			<groupId>com.barchart.util</groupId>
-			<artifactId>barchart-util-anno</artifactId>
-			<version>[2-SNAPSHOT,3-SNAPSHOT)</version>
-			<scope>provided</scope>
-			<optional>true</optional>
-		</dependency>
-		<dependency>
-			<groupId>com.barchart.util</groupId>
 			<artifactId>barchart-util-values</artifactId>
-			<version>[2-SNAPSHOT,3-SNAPSHOT)</version>
-		</dependency>
-		<dependency>
-			<groupId>com.barchart.util</groupId>
-			<artifactId>barchart-util-clone</artifactId>
-			<version>[2-SNAPSHOT,3-SNAPSHOT)</version>
-		</dependency>
-		<dependency>
-			<groupId>com.barchart.util</groupId>
-			<artifactId>barchart-util-collections</artifactId>
 			<version>[2-SNAPSHOT,3-SNAPSHOT)</version>
 		</dependency>
 		<dependency>
@@ -75,14 +64,8 @@
 		</dependency>
 		<dependency>
 			<groupId>com.barchart.util</groupId>
-			<artifactId>barchart-util-thread</artifactId>
+			<artifactId>barchart-util-collections</artifactId>
 			<version>[2-SNAPSHOT,3-SNAPSHOT)</version>
-		</dependency>
-
-		<dependency>
-			<groupId>com.barchart.feed</groupId>
-			<artifactId>barchart-feed-inst</artifactId>
-			<version>[2-SNAPSHOT, 3-SNAPSHOT)</version>
 		</dependency>
 
 		<!-- TEST -->
@@ -124,39 +107,5 @@
 		</dependency>
 
 	</dependencies>
-
-	<build>
-		<plugins>
-
-			<!-- produce both jar and test-jar -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
-				<executions>
-					<execution>
-						<goals>
-							<goal>jar</goal>
-							<goal>test-jar</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-
-			<!-- produce both jar and test-jar -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-source-plugin</artifactId>
-				<executions>
-					<execution>
-						<goals>
-							<goal>jar</goal>
-							<goal>test-jar</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-
-		</plugins>
-	</build>
 
 </project>

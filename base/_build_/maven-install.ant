@@ -28,6 +28,9 @@
 			<arg value="--define" />
 			<arg value="skipTests" />
 
+			<arg value="-U" />
+			<arg value="-e" />
+
 		</exec>
 
 	</target>

@@ -24,11 +24,14 @@
 
 			<arg value="clean" />
 			<arg value="install" />
-
+			
+			<arg value="--show-version" />
+			
+			<arg value="--errors" />
+			
 			<arg value="--define" />
 			<arg value="skipTests" />
 
-			<arg value="-e" />
 			<arg value="-U" />
 
 		</exec>

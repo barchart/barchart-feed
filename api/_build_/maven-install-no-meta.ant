@@ -29,7 +29,6 @@
 			<arg value="skipTests" />
 
 			<arg value="-e" />
-			<arg value="-U" />
 
 		</exec>
 
