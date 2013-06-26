@@ -1,18 +1,18 @@
 package com.barchart.feed.api.model.data;
 
-import com.barchart.feed.api.model.data.Session.Type;
+import com.barchart.feed.api.model.data.Book.Type;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.util.value.api.Time;
 
-public interface SessionSet extends MarketData<SessionSet> {
+public interface BookSet extends MarketData<BookSet> {
 	
 	/**
 	 * 
 	 * @param type
 	 * @return
 	 */
-	Session session(Session.Type type);
-
+	Book book(Book.Type type);
+	
 	@Override
 	Instrument instrument();
 
@@ -20,16 +20,16 @@ public interface SessionSet extends MarketData<SessionSet> {
 	Time updated();
 
 	@Override
-	SessionSet freeze();
+	BookSet freeze();
 	
 	@Override
 	boolean isNull();
 	
-	SessionSet NULL = new SessionSet() {
+	BookSet NULL = new BookSet() {
 
 		@Override
-		public Session session(Type type) {
-			return Session.NULL;
+		public Book book(Type type) {
+			return Book.NULL;
 		}
 
 		@Override
@@ -43,7 +43,7 @@ public interface SessionSet extends MarketData<SessionSet> {
 		}
 
 		@Override
-		public SessionSet freeze() {
+		public BookSet freeze() {
 			return this;
 		}
 
@@ -53,4 +53,5 @@ public interface SessionSet extends MarketData<SessionSet> {
 		}
 		
 	};
+
 }

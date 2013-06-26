@@ -8,6 +8,7 @@
 package com.barchart.feed.base.provider;
 
 import com.barchart.feed.api.model.data.Book;
+import com.barchart.feed.api.model.data.BookSet;
 import com.barchart.feed.api.model.data.Cuvol;
 import com.barchart.feed.api.model.data.Session;
 import com.barchart.feed.api.model.data.SessionSet;
@@ -96,6 +97,12 @@ class NulMarket extends ValueFreezer<Market> implements Market {
 	@Override
 	public Time updated() {
 		return Time.NULL;
+	}
+
+	@Override
+	public BookSet bookSet() {
+		throw new UnsupportedOperationException("Currently not supported");
+		//return BookSet.NULL;
 	}
 	
 }

@@ -9,6 +9,8 @@ public interface Market extends MarketData<Market> {
 	Trade trade();
 
 	Book book();
+	
+	BookSet bookSet();
 
 	Cuvol cuvol();
 
@@ -37,6 +39,11 @@ public interface Market extends MarketData<Market> {
 		public Book book() {
 			return Book.NULL;
 		}
+		
+		@Override
+		public BookSet bookSet() {
+			return BookSet.NULL;
+		}
 
 		@Override
 		public Cuvol cuvol() {
@@ -62,7 +69,7 @@ public interface Market extends MarketData<Market> {
 		public boolean isNull() {
 			return true;
 		}
-		
+
 	};
 
 }

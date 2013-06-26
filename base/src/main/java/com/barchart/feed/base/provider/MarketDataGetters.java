@@ -3,11 +3,13 @@ package com.barchart.feed.base.provider;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.barchart.feed.api.model.data.BookSet;
 import com.barchart.feed.api.model.data.Cuvol;
 import com.barchart.feed.api.model.data.Market;
 import com.barchart.feed.api.model.data.Book;
 import com.barchart.feed.api.model.data.MarketData;
 import com.barchart.feed.api.model.data.Session;
+import com.barchart.feed.api.model.data.SessionSet;
 import com.barchart.feed.api.model.data.Trade;
 
 public final class MarketDataGetters {
@@ -49,6 +51,15 @@ public final class MarketDataGetters {
 					
 				});
 				
+				put(BookSet.class, new MDGetter<BookSet>() {
+
+					@Override
+					public BookSet get(Market market) {
+						return market.bookSet();
+					}
+					
+				});
+				
 				put(Cuvol.class, new MDGetter<Cuvol>() { 
 					
 					@Override
@@ -63,6 +74,15 @@ public final class MarketDataGetters {
 					@Override
 					public Session get(final Market market) {
 						return market.session().freeze();
+					}
+					
+				});
+				
+				put(SessionSet.class, new MDGetter<SessionSet>() {
+
+					@Override
+					public SessionSet get(Market market) {
+						return market.sessionSet();
 					}
 					
 				});
