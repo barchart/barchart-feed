@@ -59,7 +59,6 @@
 			<version>4.0.92</version>
 		</dependency>
 
-		<!-- protocol buffers - original -->
 		<dependency>
 			<groupId>com.google.protobuf</groupId>
 			<artifactId>protobuf-java</artifactId>
