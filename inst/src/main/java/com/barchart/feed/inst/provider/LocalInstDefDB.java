@@ -64,7 +64,7 @@ public class LocalInstDefDB implements MetadataContext {
 		byte[] resData = result.getData();
 		
 		if(resData == null || resData.length == 0) {
-			return Instrument.NULL_INSTRUMENT;
+			return Instrument.NULL;
 		}
 		
 		try {

@@ -15,11 +15,11 @@ public interface Market extends MarketData<Market> {
 
 	Session session();
 
-	public static final Market NULL_MARKET = new Market() {
+	public static final Market NULL = new Market() {
 
 		@Override
 		public Instrument instrument() {
-			return Instrument.NULL_INSTRUMENT;
+			return Instrument.NULL;
 		}
 
 		@Override
@@ -33,28 +33,28 @@ public interface Market extends MarketData<Market> {
 		}
 
 		@Override
-		public Market copy() {
-			return this;
-		}
-
-		@Override
 		public Trade trade() {
-			return Trade.NULL_TRADE;
+			return Trade.NULL;
 		}
 
 		@Override
 		public Book book() {
-			return Book.NULL_ORDERBOOK;
+			return Book.NULL;
 		}
 
 		@Override
 		public Cuvol cuvol() {
-			return Cuvol.NULL_CUVOL;
+			return Cuvol.NULL;
 		}
 
 		@Override
 		public Session session() {
-			return Session.NULL_SESSION;
+			return Session.NULL;
+		}
+
+		@Override
+		public Market freeze() {
+			return this;
 		}
 
 	};

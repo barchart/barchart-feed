@@ -96,7 +96,7 @@ public final class InstrumentProtoBuilder {
 
 	public static InstrumentDefinition buildInstDef(final InstrumentBase inst) {
 
-		if (inst == null || inst.equals(Instrument.NULL_INSTRUMENT)) {
+		if (inst == null || inst.equals(Instrument.NULL)) {
 			return null; // Return empty instrument def
 		}
 
@@ -224,7 +224,7 @@ public final class InstrumentProtoBuilder {
 			map.set(MARKET_GUID, newText(String.valueOf(instDef.getMarketId())));
 		} else {
 			log.warn("Inst def had no market id, returning null instrument: \n{}", instDef.toString());
-			return Instrument.NULL_INSTRUMENT;
+			return Instrument.NULL;
 		}
 
 		if (instDef.hasInstrumentType()) {

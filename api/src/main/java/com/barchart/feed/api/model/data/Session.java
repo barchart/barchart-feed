@@ -26,11 +26,11 @@ public interface Session extends MarketData<Session>, SessionData {
 	/** FIXME report change set. */
 	// Set<Component> change();
 
-	public static final Session NULL_SESSION = new Session() {
+	public static final Session NULL = new Session() {
 
 		@Override
 		public Instrument instrument() {
-			return Instrument.NULL_INSTRUMENT;
+			return Instrument.NULL;
 		}
 
 		@Override
@@ -41,11 +41,6 @@ public interface Session extends MarketData<Session>, SessionData {
 		@Override
 		public boolean isNull() {
 			return true;
-		}
-
-		@Override
-		public Session copy() {
-			return this;
 		}
 
 		@Override
@@ -116,6 +111,11 @@ public interface Session extends MarketData<Session>, SessionData {
 		@Override
 		public boolean isSettled() {
 			return false;
+		}
+
+		@Override
+		public Session freeze() {
+			return this;
 		}
 
 	};

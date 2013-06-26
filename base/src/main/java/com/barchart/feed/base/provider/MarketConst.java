@@ -61,10 +61,10 @@ public final class MarketConst {
 	new SizeValue[0];
 
 	public static final MarketBook NULL_BOOK = //
-	new DefBook(Instrument.NULL_INSTRUMENT, NULL_TIME, NULL_ENTRIES, NULL_ENTRIES, NULL_BOOK_ENTRY).freeze();
+	new DefBook(Instrument.NULL, NULL_TIME, NULL_ENTRIES, NULL_ENTRIES, NULL_BOOK_ENTRY).freeze();
 
 	public static final MarketBookTop NULL_BOOK_TOP = //
-	new DefBookTop(Instrument.NULL_INSTRUMENT, NULL_TIME, NULL_BOOK_ENTRY, NULL_BOOK_ENTRY).freeze();
+	new DefBookTop(Instrument.NULL, NULL_TIME, NULL_BOOK_ENTRY, NULL_BOOK_ENTRY).freeze();
 
 	//
 

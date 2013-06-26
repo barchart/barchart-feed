@@ -42,7 +42,7 @@ public final class InstrumentFactory {
 		if(!map.containsKey(InstrumentField.GUID) ||
 				map.get(InstrumentField.GUID) == null ||
 				((InstrumentGUID) map.get(InstrumentField.GUID)).isNull()) {
-			return Instrument.NULL_INSTRUMENT;
+			return Instrument.NULL;
 		}
 		
 		return ObjectMapFactory.build(InstrumentImpl.class, map);
@@ -53,7 +53,7 @@ public final class InstrumentFactory {
 		if(!map.contains(InstrumentField.GUID) ||
 				map.get(InstrumentField.GUID) == null ||
 				((InstrumentGUID) map.get(InstrumentField.GUID)).isNull()) {
-			return Instrument.NULL_INSTRUMENT;
+			return Instrument.NULL;
 		}
 		
 		return ObjectMapFactory.build(InstrumentImpl.class, map);

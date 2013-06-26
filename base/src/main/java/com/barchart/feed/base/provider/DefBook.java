@@ -257,11 +257,6 @@ public class DefBook extends ValueFreezer<MarketBook> implements MarketBook {
 	}
 
 	@Override
-	public Book copy() {
-		return this.freeze();
-	}
-
-	@Override
 	public Instrument instrument() {
 		return instrument;
 	}

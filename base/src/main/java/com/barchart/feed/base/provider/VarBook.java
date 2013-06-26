@@ -116,11 +116,6 @@ public final class VarBook extends UniBook<MarketBook> implements MarketDoBook {
 	}
 
 	@Override
-	public Book copy() {
-		return this.freeze();
-	}
-
-	@Override
 	public Instrument instrument() {
 		return instrument;
 	}

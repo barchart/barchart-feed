@@ -22,16 +22,16 @@ public interface Book extends MarketData<Book> {
 		@Override
 		boolean isNull();
 		
-		public static final Top NULL_TOP_OF_BOOK = new Top() {
+		public static final Top NULL = new Top() {
 
 			@Override
 			public PriceLevel bid() {
-				return PriceLevel.NULL_PRICE_LEVEL;
+				return PriceLevel.NULL;
 			}
 
 			@Override
 			public PriceLevel ask() {
-				return PriceLevel.NULL_PRICE_LEVEL;
+				return PriceLevel.NULL;
 			}
 
 			@Override
@@ -58,7 +58,7 @@ public interface Book extends MarketData<Book> {
 		@Override
 		boolean isNull();
 
-		final PriceLevel NULL_PRICE_LEVEL = new PriceLevel() {
+		final PriceLevel NULL = new PriceLevel() {
 
 			@Override
 			public Price price() {
@@ -153,11 +153,11 @@ public interface Book extends MarketData<Book> {
 
 	PriceLevel lastBookUpdate();
 
-	public static final Book NULL_ORDERBOOK = new Book() {
+	public static final Book NULL = new Book() {
 
 		@Override
 		public Instrument instrument() {
-			return Instrument.NULL_INSTRUMENT;
+			return Instrument.NULL;
 		}
 
 		@Override
@@ -171,13 +171,8 @@ public interface Book extends MarketData<Book> {
 		}
 
 		@Override
-		public Book copy() {
-			return this;
-		}
-
-		@Override
 		public Top top() {
-			return Top.NULL_TOP_OF_BOOK;
+			return Top.NULL;
 		}
 
 		@Override
@@ -187,7 +182,12 @@ public interface Book extends MarketData<Book> {
 
 		@Override
 		public PriceLevel lastBookUpdate() {
-			return PriceLevel.NULL_PRICE_LEVEL;
+			return PriceLevel.NULL;
+		}
+
+		@Override
+		public Book freeze() {
+			return this;
 		}
 
 	};

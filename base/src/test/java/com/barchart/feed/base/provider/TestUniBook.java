@@ -47,7 +47,7 @@ public class TestUniBook {
 	public void testNullEntryAddDelete() {
 		final SizeValue size = newSize(10);
 		final PriceValue priceStep = newPrice(25, -2);
-		final UniBook book = new UniBook(Instrument.NULL_INSTRUMENT, 
+		final UniBook book = new UniBook(Instrument.NULL, 
 				Book.Type.COMBINED, size, priceStep);
 		UniBookResult result;
 		result = book.make(null);
@@ -61,7 +61,7 @@ public class TestUniBook {
 
 		final SizeValue size = newSize(10);
 		final PriceValue step = newPrice(25, -2);
-		final UniBook book = new UniBook(Instrument.NULL_INSTRUMENT, 
+		final UniBook book = new UniBook(Instrument.NULL, 
 				Book.Type.COMBINED, size, step);
 		DefBookEntry entry;
 		UniBookResult result;
@@ -96,7 +96,7 @@ public class TestUniBook {
 	public void testJavaSize1() {
 		final SizeValue size = newSize(10);
 		final PriceValue step = newPrice(25, -2);
-		final UniBook book = new UniBook(Instrument.NULL_INSTRUMENT,
+		final UniBook book = new UniBook(Instrument.NULL,
 				Book.Type.COMBINED, size, step);
 		final int bookSize = JavaSize.of(book);
 		assertEquals(bookSize, 304);
@@ -106,7 +106,7 @@ public class TestUniBook {
 	public void testJavaSize2() {
 		final SizeValue size = newSize(10);
 		final PriceValue step = newPrice(25, -2);
-		final UniBook book = new UniBook(Instrument.NULL_INSTRUMENT,
+		final UniBook book = new UniBook(Instrument.NULL,
 				Book.Type.DEFAULT, size, step);
 		final int bookSize = JavaSize.of(book);
 		assertEquals(bookSize, 208);
@@ -116,7 +116,7 @@ public class TestUniBook {
 	public void testJavaSize3() {
 		final SizeValue size = newSize(10);
 		final PriceValue step = newPrice(25, -2);
-		final UniBook book = new UniBook(Instrument.NULL_INSTRUMENT,
+		final UniBook book = new UniBook(Instrument.NULL,
 				Book.Type.NONE, size, step);
 		final int bookSize = JavaSize.of(book);
 		assertEquals(bookSize, 112);
@@ -126,7 +126,7 @@ public class TestUniBook {
 	public void testConst0() {
 		final SizeValue size = newSize(UniBookRing.PLACE_SIZE + 1); // invalid
 		final PriceValue step = newPrice(25, -2);
-		final UniBook book = new UniBook(Instrument.NULL_INSTRUMENT,
+		final UniBook book = new UniBook(Instrument.NULL,
 				Book.Type.COMBINED, size, step);
 		System.out.println(book);
 	}
@@ -135,7 +135,7 @@ public class TestUniBook {
 	public void testConst1() {
 		final SizeValue size = newSize(10);
 		final PriceValue step = ZERO_PRICE; // invalid
-		final UniBook book = new UniBook(Instrument.NULL_INSTRUMENT,
+		final UniBook book = new UniBook(Instrument.NULL,
 				Book.Type.COMBINED, size, step);
 		System.out.println(book);
 	}
@@ -145,7 +145,7 @@ public class TestUniBook {
 		//
 		final SizeValue size = newSize(10);
 		final PriceValue step = newPrice(25, -2);
-		final UniBook book = new UniBook(Instrument.NULL_INSTRUMENT,
+		final UniBook book = new UniBook(Instrument.NULL,
 				Book.Type.DEFAULT, size, step);
 		final UniBookRing bids = book.bids;
 		final UniBookRing asks = book.asks;
@@ -264,7 +264,7 @@ public class TestUniBook {
 
 		final SizeValue size = newSize(16);
 		final PriceValue step = newPrice(25, -2);
-		final UniBook book = new UniBook(Instrument.NULL_INSTRUMENT,
+		final UniBook book = new UniBook(Instrument.NULL,
 				Book.Type.COMBINED, size, step);
 		final UniBookRing asks = book.asks;
 		final UniBookRing bids = book.bids;
@@ -408,7 +408,7 @@ public class TestUniBook {
 
 		final SizeValue size = newSize(5);
 		final PriceValue step = newPrice(25, -2);
-		final UniBook book = new UniBook(Instrument.NULL_INSTRUMENT,
+		final UniBook book = new UniBook(Instrument.NULL,
 				Book.Type.COMBINED, size, step);
 		final UniBookRing asks = book.asks;
 		final UniBookRing bids = book.bids;
@@ -542,7 +542,7 @@ public class TestUniBook {
 
 		final SizeValue size = newSize(5);
 		final PriceValue step = newPrice(25, -2);
-		final UniBook book = new UniBook(Instrument.NULL_INSTRUMENT,
+		final UniBook book = new UniBook(Instrument.NULL,
 				Book.Type.COMBINED, size, step);
 		UniBookResult result;
 		DefBookEntry entry;

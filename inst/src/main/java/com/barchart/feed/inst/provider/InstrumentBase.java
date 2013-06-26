@@ -54,7 +54,7 @@ public abstract class InstrumentBase extends ObjectMapSafe implements Instrument
 	
 	@Override
 	public final boolean isNull() {
-		return this == Instrument.NULL_INSTRUMENT;
+		return this == Instrument.NULL;
 	}
 	
 	@Override

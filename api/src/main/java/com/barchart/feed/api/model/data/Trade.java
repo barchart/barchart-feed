@@ -21,11 +21,11 @@ public interface Trade extends MarketData<Trade>, Tuple {
 	 */
 	Time time();
 
-	public static final Trade NULL_TRADE = new Trade() {
+	public static final Trade NULL = new Trade() {
 
 		@Override
 		public Instrument instrument() {
-			return Instrument.NULL_INSTRUMENT;
+			return Instrument.NULL;
 		}
 
 		@Override
@@ -36,11 +36,6 @@ public interface Trade extends MarketData<Trade>, Tuple {
 		@Override
 		public boolean isNull() {
 			return true;
-		}
-
-		@Override
-		public Trade copy() {
-			return this;
 		}
 
 		@Override
@@ -56,6 +51,11 @@ public interface Trade extends MarketData<Trade>, Tuple {
 		@Override
 		public Time time() {
 			return Time.NULL;
+		}
+
+		@Override
+		public Trade freeze() {
+			return this;
 		}
 
 	};

@@ -51,11 +51,11 @@ public interface Cuvol extends MarketData<Cuvol> {
 
 	Entry lastCuvolUpdate();
 
-	public static final Cuvol NULL_CUVOL = new Cuvol() {
+	public static final Cuvol NULL = new Cuvol() {
 
 		@Override
 		public Instrument instrument() {
-			return Instrument.NULL_INSTRUMENT;
+			return Instrument.NULL;
 		}
 
 		@Override
@@ -66,11 +66,6 @@ public interface Cuvol extends MarketData<Cuvol> {
 		@Override
 		public boolean isNull() {
 			return true;
-		}
-
-		@Override
-		public Cuvol copy() {
-			return this;
 		}
 
 		@Override
@@ -91,6 +86,11 @@ public interface Cuvol extends MarketData<Cuvol> {
 		@Override
 		public Entry lastCuvolUpdate() {
 			return Entry.NULL_CUVOL_ENTRY;
+		}
+
+		@Override
+		public Cuvol freeze() {
+			return this;
 		}
 
 	};

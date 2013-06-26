@@ -130,7 +130,7 @@ public interface Instrument extends Comparable<Instrument>, Metadata {
 
 	List<InstrumentGUID> componentLegs();
 
-	public static Instrument NULL_INSTRUMENT = new Instrument() {
+	public static Instrument NULL = new Instrument() {
 
 		@Override
 		public boolean isNull() {
@@ -144,7 +144,7 @@ public interface Instrument extends Comparable<Instrument>, Metadata {
 
 		@Override
 		public InstrumentGUID GUID() {
-			return InstrumentGUID.NULL_INSTRUMENT_GUID;
+			return InstrumentGUID.NULL;
 		}
 
 		@Override

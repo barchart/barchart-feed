@@ -7,7 +7,6 @@
  */
 package com.barchart.feed.base.provider;
 
-import com.barchart.feed.api.model.data.Trade;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.trade.api.MarketTrade;
 import com.barchart.feed.base.trade.enums.MarketTradeField;
@@ -88,13 +87,8 @@ public class NulTrade extends ValueFreezer<MarketTrade> implements MarketTrade {
 	}
 
 	@Override
-	public Trade copy() {
-		return this.freeze();
-	}
-
-	@Override
 	public Instrument instrument() {
-		return Instrument.NULL_INSTRUMENT;
+		return Instrument.NULL;
 	}
 
 }

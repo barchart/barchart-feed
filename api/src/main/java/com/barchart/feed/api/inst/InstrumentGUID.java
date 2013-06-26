@@ -35,7 +35,7 @@ public final class InstrumentGUID implements Comparable<InstrumentGUID>,
 	}
 
 	public boolean isNull() {
-		return this == NULL_INSTRUMENT_GUID;
+		return this == NULL;
 	}
 
 	@Override
@@ -83,6 +83,6 @@ public final class InstrumentGUID implements Comparable<InstrumentGUID>,
 	}
 	
 	/** null instrument GUID */
-	public static final InstrumentGUID NULL_INSTRUMENT_GUID = new InstrumentGUID("NULL"); 
+	public static final InstrumentGUID NULL = new InstrumentGUID("NULL"); 
 
 }

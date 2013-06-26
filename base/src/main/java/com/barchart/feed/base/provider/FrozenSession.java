@@ -60,11 +60,6 @@ class FrozenSession implements Session {
 	}
 
 	@Override
-	public Session copy() {
-		return this;
-	}
-
-	@Override
 	public Price open() {
 		return current.open();
 	}
@@ -117,6 +112,11 @@ class FrozenSession implements Session {
 	@Override
 	public Instrument instrument() {
 		return instrument;
+	}
+
+	@Override
+	public Session freeze() {
+		return this;
 	}
 	
 }
