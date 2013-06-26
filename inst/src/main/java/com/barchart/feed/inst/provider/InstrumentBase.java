@@ -11,8 +11,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import com.barchart.feed.api.enums.MarketCurrency;
 import com.barchart.feed.api.inst.InstrumentGUID;
+import com.barchart.feed.api.inst.MarketCurrency;
 import com.barchart.feed.api.model.meta.Exchange;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.inst.InstrumentField;

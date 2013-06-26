@@ -1,4 +1,4 @@
-package com.barchart.feed.api.exchange;
+package com.barchart.feed.api.inst;
 
 public enum ExchangeCode {
 	

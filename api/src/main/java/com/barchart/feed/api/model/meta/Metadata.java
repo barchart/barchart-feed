@@ -1,4 +1,4 @@
-package com.barchart.feed.api.model;
+package com.barchart.feed.api.model.meta;
 
 /**
  * Top level interface for metadata objects.  Current extensions are instrument

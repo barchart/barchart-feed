@@ -1,6 +1,5 @@
-package com.barchart.feed.api;
+package com.barchart.feed.base.participant;
 
-/** FIXME shift down */
 public interface AgentLifecycleHandler {
 
 	void attachAgent(FrameworkAgent<?> agent);

@@ -1,4 +1,4 @@
-package com.barchart.feed.api.meta;
+package com.barchart.feed.inst.meta;
 
 /**
  * Identifier, unique in a given scope.

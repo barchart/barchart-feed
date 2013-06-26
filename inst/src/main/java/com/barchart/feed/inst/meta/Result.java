@@ -1,4 +1,4 @@
-package com.barchart.feed.api.meta;
+package com.barchart.feed.inst.meta;
 
 /**
  * The result of an asynchronous operation pushed to an observer.  This differs from a

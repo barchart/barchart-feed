@@ -3,10 +3,10 @@ package com.barchart.feed.base.provider;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.barchart.feed.api.model.MarketData;
 import com.barchart.feed.api.model.data.Cuvol;
 import com.barchart.feed.api.model.data.Market;
 import com.barchart.feed.api.model.data.Book;
+import com.barchart.feed.api.model.data.MarketData;
 import com.barchart.feed.api.model.data.Session;
 import com.barchart.feed.api.model.data.Trade;
 

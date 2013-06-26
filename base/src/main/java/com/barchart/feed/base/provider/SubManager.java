@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import com.barchart.feed.api.FrameworkAgent;
+import com.barchart.feed.base.participant.FrameworkAgent;
 import com.barchart.feed.base.sub.Subscription;
 import com.barchart.feed.base.sub.SubscriptionType;
 

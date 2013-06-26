@@ -1,4 +1,4 @@
-package com.barchart.feed.api.model;
+package com.barchart.feed.api.model.data;
 
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.util.value.api.Copyable;

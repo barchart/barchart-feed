@@ -1,8 +1,8 @@
-package com.barchart.feed.api.meta;
+package com.barchart.feed.inst.meta;
 
 import java.util.Collection;
 
-import com.barchart.feed.api.model.Metadata;
+import com.barchart.feed.api.model.meta.Metadata;
 import com.barchart.feed.api.util.Observer;
 
 /**

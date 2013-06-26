@@ -7,8 +7,8 @@
  */
 package com.barchart.feed.inst;
 
-import com.barchart.feed.api.enums.MarketCurrency;
 import com.barchart.feed.api.inst.InstrumentGUID;
+import com.barchart.feed.api.inst.MarketCurrency;
 import com.barchart.feed.api.model.meta.Exchange;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.missive.api.Tag;

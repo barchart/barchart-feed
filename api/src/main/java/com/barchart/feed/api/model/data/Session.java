@@ -1,6 +1,5 @@
 package com.barchart.feed.api.model.data;
 
-import com.barchart.feed.api.model.MarketData;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Size;

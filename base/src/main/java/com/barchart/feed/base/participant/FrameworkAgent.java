@@ -1,12 +1,13 @@
-package com.barchart.feed.api;
+package com.barchart.feed.base.participant;
 
 import java.util.Set;
 
-import com.barchart.feed.api.model.MarketData;
+import com.barchart.feed.api.Agent;
+import com.barchart.feed.api.MarketObserver;
 import com.barchart.feed.api.model.data.Market;
+import com.barchart.feed.api.model.data.MarketData;
 import com.barchart.feed.api.model.meta.Instrument;
 
-/** FIXME move */
 public interface FrameworkAgent<V extends MarketData<V>> extends Agent {
 
 	Class<V> type();

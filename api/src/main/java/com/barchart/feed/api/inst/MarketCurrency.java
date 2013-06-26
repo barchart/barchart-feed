@@ -5,7 +5,7 @@
  *
  * http://www.opensource.org/licenses/bsd-license.php
  */
-package com.barchart.feed.api.enums;
+package com.barchart.feed.api.inst;
 
 public enum MarketCurrency {
 

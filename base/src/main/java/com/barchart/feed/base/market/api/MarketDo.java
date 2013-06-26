@@ -10,7 +10,6 @@ package com.barchart.feed.base.market.api;
 import java.util.List;
 import java.util.Set;
 
-import com.barchart.feed.api.AgentLifecycleHandler;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.bar.api.MarketBar;
 import com.barchart.feed.base.bar.api.MarketDoBar;
@@ -19,6 +18,7 @@ import com.barchart.feed.base.book.api.MarketDoBookEntry;
 import com.barchart.feed.base.cuvol.api.MarketDoCuvolEntry;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.base.market.enums.MarketField;
+import com.barchart.feed.base.participant.AgentLifecycleHandler;
 import com.barchart.feed.base.provider.RegTaker;
 import com.barchart.feed.base.state.enums.MarketStateEntry;
 import com.barchart.feed.base.trade.enums.MarketTradeSequencing;

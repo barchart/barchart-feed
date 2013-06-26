@@ -3,9 +3,8 @@ package com.barchart.feed.api.model.meta;
 import java.util.Collections;
 import java.util.List;
 
-import com.barchart.feed.api.enums.MarketCurrency;
 import com.barchart.feed.api.inst.InstrumentGUID;
-import com.barchart.feed.api.model.Metadata;
+import com.barchart.feed.api.inst.MarketCurrency;
 import com.barchart.util.value.api.Fraction;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Schedule;

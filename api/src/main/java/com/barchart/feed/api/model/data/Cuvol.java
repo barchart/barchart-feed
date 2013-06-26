@@ -3,7 +3,6 @@ package com.barchart.feed.api.model.data;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.barchart.feed.api.model.MarketData;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Size;
