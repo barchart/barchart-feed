@@ -7,13 +7,13 @@
  */
 package com.barchart.feed.base.provider;
 
-import com.barchart.feed.api.model.data.Cuvol;
 import com.barchart.feed.api.model.data.Book;
+import com.barchart.feed.api.model.data.Cuvol;
 import com.barchart.feed.api.model.data.Session;
+import com.barchart.feed.api.model.data.SessionSet;
 import com.barchart.feed.api.model.data.Trade;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.market.enums.MarketField;
-import com.barchart.feed.base.state.enums.MarketStateEntry;
 import com.barchart.util.anno.NotMutable;
 import com.barchart.util.value.api.Time;
 import com.barchart.util.value.impl.ValueConst;
@@ -31,7 +31,6 @@ public class DefMarket extends NulMarket {
 	protected volatile Instrument instrument;
 
 	public DefMarket(final Instrument instrument) {
-		
 		this.instrument = instrument;
 		valueArray = new Value<?>[ARRAY_SIZE];
 	}
@@ -72,23 +71,23 @@ public class DefMarket extends NulMarket {
 		return get(MarketField.CUVOL);
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public Session session() {
-		
-		return new FrozenSession(
-				instrument, 
-				get(MarketField.STATE).contains(MarketStateEntry.IS_SETTLED),
-				get(MarketField.BAR_CURRENT), 
-				get(MarketField.BAR_CURRENT_EXT),
-				get(MarketField.BAR_PREVIOUS), 
-				get(MarketField.BAR_PREVIOUS_EXT));	
-		
+		return get(MarketField.BAR_CURRENT);	
 	}
 
+	@Override 
+	public SessionSet sessionSet() {
+		return new FrozenSessionSet(instrument,
+				get(MarketField.BAR_CURRENT),
+				get(MarketField.BAR_CURRENT_EXT),
+				get(MarketField.BAR_PREVIOUS),
+				get(MarketField.BAR_PREVIOUS_EXT));
+	}
+	
 	@Override
 	public Time updated() {
-		return null;
+		return Time.NULL;
 	}
 	
 }

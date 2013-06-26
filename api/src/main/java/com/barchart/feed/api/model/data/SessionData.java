@@ -1,10 +1,11 @@
 package com.barchart.feed.api.model.data;
 
+import com.barchart.util.value.api.Existential;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Size;
 import com.barchart.util.value.api.Time;
 
-public interface SessionData {
+interface SessionData extends Existential {
 
 	Price open();
 
@@ -26,7 +27,7 @@ public interface SessionData {
 
 	Time timeClosed();
 
-	public static final SessionData NULL_SESSION_DATA = new SessionData() {
+	public static final SessionData NULL = new SessionData() {
 
 		@Override
 		public Price open() {
@@ -76,6 +77,11 @@ public interface SessionData {
 		@Override
 		public Time timeClosed() {
 			return Time.NULL;
+		}
+
+		@Override
+		public boolean isNull() {
+			return true;
 		}
 
 	};

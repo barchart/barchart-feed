@@ -7,9 +7,10 @@
  */
 package com.barchart.feed.base.provider;
 
-import com.barchart.feed.api.model.data.Cuvol;
 import com.barchart.feed.api.model.data.Book;
+import com.barchart.feed.api.model.data.Cuvol;
 import com.barchart.feed.api.model.data.Session;
+import com.barchart.feed.api.model.data.SessionSet;
 import com.barchart.feed.api.model.data.Trade;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.market.api.Market;
@@ -85,6 +86,11 @@ class NulMarket extends ValueFreezer<Market> implements Market {
 	@Override
 	public Session session() {
 		return Session.NULL;
+	}
+	
+	@Override
+	public SessionSet sessionSet() {
+		return SessionSet.NULL;
 	}
 
 	@Override

@@ -7,6 +7,7 @@
  */
 package com.barchart.feed.base.provider;
 
+import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.bar.api.MarketBar;
 import com.barchart.feed.base.bar.enums.MarketBarField;
 import com.barchart.util.anno.NotMutable;
@@ -104,6 +105,21 @@ public class NulBar extends ValueFreezer<MarketBar> implements MarketBar {
 	@Override
 	public Time timeClosed() {
 		return ValueConverter.time(get(MarketBarField.TRADE_DATE));
+	}
+
+	@Override
+	public boolean isSettled() {
+		return false;
+	}
+
+	@Override
+	public Instrument instrument() {
+		return Instrument.NULL;
+	}
+
+	@Override
+	public Time updated() {
+		return Time.NULL;
 	}
 
 }

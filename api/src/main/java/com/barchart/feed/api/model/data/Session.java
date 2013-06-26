@@ -8,22 +8,68 @@ import com.barchart.util.value.api.Time;
 /**
  * document object and primitive
  */
-public interface Session extends MarketData<Session>, SessionData {
+public interface Session extends MarketData<Session> {
 
-	/** FIXME kill */
-	SessionData extended();
+	/**
+	 * Market session type.
+	 */
+	enum Type {
 
-	/** FIXME kill */
-	SessionData previous();
+		/**
+		 * Live open session.
+		 * <p>
+		 * Lifetime is 1 day.
+		 */
+		DEFAULT_CURRENT, //
 
-	/** FIXME kill */
-	SessionData previousExtended();
+		/**
+		 * Snapshot of {@link #CURRENT} at the moment of its closing.
+		 * <p>
+		 * Lifetime is 1 day.
+		 */
+		DEFAULT_PREVIOUS, //
 
+		/**
+		 * Represents FORM-T live open session.
+		 * <p>
+		 * TODO define exact life cycle.
+		 */
+		EXTENDED_CURRENT, //
+
+		/**
+		 * Represents FORM-T past closed session.
+		 * <p>
+		 * TODO define exact life cycle.
+		 */
+		EXTENDED_PREVIOUS, //
+
+	}
+	
 	/** FIXME kill */
 	boolean isSettled();
 
 	/** FIXME report change set. */
 	// Set<Component> change();
+	
+	Price open();
+
+	Price high();
+
+	Price low();
+
+	Price close();
+
+	Price settle();
+
+	Size volume();
+
+	Size interest();
+
+	Time timeOpened();
+
+	Time timeUpdated();
+
+	Time timeClosed();
 
 	public static final Session NULL = new Session() {
 
@@ -90,21 +136,6 @@ public interface Session extends MarketData<Session>, SessionData {
 		@Override
 		public Time timeClosed() {
 			return Time.NULL;
-		}
-
-		@Override
-		public SessionData extended() {
-			return SessionData.NULL_SESSION_DATA;
-		}
-
-		@Override
-		public SessionData previous() {
-			return SessionData.NULL_SESSION_DATA;
-		}
-
-		@Override
-		public SessionData previousExtended() {
-			return SessionData.NULL_SESSION_DATA;
 		}
 
 		@Override

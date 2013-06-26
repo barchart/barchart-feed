@@ -235,7 +235,7 @@ public final class Exchanges {
 		if(names.containsKey(name)) {
 			return names.get(name);
 		} else {
-			return Exchange.NULL_EXCHANGE;
+			return Exchange.NULL;
 		}
 		
 	}
@@ -245,7 +245,7 @@ public final class Exchanges {
 		if(codes.containsKey(code)) {
 			return codes.get(code);
 		} else {
-			return Exchange.NULL_EXCHANGE;
+			return Exchange.NULL;
 		}
 		
 	}
@@ -262,7 +262,7 @@ public final class Exchanges {
 
 		@Override
 		public boolean isNull() {
-			return this == Exchange.NULL_EXCHANGE;
+			return this == Exchange.NULL;
 		}
 
 		@Override

@@ -336,7 +336,7 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 
 		if (bar.isFrozen()) {
 
-			bar = new VarBar();
+			bar = new VarBar(instrument);
 
 			set(barField, bar);
 

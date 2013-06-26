@@ -7,6 +7,7 @@
  */
 package com.barchart.feed.base.provider;
 
+import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.bar.api.MarketDoBar;
 import com.barchart.feed.base.bar.enums.MarketBarField;
 import com.barchart.util.anno.Mutable;
@@ -17,9 +18,9 @@ import com.barchart.util.values.api.Value;
 @ThreadSafe
 public final class VarBar extends DefBar implements MarketDoBar {
 
-//	VarBar() {
-//		
-//	}
+	VarBar(Instrument instrument) {
+		super(instrument);
+	}
 
 	@Override
 	public final <V extends Value<V>> void set(final MarketBarField<V> field,
@@ -38,7 +39,7 @@ public final class VarBar extends DefBar implements MarketDoBar {
 	@Override
 	public final DefBar freeze() {
 
-		final DefBar that = new DefBar();
+		final DefBar that = new DefBar(instrument);
 
 		final int size = ARRAY_SIZE;
 

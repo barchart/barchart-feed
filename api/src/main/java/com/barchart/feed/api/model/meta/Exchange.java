@@ -7,7 +7,7 @@ public interface Exchange extends Metadata {
 	
 	String code();
 	
-	public static Exchange NULL_EXCHANGE = new Exchange() {
+	public static Exchange NULL = new Exchange() {
 
 		@Override
 		public boolean isNull() {

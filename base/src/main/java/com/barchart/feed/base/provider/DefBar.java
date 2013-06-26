@@ -7,6 +7,7 @@
  */
 package com.barchart.feed.base.provider;
 
+import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.bar.enums.MarketBarField;
 import com.barchart.util.anno.NotMutable;
 import com.barchart.util.values.api.Value;
@@ -17,15 +18,18 @@ class DefBar extends NulBar {
 	protected final static int ARRAY_SIZE = MarketBarField.size();
 
 	protected final Value<?>[] valueArray;
-
-	DefBar() {
+	protected final Instrument instrument;
+	
+	DefBar(final Instrument instrument) {
 		valueArray = new Value<?>[ARRAY_SIZE];
+		this.instrument = instrument;
 	}
 
-	DefBar(final Value<?>[] valueArray) {
+	DefBar(final Instrument instrument, final Value<?>[] valueArray) {
 		assert valueArray != null;
 		assert valueArray.length == ARRAY_SIZE;
 		this.valueArray = valueArray;
+		this.instrument = instrument;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -42,6 +46,11 @@ class DefBar extends NulBar {
 			return value;
 		}
 
+	}
+	
+	@Override
+	public Instrument instrument() {
+		return instrument;
 	}
 	
 }

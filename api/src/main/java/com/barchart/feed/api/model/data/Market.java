@@ -13,6 +13,8 @@ public interface Market extends MarketData<Market> {
 	Cuvol cuvol();
 
 	Session session();
+	
+	SessionSet sessionSet();
 
 	public static final Market NULL = new Market() {
 
@@ -24,11 +26,6 @@ public interface Market extends MarketData<Market> {
 		@Override
 		public Time updated() {
 			return Time.NULL;
-		}
-
-		@Override
-		public boolean isNull() {
-			return true;
 		}
 
 		@Override
@@ -50,12 +47,22 @@ public interface Market extends MarketData<Market> {
 		public Session session() {
 			return Session.NULL;
 		}
+		
+		@Override
+		public SessionSet sessionSet() {
+			return SessionSet.NULL;
+		}
 
 		@Override
 		public Market freeze() {
 			return this;
 		}
 
+		@Override
+		public boolean isNull() {
+			return true;
+		}
+		
 	};
 
 }
