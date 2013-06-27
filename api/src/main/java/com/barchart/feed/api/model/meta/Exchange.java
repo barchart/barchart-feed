@@ -7,11 +7,11 @@ import com.barchart.feed.api.util.Identifier;
  */
 public interface Exchange extends Metadata {
 	
-	@Deprecated
-	String name();
-	
-	@Deprecated
-	String code();
+//	@Deprecated
+//	String name();
+//	
+//	@Deprecated
+//	String code();
 	
 	public static Exchange NULL = new Exchange() {
 
@@ -20,15 +20,15 @@ public interface Exchange extends Metadata {
 			return true;
 		}
 
-		@Override
-		public String name() {
-			return "NULL_EXCHANGE";
-		}
-
-		@Override
-		public String code() {
-			return "NULL_EXCHANGE";
-		}
+//		@Override
+//		public String name() {
+//			return "NULL_EXCHANGE";
+//		}
+//
+//		@Override
+//		public String code() {
+//			return "NULL_EXCHANGE";
+//		}
 
 		@Override
 		public Identifier id() {

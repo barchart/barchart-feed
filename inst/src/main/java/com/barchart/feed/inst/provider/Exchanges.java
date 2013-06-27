@@ -269,18 +269,21 @@ public final class Exchanges {
 			return id.compareTo(o.toString());
 		}
 		
+		@Override
+		public boolean equals(final Object o) {
+			throw new RuntimeException("UNFINISHED");
+		}
+		
 	}
 	
 	private static class ExchangeImpl implements Exchange {
 		
-		private final String name;
-		private final String code;
+		private final String desc;
 		
 		private final Identifier id;
 		
-		ExchangeImpl(final String name, final String code) {
-			this.name = name;
-			this.code = code;
+		ExchangeImpl(final String desc, final String code) {
+			this.desc = desc.intern();
 			
 			id = new ExchangeIdentifier(code);
 		}
@@ -291,16 +294,6 @@ public final class Exchanges {
 		}
 
 		@Override
-		public String name() {
-			return name;
-		}
-
-		@Override
-		public String code() {
-			return code;
-		}
-		
-		@Override
 		public boolean equals(final Object o) {
 			
 			if(!(o instanceof Exchange)) {
@@ -309,7 +302,7 @@ public final class Exchanges {
 			
 			Exchange that = (Exchange)o;
 			
-			return (name.equals(that.name()) && code.equals(that.code()));
+			return (desc.equals(that.description()) && id.equals(that.id()));
 			
 		}
 
@@ -320,7 +313,7 @@ public final class Exchanges {
 
 		@Override
 		public String description() {
-			return name;
+			return desc;
 		}
 
 	}

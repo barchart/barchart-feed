@@ -173,7 +173,7 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 			final Set<String> interests = new HashSet<String>();
 
 			for (final Exchange e : incExchanges) {
-				interests.add(e.code());
+				interests.add(e.id().toString());
 			}
 
 			for (final Instrument i : incInsts) {
@@ -281,7 +281,7 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 					exExchanges.remove(e);
 					incExchanges.add(e);
 
-					newInterests.add(e.code());
+					newInterests.add(e.id().toString());
 
 				}
 
@@ -375,7 +375,7 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 					incExchanges.remove(e);
 					exExchanges.add(e);
 
-					oldInterests.add(e.code());
+					oldInterests.add(e.id().toString());
 
 				}
 			}

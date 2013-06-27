@@ -36,11 +36,6 @@ public abstract class InstrumentBase extends ObjectMapSafe implements Instrument
 	
 	private volatile Identifier id = Identifier.NULL;
 	
-	@Override
-	public void init() {
-		id = new InstIdentifier(GUID().toString());
-	}
-	
 	static class InstIdentifier implements Identifier {
 		
 		private final String id;
@@ -63,6 +58,9 @@ public abstract class InstrumentBase extends ObjectMapSafe implements Instrument
 	
 	@Override 
 	public Identifier id() {
+		if(id == Identifier.NULL && GUID() != null && !GUID().isNull()) {
+			id = new InstIdentifier(GUID().toString());
+		}
 		return id;
 	}
 	

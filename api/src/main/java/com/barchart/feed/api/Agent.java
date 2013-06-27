@@ -7,9 +7,6 @@ import com.barchart.feed.api.model.meta.Instrument;
  * Filter hierarchy:
  * 
  * All Filter Exchange Filter Instrument Filter Custom filter
- * 
- * @author Gavin M Litchfield
- * 
  */
 public interface Agent {
 
