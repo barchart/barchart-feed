@@ -15,7 +15,8 @@ import com.barchart.feed.api.model.data.Trade;
 import com.barchart.feed.api.model.meta.Exchange;
 import com.barchart.feed.api.model.meta.Instrument;
 
-public interface Feed extends ConnectionLifecycle<Feed>, AgentBuilder {
+public interface Marketplace extends ConnectionLifecycle<Marketplace>, 
+		AgentBuilder {
 	
 	interface Builder {
 		
@@ -25,21 +26,21 @@ public interface Feed extends ConnectionLifecycle<Feed>, AgentBuilder {
 		
 		Builder executor(ExecutorService executor);
 		
-		Builder dbaseFolder(File dbFolder);
+		Builder localDatabaseFolder(File dbFolder);
 		
 		Builder useLocalDatabase();
 		
-		Feed build();
+		Marketplace build();
 		
 	}
 
 	/* ***** ***** ConnectionLifecycle ***** ***** */
 
 	@Override
-	ConnectionFuture<Feed> startup();
+	ConnectionFuture<Marketplace> startup();
 
 	@Override
-	ConnectionFuture<Feed> shutdown();
+	ConnectionFuture<Marketplace> shutdown();
 
 	/**
 	 * Applications which need to react to the connectivity state of the feed

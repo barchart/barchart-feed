@@ -7,8 +7,8 @@ package com.barchart.feed.api;
  */
 public interface FeedFactory {
 	
-	Feed newFeed(String username, String password);
+	Marketplace newFeed(String username, String password);
 	
-	Feed.Builder builder();
+	Marketplace.Builder builder();
 
 }
