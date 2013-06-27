@@ -1,6 +1,6 @@
-package com.barchart.feed.api.inst;
+package com.barchart.feed.inst.provider;
 
-public enum ExchangeCode {
+enum ExchangeCode {
 	
 	// Pulled from profiles table, exchange column
 	

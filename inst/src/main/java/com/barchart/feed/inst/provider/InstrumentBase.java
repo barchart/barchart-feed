@@ -11,10 +11,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import com.barchart.feed.api.inst.InstrumentGUID;
-import com.barchart.feed.api.inst.MarketCurrency;
 import com.barchart.feed.api.model.meta.Exchange;
 import com.barchart.feed.api.model.meta.Instrument;
+import com.barchart.feed.api.util.Identifier;
+import com.barchart.feed.api.util.InstrumentGUID;
+import com.barchart.feed.api.util.MarketCurrency;
 import com.barchart.feed.inst.InstrumentField;
 import com.barchart.missive.core.ObjectMapSafe;
 import com.barchart.util.value.api.Factory;
@@ -32,6 +33,38 @@ public abstract class InstrumentBase extends ObjectMapSafe implements Instrument
 	
 	public final List<InstrumentGUID> componentLegs = 
 			new ArrayList<InstrumentGUID>();
+	
+	private volatile Identifier id = Identifier.NULL;
+	
+	@Override
+	public void init() {
+		id = new InstIdentifier(GUID().toString());
+	}
+	
+	static class InstIdentifier implements Identifier {
+		
+		private final String id;
+		
+		InstIdentifier(final CharSequence id) {
+			this.id = id.toString().intern();
+		}
+		
+		@Override
+		public String toString() {
+			return id;
+		}
+
+		@Override
+		public int compareTo(Identifier o) {
+			return id.compareTo(o.toString());
+		}
+		
+	}
+	
+	@Override 
+	public Identifier id() {
+		return id;
+	}
 	
 	@Override
 	public int compareTo(final Instrument o) {

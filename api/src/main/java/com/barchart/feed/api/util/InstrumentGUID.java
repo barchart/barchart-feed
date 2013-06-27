@@ -5,8 +5,12 @@
  *
  * http://www.opensource.org/licenses/bsd-license.php
  */
-package com.barchart.feed.api.inst;
+package com.barchart.feed.api.util;
 
+/*
+ * TODO Remove and replace with Identifier
+ */
+@Deprecated
 public final class InstrumentGUID implements Comparable<InstrumentGUID>, 
 		CharSequence {
 

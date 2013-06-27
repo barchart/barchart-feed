@@ -36,9 +36,9 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.feed.api.inst.InstrumentGUID;
-import com.barchart.feed.api.inst.MarketCurrency;
 import com.barchart.feed.api.model.meta.Instrument;
+import com.barchart.feed.api.util.InstrumentGUID;
+import com.barchart.feed.api.util.MarketCurrency;
 import com.barchart.missive.api.TagMapSafe;
 import com.barchart.missive.core.ObjectMapFactory;
 import com.barchart.missive.hash.HashTagMapSafe;

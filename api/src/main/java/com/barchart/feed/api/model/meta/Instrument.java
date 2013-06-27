@@ -3,8 +3,9 @@ package com.barchart.feed.api.model.meta;
 import java.util.Collections;
 import java.util.List;
 
-import com.barchart.feed.api.inst.InstrumentGUID;
-import com.barchart.feed.api.inst.MarketCurrency;
+import com.barchart.feed.api.util.Identifier;
+import com.barchart.feed.api.util.InstrumentGUID;
+import com.barchart.feed.api.util.MarketCurrency;
 import com.barchart.util.value.api.Fraction;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Schedule;
@@ -129,8 +130,11 @@ public interface Instrument extends Comparable<Instrument>, Metadata {
 
 	List<InstrumentGUID> componentLegs();
 
-	public static Instrument NULL = new Instrument() {
-
+	/**
+	 * Canonical null instance.
+	 */
+	Instrument NULL = new Instrument() {
+		
 		@Override
 		public boolean isNull() {
 			return true;
@@ -244,6 +248,11 @@ public interface Instrument extends Comparable<Instrument>, Metadata {
 		@Override
 		public List<InstrumentGUID> componentLegs() {
 			return Collections.emptyList();
+		}
+
+		@Override
+		public Identifier id() {
+			return Identifier.NULL;
 		}
 
 	};

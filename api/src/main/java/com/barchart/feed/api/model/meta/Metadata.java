@@ -1,15 +1,13 @@
 package com.barchart.feed.api.model.meta;
 
+import com.barchart.feed.api.util.Describable;
+import com.barchart.feed.api.util.Identifiable;
 import com.barchart.util.value.api.Existential;
 
 /**
- * Top level interface for metadata objects.  Current extensions are instrument
- * and exchange.  Future extensions are channel and group.
- * 
- * @author Gavin M Litchfield
- *
+ * Top level interface for metadata objects. 
  */
-public interface Metadata extends Existential {
+public interface Metadata extends Existential, Identifiable, Describable {
 	
 	@Override
 	boolean isNull();

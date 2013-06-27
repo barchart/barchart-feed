@@ -11,7 +11,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import com.barchart.feed.api.inst.InstrumentGUID;
+import com.barchart.feed.api.util.InstrumentGUID;
 
 public interface SymbologyContext<V> {
 
