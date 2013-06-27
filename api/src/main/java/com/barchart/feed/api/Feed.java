@@ -1,5 +1,8 @@
 package com.barchart.feed.api;
 
+import java.io.File;
+import java.util.concurrent.ExecutorService;
+
 import com.barchart.feed.api.connection.ConnectionFuture;
 import com.barchart.feed.api.connection.ConnectionLifecycle;
 import com.barchart.feed.api.connection.ConnectionStateListener;
@@ -13,6 +16,22 @@ import com.barchart.feed.api.model.meta.Exchange;
 import com.barchart.feed.api.model.meta.Instrument;
 
 public interface Feed extends ConnectionLifecycle<Feed>, AgentBuilder {
+	
+	interface Builder {
+		
+		Builder username(String username);
+		
+		Builder password(String password);
+		
+		Builder executor(ExecutorService executor);
+		
+		Builder dbaseFolder(File dbFolder);
+		
+		Builder useLocalDatabase();
+		
+		Feed build();
+		
+	}
 
 	/* ***** ***** ConnectionLifecycle ***** ***** */
 
