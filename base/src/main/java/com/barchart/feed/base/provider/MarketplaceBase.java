@@ -10,7 +10,6 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -91,12 +90,12 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 	private class BaseAgent<V extends MarketData<V>> implements
 			FrameworkAgent<V> {
 
-		private final AtomicBoolean isActive = new AtomicBoolean(true);
-
 		private final Class<V> clazz;
 		private final MDGetter<V> getter;
 		private final AgentLifecycleHandler agentHandler;
 		private final MarketObserver<V> callback;
+		
+		private volatile State state = State.CREATED;
 
 		// Review concurrency
 		private final Set<Exchange> incExchanges = new HashSet<Exchange>();
@@ -186,22 +185,38 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 		/* ***** ***** Consumer Methods ***** ***** */
 
 		@Override
+		public State state() {
+			return state;
+		}
+		
+		@Override
 		public boolean isActive() {
-			return isActive.get();
+			return state == State.ACTIVATED;
 		}
 
 		@Override
 		public void activate() {
-			isActive.set(true);
+			
+			if(state == State.TERMINATED) {
+				return;
+			}
+			
+			state = State.ACTIVATED;
 		}
 
 		@Override
 		public void deactivate() {
-			isActive.set(false);
+			
+			if(state == State.TERMINATED) {
+				return;
+			}
+			
+			state = State.DEACTIVATED;
 		}
 
 		@Override
-		public synchronized void dismiss() {
+		public synchronized void terminate() {
+			state = State.TERMINATED;
 			agentHandler.detachAgent(this);
 		}
 

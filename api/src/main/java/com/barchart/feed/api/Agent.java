@@ -8,8 +8,35 @@ import com.barchart.feed.api.model.meta.Instrument;
  */
 public interface Agent {
 
-	/* ***** ***** Lifecycle methods ***** ***** */
+	/* ***** ***** Lifecycle ***** ***** */
 	
+	/**
+	 * Agent life cycle state.
+	 */
+	enum State {
+
+		/** Agent is being created. */
+		CREATED, //
+
+		/** Agent is processing events. */
+		ACTIVATED, //
+
+		/** Agent event processing is suspended. */
+		DEACTIVATED, //
+
+		/** Agent is terminated and can not be used again. */
+		TERMINATED, //
+
+	}
+	
+	/**
+	 * Current agent life cycle state.
+	 */
+	State state();
+	
+	/**
+	 * Agent will fire events while active.
+	 */
 	boolean isActive();
 
 	/**
@@ -28,9 +55,9 @@ public interface Agent {
 	 * Permanently removes all references to the agent from the framework.
 	 * Activating a dismissed agent will have no effect.
 	 */
-	void dismiss();
+	void terminate();
 
-	/* ***** ***** Filter methods ***** ***** */
+	/* ***** ***** Filter ***** ***** */
 	
 	/**
 	 * Subscribes to and attaches agent to provided symbols.
