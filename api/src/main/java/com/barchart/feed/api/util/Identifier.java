@@ -30,7 +30,16 @@ public interface Identifier extends Comparable<Identifier> {
 			return nul.hashCode();
 		}
 		
-		// TODO Equals
+		@Override
+		public boolean equals(final Object o) {
+			
+			if(!(o instanceof Identifier)) {
+				return false;
+			}
+			
+			return nul.equals(((Identifier)o).toString());
+			
+		}
 		
 	};
 

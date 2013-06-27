@@ -54,6 +54,17 @@ public abstract class InstrumentBase extends ObjectMapSafe implements Instrument
 			return id.compareTo(o.toString());
 		}
 		
+		@Override
+		public boolean equals(final Object o) {
+			
+			if(!(o instanceof Identifier)) {
+				return false;
+			}
+			
+			return id.equals(((Identifier)o).toString());
+			
+		}
+		
 	}
 	
 	@Override 

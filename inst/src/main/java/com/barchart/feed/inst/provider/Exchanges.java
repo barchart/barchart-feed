@@ -271,7 +271,13 @@ public final class Exchanges {
 		
 		@Override
 		public boolean equals(final Object o) {
-			throw new RuntimeException("UNFINISHED");
+			
+			if(!(o instanceof Identifier)) {
+				return false;
+			}
+			
+			return id.equals(((Identifier)o).toString());
+			
 		}
 		
 	}

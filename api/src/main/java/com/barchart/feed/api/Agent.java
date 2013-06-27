@@ -4,12 +4,12 @@ import com.barchart.feed.api.model.meta.Exchange;
 import com.barchart.feed.api.model.meta.Instrument;
 
 /**
- * Filter hierarchy:
  * 
- * All Filter Exchange Filter Instrument Filter Custom filter
  */
 public interface Agent {
 
+	/* ***** ***** Lifecycle methods ***** ***** */
+	
 	boolean isActive();
 
 	/**
@@ -30,6 +30,8 @@ public interface Agent {
 	 */
 	void dismiss();
 
+	/* ***** ***** Filter methods ***** ***** */
+	
 	/**
 	 * Subscribes to and attaches agent to provided symbols.
 	 * 
