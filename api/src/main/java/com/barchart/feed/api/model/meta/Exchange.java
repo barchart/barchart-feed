@@ -4,7 +4,7 @@ import com.barchart.feed.api.util.Identifier;
 
 public interface Exchange extends Metadata {
 	
-	public static Exchange NULL = new Exchange() {
+	Exchange NULL = new Exchange() {
 
 		@Override
 		public boolean isNull() {
