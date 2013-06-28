@@ -640,7 +640,9 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 
 	}
 
-	private final MarketSafeRunner<Value<?>, MarketField<?>> safeTake = new MarketSafeRunner<Value<?>, MarketField<?>>() {
+	private final MarketSafeRunner<Value<?>, MarketField<?>> safeTake = 
+			new MarketSafeRunner<Value<?>, MarketField<?>>() {
+		
 		@Override
 		public Value<?> runSafe(final MarketDo market,
 				final MarketField<?> field) {
