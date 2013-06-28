@@ -235,9 +235,9 @@ public class DefBook extends ValueFreezer<MarketBook> implements MarketBook {
 	}
 
 	@Override
-	public List<PriceLevel> entryList(final Book.Side side) {
+	public List<Entry> entryList(final Book.Side side) {
 		
-		final List<PriceLevel> result = new ArrayList<PriceLevel>();
+		final List<Entry> result = new ArrayList<Entry>();
 		
 		final MarketBookEntry[] e = entries(side);
 		
@@ -252,7 +252,7 @@ public class DefBook extends ValueFreezer<MarketBook> implements MarketBook {
 	}
 	
 	@Override
-	public PriceLevel lastBookUpdate() {
+	public Entry lastBookUpdate() {
 		return lastUpdate;
 	}
 

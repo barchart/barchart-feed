@@ -10,7 +10,6 @@ package com.barchart.feed.inst;
 import com.barchart.feed.api.model.meta.Exchange;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.api.util.InstrumentGUID;
-import com.barchart.feed.api.util.MarketCurrency;
 import com.barchart.missive.api.Tag;
 import com.barchart.missive.core.TagFactory;
 import com.barchart.util.value.api.Fraction;
@@ -19,6 +18,8 @@ import com.barchart.util.value.api.TimeInterval;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
 import com.barchart.util.values.api.TextValue;
+
+import design.MarketCurrency;
 
 public interface InstrumentField {
 

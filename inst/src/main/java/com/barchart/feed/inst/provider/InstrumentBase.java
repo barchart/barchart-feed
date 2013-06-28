@@ -15,7 +15,6 @@ import com.barchart.feed.api.model.meta.Exchange;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.api.util.Identifier;
 import com.barchart.feed.api.util.InstrumentGUID;
-import com.barchart.feed.api.util.MarketCurrency;
 import com.barchart.feed.inst.InstrumentField;
 import com.barchart.missive.core.ObjectMapSafe;
 import com.barchart.util.value.api.Factory;
@@ -26,6 +25,8 @@ import com.barchart.util.value.api.Schedule;
 import com.barchart.util.value.api.Size;
 import com.barchart.util.value.api.TimeInterval;
 import com.barchart.util.values.api.PriceValue;
+
+import design.MarketCurrency;
 
 public abstract class InstrumentBase extends ObjectMapSafe implements Instrument {
 	

@@ -80,12 +80,12 @@ public class DefBookTop extends ValueFreezer<MarketBookTop> implements
 	}
 
 	@Override
-	public Book.PriceLevel bid() {
+	public Book.Entry bid() {
 		return bid;
 	}
 
 	@Override
-	public Book.PriceLevel ask() {
+	public Book.Entry ask() {
 		return ask;
 	}
 

@@ -5,12 +5,13 @@ import java.util.List;
 
 import com.barchart.feed.api.util.Identifier;
 import com.barchart.feed.api.util.InstrumentGUID;
-import com.barchart.feed.api.util.MarketCurrency;
 import com.barchart.util.value.api.Fraction;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Schedule;
 import com.barchart.util.value.api.Size;
 import com.barchart.util.value.api.TimeInterval;
+
+import design.MarketCurrency;
 
 public interface Instrument extends Comparable<Instrument>, Metadata {
 

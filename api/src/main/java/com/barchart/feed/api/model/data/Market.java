@@ -9,16 +9,16 @@ public interface Market extends MarketData<Market> {
 	Trade trade();
 
 	Book book();
-	
+
 	BookSet bookSet();
 
 	Cuvol cuvol();
 
 	Session session();
-	
+
 	SessionSet sessionSet();
 
-	public static final Market NULL = new Market() {
+	Market NULL = new Market() {
 
 		@Override
 		public Instrument instrument() {
@@ -39,7 +39,7 @@ public interface Market extends MarketData<Market> {
 		public Book book() {
 			return Book.NULL;
 		}
-		
+
 		@Override
 		public BookSet bookSet() {
 			return BookSet.NULL;
@@ -54,7 +54,7 @@ public interface Market extends MarketData<Market> {
 		public Session session() {
 			return Session.NULL;
 		}
-		
+
 		@Override
 		public SessionSet sessionSet() {
 			return SessionSet.NULL;

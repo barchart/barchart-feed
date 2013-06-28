@@ -111,7 +111,7 @@ public final class VarBook extends UniBook<MarketBook> implements MarketDoBook {
 	}
 
 	@Override
-	public List<PriceLevel> entryList(Book.Side side) {
+	public List<Entry> entryList(Book.Side side) {
 		throw new UnsupportedOperationException("UNUSED");
 	}
 
@@ -126,7 +126,7 @@ public final class VarBook extends UniBook<MarketBook> implements MarketDoBook {
 	}
 
 	@Override
-	public PriceLevel lastBookUpdate() {
+	public Entry lastBookUpdate() {
 		throw new UnsupportedOperationException("UNUSED");
 	}
 

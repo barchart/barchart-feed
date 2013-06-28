@@ -21,7 +21,7 @@ public interface Cuvol extends MarketData<Cuvol> {
 
 		int place();
 
-		Entry NULL_CUVOL_ENTRY = new Entry() {
+		Entry NULL = new Entry() {
 
 			@Override
 			public Price price() {
@@ -84,7 +84,7 @@ public interface Cuvol extends MarketData<Cuvol> {
 
 		@Override
 		public Entry lastCuvolUpdate() {
-			return Entry.NULL_CUVOL_ENTRY;
+			return Entry.NULL;
 		}
 
 		@Override

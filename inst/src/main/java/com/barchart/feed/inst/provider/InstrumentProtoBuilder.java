@@ -38,7 +38,6 @@ import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.api.util.InstrumentGUID;
-import com.barchart.feed.api.util.MarketCurrency;
 import com.barchart.missive.api.TagMapSafe;
 import com.barchart.missive.core.ObjectMapFactory;
 import com.barchart.missive.hash.HashTagMapSafe;
@@ -53,6 +52,8 @@ import com.barchart.util.value.api.Factory;
 import com.barchart.util.value.api.FactoryLoader;
 import com.barchart.util.value.api.TimeInterval;
 import com.barchart.util.values.api.PriceValue;
+
+import design.MarketCurrency;
 
 public final class InstrumentProtoBuilder {
 	

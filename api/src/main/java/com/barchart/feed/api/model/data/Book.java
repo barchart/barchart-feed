@@ -14,23 +14,23 @@ public interface Book extends MarketData<Book> {
 
 	interface Top extends Existential {
 
-		PriceLevel bid();
+		Entry bid();
 
-		PriceLevel ask();
+		Entry ask();
 
 		@Override
 		boolean isNull();
-		
-		public static final Top NULL = new Top() {
+
+		Top NULL = new Top() {
 
 			@Override
-			public PriceLevel bid() {
-				return PriceLevel.NULL;
+			public Entry bid() {
+				return Entry.NULL;
 			}
 
 			@Override
-			public PriceLevel ask() {
-				return PriceLevel.NULL;
+			public Entry ask() {
+				return Entry.NULL;
 			}
 
 			@Override
@@ -41,8 +41,8 @@ public interface Book extends MarketData<Book> {
 		};
 
 	}
-	
-	interface PriceLevel extends Existential, Tuple {
+
+	interface Entry extends Existential, Tuple {
 
 		@Override
 		Price price();
@@ -57,7 +57,7 @@ public interface Book extends MarketData<Book> {
 		@Override
 		boolean isNull();
 
-		final PriceLevel NULL = new PriceLevel() {
+		Entry NULL = new Entry() {
 
 			@Override
 			public Price price() {
@@ -88,14 +88,16 @@ public interface Book extends MarketData<Book> {
 
 	}
 
-	enum Side  {
+	/** TODO simplify for consumer */
+	enum Side {
 
 		/** buy side */
 		BID, //
 
 		/** offer side */
 		ASK, //
-		
+
+		/** ??? kill */
 		NULL
 
 		;
@@ -109,7 +111,7 @@ public interface Book extends MarketData<Book> {
 		}
 
 	}
-	
+
 	/**
 	 * Book liquidity type.
 	 */
@@ -117,7 +119,7 @@ public interface Book extends MarketData<Book> {
 
 		/** 	*/
 		NONE,
-		
+
 		/**		 */
 		DEFAULT, //
 
@@ -128,9 +130,9 @@ public interface Book extends MarketData<Book> {
 		COMBINED; //
 
 		public final byte ord = (byte) ordinal();
-		
+
 		private static final Type[] ENUM_VALUES = values();
-		
+
 		public static final Type fromOrd(final byte ord) {
 			return ENUM_VALUES[ord];
 		}
@@ -143,16 +145,16 @@ public interface Book extends MarketData<Book> {
 			}
 			return NONE;
 		}
-		
+
 	}
-	
+
 	Top top();
 
-	List<PriceLevel> entryList(Side side);
+	List<Entry> entryList(Side side);
 
-	PriceLevel lastBookUpdate();
+	Entry lastBookUpdate();
 
-	public static final Book NULL = new Book() {
+	Book NULL = new Book() {
 
 		@Override
 		public Instrument instrument() {
@@ -175,13 +177,13 @@ public interface Book extends MarketData<Book> {
 		}
 
 		@Override
-		public List<PriceLevel> entryList(final Side side) {
-			return new ArrayList<PriceLevel>();
+		public List<Entry> entryList(final Side side) {
+			return new ArrayList<Entry>();
 		}
 
 		@Override
-		public PriceLevel lastBookUpdate() {
-			return PriceLevel.NULL;
+		public Entry lastBookUpdate() {
+			return Entry.NULL;
 		}
 
 		@Override

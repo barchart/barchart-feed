@@ -24,7 +24,6 @@ import static com.barchart.util.values.provider.ValueBuilder.newText;
 import static com.barchart.util.values.provider.ValueBuilder.newTime;
 
 import com.barchart.feed.api.model.meta.Instrument;
-import com.barchart.feed.api.util.MarketCurrency;
 import com.barchart.missive.api.TagMapSafe;
 import com.barchart.missive.core.ObjectMapFactory;
 import com.barchart.missive.hash.HashTagMapSafe;
@@ -36,6 +35,8 @@ import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
 import com.barchart.util.values.api.TextValue;
 import com.barchart.util.values.api.TimeValue;
+
+import design.MarketCurrency;
 
 public class TestInstrument {
 

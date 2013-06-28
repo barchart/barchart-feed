@@ -14,7 +14,7 @@ import com.barchart.util.values.api.Value;
 
 @NotMutable
 public interface MarketBookEntry extends Value<MarketBookEntry>, MarketEntry, 
-		Book.PriceLevel {
+		Book.Entry {
 
 	/**
 	 * logical position in the bid or ask side;
