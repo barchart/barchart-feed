@@ -19,8 +19,6 @@ import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
 import com.barchart.util.values.api.TextValue;
 
-import design.MarketCurrency;
-
 public interface InstrumentField {
 
 	/** guid object used by feed for instrument identity*/

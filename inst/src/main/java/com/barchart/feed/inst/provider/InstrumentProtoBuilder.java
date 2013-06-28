@@ -52,8 +52,6 @@ import com.barchart.util.value.api.FactoryLoader;
 import com.barchart.util.value.api.TimeInterval;
 import com.barchart.util.values.api.PriceValue;
 
-import design.MarketCurrency;
-
 public final class InstrumentProtoBuilder {
 	
 	private static final Logger log = LoggerFactory

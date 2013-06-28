@@ -7,7 +7,7 @@
  */
 package design;
 
-public enum MarketCurrency {
+enum MarketCurrency {
 
 	// TODO Move
 	

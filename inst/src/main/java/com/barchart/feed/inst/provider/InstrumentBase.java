@@ -26,8 +26,6 @@ import com.barchart.util.value.api.Size;
 import com.barchart.util.value.api.TimeInterval;
 import com.barchart.util.values.api.PriceValue;
 
-import design.MarketCurrency;
-
 public abstract class InstrumentBase extends ObjectMapSafe implements Instrument {
 	
 	private static final Factory factory = FactoryLoader.load();
