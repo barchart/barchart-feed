@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.concurrent.ExecutorService;
 
 import com.barchart.feed.api.connection.Connection;
-import com.barchart.feed.api.connection.ConnectionFuture;
 import com.barchart.feed.api.connection.ConnectionLifecycle;
 import com.barchart.feed.api.connection.TimestampListener;
 import com.barchart.feed.api.model.data.Book;
@@ -37,10 +36,10 @@ public interface Marketplace extends ConnectionLifecycle<Marketplace>,
 	/* ***** ***** ConnectionLifecycle ***** ***** */
 
 	@Override
-	ConnectionFuture<Marketplace> startup();
+	void startup();
 
 	@Override
-	ConnectionFuture<Marketplace> shutdown();
+	void shutdown();
 
 	/**
 	 * Applications which need to react to the connectivity state of the feed

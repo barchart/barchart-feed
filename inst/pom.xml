@@ -53,6 +53,12 @@
 			<version>[2-SNAPSHOT,3-SNAPSHOT)</version>
 		</dependency>
 
+		<dependency>
+			<groupId>com.barchart.util</groupId>
+			<artifactId>barchart-util-concurrent</artifactId>
+			<version>[3-SNAPSHOT,4-SNAPSHOT)</version>
+		</dependency>
+
 		<!-- FIXME migrate to v 5 -->
 		<dependency>
 			<groupId>com.sleepycat</groupId>

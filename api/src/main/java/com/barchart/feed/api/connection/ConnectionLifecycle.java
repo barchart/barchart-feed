@@ -2,9 +2,9 @@ package com.barchart.feed.api.connection;
 
 public interface ConnectionLifecycle<V extends ConnectionLifecycle<V>> {
 
-	ConnectionFuture<V> startup();
+	void startup();
 	
-	ConnectionFuture<V> shutdown();
+	void shutdown();
 	
 	/**
 	 * Applications which need to react to the connectivity state of the feed
