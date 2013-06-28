@@ -53,9 +53,11 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 
 	// TODO Review concurrency, only reason to use ConcurrentMap is for
 	// putIfAbscent()
-	protected final ConcurrentMap<Instrument, MarketDo> marketMap = new ConcurrentHashMap<Instrument, MarketDo>();
+	protected final ConcurrentMap<Instrument, MarketDo> marketMap = 
+			new ConcurrentHashMap<Instrument, MarketDo>();
 
-	private final ConcurrentMap<FrameworkAgent<?>, Boolean> agents = new ConcurrentHashMap<FrameworkAgent<?>, Boolean>();
+	private final ConcurrentMap<FrameworkAgent<?>, Boolean> agents = 
+			new ConcurrentHashMap<FrameworkAgent<?>, Boolean>();
 
 	protected MarketplaceBase(final MarketFactory factory,
 			final InstrumentService<CharSequence> instLookup,
