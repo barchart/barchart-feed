@@ -53,9 +53,6 @@ public interface InstrumentField {
 	/** stock vs future vs etc. */
 	Tag<TextValue> CFI_CODE = TagFactory.create(TextValue.class);
 	
-	/** price currency */
-	Tag<MarketCurrency> CURRENCY_CODE = TagFactory.create(MarketCurrency.class);
-
 	/** exchange data object */
 	Tag<Exchange> EXCHANGE = TagFactory.create(Exchange.class);
 	

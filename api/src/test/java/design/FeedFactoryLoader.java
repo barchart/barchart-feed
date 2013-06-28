@@ -1,6 +1,5 @@
-package com.barchart.feed.api;
+package design;
 
-import com.barchart.feed.provider.FeedFactoryProvider;
 import com.barchart.util.loader.BaseLoader;
 import com.barchart.util.loader.Producer;
 

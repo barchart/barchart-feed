@@ -1,4 +1,7 @@
-package com.barchart.feed.api;
+package design;
+
+import com.barchart.feed.api.Marketplace;
+import com.barchart.feed.api.Marketplace.Builder;
 
 /**
  * Feed factory.

@@ -11,8 +11,6 @@ import com.barchart.util.value.api.Schedule;
 import com.barchart.util.value.api.Size;
 import com.barchart.util.value.api.TimeInterval;
 
-import design.MarketCurrency;
-
 public interface Instrument extends Comparable<Instrument>, Metadata {
 
 	enum BookStructureType {
@@ -113,8 +111,6 @@ public interface Instrument extends Comparable<Instrument>, Metadata {
 
 	String exchangeCode();
 
-	MarketCurrency currency();
-
 	Price tickSize();
 
 	Price pointValue();
@@ -204,11 +200,6 @@ public interface Instrument extends Comparable<Instrument>, Metadata {
 		@Override
 		public String exchangeCode() {
 			return "NULL";
-		}
-
-		@Override
-		public MarketCurrency currency() {
-			return null;
 		}
 
 		@Override

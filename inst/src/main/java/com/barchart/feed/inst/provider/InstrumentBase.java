@@ -161,11 +161,6 @@ public abstract class InstrumentBase extends ObjectMapSafe implements Instrument
 	}
 
 	@Override
-	public MarketCurrency currency() {
-		return get(InstrumentField.CURRENCY_CODE);
-	}
-	
-	@Override
 	public Price tickSize() {
 		final PriceValue temp = get(InstrumentField.TICK_SIZE);
 		return factory.newPrice(temp.mantissa(), temp.exponent());

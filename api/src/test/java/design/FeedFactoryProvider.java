@@ -1,8 +1,8 @@
-package com.barchart.feed.provider;
+package design;
 
-import com.barchart.feed.api.FeedFactory;
 import com.barchart.util.loader.Producer;
 import com.barchart.util.value.api.Factory;
+
 
 /**
  * Static service provider.

@@ -9,7 +9,6 @@ package com.barchart.feed.inst.provider;
 
 import static com.barchart.feed.inst.InstrumentField.BOOK_DEPTH;
 import static com.barchart.feed.inst.InstrumentField.CFI_CODE;
-import static com.barchart.feed.inst.InstrumentField.CURRENCY_CODE;
 import static com.barchart.feed.inst.InstrumentField.DESCRIPTION;
 import static com.barchart.feed.inst.InstrumentField.EXCHANGE_CODE;
 import static com.barchart.feed.inst.InstrumentField.FIELDS;
@@ -36,8 +35,6 @@ import com.barchart.util.values.api.SizeValue;
 import com.barchart.util.values.api.TextValue;
 import com.barchart.util.values.api.TimeValue;
 
-import design.MarketCurrency;
-
 public class TestInstrument {
 
 	public static final TextValue ID_V = newText("123456");
@@ -49,7 +46,6 @@ public class TestInstrument {
 	public static final PriceValue PRICE_STEP_V = newPrice(25, -1);
 	public static final PriceValue PRICE_POINT_V = newPrice(500, 1);
 	public static final Fraction FRACTION_V = newFraction(10, -2);
-	public static final MarketCurrency CURRENCY_V = MarketCurrency.USD;
 	public static final TextValue TYPE_V = newText("FXXXXX");
 	public static final TextValue TIME_ZONE_TEXT_V = newText("Central");
 	public static final TimeValue TIME_OPEN_V = newTime(100000000);
@@ -68,7 +64,6 @@ public class TestInstrument {
 		map.set(TICK_SIZE, PRICE_STEP_V);
 		map.set(POINT_VALUE, PRICE_POINT_V);
 		map.set(TICK_SIZE, PRICE_STEP_V);
-		map.set(CURRENCY_CODE, CURRENCY_V);
 		map.set(CFI_CODE, TYPE_V);
 //		map.set(TIME_ZONE_OFFSET, TIME_ZONE_V);
 //		map.set(TIME_OPEN, TIME_OPEN_V);
@@ -108,7 +103,6 @@ public class TestInstrument {
 //		instBuilder.setPriceDisplay(priceDisplayBuilder.build());
 //		instBuilder.setCalendar(calBuilder.build());
 //		instBuilder.setCodeCFI(TYPE_V.name());
-		instBuilder.setCurrencyCode(CURRENCY_V.name());
 		instBuilder.setRecordCreateTime(1234);
 		instBuilder.setRecordUpdateTime(1235);
 	}

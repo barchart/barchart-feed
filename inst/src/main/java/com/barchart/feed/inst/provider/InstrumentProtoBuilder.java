@@ -11,7 +11,6 @@ import static com.barchart.feed.inst.InstrumentField.BOOK_DEPTH;
 import static com.barchart.feed.inst.InstrumentField.BOOK_LIQUIDITY;
 import static com.barchart.feed.inst.InstrumentField.BOOK_STRUCTURE;
 import static com.barchart.feed.inst.InstrumentField.CFI_CODE;
-import static com.barchart.feed.inst.InstrumentField.CURRENCY_CODE;
 import static com.barchart.feed.inst.InstrumentField.DESCRIPTION;
 import static com.barchart.feed.inst.InstrumentField.DISPLAY_FRACTION;
 import static com.barchart.feed.inst.InstrumentField.EXCHANGE_CODE;
@@ -150,11 +149,6 @@ public final class InstrumentProtoBuilder {
 			builder.setCfiCode(inst.get(CFI_CODE).toString());
 		}
 
-		/* price currency */
-		if (inst.contains(CURRENCY_CODE)) {
-			builder.setCurrencyCode(inst.get(CURRENCY_CODE).name());
-		}
-
 		/* market originating exchange identifier */
 		if (inst.contains(EXCHANGE_CODE)) {
 			builder.setExchangeCode(inst.get(EXCHANGE_CODE).toString());
@@ -261,11 +255,6 @@ public final class InstrumentProtoBuilder {
 
 		if (instDef.hasCfiCode()) {
 			map.set(CFI_CODE, newText(instDef.getCfiCode()));
-		}
-
-		if (instDef.hasCurrencyCode()) {
-			map.set(CURRENCY_CODE,
-					MarketCurrency.fromString(instDef.getCurrencyCode()));
 		}
 
 		if (instDef.hasExchangeCode()) {
