@@ -3,9 +3,9 @@ package com.barchart.feed.api;
 import java.io.File;
 import java.util.concurrent.ExecutorService;
 
+import com.barchart.feed.api.connection.Connection;
 import com.barchart.feed.api.connection.ConnectionFuture;
 import com.barchart.feed.api.connection.ConnectionLifecycle;
-import com.barchart.feed.api.connection.ConnectionStateListener;
 import com.barchart.feed.api.connection.TimestampListener;
 import com.barchart.feed.api.model.data.Book;
 import com.barchart.feed.api.model.data.Cuvol;
@@ -50,7 +50,7 @@ public interface Marketplace extends ConnectionLifecycle<Marketplace>,
 	 *            The listener to be bound.
 	 */
 	@Override
-	void bindConnectionStateListener(ConnectionStateListener listener);
+	void bindConnectionStateListener(Connection.Monitor listener);
 
 	/**
 	 * Applications which require time-stamp or heart-beat messages from the

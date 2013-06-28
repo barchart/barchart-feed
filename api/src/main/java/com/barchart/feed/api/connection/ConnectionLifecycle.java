@@ -13,7 +13,7 @@ public interface ConnectionLifecycle<V extends ConnectionLifecycle<V>> {
 	 * @param listener
 	 *            The listener to be bound.
 	 */
-	void bindConnectionStateListener(ConnectionStateListener listener);
+	void bindConnectionStateListener(Connection.Monitor listener);
 	
 	/**
 	 * Applications which require time-stamp or heart-beat messages from the

@@ -1,6 +1,6 @@
 package com.barchart.feed.api.connection;
 
-public interface ConnectionStateListener {
+interface ConnectionStateListener {
 	
 	void listen(ConnectionState state);
 

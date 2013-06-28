@@ -95,7 +95,7 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 		private final AgentLifecycleHandler agentHandler;
 		private final MarketObserver<V> callback;
 		
-		private volatile State state = State.CREATED;
+		private volatile State state = State.ACTIVATED;
 
 		// Review concurrency
 		private final Set<Exchange> incExchanges = new HashSet<Exchange>();
