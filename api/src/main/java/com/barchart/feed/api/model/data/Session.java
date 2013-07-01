@@ -147,6 +147,11 @@ public interface Session extends MarketData<Session> {
 		public Session freeze() {
 			return this;
 		}
+		
+		@Override
+		public String toString() {
+			return "NULL SESSION";
+		}
 
 	};
 

@@ -37,6 +37,11 @@ public interface Book extends MarketData<Book> {
 			public boolean isNull() {
 				return true;
 			}
+			
+			@Override
+			public String toString() {
+				return "NULL BOOK TOP";
+			}
 
 		};
 
@@ -82,6 +87,11 @@ public interface Book extends MarketData<Book> {
 			@Override
 			public boolean isNull() {
 				return true;
+			}
+			
+			@Override
+			public String toString() {
+				return "NULL BOOK ENTRY";
 			}
 
 		};
@@ -189,6 +199,11 @@ public interface Book extends MarketData<Book> {
 		@Override
 		public Book freeze() {
 			return this;
+		}
+		
+		@Override
+		public String toString() {
+			return "NULL BOOK";
 		}
 
 	};

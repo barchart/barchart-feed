@@ -52,5 +52,10 @@ public interface SessionSet extends MarketData<SessionSet> {
 			return true;
 		}
 		
+		@Override
+		public String toString() {
+			return "NULL SESSION SET";
+		}
+		
 	};
 }

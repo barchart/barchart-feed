@@ -149,7 +149,7 @@ public interface Instrument extends Comparable<Instrument>, Metadata {
 
 		@Override
 		public String marketGUID() {
-			return "NULL";
+			return "NULL GUID";
 		}
 
 		@Override
@@ -174,22 +174,22 @@ public interface Instrument extends Comparable<Instrument>, Metadata {
 
 		@Override
 		public String instrumentDataVendor() {
-			return "NULL";
+			return "NULL VENDOR";
 		}
 
 		@Override
 		public String symbol() {
-			return "NULL";
+			return "NULL SYMBOL";
 		}
 
 		@Override
 		public String description() {
-			return "NULL";
+			return "NULL INSTRUMENT";
 		}
 
 		@Override
 		public String CFICode() {
-			return "NULL";
+			return "NULL CFICode";
 		}
 
 		@Override
@@ -199,7 +199,7 @@ public interface Instrument extends Comparable<Instrument>, Metadata {
 
 		@Override
 		public String exchangeCode() {
-			return "NULL";
+			return "NULL EXCHANGE";
 		}
 
 		@Override
@@ -234,7 +234,7 @@ public interface Instrument extends Comparable<Instrument>, Metadata {
 
 		@Override
 		public String timeZoneName() {
-			return "NULL";
+			return "NULL TIMEZONE";
 		}
 
 		@Override
@@ -246,7 +246,12 @@ public interface Instrument extends Comparable<Instrument>, Metadata {
 		public Identifier id() {
 			return Identifier.NULL;
 		}
-
+		
+		@Override
+		public String toString() {
+			return "NULL INSTRUMENT";
+		}
+		
 	};
 
 }

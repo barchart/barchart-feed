@@ -37,6 +37,11 @@ public interface Cuvol extends MarketData<Cuvol> {
 			public int place() {
 				return 0;
 			}
+			
+			@Override
+			public String toString() {
+				return "NULL CUVOL ENTRY";
+			}
 
 		};
 
@@ -90,6 +95,11 @@ public interface Cuvol extends MarketData<Cuvol> {
 		@Override
 		public Cuvol freeze() {
 			return this;
+		}
+		
+		@Override
+		public String toString() {
+			return "NULL CUVOL";
 		}
 
 	};

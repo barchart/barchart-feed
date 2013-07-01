@@ -69,6 +69,11 @@ public interface Market extends MarketData<Market> {
 		public boolean isNull() {
 			return true;
 		}
+		
+		@Override
+		public String toString() {
+			return "NULL MARKET";
+		}
 
 	};
 

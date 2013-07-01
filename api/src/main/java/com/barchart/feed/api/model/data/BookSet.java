@@ -52,6 +52,11 @@ public interface BookSet extends MarketData<BookSet> {
 			return true;
 		}
 		
+		@Override
+		public String toString() {
+			return "NULL BOOK SET";
+		}
+		
 	};
 
 }

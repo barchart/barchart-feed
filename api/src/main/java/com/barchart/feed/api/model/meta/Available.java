@@ -18,7 +18,12 @@ public interface Available extends Metadata {
 
 		@Override
 		public String description() {
-			return "NULL";
+			return "NULL AVAILABLE";
+		}
+		
+		@Override
+		public String toString() {
+			return "NULL AVAILABLE";
 		}
 		
 	};

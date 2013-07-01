@@ -18,7 +18,12 @@ public interface Exchange extends Metadata {
 
 		@Override
 		public String description() {
-			return "NULL";
+			return "NULL EXCHANGE";
+		}
+		
+		@Override
+		public String toString() {
+			return "NULL EXCHANGE";
 		}
 
 	};

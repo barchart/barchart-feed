@@ -18,7 +18,12 @@ public interface Group extends Metadata {
 
 		@Override
 		public String description() {
-			return "NULL";
+			return "NULL GROUP";
+		}
+		
+		@Override
+		public String toString() {
+			return "NULL GROUP";
 		}
 		
 	};

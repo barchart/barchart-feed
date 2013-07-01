@@ -19,7 +19,12 @@ public interface Channel extends Metadata {
 
 		@Override
 		public String description() {
-			return "NULL";
+			return "NULL CHANNEL";
+		}
+		
+		@Override
+		public String toString() {
+			return "NULL CHANNEL";
 		}
 		
 	};
