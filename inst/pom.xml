@@ -59,11 +59,10 @@
 			<version>[3-SNAPSHOT,4-SNAPSHOT)</version>
 		</dependency>
 
-		<!-- FIXME migrate to v 5 -->
 		<dependency>
 			<groupId>com.sleepycat</groupId>
 			<artifactId>je</artifactId>
-			<version>4.0.92</version>
+			<version>5.0.73</version>
 		</dependency>
 
 		<!-- FIXME migrate to v 2.5 -->
