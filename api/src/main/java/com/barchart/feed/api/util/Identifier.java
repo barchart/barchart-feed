@@ -1,9 +1,11 @@
 package com.barchart.feed.api.util;
 
+import com.barchart.util.value.api.Existential;
+
 /**
  * Identifier, unique in a given scope.
  */
-public interface Identifier extends Comparable<Identifier> {
+public interface Identifier extends Comparable<Identifier>, Existential {
 	
 	/**
 	 * Identifier string representation, unique in a given scope.
@@ -13,7 +15,7 @@ public interface Identifier extends Comparable<Identifier> {
 	
 	Identifier NULL = new Identifier() {
 		
-		private final String nul = "0".intern();
+		private final String nul = "NULL ID".intern();
 		
 		@Override
 		public String toString() {
@@ -39,6 +41,11 @@ public interface Identifier extends Comparable<Identifier> {
 			
 			return nul.equals(((Identifier)o).toString());
 			
+		}
+		
+		@Override
+		public boolean isNull() {
+			return true;
 		}
 		
 	};

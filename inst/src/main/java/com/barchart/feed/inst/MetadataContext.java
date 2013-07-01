@@ -8,7 +8,7 @@
 package com.barchart.feed.inst;
 
 import com.barchart.feed.api.model.meta.Instrument;
-import com.barchart.feed.api.util.InstrumentGUID;
+import com.barchart.feed.inst.provider.InstrumentGUID;
 
 public interface MetadataContext {
 	

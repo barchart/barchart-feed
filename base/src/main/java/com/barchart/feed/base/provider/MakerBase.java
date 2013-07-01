@@ -275,7 +275,7 @@ public abstract class MakerBase<Message extends MarketMessage> implements
 				final MarketDo market = marketMap.get(inst);
 
 				if(market==null){
-					log.error("Failed to get MarketDo for " + inst.GUID().toString());
+					log.error("Failed to get MarketDo for " + inst.symbol());
 					continue;
 				}
 				

@@ -11,16 +11,16 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import com.barchart.feed.api.util.InstrumentGUID;
+import com.barchart.feed.api.util.Identifier;
 
 public interface SymbologyContext<V> {
 
-	InstrumentGUID lookup(V symbol);
+	Identifier lookup(V symbol);
 	
-	Map<V, InstrumentGUID> lookup(Collection<? extends V> symbols);
+	Map<V, Identifier> lookup(Collection<? extends V> symbols);
 	
-	List<InstrumentGUID> search(CharSequence symbol);
+	List<Identifier> search(CharSequence symbol);
 	
-	List<InstrumentGUID> search(CharSequence symbol, int limit, int offset);
+	List<Identifier> search(CharSequence symbol, int limit, int offset);
 	
 }

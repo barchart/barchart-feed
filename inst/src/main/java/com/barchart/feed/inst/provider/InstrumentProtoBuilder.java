@@ -36,7 +36,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.api.model.meta.Instrument;
-import com.barchart.feed.api.util.InstrumentGUID;
 import com.barchart.missive.api.TagMapSafe;
 import com.barchart.missive.core.ObjectMapFactory;
 import com.barchart.missive.hash.HashTagMapSafe;
@@ -306,7 +305,7 @@ public final class InstrumentProtoBuilder {
 		
 		final List<Long> ids = instDef.getComponentIdList();
 		for(final Long id : ids) {
-			inst.componentLegs.add(new InstrumentGUID(String.valueOf(id)));
+			inst.componentLegs.add(new InstrumentBase.InstIdentifier(String.valueOf(id)));
 		}
 		
 		return inst;

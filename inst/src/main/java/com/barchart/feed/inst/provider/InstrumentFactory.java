@@ -10,7 +10,6 @@ package com.barchart.feed.inst.provider;
 import java.util.Map;
 
 import com.barchart.feed.api.model.meta.Instrument;
-import com.barchart.feed.api.util.InstrumentGUID;
 import com.barchart.feed.inst.InstrumentField;
 import com.barchart.feed.inst.missive.BarchartFeedInstManifest;
 import com.barchart.missive.api.Tag;

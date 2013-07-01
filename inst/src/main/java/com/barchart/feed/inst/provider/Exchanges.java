@@ -280,6 +280,11 @@ public final class Exchanges {
 			
 		}
 		
+		@Override
+		public boolean isNull() {
+			return this == Identifier.NULL;
+		}
+		
 	}
 	
 	private static class ExchangeImpl implements Exchange {

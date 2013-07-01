@@ -14,7 +14,6 @@ import java.util.List;
 import com.barchart.feed.api.model.meta.Exchange;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.api.util.Identifier;
-import com.barchart.feed.api.util.InstrumentGUID;
 import com.barchart.feed.inst.InstrumentField;
 import com.barchart.missive.core.ObjectMapSafe;
 import com.barchart.util.value.api.Factory;
@@ -30,16 +29,16 @@ public abstract class InstrumentBase extends ObjectMapSafe implements Instrument
 	
 	private static final Factory factory = FactoryLoader.load();
 	
-	public final List<InstrumentGUID> componentLegs = 
-			new ArrayList<InstrumentGUID>();
+	public final List<Identifier> componentLegs = 
+			new ArrayList<Identifier>();
 	
 	private volatile Identifier id = Identifier.NULL;
 	
-	static class InstIdentifier implements Identifier {
+	public static class InstIdentifier implements Identifier {
 		
 		private final String id;
 		
-		InstIdentifier(final CharSequence id) {
+		public InstIdentifier(final CharSequence id) {
 			this.id = id.toString().intern();
 		}
 		
@@ -64,24 +63,35 @@ public abstract class InstrumentBase extends ObjectMapSafe implements Instrument
 			
 		}
 		
+		@Override
+		public int hashCode() {
+			return id.hashCode();
+		}
+		
+		@Override
+		public boolean isNull() {
+			return this == Identifier.NULL;
+		}
+		
 	}
 	
 	@Override 
 	public Identifier id() {
-		if(id == Identifier.NULL && GUID() != null && !GUID().isNull()) {
-			id = new InstIdentifier(GUID().toString());
+		if(id == Identifier.NULL && get(InstrumentField.GUID) != null && 
+				!get(InstrumentField.GUID).isNull()) {
+			id = new InstIdentifier(get(InstrumentField.GUID).toString());
 		}
 		return id;
 	}
 	
 	@Override
 	public int compareTo(final Instrument o) {
-		return GUID().compareTo(o.GUID());
+		return id().compareTo(o.id());
 	}
 	
 	@Override
 	public int hashCode() {
-		return GUID().hashCode();
+		return id().hashCode();
 	}
 	
 	@Override
@@ -98,10 +108,10 @@ public abstract class InstrumentBase extends ObjectMapSafe implements Instrument
 		return this == Instrument.NULL;
 	}
 	
-	@Override
-	public InstrumentGUID GUID() {
-		return get(InstrumentField.GUID);
-	}
+//	@Override
+//	public InstrumentGUID GUID() {
+//		return get(InstrumentField.GUID);
+//	}
 
 	@Override
 	public String marketGUID() {
@@ -196,7 +206,7 @@ public abstract class InstrumentBase extends ObjectMapSafe implements Instrument
 	}
 
 	@Override
-	public List<InstrumentGUID> componentLegs() {
+	public List<Identifier> componentLegs() {
 		return Collections.unmodifiableList(componentLegs);
 	}
 

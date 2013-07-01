@@ -9,7 +9,7 @@ package com.barchart.feed.inst;
 
 import com.barchart.feed.api.model.meta.Exchange;
 import com.barchart.feed.api.model.meta.Instrument;
-import com.barchart.feed.api.util.InstrumentGUID;
+import com.barchart.feed.inst.provider.InstrumentGUID;
 import com.barchart.missive.api.Tag;
 import com.barchart.missive.core.TagFactory;
 import com.barchart.util.value.api.Fraction;
