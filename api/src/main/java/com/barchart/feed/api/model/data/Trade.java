@@ -8,6 +8,10 @@ import com.barchart.util.value.api.Tuple;
 
 public interface Trade extends MarketData<Trade>, Tuple {
 
+	enum Sequence {
+		NULL, NORMAL, UNSEQUENCED
+	}
+	
 	@Override
 	Price price();
 

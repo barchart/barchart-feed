@@ -108,11 +108,6 @@ public abstract class InstrumentBase extends ObjectMapSafe implements Instrument
 		return this == Instrument.NULL;
 	}
 	
-//	@Override
-//	public InstrumentGUID GUID() {
-//		return get(InstrumentField.GUID);
-//	}
-
 	@Override
 	public String marketGUID() {
 		return get(InstrumentField.GUID).toString();
