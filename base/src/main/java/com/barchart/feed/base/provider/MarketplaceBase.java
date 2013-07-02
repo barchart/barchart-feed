@@ -100,12 +100,14 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 		
 		private volatile State state = State.ACTIVATED;
 
-		// Review concurrency
 		private final Set<Exchange> incExchanges = new HashSet<Exchange>();
 		private final Set<Exchange> exExchanges = new HashSet<Exchange>();
 
 		private final Set<Instrument> incInsts = new HashSet<Instrument>();
 		private final Set<Instrument> exInsts = new HashSet<Instrument>();
+		
+		private final Set<String> incUnknown = new HashSet<String>();
+		private final Set<String> exUnknown = new HashSet<String>();
 
 		BaseAgent(final AgentLifecycleHandler agentHandler,
 				final Class<V> clazz, final MDGetter<V> getter,
@@ -158,8 +160,14 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 		public boolean hasMatch(final Instrument instrument) {
 
 			/* Work bottom up on the hierarchy */
-
-			// TODO Custom filters
+			
+			if(incUnknown.contains(instrument.symbol())) {
+				return true;
+			}
+			
+			if(exUnknown.contains(instrument.symbol())) {
+				return false;
+			}
 
 			if (incInsts.contains(instrument)) {
 				return true;
@@ -253,7 +261,15 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 						newInterests.add(formatForJERQ(in.symbol()));
 					}
 
+				} else {
+					/*
+					 * For all failed lookups, store symbol and attempt to match 
+					 * in the hasMatch method.
+					 */
+					incUnknown.add(e.getKey().toString());
+					exUnknown.remove(e.getKey().toString());
 				}
+				
 			}
 
 			agentHandler.updateAgent(this);
@@ -291,6 +307,13 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 						oldInterests.add(in.symbol());
 					}
 
+				} else {
+					/*
+					 * For all failed lookups, store symbol and attempt to match 
+					 * in the hasMatch method.
+					 */
+					incUnknown.remove(e.getKey().toString());
+					exUnknown.add(e.getKey().toString());
 				}
 
 			}
