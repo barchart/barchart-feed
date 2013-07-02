@@ -13,6 +13,7 @@ import static com.barchart.feed.inst.InstrumentField.BOOK_STRUCTURE;
 import static com.barchart.feed.inst.InstrumentField.CFI_CODE;
 import static com.barchart.feed.inst.InstrumentField.DESCRIPTION;
 import static com.barchart.feed.inst.InstrumentField.DISPLAY_FRACTION;
+import static com.barchart.feed.inst.InstrumentField.EXCHANGE;
 import static com.barchart.feed.inst.InstrumentField.EXCHANGE_CODE;
 import static com.barchart.feed.inst.InstrumentField.FIELDS;
 import static com.barchart.feed.inst.InstrumentField.GUID;
@@ -255,6 +256,7 @@ public final class InstrumentProtoBuilder {
 		}
 
 		if (instDef.hasExchangeCode()) {
+			map.set(EXCHANGE, Exchanges.fromCode(instDef.getExchangeCode()));
 			map.set(EXCHANGE_CODE, newText(instDef.getExchangeCode()));
 		}
 

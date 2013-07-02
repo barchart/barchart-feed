@@ -7,6 +7,7 @@
  */
 package com.barchart.feed.base.trade.enums;
 
+import com.barchart.feed.api.model.data.Trade;
 import com.barchart.util.values.api.Value;
 
 public enum MarketTradeSession implements Value<MarketTradeSession> {
@@ -41,6 +42,23 @@ public enum MarketTradeSession implements Value<MarketTradeSession> {
 	@Override
 	public boolean isNull() {
 		return this == NULL_TRADE_SESSION;
+	}
+	
+	public Trade.Session asSession() {
+		
+		switch(this) {
+		default:
+			return Trade.Session.NULL;
+		case DEFAULT:
+			return Trade.Session.DEFAULT;
+		case PIT:
+			return Trade.Session.PIT;
+		case COMBINED:
+			return Trade.Session.COMBINED;
+		case EXTENDED:
+			return Trade.Session.EXTENDED;
+		}
+		
 	}
 
 }

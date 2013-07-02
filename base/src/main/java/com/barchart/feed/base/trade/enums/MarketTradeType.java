@@ -14,6 +14,7 @@ import static com.barchart.feed.base.trade.enums.MarketTradeSession.DEFAULT;
 import static com.barchart.feed.base.trade.enums.MarketTradeSession.EXTENDED;
 import static com.barchart.feed.base.trade.enums.MarketTradeSession.PIT;
 
+import com.barchart.feed.api.model.data.Trade;
 import com.barchart.util.values.api.Value;
 
 public enum MarketTradeType implements Value<MarketTradeType> {
@@ -102,4 +103,74 @@ public enum MarketTradeType implements Value<MarketTradeType> {
 		return this == NULL_TRADE_TYPE;
 	}
 
+	public Trade.TradeType asType() {
+		
+		switch(this) {
+		
+		default:
+			return Trade.TradeType.NULL_TRADE_TYPE;
+		case UNKNOWN:
+			return Trade.TradeType.UNKNOWN;
+		case FUTURE_COMPOSITE:
+			return Trade.TradeType.FUTURE_COMPOSITE;
+		case FUTURE_ELECTRONIC:
+			return Trade.TradeType.FUTURE_ELECTRONIC;
+		case FUTURE_PIT:
+			return Trade.TradeType.FUTURE_PIT;
+		case REGULAR_SALE:
+			return Trade.TradeType.REGULAR_SALE;
+		case ACQUISITION:
+			return Trade.TradeType.ACQUISITION;
+		case AMEX_RULE_155:
+			return Trade.TradeType.AMEX_RULE_155;
+		case AUTOMATIC_EXECUTION:
+			return Trade.TradeType.AUTOMATIC_EXECUTION;
+		case BUNCHED_TRADE:
+			return Trade.TradeType.BUNCHED_TRADE;
+		case CROSS_TRADE:
+			return Trade.TradeType.CROSS_TRADE;
+		case DISTRIBUTION:
+			return Trade.TradeType.DISTRIBUTION;
+		case INTERMARKET_SWEEP:
+			return Trade.TradeType.INTERMARKET_SWEEP;
+		case MARKET_CLOSING:
+			return Trade.TradeType.MARKET_CLOSING;
+		case MARKET_OPENING:
+			return Trade.TradeType.MARKET_OPENING;
+		case MARKET_REOPENING:
+			return Trade.TradeType.MARKET_REOPENING;
+		case NYSE_RULE_127:
+			return Trade.TradeType.NYSE_RULE_127;
+		case RESERVED:
+			return Trade.TradeType.RESERVED;
+		case SPLIT:
+			return Trade.TradeType.SPLIT;
+		case STOCK_OPTION:
+			return Trade.TradeType.STOCK_OPTION;
+		case STOPPED_STOCK_REGULAR:
+			return Trade.TradeType.STOPPED_STOCK_REGULAR;
+		case YELLOW_FLAG:
+			return Trade.TradeType.YELLOW_FLAG;
+		case BUNCHED_SOLD:
+			return Trade.TradeType.BUNCHED_SOLD;
+		case DERIVATIVELY_PRICED:
+			return Trade.TradeType.DERIVATIVELY_PRICED;
+		case PRIOR_REFERENCE_PRICE:
+			return Trade.TradeType.PRIOR_REFERENCE_PRICE;
+		case SOLD_LAST:
+			return Trade.TradeType.SOLD_LAST;
+		case SOLD_OOO:
+			return Trade.TradeType.SOLD_OOO;
+		case STOPPED_STOCK_OOO:
+			return Trade.TradeType.STOPPED_STOCK_OOO;
+		case STOPPED_STOCK_SOLD_LAST:
+			return Trade.TradeType.STOPPED_STOCK_SOLD_LAST;
+		case FORM_T:
+			return Trade.TradeType.FORM_T;
+		case FORM_T_OOO:	
+			return Trade.TradeType.FORM_T_OOO;
+		}
+		
+	}
+	
 }

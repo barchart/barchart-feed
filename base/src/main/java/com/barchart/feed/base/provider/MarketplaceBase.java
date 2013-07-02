@@ -178,8 +178,9 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 			}
 
 			if (instrument.exchange().isNull()) {
-				log.debug("Exchange is NULL for " + instrument.symbol() + " "
-						+ instrument.exchangeCode());
+				// TODO FIXME
+//				log.debug("Exchange is NULL for " + instrument.symbol() + " "
+//						+ instrument.exchangeCode());
 				return false;
 			}
 

@@ -3,12 +3,11 @@ package com.barchart.feed.inst.provider;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.barchart.feed.api.filter.Filterable.MetaType;
 import com.barchart.feed.api.model.meta.Exchange;
 import com.barchart.feed.api.util.Identifier;
 
 public final class Exchanges {
-
+	
 	private static final Map<String, Exchange> names =
 			new HashMap<String, Exchange>();
 	
@@ -23,17 +22,17 @@ public final class Exchanges {
 		
 		temp = new ExchangeImpl("ASX", "v");
 		names.put("ASX", temp);
-		names.put("Fix_Me_V", temp); // LOL
+		names.put("Fix_Me_V", temp); 
 		codes.put("v", temp);
 		
 		temp = new ExchangeImpl("BATS", "X");
 		names.put("BATS", temp);
-		names.put("Fix_Me_X", temp); // LOL
+		names.put("Fix_Me_X", temp); 
 		codes.put("X", temp);
 		
 		temp = new ExchangeImpl("BMF", "2");
 		names.put("BMF", temp);
-		names.put("Fix_Me_2", temp); // LOL
+		names.put("Fix_Me_2", temp); 
 		codes.put("2", temp);
 		
 		temp = new ExchangeImpl("CBOT", "B");
@@ -50,6 +49,8 @@ public final class Exchanges {
 		temp = new ExchangeImpl("CME", "M");
 		names.put("CME", temp);
 		names.put("CME_Main", temp);
+		names.put("XCME", temp);
+		names.put("XIMM", temp);
 		names.put("IMM", temp);
 		names.put("IOM", temp);
 		names.put("WEA", temp);
@@ -245,6 +246,7 @@ public final class Exchanges {
 	public static Exchange fromCode(final String code) {
 		
 		if(codes.containsKey(code)) {
+			
 			return codes.get(code);
 		} else {
 			return Exchange.NULL;
@@ -283,7 +285,7 @@ public final class Exchanges {
 		
 		@Override
 		public boolean isNull() {
-			return this == Identifier.NULL;
+			return false;  // TODO FIXME
 		}
 		
 	}
@@ -308,7 +310,7 @@ public final class Exchanges {
 		
 		@Override
 		public boolean isNull() {
-			return this == Exchange.NULL;
+			return false;  // TODO FIXME
 		}
 
 		@Override

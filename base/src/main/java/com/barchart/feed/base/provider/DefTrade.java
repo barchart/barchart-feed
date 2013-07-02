@@ -73,6 +73,21 @@ class DefTrade extends NulTrade {
 	}
 	
 	@Override
+	public Sequence sequence() {
+		return get(MarketTradeField.SEQUENCING).asSequence();
+	}
+
+	@Override
+	public Session session() {
+		return get(MarketTradeField.SESSION).asSession();
+	}
+	
+	@Override
+	public TradeType type() {
+		return get(MarketTradeField.TYPE).asType();
+	}
+	
+	@Override
 	public Price price() {
 		return ValueConverter.price(get(MarketTradeField.PRICE));
 	}

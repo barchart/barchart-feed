@@ -1,25 +1,33 @@
 package com.barchart.feed.base.provider;
 
+import com.barchart.util.value.api.Factory;
+import com.barchart.util.value.api.FactoryLoader;
+import com.barchart.util.value.api.Fraction;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Size;
 import com.barchart.util.value.api.Time;
-import com.barchart.util.value.impl.ValueBuilder;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
 import com.barchart.util.values.api.TimeValue;
 
 public final class ValueConverter {
 
+	private static final Factory factory = FactoryLoader.load();
+	
 	public static Price price(final PriceValue value) {
-		return ValueBuilder.newPrice(value.mantissa(), value.exponent());
+		return factory.newPrice(value.mantissa(), value.exponent());
 	}
 	
 	public static Size size(final SizeValue value) {
-		return ValueBuilder.newSize(value.asLong());
+		return factory.newSize(value.asLong(), 0);
 	}
 	
 	public static Time time(final TimeValue value) {
-		return ValueBuilder.newTime(value.asMillisUTC());
+		return factory.newTime(value.asMillisUTC(), "");
+	}
+	
+	public static Fraction fraction(final com.barchart.util.values.api.Fraction frac) {
+		return factory.newFraction((int)frac.numerator(), (int)frac.denominator());
 	}
 	
 }

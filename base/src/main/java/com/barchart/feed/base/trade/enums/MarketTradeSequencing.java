@@ -7,6 +7,7 @@
  */
 package com.barchart.feed.base.trade.enums;
 
+import com.barchart.feed.api.model.data.Trade;
 import com.barchart.util.values.api.Value;
 
 public enum MarketTradeSequencing implements Value<MarketTradeSequencing> {
@@ -37,4 +38,17 @@ public enum MarketTradeSequencing implements Value<MarketTradeSequencing> {
 		return this == NULL_TRADE_SEQUENCE;
 	}
 
+	public Trade.Sequence asSequence() {
+		
+		switch(this) {
+		default:
+			return Trade.Sequence.NULL;
+		case NORMAL:
+			return Trade.Sequence.NORMAL;
+		case UNSEQUENCED:
+			return Trade.Sequence.UNSEQUENCED;
+		}
+		
+	}
+	
 }
