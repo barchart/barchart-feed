@@ -1,10 +1,16 @@
 package com.barchart.feed.api.model.meta;
 
+import com.barchart.feed.api.filter.Filterable.MetaType;
 import com.barchart.feed.api.util.Identifier;
 
 public interface Group extends Metadata {
 
 	public static Group NULL = new Group() {
+		
+		@Override
+		public MetaType type() {
+			return MetaType.GROUP;
+		}
 
 		@Override
 		public boolean isNull() {

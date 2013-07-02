@@ -1,11 +1,17 @@
 package com.barchart.feed.api.model.meta;
 
+import com.barchart.feed.api.filter.Filterable.MetaType;
 import com.barchart.feed.api.util.Identifier;
 
 public interface Available extends Metadata {
 
 	Available NULL = new Available() {
 
+		@Override
+		public MetaType type() {
+			return MetaType.AVAILABLE;
+		}
+		
 		@Override
 		public boolean isNull() {
 			return true;
@@ -25,7 +31,7 @@ public interface Available extends Metadata {
 		public String toString() {
 			return "NULL AVAILABLE";
 		}
-		
+
 	};
 	
 }

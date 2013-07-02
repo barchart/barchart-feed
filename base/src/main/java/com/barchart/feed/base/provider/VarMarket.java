@@ -99,7 +99,7 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 			return;
 		}
 		
-		if(!agent.accept(instrument())) {
+		if(!agent.hasMatch(instrument())) {
 			return;
 		}
 		
@@ -117,7 +117,7 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 			return;
 		}
 		
-		if(!agent.accept(instrument())) {
+		if(!agent.hasMatch(instrument())) {
 			detachAgent(agent);
 		}
 		

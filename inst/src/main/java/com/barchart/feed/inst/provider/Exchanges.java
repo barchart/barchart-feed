@@ -3,6 +3,7 @@ package com.barchart.feed.inst.provider;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.barchart.feed.api.filter.Filterable.MetaType;
 import com.barchart.feed.api.model.meta.Exchange;
 import com.barchart.feed.api.util.Identifier;
 
@@ -299,6 +300,12 @@ public final class Exchanges {
 			id = new ExchangeIdentifier(code);
 		}
 
+		@Override
+		public MetaType type() {
+			return MetaType.EXCHANGE;
+		}
+		
+		
 		@Override
 		public boolean isNull() {
 			return this == Exchange.NULL;

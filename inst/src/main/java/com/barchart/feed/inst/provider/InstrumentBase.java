@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.barchart.feed.api.filter.Filterable.MetaType;
 import com.barchart.feed.api.model.meta.Exchange;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.api.util.Identifier;
@@ -73,6 +74,11 @@ public abstract class InstrumentBase extends ObjectMapSafe implements Instrument
 			return this == Identifier.NULL;
 		}
 		
+	}
+	
+	@Override
+	public MetaType type() {
+		return MetaType.INSTRUMENT;
 	}
 	
 	@Override 

@@ -17,10 +17,12 @@ import org.slf4j.LoggerFactory;
 import com.barchart.feed.api.Agent;
 import com.barchart.feed.api.AgentBuilder;
 import com.barchart.feed.api.MarketObserver;
+import com.barchart.feed.api.filter.Filter;
 import com.barchart.feed.api.model.data.Market;
 import com.barchart.feed.api.model.data.MarketData;
 import com.barchart.feed.api.model.meta.Exchange;
 import com.barchart.feed.api.model.meta.Instrument;
+import com.barchart.feed.api.model.meta.Metadata;
 import com.barchart.feed.base.market.api.MarketDo;
 import com.barchart.feed.base.market.api.MarketFactory;
 import com.barchart.feed.base.market.api.MarketMakerProvider;
@@ -51,8 +53,6 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 	protected final InstrumentService<CharSequence> instLookup;
 	protected final SubscriptionHandler subHandler;
 
-	// TODO Review concurrency, only reason to use ConcurrentMap is for
-	// putIfAbscent()
 	protected final ConcurrentMap<Instrument, MarketDo> marketMap = 
 			new ConcurrentHashMap<Instrument, MarketDo>();
 
@@ -66,6 +66,7 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 		this.factory = factory;
 		this.instLookup = instLookup;
 		this.subHandler = handler;
+		
 	}
 
 	// #########################
@@ -134,40 +135,7 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 			/* getter calling copy() */
 			return getter.get(market);
 		}
-
-		/* ***** ***** Filter Methods ***** ***** */
-
-		@Override
-		public boolean accept(final Instrument instrument) {
-
-			/* Work bottom up on the hierarchy */
-
-			// TODO Custom filters
-
-			if (incInsts.contains(instrument)) {
-				return true;
-			}
-
-			if (exInsts.contains(instrument)) {
-				return false;
-			}
-
-			if (instrument.exchange().isNull()) {
-				log.debug("Exchange is NULL for " + instrument.symbol() + " "
-						+ instrument.exchangeCode());
-			}
-
-			if (incExchanges.contains(instrument.exchange())) {
-				return true;
-			}
-
-			if (exExchanges.contains(instrument.exchange())) {
-				return false;
-			}
-
-			return false;
-		}
-
+		
 		@Override
 		public Set<String> interests() {
 
@@ -184,6 +152,45 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 			return interests;
 		}
 
+		/* ***** ***** Filter Methods ***** ***** */
+
+		@Override
+		public boolean hasMatch(final Instrument instrument) {
+
+			/* Work bottom up on the hierarchy */
+
+			// TODO Custom filters
+
+			if (incInsts.contains(instrument)) {
+				return true;
+			}
+
+			if (exInsts.contains(instrument)) {
+				return false;
+			}
+
+			if (instrument.exchange().isNull()) {
+				log.debug("Exchange is NULL for " + instrument.symbol() + " "
+						+ instrument.exchangeCode());
+				return false;
+			}
+
+			if (incExchanges.contains(instrument.exchange())) {
+				return true;
+			}
+
+			if (exExchanges.contains(instrument.exchange())) {
+				return false;
+			}
+
+			return false;
+		}
+		
+		@Override
+		public String expression() {
+			throw new UnsupportedOperationException();
+		}
+		
 		/* ***** ***** Consumer Methods ***** ***** */
 
 		@Override
@@ -258,62 +265,7 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 			}
 
 		}
-
-		@Override
-		public synchronized void include(final Instrument... instruments) {
-
-			final Set<String> newInterests = new HashSet<String>();
-
-			for (final Instrument i : instruments) {
-
-				if (!i.isNull()) {
-
-					exInsts.remove(i);
-					incInsts.add(i);
-
-					newInterests.add(formatForJERQ(i.symbol()));
-
-				}
-			}
-
-			agentHandler.updateAgent(this);
-
-			final Set<Subscription> newSubs = subscribe(this, newInterests);
-			if (!newSubs.isEmpty()) {
-				log.debug("Sending new subs to sub handler");
-				subHandler.subscribe(newSubs);
-			}
-
-		}
-
-		@Override
-		public synchronized void include(final Exchange... exchanges) {
-
-			final Set<String> newInterests = new HashSet<String>();
-
-			for (final Exchange e : exchanges) {
-
-				if (!e.isNull()) {
-
-					exExchanges.remove(e);
-					incExchanges.add(e);
-
-					newInterests.add(e.id().toString());
-
-				}
-
-			}
-
-			agentHandler.updateAgent(this);
-
-			final Set<Subscription> newSubs = subscribe(this, newInterests);
-			if (!newSubs.isEmpty()) {
-				log.debug("Sending new subs to sub handler");
-				subHandler.subscribe(newSubs);
-			}
-
-		}
-
+		
 		@Override
 		public synchronized void exclude(final CharSequence... symbols) {
 
@@ -352,50 +304,87 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 			}
 
 		}
+		
+		/* ***** ***** Filter Updatable ***** ***** */
+		
+		@Override
+		public void filter(Filter filter) {
+			throw new UnsupportedOperationException();
+		}
+		
+		@Override
+		public Filter filter() {
+			return this;
+		}
 
 		@Override
-		public synchronized void exclude(final Instrument... instruments) {
+		public synchronized void include(final Metadata... meta) {
 
-			final Set<String> oldInterests = new HashSet<String>();
+			final Set<String> newInterests = new HashSet<String>();
 
-			for (final Instrument i : instruments) {
-
-				if (!i.isNull()) {
-
-					incInsts.remove(i);
-					exInsts.add(i);
-
-					oldInterests.add(i.symbol());
-
+			for(Metadata m : meta) {
+				
+				if(m.isNull()) {
+					continue;
 				}
+				
+				switch(m.type()) {
+				
+				default:
+					// Ignore 
+					continue;
+				case INSTRUMENT:
+					incInsts.add((Instrument)m);
+					exInsts.remove((Instrument)m);
+					newInterests.add(formatForJERQ(((Instrument)m).symbol()));
+					continue;
+				case EXCHANGE:
+					incExchanges.add((Exchange)m);
+					exExchanges.remove((Exchange)m);
+					newInterests.add(((Exchange)m).id().toString());
+				}
+			
 			}
 
 			agentHandler.updateAgent(this);
 
-			final Set<Subscription> oldSubs = unsubscribe(this, oldInterests);
-			if (!oldSubs.isEmpty()) {
-				log.debug("Sending new unsubs to sub handler");
-				subHandler.unsubscribe(oldSubs);
+			final Set<Subscription> newSubs = subscribe(this, newInterests);
+			if (!newSubs.isEmpty()) {
+				log.debug("Sending new subs to sub handler");
+				subHandler.subscribe(newSubs);
 			}
 
 		}
 
 		@Override
-		public synchronized void exclude(final Exchange... exchanges) {
+		public synchronized void exclude(final Metadata... meta) {
 
 			final Set<String> oldInterests = new HashSet<String>();
 
-			for (final Exchange e : exchanges) {
-
-				if (!e.isNull()) {
-
-					incExchanges.remove(e);
-					exExchanges.add(e);
-
-					oldInterests.add(e.id().toString());
-
+			for(Metadata m : meta) {
+				
+				if(m.isNull()) {
+					continue;
 				}
+				
+				switch(m.type()) {
+				
+				default:
+					// Ignore 
+					continue;
+				case INSTRUMENT:
+					exInsts.add((Instrument)m);
+					incInsts.remove((Instrument)m);
+					oldInterests.add(((Instrument)m).symbol());
+					continue;
+				case EXCHANGE:
+					exExchanges.add((Exchange)m);
+					incExchanges.remove((Exchange)m);
+					oldInterests.add(((Exchange)m).id().toString());
+				}
+				
 			}
+			
 
 			agentHandler.updateAgent(this);
 
@@ -423,9 +412,11 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 
 	/* ***** ***** Subscription Aggregation Methods ***** ***** */
 
-	private final Map<String, Set<Set<SubscriptionType>>> subs = new HashMap<String, Set<Set<SubscriptionType>>>();
+	private final Map<String, Set<Set<SubscriptionType>>> subs = 
+			new HashMap<String, Set<Set<SubscriptionType>>>();
 
-	private final Map<FrameworkAgent<?>, Set<SubscriptionType>> agentMap = new HashMap<FrameworkAgent<?>, Set<SubscriptionType>>();
+	private final Map<FrameworkAgent<?>, Set<SubscriptionType>> agentMap = 
+			new HashMap<FrameworkAgent<?>, Set<SubscriptionType>>();
 
 	private Set<SubscriptionType> aggregate(final String interest) {
 
