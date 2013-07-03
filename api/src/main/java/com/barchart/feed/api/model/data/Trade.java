@@ -1,5 +1,8 @@
 package com.barchart.feed.api.model.data;
 
+import java.util.Collections;
+import java.util.Set;
+
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Size;
@@ -78,11 +81,9 @@ public interface Trade extends MarketData<Trade>, Tuple {
 		}
 	}
 	
-	Sequence sequence();
-	
 	Session session();
 	
-	TradeType type();
+	Set<TradeType> types();
 	
 	@Override
 	Price price();
@@ -99,18 +100,13 @@ public interface Trade extends MarketData<Trade>, Tuple {
 	public static final Trade NULL = new Trade() {
 		
 		@Override
-		public Sequence sequence() {
-			return Sequence.NULL;
-		}
-
-		@Override
 		public Session session() {
 			return Session.NULL;
 		}
 		
 		@Override
-		public TradeType type() {
-			return TradeType.NULL_TRADE_TYPE;
+		public Set<TradeType> types() {
+			return Collections.singleton(TradeType.NULL_TRADE_TYPE);
 		}
 
 		@Override

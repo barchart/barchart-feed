@@ -7,6 +7,9 @@
  */
 package com.barchart.feed.base.provider;
 
+import java.util.Collections;
+import java.util.Set;
+
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.trade.enums.MarketTradeField;
 import com.barchart.feed.base.trade.enums.MarketTradeSequencing;
@@ -73,18 +76,13 @@ class DefTrade extends NulTrade {
 	}
 	
 	@Override
-	public Sequence sequence() {
-		return get(MarketTradeField.SEQUENCING).asSequence();
-	}
-
-	@Override
 	public Session session() {
 		return get(MarketTradeField.SESSION).asSession();
 	}
 	
 	@Override
-	public TradeType type() {
-		return get(MarketTradeField.TYPE).asType();
+	public Set<TradeType> types() {
+		return Collections.singleton(get(MarketTradeField.TYPE).asType());
 	}
 	
 	@Override

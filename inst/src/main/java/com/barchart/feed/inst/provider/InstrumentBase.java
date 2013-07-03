@@ -160,7 +160,7 @@ public abstract class InstrumentBase extends ObjectMapSafe implements Instrument
 	
 	@Override
 	public Exchange exchange() {
-		return Exchanges.fromName(exchangeCode());
+		return Exchanges.fromCode(exchangeCode());
 	}
 
 	@Override

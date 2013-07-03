@@ -7,6 +7,9 @@
  */
 package com.barchart.feed.base.provider;
 
+import java.util.Collections;
+import java.util.Set;
+
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.trade.api.MarketTrade;
 import com.barchart.feed.base.trade.enums.MarketTradeField;
@@ -52,18 +55,13 @@ public class NulTrade extends ValueFreezer<MarketTrade> implements MarketTrade {
 	}
 	
 	@Override
-	public Sequence sequence() {
-		return Sequence.NULL;
-	}
-
-	@Override
 	public Session session() {
 		return Session.NULL;
 	}
 	
 	@Override
-	public TradeType type() {
-		return TradeType.NULL_TRADE_TYPE;
+	public Set<TradeType> types() {
+		return Collections.singleton(TradeType.NULL_TRADE_TYPE);
 	}
 
 	@Override

@@ -8,6 +8,9 @@ import com.barchart.feed.api.util.Identifier;
 
 public final class Exchanges {
 	
+	public static String NULL_NAME = "NULL_EXCHANGE_NAME";
+	public static String NULL_CODE = "~";
+	
 	private static final Map<String, Exchange> names =
 			new HashMap<String, Exchange>();
 	
@@ -15,6 +18,9 @@ public final class Exchanges {
 			new HashMap<String, Exchange>();
 	
 	static {
+		
+		names.put(NULL_NAME, Exchange.NULL);
+		codes.put(NULL_CODE, Exchange.NULL);
 		
 		Exchange temp = new ExchangeImpl("AMEX", "A");
 		names.put("AMEX", temp);
@@ -228,6 +234,8 @@ public final class Exchanges {
 		codes.put("W", temp);
 		
 	}
+	
+	
 	
 	private Exchanges() {
 		

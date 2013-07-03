@@ -36,6 +36,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.barchart.feed.api.model.meta.Exchange;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.missive.api.TagMapSafe;
 import com.barchart.missive.core.ObjectMapFactory;
@@ -258,6 +259,9 @@ public final class InstrumentProtoBuilder {
 		if (instDef.hasExchangeCode()) {
 			map.set(EXCHANGE, Exchanges.fromCode(instDef.getExchangeCode()));
 			map.set(EXCHANGE_CODE, newText(instDef.getExchangeCode()));
+		} else {
+			map.set(EXCHANGE, Exchange.NULL);
+			map.set(EXCHANGE_CODE, newText(Exchanges.NULL_CODE));
 		}
 
 		if (instDef.hasMinimumPriceIncrement()) {

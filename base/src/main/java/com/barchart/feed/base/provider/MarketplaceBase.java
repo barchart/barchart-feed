@@ -179,8 +179,8 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 
 			if (instrument.exchange().isNull()) {
 				// TODO FIXME
-//				log.debug("Exchange is NULL for " + instrument.symbol() + " "
-//						+ instrument.exchangeCode());
+				log.debug("Exchange is NULL for " + instrument.symbol() + " "
+						+ instrument.exchangeCode());
 				return false;
 			}
 
@@ -691,7 +691,7 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 			register(instrument);
 			market = marketMap.get(instrument);
 
-			log.debug("Registering new instrument " + instrument.symbol());
+			//log.debug("Registering new instrument " + instrument.symbol());
 		}
 
 		market.runSafe(safeMake, message);
