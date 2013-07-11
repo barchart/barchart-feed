@@ -86,6 +86,11 @@ public final class VarBook extends UniBook<MarketBook> implements MarketDoBook {
 	/* #################################### */
 
 	@Override
+	public Instrument instrument() {
+		return instrument;
+	}
+	
+	@Override
 	public PriceValue priceGap() {
 		throw new UnsupportedOperationException("UNUSED");
 	}
@@ -113,11 +118,6 @@ public final class VarBook extends UniBook<MarketBook> implements MarketDoBook {
 	@Override
 	public List<Entry> entryList(Book.Side side) {
 		throw new UnsupportedOperationException("UNUSED");
-	}
-
-	@Override
-	public Instrument instrument() {
-		return instrument;
 	}
 
 	@Override
