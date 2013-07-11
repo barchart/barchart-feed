@@ -83,6 +83,11 @@ public class NulBar extends ValueFreezer<MarketBar> implements MarketBar {
 	}
 
 	@Override
+	public Price previousClose() {
+		return ValueConverter.price(get(MarketBarField.SETTLE_PREVIOUS));
+	}
+	
+	@Override
 	public Size volume() {
 		return ValueConverter.size(get(MarketBarField.VOLUME));
 	}

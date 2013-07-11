@@ -11,7 +11,7 @@ public interface SessionSet extends MarketData<SessionSet> {
 	 * @param type
 	 * @return
 	 */
-	Session session(Session.Type type);
+	SessionData session(Session.Type type);
 
 	@Override
 	Instrument instrument();
@@ -28,8 +28,8 @@ public interface SessionSet extends MarketData<SessionSet> {
 	SessionSet NULL = new SessionSet() {
 
 		@Override
-		public Session session(Type type) {
-			return Session.NULL;
+		public SessionData session(Type type) {
+			return SessionData.NULL;
 		}
 
 		@Override

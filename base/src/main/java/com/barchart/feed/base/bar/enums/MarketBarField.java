@@ -33,6 +33,8 @@ public final class MarketBarField<V extends Value<V>> extends
 	public static final MarketBarField<PriceValue> LOW = NEW(NULL_PRICE);
 	public static final MarketBarField<PriceValue> CLOSE = NEW(NULL_PRICE);
 	public static final MarketBarField<PriceValue> SETTLE = NEW(NULL_PRICE);
+	
+	public static final MarketBarField<PriceValue> SETTLE_PREVIOUS = NEW(NULL_PRICE);
 
 	// sizes
 

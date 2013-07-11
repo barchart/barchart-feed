@@ -8,7 +8,7 @@ import com.barchart.util.value.api.Time;
 /**
  * document object and primitive
  */
-public interface Session extends MarketData<Session> {
+public interface Session extends MarketData<Session>, SessionData {
 
 	/**
 	 * Market session type.
@@ -44,6 +44,11 @@ public interface Session extends MarketData<Session> {
 		EXTENDED_PREVIOUS, //
 
 	}
+
+	/**
+	 * @return the close of the previous trading day.
+	 */
+	Price previousClose();
 	
 	/** FIXME kill */
 	boolean isSettled();
@@ -51,26 +56,36 @@ public interface Session extends MarketData<Session> {
 	/** FIXME report change set. */
 	// Set<Component> change();
 	
+	@Override
 	Price open();
 
+	@Override
 	Price high();
 
+	@Override
 	Price low();
 
+	@Override
 	Price close();
 
+	@Override
 	Price settle();
 
+	@Override
 	Size volume();
 
+	@Override
 	Size interest();
 
+	@Override
 	Time timeOpened();
 
+	@Override
 	Time timeUpdated();
 
+	@Override
 	Time timeClosed();
-
+	
 	public static final Session NULL = new Session() {
 
 		@Override
@@ -151,6 +166,11 @@ public interface Session extends MarketData<Session> {
 		@Override
 		public String toString() {
 			return "NULL SESSION";
+		}
+
+		@Override
+		public Price previousClose() {
+			return Price.NULL;
 		}
 
 	};
