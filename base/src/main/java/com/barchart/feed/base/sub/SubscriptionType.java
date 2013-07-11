@@ -43,8 +43,6 @@ public enum SubscriptionType {
 			result.add(QUOTE_SNAPSHOT);
 			result.add(BOOK_UPDATE);
 			result.add(QUOTE_UPDATE);
-		} else if(clazz.equals(Instrument.class)) {
-			// Not updating
 		} else if(clazz.equals(Trade.class)) {
 			result.add(QUOTE_UPDATE);
 			result.add(QUOTE_SNAPSHOT);
