@@ -9,12 +9,12 @@ package com.barchart.feed.inst.provider;
 
 import java.io.File;
 
+import org.openfeed.proto.inst.InstrumentDefinition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.inst.MetadataContext;
-import com.barchart.proto.buf.inst.InstrumentDefinition;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.sleepycat.je.Database;
 import com.sleepycat.je.DatabaseConfig;

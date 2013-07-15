@@ -25,7 +25,6 @@ import static com.barchart.feed.inst.InstrumentField.SECURITY_TYPE;
 import static com.barchart.feed.inst.InstrumentField.SYMBOL;
 import static com.barchart.feed.inst.InstrumentField.TICK_SIZE;
 import static com.barchart.feed.inst.InstrumentField.TIME_ZONE_NAME;
-import static com.barchart.feed.inst.InstrumentField.TIME_ZONE_OFFSET;
 import static com.barchart.feed.inst.InstrumentField.VENDOR;
 import static com.barchart.util.values.provider.ValueBuilder.newPrice;
 import static com.barchart.util.values.provider.ValueBuilder.newSize;
@@ -33,6 +32,13 @@ import static com.barchart.util.values.provider.ValueBuilder.newText;
 
 import java.util.List;
 
+import org.openfeed.proto.inst.BookLiquidity;
+import org.openfeed.proto.inst.BookStructure;
+import org.openfeed.proto.inst.Calendar;
+import org.openfeed.proto.inst.Decimal;
+import org.openfeed.proto.inst.InstrumentDefinition;
+import org.openfeed.proto.inst.InstrumentType;
+import org.openfeed.proto.inst.Interval;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,13 +47,6 @@ import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.missive.api.TagMapSafe;
 import com.barchart.missive.core.ObjectMapFactory;
 import com.barchart.missive.hash.HashTagMapSafe;
-import com.barchart.proto.buf.inst.BookLiquidity;
-import com.barchart.proto.buf.inst.BookStructure;
-import com.barchart.proto.buf.inst.Calendar;
-import com.barchart.proto.buf.inst.Decimal;
-import com.barchart.proto.buf.inst.InstrumentDefinition;
-import com.barchart.proto.buf.inst.InstrumentType;
-import com.barchart.proto.buf.inst.Interval;
 import com.barchart.util.value.api.Factory;
 import com.barchart.util.value.api.FactoryLoader;
 import com.barchart.util.value.api.TimeInterval;
@@ -65,10 +64,10 @@ public final class InstrumentProtoBuilder {
 					Instrument.SecurityType.INDEX, Instrument.SecurityType.EQUITY,
 					Instrument.SecurityType.FUTURE, Instrument.SecurityType.OPTION,
 					Instrument.SecurityType.SPREAD }, new InstrumentType[] {
-					InstrumentType.NO_TYPE_INST, InstrumentType.FOREX_INST,
-					InstrumentType.INDEX_INST, InstrumentType.EQUITY_INST,
-					InstrumentType.FUTURE_INST, InstrumentType.OPTION_INST,
-					InstrumentType.SPREAD_INST });
+					InstrumentType.NO_INSTUMENT, InstrumentType.FOREX_INSTUMENT,
+					InstrumentType.INDEX_INSTUMENT, InstrumentType.EQUITY_INSTUMENT,
+					InstrumentType.FUTURE_INSTUMENT, InstrumentType.OPTION_INSTUMENT,
+					InstrumentType.SPREAD_INSTUMENT });
 
 	private static final BiEnumMap<Instrument.BookLiquidityType, BookLiquidity> liqidityTypeMap = new BiEnumMap<Instrument.BookLiquidityType, BookLiquidity>(
 			new Instrument.BookLiquidityType[] { Instrument.BookLiquidityType.NONE,
@@ -85,9 +84,9 @@ public final class InstrumentProtoBuilder {
 					Instrument.BookStructureType.PRICE_VALUE,
 					Instrument.BookStructureType.ORDER_NUMBER }, new BookStructure[] {
 					BookStructure.NO_BOOK_STRUCTURE,
-					BookStructure.PRICE_LEVEL_STRUCTURE,
-					BookStructure.PRICE_VALUE_STRUCTURE,
-					BookStructure.ORDER_NUMBER_STRUCTURE });
+					BookStructure.LEVEL_STRUCTURE,
+					BookStructure.PRICE_STRUCTURE,
+					BookStructure.ORDER_STRUCTURE });
 
 	private InstrumentProtoBuilder() {
 
@@ -197,9 +196,10 @@ public final class InstrumentProtoBuilder {
 		}
 
 		/* timezone represented as offset in minutes from utc */
-		if (inst.contains(TIME_ZONE_OFFSET)) {
-			builder.setTimeZoneOffset((int) inst.get(TIME_ZONE_OFFSET).asLong());
-		}
+		// TODO TimeZoneOffset removed?
+//		if (inst.contains(TIME_ZONE_OFFSET)) {
+//			builder.setTimeZoneOffset((int) inst.get(TIME_ZONE_OFFSET).asLong());
+//		}
 
 		/* time zone name as text */
 		if (inst.contains(TIME_ZONE_NAME)) {
@@ -299,9 +299,10 @@ public final class InstrumentProtoBuilder {
 			map.set(MARKET_HOURS, factory.newSchedule(tints));
 		}
 
-		if (instDef.hasTimeZoneOffset()) {
-			map.set(TIME_ZONE_OFFSET, newSize(instDef.getTimeZoneOffset()));
-		}
+		// TODO TimeZoneOffset Removed?
+//		if (instDef.hasTimeZoneOffset()) {
+//			map.set(TIME_ZONE_OFFSET, newSize(instDef.getTimeZoneOffset()));
+//		}
 
 		if (instDef.hasTimeZoneName()) {
 			map.set(TIME_ZONE_NAME, newText(instDef.getTimeZoneName()));

@@ -22,13 +22,14 @@ import static com.barchart.util.values.provider.ValueBuilder.newSize;
 import static com.barchart.util.values.provider.ValueBuilder.newText;
 import static com.barchart.util.values.provider.ValueBuilder.newTime;
 
+import org.openfeed.proto.inst.Calendar;
+import org.openfeed.proto.inst.InstrumentDefinition;
+import org.openfeed.proto.inst.Interval;
+
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.missive.api.TagMapSafe;
 import com.barchart.missive.core.ObjectMapFactory;
 import com.barchart.missive.hash.HashTagMapSafe;
-import com.barchart.proto.buf.inst.Calendar;
-import com.barchart.proto.buf.inst.InstrumentDefinition;
-import com.barchart.proto.buf.inst.Interval;
 import com.barchart.util.values.api.Fraction;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;

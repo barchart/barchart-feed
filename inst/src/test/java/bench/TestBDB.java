@@ -10,9 +10,10 @@ package bench;
 import java.io.File;
 import java.nio.ByteBuffer;
 
-import com.barchart.proto.buf.inst.Calendar;
-import com.barchart.proto.buf.inst.InstrumentDefinition;
-import com.barchart.proto.buf.inst.Interval;
+import org.openfeed.proto.inst.Calendar;
+import org.openfeed.proto.inst.InstrumentDefinition;
+import org.openfeed.proto.inst.Interval;
+
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.sleepycat.je.Database;
 import com.sleepycat.je.DatabaseConfig;

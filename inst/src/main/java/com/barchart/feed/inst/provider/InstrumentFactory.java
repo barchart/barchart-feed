@@ -9,13 +9,14 @@ package com.barchart.feed.inst.provider;
 
 import java.util.Map;
 
+import org.openfeed.proto.inst.InstrumentDefinition;
+
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.inst.InstrumentField;
 import com.barchart.feed.inst.missive.BarchartFeedInstManifest;
 import com.barchart.missive.api.Tag;
 import com.barchart.missive.api.TagMap;
 import com.barchart.missive.core.ObjectMapFactory;
-import com.barchart.proto.buf.inst.InstrumentDefinition;
 
 public final class InstrumentFactory {
 	
