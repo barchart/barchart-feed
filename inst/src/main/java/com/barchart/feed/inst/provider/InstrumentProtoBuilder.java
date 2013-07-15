@@ -64,10 +64,10 @@ public final class InstrumentProtoBuilder {
 					Instrument.SecurityType.INDEX, Instrument.SecurityType.EQUITY,
 					Instrument.SecurityType.FUTURE, Instrument.SecurityType.OPTION,
 					Instrument.SecurityType.SPREAD }, new InstrumentType[] {
-					InstrumentType.NO_INSTUMENT, InstrumentType.FOREX_INSTUMENT,
-					InstrumentType.INDEX_INSTUMENT, InstrumentType.EQUITY_INSTUMENT,
-					InstrumentType.FUTURE_INSTUMENT, InstrumentType.OPTION_INSTUMENT,
-					InstrumentType.SPREAD_INSTUMENT });
+					InstrumentType.NO_INSTRUMENT, InstrumentType.FOREX_INSTRUMENT,
+					InstrumentType.INDEX_INSTRUMENT, InstrumentType.EQUITY_INSTRUMENT,
+					InstrumentType.FUTURE_INSTRUMENT, InstrumentType.OPTION_INSTRUMENT,
+					InstrumentType.SPREAD_INSTRUMENT });
 
 	private static final BiEnumMap<Instrument.BookLiquidityType, BookLiquidity> liqidityTypeMap = new BiEnumMap<Instrument.BookLiquidityType, BookLiquidity>(
 			new Instrument.BookLiquidityType[] { Instrument.BookLiquidityType.NONE,

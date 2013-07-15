@@ -71,12 +71,6 @@
 			<version>2.5.0</version>
 		</dependency>
 
-		<!-- FIXME migrate to open-feed -->
-		<!-- <dependency>
-			<groupId>com.barchart.proto</groupId>
-			<artifactId>barchart-proto-buf-inst</artifactId>
-			<version>1.2.0</version>
-		</dependency> -->
 		<dependency>
 			<groupId>org.openfeed.proto</groupId>
 			<artifactId>openfeed-protocol-instrument</artifactId>
