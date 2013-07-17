@@ -34,7 +34,7 @@
   		<dependency>
   			<groupId>com.barchart.feed</groupId>
   			<artifactId>barchart-feed-base</artifactId>
-  			<version>${parent.version}</version>
+  			<version>${pom.version}</version>
   		</dependency>
   	
 		<dependency>
@@ -48,5 +48,5 @@
 		</dependency>
   	
   	</dependencies>
-  	<groupId>com.barchart.feed</groupId>
+  	
 </project>
