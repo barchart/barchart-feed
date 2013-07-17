@@ -22,6 +22,7 @@ import com.barchart.util.values.api.SizeValue;
 import com.barchart.util.values.api.TextValue;
 import com.barchart.util.values.api.TimeValue;
 import com.barchart.util.values.api.Value;
+import com.barchart.util.values.provider.ValueConst;
 
 @NotMutable
 public final class InstrumentField<V extends Value<V>> extends
@@ -58,7 +59,7 @@ public final class InstrumentField<V extends Value<V>> extends
 	public static final InstrumentField<PriceValue> PRICE_POINT = NEW(NULL_PRICE);
 
 	/** display fraction render format : decimal vs binary, etc. */
-	public static final InstrumentField<Fraction> FRACTION = NEW(NULL_FRACTION);
+	public static final InstrumentField<Fraction> FRACTION = NEW(MarketDisplay.Fraction.NULL_FRACTION);
 
 	/** price currency */
 	public static final InstrumentField<MarketCurrency> CURRENCY = NEW(NULL_CURRENCY);
