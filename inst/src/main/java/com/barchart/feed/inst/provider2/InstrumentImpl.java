@@ -9,12 +9,8 @@ import org.openfeed.proto.inst.Decimal;
 import org.openfeed.proto.inst.InstrumentDefinition;
 import org.openfeed.proto.inst.Interval;
 
-import com.barchart.feed.api.filter.Filterable.MetaType;
 import com.barchart.feed.api.model.meta.Exchange;
 import com.barchart.feed.api.model.meta.Instrument;
-import com.barchart.feed.api.model.meta.Instrument.BookLiquidityType;
-import com.barchart.feed.api.model.meta.Instrument.BookStructureType;
-import com.barchart.feed.api.model.meta.Instrument.SecurityType;
 import com.barchart.feed.api.util.Identifier;
 import com.barchart.feed.inst.participant.InstrumentState.State;
 import com.barchart.feed.inst.provider.Exchanges;
@@ -26,7 +22,7 @@ import com.barchart.util.value.api.Schedule;
 import com.barchart.util.value.api.Size;
 import com.barchart.util.value.api.TimeInterval;
 
-class InstrumentImpl implements Instrument {
+class InstrumentImpl extends InstrumentBase implements Instrument {
 	
 	private static final Factory factory = FactoryLoader.load();
 	
@@ -279,40 +275,6 @@ class InstrumentImpl implements Instrument {
 		}
 		
 		return legs;
-	}
-
-	@Override
-	public int compareTo(Instrument o) {
-		return id().compareTo(o.id());
-	}
-
-	@Override
-	public boolean isNull() {
-		return state == State.NULL;
-	}
-
-	@Override
-	public Identifier id() {
-		return new IdentifierImpl(marketGUID());
-	}
-
-	@Override
-	public boolean equals(final Object o) {
-		
-		if(!(o instanceof Instrument)) {
-			return false;
-		}
-		
-		System.out.println("Equals in inst state fac impl " + id().toString() + " " +
-				((Instrument)o).id().toString());
-		
-		return compareTo((Instrument)o) == 0;
-		
-	}
-	
-	@Override
-	public MetaType type() {
-		return MetaType.INSTRUMENT;
 	}
 
 }
