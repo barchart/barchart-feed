@@ -806,12 +806,17 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 			return false;
 		}
 
-		final Price priceStep = instrument.tickSize();
-
-		if (priceStep.isZero()) {
-			log.error("priceStep.isZero()");
-			return false;
-		}
+		/*
+		 * No longer validating tick size because we don't get this
+		 * information in streaming messages, only XML messages
+		 * from individual instrument subscriptions.
+		 */
+//		final Price priceStep = instrument.tickSize();
+//
+//		if (priceStep.isZero()) {
+//			log.error("priceStep.isZero() for {}", instrument.symbol());
+//			return false;
+//		}
 
 		final Fraction fraction = instrument.displayFraction();
 
