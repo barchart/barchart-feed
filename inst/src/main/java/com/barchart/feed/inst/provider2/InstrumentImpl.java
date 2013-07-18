@@ -261,8 +261,6 @@ class InstrumentImpl extends InstrumentBase implements Instrument {
 	@Override
 	public long timeZoneOffset() {
 		
-		final Exchange e = exchange();
-		
 		if(!def.hasTimeZoneName()) {
 			return 0l;
 		}
