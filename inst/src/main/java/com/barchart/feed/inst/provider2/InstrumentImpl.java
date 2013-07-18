@@ -3,6 +3,7 @@ package com.barchart.feed.inst.provider2;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.TimeZone;
 
 import org.openfeed.proto.inst.Calendar;
 import org.openfeed.proto.inst.Decimal;
@@ -215,13 +216,21 @@ class InstrumentImpl extends InstrumentBase implements Instrument {
 	@Override
 	public TimeInterval lifetime() {
 		
-		if(!def.hasSymbolExpiration()) {
+		if(!def.hasCalendar()) {
 			return TimeInterval.NULL;
 		}
 		
-		// TODO
-		//return factory.newTimeInterval(0, def.getSymbolExpiration().);
-		return null;
+		if(!def.getCalendar().hasLifeTime()) {
+			return TimeInterval.NULL;
+		}
+		
+		final Interval i = def.getCalendar().getLifeTime();
+		
+		if(i.getTimeFinish() == 0) {
+			return TimeInterval.NULL;
+		}
+		
+		return factory.newTimeInterval(i.getTimeStart(), i.getTimeFinish());
 	}
 
 	@Override
@@ -231,7 +240,12 @@ class InstrumentImpl extends InstrumentBase implements Instrument {
 			return Schedule.NULL;
 		}
 
+		if(def.getCalendar().getMarketHoursCount() == 0) {
+			return Schedule.NULL;
+		}
+		
 		final Calendar c = def.getCalendar();
+		
 		final TimeInterval[] ti = new TimeInterval[c.getMarketHoursCount()];
 		for(int i = 0; i < c.getMarketHoursCount(); i++) {
 			final Interval inter = c.getMarketHours(i);
@@ -247,9 +261,26 @@ class InstrumentImpl extends InstrumentBase implements Instrument {
 	@Override
 	public long timeZoneOffset() {
 		
-		// This method needs to be removed
+		final Exchange e = exchange();
 		
-		return 0;
+		if(!def.hasTimeZoneName()) {
+			return 0l;
+		}
+		
+		/* Hack because extras "time zone name" isn't actually the code for the
+		 * timezone */
+		final String tzn = timeZoneName();
+		
+		TimeZone zone;
+		if(tzn.equals("NEW_YORK")) {
+			zone = TimeZone.getTimeZone("EST");
+		} else if(tzn.equals("CHICAGO")) {
+			zone = TimeZone.getTimeZone("CST");
+		} else {
+			zone = TimeZone.getTimeZone(timeZoneName());
+		}
+		
+		return zone.getOffset(System.currentTimeMillis());
 	}
 
 	@Override
