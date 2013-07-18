@@ -4,7 +4,6 @@ import java.util.Collections;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -39,7 +38,6 @@ import com.barchart.feed.base.sub.SubscriptionHandler;
 import com.barchart.feed.base.sub.SubscriptionType;
 import com.barchart.feed.inst.InstrumentService;
 import com.barchart.util.value.api.Fraction;
-import com.barchart.util.value.api.Price;
 import com.barchart.util.value.impl.ValueConst;
 import com.barchart.util.values.api.Value;
 
@@ -50,7 +48,7 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 			.getLogger(MarketplaceBase.class);
 
 	protected final MarketFactory factory;
-	protected final InstrumentService<CharSequence> instLookup;
+	protected final InstrumentService<String> instLookup;
 	protected final SubscriptionHandler subHandler;
 
 	protected final ConcurrentMap<Instrument, MarketDo> marketMap = 
@@ -60,7 +58,7 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 			new ConcurrentHashMap<FrameworkAgent<?>, Boolean>();
 
 	protected MarketplaceBase(final MarketFactory factory,
-			final InstrumentService<CharSequence> instLookup,
+			final InstrumentService<String> instLookup,
 			final SubscriptionHandler handler) {
 
 		this.factory = factory;
@@ -239,28 +237,30 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 		}
 
 		@Override
-		public synchronized void include(final CharSequence... symbols) {
+		public synchronized void include(final String... symbols) {
 
-			final Set<CharSequence> symbSet = new HashSet<CharSequence>();
+			final Set<String> symbSet = new HashSet<String>();
 			Collections.addAll(symbSet, symbols);
 
-			final Map<CharSequence, List<Instrument>> instMap = instLookup
+			final Map<String, Instrument> instMap = instLookup
 					.lookup(symbSet);
 			final Set<String> newInterests = new HashSet<String>();
 
-			for (final Entry<CharSequence, List<Instrument>> e : instMap
+			for (final Entry<String, Instrument> e : instMap
 					.entrySet()) {
 
-				final List<Instrument> i = e.getValue();
+				final Instrument i = e.getValue();
 
-				if (!i.isEmpty()) {
+				if (!i.isNull()) {
 
 					exInsts.remove(i);
-					incInsts.addAll(i);
-
-					for (final Instrument in : i) {
+					incInsts.add(i);
+					
+					newInterests.add(formatForJERQ(i.symbol()));
+					
+					/*for (final Instrument in : i) {
 						newInterests.add(formatForJERQ(in.symbol()));
-					}
+					}*/
 
 				} else {
 					/*
@@ -284,29 +284,31 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 		}
 		
 		@Override
-		public synchronized void exclude(final CharSequence... symbols) {
+		public synchronized void exclude(final String... symbols) {
 
-			final Set<CharSequence> symbSet = new HashSet<CharSequence>();
+			final Set<String> symbSet = new HashSet<String>();
 			Collections.addAll(symbSet, symbols);
 
-			final Map<CharSequence, List<Instrument>> instMap = instLookup
+			final Map<String, Instrument> instMap = instLookup
 					.lookup(symbSet);
 
 			final Set<String> oldInterests = new HashSet<String>();
 
-			for (final Entry<CharSequence, List<Instrument>> e : instMap
+			for (final Entry<String, Instrument> e : instMap
 					.entrySet()) {
 
-				final List<Instrument> i = e.getValue();
+				final Instrument i = e.getValue();
 
-				if (!i.isEmpty()) {
+				if (!i.isNull()) {
 
 					incInsts.remove(i);
-					exInsts.addAll(i);
+					exInsts.add(i);
 
-					for (final Instrument in : i) {
-						oldInterests.add(in.symbol());
-					}
+					oldInterests.add(i.symbol());
+					
+//					for (final Instrument in : i) {
+//						oldInterests.add(in.symbol());
+//					}
 
 				} else {
 					/*

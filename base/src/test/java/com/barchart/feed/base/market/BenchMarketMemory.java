@@ -35,7 +35,7 @@ public class BenchMarketMemory {
 
 			//inst = new Instrument[] { service.lookup(id) };
 
-			inst = (Instrument[]) service.lookup(id).toArray(new Instrument[0]);
+			inst = new Instrument[] {service.lookup(id)};
 			
 			taker = new MockTaker<Market>(inst);
 

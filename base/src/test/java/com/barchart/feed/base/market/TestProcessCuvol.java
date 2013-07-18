@@ -16,7 +16,6 @@ import static com.barchart.feed.base.trade.enums.MarketTradeType.FUTURE_ELECTRON
 import static com.barchart.feed.base.trade.enums.MarketTradeType.FUTURE_PIT;
 import static com.barchart.util.values.provider.ValueBuilder.newPrice;
 import static com.barchart.util.values.provider.ValueBuilder.newSize;
-import static com.barchart.util.values.provider.ValueBuilder.newText;
 import static com.barchart.util.values.provider.ValueBuilder.newTime;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -61,7 +60,7 @@ public class TestProcessCuvol {
 
 		final MockMaker maker = new MockMaker(new MockMarketFactory());
 
-		final Instrument inst = service.lookup(MockDefinitionService.INST_SYMBOL_3).get(0);
+		final Instrument inst = service.lookup(MockDefinitionService.INST_SYMBOL_3);
 
 		final Instrument[] insts = new Instrument[] { inst };
 

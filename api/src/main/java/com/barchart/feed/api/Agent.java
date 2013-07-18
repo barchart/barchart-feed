@@ -66,7 +66,7 @@ public interface Agent extends FilterUpdatable, Filter {
 	 * 
 	 * @param symbols
 	 */
-	void include(CharSequence... symbols);
+	void include(String... symbols);
 	
 	/**
 	 * Unsubscribes and detaches agent from provided symbols. Performs
@@ -74,7 +74,7 @@ public interface Agent extends FilterUpdatable, Filter {
 	 * 
 	 * @param symbols
 	 */
-	void exclude(CharSequence... symbols);
+	void exclude(String... symbols);
 	
 	/* ***** ***** Filter ***** ***** */
 	

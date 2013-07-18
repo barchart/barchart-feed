@@ -84,7 +84,6 @@ public abstract class InstrumentBase implements Instrument {
 		return "Null Time Zone";
 	}
 	
-	// TODO remove these???
 	@Override
 	public long timeZoneOffset() {
 		return 0;

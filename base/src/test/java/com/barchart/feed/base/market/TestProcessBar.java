@@ -73,7 +73,7 @@ public class TestProcessBar {
 
 		Instrument inst;
 
-		inst = service.lookup(MockDefinitionService.INST_SYMBOL_1).get(0);
+		inst = service.lookup(MockDefinitionService.INST_SYMBOL_1);
 
 		final Instrument[] insts = new Instrument[] { inst };
 

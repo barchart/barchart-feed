@@ -87,7 +87,7 @@ public class TestProcessBook {
 
 		Instrument inst;
 
-		inst = service.lookup(MockDefinitionService.INST_SYMBOL_2).get(0);
+		inst = service.lookup(MockDefinitionService.INST_SYMBOL_2);
 
 		final Instrument[] insts = new Instrument[] { inst };
 
@@ -276,7 +276,7 @@ public class TestProcessBook {
 
 		final Instrument inst;
 
-		inst = service.lookup(MockDefinitionService.INST_SYMBOL_2).get(0);
+		inst = service.lookup(MockDefinitionService.INST_SYMBOL_2);
 
 		final Instrument[] insts = new Instrument[] { inst };
 

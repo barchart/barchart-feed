@@ -102,11 +102,11 @@ public class MockDefinitionService implements InstrumentService<CharSequence> {
 	}
 	
 	@Override
-	public List<Instrument> lookup(final CharSequence symbol) {
+	public Instrument lookup(final CharSequence symbol) {
 		if(symbolMap.containsKey(symbol)) {
-			return Collections.singletonList(guidMap.get(symbolMap.get(symbol)));
+			return guidMap.get(symbolMap.get(symbol));
 		}
-		return Collections.emptyList();
+		return Instrument.NULL;
 	}
 
 	@Override
@@ -125,11 +125,11 @@ public class MockDefinitionService implements InstrumentService<CharSequence> {
 	}
 
 	@Override
-	public Map<CharSequence, List<Instrument>> lookup(
-			final Collection<? extends CharSequence> symbols) {
+	public Map<CharSequence, Instrument> lookup(
+			final Collection<CharSequence> symbols) {
 		
-		final Map<CharSequence, List<Instrument>> insts = 
-				new HashMap<CharSequence, List<Instrument>>();
+		final Map<CharSequence, Instrument> insts = 
+				new HashMap<CharSequence, Instrument>();
 		
 		for(final CharSequence symbol : symbols) {
 			insts.put(symbol,lookup(symbol));
@@ -140,7 +140,7 @@ public class MockDefinitionService implements InstrumentService<CharSequence> {
 
 	@Override
 	public InstrumentFutureMap<CharSequence> lookupAsync(
-			final Collection<? extends CharSequence> symbols) {
+			final Collection<CharSequence> symbols) {
 		
 		return null;
 	}
