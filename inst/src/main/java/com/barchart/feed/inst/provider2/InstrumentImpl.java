@@ -38,7 +38,8 @@ class InstrumentImpl extends InstrumentBase implements Instrument {
 	@Override
 	public String marketGUID() {
 		
-		if(!def.hasMarketId()) {
+		/* Symbol is currently GUID */
+		if(!def.hasSymbol()) {
 			return "NULL";
 		}
 		

@@ -258,10 +258,6 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 					
 					newInterests.add(formatForJERQ(i.symbol()));
 					
-					/*for (final Instrument in : i) {
-						newInterests.add(formatForJERQ(in.symbol()));
-					}*/
-
 				} else {
 					/*
 					 * For all failed lookups, store symbol and attempt to match 
@@ -306,10 +302,6 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 
 					oldInterests.add(i.symbol());
 					
-//					for (final Instrument in : i) {
-//						oldInterests.add(in.symbol());
-//					}
-
 				} else {
 					/*
 					 * For all failed lookups, store symbol and attempt to match 
