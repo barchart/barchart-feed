@@ -21,12 +21,10 @@ import static com.barchart.feed.base.trade.enums.MarketTradeType.FUTURE_ELECTRON
 import static com.barchart.feed.base.trade.enums.MarketTradeType.FUTURE_PIT;
 import static com.barchart.util.values.provider.ValueBuilder.newPrice;
 import static com.barchart.util.values.provider.ValueBuilder.newSize;
-import static com.barchart.util.values.provider.ValueBuilder.newText;
 import static com.barchart.util.values.provider.ValueBuilder.newTime;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import legacy.BarchartFeedInstManifest;
 
 import org.junit.After;
 import org.junit.Before;
@@ -42,7 +40,6 @@ import com.barchart.feed.base.message.MockMsgTrade;
 import com.barchart.feed.base.trade.api.MarketTrade;
 import com.barchart.feed.inst.InstrumentService;
 import com.barchart.feed.inst.provider.MockDefinitionService;
-import com.barchart.missive.core.ObjectMapFactory;
 
 public class TestProcessBar {
 
@@ -54,7 +51,6 @@ public class TestProcessBar {
 
 	@Before
 	public void setUp() throws Exception {
-		ObjectMapFactory.install(new BarchartFeedInstManifest());
 		service = new MockDefinitionService();
 	}
 

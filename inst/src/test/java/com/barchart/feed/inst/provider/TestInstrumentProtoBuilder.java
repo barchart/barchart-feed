@@ -11,7 +11,6 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import com.barchart.missive.api.Tag;
 import com.google.protobuf.InvalidProtocolBufferException;
 
 public class TestInstrumentProtoBuilder {

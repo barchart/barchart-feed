@@ -7,26 +7,15 @@
  */
 package com.barchart.feed.inst.provider;
 
-import static legacy.InstrumentField.BOOK_DEPTH;
-import static legacy.InstrumentField.DISPLAY_FRACTION;
-import static legacy.InstrumentField.GUID;
-import static legacy.InstrumentField.MARKET_GUID;
-import static legacy.InstrumentField.SYMBOL;
-import static legacy.InstrumentField.TICK_SIZE;
-
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import legacy.InstrumentFactory;
-import legacy.InstrumentGUID;
-import legacy.MetadataContext;
-
+import org.openfeed.proto.inst.Decimal;
+import org.openfeed.proto.inst.InstrumentDefinition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,11 +23,8 @@ import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.inst.InstrumentFuture;
 import com.barchart.feed.inst.InstrumentFutureMap;
 import com.barchart.feed.inst.InstrumentService;
-import com.barchart.missive.api.Tag;
 import com.barchart.util.value.api.Factory;
 import com.barchart.util.value.api.FactoryLoader;
-import com.barchart.util.values.api.TextValue;
-import com.barchart.util.values.provider.ValueBuilder;
 
 public class MockDefinitionService implements InstrumentService<CharSequence> {
 	
@@ -48,58 +34,58 @@ public class MockDefinitionService implements InstrumentService<CharSequence> {
 	private static final Logger log = LoggerFactory
 			.getLogger(MockDefinitionService.class);
 
-	public static final InstrumentGUID INST_GUID_1 = new InstrumentGUID("1");
-	public static final InstrumentGUID INST_GUID_2 = new InstrumentGUID("2");
-	public static final InstrumentGUID INST_GUID_3 = new InstrumentGUID("3");
+	public static final long INST_GUID_1 = 1;
+	public static final long INST_GUID_2 = 2;
+	public static final long INST_GUID_3 = 3;
 	
-	public static final TextValue INST_SYMBOL_1 = ValueBuilder.newText("one");
-	public static final TextValue INST_SYMBOL_2 = ValueBuilder.newText("two");
-	public static final TextValue INST_SYMBOL_3 = ValueBuilder.newText("three");
+	public static final String INST_SYMBOL_1 = "one";
+	public static final String INST_SYMBOL_2 = "two";
+	public static final String INST_SYMBOL_3 = "three";
 	
-	final Map<InstrumentGUID, Instrument> guidMap = 
-			new ConcurrentHashMap<InstrumentGUID, Instrument>();
-	final Map<TextValue, InstrumentGUID> symbolMap = 
-			new ConcurrentHashMap<TextValue, InstrumentGUID>();
+	final Map<Long, Instrument> guidMap = 
+			new ConcurrentHashMap<Long, Instrument>();
+	final Map<String, Long> symbolMap = 
+			new ConcurrentHashMap<String, Long>();
 	
 	final ExecutorService executor = Executors.newCachedThreadPool();
 		
 	@SuppressWarnings("rawtypes")
 	public MockDefinitionService() {
 		
-		Map<Tag, Object> tagmap1 = new HashMap<Tag, Object>();
+		InstrumentDefinition.Builder builder = InstrumentDefinition.newBuilder();
 		
-		tagmap1.put(GUID, INST_GUID_1);
-		tagmap1.put(MARKET_GUID, ValueBuilder.newText("1"));
-		tagmap1.put(SYMBOL, INST_SYMBOL_1);
-		tagmap1.put(TICK_SIZE, ValueBuilder.newPrice(1, -1));
-		tagmap1.put(BOOK_DEPTH, ValueBuilder.newSize(10));
-		tagmap1.put(DISPLAY_FRACTION, factory.newFraction(10, -1));
+		builder.setMarketId(INST_GUID_1);
+		builder.setSymbol(INST_SYMBOL_1);
+		builder.setMinimumPriceIncrement(Decimal.newBuilder().setMantissa(1).setExponent(-1).build());
+		builder.setBookDepth(10);
+		builder.setDisplayBase(10);
+		builder.setDisplayExponent(-1);
 		
-		guidMap.put(INST_GUID_1, InstrumentFactory.build(tagmap1));
+		guidMap.put(INST_GUID_1, InstrumentFactory.instrument(builder.buildPartial()));
 		symbolMap.put(INST_SYMBOL_1, INST_GUID_1);
 		
-		Map<Tag, Object> tagmap2 = new HashMap<Tag, Object>();
+		builder.clear();
 		
-		tagmap2.put(GUID, INST_GUID_2);
-		tagmap2.put(MARKET_GUID, ValueBuilder.newText("2"));
-		tagmap2.put(SYMBOL, INST_SYMBOL_2);
-		tagmap2.put(TICK_SIZE, ValueBuilder.newPrice(25, -2));
-		tagmap2.put(BOOK_DEPTH, ValueBuilder.newSize(10));
-		tagmap2.put(DISPLAY_FRACTION, factory.newFraction(10, -1));
+		builder.setMarketId(INST_GUID_2);
+		builder.setSymbol(INST_SYMBOL_2);
+		builder.setMinimumPriceIncrement(Decimal.newBuilder().setMantissa(25).setExponent(-2).build());
+		builder.setBookDepth(10);
+		builder.setDisplayBase(10);
+		builder.setDisplayExponent(-1);
 		
-		guidMap.put(INST_GUID_2, InstrumentFactory.build(tagmap2));
+		guidMap.put(INST_GUID_2, InstrumentFactory.instrument(builder.buildPartial()));
 		symbolMap.put(INST_SYMBOL_2, INST_GUID_2);
 		
-		Map<Tag, Object> tagmap3 = new HashMap<Tag, Object>();
+		builder.clear();
 		
-		tagmap3.put(GUID, INST_GUID_3);
-		tagmap3.put(MARKET_GUID, ValueBuilder.newText("3"));
-		tagmap3.put(SYMBOL,  INST_SYMBOL_3);
-		tagmap3.put(TICK_SIZE, ValueBuilder.newPrice(125, -3));
-		tagmap3.put(BOOK_DEPTH, ValueBuilder.newSize(10));
-		tagmap3.put(DISPLAY_FRACTION, factory.newFraction(10, -1));
+		builder.setMarketId(INST_GUID_3);
+		builder.setSymbol(INST_SYMBOL_3);
+		builder.setMinimumPriceIncrement(Decimal.newBuilder().setMantissa(125).setExponent(-3).build());
+		builder.setBookDepth(10);
+		builder.setDisplayBase(10);
+		builder.setDisplayExponent(-1);
 		
-		guidMap.put(INST_GUID_3, InstrumentFactory.build(tagmap3));
+		guidMap.put(INST_GUID_3, InstrumentFactory.instrument(builder.buildPartial()));
 		symbolMap.put(INST_SYMBOL_3, INST_GUID_3);
 		
 	}
@@ -117,13 +103,6 @@ public class MockDefinitionService implements InstrumentService<CharSequence> {
 		
 		// TODO
 		throw new UnsupportedOperationException();
-		
-//		InstrumentGUID guid = symbolMap.get(symbol);
-//		if(guid == null) {
-//			guid = InstrumentGUID.NULL_INSTRUMENT_GUID;
-//		}
-//		
-//		return new InstrumentFutureImpl(guid, randomDelayContext, executor);
 		
 	}
 
@@ -148,19 +127,4 @@ public class MockDefinitionService implements InstrumentService<CharSequence> {
 		return null;
 	}
 	
-	private MetadataContext randomDelayContext = new MetadataContext() {
-
-		@Override
-		public Instrument lookup(final InstrumentGUID guid) {
-			try {
-				Thread.sleep((long) (Math.random() * 100));
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			return guidMap.get(guid);
-			
-		}
-		
-	};
-
 }

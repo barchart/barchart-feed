@@ -19,7 +19,6 @@ import static com.barchart.util.values.provider.ValueBuilder.newSize;
 import static com.barchart.util.values.provider.ValueBuilder.newTime;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import legacy.BarchartFeedInstManifest;
 
 import org.junit.After;
 import org.junit.Before;
@@ -47,7 +46,6 @@ public class TestProcessCuvol {
 
 	@Before
 	public void setUp() throws Exception {
-		ObjectMapFactory.install(new BarchartFeedInstManifest());
 		service = new MockDefinitionService();
 	}
 

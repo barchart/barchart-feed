@@ -10,7 +10,6 @@ package com.barchart.feed.base.market.provider;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import legacy.BarchartFeedInstManifest;
 
 import org.junit.After;
 import org.junit.Before;
@@ -33,7 +32,6 @@ public class TestMakerBase {
 
 	@Before
 	public void setUp() throws Exception {
-		ObjectMapFactory.install(new BarchartFeedInstManifest());
 		service = new MockDefinitionService();
 	}
 

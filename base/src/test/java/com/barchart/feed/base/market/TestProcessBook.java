@@ -28,8 +28,6 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-import legacy.BarchartFeedInstManifest;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -64,7 +62,6 @@ public class TestProcessBook {
 
 	@Before
 	public void setUp() throws Exception {
-		ObjectMapFactory.install(new BarchartFeedInstManifest());
 		service = new MockDefinitionService();
 	}
 
