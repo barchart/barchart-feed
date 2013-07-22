@@ -24,7 +24,6 @@ import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.feed.inst.InstrumentService;
 import com.barchart.feed.inst.provider.MockDefinitionService;
-import com.barchart.missive.core.ObjectMapFactory;
 
 public class TestMakerBase {
 

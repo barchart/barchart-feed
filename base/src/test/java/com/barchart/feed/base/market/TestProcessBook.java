@@ -50,7 +50,6 @@ import com.barchart.feed.base.trade.api.MarketTrade;
 import com.barchart.feed.base.trade.enums.MarketTradeSession;
 import com.barchart.feed.inst.InstrumentService;
 import com.barchart.feed.inst.provider.MockDefinitionService;
-import com.barchart.missive.core.ObjectMapFactory;
 import com.barchart.util.values.api.SizeValue;
 
 public class TestProcessBook {
