@@ -1,6 +1,9 @@
 package com.barchart.feed.base.provider;
 
+import java.util.Collections;
 import java.util.EnumMap;
+import java.util.EnumSet;
+import java.util.Set;
 
 import com.barchart.feed.api.model.data.Session;
 import com.barchart.feed.api.model.data.Session.Type;
@@ -15,6 +18,8 @@ class FrozenSessionSet implements SessionSet {
 	private final EnumMap<Session.Type, Session> map = 
 			new EnumMap<Session.Type, Session>(Session.Type.class);
 	
+	protected final Set<Type> changeSet =
+			Collections.synchronizedSet(EnumSet.noneOf(Type.class));
 	
 	FrozenSessionSet(final Instrument instrument, 
 			final Session current, 
@@ -56,5 +61,9 @@ class FrozenSessionSet implements SessionSet {
 		return this;
 	}
 
-	
+	@Override
+	public Set<Type> change() {
+		return EnumSet.copyOf(changeSet);
+	}
+
 }

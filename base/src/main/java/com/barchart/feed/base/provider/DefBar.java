@@ -7,6 +7,10 @@
  */
 package com.barchart.feed.base.provider;
 
+import java.util.Collections;
+import java.util.EnumSet;
+import java.util.Set;
+
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.bar.enums.MarketBarField;
 import com.barchart.util.anno.NotMutable;
@@ -19,6 +23,9 @@ class DefBar extends NulBar {
 
 	protected final Value<?>[] valueArray;
 	protected final Instrument instrument;
+	
+	protected final Set<Component> changeSet = 
+			Collections.synchronizedSet(EnumSet.noneOf(Component.class));
 	
 	DefBar(final Instrument instrument) {
 		valueArray = new Value<?>[ARRAY_SIZE];
@@ -51,6 +58,11 @@ class DefBar extends NulBar {
 	@Override
 	public Instrument instrument() {
 		return instrument;
+	}
+	
+	@Override
+	public Set<Component> change() {
+		return EnumSet.copyOf(changeSet);
 	}
 	
 }

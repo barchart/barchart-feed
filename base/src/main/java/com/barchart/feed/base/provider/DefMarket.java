@@ -7,6 +7,10 @@
  */
 package com.barchart.feed.base.provider;
 
+import java.util.Collections;
+import java.util.EnumSet;
+import java.util.Set;
+
 import com.barchart.feed.api.model.data.Book;
 import com.barchart.feed.api.model.data.Cuvol;
 import com.barchart.feed.api.model.data.Session;
@@ -29,6 +33,9 @@ public class DefMarket extends NulMarket {
 	protected volatile Time lastUpdateTime = ValueConst.NULL_TIME;
 	
 	protected volatile Instrument instrument;
+	
+	protected final Set<Component> changeSet = 
+		Collections.synchronizedSet(EnumSet.noneOf(Component.class));
 
 	public DefMarket(final Instrument instrument) {
 		this.instrument = instrument;
@@ -88,6 +95,11 @@ public class DefMarket extends NulMarket {
 	@Override
 	public Time updated() {
 		return Time.NULL;
+	}
+	
+	@Override
+	public Set<Component> change() {
+		return EnumSet.copyOf(changeSet);
 	}
 	
 }

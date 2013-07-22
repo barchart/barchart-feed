@@ -7,6 +7,9 @@
  */
 package com.barchart.feed.base.provider;
 
+import java.util.Collections;
+import java.util.Set;
+
 import com.barchart.feed.api.model.data.Book;
 import com.barchart.feed.api.model.data.BookSet;
 import com.barchart.feed.api.model.data.Cuvol;
@@ -103,6 +106,11 @@ class NulMarket extends ValueFreezer<Market> implements Market {
 	public BookSet bookSet() {
 		throw new UnsupportedOperationException("Currently not supported");
 		//return BookSet.NULL;
+	}
+
+	@Override
+	public Set<Component> change() {
+		return Collections.emptySet();
 	}
 	
 }

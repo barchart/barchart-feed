@@ -7,6 +7,9 @@
  */
 package com.barchart.feed.base.provider;
 
+import java.util.Collections;
+import java.util.Set;
+
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.bar.api.MarketBar;
 import com.barchart.feed.base.bar.enums.MarketBarField;
@@ -125,6 +128,11 @@ public class NulBar extends ValueFreezer<MarketBar> implements MarketBar {
 	@Override
 	public Time updated() {
 		return Time.NULL;
+	}
+
+	@Override
+	public Set<Component> change() {
+		return Collections.emptySet();
 	}
 
 }

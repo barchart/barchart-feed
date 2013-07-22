@@ -11,10 +11,13 @@ import static com.barchart.util.values.provider.ValueConst.NULL_PRICE;
 import static com.barchart.util.values.provider.ValueConst.NULL_SIZE;
 import static com.barchart.util.values.provider.ValueConst.NULL_TIME;
 
+import java.util.EnumSet;
+
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.barchart.feed.api.model.data.Book;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.bar.api.MarketBar;
 import com.barchart.feed.base.book.api.MarketBook;
@@ -61,7 +64,8 @@ public final class MarketConst {
 	new SizeValue[0];
 
 	public static final MarketBook NULL_BOOK = //
-	new DefBook(Instrument.NULL, NULL_TIME, NULL_ENTRIES, NULL_ENTRIES, NULL_BOOK_ENTRY).freeze();
+	new DefBook(Instrument.NULL, NULL_TIME, NULL_ENTRIES, NULL_ENTRIES, 
+			NULL_BOOK_ENTRY, EnumSet.noneOf(Book.Component.class)).freeze();
 
 	public static final MarketBookTop NULL_BOOK_TOP = //
 	new DefBookTop(Instrument.NULL, NULL_TIME, NULL_BOOK_ENTRY, NULL_BOOK_ENTRY).freeze();

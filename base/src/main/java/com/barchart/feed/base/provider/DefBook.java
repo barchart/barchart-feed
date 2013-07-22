@@ -12,6 +12,7 @@ import static com.barchart.feed.base.provider.MarketConst.NULL_BOOK_ENTRY;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import com.barchart.feed.api.model.data.Book;
 import com.barchart.feed.api.model.meta.Instrument;
@@ -36,10 +37,13 @@ public class DefBook extends ValueFreezer<MarketBook> implements MarketBook {
 	private final MarketBookEntry[] asks;
 	
 	private final MarketBookEntry lastUpdate; 
+	
+	private Set<Component> changeSet;
 
 	public DefBook(final Instrument instrument, final TimeValue time, 
 			final MarketBookEntry[] bids, final MarketBookEntry[] asks,
-			final MarketBookEntry lastUpdate) {
+			final MarketBookEntry lastUpdate, 
+			final Set<Component> changeSet) {
 
 		assert time != null;
 		assert bids != null;
@@ -53,6 +57,8 @@ public class DefBook extends ValueFreezer<MarketBook> implements MarketBook {
 		this.asks = asks;
 		
 		this.lastUpdate = lastUpdate;
+		
+		this.changeSet = changeSet;
 
 	}
 
@@ -264,6 +270,11 @@ public class DefBook extends ValueFreezer<MarketBook> implements MarketBook {
 	@Override
 	public Time updated() {
 		return ValueConverter.time(time);
+	}
+
+	@Override
+	public Set<Component> change() {
+		return changeSet;
 	}
 
 }

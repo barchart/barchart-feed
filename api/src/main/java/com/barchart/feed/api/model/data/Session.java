@@ -1,5 +1,9 @@
 package com.barchart.feed.api.model.data;
 
+import java.util.Collections;
+import java.util.Set;
+
+import com.barchart.feed.api.model.ChangeSet;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Size;
@@ -8,8 +12,38 @@ import com.barchart.util.value.api.Time;
 /**
  * document object and primitive
  */
-public interface Session extends MarketData<Session>, SessionData {
+public interface Session extends MarketData<Session>, SessionData, ChangeSet<Session.Component> {
 
+	/**
+	 * Last changed session item.
+	 */
+	enum Component {
+
+		UNKNOWN, //
+
+		OPEN, //
+		HIGH, //
+		LOW, //
+		CLOSE, //
+
+		TRADE, //
+
+		BID, //
+		ASK, //
+
+		SETTLE, //
+
+		VOLUME, //
+		INTEREST, //
+
+		TIME_OPENED, //
+		TIME_UPDATED, //
+		TIME_CLOSED, //
+
+		;
+
+	}
+	
 	/**
 	 * Market session type.
 	 */
@@ -53,8 +87,11 @@ public interface Session extends MarketData<Session>, SessionData {
 	/** FIXME kill */
 	boolean isSettled();
 
-	/** FIXME report change set. */
-	// Set<Component> change();
+	@Override
+	Set<Component> change();
+	
+	@Override
+	Instrument instrument();
 	
 	@Override
 	Price open();
@@ -171,6 +208,11 @@ public interface Session extends MarketData<Session>, SessionData {
 		@Override
 		public Price previousClose() {
 			return Price.NULL;
+		}
+
+		@Override
+		public Set<Component> change() {
+			return Collections.emptySet();
 		}
 
 	};

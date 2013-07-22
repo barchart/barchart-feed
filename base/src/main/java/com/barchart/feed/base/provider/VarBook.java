@@ -9,7 +9,10 @@ package com.barchart.feed.base.provider;
 
 import static com.barchart.feed.base.provider.MarketConst.NULL_BOOK_ENTRY;
 
+import java.util.Collections;
+import java.util.EnumSet;
 import java.util.List;
+import java.util.Set;
 
 import com.barchart.feed.api.model.data.Book;
 import com.barchart.feed.api.model.meta.Instrument;
@@ -34,6 +37,9 @@ public final class VarBook extends UniBook<MarketBook> implements MarketDoBook {
 	
 	protected volatile MarketBookEntry lastEntry = MarketConst.NULL_BOOK_ENTRY;
 	
+	protected Set<Component> changeSet =
+			Collections.synchronizedSet(EnumSet.noneOf(Component.class));
+	
 	public VarBook(final Instrument instrument, final Book.Type type, 
 			final SizeValue size, final PriceValue step) {
 		super(instrument, type, size, step);
@@ -53,7 +59,7 @@ public final class VarBook extends UniBook<MarketBook> implements MarketDoBook {
 	@Override
 	public final DefBook freeze() {
 		return new DefBook(instrument, time(), entries(Book.Side.BID), 
-				entries(Book.Side.ASK), lastEntry);
+				entries(Book.Side.ASK), lastEntry, EnumSet.copyOf(changeSet));
 	}
 
 	@Override
@@ -132,6 +138,11 @@ public final class VarBook extends UniBook<MarketBook> implements MarketDoBook {
 
 	@Override
 	public Time updated() {
+		throw new UnsupportedOperationException("UNUSED");
+	}
+
+	@Override
+	public Set<Component> change() {
 		throw new UnsupportedOperationException("UNUSED");
 	}
 

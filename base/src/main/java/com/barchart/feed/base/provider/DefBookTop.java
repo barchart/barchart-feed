@@ -7,6 +7,8 @@
  */
 package com.barchart.feed.base.provider;
 
+import java.util.EnumSet;
+
 import com.barchart.feed.api.model.data.Book;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.book.api.MarketBookEntry;
@@ -63,7 +65,7 @@ public class DefBookTop extends ValueFreezer<MarketBookTop> implements
 		final MarketBookEntry[] askEntries = new MarketBookEntry[] { ask };
 
 		final DefBook book = new DefBook(instrument, time, bidEntries, askEntries, 
-				MarketConst.NULL_BOOK_ENTRY);
+				MarketConst.NULL_BOOK_ENTRY, EnumSet.noneOf(Book.Component.class));
 
 		return book.toString();
 

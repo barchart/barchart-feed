@@ -1,10 +1,14 @@
 package com.barchart.feed.api.model.data;
 
+import java.util.Collections;
+import java.util.Set;
+
+import com.barchart.feed.api.model.ChangeSet;
 import com.barchart.feed.api.model.data.Book.Type;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.util.value.api.Time;
 
-public interface BookSet extends MarketData<BookSet> {
+public interface BookSet extends MarketData<BookSet>, ChangeSet<Book.Type> {
 	
 	/**
 	 * 
@@ -12,6 +16,9 @@ public interface BookSet extends MarketData<BookSet> {
 	 * @return
 	 */
 	Book book(Book.Type type);
+	
+	@Override
+	Set<Type> change();
 	
 	@Override
 	Instrument instrument();
@@ -55,6 +62,11 @@ public interface BookSet extends MarketData<BookSet> {
 		@Override
 		public String toString() {
 			return "NULL BOOK SET";
+		}
+
+		@Override
+		public Set<Type> change() {
+			return Collections.emptySet();
 		}
 		
 	};

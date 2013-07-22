@@ -1,10 +1,14 @@
 package com.barchart.feed.api.model.data;
 
+import java.util.Collections;
+import java.util.Set;
+
+import com.barchart.feed.api.model.ChangeSet;
 import com.barchart.feed.api.model.data.Session.Type;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.util.value.api.Time;
 
-public interface SessionSet extends MarketData<SessionSet> {
+public interface SessionSet extends MarketData<SessionSet>, ChangeSet<Type> {
 	
 	/**
 	 * 
@@ -13,6 +17,9 @@ public interface SessionSet extends MarketData<SessionSet> {
 	 */
 	SessionData session(Session.Type type);
 
+	@Override
+	Set<Type> change();
+	
 	@Override
 	Instrument instrument();
 
@@ -55,6 +62,11 @@ public interface SessionSet extends MarketData<SessionSet> {
 		@Override
 		public String toString() {
 			return "NULL SESSION SET";
+		}
+
+		@Override
+		public Set<Type> change() {
+			return Collections.emptySet();
 		}
 		
 	};

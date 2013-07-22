@@ -1,8 +1,11 @@
 package com.barchart.feed.api.model.data;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
+import com.barchart.feed.api.model.ChangeSet;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.util.value.api.Existential;
 import com.barchart.util.value.api.Price;
@@ -10,8 +13,20 @@ import com.barchart.util.value.api.Size;
 import com.barchart.util.value.api.Time;
 import com.barchart.util.value.api.Tuple;
 
-public interface Book extends MarketData<Book> {
+public interface Book extends MarketData<Book>, ChangeSet<Book.Component> {
 
+	/**
+	 * Last changed book entry.
+	 */
+	enum Component {
+		NORMAL_BID, //
+		NORMAL_ASK, //
+		TOP_BID, //
+		TOP_ASK, //
+		ANY_BID, //
+		ANY_ASK, //
+	}
+	
 	interface Top extends Existential {
 
 		Entry bid();
@@ -163,6 +178,12 @@ public interface Book extends MarketData<Book> {
 	List<Entry> entryList(Side side);
 
 	Entry lastBookUpdate();
+	
+	@Override
+	Set<Component> change();
+	
+	@Override
+	Instrument instrument();
 
 	Book NULL = new Book() {
 
@@ -204,6 +225,11 @@ public interface Book extends MarketData<Book> {
 		@Override
 		public String toString() {
 			return "NULL BOOK";
+		}
+
+		@Override
+		public Set<Component> change() {
+			return Collections.emptySet();
 		}
 
 	};

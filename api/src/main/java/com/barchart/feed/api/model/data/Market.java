@@ -1,10 +1,65 @@
 package com.barchart.feed.api.model.data;
 
+import java.util.Collections;
+import java.util.Set;
+
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.util.value.api.Time;
 
 public interface Market extends MarketData<Market> {
 
+	/**
+	 * Last changed market component.
+	 */
+	enum Component {
+
+		/** Trade update. */
+		TRADE, //
+
+		/** Book update. */
+		BOOK_DEFAULT, //
+
+		/** Book update. */
+		BOOK_IMPLIED, //
+
+		/** Book update. */
+		BOOK_COMBINED, //
+
+		/** Cuvol update. */
+		CUVOL, //
+
+		/** Session update. */
+		DEFAULT_CURRENT, //
+
+		/** Session update. */
+		DEFAULT_PREVIOUS, //
+
+		/** Session update. */
+		EXTENDED_CURRENT, //
+
+		/** Session update. */
+		EXTENDED_PREVIOUS, //
+
+		/** New instrument definition. */
+		INSTRUMENT, //
+
+		/** New market state snapshot. */
+		MARKET_DATA, //
+
+		/** Unsupported update. */
+		UNKNOWN, //
+	}
+
+	/**
+	 * Market change set.
+	 * 
+	 * @return will contain: empty - for unsupported update;
+	 *         {@link Component#MARKET_DATA} - for complete snapshot;
+	 *         {@link Component#INSTRUMENT} - for new definition; other - for
+	 *         market data updates.
+	 */
+	Set<Component> change();
+	
 	/** Last trade. */
 	Trade trade();
 
@@ -73,6 +128,11 @@ public interface Market extends MarketData<Market> {
 		@Override
 		public String toString() {
 			return "NULL MARKET";
+		}
+
+		@Override
+		public Set<Component> change() {
+			return Collections.emptySet();
 		}
 
 	};
