@@ -7,20 +7,21 @@
  */
 package com.barchart.feed.inst.provider;
 
-import static com.barchart.feed.inst.InstrumentField.BOOK_DEPTH;
-import static com.barchart.feed.inst.InstrumentField.CFI_CODE;
-import static com.barchart.feed.inst.InstrumentField.DESCRIPTION;
-import static com.barchart.feed.inst.InstrumentField.EXCHANGE_CODE;
-import static com.barchart.feed.inst.InstrumentField.FIELDS;
-import static com.barchart.feed.inst.InstrumentField.MARKET_GUID;
-import static com.barchart.feed.inst.InstrumentField.POINT_VALUE;
-import static com.barchart.feed.inst.InstrumentField.SYMBOL;
-import static com.barchart.feed.inst.InstrumentField.TICK_SIZE;
 import static com.barchart.util.values.provider.ValueBuilder.newFraction;
 import static com.barchart.util.values.provider.ValueBuilder.newPrice;
 import static com.barchart.util.values.provider.ValueBuilder.newSize;
 import static com.barchart.util.values.provider.ValueBuilder.newText;
 import static com.barchart.util.values.provider.ValueBuilder.newTime;
+import static legacy.InstrumentField.BOOK_DEPTH;
+import static legacy.InstrumentField.CFI_CODE;
+import static legacy.InstrumentField.DESCRIPTION;
+import static legacy.InstrumentField.EXCHANGE_CODE;
+import static legacy.InstrumentField.FIELDS;
+import static legacy.InstrumentField.MARKET_GUID;
+import static legacy.InstrumentField.POINT_VALUE;
+import static legacy.InstrumentField.SYMBOL;
+import static legacy.InstrumentField.TICK_SIZE;
+import legacy.InstrumentImpl;
 
 import org.openfeed.proto.inst.Calendar;
 import org.openfeed.proto.inst.InstrumentDefinition;

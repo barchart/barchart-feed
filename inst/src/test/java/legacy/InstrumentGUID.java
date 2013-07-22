@@ -5,7 +5,7 @@
  *
  * http://www.opensource.org/licenses/bsd-license.php
  */
-package com.barchart.feed.inst.provider;
+package legacy;
 
 /*
  * TODO Remove and replace with Identifier

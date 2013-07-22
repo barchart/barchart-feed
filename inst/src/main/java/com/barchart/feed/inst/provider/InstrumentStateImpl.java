@@ -1,4 +1,4 @@
-package com.barchart.feed.inst.provider2;
+package com.barchart.feed.inst.provider;
 
 import org.openfeed.proto.inst.InstrumentDefinition;
 

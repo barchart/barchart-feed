@@ -5,7 +5,7 @@
  *
  * http://www.opensource.org/licenses/bsd-license.php
  */
-package com.barchart.feed.inst;
+package legacy;
 
 import java.util.Collection;
 import java.util.List;

@@ -7,30 +7,34 @@
  */
 package com.barchart.feed.inst.provider;
 
-import static com.barchart.feed.inst.InstrumentField.BOOK_DEPTH;
-import static com.barchart.feed.inst.InstrumentField.BOOK_LIQUIDITY;
-import static com.barchart.feed.inst.InstrumentField.BOOK_STRUCTURE;
-import static com.barchart.feed.inst.InstrumentField.CFI_CODE;
-import static com.barchart.feed.inst.InstrumentField.DESCRIPTION;
-import static com.barchart.feed.inst.InstrumentField.DISPLAY_FRACTION;
-import static com.barchart.feed.inst.InstrumentField.EXCHANGE;
-import static com.barchart.feed.inst.InstrumentField.EXCHANGE_CODE;
-import static com.barchart.feed.inst.InstrumentField.FIELDS;
-import static com.barchart.feed.inst.InstrumentField.GUID;
-import static com.barchart.feed.inst.InstrumentField.LIFETIME;
-import static com.barchart.feed.inst.InstrumentField.MARKET_GUID;
-import static com.barchart.feed.inst.InstrumentField.MARKET_HOURS;
-import static com.barchart.feed.inst.InstrumentField.POINT_VALUE;
-import static com.barchart.feed.inst.InstrumentField.SECURITY_TYPE;
-import static com.barchart.feed.inst.InstrumentField.SYMBOL;
-import static com.barchart.feed.inst.InstrumentField.TICK_SIZE;
-import static com.barchart.feed.inst.InstrumentField.TIME_ZONE_NAME;
-import static com.barchart.feed.inst.InstrumentField.VENDOR;
 import static com.barchart.util.values.provider.ValueBuilder.newPrice;
 import static com.barchart.util.values.provider.ValueBuilder.newSize;
 import static com.barchart.util.values.provider.ValueBuilder.newText;
+import static legacy.InstrumentField.BOOK_DEPTH;
+import static legacy.InstrumentField.BOOK_LIQUIDITY;
+import static legacy.InstrumentField.BOOK_STRUCTURE;
+import static legacy.InstrumentField.CFI_CODE;
+import static legacy.InstrumentField.DESCRIPTION;
+import static legacy.InstrumentField.DISPLAY_FRACTION;
+import static legacy.InstrumentField.EXCHANGE;
+import static legacy.InstrumentField.EXCHANGE_CODE;
+import static legacy.InstrumentField.FIELDS;
+import static legacy.InstrumentField.GUID;
+import static legacy.InstrumentField.LIFETIME;
+import static legacy.InstrumentField.MARKET_GUID;
+import static legacy.InstrumentField.MARKET_HOURS;
+import static legacy.InstrumentField.POINT_VALUE;
+import static legacy.InstrumentField.SECURITY_TYPE;
+import static legacy.InstrumentField.SYMBOL;
+import static legacy.InstrumentField.TICK_SIZE;
+import static legacy.InstrumentField.TIME_ZONE_NAME;
+import static legacy.InstrumentField.VENDOR;
 
 import java.util.List;
+
+import legacy.InstrumentBase;
+import legacy.InstrumentGUID;
+import legacy.InstrumentImpl;
 
 import org.openfeed.proto.inst.BookLiquidity;
 import org.openfeed.proto.inst.BookStructure;
@@ -92,7 +96,7 @@ public final class InstrumentProtoBuilder {
 
 	}
 
-	public static InstrumentDefinition buildInstDef(final InstrumentBase inst) {
+	public static InstrumentDefinition buildInstDef(final Instrument inst) {
 
 		if (inst == null || inst.equals(Instrument.NULL)) {
 			return null; // Return empty instrument def

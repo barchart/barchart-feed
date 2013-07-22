@@ -5,13 +5,11 @@
  *
  * http://www.opensource.org/licenses/bsd-license.php
  */
-package com.barchart.feed.inst;
+package legacy;
+
 
 import com.barchart.feed.api.model.meta.Instrument;
-import com.barchart.feed.inst.provider.InstrumentGUID;
 
-public interface MetadataContext {
-	
-	Instrument lookup(InstrumentGUID guid);
+public class InstrumentImpl extends InstrumentBase implements Instrument {
 
 }

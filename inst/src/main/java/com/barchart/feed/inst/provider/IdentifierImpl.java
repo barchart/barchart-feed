@@ -1,4 +1,4 @@
-package com.barchart.feed.inst.provider2;
+package com.barchart.feed.inst.provider;
 
 import com.barchart.feed.api.util.Identifier;
 

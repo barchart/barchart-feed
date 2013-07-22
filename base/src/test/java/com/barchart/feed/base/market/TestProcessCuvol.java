@@ -19,6 +19,7 @@ import static com.barchart.util.values.provider.ValueBuilder.newSize;
 import static com.barchart.util.values.provider.ValueBuilder.newTime;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import legacy.BarchartFeedInstManifest;
 
 import org.junit.After;
 import org.junit.Before;
@@ -33,7 +34,6 @@ import com.barchart.feed.base.market.api.Market;
 import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.message.MockMsgTrade;
 import com.barchart.feed.inst.InstrumentService;
-import com.barchart.feed.inst.missive.BarchartFeedInstManifest;
 import com.barchart.feed.inst.provider.MockDefinitionService;
 import com.barchart.missive.core.ObjectMapFactory;
 import com.barchart.util.values.api.SizeValue;

@@ -20,6 +20,8 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
+import legacy.BarchartFeedInstManifest;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -34,7 +36,6 @@ import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.feed.base.message.MockMsgTrade;
 import com.barchart.feed.inst.InstrumentService;
-import com.barchart.feed.inst.missive.BarchartFeedInstManifest;
 import com.barchart.feed.inst.provider.MockDefinitionService;
 import com.barchart.missive.core.ObjectMapFactory;
 import com.barchart.util.values.api.SizeValue;

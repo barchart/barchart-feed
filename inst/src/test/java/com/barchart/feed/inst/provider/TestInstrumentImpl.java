@@ -10,9 +10,11 @@ package com.barchart.feed.inst.provider;
 import java.util.HashMap;
 import java.util.Map;
 
+import legacy.InstrumentField;
+import legacy.InstrumentGUID;
+
 import org.junit.Test;
 
-import com.barchart.feed.inst.InstrumentField;
 import com.barchart.missive.api.Tag;
 
 public class TestInstrumentImpl {
