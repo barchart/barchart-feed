@@ -48,6 +48,10 @@ public interface MarketDo extends Market, AgentLifecycleHandler {
 
 	Set<MarketEvent> regEvents();
 	
+	void setChange(Component c);
+	
+	void clearChanges();
+	
 	/* VALUES */
 
 	/** one time instrument initialization */

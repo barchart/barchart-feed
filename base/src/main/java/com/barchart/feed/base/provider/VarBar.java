@@ -7,6 +7,10 @@
  */
 package com.barchart.feed.base.provider;
 
+import java.util.Collections;
+import java.util.EnumSet;
+import java.util.Set;
+
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.bar.api.MarketDoBar;
 import com.barchart.feed.base.bar.enums.MarketBarField;
@@ -18,8 +22,11 @@ import com.barchart.util.values.api.Value;
 @ThreadSafe
 public final class VarBar extends DefBar implements MarketDoBar {
 
+	protected final Set<Component> changeSet = 
+			Collections.synchronizedSet(EnumSet.noneOf(Component.class));
+	
 	VarBar(Instrument instrument) {
-		super(instrument);
+		super(instrument, EnumSet.noneOf(Component.class));
 	}
 
 	@Override
@@ -32,6 +39,35 @@ public final class VarBar extends DefBar implements MarketDoBar {
 		assert value != null;
 
 		valueArray[field.ordinal()] = value;
+		
+		/* Update change set */
+		changeSet.clear();
+		
+		switch(field.ordinal()) {
+		default:
+			break;
+		case 0: // open
+			changeSet.add(Component.OPEN);
+			break;
+		case 1: // high
+			changeSet.add(Component.HIGH);
+			break;
+		case 2: // low
+			changeSet.add(Component.LOW);
+			break;
+		case 3:	 // close
+			changeSet.add(Component.CLOSE);
+			break;
+		case 4: // settle
+			changeSet.add(Component.SETTLE);
+			break;
+		case 6: // volume
+			changeSet.add(Component.VOLUME);
+			break;
+		case 7: // open interest
+			changeSet.add(Component.INTEREST);
+			break;
+		}
 
 	}
 
@@ -39,7 +75,7 @@ public final class VarBar extends DefBar implements MarketDoBar {
 	@Override
 	public final DefBar freeze() {
 
-		final DefBar that = new DefBar(instrument);
+		final DefBar that = new DefBar(instrument, EnumSet.copyOf(changeSet));
 
 		final int size = ARRAY_SIZE;
 

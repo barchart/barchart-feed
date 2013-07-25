@@ -28,21 +28,21 @@ public final class MarketBarField<V extends Value<V>> extends
 
 	// prices
 
-	public static final MarketBarField<PriceValue> OPEN = NEW(NULL_PRICE);
-	public static final MarketBarField<PriceValue> HIGH = NEW(NULL_PRICE);
-	public static final MarketBarField<PriceValue> LOW = NEW(NULL_PRICE);
-	public static final MarketBarField<PriceValue> CLOSE = NEW(NULL_PRICE);
-	public static final MarketBarField<PriceValue> SETTLE = NEW(NULL_PRICE);
+	public static final MarketBarField<PriceValue> OPEN = NEW(NULL_PRICE); // 0
+	public static final MarketBarField<PriceValue> HIGH = NEW(NULL_PRICE); // 1
+	public static final MarketBarField<PriceValue> LOW = NEW(NULL_PRICE);  // 2
+	public static final MarketBarField<PriceValue> CLOSE = NEW(NULL_PRICE); // 3
+	public static final MarketBarField<PriceValue> SETTLE = NEW(NULL_PRICE); // 4
 	
-	public static final MarketBarField<PriceValue> SETTLE_PREVIOUS = NEW(NULL_PRICE);
+	public static final MarketBarField<PriceValue> SETTLE_PREVIOUS = NEW(NULL_PRICE); // 5
 
 	// sizes
 
-	public static final MarketBarField<SizeValue> VOLUME = NEW(NULL_SIZE);
-	public static final MarketBarField<SizeValue> INTEREST = NEW(NULL_SIZE);
+	public static final MarketBarField<SizeValue> VOLUME = NEW(NULL_SIZE); // 6
+	public static final MarketBarField<SizeValue> INTEREST = NEW(NULL_SIZE); // 7
 
 	/** last time of any bar field change */
-	public static final MarketBarField<TimeValue> BAR_TIME = NEW(NULL_TIME);
+	public static final MarketBarField<TimeValue> BAR_TIME = NEW(NULL_TIME); // 8
 
 	/**
 	 * latest known market trading date represented by this bar
@@ -51,7 +51,7 @@ public final class MarketBarField<V extends Value<V>> extends
 	 * 
 	 * year, month, day should be treated as local market trade date
 	 */
-	public static final MarketBarField<TimeValue> TRADE_DATE = NEW(NULL_TIME);
+	public static final MarketBarField<TimeValue> TRADE_DATE = NEW(NULL_TIME); // 9
 
 	// ##################################
 

@@ -12,7 +12,8 @@ import com.barchart.util.value.api.Time;
 /**
  * document object and primitive
  */
-public interface Session extends MarketData<Session>, SessionData, ChangeSet<Session.Component> {
+public interface Session extends MarketData<Session>, SessionData, 
+		ChangeSet<Session.Component> {
 
 	/**
 	 * Last changed session item.
@@ -26,8 +27,6 @@ public interface Session extends MarketData<Session>, SessionData, ChangeSet<Ses
 		LOW, //
 		CLOSE, //
 
-		TRADE, //
-
 		BID, //
 		ASK, //
 
@@ -36,9 +35,9 @@ public interface Session extends MarketData<Session>, SessionData, ChangeSet<Ses
 		VOLUME, //
 		INTEREST, //
 
-		TIME_OPENED, //
-		TIME_UPDATED, //
-		TIME_CLOSED, //
+//		TIME_OPENED, //
+//		TIME_UPDATED, //
+//		TIME_CLOSED, //
 
 		;
 

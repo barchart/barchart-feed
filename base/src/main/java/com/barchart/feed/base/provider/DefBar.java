@@ -7,8 +7,6 @@
  */
 package com.barchart.feed.base.provider;
 
-import java.util.Collections;
-import java.util.EnumSet;
 import java.util.Set;
 
 import com.barchart.feed.api.model.meta.Instrument;
@@ -24,19 +22,21 @@ class DefBar extends NulBar {
 	protected final Value<?>[] valueArray;
 	protected final Instrument instrument;
 	
-	protected final Set<Component> changeSet = 
-			Collections.synchronizedSet(EnumSet.noneOf(Component.class));
+	private final Set<Component> changeSet;
 	
-	DefBar(final Instrument instrument) {
+	DefBar(final Instrument instrument, final Set<Component> changeSet) {
 		valueArray = new Value<?>[ARRAY_SIZE];
 		this.instrument = instrument;
+		this.changeSet = changeSet;
 	}
 
-	DefBar(final Instrument instrument, final Value<?>[] valueArray) {
+	DefBar(final Instrument instrument, final Value<?>[] valueArray,
+			final Set<Component> changeSet) {
 		assert valueArray != null;
 		assert valueArray.length == ARRAY_SIZE;
 		this.valueArray = valueArray;
 		this.instrument = instrument;
+		this.changeSet = changeSet;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -62,7 +62,7 @@ class DefBar extends NulBar {
 	
 	@Override
 	public Set<Component> change() {
-		return EnumSet.copyOf(changeSet);
+		return changeSet;
 	}
 	
 }
