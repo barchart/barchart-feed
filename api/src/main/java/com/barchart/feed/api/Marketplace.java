@@ -15,7 +15,7 @@ import com.barchart.feed.api.model.meta.Exchange;
 import com.barchart.feed.api.model.meta.Instrument;
 
 public interface Marketplace extends ConnectionLifecycle<Marketplace>, 
-		AgentBuilder {
+		AgentBuilder, SnapshotProvider {
 	
 	interface Builder {
 		
@@ -61,6 +61,14 @@ public interface Marketplace extends ConnectionLifecycle<Marketplace>,
 	@Override
 	void bindTimestampListener(TimestampListener listener);
 
+	/* ***** ***** SnapshotProvider ***** ***** */
+	
+	@Override
+	Market snapshot(Instrument instrument);
+	
+	@Override
+	Market snapshot(String symbol);
+	
 	/* ***** ***** AgentBuilder ***** ***** */
 
 	@Override

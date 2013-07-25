@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import com.barchart.feed.api.Agent;
 import com.barchart.feed.api.AgentBuilder;
 import com.barchart.feed.api.MarketObserver;
+import com.barchart.feed.api.SnapshotProvider;
 import com.barchart.feed.api.filter.Filter;
 import com.barchart.feed.api.model.data.Market;
 import com.barchart.feed.api.model.data.MarketData;
@@ -42,7 +43,8 @@ import com.barchart.util.value.impl.ValueConst;
 import com.barchart.util.values.api.Value;
 
 public abstract class MarketplaceBase<Message extends MarketMessage> implements
-		MarketMakerProvider<Message>, AgentBuilder, AgentLifecycleHandler {
+		MarketMakerProvider<Message>, AgentBuilder, AgentLifecycleHandler, 
+		SnapshotProvider {
 
 	protected static final Logger log = LoggerFactory
 			.getLogger(MarketplaceBase.class);
@@ -53,6 +55,9 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 
 	protected final ConcurrentMap<Instrument, MarketDo> marketMap = 
 			new ConcurrentHashMap<Instrument, MarketDo>();
+	
+	protected final ConcurrentMap<String, Instrument> symbolMap = 
+			new ConcurrentHashMap<String, Instrument>();
 
 	private final ConcurrentMap<FrameworkAgent<?>, Boolean> agents = 
 			new ConcurrentHashMap<FrameworkAgent<?>, Boolean>();
@@ -559,6 +564,29 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 
 		return symbol;
 	}
+	
+	/* ***** ***** SnapshotProvider ***** ***** */
+	
+	@Override
+	public Market snapshot(final Instrument instrument) {
+		
+		if(marketMap.containsKey(instrument)) {
+			return marketMap.get(instrument).freeze();
+		}
+		
+		return Market.NULL;
+	}
+	
+	@Override
+	public Market snapshot(final String symbol) {
+		
+		if(symbolMap.containsKey(Symbology.formatSymbol(symbol))) {
+			return marketMap.get(
+					symbolMap.get(Symbology.formatSymbol(symbol))).freeze();
+		}
+		
+		return Market.NULL;
+	}
 
 	/* ***** ***** Agent Lifecycle Methods ***** ***** */
 
@@ -666,6 +694,7 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 	@Override
 	public synchronized void clearAll() {
 		marketMap.clear();
+		symbolMap.clear();
 	}
 
 	// ########################
@@ -745,6 +774,8 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 				marketMap.get(instrument).attachAgent(agent);
 			}
 
+			symbolMap.put(instrument.symbol(), instrument);
+			
 		} else {
 			log.warn("already registered : {}", instrument);
 		}
@@ -769,6 +800,8 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 				marketMap.get(instrument).detachAgent(agent);
 			}
 
+			symbolMap.remove(instrument.symbol());
+			
 		} else {
 			log.warn("was not registered : {}", instrument);
 		}
