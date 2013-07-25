@@ -1,5 +1,8 @@
 package com.barchart.feed.inst.provider;
 
+import java.util.Collections;
+import java.util.Set;
+
 import org.openfeed.proto.inst.InstrumentDefinition;
 
 public interface InstrumentMap {
@@ -15,6 +18,8 @@ public interface InstrumentMap {
 	int size();
 	
 	void close();
+	
+	Set<String> keySet();
 	
 	InstrumentMap NULL = new InstrumentMap() {
 
@@ -46,6 +51,11 @@ public interface InstrumentMap {
 		@Override
 		public void close() {
 			
+		}
+
+		@Override
+		public Set<String> keySet() {
+			return Collections.emptySet();
 		}
 		
 	};

@@ -29,6 +29,9 @@ public final class VarCuvol extends NulCuvol implements MarketDoCuvol {
 	
 	public VarCuvol(final Instrument instrument, final PriceValue priceStep) {
 		this.instrument = instrument;
+		if(priceStep == null || priceStep.isNull() || priceStep.mantissa() == 0) {
+			System.out.println("Price Step was null for " + instrument.symbol());
+		}
 		this.map = new PriceArrayMap<SizeValue>(priceStep);
 	}
 
@@ -114,6 +117,11 @@ public final class VarCuvol extends NulCuvol implements MarketDoCuvol {
 		final PriceValue price = priceLast;
 
 		if (price == null) {
+			return MarketConst.NULL_CUVOL_ENTRY;
+		}
+		
+		if(map.size() == 0) {
+			System.out.println("Cuvol Map Was Size 0 for " + instrument.symbol());
 			return MarketConst.NULL_CUVOL_ENTRY;
 		}
 

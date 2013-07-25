@@ -306,8 +306,12 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 
 	protected final MarketDoCuvol loadCuvol() {
 
+		if(instrument.tickSize().mantissa() == 0) {
+			return MarketDoCuvol.NULL;
+		}
+		
 		MarketCuvol cuvol = get(CUVOL);
-
+		
 		if (cuvol.isFrozen()) {
 
 			// TODO Value Converter
@@ -315,6 +319,10 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 					instrument.tickSize().mantissa(), 
 					instrument.tickSize().exponent());
 
+			if(priceStep.mantissa() == 0) {
+				System.out.println();
+			}
+			
 			final VarCuvol varCuvol = new VarCuvol(instrument, priceStep);
 			final VarCuvolLast varCuvolLast = new VarCuvolLast(varCuvol);
 

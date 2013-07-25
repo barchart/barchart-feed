@@ -7,6 +7,8 @@ import org.slf4j.LoggerFactory;
 
 public final class Symbology {
 
+	private static final Logger log = LoggerFactory.getLogger(Symbology.class);
+	
 	private Symbology() {
 		
 	}
@@ -191,88 +193,104 @@ public final class Symbology {
 	
 	public static String formatSymbol(String symbol) {
 		
-		if(symbol == null) {
-			return "";
-		}
+		try {
 		
-		final int len = symbol.length();
-		
-		if(len < 3) {
-			return symbol;
-		}
-		
-		/* Spread */
-		if(symbol.charAt(0) == '_') {
-			return symbol;
-		}
-		
-		/* Option */
-		if(symbol.matches(".+\\d(C|P|D|Q)$")) {
+			if(symbol == null) {
+				return "";
+			}
 			
+			final int len = symbol.length();
 			
-			int pIndex = len - 2;
-			while(Character.isDigit(symbol.charAt(pIndex))) {
+			if(len < 3) {
+				return symbol;
+			}
+			
+			/* Spread */
+			if(symbol.charAt(0) == '_') {
+				return symbol;
+			}
+			
+			/*  Spot index */
+			if(symbol.endsWith("Y0")) {
+				return symbol.replace("Y0", "Y2000");
+			}
+			
+			/* Option */
+			if(symbol.matches(".+\\d(C|P|D|Q)$")) {
 				
-				if(pIndex <= 2) {
-					return symbol + " failed";
+				/* Already in correct format */
+				if(symbol.contains("|")) {
+					return symbol;
 				}
 				
-				pIndex--;
-			}
-
-			final String price = symbol.substring(pIndex + 1, len-1);
-			
-			final char mon = symbol.charAt(pIndex);
-			ExpireMonth sMon = ExpireMonth.fromCode(mon);
-			ExpireMonth nowMon = ExpireMonth.fromCode(MONTH);
-			final String y = (sMon.value >= nowMon.value) ? String.valueOf(YEAR) :
-				String.valueOf(YEAR+1);
-			
-			final StringBuilder sb = new StringBuilder();
-			
-			sb.append(symbol.substring(0, pIndex + 1)); // prefix
-			sb.append(y); // year
-			sb.append("|"); // pipe
-			sb.append(price);
-			
-			if(symbol.matches(".+(C|D)$")) {
-				return sb.append("C").toString();
-			} else {
-				return sb.append("P").toString();
-			}
-			
-		}
-		
-		/* e.g. GOOG */
-		if(!Character.isDigit(symbol.charAt(len - 1))) {
-			return symbol;
-		}
-		
-		/* e.g. ESH3 */
-		if(!Character.isDigit(symbol.charAt(len - 2))) {
-			
-			final StringBuilder sb = new StringBuilder(symbol);
-			int last = Character.getNumericValue(symbol.charAt(len - 1));
-			if(YEAR % 2010 < last) {
-				return sb.insert(len - 1, T_Z_O).toString();
-			} else if(YEAR % 2010 > last) {
-				return sb.insert(len - 1, T_Z_T).toString();
-			} else {
-				if(symbol.charAt(len - 2) >= MONTH) {
-					return sb.insert(len - 1, T_Z_O).toString();
+				int pIndex = len - 2;
+				while(Character.isDigit(symbol.charAt(pIndex))) {
+					
+					if(pIndex <= 2) {
+						return symbol + " failed";
+					}
+					
+					pIndex--;
+				}
+	
+				final String price = symbol.substring(pIndex + 1, len-1);
+				
+				final char mon = symbol.charAt(pIndex);
+				ExpireMonth sMon = ExpireMonth.fromCode(mon);
+				ExpireMonth nowMon = ExpireMonth.fromCode(MONTH);
+				final String y = (sMon.value >= nowMon.value) ? String.valueOf(YEAR) :
+					String.valueOf(YEAR+1);
+				
+				final StringBuilder sb = new StringBuilder();
+				
+				sb.append(symbol.substring(0, pIndex + 1)); // prefix
+				sb.append(y); // year
+				sb.append("|"); // pipe
+				sb.append(price);
+				
+				if(symbol.matches(".+(C|D)$")) {
+					return sb.append("C").toString();
 				} else {
-					return sb.insert(len - 1, T_Z_T).toString();
+					return sb.append("P").toString();
 				}
+				
 			}
 			
-		}
+			/* e.g. GOOG */
+			if(!Character.isDigit(symbol.charAt(len - 1))) {
+				return symbol;
+			}
+			
+			/* e.g. ESH3 */
+			if(!Character.isDigit(symbol.charAt(len - 2))) {
+				
+				final StringBuilder sb = new StringBuilder(symbol);
+				int last = Character.getNumericValue(symbol.charAt(len - 1));
+				if(YEAR % 2010 < last) {
+					return sb.insert(len - 1, T_Z_O).toString();
+				} else if(YEAR % 2010 > last) {
+					return sb.insert(len - 1, T_Z_T).toString();
+				} else {
+					if(symbol.charAt(len - 2) >= MONTH) {
+						return sb.insert(len - 1, T_Z_O).toString();
+					} else {
+						return sb.insert(len - 1, T_Z_T).toString();
+					}
+				}
+				
+			}
+			
+			/* e.g. ESH13 */
+			if(!Character.isDigit(symbol.charAt(len - 3))) {
+				return new StringBuilder(symbol).insert(len-2, T_Z).toString();
+			}
+			
+			return symbol;
 		
-		/* e.g. ESH13 */
-		if(!Character.isDigit(symbol.charAt(len - 3))) {
-			return new StringBuilder(symbol).insert(len-2, T_Z).toString();
+		} catch (RuntimeException e) {
+			log.error("Exception {} for symbol {}", e, symbol);
+			throw e;
 		}
-		
-		return symbol;
 		
 	}
 
