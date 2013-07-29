@@ -7,9 +7,7 @@
  */
 package com.barchart.feed.base.provider;
 
-import java.util.Collections;
 import java.util.EnumSet;
-import java.util.Set;
 
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.bar.api.MarketDoBar;
@@ -22,8 +20,8 @@ import com.barchart.util.values.api.Value;
 @ThreadSafe
 public final class VarBar extends DefBar implements MarketDoBar {
 
-	protected final Set<Component> changeSet = 
-			Collections.synchronizedSet(EnumSet.noneOf(Component.class));
+	protected final EnumSet<Component> changeSet = 
+			EnumSet.noneOf(Component.class);
 	
 	VarBar(Instrument instrument) {
 		super(instrument, EnumSet.noneOf(Component.class));
