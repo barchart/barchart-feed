@@ -30,6 +30,7 @@
 
 			<arg value="-U" />
 			<arg value="-e" />
+			<arg value="--show-version" />
 
 		</exec>
 
