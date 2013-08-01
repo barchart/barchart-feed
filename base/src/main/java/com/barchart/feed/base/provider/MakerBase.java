@@ -8,7 +8,9 @@
 package com.barchart.feed.base.provider;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -28,8 +30,8 @@ import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.util.anno.ThreadSafe;
-import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Fraction;
+import com.barchart.util.value.api.Price;
 import com.barchart.util.value.impl.ValueConst;
 import com.barchart.util.values.api.Value;
 
@@ -93,6 +95,9 @@ public abstract class MakerBase<Message extends MarketMessage> implements
 		}
 
 		if (wasAdded) {
+			
+			final Set<MarketDo> ms = new HashSet<MarketDo>();
+			
 			for (final Instrument inst : regTaker.getInstruments()) {
 
 				if (!isValid(inst)) {
@@ -107,9 +112,11 @@ public abstract class MakerBase<Message extends MarketMessage> implements
 
 				market.runSafe(safeRegister, regTaker);
 
-				notifyRegListeners(market);
+				ms.add(market);
 
 			}
+			
+			notifyRegListeners(ms);
 			
 		} else {
 			log.warn("already registered : {}", taker);
@@ -227,6 +234,8 @@ public abstract class MakerBase<Message extends MarketMessage> implements
 			market.runSafe(safeRegister, regTaker);
 
 		}
+		
+		final Set<MarketDo> ms = new HashSet<MarketDo>();
 
 		/** remove / notify */
 		for (final Instrument inst : changeNotifySet) {
@@ -237,9 +246,11 @@ public abstract class MakerBase<Message extends MarketMessage> implements
 				unregister(inst);
 			}
 
-			notifyRegListeners(market);
+			ms.add(market);
 
 		}
+		
+		notifyRegListeners(ms);
 
 		return true;
 	}
@@ -266,6 +277,9 @@ public abstract class MakerBase<Message extends MarketMessage> implements
 		final boolean wasRemoved = (regTaker != null);
 
 		if (wasRemoved) {
+			
+			final Set<MarketDo> ms = new HashSet<MarketDo>();
+			
 			for (final Instrument inst : regTaker.getInstruments()) {
 
 				if (!isValid(inst)) {
@@ -285,9 +299,12 @@ public abstract class MakerBase<Message extends MarketMessage> implements
 					unregister(inst);
 				}
 
-				notifyRegListeners(market);
+				ms.add(market);
 
 			}
+			
+			notifyRegListeners(ms);
+			
 		} else {
 			log.warn("was not registered : {}", taker);
 		}
@@ -487,15 +504,18 @@ public abstract class MakerBase<Message extends MarketMessage> implements
 		listenerList.remove(listener);
 	}
 
-	protected final void notifyRegListeners(final MarketDo market) {
+	protected final void notifyRegListeners(final Set<MarketDo> markets) {
 
-		final Instrument inst = market.instrument();
-
-		final Set<MarketEvent> events = market.regEvents();
-
+		final Map<Instrument, Set<MarketEvent>> insts = new
+				HashMap<Instrument, Set<MarketEvent>>();
+		
+		for(final MarketDo m : markets) {
+			insts.put(m.instrument(), m.regEvents());
+		}
+		
 		for (final MarketRegListener listener : listenerList) {
 			try {
-				listener.onRegistrationChange(inst, events);
+				listener.onRegistrationChange(insts);
 			} catch (final Exception e) {
 				log.error("", e);
 			}
@@ -505,9 +525,12 @@ public abstract class MakerBase<Message extends MarketMessage> implements
 
 	@Override
 	public void notifyRegListeners() {
-		for (final MarketDo market : marketMap.values()) {
-			notifyRegListeners(market);
-		}
+		
+		final Set<MarketDo> s = new HashSet<MarketDo>();
+		s.addAll(marketMap.values());
+		
+		notifyRegListeners(s);
+		
 	}
 
 	@Override

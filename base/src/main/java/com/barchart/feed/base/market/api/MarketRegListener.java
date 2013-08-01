@@ -7,6 +7,7 @@
  */
 package com.barchart.feed.base.market.api;
 
+import java.util.Map;
 import java.util.Set;
 
 import com.barchart.feed.api.model.meta.Instrument;
@@ -24,6 +25,6 @@ public interface MarketRegListener {
 	 */
 	@EventListener(MarketTaker.class)
 	void onRegistrationChange(//
-			Instrument instrument, Set<MarketEvent> events);
+			Map<Instrument, Set<MarketEvent>> instMap);
 
 }
