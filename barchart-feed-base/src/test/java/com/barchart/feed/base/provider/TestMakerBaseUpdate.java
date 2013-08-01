@@ -11,6 +11,7 @@ import static com.barchart.util.values.provider.ValueBuilder.*;
 import static org.junit.Assert.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.junit.After;
@@ -59,12 +60,11 @@ public class TestMakerBaseUpdate {
 		regListenter = new MarketRegListener() {
 
 			@Override
-			public void onRegistrationChange(final MarketInstrument inst,
-					final Set<MarketEvent> events) {
-
-				log.debug("inst : {} ; events : {}", inst, asString(events));
-
+			public void onRegistrationChange(
+					Map<MarketInstrument, Set<MarketEvent>> instMap) {
+				
 			}
+
 
 		};
 
