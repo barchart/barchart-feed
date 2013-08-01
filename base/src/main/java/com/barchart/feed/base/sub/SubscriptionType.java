@@ -12,7 +12,6 @@ import com.barchart.feed.api.model.data.Book;
 import com.barchart.feed.api.model.data.MarketData;
 import com.barchart.feed.api.model.data.Session;
 import com.barchart.feed.api.model.data.Trade;
-import com.barchart.feed.api.model.meta.Instrument;
 
 public enum SubscriptionType {
 	
