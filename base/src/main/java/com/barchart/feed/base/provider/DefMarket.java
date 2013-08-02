@@ -7,9 +7,11 @@
  */
 package com.barchart.feed.base.provider;
 
-import java.util.Collections;
 import java.util.EnumSet;
 import java.util.Set;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.api.model.data.Book;
 import com.barchart.feed.api.model.data.Cuvol;
@@ -25,6 +27,9 @@ import com.barchart.util.values.api.Value;
 
 @NotMutable
 public class DefMarket extends NulMarket {
+	
+	private static final Logger log = LoggerFactory
+			.getLogger(DefMarket.class);
 
 	protected final static int ARRAY_SIZE = MarketField.size();
 
@@ -35,7 +40,7 @@ public class DefMarket extends NulMarket {
 	protected volatile Instrument instrument;
 	
 	protected final Set<Component> changeSet = 
-		Collections.synchronizedSet(EnumSet.noneOf(Component.class));
+		EnumSet.noneOf(Component.class);
 
 	public DefMarket(final Instrument instrument) {
 		this.instrument = instrument;
@@ -99,6 +104,7 @@ public class DefMarket extends NulMarket {
 	
 	@Override
 	public Set<Component> change() {
+		log.debug("Change set had {} elements", changeSet.size());
 		return EnumSet.copyOf(changeSet);
 	}
 	

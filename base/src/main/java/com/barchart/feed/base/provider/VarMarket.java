@@ -254,6 +254,7 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 
 		}
 
+		that.changeSet.addAll(changeSet);
 		// XXX keep null
 		// target[marketOrdinal] = that;
 
