@@ -12,6 +12,7 @@ import static com.barchart.feed.base.provider.MarketConst.*;
 import static com.barchart.util.values.provider.ValueConst.*;
 
 import com.barchart.feed.api.model.data.Book;
+import com.barchart.feed.api.model.data.Book.Entry;
 import com.barchart.feed.base.book.api.MarketBookEntry;
 import com.barchart.feed.base.book.api.MarketDoBookEntry;
 import com.barchart.feed.base.book.enums.MarketBookAction;
@@ -112,6 +113,11 @@ public class DefBookEntry extends ValueFreezer<MarketBookEntry> implements
 		}
 	}
 
+	@Override
+	public int compareTo(final Entry o) {
+		return price().compareTo(o.price());
+	}
+	
 	//
 
 	@Override

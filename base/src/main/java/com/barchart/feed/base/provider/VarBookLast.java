@@ -8,6 +8,7 @@
 package com.barchart.feed.base.provider;
 
 import com.barchart.feed.api.model.data.Book;
+import com.barchart.feed.api.model.data.Book.Entry;
 import com.barchart.feed.base.book.api.MarketBookEntry;
 import com.barchart.util.anno.ProxyTo;
 import com.barchart.util.value.api.Price;
@@ -60,14 +61,19 @@ final class VarBookLast extends ValueFreezer<MarketBookEntry> implements
 
 	@Override
 	public Price price() {
-		return null;
+		return Price.NULL;
 	}
 
 	@Override
 	public Size size() {
-		return null;
+		return Size.NULL;
 	}
 
+	@Override
+	public int compareTo(final Entry o) {
+		return price().compareTo(o.price());
+	}
+	
 	@Override
 	public int level() {
 		return 0;

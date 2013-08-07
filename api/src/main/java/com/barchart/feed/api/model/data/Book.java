@@ -62,7 +62,7 @@ public interface Book extends MarketData<Book>, ChangeSet<Book.Component> {
 
 	}
 
-	interface Entry extends Existential, Tuple {
+	interface Entry extends Existential, Tuple, Comparable<Entry> {
 
 		@Override
 		Price price();
@@ -102,6 +102,11 @@ public interface Book extends MarketData<Book>, ChangeSet<Book.Component> {
 			@Override
 			public boolean isNull() {
 				return true;
+			}
+			
+			@Override
+			public int compareTo(final Entry o) {
+				return Price.NULL.compareTo(o.price());
 			}
 			
 			@Override
