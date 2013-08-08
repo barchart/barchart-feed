@@ -4,13 +4,14 @@ import com.barchart.feed.api.util.Identifier;
 
 public interface Exchange extends Metadata {
 	
+	String timeZoneName();
+	
 	Exchange NULL = new Exchange() {
 
 		@Override
 		public MetaType type() {
 			return MetaType.EXCHANGE;
 		}
-		
 		
 		@Override
 		public boolean isNull() {
@@ -22,6 +23,11 @@ public interface Exchange extends Metadata {
 			return Identifier.NULL;
 		}
 
+		@Override
+		public String timeZoneName() {
+			return "NULL TIME ZONE";
+		}
+		
 		@Override
 		public String description() {
 			return "NULL EXCHANGE";
