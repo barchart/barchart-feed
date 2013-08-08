@@ -3,8 +3,6 @@ package com.barchart.feed.inst.provider;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.joda.time.DateTimeZone;
-
 import com.barchart.feed.api.model.meta.Exchange;
 import com.barchart.feed.api.util.Identifier;
 
@@ -306,14 +304,14 @@ public final class Exchanges {
 	private static class ExchangeImpl implements Exchange {
 		
 		private final String desc;
-		private final DateTimeZone zone;
+		private final String zone;
 		private final Identifier id;
 		
 		ExchangeImpl(final String desc, final String code, 
 				final String zone) {
 			
 			this.desc = desc.intern();
-			this.zone = DateTimeZone.forID(zone);
+			this.zone = zone;
 			id = new ExchangeIdentifier(code);
 			
 		}
@@ -353,7 +351,7 @@ public final class Exchanges {
 
 		@Override
 		public String timeZoneName() {
-			return zone.getShortName(System.currentTimeMillis());
+			return zone;
 		}
 
 	}
