@@ -1,5 +1,6 @@
 package com.barchart.feed.inst.participant;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.openfeed.proto.inst.InstrumentDefinition;
@@ -41,163 +42,136 @@ public interface InstrumentState extends Instrument, Resettable, Instrumentable 
 
 		@Override
 		public String marketGUID() {
-			// TODO Auto-generated method stub
-			return null;
+			return "NULL_INSTRUMENT_STATE";
 		}
 
 		@Override
 		public SecurityType securityType() {
-			// TODO Auto-generated method stub
-			return null;
+			return SecurityType.NULL_TYPE;
 		}
 
 		@Override
 		public BookLiquidityType liquidityType() {
-			// TODO Auto-generated method stub
-			return null;
+			return BookLiquidityType.NONE;
 		}
 
 		@Override
 		public BookStructureType bookStructure() {
-			// TODO Auto-generated method stub
-			return null;
+			return BookStructureType.NONE;
 		}
 
 		@Override
 		public Size maxBookDepth() {
-			// TODO Auto-generated method stub
-			return null;
+			return Size.NULL;
 		}
 
 		@Override
 		public String instrumentDataVendor() {
-			// TODO Auto-generated method stub
-			return null;
+			return "NULL_VENDOR";
 		}
 
 		@Override
 		public String symbol() {
-			// TODO Auto-generated method stub
-			return null;
+			return "NULL_SYMBOL";
 		}
 
 		@Override
 		public String description() {
-			// TODO Auto-generated method stub
-			return null;
+			return "NULL_DESCRIPTION";
 		}
 
 		@Override
 		public String CFICode() {
-			// TODO Auto-generated method stub
-			return null;
+			return "NULL_CFI";
 		}
 
 		@Override
 		public Exchange exchange() {
-			// TODO Auto-generated method stub
-			return null;
+			return Exchange.NULL;
 		}
 
 		@Override
 		public String exchangeCode() {
-			// TODO Auto-generated method stub
-			return null;
+			return "NULL_EXCHANGE_CODE";
 		}
 
 		@Override
 		public Price tickSize() {
-			// TODO Auto-generated method stub
-			return null;
+			return Price.NULL;
 		}
 
 		@Override
 		public Price pointValue() {
-			// TODO Auto-generated method stub
-			return null;
+			return Price.NULL;
 		}
 
 		@Override
 		public Fraction displayFraction() {
-			// TODO Auto-generated method stub
-			return null;
+			return Fraction.NULL;
 		}
 
 		@Override
 		public TimeInterval lifetime() {
-			// TODO Auto-generated method stub
-			return null;
+			return TimeInterval.NULL;
 		}
 
 		@Override
 		public Schedule marketHours() {
-			// TODO Auto-generated method stub
-			return null;
+			return Schedule.NULL;
 		}
 
 		@Override
 		public long timeZoneOffset() {
-			// TODO Auto-generated method stub
 			return 0;
 		}
 
 		@Override
 		public String timeZoneName() {
-			// TODO Auto-generated method stub
-			return null;
+			return "NULL_TIMEZONE";
 		}
 
 		@Override
 		public List<Identifier> componentLegs() {
-			// TODO Auto-generated method stub
-			return null;
+			return Collections.emptyList();
 		}
 
 		@Override
 		public int compareTo(Instrument o) {
-			// TODO Auto-generated method stub
-			return 0;
+			return o.compareTo(Instrument.NULL);
 		}
 
 		@Override
 		public boolean isNull() {
-			// TODO Auto-generated method stub
-			return false;
+			return true;
 		}
 
 		@Override
 		public Identifier id() {
-			// TODO Auto-generated method stub
-			return null;
+			return Identifier.NULL;
 		}
 
 		@Override
 		public MetaType type() {
-			// TODO Auto-generated method stub
-			return null;
+			return MetaType.INSTRUMENT;
 		}
 
 		@Override
 		public State state() {
-			// TODO Auto-generated method stub
-			return null;
+			return State.NULL;
 		}
 
 		@Override
 		public void process(InstrumentDefinition value) {
-			// TODO Auto-generated method stub
 			
 		}
 
 		@Override
 		public InstrumentDefinition definition() {
-			// TODO Auto-generated method stub
-			return null;
+			return InstrumentDefinition.getDefaultInstance();
 		}
 
 		@Override
 		public void reset() {
-			// TODO Auto-generated method stub
 			
 		}
 		
