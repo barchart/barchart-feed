@@ -35,6 +35,8 @@ public final class InstrumentDefField<V extends Value<V>> extends
 
 	/** market symbol; can be non unique; */
 	public static final InstrumentDefField<TextValue> SYMBOL = NEW(NULL_TEXT);
+	
+	public static final InstrumentDefField<TextValue> CQG_TRADING_SYMBOL = NEW(NULL_TEXT);
 
 	/** market free style description; can be used in full text search */
 	public static final InstrumentDefField<TextValue> DESCRIPTION = NEW(NULL_TEXT);
