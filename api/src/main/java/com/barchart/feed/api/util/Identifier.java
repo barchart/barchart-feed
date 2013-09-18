@@ -13,6 +13,60 @@ public interface Identifier extends Comparable<Identifier>, Existential {
 	@Override
 	String toString();
 	
+	@Override
+	int hashCode();
+	
+	@Override
+	boolean equals(Object o);
+	
+	interface IdentifierFactory {
+		
+		Identifier id(String id);
+		
+	}
+	
+	IdentifierFactory FAC = new IdentifierFactory() {
+
+		@Override
+		public Identifier id(final String id) {
+			
+			return new Identifier() {
+
+				@Override
+				public int compareTo(final Identifier o) {
+					return id.compareTo(o.toString());
+				}
+
+				@Override
+				public boolean isNull() {
+					return false;
+				}
+				
+				@Override
+				public int hashCode() {
+					return id.hashCode();
+				}
+				
+				@Override
+				public boolean equals(final Object o) {
+					if(!(o instanceof Identifier)) {
+						return false;
+					}
+					
+					return id.equals(o.toString());
+				}
+				
+				@Override
+				public String toString() {
+					return id;
+				}
+				
+			};
+			
+		}
+		
+	};
+	
 	Identifier NULL = new Identifier() {
 		
 		private final String nul = "NULL ID".intern();
