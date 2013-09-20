@@ -25,6 +25,10 @@ public interface Identifier extends Comparable<Identifier>, Existential {
 		
 	}
 	
+	/**
+	 * All instances of Identifier should use this factory to ensure
+	 * all methods are implemented correctly
+	 */
 	IdentifierFactory FAC = new IdentifierFactory() {
 
 		@Override

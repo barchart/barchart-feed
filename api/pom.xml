@@ -28,7 +28,7 @@
 		<dependency>
 			<groupId>com.barchart.util</groupId>
 			<artifactId>barchart-util-value-api</artifactId>
-			<version>[7-SNAPSHOT,8-SNAPSHOT)</version>
+			<version>[8-SNAPSHOT,9-SNAPSHOT)</version>
 		</dependency>
 
 	</dependencies>
