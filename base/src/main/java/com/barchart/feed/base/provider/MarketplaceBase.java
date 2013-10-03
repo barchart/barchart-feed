@@ -23,6 +23,7 @@ import com.barchart.feed.api.model.data.MarketData;
 import com.barchart.feed.api.model.meta.Exchange;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.api.model.meta.Metadata;
+import com.barchart.feed.api.util.Identifier;
 import com.barchart.feed.base.market.api.MarketDo;
 import com.barchart.feed.base.market.api.MarketFactory;
 import com.barchart.feed.base.market.api.MarketMakerProvider;
@@ -53,11 +54,11 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 	protected final InstrumentService<String> instLookup;
 	protected final SubscriptionHandler subHandler;
 
-	protected final ConcurrentMap<Instrument, MarketDo> marketMap = 
-			new ConcurrentHashMap<Instrument, MarketDo>();
+	protected final ConcurrentMap<Identifier, MarketDo> marketMap = 
+			new ConcurrentHashMap<Identifier, MarketDo>();
 	
-	protected final ConcurrentMap<String, Instrument> symbolMap = 
-			new ConcurrentHashMap<String, Instrument>();
+	protected final ConcurrentMap<String, Identifier> symbolMap = 
+			new ConcurrentHashMap<String, Identifier>();
 
 	private final ConcurrentMap<FrameworkAgent<?>, Boolean> agents = 
 			new ConcurrentHashMap<FrameworkAgent<?>, Boolean>();
@@ -112,6 +113,8 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 		private final Set<String> incUnknown = new HashSet<String>();
 		private final Set<String> exUnknown = new HashSet<String>();
 
+		private Filter filter = new DefaultFilter();
+		
 		BaseAgent(final AgentLifecycleHandler agentHandler,
 				final Class<V> clazz, final MDGetter<V> getter,
 				final MarketObserver<V> callback) {
@@ -161,41 +164,57 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 
 		@Override
 		public boolean hasMatch(final Instrument instrument) {
+			return filter.hasMatch(instrument);
+		}
+		
+		/*
+		 * Allow for filter to be overridden. 
+		 */
+		private class DefaultFilter implements Filter {
 
-			/* Work bottom up on the hierarchy */
+			@Override
+			public boolean hasMatch(Instrument instrument) {
+				/* Work bottom up on the hierarchy */
+				
+				if(incUnknown.contains(instrument.symbol())) {
+					return true;
+				}
+				
+				if(exUnknown.contains(instrument.symbol())) {
+					return false;
+				}
+
+				if (incInsts.contains(instrument)) {
+					return true;
+				}
+
+				if (exInsts.contains(instrument)) {
+					return false;
+				}
+
+				if (instrument.exchange().isNull()) {
+					// TODO FIXME
+					log.debug("Exchange is NULL for " + instrument.symbol() + " "
+							+ instrument.exchangeCode());
+					return false;
+				}
+
+				if (incExchanges.contains(instrument.exchange())) {
+					return true;
+				}
+
+				if (exExchanges.contains(instrument.exchange())) {
+					return false;
+				}
+
+				return false;
+			}
+
+			@Override
+			public String expression() {
+				throw new UnsupportedOperationException();
+			}
 			
-			if(incUnknown.contains(instrument.symbol())) {
-				return true;
-			}
-			
-			if(exUnknown.contains(instrument.symbol())) {
-				return false;
-			}
-
-			if (incInsts.contains(instrument)) {
-				return true;
-			}
-
-			if (exInsts.contains(instrument)) {
-				return false;
-			}
-
-			if (instrument.exchange().isNull()) {
-				// TODO FIXME
-				log.debug("Exchange is NULL for " + instrument.symbol() + " "
-						+ instrument.exchangeCode());
-				return false;
-			}
-
-			if (incExchanges.contains(instrument.exchange())) {
-				return true;
-			}
-
-			if (exExchanges.contains(instrument.exchange())) {
-				return false;
-			}
-
-			return false;
 		}
 		
 		@Override
@@ -332,12 +351,12 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 		
 		@Override
 		public void filter(Filter filter) {
-			throw new UnsupportedOperationException();
+			this.filter = filter;
 		}
 		
 		@Override
 		public Filter filter() {
-			return this;
+			return filter;
 		}
 
 		@Override
@@ -407,7 +426,6 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 				}
 				
 			}
-			
 
 			agentHandler.updateAgent(this);
 
@@ -570,11 +588,22 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 	@Override
 	public Market snapshot(final Instrument instrument) {
 		
-		if(marketMap.containsKey(instrument)) {
-			return marketMap.get(instrument).freeze();
+		if(marketMap.containsKey(instrument.id())) {
+			return marketMap.get(instrument.id()).freeze();
 		}
 		
 		return Market.NULL;
+	}
+	
+	@Override
+	public Market snapshot(final Identifier instID) {
+		
+		if(marketMap.containsKey(instID)) {
+			return marketMap.get(instID).freeze();
+		}
+		
+		return Market.NULL;
+		
 	}
 	
 	@Override
@@ -605,7 +634,7 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 
 			agents.put(agent, new Boolean(false));
 
-			for (final Entry<Instrument, MarketDo> e : marketMap.entrySet()) {
+			for (final Entry<Identifier, MarketDo> e : marketMap.entrySet()) {
 				e.getValue().attachAgent(agent);
 			}
 
@@ -625,7 +654,7 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 
 		} else {
 
-			for (final Entry<Instrument, MarketDo> e : marketMap.entrySet()) {
+			for (final Entry<Identifier, MarketDo> e : marketMap.entrySet()) {
 				e.getValue().updateAgent(agent);
 			}
 
@@ -646,7 +675,7 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 
 		agents.remove(agent);
 
-		for (final Entry<Instrument, MarketDo> e : marketMap.entrySet()) {
+		for (final Entry<Identifier, MarketDo> e : marketMap.entrySet()) {
 			e.getValue().detachAgent(agent);
 		}
 
@@ -661,7 +690,7 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 
 	@Override
 	public boolean isRegistered(final Instrument instrument) {
-		return marketMap.containsKey(instrument);
+		return marketMap.containsKey(instrument.id());
 	}
 
 	@SuppressWarnings("unchecked")
@@ -669,7 +698,7 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 	public <S extends Instrument, V extends Value<V>> V take(
 			final S instrument, final MarketField<V> field) {
 
-		final MarketDo market = marketMap.get(instrument);
+		final MarketDo market = marketMap.get(instrument.id());
 
 		if (market == null) {
 			return MarketConst.NULL_MARKET.get(field).freeze();
@@ -708,13 +737,13 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 			return;
 		}
 
-		MarketDo market = marketMap.get(instrument);
+		MarketDo market = marketMap.get(instrument.id());
 
 		if (!isValid(market)) {
 			register(instrument);
-			market = marketMap.get(instrument);
+			market = marketMap.get(instrument.id());
 
-			//log.debug("Registering new instrument " + instrument.symbol());
+			// log.debug("Registering new instrument " + instrument.symbol());
 		}
 
 		market.runSafe(safeMake, message);
@@ -757,27 +786,27 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 			return false;
 		}
 
-		MarketDo market = marketMap.get(instrument);
+		MarketDo market = marketMap.get(instrument.id());
 
 		final boolean wasAdded = (market == null);
 
 		while (market == null) {
 			market = factory.newMarket(instrument);
 			market.setInstrument(instrument);
-			marketMap.putIfAbsent(instrument, market);
-			market = marketMap.get(instrument);
+			marketMap.putIfAbsent(instrument.id(), market);
+			market = marketMap.get(instrument.id());
 		}
 
 		if (wasAdded) {
 
 			for (final FrameworkAgent<?> agent : agents.keySet()) {
-				marketMap.get(instrument).attachAgent(agent);
+				marketMap.get(instrument.id()).attachAgent(agent);
 			}
 
-			symbolMap.put(instrument.symbol(), instrument);
+			symbolMap.put(instrument.symbol(), instrument.id());
 			
 		} else {
-			log.warn("already registered : {}", instrument);
+			log.warn("already registered : {}", instrument.id());
 		}
 
 		return wasAdded;
@@ -790,14 +819,14 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 			return false;
 		}
 
-		final MarketDo market = marketMap.remove(instrument);
+		final MarketDo market = marketMap.remove(instrument.id());
 
 		final boolean wasRemoved = (market != null);
 
 		if (wasRemoved) {
 
 			for (final FrameworkAgent<?> agent : agents.keySet()) {
-				marketMap.get(instrument).detachAgent(agent);
+				marketMap.get(instrument.id()).detachAgent(agent);
 			}
 
 			symbolMap.remove(instrument.symbol());

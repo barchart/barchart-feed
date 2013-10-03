@@ -3,7 +3,6 @@ package com.barchart.feed.api.model.meta;
 import java.util.Collections;
 import java.util.List;
 
-import com.barchart.feed.api.filter.Filterable.MetaType;
 import com.barchart.feed.api.util.Identifier;
 import com.barchart.util.value.api.Fraction;
 import com.barchart.util.value.api.Price;
@@ -87,7 +86,7 @@ public interface Instrument extends Comparable<Instrument>, Metadata {
 
 	}
 	
-	//InstrumentGUID GUID();
+	Identifier id();
 
 	String marketGUID();
 
