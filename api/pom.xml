@@ -31,6 +31,12 @@
 			<version>[8-SNAPSHOT,9-SNAPSHOT)</version>
 		</dependency>
 
+		<dependency>
+			<groupId>com.barchart.util</groupId>
+			<artifactId>barchart-util-observer</artifactId>
+			<version>1.0.1-SNAPSHOT</version>
+		</dependency>
+
 	</dependencies>
 
 </project>
