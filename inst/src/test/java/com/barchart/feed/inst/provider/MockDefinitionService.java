@@ -24,11 +24,11 @@ import com.barchart.feed.inst.InstrumentFuture;
 import com.barchart.feed.inst.InstrumentFutureMap;
 import com.barchart.feed.inst.InstrumentService;
 import com.barchart.util.value.api.Factory;
-import com.barchart.util.value.api.FactoryLoader;
+import com.barchart.util.value.impl.FactoryImpl;
 
 public class MockDefinitionService implements InstrumentService<CharSequence> {
 	
-	private static final Factory factory = FactoryLoader.load();
+	private static final Factory factory = new FactoryImpl();
 	
 	@SuppressWarnings("unused")
 	private static final Logger log = LoggerFactory

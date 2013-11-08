@@ -1,15 +1,16 @@
 package com.barchart.feed.inst.provider;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.api.util.Identifier;
 import com.barchart.util.value.api.Factory;
-import com.barchart.util.value.api.FactoryLoader;
+import com.barchart.util.value.impl.FactoryImpl;
 
 public class MockInstrumentFactory {
 
-	private static final Factory valFactory = FactoryLoader.load();
+	private static final Factory valFactory = new FactoryImpl();
 	
 	public static Instrument newInstrument() {
 		

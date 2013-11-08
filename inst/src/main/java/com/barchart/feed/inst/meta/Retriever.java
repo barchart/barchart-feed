@@ -3,7 +3,7 @@ package com.barchart.feed.inst.meta;
 import java.util.Collection;
 
 import com.barchart.feed.api.model.meta.Metadata;
-import com.barchart.feed.api.util.Observer;
+import com.barchart.util.observer.Observer;
 
 /**
  * Service which executes exact match metadata lookups on an observer.

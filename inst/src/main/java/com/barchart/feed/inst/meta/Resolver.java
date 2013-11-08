@@ -3,7 +3,7 @@ package com.barchart.feed.inst.meta;
 import java.util.List;
 
 import com.barchart.feed.api.model.meta.Metadata;
-import com.barchart.feed.api.util.Observer;
+import com.barchart.util.observer.Observer;
 
 /**
  * 

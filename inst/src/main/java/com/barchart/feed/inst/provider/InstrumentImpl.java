@@ -15,16 +15,16 @@ import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.api.util.Identifier;
 import com.barchart.feed.inst.participant.InstrumentState.State;
 import com.barchart.util.value.api.Factory;
-import com.barchart.util.value.api.FactoryLoader;
 import com.barchart.util.value.api.Fraction;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Schedule;
 import com.barchart.util.value.api.Size;
 import com.barchart.util.value.api.TimeInterval;
+import com.barchart.util.value.impl.FactoryImpl;
 
 class InstrumentImpl extends InstrumentBase implements Instrument {
 	
-	private static final Factory factory = FactoryLoader.load();
+	private static final Factory factory = new FactoryImpl();
 	
 	protected volatile InstrumentDefinition def = 
 			InstrumentDefinition.getDefaultInstance();
