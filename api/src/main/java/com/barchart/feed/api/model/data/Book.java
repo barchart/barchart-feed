@@ -223,11 +223,6 @@ public interface Book extends MarketData<Book>, ChangeSet<Book.Component> {
 		}
 
 		@Override
-		public Book freeze() {
-			return this;
-		}
-		
-		@Override
 		public String toString() {
 			return "NULL BOOK";
 		}

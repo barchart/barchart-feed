@@ -1,18 +1,18 @@
 package com.barchart.feed.base.provider;
 
 import com.barchart.util.value.api.Factory;
-import com.barchart.util.value.api.FactoryLoader;
 import com.barchart.util.value.api.Fraction;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Size;
 import com.barchart.util.value.api.Time;
+import com.barchart.util.value.impl.FactoryImpl;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
 import com.barchart.util.values.api.TimeValue;
 
 public final class ValueConverter {
 
-	private static final Factory factory = FactoryLoader.load();
+	private static final Factory factory = new FactoryImpl();
 	
 	public static Price price(final PriceValue value) {
 		return factory.newPrice(value.mantissa(), value.exponent());

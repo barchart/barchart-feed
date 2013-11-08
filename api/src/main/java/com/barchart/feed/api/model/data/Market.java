@@ -116,11 +116,6 @@ public interface Market extends MarketData<Market> {
 		}
 
 		@Override
-		public Market freeze() {
-			return this;
-		}
-
-		@Override
 		public boolean isNull() {
 			return true;
 		}

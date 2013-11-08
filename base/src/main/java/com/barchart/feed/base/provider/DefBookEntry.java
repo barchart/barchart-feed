@@ -7,9 +7,10 @@
  */
 package com.barchart.feed.base.provider;
 
-import static com.barchart.feed.base.book.enums.MarketBookAction.*;
-import static com.barchart.feed.base.provider.MarketConst.*;
-import static com.barchart.util.values.provider.ValueConst.*;
+import static com.barchart.feed.base.book.enums.MarketBookAction.NOOP;
+import static com.barchart.feed.base.provider.MarketConst.NULL_BOOK_ENTRY;
+import static com.barchart.util.values.provider.ValueConst.NULL_PRICE;
+import static com.barchart.util.values.provider.ValueConst.NULL_SIZE;
 
 import com.barchart.feed.api.model.data.Book;
 import com.barchart.feed.api.model.data.Book.Entry;
@@ -18,9 +19,9 @@ import com.barchart.feed.base.book.api.MarketDoBookEntry;
 import com.barchart.feed.base.book.enums.MarketBookAction;
 import com.barchart.util.math.MathExtra;
 import com.barchart.util.value.api.Factory;
-import com.barchart.util.value.api.FactoryLoader;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Size;
+import com.barchart.util.value.impl.FactoryImpl;
 import com.barchart.util.value.impl.ValueConst;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
@@ -30,7 +31,7 @@ import com.barchart.util.values.provider.ValueFreezer;
 public class DefBookEntry extends ValueFreezer<MarketBookEntry> implements
 		MarketDoBookEntry {
 	
-	private static final Factory factory = FactoryLoader.load();
+	private static final Factory factory = new FactoryImpl();
 
 	private final static byte nulAct = NOOP.ord;
 	private final static byte nulSide = Book.Side.NULL.ord;

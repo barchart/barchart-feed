@@ -27,9 +27,6 @@ public interface BookSet extends MarketData<BookSet>, ChangeSet<Book.Type> {
 	Time updated();
 
 	@Override
-	BookSet freeze();
-	
-	@Override
 	boolean isNull();
 	
 	BookSet NULL = new BookSet() {
@@ -47,11 +44,6 @@ public interface BookSet extends MarketData<BookSet>, ChangeSet<Book.Type> {
 		@Override
 		public Time updated() {
 			return Time.NULL;
-		}
-
-		@Override
-		public BookSet freeze() {
-			return this;
 		}
 
 		@Override

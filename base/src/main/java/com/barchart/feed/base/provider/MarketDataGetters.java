@@ -28,7 +28,7 @@ public final class MarketDataGetters {
 
 					@Override
 					public Market get(final Market market) {
-						return market.freeze();
+						return market;
 					}
 			
 				});
@@ -37,7 +37,7 @@ public final class MarketDataGetters {
 
 					@Override
 					public Trade get(final Market market) {
-						return market.trade().freeze();
+						return market.trade();
 					}
 					
 				});
@@ -46,7 +46,7 @@ public final class MarketDataGetters {
 
 					@Override
 					public Book get(final Market market) {
-						return market.book().freeze();
+						return market.book();
 					}
 					
 				});
@@ -64,7 +64,7 @@ public final class MarketDataGetters {
 					
 					@Override
 					public Cuvol get(final Market market) {
-						return market.cuvol().freeze();
+						return market.cuvol();
 					}
 					
 				});
@@ -73,7 +73,7 @@ public final class MarketDataGetters {
 
 					@Override
 					public Session get(final Market market) {
-						return market.session().freeze();
+						return market.session();
 					}
 					
 				});

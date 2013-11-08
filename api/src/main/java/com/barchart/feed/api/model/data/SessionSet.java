@@ -27,9 +27,6 @@ public interface SessionSet extends MarketData<SessionSet>, ChangeSet<Type> {
 	Time updated();
 
 	@Override
-	SessionSet freeze();
-	
-	@Override
 	boolean isNull();
 	
 	SessionSet NULL = new SessionSet() {
@@ -47,11 +44,6 @@ public interface SessionSet extends MarketData<SessionSet>, ChangeSet<Type> {
 		@Override
 		public Time updated() {
 			return Time.NULL;
-		}
-
-		@Override
-		public SessionSet freeze() {
-			return this;
 		}
 
 		@Override

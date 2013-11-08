@@ -57,11 +57,6 @@ class FrozenSessionSet implements SessionSet {
 	}
 
 	@Override
-	public SessionSet freeze() {
-		return this;
-	}
-
-	@Override
 	public Set<Type> change() {
 		return EnumSet.copyOf(changeSet);
 	}

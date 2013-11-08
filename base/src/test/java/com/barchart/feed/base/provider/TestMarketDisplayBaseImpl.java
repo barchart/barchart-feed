@@ -19,14 +19,14 @@ import org.junit.Test;
 
 import com.barchart.feed.base.market.api.MarketDisplay;
 import com.barchart.util.value.api.Factory;
-import com.barchart.util.value.api.FactoryLoader;
 import com.barchart.util.value.api.Fraction;
+import com.barchart.util.value.impl.FactoryImpl;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.TimeValue;
 
 public class TestMarketDisplayBaseImpl {
 	
-	private static final Factory factory = FactoryLoader.load();
+	private static final Factory factory = new FactoryImpl();
 	
 	public static MarketDisplay display = new MarketDisplayBaseImpl();
 	

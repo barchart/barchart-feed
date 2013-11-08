@@ -43,6 +43,11 @@ public interface Cuvol extends MarketData<Cuvol> {
 				return "NULL CUVOL ENTRY";
 			}
 
+			@Override
+			public boolean isNull() {
+				return true;
+			}
+
 		};
 
 	}
@@ -92,11 +97,6 @@ public interface Cuvol extends MarketData<Cuvol> {
 			return Entry.NULL;
 		}
 
-		@Override
-		public Cuvol freeze() {
-			return this;
-		}
-		
 		@Override
 		public String toString() {
 			return "NULL CUVOL";

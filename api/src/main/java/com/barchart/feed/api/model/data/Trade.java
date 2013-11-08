@@ -140,11 +140,6 @@ public interface Trade extends MarketData<Trade>, Tuple {
 		}
 
 		@Override
-		public Trade freeze() {
-			return this;
-		}
-		
-		@Override
 		public String toString() {
 			return "NULL TRADE";
 		}
