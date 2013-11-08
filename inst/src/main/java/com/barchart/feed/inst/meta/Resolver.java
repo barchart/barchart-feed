@@ -2,8 +2,9 @@ package com.barchart.feed.inst.meta;
 
 import java.util.List;
 
+import rx.Observer;
+
 import com.barchart.feed.api.model.meta.Metadata;
-import com.barchart.util.observer.Observer;
 
 /**
  * 

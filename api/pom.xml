@@ -32,9 +32,9 @@
 		</dependency>
 
 		<dependency>
-			<groupId>com.barchart.util</groupId>
-			<artifactId>barchart-util-observer</artifactId>
-			<version>[1.0-SNAPSHOT, 1.1-SNAPSHOT)</version>
+		   	<groupId>com.netflix.rxjava</groupId>
+		   	<artifactId>rxjava-core</artifactId>
+		   	<version>[0.14-SNAPSHOT,0.15-SNAPSHOT)</version>
 		</dependency>
 
 	</dependencies>
