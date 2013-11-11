@@ -7,6 +7,7 @@ import org.openfeed.proto.inst.InstrumentDefinition;
 
 import com.barchart.feed.api.model.meta.Exchange;
 import com.barchart.feed.api.model.meta.Instrument;
+import com.barchart.feed.api.model.meta.id.InstrumentID;
 import com.barchart.feed.api.util.Identifier;
 import com.barchart.util.value.api.Fraction;
 import com.barchart.util.value.api.Price;
@@ -146,8 +147,8 @@ public interface InstrumentState extends Instrument, Resettable, Instrumentable 
 		}
 
 		@Override
-		public Identifier id() {
-			return Identifier.NULL;
+		public InstrumentID id() {
+			return InstrumentID.NULL;
 		}
 
 		@Override

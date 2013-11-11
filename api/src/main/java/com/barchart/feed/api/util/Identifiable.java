@@ -1,5 +1,6 @@
 package com.barchart.feed.api.util;
 
+@Deprecated
 public interface Identifiable {
 
 	/**

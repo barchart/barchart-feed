@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.barchart.feed.api.model.meta.Exchange;
 import com.barchart.feed.api.model.meta.Instrument;
+import com.barchart.feed.api.model.meta.id.InstrumentID;
 import com.barchart.feed.api.util.Identifier;
 import com.barchart.util.value.api.Fraction;
 import com.barchart.util.value.api.Price;
@@ -95,8 +96,8 @@ public abstract class InstrumentBase implements Instrument {
 	}
 	
 	@Override
-	public Identifier id() {
-		return new IdentifierImpl(marketGUID());
+	public InstrumentID id() {
+		return new InstrumentID(marketGUID());
 	}
 	
 	@Override

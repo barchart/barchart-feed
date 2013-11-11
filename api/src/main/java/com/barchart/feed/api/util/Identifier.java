@@ -5,6 +5,7 @@ import com.barchart.util.value.api.Existential;
 /**
  * Identifier, unique in a given scope.
  */
+@Deprecated
 public interface Identifier extends Comparable<Identifier>, Existential {
 	
 	/**

@@ -2,7 +2,8 @@ package com.barchart.feed.inst.provider;
 
 import com.barchart.feed.api.util.Identifier;
 
-public class IdentifierImpl implements Identifier {
+@Deprecated
+class IdentifierImpl implements Identifier {
 
 	private final String id;
 	

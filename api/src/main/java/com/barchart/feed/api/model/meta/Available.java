@@ -1,7 +1,5 @@
 package com.barchart.feed.api.model.meta;
 
-import com.barchart.feed.api.filter.Filterable.MetaType;
-import com.barchart.feed.api.util.Identifier;
 
 public interface Available extends Metadata {
 
@@ -15,11 +13,6 @@ public interface Available extends Metadata {
 		@Override
 		public boolean isNull() {
 			return true;
-		}
-
-		@Override
-		public Identifier id() {
-			return Identifier.NULL;
 		}
 
 		@Override

@@ -23,6 +23,7 @@ import com.barchart.feed.api.model.data.MarketData;
 import com.barchart.feed.api.model.meta.Exchange;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.api.model.meta.Metadata;
+import com.barchart.feed.api.model.meta.id.InstrumentID;
 import com.barchart.feed.api.util.Identifier;
 import com.barchart.feed.base.market.api.MarketDo;
 import com.barchart.feed.base.market.api.MarketFactory;
@@ -54,11 +55,11 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 	protected final InstrumentService<String> instLookup;
 	protected final SubscriptionHandler subHandler;
 
-	protected final ConcurrentMap<Identifier, MarketDo> marketMap = 
-			new ConcurrentHashMap<Identifier, MarketDo>();
+	protected final ConcurrentMap<InstrumentID, MarketDo> marketMap = 
+			new ConcurrentHashMap<InstrumentID, MarketDo>();
 	
-	protected final ConcurrentMap<String, Identifier> symbolMap = 
-			new ConcurrentHashMap<String, Identifier>();
+	protected final ConcurrentMap<String, InstrumentID> symbolMap = 
+			new ConcurrentHashMap<String, InstrumentID>();
 
 	private final ConcurrentMap<FrameworkAgent<?>, Boolean> agents = 
 			new ConcurrentHashMap<FrameworkAgent<?>, Boolean>();
@@ -634,7 +635,7 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 
 			agents.put(agent, new Boolean(false));
 
-			for (final Entry<Identifier, MarketDo> e : marketMap.entrySet()) {
+			for (final Entry<InstrumentID, MarketDo> e : marketMap.entrySet()) {
 				e.getValue().attachAgent(agent);
 			}
 
@@ -654,7 +655,7 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 
 		} else {
 
-			for (final Entry<Identifier, MarketDo> e : marketMap.entrySet()) {
+			for (final Entry<InstrumentID, MarketDo> e : marketMap.entrySet()) {
 				e.getValue().updateAgent(agent);
 			}
 
@@ -675,7 +676,7 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 
 		agents.remove(agent);
 
-		for (final Entry<Identifier, MarketDo> e : marketMap.entrySet()) {
+		for (final Entry<InstrumentID, MarketDo> e : marketMap.entrySet()) {
 			e.getValue().detachAgent(agent);
 		}
 

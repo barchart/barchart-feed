@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.barchart.feed.api.model.meta.Exchange;
-import com.barchart.feed.api.util.Identifier;
+import com.barchart.feed.api.model.meta.id.ExchangeID;
 
 public final class Exchanges {
 	
@@ -265,54 +265,18 @@ public final class Exchanges {
 		
 	}
 	
-	private static class ExchangeIdentifier implements Identifier {
-		
-		private final String id;
-		
-		ExchangeIdentifier(final String id) {
-			this.id = id.intern();
-		}
-		
-		@Override
-		public String toString() {
-			return id;
-		}
-
-		@Override
-		public int compareTo(Identifier o) {
-			return id.compareTo(o.toString());
-		}
-		
-		@Override
-		public boolean equals(final Object o) {
-			
-			if(!(o instanceof Identifier)) {
-				return false;
-			}
-			
-			return id.equals(((Identifier)o).toString());
-			
-		}
-		
-		@Override
-		public boolean isNull() {
-			return false;  // TODO FIXME
-		}
-		
-	}
-	
 	private static class ExchangeImpl implements Exchange {
 		
 		private final String desc;
 		private final String zone;
-		private final Identifier id;
+		private final ExchangeID id;
 		
 		ExchangeImpl(final String desc, final String code, 
 				final String zone) {
 			
 			this.desc = desc.intern();
 			this.zone = zone;
-			id = new ExchangeIdentifier(code);
+			id = new ExchangeID(code);
 			
 		}
 
@@ -340,7 +304,7 @@ public final class Exchanges {
 		}
 
 		@Override
-		public Identifier id() {
+		public ExchangeID id() {
 			return id;
 		}
 

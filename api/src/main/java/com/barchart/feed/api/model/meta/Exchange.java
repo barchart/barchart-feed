@@ -1,10 +1,13 @@
 package com.barchart.feed.api.model.meta;
 
-import com.barchart.feed.api.util.Identifier;
+import com.barchart.feed.api.model.meta.id.ExchangeID;
+
 
 public interface Exchange extends Metadata {
 	
 	String timeZoneName();
+	
+	ExchangeID id();
 	
 	Exchange NULL = new Exchange() {
 
@@ -14,13 +17,13 @@ public interface Exchange extends Metadata {
 		}
 		
 		@Override
+		public ExchangeID id() {
+			return ExchangeID.NULL;
+		}
+		
+		@Override
 		public boolean isNull() {
 			return true;
-		}
-
-		@Override
-		public Identifier id() {
-			return Identifier.NULL;
 		}
 
 		@Override
@@ -37,6 +40,8 @@ public interface Exchange extends Metadata {
 		public String toString() {
 			return "NULL EXCHANGE";
 		}
+
+		
 
 	};
 	
