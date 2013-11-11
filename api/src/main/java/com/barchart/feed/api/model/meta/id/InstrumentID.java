@@ -4,7 +4,7 @@ import com.barchart.util.value.api.identifier.Identifier;
 
 public class InstrumentID extends Identifier<String, InstrumentID> {
 
-	public InstrumentID(String id) {
+	public InstrumentID(final String id) {
 		super(id, InstrumentID.class);
 	}
 	
