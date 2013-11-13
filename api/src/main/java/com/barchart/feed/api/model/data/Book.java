@@ -122,15 +122,21 @@ public interface Book extends MarketData<Book>, ChangeSet<Book.Component> {
 	enum Side {
 
 		/** buy side */
-		BID, //
+		BID(1), //
 
 		/** offer side */
-		ASK, //
+		ASK(-1), //
 
 		/** ??? kill */
-		NULL
+		NULL(0)
 
 		;
+		
+		public final int sign;
+		
+		private Side(final int sign) {
+			this.sign = sign;
+		}
 
 		public final byte ord = (byte) ordinal();
 
@@ -139,7 +145,7 @@ public interface Book extends MarketData<Book>, ChangeSet<Book.Component> {
 		public static final Side fromOrd(final byte ord) {
 			return ENUM_VALUES[ord];
 		}
-
+		
 	}
 
 	/**
