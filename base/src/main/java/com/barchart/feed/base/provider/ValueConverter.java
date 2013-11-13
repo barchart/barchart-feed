@@ -1,11 +1,11 @@
 package com.barchart.feed.base.provider;
 
+import com.barchart.util.value.FactoryImpl;
 import com.barchart.util.value.api.Factory;
 import com.barchart.util.value.api.Fraction;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Size;
 import com.barchart.util.value.api.Time;
-import com.barchart.util.value.impl.FactoryImpl;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
 import com.barchart.util.values.api.TimeValue;

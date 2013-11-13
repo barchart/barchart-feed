@@ -18,9 +18,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.barchart.feed.base.market.api.MarketDisplay;
+import com.barchart.util.value.FactoryImpl;
 import com.barchart.util.value.api.Factory;
 import com.barchart.util.value.api.Fraction;
-import com.barchart.util.value.impl.FactoryImpl;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.TimeValue;
 

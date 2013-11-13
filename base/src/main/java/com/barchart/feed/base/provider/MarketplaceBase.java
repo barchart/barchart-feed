@@ -24,7 +24,6 @@ import com.barchart.feed.api.model.meta.Exchange;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.api.model.meta.Metadata;
 import com.barchart.feed.api.model.meta.id.InstrumentID;
-import com.barchart.feed.api.util.Identifier;
 import com.barchart.feed.base.market.api.MarketDo;
 import com.barchart.feed.base.market.api.MarketFactory;
 import com.barchart.feed.base.market.api.MarketMakerProvider;
@@ -597,7 +596,7 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 	}
 	
 	@Override
-	public Market snapshot(final Identifier instID) {
+	public Market snapshot(final InstrumentID instID) {
 		
 		if(marketMap.containsKey(instID)) {
 			return marketMap.get(instID).freeze();

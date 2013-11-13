@@ -4,7 +4,6 @@ import java.util.Collections;
 import java.util.List;
 
 import com.barchart.feed.api.model.meta.id.InstrumentID;
-import com.barchart.feed.api.util.Identifier;
 import com.barchart.util.value.api.Fraction;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Schedule;
@@ -125,7 +124,7 @@ public interface Instrument extends Comparable<Instrument>, Metadata {
 
 	String timeZoneName();
 
-	List<Identifier> componentLegs();
+	List<InstrumentID> componentLegs();
 
 	/**
 	 * Canonical null instance.
@@ -238,7 +237,7 @@ public interface Instrument extends Comparable<Instrument>, Metadata {
 		}
 
 		@Override
-		public List<Identifier> componentLegs() {
+		public List<InstrumentID> componentLegs() {
 			return Collections.emptyList();
 		}
 

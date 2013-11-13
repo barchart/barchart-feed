@@ -8,7 +8,6 @@ import org.openfeed.proto.inst.InstrumentDefinition;
 import com.barchart.feed.api.model.meta.Exchange;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.api.model.meta.id.InstrumentID;
-import com.barchart.feed.api.util.Identifier;
 import com.barchart.util.value.api.Fraction;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Schedule;
@@ -132,7 +131,7 @@ public interface InstrumentState extends Instrument, Resettable, Instrumentable 
 		}
 
 		@Override
-		public List<Identifier> componentLegs() {
+		public List<InstrumentID> componentLegs() {
 			return Collections.emptyList();
 		}
 

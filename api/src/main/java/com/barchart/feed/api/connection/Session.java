@@ -2,8 +2,6 @@ package com.barchart.feed.api.connection;
 
 import aQute.bnd.annotation.ProviderType;
 
-import com.barchart.feed.api.util.Identifiable;
-import com.barchart.feed.api.util.Identifier;
 import com.barchart.util.anno.Mutable;
 
 /**
@@ -13,13 +11,12 @@ import com.barchart.util.anno.Mutable;
  */
 @Mutable
 @ProviderType
-public interface Session extends Identifiable {
+public interface Session {
 	
 	/**
 	 * Unique session token GUID, used to authenticate additional services.
 	 */
-	@Override
-	Identifier id();
+	SessionID id();
 
 	/**
 	 * Supported session states.
