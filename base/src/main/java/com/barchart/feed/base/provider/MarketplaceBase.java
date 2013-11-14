@@ -494,7 +494,7 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 		if (!stuffToAdd.isEmpty()) {
 			return new SubscriptionBase(interest, stuffToAdd);
 		} else {
-			return Subscription.NULL_SUBSCRIPTION;
+			return Subscription.NULL;
 		}
 
 	}
@@ -519,7 +519,7 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 			final String interest) {
 
 		if (!agentMap.containsKey(agent)) {
-			return Subscription.NULL_SUBSCRIPTION;
+			return Subscription.NULL;
 		}
 
 		final Set<SubscriptionType> oldSubs = agentMap.remove(agent);
@@ -536,7 +536,7 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 		if (!stuffToRemove.isEmpty()) {
 			return new SubscriptionBase(interest, stuffToRemove);
 		} else {
-			return Subscription.NULL_SUBSCRIPTION;
+			return Subscription.NULL;
 		}
 
 	}

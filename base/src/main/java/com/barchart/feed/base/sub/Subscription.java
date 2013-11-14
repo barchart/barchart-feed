@@ -24,7 +24,7 @@ public interface Subscription {
 	String interest();
 	String encode();
 	
-	public static Subscription NULL_SUBSCRIPTION = new Subscription() {
+	public static Subscription NULL = new Subscription() {
 
 		@Override
 		public boolean isNull() {
