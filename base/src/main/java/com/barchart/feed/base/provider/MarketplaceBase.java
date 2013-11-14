@@ -492,7 +492,7 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 		stuffToAdd.removeAll(aggregate(interest));
 
 		if (!stuffToAdd.isEmpty()) {
-			return new SubscriptionBase(interest, stuffToAdd);
+			return new SubscriptionBase(interest, Subscription.Type.INSTRUMENT, stuffToAdd);
 		} else {
 			return Subscription.NULL;
 		}
@@ -534,7 +534,7 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 		stuffToRemove.removeAll(aggregate(interest));
 
 		if (!stuffToRemove.isEmpty()) {
-			return new SubscriptionBase(interest, stuffToRemove);
+			return new SubscriptionBase(interest, Subscription.Type.INSTRUMENT, stuffToRemove);
 		} else {
 			return Subscription.NULL;
 		}

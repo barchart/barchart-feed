@@ -8,6 +8,7 @@ import java.util.Set;
 
 import com.barchart.feed.base.participant.FrameworkAgent;
 import com.barchart.feed.base.sub.Subscription;
+import com.barchart.feed.base.sub.Subscription.Type;
 import com.barchart.feed.base.sub.SubscriptionType;
 
 /*
@@ -49,7 +50,7 @@ public class SubManager {
 		stuffToAdd.removeAll(aggregate(interest));
 		
 		if(!stuffToAdd.isEmpty()) {
-			return new SubscriptionBase(interest, stuffToAdd);
+			return new SubscriptionBase(interest, Type.INSTRUMENT, stuffToAdd);
 		} else {
 			return Subscription.NULL;
 		}
@@ -91,7 +92,7 @@ public class SubManager {
 		stuffToRemove.removeAll(aggregate(interest));
 		
 		if(!stuffToRemove.isEmpty()) {
-			return new SubscriptionBase(interest, stuffToRemove);
+			return new SubscriptionBase(interest, Type.INSTRUMENT, stuffToRemove);
 		} else {
 			return Subscription.NULL;
 		}

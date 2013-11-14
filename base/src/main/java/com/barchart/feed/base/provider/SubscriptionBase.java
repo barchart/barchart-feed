@@ -10,8 +10,10 @@ public class SubscriptionBase implements Subscription {
 	
 	private final Set<SubscriptionType> subTypes;
 	private final String interest;
+	private final Subscription.Type type;
 	
-	SubscriptionBase(final String interest, final Set<SubscriptionType> types) {
+	SubscriptionBase(final String interest, Subscription.Type type, 
+			final Set<SubscriptionType> types) {
 		
 		if(interest == null || types == null || types.isEmpty()) {
 			throw new IllegalArgumentException();
@@ -19,8 +21,14 @@ public class SubscriptionBase implements Subscription {
 		
 		this.subTypes = EnumSet.copyOf(types);
 		this.interest = interest;
+		this.type = type;
 	}
 
+	@Override
+	public Type type() {
+		return type;
+	}
+	
 	@Override
 	public Set<SubscriptionType> types() {
 		return subTypes;

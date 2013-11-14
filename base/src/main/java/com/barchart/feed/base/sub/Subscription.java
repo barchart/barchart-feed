@@ -14,6 +14,12 @@ import java.util.Set;
  *
  */
 public interface Subscription {
+	
+	enum Type {
+		NULL, INSTRUMENT, EXCHANGE
+	}
+	
+	Type type();
 
 	boolean isNull();
 	
@@ -26,6 +32,11 @@ public interface Subscription {
 	
 	public static Subscription NULL = new Subscription() {
 
+		@Override
+		public Type type() {
+			return Type.NULL;
+		}
+		
 		@Override
 		public boolean isNull() {
 			return true;
