@@ -1,8 +1,8 @@
 package com.barchart.feed.api.consumer;
 
 import rx.Observable;
-import rx.Observer;
 
+import com.barchart.feed.api.MarketObserver;
 import com.barchart.feed.api.connection.Connection;
 import com.barchart.feed.api.connection.ConnectionLifecycle;
 import com.barchart.feed.api.connection.TimestampListener;
@@ -14,9 +14,7 @@ import com.barchart.feed.api.model.meta.id.InstrumentID;
 public interface MarketService extends ConnectionLifecycle<MarketService>, 
 		MetadataService {
 	
-	// NOTE this is not quite the same pattern as rx
-	// Observers are meant to be short lived, this is a persistent callback
-	<V extends MarketData<V>> ConsumerAgent subscribe(Observer<V> callback,
+	<V extends MarketData<V>> ConsumerAgent register(MarketObserver<V> callback,
 			Class<V> clazz);
 
 	Observable<Market> snapshot(InstrumentID instrument);
@@ -41,7 +39,7 @@ public interface MarketService extends ConnectionLifecycle<MarketService>,
 
 	/**
 	 * Applications which require time-stamp or heart-beat messages from the
-	 * data server instantiate a DDF_TimestampListener and bind it to the
+	 * data server instantiate a TimestampListener and bind it to the
 	 * client.
 	 * 
 	 * @param listener
