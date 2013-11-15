@@ -18,7 +18,7 @@ import com.barchart.feed.base.book.api.MarketDoBookEntry;
 import com.barchart.feed.base.cuvol.api.MarketDoCuvolEntry;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.base.market.enums.MarketField;
-import com.barchart.feed.base.participant.AgentLifecycleHandler;
+import com.barchart.feed.base.participant.FrameworkAgentLifecycleHandler;
 import com.barchart.feed.base.provider.RegTaker;
 import com.barchart.feed.base.state.enums.MarketStateEntry;
 import com.barchart.feed.base.trade.enums.MarketTradeSequencing;
@@ -30,7 +30,7 @@ import com.barchart.util.values.api.SizeValue;
 import com.barchart.util.values.api.TimeValue;
 
 @Mutable
-public interface MarketDo extends Market, AgentLifecycleHandler {
+public interface MarketDo extends Market, FrameworkAgentLifecycleHandler {
 
 	/* OLD EVENTS */
 

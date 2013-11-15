@@ -1,8 +1,10 @@
 package com.barchart.feed.api;
 
+import rx.Observer;
+
 import com.barchart.feed.api.model.data.MarketData;
 
-public interface MarketObserver<V extends MarketData<V>> extends rx.Observer<V> {
+public interface MarketObserver<V extends MarketData<V>> extends Observer<V> {
 	
 	@Override
 	void onCompleted();

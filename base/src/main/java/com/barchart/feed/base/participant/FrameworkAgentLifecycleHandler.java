@@ -1,6 +1,6 @@
 package com.barchart.feed.base.participant;
 
-public interface AgentLifecycleHandler {
+public interface FrameworkAgentLifecycleHandler {
 
 	void attachAgent(FrameworkAgent<?> agent);
 

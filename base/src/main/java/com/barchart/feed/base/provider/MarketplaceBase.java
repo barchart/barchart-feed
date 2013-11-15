@@ -14,9 +14,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.api.Agent;
-import com.barchart.feed.api.AgentBuilder;
+import com.barchart.feed.api.AgentFactory;
 import com.barchart.feed.api.MarketObserver;
-import com.barchart.feed.api.SnapshotProvider;
 import com.barchart.feed.api.filter.Filter;
 import com.barchart.feed.api.model.data.Market;
 import com.barchart.feed.api.model.data.MarketData;
@@ -24,6 +23,7 @@ import com.barchart.feed.api.model.meta.Exchange;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.api.model.meta.Metadata;
 import com.barchart.feed.api.model.meta.id.InstrumentID;
+import com.barchart.feed.api.util.SnapshotService;
 import com.barchart.feed.base.market.api.MarketDo;
 import com.barchart.feed.base.market.api.MarketFactory;
 import com.barchart.feed.base.market.api.MarketMakerProvider;
@@ -32,8 +32,8 @@ import com.barchart.feed.base.market.api.MarketRegListener;
 import com.barchart.feed.base.market.api.MarketSafeRunner;
 import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketField;
-import com.barchart.feed.base.participant.AgentLifecycleHandler;
 import com.barchart.feed.base.participant.FrameworkAgent;
+import com.barchart.feed.base.participant.FrameworkAgentLifecycleHandler;
 import com.barchart.feed.base.provider.MarketDataGetters.MDGetter;
 import com.barchart.feed.base.sub.Subscription;
 import com.barchart.feed.base.sub.SubscriptionHandler;
@@ -44,8 +44,8 @@ import com.barchart.util.value.impl.ValueConst;
 import com.barchart.util.values.api.Value;
 
 public abstract class MarketplaceBase<Message extends MarketMessage> implements
-		MarketMakerProvider<Message>, AgentBuilder, AgentLifecycleHandler, 
-		SnapshotProvider {
+		MarketMakerProvider<Message>, FrameworkAgentLifecycleHandler,
+		SnapshotService, AgentFactory {
 
 	protected static final Logger log = LoggerFactory
 			.getLogger(MarketplaceBase.class);
@@ -99,7 +99,7 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 
 		private final Class<V> clazz;
 		private final MDGetter<V> getter;
-		private final AgentLifecycleHandler agentHandler;
+		private final FrameworkAgentLifecycleHandler agentHandler;
 		private final MarketObserver<V> callback;
 		
 		private volatile State state = State.ACTIVATED;
@@ -115,7 +115,7 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 
 		private Filter filter = new DefaultFilter();
 		
-		BaseAgent(final AgentLifecycleHandler agentHandler,
+		BaseAgent(final FrameworkAgentLifecycleHandler agentHandler,
 				final Class<V> clazz, final MDGetter<V> getter,
 				final MarketObserver<V> callback) {
 
@@ -574,7 +574,7 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 			return symbol;
 		}
 
-		/* e.g. ESH2013 */
+		/* e.g. ESH2013 -> ESH3 */
 		if (Character.isDigit(symbol.charAt(symbol.length() - 4))) {
 			return new StringBuilder(symbol).delete(symbol.length() - 4,
 					symbol.length() - 1).toString();
@@ -861,18 +861,6 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 		if (instrument.isNull()) {
 			return false;
 		}
-
-		/*
-		 * No longer validating tick size because we don't get this
-		 * information in streaming messages, only XML messages
-		 * from individual instrument subscriptions.
-		 */
-//		final Price priceStep = instrument.tickSize();
-//
-//		if (priceStep.isZero()) {
-//			log.error("priceStep.isZero() for {}", instrument.symbol());
-//			return false;
-//		}
 
 		final Fraction fraction = instrument.displayFraction();
 

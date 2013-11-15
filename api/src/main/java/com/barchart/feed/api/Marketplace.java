@@ -13,9 +13,9 @@ import com.barchart.feed.api.model.data.MarketData;
 import com.barchart.feed.api.model.data.Trade;
 import com.barchart.feed.api.model.meta.Exchange;
 import com.barchart.feed.api.model.meta.Instrument;
+import com.barchart.feed.api.model.meta.id.InstrumentID;
 
-public interface Marketplace extends ConnectionLifecycle<Marketplace>, 
-		AgentBuilder, SnapshotProvider {
+public interface Marketplace extends ConnectionLifecycle<Marketplace> {
 	
 	interface Builder {
 		
@@ -32,53 +32,19 @@ public interface Marketplace extends ConnectionLifecycle<Marketplace>,
 		Marketplace build();
 		
 	}
-
-	/* ***** ***** ConnectionLifecycle ***** ***** */
-
-	@Override
-	void startup();
-
-	@Override
-	void shutdown();
-
-	/**
-	 * Applications which need to react to the connectivity state of the feed
-	 * instantiate a FeedStateListener and bind it to the client.
-	 * 
-	 * @param listener
-	 *            The listener to be bound.
-	 */
-	@Override
-	void bindConnectionStateListener(Connection.Monitor listener);
-
-	/**
-	 * Applications which require time-stamp or heart-beat messages from the
-	 * data server instantiate a DDF_TimestampListener and bind it to the
-	 * client.
-	 * 
-	 * @param listener
-	 */
-	@Override
-	void bindTimestampListener(TimestampListener listener);
-
-	/* ***** ***** SnapshotProvider ***** ***** */
 	
-	@Override
+	/* ***** ***** Snapshot Provider ***** ***** */
+	
 	Market snapshot(Instrument instrument);
 	
-	@Override
+	Market snapshot(InstrumentID instID);
+	
 	Market snapshot(String symbol);
 	
-	/* ***** ***** AgentBuilder ***** ***** */
-
-	@Override
+	/* ***** ***** Helper subscribe methods ***** ***** */
+	
 	<V extends MarketData<V>> Agent newAgent(Class<V> clazz,
 			MarketObserver<V> callback);
-
-	/* ***** ***** Helper subscribe methods ***** ***** */
-
-	// Agent a = feed.subscribe(new String[] { "IBM", "MSFT" }, MARKET,
-	// callback);
 
 	/** FIXME document */
 	<V extends MarketData<V>> Agent subscribe(Class<V> clazz,
@@ -125,5 +91,33 @@ public interface Marketplace extends ConnectionLifecycle<Marketplace>,
 	 * @return
 	 */
 	Agent subscribeCuvol(MarketObserver<Cuvol> cuvol, String... symbols);
+	
+	/* ***** ***** ConnectionLifecycle ***** ***** */
+
+	@Override
+	void startup();
+
+	@Override
+	void shutdown();
+
+	/**
+	 * Applications which need to react to the connectivity state of the feed
+	 * instantiate a FeedStateListener and bind it to the client.
+	 * 
+	 * @param listener
+	 *            The listener to be bound.
+	 */
+	@Override
+	void bindConnectionStateListener(Connection.Monitor listener);
+
+	/**
+	 * Applications which require time-stamp or heart-beat messages from the
+	 * data server instantiate a DDF_TimestampListener and bind it to the
+	 * client.
+	 * 
+	 * @param listener
+	 */
+	@Override
+	void bindTimestampListener(TimestampListener listener);
 
 }
