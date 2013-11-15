@@ -1,7 +1,6 @@
 package com.barchart.feed.api.model.meta;
 
 import com.barchart.feed.api.filter.Filterable;
-import com.barchart.feed.api.util.Describable;
 import com.barchart.util.value.api.Existential;
 
 /**

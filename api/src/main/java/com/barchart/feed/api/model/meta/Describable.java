@@ -1,4 +1,4 @@
-package com.barchart.feed.api.util;
+package com.barchart.feed.api.model.meta;
 
 /**
  * Instance with human readable description.

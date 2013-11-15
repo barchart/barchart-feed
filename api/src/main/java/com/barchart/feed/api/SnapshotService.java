@@ -1,4 +1,4 @@
-package com.barchart.feed.api.util;
+package com.barchart.feed.api;
 
 import com.barchart.feed.api.model.data.Market;
 import com.barchart.feed.api.model.meta.Instrument;
