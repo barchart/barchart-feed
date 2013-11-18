@@ -22,7 +22,7 @@ import com.barchart.util.value.api.Schedule;
 import com.barchart.util.value.api.Size;
 import com.barchart.util.value.api.TimeInterval;
 
-class InstrumentImpl extends InstrumentBase implements Instrument {
+public class InstrumentImpl extends InstrumentBase implements Instrument {
 	
 	private static final Factory factory = new FactoryImpl();
 	
@@ -304,6 +304,11 @@ class InstrumentImpl extends InstrumentBase implements Instrument {
 		}
 		
 		return legs;
+	}
+	
+	@Override
+	public String toString() {
+		return def.toString();
 	}
 
 }
