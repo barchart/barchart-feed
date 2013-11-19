@@ -208,9 +208,7 @@ public class InstrumentImpl extends InstrumentBase implements Instrument {
 			return Fraction.NULL;
 		}
 		
-		// TODO revisit fraction, num / denom doesn't fit with base / exponent
-		return factory.newFraction(1, 
-				(int)Math.pow(def.getDisplayBase(), def.getDisplayExponent()));
+		return factory.newFraction(def.getDisplayBase(), def.getDisplayExponent());
 	}
 
 	@Override

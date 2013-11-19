@@ -1,5 +1,6 @@
 package com.barchart.feed.base.provider;
 
+import java.util.Collections;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -14,14 +15,20 @@ import org.slf4j.LoggerFactory;
 
 import rx.Observable;
 
+import com.barchart.feed.api.Agent;
 import com.barchart.feed.api.MarketObserver;
 import com.barchart.feed.api.connection.Connection.Monitor;
 import com.barchart.feed.api.connection.TimestampListener;
 import com.barchart.feed.api.consumer.ConsumerAgent;
 import com.barchart.feed.api.consumer.MarketService;
+import com.barchart.feed.api.consumer.AgentLifecycle.State;
+import com.barchart.feed.api.consumer.MetadataService.Result;
+import com.barchart.feed.api.filter.Filter;
 import com.barchart.feed.api.model.data.Market;
 import com.barchart.feed.api.model.data.MarketData;
+import com.barchart.feed.api.model.meta.Exchange;
 import com.barchart.feed.api.model.meta.Instrument;
+import com.barchart.feed.api.model.meta.Metadata;
 import com.barchart.feed.api.model.meta.id.InstrumentID;
 import com.barchart.feed.base.market.api.MarketDo;
 import com.barchart.feed.base.market.api.MarketFactory;
@@ -32,6 +39,7 @@ import com.barchart.feed.base.market.api.MarketSafeRunner;
 import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.feed.base.participant.FrameworkAgent;
+import com.barchart.feed.base.participant.FrameworkAgentLifecycleHandler;
 import com.barchart.feed.base.provider.MarketDataGetters.MDGetter;
 import com.barchart.feed.base.sub.Subscription;
 import com.barchart.feed.base.sub.SubscriptionHandler;
@@ -80,6 +88,380 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		
 		return null;
 	}
+	
+	private class BaseAgent<V extends MarketData<V>> implements
+			FrameworkAgent<V>, ConsumerAgent {
+
+		private final Class<V> clazz;
+		private final MDGetter<V> getter;
+		private final FrameworkAgentLifecycleHandler agentHandler;
+		private final MarketObserver<V> callback;
+		
+		private volatile State state = State.ACTIVATED;
+		
+		private final Set<Exchange> incExchanges = new HashSet<Exchange>();
+		private final Set<Exchange> exExchanges = new HashSet<Exchange>();
+		
+		private final Set<Instrument> incInsts = new HashSet<Instrument>();
+		private final Set<Instrument> exInsts = new HashSet<Instrument>();
+		
+		private final Set<String> incUnknown = new HashSet<String>();
+		private final Set<String> exUnknown = new HashSet<String>();
+		
+		private Filter filter = new DefaultFilter();
+		
+		BaseAgent(final FrameworkAgentLifecycleHandler agentHandler,
+				final Class<V> clazz, final MDGetter<V> getter,
+				final MarketObserver<V> callback) {
+		
+			this.agentHandler = agentHandler;
+			this.clazz = clazz;
+			this.getter = getter;
+			this.callback = callback;
+		
+		}
+		
+		@Override
+		public Agent userAgent() {
+			throw new UnsupportedOperationException();
+		}
+		
+		@Override 
+		public ConsumerAgent consumerAgent() {
+			return this;
+		}
+		
+		/* ***** ***** Framework Methods ***** ***** */
+		
+		@Override
+		public Class<V> type() {
+			return clazz;
+		}
+		
+		@Override
+		public MarketObserver<V> callback() {
+			return callback;
+		}
+		
+		@Override
+		public V data(final Market market) {
+			/* getter calling copy() */
+			return getter.get(market);
+		}
+		
+		@Override
+		public Set<String> interests() {
+		
+			final Set<String> interests = new HashSet<String>();
+		
+			for (final Exchange e : incExchanges) {
+				interests.add(e.id().toString());
+			}
+		
+			for (final Instrument i : incInsts) {
+				interests.add(i.symbol());
+			}
+		
+			return interests;
+		}
+		
+		/* ***** ***** Filter Methods ***** ***** */
+		
+		@Override
+		public boolean hasMatch(final Instrument instrument) {
+			return filter.hasMatch(instrument);
+		}
+		
+		/*
+		 * Allow for filter to be overridden. 
+		 */
+		private class DefaultFilter implements Filter {
+		
+			@Override
+			public boolean hasMatch(Instrument instrument) {
+				/* Work bottom up on the hierarchy */
+				
+				if(incUnknown.contains(instrument.symbol())) {
+					return true;
+				}
+				
+				if(exUnknown.contains(instrument.symbol())) {
+					return false;
+				}
+		
+				if (incInsts.contains(instrument)) {
+					return true;
+				}
+		
+				if (exInsts.contains(instrument)) {
+					return false;
+				}
+		
+				if (instrument.exchange().isNull()) {
+					// TODO FIXME
+					log.debug("Exchange is NULL for " + instrument.symbol() + " "
+							+ instrument.exchangeCode());
+					return false;
+				}
+		
+				if (incExchanges.contains(instrument.exchange())) {
+					return true;
+				}
+		
+				if (exExchanges.contains(instrument.exchange())) {
+					return false;
+				}
+		
+				return false;
+			}
+		
+			@Override
+			public String expression() {
+				throw new UnsupportedOperationException();
+			}
+			
+		}
+		
+		@Override
+		public String expression() {
+			throw new UnsupportedOperationException();
+		}
+		
+		/* ***** ***** Consumer Methods ***** ***** */
+		
+		@Override
+		public State state() {
+			return state;
+		}
+		
+		@Override
+		public boolean isActive() {
+			return state == State.ACTIVATED;
+		}
+		
+		@Override
+		public void activate() {
+			
+			if(state == State.TERMINATED) {
+				return;
+			}
+			
+			state = State.ACTIVATED;
+		}
+		
+		@Override
+		public void deactivate() {
+			
+			if(state == State.TERMINATED) {
+				return;
+			}
+			
+			state = State.DEACTIVATED;
+		}
+		
+		@Override
+		public synchronized void terminate() {
+			state = State.TERMINATED;
+			agentHandler.detachAgent(this);
+		}
+		
+		@Override
+		public synchronized Observable<Result<Instrument>> include(
+				final String... symbols) {
+		
+			final Set<String> symbSet = new HashSet<String>();
+			Collections.addAll(symbSet, symbols);
+		
+			final Map<String, Instrument> instMap = null; 
+					//instLookup.lookup(symbSet);
+			
+			final Set<String> newInterests = new HashSet<String>();
+		
+			for (final Entry<String, Instrument> e : instMap.entrySet()) {
+		
+				final Instrument i = e.getValue();
+		
+				if (!i.isNull()) {
+		
+					exInsts.remove(i);
+					incInsts.add(i);
+					
+					newInterests.add(formatForJERQ(i.symbol()));
+					
+				} else {
+					/*
+					 * For all failed lookups, store symbol and attempt to match 
+					 * in the hasMatch method.
+					 */
+					incUnknown.add(e.getKey().toString());
+					exUnknown.remove(e.getKey().toString());
+				}
+				
+			}
+		
+			agentHandler.updateAgent(this);
+		
+			final Set<Subscription> newSubs = subscribe(this, newInterests);
+			if (!newSubs.isEmpty()) {
+				log.debug("Sending new subs to sub handler");
+				subHandler.subscribe(newSubs);
+			}
+		
+			return null;
+			
+		}
+		
+		@Override
+		public synchronized Observable<Result<Instrument>> exclude(
+				final String... symbols) {
+		
+			final Set<String> symbSet = new HashSet<String>();
+			Collections.addAll(symbSet, symbols);
+		
+			final Map<String, Instrument> instMap = null; 
+					//instLookup.lookup(symbSet);
+		
+			final Set<String> oldInterests = new HashSet<String>();
+		
+			for (final Entry<String, Instrument> e : instMap
+					.entrySet()) {
+		
+				final Instrument i = e.getValue();
+		
+				if (!i.isNull()) {
+		
+					incInsts.remove(i);
+					exInsts.add(i);
+		
+					oldInterests.add(i.symbol());
+					
+				} else {
+					/*
+					 * For all failed lookups, store symbol and attempt to match 
+					 * in the hasMatch method.
+					 */
+					incUnknown.remove(e.getKey().toString());
+					exUnknown.add(e.getKey().toString());
+				}
+		
+			}
+		
+			agentHandler.updateAgent(this);
+		
+			final Set<Subscription> oldSubs = unsubscribe(this, oldInterests);
+			if (!oldSubs.isEmpty()) {
+				log.debug("Sending new unsubs to sub handler");
+				subHandler.unsubscribe(oldSubs);
+			}
+		
+			return null;
+			
+		}
+		
+		/* ***** ***** Filter Updatable ***** ***** */
+		
+		@Override
+		public void filter(Filter filter) {
+			this.filter = filter;
+		}
+		
+		@Override
+		public Filter filter() {
+			return filter;
+		}
+		
+		@Override
+		public synchronized void include(final Metadata... meta) {
+		
+			final Set<String> newInterests = new HashSet<String>();
+		
+			for(Metadata m : meta) {
+				
+				if(m.isNull()) {
+					continue;
+				}
+				
+				switch(m.type()) {
+				
+				default:
+					// Ignore 
+					continue;
+				case INSTRUMENT:
+					incInsts.add((Instrument)m);
+					exInsts.remove((Instrument)m);
+					newInterests.add(formatForJERQ(((Instrument)m).symbol()));
+					continue;
+				case EXCHANGE:
+					incExchanges.add((Exchange)m);
+					exExchanges.remove((Exchange)m);
+					newInterests.add(((Exchange)m).id().toString());
+				}
+			
+			}
+		
+			agentHandler.updateAgent(this);
+		
+			final Set<Subscription> newSubs = subscribe(this, newInterests);
+			if (!newSubs.isEmpty()) {
+				log.debug("Sending new subs to sub handler");
+				subHandler.subscribe(newSubs);
+			}
+		
+		}
+		
+		@Override
+		public synchronized void exclude(final Metadata... meta) {
+		
+			final Set<String> oldInterests = new HashSet<String>();
+		
+			for(Metadata m : meta) {
+				
+				if(m.isNull()) {
+					continue;
+				}
+				
+				switch(m.type()) {
+				
+				default:
+					// Ignore 
+					continue;
+				case INSTRUMENT:
+					exInsts.add((Instrument)m);
+					incInsts.remove((Instrument)m);
+					oldInterests.add(((Instrument)m).symbol());
+					continue;
+				case EXCHANGE:
+					exExchanges.add((Exchange)m);
+					incExchanges.remove((Exchange)m);
+					oldInterests.add(((Exchange)m).id().toString());
+				}
+				
+			}
+		
+			agentHandler.updateAgent(this);
+		
+			final Set<Subscription> oldSubs = unsubscribe(this, oldInterests);
+			if (!oldSubs.isEmpty()) {
+				log.debug("Sending new unsubs to sub handler");
+				subHandler.unsubscribe(oldSubs);
+			}
+		
+		}
+		
+		@Override
+		public synchronized void clear() {
+		
+			incInsts.clear();
+			exInsts.clear();
+			incExchanges.clear();
+			exExchanges.clear();
+		
+			agentHandler.updateAgent(this);
+		
+		}
+
+}
+
 	
 	/* ***** ***** Subscription Aggregation Methods ***** ***** */
 	

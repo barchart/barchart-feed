@@ -27,7 +27,7 @@ public final class ValueConverter {
 	}
 	
 	public static Fraction fraction(final com.barchart.util.values.api.Fraction frac) {
-		return factory.newFraction((int)frac.numerator(), (int)frac.denominator());
+		return factory.newFraction((int)frac.base(), (int)frac.exponent());
 	}
 	
 }

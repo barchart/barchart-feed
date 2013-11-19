@@ -126,7 +126,7 @@ public class MarketDisplayBaseImpl implements MarketDisplay {
 		}
 		
 		if(frac == null || frac.isNull()) {
-			frac = factory.newFraction(10, 0);
+			frac = Fraction.NULL;
 		}
 		
 		long value = frac.priceFraction(price.mantissa(), price.exponent());

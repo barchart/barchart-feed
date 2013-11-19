@@ -17,6 +17,7 @@ import com.barchart.feed.api.Agent;
 import com.barchart.feed.api.AgentFactory;
 import com.barchart.feed.api.MarketObserver;
 import com.barchart.feed.api.SnapshotService;
+import com.barchart.feed.api.consumer.ConsumerAgent;
 import com.barchart.feed.api.filter.Filter;
 import com.barchart.feed.api.model.data.Market;
 import com.barchart.feed.api.model.data.MarketData;
@@ -41,7 +42,6 @@ import com.barchart.feed.base.sub.SubscriptionType;
 import com.barchart.feed.inst.InstrumentService;
 import com.barchart.util.value.api.Fraction;
 import com.barchart.util.values.api.Value;
-import com.barchart.util.values.provider.ValueConst;
 
 public abstract class MarketplaceBase<Message extends MarketMessage> implements
 		MarketMakerProvider<Message>, FrameworkAgentLifecycleHandler,
@@ -91,11 +91,11 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 
 		attachAgent(agent);
 
-		return agent;
+		return agent.userAgent();
 	}
 
 	private class BaseAgent<V extends MarketData<V>> implements
-			FrameworkAgent<V> {
+			FrameworkAgent<V>, Agent {
 
 		private final Class<V> clazz;
 		private final MDGetter<V> getter;
@@ -126,6 +126,16 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 
 		}
 
+		@Override
+		public Agent userAgent() {
+			return this;
+		}
+		
+		@Override 
+		public ConsumerAgent consumerAgent() {
+			throw new UnsupportedOperationException();
+		}
+		
 		/* ***** ***** Framework Methods ***** ***** */
 
 		@Override
