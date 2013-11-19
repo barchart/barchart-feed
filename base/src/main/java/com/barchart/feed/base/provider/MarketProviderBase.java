@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -14,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import rx.Observable;
+import rx.Observer;
 
 import com.barchart.feed.api.Agent;
 import com.barchart.feed.api.MarketObserver;
@@ -21,8 +23,6 @@ import com.barchart.feed.api.connection.Connection.Monitor;
 import com.barchart.feed.api.connection.TimestampListener;
 import com.barchart.feed.api.consumer.ConsumerAgent;
 import com.barchart.feed.api.consumer.MarketService;
-import com.barchart.feed.api.consumer.AgentLifecycle.State;
-import com.barchart.feed.api.consumer.MetadataService.Result;
 import com.barchart.feed.api.filter.Filter;
 import com.barchart.feed.api.model.data.Market;
 import com.barchart.feed.api.model.data.MarketData;
@@ -47,7 +47,6 @@ import com.barchart.feed.base.sub.SubscriptionType;
 import com.barchart.util.value.api.Fraction;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.values.api.Value;
-import com.barchart.util.values.provider.ValueConst;
 
 public abstract class MarketProviderBase<Message extends MarketMessage> 
 		implements MarketService, MarketMakerProvider<Message> {
@@ -309,6 +308,29 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		
 			return null;
 			
+		}
+		
+		private Observer<Result<Instrument>> incObs() {
+			return new Observer<Result<Instrument>>() {
+
+				@Override
+				public void onNext(final Result<Instrument> args) {
+					
+					final Map<String, List<Instrument>> results = args.results();
+					
+				}
+				
+				@Override
+				public void onCompleted() {
+					
+				}
+
+				@Override
+				public void onError(Throwable e) {
+					
+				}
+				
+			};
 		}
 		
 		@Override

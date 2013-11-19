@@ -427,7 +427,7 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 				case INSTRUMENT:
 					exInsts.add((Instrument)m);
 					incInsts.remove((Instrument)m);
-					oldInterests.add(((Instrument)m).symbol());
+					oldInterests.add(formatForJERQ(((Instrument)m).symbol()));
 					continue;
 				case EXCHANGE:
 					exExchanges.add((Exchange)m);
