@@ -18,7 +18,6 @@ import com.barchart.feed.base.trade.enums.MarketTradeType;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Size;
 import com.barchart.util.value.api.Time;
-import com.barchart.util.value.impl.ValueConst;
 import com.barchart.util.values.api.Value;
 
 class DefTrade extends NulTrade {
@@ -103,7 +102,7 @@ class DefTrade extends NulTrade {
 	@Override
 	public Time updated() {
 		// TODO
-		return ValueConst.NULL_TIME;
+		return Time.NULL;
 	}
 	
 	@Override

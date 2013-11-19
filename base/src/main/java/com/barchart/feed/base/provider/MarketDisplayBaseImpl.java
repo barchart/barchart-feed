@@ -125,7 +125,7 @@ public class MarketDisplayBaseImpl implements MarketDisplay {
 			price = ValueConst.NULL_PRICE;
 		}
 		
-		if(frac == null || frac == com.barchart.util.value.impl.ValueConst.NULL_FRACTION) {
+		if(frac == null || frac.isNull()) {
 			frac = factory.newFraction(10, 0);
 		}
 		

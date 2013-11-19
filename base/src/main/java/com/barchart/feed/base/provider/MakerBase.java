@@ -32,7 +32,6 @@ import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.util.anno.ThreadSafe;
 import com.barchart.util.value.api.Fraction;
 import com.barchart.util.value.api.Price;
-import com.barchart.util.value.impl.ValueConst;
 import com.barchart.util.values.api.Value;
 
 /** TODO review and remove synchronized */
@@ -432,7 +431,7 @@ public abstract class MakerBase<Message extends MarketMessage> implements
 
 		final Fraction fraction = instrument.displayFraction();
 		
-		if(fraction == null || fraction == ValueConst.NULL_FRACTION) {
+		if(fraction == null || fraction.isNull()) {
 			log.error("fraction.isNull()");
 			return false;
 		}

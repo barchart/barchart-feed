@@ -22,7 +22,6 @@ import com.barchart.util.value.FactoryImpl;
 import com.barchart.util.value.api.Factory;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Size;
-import com.barchart.util.value.impl.ValueConst;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
 import com.barchart.util.values.provider.ValueFreezer;
@@ -93,7 +92,7 @@ public class DefBookEntry extends ValueFreezer<MarketBookEntry> implements
 	public Price price() {
 		
 		if(price == null) {
-			return ValueConst.NULL_PRICE;
+			return Price.NULL;
 		} else {
 			return factory.newPrice(price.mantissa(), price.exponent());
 		}
@@ -108,7 +107,7 @@ public class DefBookEntry extends ValueFreezer<MarketBookEntry> implements
 	public Size size() {
 		
 		if(size == null) {
-			return ValueConst.NULL_SIZE;
+			return Size.NULL;
 		} else {
 			return factory.newSize(size.asLong(), 0);
 		}

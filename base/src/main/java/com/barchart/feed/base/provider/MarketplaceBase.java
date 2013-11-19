@@ -40,8 +40,8 @@ import com.barchart.feed.base.sub.SubscriptionHandler;
 import com.barchart.feed.base.sub.SubscriptionType;
 import com.barchart.feed.inst.InstrumentService;
 import com.barchart.util.value.api.Fraction;
-import com.barchart.util.value.impl.ValueConst;
 import com.barchart.util.values.api.Value;
+import com.barchart.util.values.provider.ValueConst;
 
 public abstract class MarketplaceBase<Message extends MarketMessage> implements
 		MarketMakerProvider<Message>, FrameworkAgentLifecycleHandler,
@@ -864,7 +864,7 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 
 		final Fraction fraction = instrument.displayFraction();
 
-		if (fraction == null || fraction == ValueConst.NULL_FRACTION) {
+		if (fraction == null || fraction.isNull()) {
 			log.error("fraction.isNull()");
 			return false;
 		}

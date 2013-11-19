@@ -1,5 +1,11 @@
 package com.barchart.feed.base.provider;
 
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -26,10 +32,14 @@ import com.barchart.feed.base.market.api.MarketSafeRunner;
 import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.feed.base.participant.FrameworkAgent;
+import com.barchart.feed.base.provider.MarketDataGetters.MDGetter;
+import com.barchart.feed.base.sub.Subscription;
+import com.barchart.feed.base.sub.SubscriptionHandler;
+import com.barchart.feed.base.sub.SubscriptionType;
 import com.barchart.util.value.api.Fraction;
 import com.barchart.util.value.api.Price;
-import com.barchart.util.value.impl.ValueConst;
 import com.barchart.util.values.api.Value;
+import com.barchart.util.values.provider.ValueConst;
 
 public abstract class MarketProviderBase<Message extends MarketMessage> 
 		implements MarketService, MarketMakerProvider<Message> {
@@ -38,6 +48,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 			MarketProviderBase.class);
 
 	protected final MarketFactory factory;
+	protected final SubscriptionHandler subHandler;
 	
 	protected final ConcurrentMap<InstrumentID, MarketDo> marketMap = 
 			new ConcurrentHashMap<InstrumentID, MarketDo>();
@@ -48,44 +59,219 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 	private final ConcurrentMap<FrameworkAgent<?>, Boolean> agents = 
 			new ConcurrentHashMap<FrameworkAgent<?>, Boolean>();
 	
-	protected MarketProviderBase(final MarketFactory factory) {
+	protected MarketProviderBase(final MarketFactory factory,
+			final SubscriptionHandler handler) {
 		this.factory = factory;
+		subHandler = handler;
 	}
+	
+	/* ***** ***** Consumer Agent ***** ***** */
 	
 	@Override
 	public <V extends MarketData<V>> ConsumerAgent register(
 			MarketObserver<V> callback, Class<V> clazz) {
-		// TODO Auto-generated method stub
+		
+		final MDGetter<V> getter = MarketDataGetters.get(clazz);
+
+		if (getter == null) {
+			throw new IllegalArgumentException("Illegal class type "
+					+ clazz.getName());
+		}
+		
 		return null;
 	}
+	
+	/* ***** ***** Subscription Aggregation Methods ***** ***** */
+	
+	private final Map<String, Set<Set<SubscriptionType>>> subs = 
+			new HashMap<String, Set<Set<SubscriptionType>>>();
 
+	private final Map<FrameworkAgent<?>, Set<SubscriptionType>> agentMap = 
+			new HashMap<FrameworkAgent<?>, Set<SubscriptionType>>();
+
+	private Set<SubscriptionType> aggregate(final String interest) {
+
+		final Set<SubscriptionType> agg = EnumSet
+				.noneOf(SubscriptionType.class);
+
+		if (!subs.containsKey(interest)) {
+			return agg;
+		}
+
+		for (final Set<SubscriptionType> set : subs.get(interest)) {
+			agg.addAll(set);
+		}
+
+		return agg;
+	}
+
+	private Subscription subscribe(final FrameworkAgent<?> agent,
+			final String interest) {
+
+		if (!agentMap.containsKey(agent)) {
+			agentMap.put(agent, SubscriptionType.mapMarketEvent(agent.type()));
+		}
+
+		final Set<SubscriptionType> newSubs = agentMap.get(agent);
+
+		if (!subs.containsKey(interest) && !newSubs.isEmpty()) {
+			subs.put(interest, new HashSet<Set<SubscriptionType>>());
+		}
+
+		final Set<SubscriptionType> stuffToAdd = EnumSet.copyOf(newSubs);
+		stuffToAdd.removeAll(aggregate(interest));
+
+		if (!stuffToAdd.isEmpty()) {
+			return new SubscriptionBase(interest, Subscription.Type.INSTRUMENT, stuffToAdd);
+		} else {
+			return Subscription.NULL;
+		}
+
+	}
+
+	private Set<Subscription> subscribe(final FrameworkAgent<?> agent,
+			final Set<String> interests) {
+
+		final Set<Subscription> newSubs = new HashSet<Subscription>();
+
+		for (final String interest : interests) {
+			final Subscription sub = subscribe(agent, interest);
+			if (!sub.isNull()) {
+				newSubs.add(sub);
+			}
+		}
+
+		return newSubs;
+
+	}
+
+	private Subscription unsubscribe(final FrameworkAgent<?> agent,
+			final String interest) {
+
+		if (!agentMap.containsKey(agent)) {
+			return Subscription.NULL;
+		}
+
+		final Set<SubscriptionType> oldSubs = agentMap.remove(agent);
+
+		subs.get(interest).remove(oldSubs);
+
+		if (subs.get(interest).isEmpty()) {
+			subs.remove(interest);
+		}
+
+		final Set<SubscriptionType> stuffToRemove = EnumSet.copyOf(oldSubs);
+		stuffToRemove.removeAll(aggregate(interest));
+
+		if (!stuffToRemove.isEmpty()) {
+			return new SubscriptionBase(interest, Subscription.Type.INSTRUMENT, stuffToRemove);
+		} else {
+			return Subscription.NULL;
+		}
+
+	}
+
+	private Set<Subscription> unsubscribe(final FrameworkAgent<?> agent,
+			final Set<String> interests) {
+
+		final Set<Subscription> newSubs = new HashSet<Subscription>();
+
+		for (final String interest : interests) {
+			final Subscription sub = unsubscribe(agent, interest);
+			if (!sub.isNull()) {
+				newSubs.add(sub);
+			}
+		}
+
+		return newSubs;
+
+	}
+
+	private static String formatForJERQ(final String symbol) {
+
+		log.debug("Formatting {} for JERQ", symbol);
+
+		if (symbol == null) {
+			return "";
+		}
+
+		if (symbol.length() < 3) {
+			return symbol;
+		}
+
+		/* e.g. GOOG */
+		if (!Character.isDigit(symbol.charAt(symbol.length() - 1))) {
+			return symbol;
+		}
+
+		/* e.g. ESH2013 -> ESH3 */
+		if (Character.isDigit(symbol.charAt(symbol.length() - 4))) {
+			return new StringBuilder(symbol).delete(symbol.length() - 4,
+					symbol.length() - 1).toString();
+		}
+
+		return symbol;
+	}
+	
+	/* ***** ***** Agent Lifecycle Methods ***** ***** */
+	
+	private synchronized void attachAgent(final FrameworkAgent<?> agent) {
+
+		if (agents.containsKey(agent)) {
+
+			updateAgent(agent);
+
+		} else {
+
+			agents.put(agent, new Boolean(false));
+
+			for (final Entry<InstrumentID, MarketDo> e : marketMap.entrySet()) {
+				e.getValue().attachAgent(agent);
+			}
+
+		}
+	}
+	
+	public synchronized void updateAgent(final FrameworkAgent<?> agent) {
+
+		if (!agents.containsKey(agent)) {
+
+			attachAgent(agent);
+
+		} else {
+
+			for (final Entry<InstrumentID, MarketDo> e : marketMap.entrySet()) {
+				e.getValue().updateAgent(agent);
+			}
+
+		}
+
+	}
+	
+	public synchronized void detachAgent(final FrameworkAgent<?> agent) {
+
+		if (!agents.containsKey(agent)) {
+			return;
+		}
+
+		agents.remove(agent);
+
+		for (final Entry<InstrumentID, MarketDo> e : marketMap.entrySet()) {
+			e.getValue().detachAgent(agent);
+		}
+
+	}
+	
+	// ######################## // ########################
+	
 	@Override
 	public Observable<Market> snapshot(InstrumentID instrument) {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	// ######################## // ########################
 
-	@Override
-	public void startup() {
-		
-	}
-
-	@Override
-	public void shutdown() {
-		
-	}
-
-	@Override
-	public void bindConnectionStateListener(Monitor listener) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void bindTimestampListener(TimestampListener listener) {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public Observable<Result<Instrument>> instrument(String... symbols) {
@@ -179,6 +365,8 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		symbolMap.clear();
 	}
 	
+	// ######################## Make ########################
+	
 	@Override
 	public void make(final Message message) {
 
@@ -209,18 +397,32 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 	
 	protected abstract void make(Message message, MarketDo market);
 	
+	// ######################## Take ########################
+	
+	@SuppressWarnings("unchecked")
 	@Override
 	public <S extends Instrument, V extends Value<V>> V take(S instrument,
 			MarketField<V> field) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		final MarketDo market = marketMap.get(instrument.id());
+
+		if (market == null) {
+			return MarketConst.NULL_MARKET.get(field).freeze();
+		}
+
+		return (V) market.runSafe(safeTake, field);
 	}
 	
-	@Override
-	public void appendMarketProvider(final MarketFactory marketFactory) {
-		throw new UnsupportedOperationException("TODO");
-	}
-
+	private final MarketSafeRunner<Value<?>, MarketField<?>> safeTake = 
+			new MarketSafeRunner<Value<?>, MarketField<?>>() {
+		
+		@Override
+		public Value<?> runSafe(final MarketDo market,
+				final MarketField<?> field) {
+			return market.get(field).freeze();
+		}
+	};
+	
 	// ######################## // ########################
 	
 	protected boolean isValid(final MarketDo market) {
@@ -256,7 +458,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 
 		final Fraction fraction = instrument.displayFraction();
 		
-		if(fraction == null || fraction == ValueConst.NULL_FRACTION) {
+		if(fraction == null || fraction.isNull()) {
 			log.error("fraction.isNull()");
 			return false;
 		}
@@ -266,6 +468,31 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 	}
 	
 	/* ***** ***** Unsupported ***** ***** */
+	
+	@Override
+	public void startup() {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public void shutdown() {
+		throw new UnsupportedOperationException();
+	}
+	
+	@Override
+	public void bindConnectionStateListener(Monitor listener) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public void bindTimestampListener(TimestampListener listener) {
+		throw new UnsupportedOperationException();
+	}
+	
+	@Override
+	public void appendMarketProvider(final MarketFactory marketFactory) {
+		throw new UnsupportedOperationException();
+	}
 
 	@Override
 	public synchronized final void copyTo(

@@ -8,7 +8,7 @@ import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.api.model.meta.Metadata;
 
 
-public interface ConsumerAgent extends FilterUpdatable, AgentLifecycle {
+public interface ConsumerAgent extends FilterUpdatable, Filter, AgentLifecycle {
 
 	/**
 	 * Subscribes to and attaches agent to provided symbols.
@@ -61,6 +61,20 @@ public interface ConsumerAgent extends FilterUpdatable, AgentLifecycle {
 	@Override
 	void terminate();
 	
+	/* ***** ***** Filter ***** ***** */
+	
+	/**
+	 * Verify that market matches the filter.
+	 */
+	@Override
+	boolean hasMatch(Instrument instrument);
+
+	/**
+	 * Resolved filter in the LDAP format http://www.ietf.org/rfc/rfc1960.txt.
+	 */
+	@Override
+	String expression();
+	
 	/* ***** ***** Filter Updatable ***** ***** */
 
 	/**
@@ -93,8 +107,6 @@ public interface ConsumerAgent extends FilterUpdatable, AgentLifecycle {
 
 	/**
 	 * Unsubscribes agent from all instruments
-	 * 
-	 * FIXME better name
 	 */
 	@Override
 	void clear();

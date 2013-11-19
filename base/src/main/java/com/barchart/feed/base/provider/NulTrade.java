@@ -19,8 +19,8 @@ import com.barchart.feed.base.trade.enums.MarketTradeType;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Size;
 import com.barchart.util.value.api.Time;
-import com.barchart.util.value.impl.ValueConst;
 import com.barchart.util.values.api.Value;
+import com.barchart.util.values.provider.ValueConst;
 import com.barchart.util.values.provider.ValueFreezer;
 
 public class NulTrade extends ValueFreezer<MarketTrade> implements MarketTrade {
@@ -81,22 +81,22 @@ public class NulTrade extends ValueFreezer<MarketTrade> implements MarketTrade {
 
 	@Override
 	public Price price() {
-		return ValueConst.NULL_PRICE;
+		return Price.NULL;
 	}
 
 	@Override
 	public Size size() {
-		return ValueConst.NULL_SIZE;
+		return Size.NULL;
 	}
 
 	@Override
 	public Time time() {
-		return ValueConst.NULL_TIME;
+		return Time.NULL;
 	}
 
 	@Override
 	public Time updated() {
-		return ValueConst.NULL_TIME;
+		return Time.NULL;
 	}
 
 	@Override

@@ -1,22 +1,35 @@
-package com.barchart.feed.api;
+package com.barchart.feed.base.participant;
 
-import com.barchart.feed.api.consumer.AgentLifecycle;
+import java.util.Set;
+
+import rx.Observable;
+
+import com.barchart.feed.api.MarketObserver;
+import com.barchart.feed.api.consumer.ConsumerAgent;
+import com.barchart.feed.api.consumer.MetadataService.Result;
 import com.barchart.feed.api.filter.Filter;
-import com.barchart.feed.api.filter.FilterUpdatable;
+import com.barchart.feed.api.model.data.Market;
+import com.barchart.feed.api.model.data.MarketData;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.api.model.meta.Metadata;
 
-/**
- * 
- */
-public interface Agent extends AgentLifecycle, FilterUpdatable, Filter {
+public interface FrameworkConsumerAgent<V extends MarketData<V>> extends ConsumerAgent {
+	
+	Class<V> type();
+
+	MarketObserver<V> callback();
+
+	V data(Market market);
+
+	Set<String> interests();
 
 	/**
 	 * Subscribes to and attaches agent to provided symbols.
 	 * 
 	 * @param symbols
 	 */
-	void include(String... symbols);
+	@Override
+	Observable<Result<Instrument>> include(String... symbols);
 	
 	/**
 	 * Unsubscribes and detaches agent from provided symbols. Performs
@@ -24,7 +37,9 @@ public interface Agent extends AgentLifecycle, FilterUpdatable, Filter {
 	 * 
 	 * @param symbols
 	 */
-	void exclude(String... symbols);
+	@Override
+	Observable<Result<Instrument>> exclude(String... symbols);
+	
 	
 	/* ***** ***** Lifecycle ***** ***** */
 	
@@ -60,7 +75,7 @@ public interface Agent extends AgentLifecycle, FilterUpdatable, Filter {
 	 */
 	@Override
 	void terminate();
-
+	
 	/* ***** ***** Filter ***** ***** */
 	
 	/**
@@ -110,4 +125,5 @@ public interface Agent extends AgentLifecycle, FilterUpdatable, Filter {
 	 */
 	@Override
 	void clear();
+	
 }

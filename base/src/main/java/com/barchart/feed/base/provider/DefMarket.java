@@ -22,7 +22,6 @@ import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.util.anno.NotMutable;
 import com.barchart.util.value.api.Time;
-import com.barchart.util.value.impl.ValueConst;
 import com.barchart.util.values.api.Value;
 
 @NotMutable
@@ -35,7 +34,7 @@ public class DefMarket extends NulMarket {
 
 	protected final Value<?>[] valueArray;
 	
-	protected volatile Time lastUpdateTime = ValueConst.NULL_TIME;
+	protected volatile Time lastUpdateTime = Time.NULL;
 	
 	protected volatile Instrument instrument;
 	
