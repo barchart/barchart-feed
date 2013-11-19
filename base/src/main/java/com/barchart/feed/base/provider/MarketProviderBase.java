@@ -52,8 +52,6 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		this.factory = factory;
 	}
 	
-	
-	
 	@Override
 	public <V extends MarketData<V>> ConsumerAgent register(
 			MarketObserver<V> callback, Class<V> clazz) {
