@@ -33,7 +33,7 @@ public interface MetadataService {
 		@Override
 		boolean isNull();
 		
-		static SearchContext NULL = new SearchContext(){
+		static SearchContext NULL = new SearchContext() {
 			
 			@Override
 			public boolean isNull() {

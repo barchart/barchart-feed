@@ -1,6 +1,5 @@
 package com.barchart.feed.base.provider;
 
-import java.util.Collections;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -15,7 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import rx.Observable;
-import rx.Observer;
+import rx.util.functions.Func1;
 
 import com.barchart.feed.api.Agent;
 import com.barchart.feed.api.MarketObserver;
@@ -23,6 +22,7 @@ import com.barchart.feed.api.connection.Connection.Monitor;
 import com.barchart.feed.api.connection.TimestampListener;
 import com.barchart.feed.api.consumer.ConsumerAgent;
 import com.barchart.feed.api.consumer.MarketService;
+import com.barchart.feed.api.consumer.MetadataService;
 import com.barchart.feed.api.filter.Filter;
 import com.barchart.feed.api.model.data.Market;
 import com.barchart.feed.api.model.data.MarketData;
@@ -49,12 +49,14 @@ import com.barchart.util.value.api.Price;
 import com.barchart.util.values.api.Value;
 
 public abstract class MarketProviderBase<Message extends MarketMessage> 
-		implements MarketService, MarketMakerProvider<Message> {
+		implements MarketService, MarketMakerProvider<Message>,
+		FrameworkAgentLifecycleHandler {
 	
 	protected static final Logger log = LoggerFactory.getLogger(
 			MarketProviderBase.class);
 
 	protected final MarketFactory factory;
+	protected final MetadataService metaService;
 	protected final SubscriptionHandler subHandler;
 	
 	protected final ConcurrentMap<InstrumentID, MarketDo> marketMap = 
@@ -67,8 +69,10 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 			new ConcurrentHashMap<FrameworkAgent<?>, Boolean>();
 	
 	protected MarketProviderBase(final MarketFactory factory,
+			final MetadataService metaService,
 			final SubscriptionHandler handler) {
 		this.factory = factory;
+		this.metaService = metaService;
 		subHandler = handler;
 	}
 	
@@ -85,7 +89,12 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 					+ clazz.getName());
 		}
 		
-		return null;
+		final FrameworkAgent<V> agent = new BaseAgent<V>(this, clazz, getter,
+				callback);
+		
+		attachAgent(agent);
+		
+		return agent.consumerAgent();
 	}
 	
 	private class BaseAgent<V extends MarketData<V>> implements
@@ -265,119 +274,112 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		}
 		
 		@Override
-		public synchronized Observable<Result<Instrument>> include(
-				final String... symbols) {
-		
-			final Set<String> symbSet = new HashSet<String>();
-			Collections.addAll(symbSet, symbols);
-		
-			final Map<String, Instrument> instMap = null; 
-					//instLookup.lookup(symbSet);
+		public synchronized Observable<Result<Instrument>> include(final String... symbols) {
 			
-			final Set<String> newInterests = new HashSet<String>();
-		
-			for (final Entry<String, Instrument> e : instMap.entrySet()) {
-		
-				final Instrument i = e.getValue();
-		
-				if (!i.isNull()) {
-		
-					exInsts.remove(i);
-					incInsts.add(i);
-					
-					newInterests.add(formatForJERQ(i.symbol()));
-					
-				} else {
-					/*
-					 * For all failed lookups, store symbol and attempt to match 
-					 * in the hasMatch method.
-					 */
-					incUnknown.add(e.getKey().toString());
-					exUnknown.remove(e.getKey().toString());
-				}
-				
-			}
-		
-			agentHandler.updateAgent(this);
-		
-			final Set<Subscription> newSubs = subscribe(this, newInterests);
-			if (!newSubs.isEmpty()) {
-				log.debug("Sending new subs to sub handler");
-				subHandler.subscribe(newSubs);
-			}
-		
-			return null;
+			final FrameworkAgent<?> agent = this;
 			
-		}
+			return metaService.instrument(symbols).mapMany(
+					
+				new Func1<Result<Instrument>, Observable<Result<Instrument>>>() {
+					
+					public Observable<Result<Instrument>> call(final Result<Instrument> result) {
+						
+						final Map<String, List<Instrument>> instMap = result.results();
+						final Set<String> newInterests = new HashSet<String>();
+						
+						for (final Entry<String, List<Instrument>> e : instMap.entrySet()) {
+							
+							/* Currently assuming we're only getting one inst back */
+							final Instrument i = e.getValue().get(0);
+					
+							if (!i.isNull()) {
+					
+								exInsts.remove(i);
+								incInsts.add(i);
+								
+								newInterests.add(formatForJERQ(i.symbol()));
+								
+							} else {
+								/*
+								 * For all failed lookups, store symbol and attempt to match 
+								 * in the hasMatch method.
+								 */
+								incUnknown.add(e.getKey().toString());
+								exUnknown.remove(e.getKey().toString());
+							}
+							
+						}
+						
+						agentHandler.updateAgent(agent);
+						
+						final Set<Subscription> newSubs = subscribe(agent, newInterests);
+						if (!newSubs.isEmpty()) {
+							log.debug("Sending new subs to sub handler");
+							subHandler.subscribe(newSubs);
+						}
+						
+						return Observable.just(result);
+					}
+					
+				}
+				
+			);
 		
-		private Observer<Result<Instrument>> incObs() {
-			return new Observer<Result<Instrument>>() {
-
-				@Override
-				public void onNext(final Result<Instrument> args) {
-					
-					final Map<String, List<Instrument>> results = args.results();
-					
-				}
-				
-				@Override
-				public void onCompleted() {
-					
-				}
-
-				@Override
-				public void onError(Throwable e) {
-					
-				}
-				
-			};
 		}
 		
 		@Override
 		public synchronized Observable<Result<Instrument>> exclude(
 				final String... symbols) {
-		
-			final Set<String> symbSet = new HashSet<String>();
-			Collections.addAll(symbSet, symbols);
-		
-			final Map<String, Instrument> instMap = null; 
-					//instLookup.lookup(symbSet);
-		
-			final Set<String> oldInterests = new HashSet<String>();
-		
-			for (final Entry<String, Instrument> e : instMap
-					.entrySet()) {
-		
-				final Instrument i = e.getValue();
-		
-				if (!i.isNull()) {
-		
-					incInsts.remove(i);
-					exInsts.add(i);
-		
-					oldInterests.add(i.symbol());
-					
-				} else {
-					/*
-					 * For all failed lookups, store symbol and attempt to match 
-					 * in the hasMatch method.
-					 */
-					incUnknown.remove(e.getKey().toString());
-					exUnknown.add(e.getKey().toString());
-				}
-		
-			}
-		
-			agentHandler.updateAgent(this);
-		
-			final Set<Subscription> oldSubs = unsubscribe(this, oldInterests);
-			if (!oldSubs.isEmpty()) {
-				log.debug("Sending new unsubs to sub handler");
-				subHandler.unsubscribe(oldSubs);
-			}
-		
-			return null;
 			
+			final FrameworkAgent<?> agent = this;
+			
+			return metaService.instrument(symbols).mapMany(
+					
+				new Func1<Result<Instrument>, Observable<Result<Instrument>>>() {
+					
+					public Observable<Result<Instrument>> call(final Result<Instrument> result) {
+						
+						final Map<String, List<Instrument>> instMap = result.results();
+						final Set<String> oldInterests = new HashSet<String>();
+						
+						for (final Entry<String, List<Instrument>> e : instMap.entrySet()) {
+							
+							/* Currently assuming we're only getting one inst back */
+							final Instrument i = e.getValue().get(0);
+					
+							if (!i.isNull()) {
+					
+								incInsts.remove(i);
+								exInsts.add(i);
+								
+								oldInterests.add(formatForJERQ(i.symbol()));
+								
+							} else {
+								/*
+								 * For all failed lookups, store symbol and attempt to match 
+								 * in the hasMatch method.
+								 */
+								incUnknown.remove(e.getKey().toString());
+								exUnknown.add(e.getKey().toString());
+							}
+							
+						}
+						
+						agentHandler.updateAgent(agent);
+						
+						final Set<Subscription> oldSubs = unsubscribe(agent, oldInterests);
+						if (!oldSubs.isEmpty()) {
+							log.debug("Sending new unsubs to sub handler");
+							subHandler.unsubscribe(oldSubs);
+						}
+						
+						return Observable.just(result);
+					}
+					
+				}
+				
+			);
+		
 		}
 		
 		/* ***** ***** Filter Updatable ***** ***** */
@@ -450,7 +452,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 				case INSTRUMENT:
 					exInsts.add((Instrument)m);
 					incInsts.remove((Instrument)m);
-					oldInterests.add(((Instrument)m).symbol());
+					oldInterests.add(formatForJERQ(((Instrument)m).symbol()));
 					continue;
 				case EXCHANGE:
 					exExchanges.add((Exchange)m);
@@ -618,8 +620,8 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 	}
 	
 	/* ***** ***** Agent Lifecycle Methods ***** ***** */
-	
-	private synchronized void attachAgent(final FrameworkAgent<?> agent) {
+	@Override
+	public synchronized void attachAgent(final FrameworkAgent<?> agent) {
 
 		if (agents.containsKey(agent)) {
 
@@ -636,6 +638,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		}
 	}
 	
+	@Override
 	public synchronized void updateAgent(final FrameworkAgent<?> agent) {
 
 		if (!agents.containsKey(agent)) {
@@ -652,6 +655,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 
 	}
 	
+	@Override
 	public synchronized void detachAgent(final FrameworkAgent<?> agent) {
 
 		if (!agents.containsKey(agent)) {
