@@ -29,6 +29,7 @@
 		<module>client</module>
 		<module>archon</module>
 		<module>market</module>
+		<module>impl</module>
 	</modules>
 
 	<url>https://github.com/barchart/barchart-feed</url>
