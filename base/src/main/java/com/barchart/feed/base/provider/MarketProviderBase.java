@@ -331,8 +331,6 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		public synchronized Observable<Result<Instrument>> exclude(
 				final String... symbols) {
 			
-			final FrameworkAgent<?> agent = this;
-			
 			return metaService.instrument(symbols).mapMany(
 					
 				new Func1<Result<Instrument>, Observable<Result<Instrument>>>() {
@@ -365,9 +363,9 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 							
 						}
 						
-						agentHandler.updateAgent(agent);
+						agentHandler.updateAgent(BaseAgent.this);
 						
-						final Set<Subscription> oldSubs = unsubscribe(agent, oldInterests);
+						final Set<Subscription> oldSubs = unsubscribe(BaseAgent.this, oldInterests);
 						if (!oldSubs.isEmpty()) {
 							log.debug("Sending new unsubs to sub handler");
 							subHandler.unsubscribe(oldSubs);
@@ -484,7 +482,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		
 		}
 
-}
+	}  // END BASE AGENT
 
 	
 	/* ***** ***** Subscription Aggregation Methods ***** ***** */
@@ -683,21 +681,21 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 
 	@Override
 	public Observable<Result<Instrument>> instrument(String... symbols) {
-		// TODO Auto-generated method stub
-		return null;
+		return metaService.instrument(symbols);
 	}
 
 	@Override
 	public Observable<Result<Instrument>> instrument(SearchContext ctx,
 			String... symbols) {
-		// TODO Auto-generated method stub
-		return null;
+		return metaService.instrument(ctx, symbols);
 	}
 
 	// ######################## // ########################
 	
 	@Override
 	public boolean register(Instrument instrument) {
+		
+		log.debug("Registering {}", instrument.symbol());
 		
 		if (!isValid(instrument)) {
 			return false;
@@ -721,10 +719,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 			}
 
 			symbolMap.put(instrument.symbol(), instrument.id());
-			
-		} else {
-			log.warn("already registered : {}", instrument.id());
-		}
+		} 
 
 		return wasAdded;
 	}
@@ -784,17 +779,20 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 			return;
 		}
 
-		final MarketDo market = marketMap.get(instrument);
+		MarketDo market = marketMap.get(instrument.id());
 
-		if (!isValid(market)) {
-			return;
+		if(!isValid(market)) {
+			register(instrument);
+			market = marketMap.get(instrument.id());
 		}
 
 		market.runSafe(safeMake, message);
 
 	}
 
-	protected MarketSafeRunner<Void, Message> safeMake = new MarketSafeRunner<Void, Message>() {
+	protected MarketSafeRunner<Void, Message> safeMake = 
+			new MarketSafeRunner<Void, Message>() {
+		
 		@Override
 		public Void runSafe(final MarketDo market, final Message message) {
 			make(message, market);

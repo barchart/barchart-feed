@@ -131,7 +131,7 @@ public class MockMarket extends VarMarket {
 
 		assert entry != null && time != null;
 
-		makeCuvol(entry.priceValue(), entry.sizeValue());
+		makeCuvol(entry.priceValue(), entry.sizeValue(), time);
 
 		updateMarket(time);
 
@@ -148,7 +148,7 @@ public class MockMarket extends VarMarket {
 		cuvol.clear();
 
 		for (final MarketDoCuvolEntry entry : entries) {
-			cuvol.add(entry.priceValue(), entry.sizeValue());
+			cuvol.add(entry.priceValue(), entry.sizeValue(), time);
 		}
 
 		eventAdd(NEW_CUVOL_SNAPSHOT);
@@ -193,7 +193,7 @@ public class MockMarket extends VarMarket {
 
 		applyTradeToBar(CURRENT, price, size, time, date);
 
-		makeCuvol(price, size);
+		makeCuvol(price, size, time);
 
 		updateMarket(time);
 
@@ -207,11 +207,12 @@ public class MockMarket extends VarMarket {
 
 	}
 
-	private final void makeCuvol(final PriceValue price, final SizeValue size) {
+	private final void makeCuvol(final PriceValue price, final SizeValue size,
+			final TimeValue time) {
 
 		final MarketDoCuvol cuvol = loadCuvol();
 
-		cuvol.add(price, size);
+		cuvol.add(price, size, time);
 
 		eventAdd(NEW_CUVOL_UPDATE);
 

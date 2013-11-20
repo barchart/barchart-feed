@@ -10,8 +10,11 @@ package com.barchart.feed.base.provider;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.barchart.feed.api.model.data.Cuvol;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.util.anno.NotMutable;
+import com.barchart.util.value.api.Price;
+import com.barchart.util.value.api.Time;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
 
@@ -24,9 +27,14 @@ class DefCuvol extends NulCuvol {
 	private final PriceValue priceStep;
 	
 	private final Instrument instrument;
+	
+	private final Cuvol.Entry entry;
+	
+	private final Time updated;
 
 	DefCuvol(final Instrument instrument, final SizeValue[] entries, 
-			final PriceValue priceFirst, final PriceValue priceStep) {
+			final PriceValue priceFirst, final PriceValue priceStep,
+			final Time updated, final Cuvol.Entry entry) {
 
 		assert entries != null;
 		assert priceFirst != null;
@@ -38,6 +46,9 @@ class DefCuvol extends NulCuvol {
 		this.entries = entries;
 		this.priceFirst = priceFirst;
 		this.priceStep = priceStep;
+		
+		this.updated = updated;
+		this.entry = entry;
 
 	}
 
@@ -82,4 +93,25 @@ class DefCuvol extends NulCuvol {
 		return result;
 		
 	}
+	
+	@Override
+	public Price firstPrice() {
+		return ValueConverter.price(priceFirst);
+	}
+
+	@Override
+	public Price tickSize() {
+		return ValueConverter.price(priceStep);
+	}
+	
+	@Override
+	public Time updated() {
+		return updated;
+	}
+	
+	@Override
+	public Entry lastCuvolUpdate() {
+		return entry;
+	}
+	
 }

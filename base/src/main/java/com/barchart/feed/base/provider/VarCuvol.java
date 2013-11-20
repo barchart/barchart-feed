@@ -7,14 +7,18 @@
  */
 package com.barchart.feed.base.provider;
 
+import com.barchart.feed.api.model.data.Cuvol;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.cuvol.api.MarketCuvolEntry;
 import com.barchart.feed.base.cuvol.api.MarketDoCuvol;
 import com.barchart.util.anno.Mutable;
 import com.barchart.util.anno.NotThreadSafe;
 import com.barchart.util.collections.PriceArrayMap;
+import com.barchart.util.value.api.Price;
+import com.barchart.util.value.api.Size;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
+import com.barchart.util.values.api.TimeValue;
 import com.barchart.util.values.provider.ValueConst;
 
 @Mutable
@@ -24,6 +28,8 @@ public final class VarCuvol extends NulCuvol implements MarketDoCuvol {
 	private final PriceArrayMap<SizeValue> map;
 
 	private PriceValue priceLast;
+	private TimeValue timeLast;
+	private Cuvol.Entry entryLast;
 	
 	private final Instrument instrument;
 	
@@ -36,7 +42,8 @@ public final class VarCuvol extends NulCuvol implements MarketDoCuvol {
 	}
 
 	@Override
-	public final void add(final PriceValue price, final SizeValue size) {
+	public final void add(final PriceValue price, final SizeValue size, 
+			final TimeValue time) {
 
 		assert price != null;
 		assert size != null;
@@ -52,9 +59,39 @@ public final class VarCuvol extends NulCuvol implements MarketDoCuvol {
 		map.put(price, volume);
 
 		priceLast = price;
+		timeLast = time;
+		
+		entryLast = entry(ValueConverter.price(price), ValueConverter.size(size), 
+				map.getIndex(price));
 
 	}
 
+	private Cuvol.Entry entry(final Price price, final Size size, final int place) {
+		return new Entry() {
+
+			@Override
+			public boolean isNull() {
+				return false;
+			}
+
+			@Override
+			public Price price() {
+				return price;
+			}
+
+			@Override
+			public Size size() {
+				return size;
+			}
+
+			@Override
+			public int place() {
+				return place;
+			}
+			
+		};
+	}
+	
 	@Override
 	public final DefCuvol freeze() {
 
@@ -69,7 +106,8 @@ public final class VarCuvol extends NulCuvol implements MarketDoCuvol {
 		}
 
 		final DefCuvol that = new DefCuvol(instrument, entries, 
-				priceFirst(), priceStep());
+				priceFirst(), priceStep(), ValueConverter.time(timeLast), 
+				entryLast);
 
 		return that;
 

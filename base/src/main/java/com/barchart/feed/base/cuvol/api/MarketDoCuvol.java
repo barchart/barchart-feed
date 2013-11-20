@@ -15,11 +15,12 @@ import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Time;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
+import com.barchart.util.values.api.TimeValue;
 import com.barchart.util.values.provider.ValueConst;
 
 public interface MarketDoCuvol extends MarketCuvol {
 
-	void add(PriceValue price, SizeValue size);
+	void add(PriceValue price, SizeValue size, TimeValue time);
 
 	MarketCuvolEntry getLastEntry();
 
@@ -88,7 +89,7 @@ public interface MarketDoCuvol extends MarketCuvol {
 		}
 
 		@Override
-		public void add(PriceValue price, SizeValue size) {
+		public void add(PriceValue price, SizeValue size, TimeValue time) {
 			
 		}
 

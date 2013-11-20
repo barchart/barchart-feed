@@ -752,8 +752,6 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 		if (!isValid(market)) {
 			register(instrument);
 			market = marketMap.get(instrument.id());
-
-			// log.debug("Registering new instrument " + instrument.symbol());
 		}
 
 		market.runSafe(safeMake, message);

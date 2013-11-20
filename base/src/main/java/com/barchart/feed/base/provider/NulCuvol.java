@@ -93,8 +93,7 @@ public class NulCuvol extends ValueFreezer<MarketCuvol> implements MarketCuvol {
 
 	@Override
 	public Entry lastCuvolUpdate() {
-		// TODO
-		return null;
+		return Entry.NULL;
 	}
 
 }

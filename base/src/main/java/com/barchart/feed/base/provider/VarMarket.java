@@ -94,6 +94,8 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 	@Override
 	public synchronized void attachAgent(final FrameworkAgent<?> agent) {
 		
+		log.debug("Attach Agent Called in VarMarket");
+		
 		if(agentSet.containsKey(agent)) {
 			updateAgent(agent);
 			return;
@@ -112,6 +114,8 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 	@Override
 	public synchronized void updateAgent(final FrameworkAgent<?> agent) {
 		
+		log.debug("Update Agent Called in VarMarket");
+		
 		if(!agentSet.containsKey(agent)) {
 			attachAgent(agent);
 			return;
@@ -125,6 +129,8 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 	
 	@Override
 	public synchronized void detachAgent(final FrameworkAgent<?> agent) {
+		
+		log.debug("Detach Agent Called in VarMarket");
 		
 		if(!agentSet.containsKey(agent)) {
 			return;
@@ -315,7 +321,6 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 		
 		if (cuvol.isFrozen()) {
 
-			// TODO Value Converter
 			final PriceValue priceStep = ValueBuilder.newPrice(
 					instrument.tickSize().mantissa(), 
 					instrument.tickSize().exponent());
