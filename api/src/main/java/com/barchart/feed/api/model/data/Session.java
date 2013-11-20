@@ -35,10 +35,6 @@ public interface Session extends MarketData<Session>, SessionData,
 		VOLUME, //
 		INTEREST, //
 
-//		TIME_OPENED, //
-//		TIME_UPDATED, //
-//		TIME_CLOSED, //
-
 		;
 
 	}
@@ -87,6 +83,9 @@ public interface Session extends MarketData<Session>, SessionData,
 	boolean isSettled();
 
 	@Override
+	Time updated();
+	
+	@Override
 	Set<Component> change();
 	
 	@Override
@@ -115,9 +114,6 @@ public interface Session extends MarketData<Session>, SessionData,
 
 	@Override
 	Time timeOpened();
-
-	@Override
-	Time timeUpdated();
 
 	@Override
 	Time timeClosed();
@@ -176,11 +172,6 @@ public interface Session extends MarketData<Session>, SessionData,
 
 		@Override
 		public Time timeOpened() {
-			return Time.NULL;
-		}
-
-		@Override
-		public Time timeUpdated() {
 			return Time.NULL;
 		}
 

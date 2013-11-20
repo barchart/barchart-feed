@@ -54,8 +54,6 @@ public class NulBar extends ValueFreezer<MarketBar> implements MarketBar {
 
 		}
 
-		// System.err.println(text.length());
-
 		return text.toString();
 
 	}
@@ -105,7 +103,6 @@ public class NulBar extends ValueFreezer<MarketBar> implements MarketBar {
 		throw new UnsupportedOperationException();
 	}
 
-	@Override
 	public Time timeUpdated() {
 		throw new UnsupportedOperationException();
 	}
@@ -127,7 +124,7 @@ public class NulBar extends ValueFreezer<MarketBar> implements MarketBar {
 
 	@Override
 	public Time updated() {
-		return Time.NULL;
+		return ValueConverter.time(get(MarketBarField.BAR_TIME));
 	}
 
 	@Override

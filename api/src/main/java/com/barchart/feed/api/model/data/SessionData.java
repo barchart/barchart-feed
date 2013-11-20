@@ -22,8 +22,6 @@ public interface SessionData {
 
 	Time timeOpened();
 
-	Time timeUpdated();
-
 	Time timeClosed();
 	
 	public static final SessionData NULL = new SessionData() {
@@ -65,11 +63,6 @@ public interface SessionData {
 
 		@Override
 		public Time timeOpened() {
-			return Time.NULL;
-		}
-
-		@Override
-		public Time timeUpdated() {
 			return Time.NULL;
 		}
 
