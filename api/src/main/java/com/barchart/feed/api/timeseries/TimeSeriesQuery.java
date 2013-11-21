@@ -2,8 +2,6 @@ package com.barchart.feed.api.timeseries;
 
 import java.util.Date;
 
-import com.barchart.feed.api.data.Instrument;
-
 /**
  * A fluent interface for constructing time series queries.
  */
@@ -14,7 +12,7 @@ public interface TimeSeriesQuery {
 	 * instrument, symbol or expression. Subsequent calls will overwrite the
 	 * previous value.
 	 */
-	public TimeSeriesQuery instrument(Instrument instrument);
+	//public TimeSeriesQuery instrument(Instrument instrument);
 
 	/**
 	 * The symbol requested. Queries should request only one of an instrument,

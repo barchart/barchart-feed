@@ -2,24 +2,11 @@ package com.barchart.feed.api.timeseries;
 
 import java.util.List;
 
-import com.barchart.feed.api.data.Instrument;
-import com.barchart.feed.api.enums.SessionType;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Size;
 import com.barchart.util.value.api.Time;
 
 public interface TimeSeriesBar {
-
-	/**
-	 * The trading instrument that this bar is for. For futures continuation
-	 * charts, symbols can change within one timeseries.
-	 */
-	public Instrument instrument();
-
-	/**
-	 * The session for this bar
-	 */
-	public SessionType session();
 
 	/**
 	 * Start time of this bar
