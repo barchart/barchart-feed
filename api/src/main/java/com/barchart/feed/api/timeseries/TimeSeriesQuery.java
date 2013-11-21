@@ -25,7 +25,7 @@ public interface TimeSeriesQuery {
 	/**
 	 * The bar aggregation
 	 */
-	public TimeSeriesQuery aggregation(BarAggregation aggregation);
+	public TimeSeriesQuery aggregation(Period aggregation);
 
 	/**
 	 * The start date (earliest bar)

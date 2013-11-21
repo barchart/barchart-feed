@@ -10,7 +10,6 @@ import com.barchart.missive.api.Tag;
 import com.barchart.missive.api.TagMap;
 import com.barchart.missive.core.MissiveException;
 import com.barchart.util.value.api.Price;
-import com.barchart.util.value.api.Schedule;
 import com.barchart.util.value.api.Size;
 import com.barchart.util.value.api.Time;
 import com.barchart.util.value.api.TimeInterval;
@@ -55,7 +54,7 @@ public interface Instrument extends MarketData<Instrument>, Comparable<Instrumen
 	
 	TimeInterval lifetime();
 	
-	Schedule marketHours();
+//	Schedule marketHours();
 	
 	long timeZoneOffset();
 	
@@ -204,11 +203,11 @@ public interface Instrument extends MarketData<Instrument>, Comparable<Instrumen
 			return null;
 		}
 
-		@Override
-		public Schedule marketHours() {
-			// TODO Auto-generated method stub
-			return null;
-		}
+//		@Override
+//		public Schedule marketHours() {
+//			// TODO Auto-generated method stub
+//			return null;
+//		}
 
 		@Override
 		public long timeZoneOffset() {

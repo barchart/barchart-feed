@@ -3,40 +3,53 @@ package com.barchart.feed.api.timeseries;
 import java.util.Date;
 import java.util.Iterator;
 
+import org.joda.time.DateTime;
+
 /**
- * Ordered time series of aggregated bars for a traded instrument.
+ * Ordered collection/series of sequential time-based {@link DataPoint}s.
+ * Provides specialized methods to search and retrieve data 
+ * within this series in an optimized manner.
  */
-public interface TimeSeries {
+public interface TimeSeries<T extends DataPoint> {
 
 	/**
-	 * The bar aggregation
+	 * Returns the {@link Period} which defines the aggregation of
+	 * time and data for every {@link DataPoint}.
+	 * 
+	 * @return this {@code TimeSeries}' {@link Period}
 	 */
-	public BarAggregation aggregation();
+	public Period getPeriod();
 
 	/**
-	 * The earliest date available in this time series
+	 * Returns the earliest date available in this time series.
+	 * 
+	 * @return the earliest date available in this time series.
 	 */
-	public Date start();
+	public DateTime getStart();
 
 	/**
-	 * The latest date available in this time series
+	 * Returns the most recent date available in this time series.
+	 * 
+	 * @return	the most recent date available in this time series
 	 */
-	public Date end();
+	public DateTime getEnd();
 
 	/**
-	 * Number of bars currently loaded.
+	 * Returns the number of {@link DataPoint}s currently contained within this series.
+	 * 
+	 * @return	the size of this series
 	 */
 	public int size();
 
 	/**
 	 * Indexed list of bars, 0 = oldest.
 	 */
-	public TimeSeriesBar bar(int index);
+	public TimeSeriesBar get(int index);
 
 	/**
 	 * The bar at the specified date (can be null if non-existent)
 	 */
-	public TimeSeriesBar bar(Date date);
+	public TimeSeriesBar bar(DateTime date);
 
 	/**
 	 * Bar iterator, most recent bar first
