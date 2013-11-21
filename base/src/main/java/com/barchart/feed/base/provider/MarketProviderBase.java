@@ -1,5 +1,6 @@
 package com.barchart.feed.base.provider;
 
+import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -485,8 +486,8 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 	
 	/* ***** ***** Subscription Aggregation Methods ***** ***** */
 	
-	private final Map<String, Set<Set<SubscriptionType>>> subs = 
-			new HashMap<String, Set<Set<SubscriptionType>>>();
+	private final Map<String, List<Set<SubscriptionType>>> subs = 
+			new HashMap<String, List<Set<SubscriptionType>>>();
 
 	private final Map<FrameworkAgent<?>, Set<SubscriptionType>> agentMap = 
 			new HashMap<FrameworkAgent<?>, Set<SubscriptionType>>();
@@ -517,8 +518,10 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		final Set<SubscriptionType> newSubs = agentMap.get(agent);
 
 		if (!subs.containsKey(interest) && !newSubs.isEmpty()) {
-			subs.put(interest, new HashSet<Set<SubscriptionType>>());
+			subs.put(interest, new RefEqualsList<Set<SubscriptionType>>());
 		}
+		
+		subs.get(interest).add(newSubs);
 
 		final Set<SubscriptionType> stuffToAdd = EnumSet.copyOf(newSubs);
 		stuffToAdd.removeAll(aggregate(interest));
@@ -566,7 +569,8 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		stuffToRemove.removeAll(aggregate(interest));
 
 		if (!stuffToRemove.isEmpty()) {
-			return new SubscriptionBase(interest, Subscription.Type.INSTRUMENT, stuffToRemove);
+			return new SubscriptionBase(interest, Subscription.Type.INSTRUMENT, 
+					stuffToRemove);
 		} else {
 			return Subscription.NULL;
 		}
@@ -588,7 +592,22 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		return newSubs;
 
 	}
+	
+	class RefEqualsList<T> extends ArrayList<T> {
+		
+		private static final long serialVersionUID = -7398964176380704808L;
 
+		@Override
+		public boolean equals(Object o) {
+			if(this == o) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+		
+	}
+	
 	private static String formatForJERQ(final String symbol) {
 
 		log.debug("Formatting {} for JERQ", symbol);

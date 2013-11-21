@@ -1,9 +1,11 @@
 package com.barchart.feed.base.provider;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -463,8 +465,8 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 
 	/* ***** ***** Subscription Aggregation Methods ***** ***** */
 
-	private final Map<String, Set<Set<SubscriptionType>>> subs = 
-			new HashMap<String, Set<Set<SubscriptionType>>>();
+	private final Map<String, List<Set<SubscriptionType>>> subs = 
+			new HashMap<String, List<Set<SubscriptionType>>>();
 
 	private final Map<FrameworkAgent<?>, Set<SubscriptionType>> agentMap = 
 			new HashMap<FrameworkAgent<?>, Set<SubscriptionType>>();
@@ -485,7 +487,7 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 		return agg;
 	}
 
-	private Subscription subscribe(final FrameworkAgent<?> agent,
+	protected Subscription subscribe(final FrameworkAgent<?> agent,
 			final String interest) {
 
 		if (!agentMap.containsKey(agent)) {
@@ -495,8 +497,10 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 		final Set<SubscriptionType> newSubs = agentMap.get(agent);
 
 		if (!subs.containsKey(interest) && !newSubs.isEmpty()) {
-			subs.put(interest, new HashSet<Set<SubscriptionType>>());
+			subs.put(interest, new RefEqualsList<Set<SubscriptionType>>());
 		}
+		
+		subs.get(interest).add(newSubs);
 
 		final Set<SubscriptionType> stuffToAdd = EnumSet.copyOf(newSubs);
 		stuffToAdd.removeAll(aggregate(interest));
@@ -509,7 +513,7 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 
 	}
 
-	private Set<Subscription> subscribe(final FrameworkAgent<?> agent,
+	protected Set<Subscription> subscribe(final FrameworkAgent<?> agent,
 			final Set<String> interests) {
 
 		final Set<Subscription> newSubs = new HashSet<Subscription>();
@@ -525,7 +529,7 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 
 	}
 
-	private Subscription unsubscribe(final FrameworkAgent<?> agent,
+	protected Subscription unsubscribe(final FrameworkAgent<?> agent,
 			final String interest) {
 
 		if (!agentMap.containsKey(agent)) {
@@ -551,7 +555,7 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 
 	}
 
-	private Set<Subscription> unsubscribe(final FrameworkAgent<?> agent,
+	protected Set<Subscription> unsubscribe(final FrameworkAgent<?> agent,
 			final Set<String> interests) {
 
 		final Set<Subscription> newSubs = new HashSet<Subscription>();
@@ -565,6 +569,21 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 
 		return newSubs;
 
+	}
+	
+	class RefEqualsList<T> extends ArrayList<T> {
+		
+		private static final long serialVersionUID = -7398964176381704808L;
+
+		@Override
+		public boolean equals(Object o) {
+			if(this == o) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+		
 	}
 
 	private static String formatForJERQ(final String symbol) {
