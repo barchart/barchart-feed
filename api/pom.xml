@@ -11,7 +11,6 @@
 		<relativePath>../archon</relativePath>
 	</parent>
 
-	<groupId>com.barchart.feed</groupId>
 	<artifactId>barchart-feed-api</artifactId>
 	<version>2.2.2-SNAPSHOT</version>
 	<packaging>bundle</packaging>
