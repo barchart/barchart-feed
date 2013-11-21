@@ -519,12 +519,12 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 
 		if (!subs.containsKey(interest) && !newSubs.isEmpty()) {
 			subs.put(interest, new RefEqualsList<Set<SubscriptionType>>());
-		}
+		} 
 		
-		subs.get(interest).add(newSubs);
-
 		final Set<SubscriptionType> stuffToAdd = EnumSet.copyOf(newSubs);
 		stuffToAdd.removeAll(aggregate(interest));
+		
+		subs.get(interest).add(newSubs);
 
 		if (!stuffToAdd.isEmpty()) {
 			return new SubscriptionBase(interest, Subscription.Type.INSTRUMENT, stuffToAdd);

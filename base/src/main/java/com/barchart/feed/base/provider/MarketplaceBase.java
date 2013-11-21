@@ -500,10 +500,10 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 			subs.put(interest, new RefEqualsList<Set<SubscriptionType>>());
 		}
 		
-		subs.get(interest).add(newSubs);
-
 		final Set<SubscriptionType> stuffToAdd = EnumSet.copyOf(newSubs);
 		stuffToAdd.removeAll(aggregate(interest));
+		
+		subs.get(interest).add(newSubs);
 
 		if (!stuffToAdd.isEmpty()) {
 			return new SubscriptionBase(interest, Subscription.Type.INSTRUMENT, stuffToAdd);
