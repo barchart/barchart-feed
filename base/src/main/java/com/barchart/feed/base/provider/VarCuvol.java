@@ -29,7 +29,7 @@ public final class VarCuvol extends NulCuvol implements MarketDoCuvol {
 
 	private PriceValue priceLast = ValueConst.NULL_PRICE;
 	private TimeValue timeLast = ValueConst.NULL_TIME;
-	private Cuvol.Entry entryLast;
+	private Cuvol.Entry entryLast = Cuvol.Entry.NULL;
 	
 	private final Instrument instrument;
 	
