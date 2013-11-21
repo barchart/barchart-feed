@@ -30,7 +30,7 @@
 		<module>api</module>
 		<module>inst</module>
 		<module>base</module>
-		
+		<module>impl</module>
 	</modules>
 
 	<url>https://github.com/barchart/barchart-feed</url>
