@@ -27,8 +27,8 @@ public final class VarCuvol extends NulCuvol implements MarketDoCuvol {
 
 	private final PriceArrayMap<SizeValue> map;
 
-	private PriceValue priceLast;
-	private TimeValue timeLast;
+	private PriceValue priceLast = ValueConst.NULL_PRICE;
+	private TimeValue timeLast = ValueConst.NULL_TIME;
 	private Cuvol.Entry entryLast;
 	
 	private final Instrument instrument;

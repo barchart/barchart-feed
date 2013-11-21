@@ -6,13 +6,13 @@ import com.barchart.util.value.api.Existential;
 /**
  * Top level interface for metadata objects. 
  */
-public interface Metadata extends Existential, Describable, Filterable {
+public interface Metadata extends Existential, Filterable {
 
-	@Override
-	boolean isNull();
+	
+	String description();
 	
 	@Override
-	String description();
+	boolean isNull();
 
 	@Override
 	MetaType type();

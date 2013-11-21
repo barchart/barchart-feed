@@ -122,7 +122,7 @@ public interface Market extends MarketData<Market> {
 		
 		@Override
 		public String toString() {
-			return "NULL MARKET";
+			return "NULL_MARKET";
 		}
 
 		@Override

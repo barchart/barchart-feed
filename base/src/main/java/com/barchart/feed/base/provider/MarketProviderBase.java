@@ -276,8 +276,6 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		@Override
 		public synchronized Observable<Result<Instrument>> include(final String... symbols) {
 			
-			final FrameworkAgent<?> agent = this;
-			
 			return metaService.instrument(symbols).mapMany(
 					
 				new Func1<Result<Instrument>, Observable<Result<Instrument>>>() {
@@ -310,9 +308,9 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 							
 						}
 						
-						agentHandler.updateAgent(agent);
+						agentHandler.updateAgent(BaseAgent.this);
 						
-						final Set<Subscription> newSubs = subscribe(agent, newInterests);
+						final Set<Subscription> newSubs = subscribe(BaseAgent.this, newInterests);
 						if (!newSubs.isEmpty()) {
 							log.debug("Sending new subs to sub handler");
 							subHandler.subscribe(newSubs);
