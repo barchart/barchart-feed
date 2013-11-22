@@ -710,10 +710,10 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 	// ######################## // ########################
 	
 	@Override
-	public Observable<Market> snapshot(InstrumentID instrument) {
+	public Observable<Market> snapshot(InstrumentID instID) {
 		
-		if(marketMap.containsKey(instrument)) {
-			final Market market = marketMap.get(instrument).freeze();
+		if(marketMap.containsKey(instID)) {
+			final Market market = marketMap.get(instID).freeze();
 			return Observable.just(market);
 		} else {
 			return Observable.just(Market.NULL);
