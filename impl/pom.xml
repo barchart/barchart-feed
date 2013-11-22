@@ -1,0 +1,39 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.barchart.feed</groupId>
+    <artifactId>barchart-feed-a</artifactId>
+    <version>2.0.4</version>
+  </parent>
+  <artifactId>barchart-feed-impl</artifactId>
+  <version>1.0.1-SNAPSHOT</version>
+  <packaging>bundle</packaging>
+  
+  <scm>
+        <url>https://github.com/barchart/barchart-feed</url>
+        <connection>scm:git:git://github.com/barchart/barchart-feed.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com/barchart/barchart-feed.git</developerConnection>
+        <tag>master</tag>
+    </scm>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.barchart.feed</groupId>
+            <artifactId>barchart-feed-api</artifactId>
+            <version>[2-SNAPSHOT,3-SNAPSHOT)</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.barchart.util</groupId>
+            <artifactId>barchart-util-value</artifactId>
+            <version>[1-SNAPSHOT,2-SNAPSHOT)</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.netflix.rxjava</groupId>
+            <artifactId>rxjava-core</artifactId>
+            <version>[0.14-SNAPSHOT,0.15-SNAPSHOT)</version>
+        </dependency>
+
+    </dependencies>
+</project>
