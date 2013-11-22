@@ -20,6 +20,7 @@ import rx.util.functions.Func1;
 import com.barchart.feed.api.Agent;
 import com.barchart.feed.api.MarketObserver;
 import com.barchart.feed.api.connection.Connection.Monitor;
+import com.barchart.feed.api.connection.Subscription;
 import com.barchart.feed.api.connection.TimestampListener;
 import com.barchart.feed.api.consumer.ConsumerAgent;
 import com.barchart.feed.api.consumer.MarketService;
@@ -30,6 +31,7 @@ import com.barchart.feed.api.model.data.MarketData;
 import com.barchart.feed.api.model.meta.Exchange;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.api.model.meta.Metadata;
+import com.barchart.feed.api.model.meta.id.ExchangeID;
 import com.barchart.feed.api.model.meta.id.InstrumentID;
 import com.barchart.feed.base.market.api.MarketDo;
 import com.barchart.feed.base.market.api.MarketFactory;
@@ -42,7 +44,7 @@ import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.feed.base.participant.FrameworkAgent;
 import com.barchart.feed.base.participant.FrameworkAgentLifecycleHandler;
 import com.barchart.feed.base.provider.MarketDataGetters.MDGetter;
-import com.barchart.feed.base.sub.Subscription;
+import com.barchart.feed.base.sub.Sub;
 import com.barchart.feed.base.sub.SubscriptionHandler;
 import com.barchart.feed.base.sub.SubscriptionType;
 import com.barchart.util.value.api.Fraction;
@@ -68,6 +70,12 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 
 	private final ConcurrentMap<FrameworkAgent<?>, Boolean> agents = 
 			new ConcurrentHashMap<FrameworkAgent<?>, Boolean>();
+	
+	private final ConcurrentMap<InstrumentID, Subscription<Instrument>> instSubs = 
+			new ConcurrentHashMap<InstrumentID, Subscription<Instrument>>();
+	
+	private final ConcurrentMap<ExchangeID, Subscription<Exchange>> exchSubs =
+			new ConcurrentHashMap<ExchangeID, Subscription<Exchange>>();
 	
 	protected MarketProviderBase(final MarketFactory factory,
 			final MetadataService metaService,
@@ -311,7 +319,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 						
 						agentHandler.updateAgent(BaseAgent.this);
 						
-						final Set<Subscription> newSubs = subscribe(BaseAgent.this, newInterests);
+						final Set<Sub> newSubs = subscribe(BaseAgent.this, newInterests);
 						if (!newSubs.isEmpty()) {
 							log.debug("Sending new subs to sub handler");
 							subHandler.subscribe(newSubs);
@@ -364,7 +372,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 						
 						agentHandler.updateAgent(BaseAgent.this);
 						
-						final Set<Subscription> oldSubs = unsubscribe(BaseAgent.this, oldInterests);
+						final Set<Sub> oldSubs = unsubscribe(BaseAgent.this, oldInterests);
 						if (!oldSubs.isEmpty()) {
 							log.debug("Sending new unsubs to sub handler");
 							subHandler.unsubscribe(oldSubs);
@@ -422,7 +430,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		
 			agentHandler.updateAgent(this);
 		
-			final Set<Subscription> newSubs = subscribe(this, newInterests);
+			final Set<Sub> newSubs = subscribe(this, newInterests);
 			if (!newSubs.isEmpty()) {
 				log.debug("Sending new subs to sub handler");
 				subHandler.subscribe(newSubs);
@@ -461,7 +469,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		
 			agentHandler.updateAgent(this);
 		
-			final Set<Subscription> oldSubs = unsubscribe(this, oldInterests);
+			final Set<Sub> oldSubs = unsubscribe(this, oldInterests);
 			if (!oldSubs.isEmpty()) {
 				log.debug("Sending new unsubs to sub handler");
 				subHandler.unsubscribe(oldSubs);
@@ -508,7 +516,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		return agg;
 	}
 
-	private Subscription subscribe(final FrameworkAgent<?> agent,
+	private Sub subscribe(final FrameworkAgent<?> agent,
 			final String interest) {
 
 		if (!agentMap.containsKey(agent)) {
@@ -527,20 +535,20 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		subs.get(interest).add(newSubs);
 
 		if (!stuffToAdd.isEmpty()) {
-			return new SubscriptionBase(interest, Subscription.Type.INSTRUMENT, stuffToAdd);
+			return new SubscriptionBase(interest, Sub.Type.INSTRUMENT, stuffToAdd);
 		} else {
-			return Subscription.NULL;
+			return Sub.NULL;
 		}
 
 	}
 
-	private Set<Subscription> subscribe(final FrameworkAgent<?> agent,
+	private Set<Sub> subscribe(final FrameworkAgent<?> agent,
 			final Set<String> interests) {
 
-		final Set<Subscription> newSubs = new HashSet<Subscription>();
+		final Set<Sub> newSubs = new HashSet<Sub>();
 
 		for (final String interest : interests) {
-			final Subscription sub = subscribe(agent, interest);
+			final Sub sub = subscribe(agent, interest);
 			if (!sub.isNull()) {
 				newSubs.add(sub);
 			}
@@ -550,11 +558,11 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 
 	}
 
-	private Subscription unsubscribe(final FrameworkAgent<?> agent,
+	private Sub unsubscribe(final FrameworkAgent<?> agent,
 			final String interest) {
 
 		if (!agentMap.containsKey(agent)) {
-			return Subscription.NULL;
+			return Sub.NULL;
 		}
 
 		final Set<SubscriptionType> oldSubs = agentMap.remove(agent);
@@ -569,21 +577,21 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		stuffToRemove.removeAll(aggregate(interest));
 
 		if (!stuffToRemove.isEmpty()) {
-			return new SubscriptionBase(interest, Subscription.Type.INSTRUMENT, 
+			return new SubscriptionBase(interest, Sub.Type.INSTRUMENT, 
 					stuffToRemove);
 		} else {
-			return Subscription.NULL;
+			return Sub.NULL;
 		}
 
 	}
 
-	private Set<Subscription> unsubscribe(final FrameworkAgent<?> agent,
+	private Set<Sub> unsubscribe(final FrameworkAgent<?> agent,
 			final Set<String> interests) {
 
-		final Set<Subscription> newSubs = new HashSet<Subscription>();
+		final Set<Sub> newSubs = new HashSet<Sub>();
 
 		for (final String interest : interests) {
-			final Subscription sub = unsubscribe(agent, interest);
+			final Sub sub = unsubscribe(agent, interest);
 			if (!sub.isNull()) {
 				newSubs.add(sub);
 			}
@@ -683,6 +691,18 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 			e.getValue().detachAgent(agent);
 		}
 
+	}
+	
+	/* ***** ***** SubscriptionService ***** ***** */
+	
+	@Override
+	public Map<InstrumentID, Subscription<Instrument>> instruments() {
+		return instSubs;
+	}
+	
+	@Override
+	public Map<ExchangeID, Subscription<Exchange>> exchanges() {
+		return exchSubs;
 	}
 	
 	// ######################## // ########################

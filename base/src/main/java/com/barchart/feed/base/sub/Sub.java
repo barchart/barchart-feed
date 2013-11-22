@@ -13,7 +13,7 @@ import java.util.Set;
  * @author Gavin M Litchfield
  *
  */
-public interface Subscription {
+public interface Sub {
 	
 	enum Type {
 		NULL, INSTRUMENT, EXCHANGE
@@ -30,7 +30,7 @@ public interface Subscription {
 	String interest();
 	String encode();
 	
-	public static Subscription NULL = new Subscription() {
+	public static Sub NULL = new Sub() {
 
 		@Override
 		public Type type() {

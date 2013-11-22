@@ -38,7 +38,7 @@ import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.feed.base.participant.FrameworkAgent;
 import com.barchart.feed.base.participant.FrameworkAgentLifecycleHandler;
 import com.barchart.feed.base.provider.MarketDataGetters.MDGetter;
-import com.barchart.feed.base.sub.Subscription;
+import com.barchart.feed.base.sub.Sub;
 import com.barchart.feed.base.sub.SubscriptionHandler;
 import com.barchart.feed.base.sub.SubscriptionType;
 import com.barchart.feed.inst.InstrumentService;
@@ -307,7 +307,7 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 
 			agentHandler.updateAgent(this);
 
-			final Set<Subscription> newSubs = subscribe(this, newInterests);
+			final Set<Sub> newSubs = subscribe(this, newInterests);
 			if (!newSubs.isEmpty()) {
 				log.debug("Sending new subs to sub handler");
 				subHandler.subscribe(newSubs);
@@ -351,7 +351,7 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 
 			agentHandler.updateAgent(this);
 
-			final Set<Subscription> oldSubs = unsubscribe(this, oldInterests);
+			final Set<Sub> oldSubs = unsubscribe(this, oldInterests);
 			if (!oldSubs.isEmpty()) {
 				log.debug("Sending new unsubs to sub handler");
 				subHandler.unsubscribe(oldSubs);
@@ -402,7 +402,7 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 
 			agentHandler.updateAgent(this);
 
-			final Set<Subscription> newSubs = subscribe(this, newInterests);
+			final Set<Sub> newSubs = subscribe(this, newInterests);
 			if (!newSubs.isEmpty()) {
 				log.debug("Sending new subs to sub handler");
 				subHandler.subscribe(newSubs);
@@ -441,7 +441,7 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 
 			agentHandler.updateAgent(this);
 
-			final Set<Subscription> oldSubs = unsubscribe(this, oldInterests);
+			final Set<Sub> oldSubs = unsubscribe(this, oldInterests);
 			if (!oldSubs.isEmpty()) {
 				log.debug("Sending new unsubs to sub handler");
 				subHandler.unsubscribe(oldSubs);
@@ -487,7 +487,7 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 		return agg;
 	}
 
-	protected Subscription subscribe(final FrameworkAgent<?> agent,
+	protected Sub subscribe(final FrameworkAgent<?> agent,
 			final String interest) {
 
 		if (!agentMap.containsKey(agent)) {
@@ -506,20 +506,20 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 		subs.get(interest).add(newSubs);
 
 		if (!stuffToAdd.isEmpty()) {
-			return new SubscriptionBase(interest, Subscription.Type.INSTRUMENT, stuffToAdd);
+			return new SubscriptionBase(interest, Sub.Type.INSTRUMENT, stuffToAdd);
 		} else {
-			return Subscription.NULL;
+			return Sub.NULL;
 		}
 
 	}
 
-	protected Set<Subscription> subscribe(final FrameworkAgent<?> agent,
+	protected Set<Sub> subscribe(final FrameworkAgent<?> agent,
 			final Set<String> interests) {
 
-		final Set<Subscription> newSubs = new HashSet<Subscription>();
+		final Set<Sub> newSubs = new HashSet<Sub>();
 
 		for (final String interest : interests) {
-			final Subscription sub = subscribe(agent, interest);
+			final Sub sub = subscribe(agent, interest);
 			if (!sub.isNull()) {
 				newSubs.add(sub);
 			}
@@ -529,11 +529,11 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 
 	}
 
-	protected Subscription unsubscribe(final FrameworkAgent<?> agent,
+	protected Sub unsubscribe(final FrameworkAgent<?> agent,
 			final String interest) {
 
 		if (!agentMap.containsKey(agent)) {
-			return Subscription.NULL;
+			return Sub.NULL;
 		}
 
 		final Set<SubscriptionType> oldSubs = agentMap.remove(agent);
@@ -548,20 +548,20 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 		stuffToRemove.removeAll(aggregate(interest));
 
 		if (!stuffToRemove.isEmpty()) {
-			return new SubscriptionBase(interest, Subscription.Type.INSTRUMENT, stuffToRemove);
+			return new SubscriptionBase(interest, Sub.Type.INSTRUMENT, stuffToRemove);
 		} else {
-			return Subscription.NULL;
+			return Sub.NULL;
 		}
 
 	}
 
-	protected Set<Subscription> unsubscribe(final FrameworkAgent<?> agent,
+	protected Set<Sub> unsubscribe(final FrameworkAgent<?> agent,
 			final Set<String> interests) {
 
-		final Set<Subscription> newSubs = new HashSet<Subscription>();
+		final Set<Sub> newSubs = new HashSet<Sub>();
 
 		for (final String interest : interests) {
-			final Subscription sub = unsubscribe(agent, interest);
+			final Sub sub = unsubscribe(agent, interest);
 			if (!sub.isNull()) {
 				newSubs.add(sub);
 			}

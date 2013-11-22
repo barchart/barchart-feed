@@ -2,26 +2,40 @@ package com.barchart.feed.api.connection;
 
 import com.barchart.feed.api.model.meta.Metadata;
 import com.barchart.util.value.api.Existential;
-import com.barchart.util.value.api.Time;
 
 public interface Subscription<T extends Metadata> extends Existential {
 
-	enum SubscriptionType {
-		NULL, REALTIME, FIFTEEN_MIN_DELAYED
+	enum Lense {
+		REALTIME, DELAYED, REPLAY
 	}
 	
-	SubscriptionType type();
+	Lense lense();
 	
+	/**
+	 * 
+	 * @return The meta-data object this subscription is for.
+	 */
 	T metadata();
-	
-	Time subscribed(); // ?? Name
-	
-	
 	
 	@Override
 	boolean isNull();
 	
+//	Time subscribed(); // ?? Name
+	
+//	Set<Class<? extends MarketData<?>>> dataTypes();
+	
+//	/**
+//	 * @return The time delay in seconds of this subscription, 0 = realtime
+//	 */
+//	int delay();
+//	
+//	/**
+//	 * @return The frequency in seconds of snapshot messages
+//	 */
+//	int snapshotFrequency();
+	
 	// NULL 
 	
+//	- Update frequency (every message, snapshots every 10 seconds, etc)
 	
 }

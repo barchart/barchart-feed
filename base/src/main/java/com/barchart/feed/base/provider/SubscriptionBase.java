@@ -3,16 +3,16 @@ package com.barchart.feed.base.provider;
 import java.util.EnumSet;
 import java.util.Set;
 
-import com.barchart.feed.base.sub.Subscription;
+import com.barchart.feed.base.sub.Sub;
 import com.barchart.feed.base.sub.SubscriptionType;
 
-public class SubscriptionBase implements Subscription {
+public class SubscriptionBase implements Sub {
 	
 	private final Set<SubscriptionType> subTypes;
 	private final String interest;
-	private final Subscription.Type type;
+	private final Sub.Type type;
 	
-	SubscriptionBase(final String interest, Subscription.Type type, 
+	SubscriptionBase(final String interest, Sub.Type type, 
 			final Set<SubscriptionType> types) {
 		
 		if(interest == null || types == null || types.isEmpty()) {
