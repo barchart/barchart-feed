@@ -709,8 +709,14 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 	
 	@Override
 	public Observable<Market> snapshot(InstrumentID instrument) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		if(marketMap.containsKey(instrument)) {
+			final Market market = marketMap.get(instrument);
+			return Observable.just(market);
+		} else {
+			return Observable.just(Market.NULL);
+		}
+		
 	}
 	
 	// ######################## // ########################
