@@ -6,7 +6,7 @@ import com.barchart.util.value.api.Existential;
 public interface Subscription<T extends Metadata> extends Existential {
 
 	enum Lense {
-		REALTIME, DELAYED, REPLAY
+		NULL, REALTIME, DELAYED, REPLAY
 	}
 	
 	Lense lense();

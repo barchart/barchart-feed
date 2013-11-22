@@ -44,6 +44,7 @@ import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.feed.base.participant.FrameworkAgent;
 import com.barchart.feed.base.participant.FrameworkAgentLifecycleHandler;
 import com.barchart.feed.base.provider.MarketDataGetters.MDGetter;
+import com.barchart.feed.base.state.enums.MarketStateEntry;
 import com.barchart.feed.base.sub.Sub;
 import com.barchart.feed.base.sub.SubscriptionHandler;
 import com.barchart.feed.base.sub.SubscriptionType;
@@ -74,6 +75,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 	private final ConcurrentMap<InstrumentID, Subscription<Instrument>> instSubs = 
 			new ConcurrentHashMap<InstrumentID, Subscription<Instrument>>();
 	
+	// Not implemented
 	private final ConcurrentMap<ExchangeID, Subscription<Exchange>> exchSubs =
 			new ConcurrentHashMap<ExchangeID, Subscription<Exchange>>();
 	
@@ -721,7 +723,6 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 	
 	// ######################## // ########################
 
-
 	@Override
 	public Observable<Result<Instrument>> instrument(String... symbols) {
 		return metaService.instrument(symbols);
@@ -762,11 +763,12 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 			}
 
 			symbolMap.put(instrument.symbol(), instrument.id());
+			
 		} 
 
 		return wasAdded;
 	}
-
+	
 	@Override
 	public boolean unregister(Instrument instrument) {
 		
@@ -824,15 +826,59 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 
 		MarketDo market = marketMap.get(instrument.id());
 
-		if(!isValid(market)) {
+		final boolean valid = isValid(market);
+		
+		if(!valid) {
 			register(instrument);
 			market = marketMap.get(instrument.id());
 		}
 
 		market.runSafe(safeMake, message);
+		
+		/* Below is a hack to keep the subscriptions updated */
+		/* If a new market is created, a new subscription is made, 
+		 * but it needs the State enum from market which should 
+		 * get set on the first market snapshot, which is why
+		 * this comes after the above safeRun update of the message */
+		
+		/* If the state hasn't been set, this will mark it as Delayed, 
+		 * and we're not updating */
+		Subscription.Lense lense;
+		if(market.get(MarketField.STATE).contains(
+				MarketStateEntry.IS_PUBLISH_REALTIME)) {
+			lense = Subscription.Lense.REALTIME;
+		} else {
+			lense = Subscription.Lense.DELAYED;
+		}
+		
+		if(!valid) {
+			instSubs.put(instrument.id(), instSub(instrument, lense));
+		}
 
 	}
 
+	private Subscription<Instrument> instSub(final Instrument inst,
+			final Subscription.Lense lense) {
+		return new Subscription<Instrument>() {
+
+			@Override
+			public Lense lense() {
+				return lense;
+			}
+
+			@Override
+			public Instrument metadata() {
+				return inst;
+			}
+
+			@Override
+			public boolean isNull() {
+				return false;
+			}
+			
+		};
+	}
+	
 	protected MarketSafeRunner<Void, Message> safeMake = 
 			new MarketSafeRunner<Void, Message>() {
 		
