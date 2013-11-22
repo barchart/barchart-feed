@@ -711,7 +711,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 	public Observable<Market> snapshot(InstrumentID instrument) {
 		
 		if(marketMap.containsKey(instrument)) {
-			final Market market = marketMap.get(instrument);
+			final Market market = marketMap.get(instrument).freeze();
 			return Observable.just(market);
 		} else {
 			return Observable.just(Market.NULL);
