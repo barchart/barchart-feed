@@ -72,8 +72,11 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 	private final ConcurrentMap<FrameworkAgent<?>, Boolean> agents = 
 			new ConcurrentHashMap<FrameworkAgent<?>, Boolean>();
 	
-	private final ConcurrentMap<InstrumentID, Subscription<Instrument>> instSubs = 
+	private final ConcurrentMap<InstrumentID, Subscription<Instrument>> defSubs = 
 			new ConcurrentHashMap<InstrumentID, Subscription<Instrument>>();
+	
+	private final ConcurrentMap<InstrumentID, VarSubscription> varSubs =
+			new ConcurrentHashMap<InstrumentID, VarSubscription>();
 	
 	// Not implemented
 	private final ConcurrentMap<ExchangeID, Subscription<Exchange>> exchSubs =
@@ -537,7 +540,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		subs.get(interest).add(newSubs);
 
 		if (!stuffToAdd.isEmpty()) {
-			return new SubscriptionBase(interest, Sub.Type.INSTRUMENT, stuffToAdd);
+			return new SubBase(interest, Sub.Type.INSTRUMENT, stuffToAdd);
 		} else {
 			return Sub.NULL;
 		}
@@ -579,7 +582,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		stuffToRemove.removeAll(aggregate(interest));
 
 		if (!stuffToRemove.isEmpty()) {
-			return new SubscriptionBase(interest, Sub.Type.INSTRUMENT, 
+			return new SubBase(interest, Sub.Type.INSTRUMENT, 
 					stuffToRemove);
 		} else {
 			return Sub.NULL;
@@ -699,7 +702,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 	
 	@Override
 	public Map<InstrumentID, Subscription<Instrument>> instruments() {
-		return instSubs;
+		return defSubs;
 	}
 	
 	@Override
@@ -854,33 +857,46 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 			lense = Subscription.Lense.NULL;
 		}
 		
-		if(!valid && !instSubs.containsKey(instrument.id())) {
+		if(!valid) {
 			log.debug("Adding Subscription to map for {}", instrument.symbol());
-			instSubs.put(instrument.id(), instSub(instrument, lense));
-		}
+			varSubs.put(instrument.id(), new VarSubscription(instrument, lense));
+			defSubs.put(instrument.id(), varSubs.get(instrument.id()));
+		} 
+		
+		varSubs.get(instrument.id()).setLense(lense);
 
 	}
 
-	private Subscription<Instrument> instSub(final Instrument inst,
+	private class VarSubscription implements Subscription<Instrument> {
+
+		private final Instrument inst;
+		private Subscription.Lense lense;
+		
+		VarSubscription(final Instrument inst,
 			final Subscription.Lense lense) {
-		return new Subscription<Instrument>() {
+			this.inst = inst;
+			this.lense = lense;
+		}
+		
+		@Override
+		public Lense lense() {
+			return lense;
+		}
 
-			@Override
-			public Lense lense() {
-				return lense;
-			}
+		@Override
+		public Instrument metadata() {
+			return inst;
+		}
 
-			@Override
-			public Instrument metadata() {
-				return inst;
-			}
-
-			@Override
-			public boolean isNull() {
-				return false;
-			}
-			
-		};
+		@Override
+		public boolean isNull() {
+			return false;
+		}
+		
+		public void setLense(final Subscription.Lense lense) {
+			this.lense = lense;
+		}
+		
 	}
 	
 	protected MarketSafeRunner<Void, Message> safeMake = 

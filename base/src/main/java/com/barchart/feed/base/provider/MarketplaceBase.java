@@ -506,7 +506,7 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 		subs.get(interest).add(newSubs);
 
 		if (!stuffToAdd.isEmpty()) {
-			return new SubscriptionBase(interest, Sub.Type.INSTRUMENT, stuffToAdd);
+			return new SubBase(interest, Sub.Type.INSTRUMENT, stuffToAdd);
 		} else {
 			return Sub.NULL;
 		}
@@ -548,7 +548,7 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 		stuffToRemove.removeAll(aggregate(interest));
 
 		if (!stuffToRemove.isEmpty()) {
-			return new SubscriptionBase(interest, Sub.Type.INSTRUMENT, stuffToRemove);
+			return new SubBase(interest, Sub.Type.INSTRUMENT, stuffToRemove);
 		} else {
 			return Sub.NULL;
 		}

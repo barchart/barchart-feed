@@ -50,7 +50,7 @@ public class SubManager {
 		stuffToAdd.removeAll(aggregate(interest));
 		
 		if(!stuffToAdd.isEmpty()) {
-			return new SubscriptionBase(interest, Type.INSTRUMENT, stuffToAdd);
+			return new SubBase(interest, Type.INSTRUMENT, stuffToAdd);
 		} else {
 			return Sub.NULL;
 		}
@@ -92,7 +92,7 @@ public class SubManager {
 		stuffToRemove.removeAll(aggregate(interest));
 		
 		if(!stuffToRemove.isEmpty()) {
-			return new SubscriptionBase(interest, Type.INSTRUMENT, stuffToRemove);
+			return new SubBase(interest, Type.INSTRUMENT, stuffToRemove);
 		} else {
 			return Sub.NULL;
 		}

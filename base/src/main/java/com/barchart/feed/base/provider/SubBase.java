@@ -6,13 +6,13 @@ import java.util.Set;
 import com.barchart.feed.base.sub.Sub;
 import com.barchart.feed.base.sub.SubscriptionType;
 
-public class SubscriptionBase implements Sub {
+public class SubBase implements Sub {
 	
 	private final Set<SubscriptionType> subTypes;
 	private final String interest;
 	private final Sub.Type type;
 	
-	SubscriptionBase(final String interest, Sub.Type type, 
+	SubBase(final String interest, Sub.Type type, 
 			final Set<SubscriptionType> types) {
 		
 		if(interest == null || types == null || types.isEmpty()) {
