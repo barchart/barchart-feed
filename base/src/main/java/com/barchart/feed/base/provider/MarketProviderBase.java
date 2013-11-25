@@ -854,7 +854,8 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 			lense = Subscription.Lense.NULL;
 		}
 		
-		if(!valid) {
+		if(!valid && !instSubs.containsKey(instrument.id())) {
+			log.debug("Adding Subscription to map for {}", instrument.symbol());
 			instSubs.put(instrument.id(), instSub(instrument, lense));
 		}
 
