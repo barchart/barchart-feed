@@ -19,7 +19,8 @@ public enum MarketStateEntry implements BitSetEnum<MarketStateEntry> {
 	 * the CURRENT and PREVIOUS bars.
 	 */
 	@Deprecated IS_SETTLED,        	// Generic Settled Flag
-	IS_PUBLISH_REALTIME,			// Publishing Realtime, or Other
+	IS_PUBLISH_REALTIME,  			// Publishing Realtime, or Other
+	IS_PUBLISH_DELAYED
 	
 	;
 

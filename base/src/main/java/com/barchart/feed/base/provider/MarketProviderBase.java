@@ -847,8 +847,11 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		if(market.get(MarketField.STATE).contains(
 				MarketStateEntry.IS_PUBLISH_REALTIME)) {
 			lense = Subscription.Lense.REALTIME;
-		} else {
+		} else if(market.get(MarketField.STATE).contains(
+				MarketStateEntry.IS_PUBLISH_DELAYED)) {
 			lense = Subscription.Lense.DELAYED;
+		} else {
+			lense = Subscription.Lense.NULL;
 		}
 		
 		if(!valid) {

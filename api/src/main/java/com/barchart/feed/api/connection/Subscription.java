@@ -34,8 +34,6 @@ public interface Subscription<T extends Metadata> extends Existential {
 //	 */
 //	int snapshotFrequency();
 	
-	// NULL 
-	
 //	- Update frequency (every message, snapshots every 10 seconds, etc)
 	
 }
