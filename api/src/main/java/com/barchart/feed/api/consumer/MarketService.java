@@ -13,16 +13,26 @@ import com.barchart.feed.api.model.data.Market;
 import com.barchart.feed.api.model.data.MarketData;
 import com.barchart.feed.api.model.meta.Exchange;
 import com.barchart.feed.api.model.meta.Instrument;
-import com.barchart.feed.api.model.meta.Metadata;
 import com.barchart.feed.api.model.meta.id.ExchangeID;
 import com.barchart.feed.api.model.meta.id.InstrumentID;
 
 public interface MarketService extends ConnectionLifecycle<MarketService>, 
 		MetadataService, SubscriptionService {
 	
+	/**
+	 * 
+	 * @param callback
+	 * @param clazz
+	 * @return
+	 */
 	<V extends MarketData<V>> ConsumerAgent register(MarketObserver<V> callback,
 			Class<V> clazz);
 
+	/**
+	 * 
+	 * @param instrument
+	 * @return
+	 */
 	Observable<Market> snapshot(InstrumentID instrument);
 	
 	/* ***** ***** ConnectionLifecycle ***** ***** */

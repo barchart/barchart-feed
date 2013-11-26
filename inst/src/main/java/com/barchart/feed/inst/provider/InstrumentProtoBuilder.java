@@ -39,8 +39,7 @@ public final class InstrumentProtoBuilder {
 			new BiEnumMap<Instrument.SecurityType, InstrumentType>(
 				new Instrument.SecurityType[] { Instrument.SecurityType.NULL_TYPE, Instrument.SecurityType.FOREX,
 					Instrument.SecurityType.INDEX, Instrument.SecurityType.EQUITY,
-					Instrument.SecurityType.FUTURE, Instrument.SecurityType.OPTION,
-					Instrument.SecurityType.SPREAD }, new InstrumentType[] {
+					Instrument.SecurityType.FUTURE, Instrument.SecurityType.OPTION}, new InstrumentType[] {
 					InstrumentType.NO_INSTRUMENT, InstrumentType.FOREX_INSTRUMENT,
 					InstrumentType.INDEX_INSTRUMENT, InstrumentType.EQUITY_INSTRUMENT,
 					InstrumentType.FUTURE_INSTRUMENT, InstrumentType.OPTION_INSTRUMENT,

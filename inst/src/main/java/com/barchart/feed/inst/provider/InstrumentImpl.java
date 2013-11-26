@@ -50,7 +50,7 @@ public class InstrumentImpl extends InstrumentBase implements Instrument {
 	public SecurityType securityType() {
 		
 		if(!def.hasInstrumentType()) {
-			return SecurityType.NULL_TYPE;
+			return SecurityType.fromCFI(CFICode());
 		}
 		
 		switch(def.getInstrumentType()) {
@@ -66,8 +66,6 @@ public class InstrumentImpl extends InstrumentBase implements Instrument {
 			return SecurityType.FUTURE;
 		case OPTION_INSTRUMENT:
 			return SecurityType.OPTION;
-		case SPREAD_INSTRUMENT:
-			return SecurityType.SPREAD;
 		}
 	}
 

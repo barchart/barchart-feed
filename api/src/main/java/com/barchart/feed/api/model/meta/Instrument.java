@@ -75,15 +75,35 @@ public interface Instrument extends Comparable<Instrument>, Metadata {
 	
 	enum SecurityType {
 
-		NULL_TYPE, //
-		FOREX, //
-		INDEX, //
-		EQUITY, //
-		FUTURE, //
-		OPTION, //
-		SPREAD, //
+		NULL_TYPE(""), //
+		FOREX("MRC"), //
+		INDEX("MRI"), //
+		EQUITY("E"), //
+		FUTURE("F"), //
+		OPTION("O"), //
 		;
 
+		private final String cfi;
+		
+		private SecurityType(final String cfi) {
+			this.cfi = cfi;
+		}
+		
+		public static SecurityType fromCFI(final String code) {
+			
+			if(code.length() != 6) {
+				return NULL_TYPE;
+			}
+			
+			for(final SecurityType t : values()) {
+				if(code.startsWith(t.cfi)) {
+					return t;
+				}
+			}
+			
+			return NULL_TYPE;
+		}
+		
 	}
 	
 	InstrumentID id();
