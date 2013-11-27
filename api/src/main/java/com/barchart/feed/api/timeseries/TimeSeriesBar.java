@@ -4,29 +4,23 @@ import java.util.List;
 
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Size;
-import com.barchart.util.value.api.Time;
 
-public interface TimeSeriesBar {
-
-	/**
-	 * Start time of this bar
-	 */
-	public Time time();
+public interface TimeSeriesBar extends TimePoint {
 
 	/**
 	 * Open price
 	 */
-	public Price open();
+	public abstract Price open();
 
 	/**
 	 * High price
 	 */
-	public Price high();
+	public abstract Price high();
 
 	/**
 	 * Low price
 	 */
-	public Price low();
+	public abstract Price low();
 
 	/**
 	 * Close price

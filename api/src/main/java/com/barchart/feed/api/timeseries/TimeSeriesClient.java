@@ -11,18 +11,18 @@ public interface TimeSeriesClient {
 
 	// Standard time series retrieval
 
-	public TimeSeriesQuery newQuery();
+	public Query newQuery();
 
-	public TimeSeriesFuture fetch(TimeSeriesQuery query);
-
-	public TimeSeriesFuture subscribe(TimeSeriesQuery query);
+//	public TimeSeriesFuture fetch(Query query);
+//
+//	public TimeSeriesFuture subscribe(Query query);
 
 	// Forward Curves
 
-	public TimeSeriesFuture fetchForwardCurve(String root);
-
-	public TimeSeriesFuture fetchForwardCurve(String root, Date from);
-
-	public TimeSeriesFuture subscribeForwardCurve(String root);
+//	public TimeSeriesFuture fetchForwardCurve(String root);
+//
+//	public TimeSeriesFuture fetchForwardCurve(String root, Date from);
+//
+//	public TimeSeriesFuture subscribeForwardCurve(String root);
 
 }
