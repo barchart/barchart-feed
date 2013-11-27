@@ -1,4 +1,4 @@
-package com.barchart.feed.impl;
+package com.barchart.feed.series;
 
 import java.io.BufferedReader;
 import java.io.IOException;

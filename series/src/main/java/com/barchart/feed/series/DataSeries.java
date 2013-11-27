@@ -1,4 +1,4 @@
-package com.barchart.feed.impl.timeseries;
+package com.barchart.feed.series;
 
 import java.util.ArrayList;
 import java.util.Iterator;
