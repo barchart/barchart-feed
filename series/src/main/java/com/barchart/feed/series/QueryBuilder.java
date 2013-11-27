@@ -5,10 +5,10 @@ import org.joda.time.DateTime;
 import rx.Observable;
 
 import com.barchart.feed.api.model.meta.Instrument;
-import com.barchart.feed.api.timeseries.ContinuationPolicy;
-import com.barchart.feed.api.timeseries.Event;
-import com.barchart.feed.api.timeseries.Period;
-import com.barchart.feed.api.timeseries.SaleCondition;
+import com.barchart.feed.api.series.ContinuationPolicy;
+import com.barchart.feed.api.series.Event;
+import com.barchart.feed.api.series.Period;
+import com.barchart.feed.api.series.SaleCondition;
 
 public class QueryBuilder {
 	private DataQuery query;

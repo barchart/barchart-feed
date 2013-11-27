@@ -1,4 +1,4 @@
-package com.barchart.feed.api.timeseries;
+package com.barchart.feed.api.series;
 
 public class Event {
 
