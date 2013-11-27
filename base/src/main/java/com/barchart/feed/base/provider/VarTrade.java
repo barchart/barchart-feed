@@ -13,8 +13,8 @@ import com.barchart.feed.base.trade.enums.MarketTradeField;
 import com.barchart.feed.base.trade.enums.MarketTradeSequencing;
 import com.barchart.feed.base.trade.enums.MarketTradeSession;
 import com.barchart.feed.base.trade.enums.MarketTradeType;
+import com.barchart.feed.base.values.api.Value;
 import com.barchart.util.anno.Mutable;
-import com.barchart.util.values.api.Value;
 
 @Mutable
 public final class VarTrade extends DefTrade implements MarketDoTrade {

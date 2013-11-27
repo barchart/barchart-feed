@@ -15,7 +15,7 @@ import static com.barchart.feed.base.trade.enums.MarketTradeSession.EXTENDED;
 import static com.barchart.feed.base.trade.enums.MarketTradeSession.PIT;
 
 import com.barchart.feed.api.model.data.Trade;
-import com.barchart.util.values.api.Value;
+import com.barchart.feed.base.values.api.Value;
 
 public enum MarketTradeType implements Value<MarketTradeType> {
 

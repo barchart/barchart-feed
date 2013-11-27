@@ -9,7 +9,7 @@ package com.barchart.feed.base.bar.api;
 
 import com.barchart.feed.api.model.data.Session;
 import com.barchart.feed.base.bar.enums.MarketBarField;
-import com.barchart.util.values.api.Value;
+import com.barchart.feed.base.values.api.Value;
 
 /**
  * represents a market bar, such as O-H-L-C;

@@ -7,24 +7,32 @@
  */
 package com.barchart.feed.base.market.enums;
 
-import static com.barchart.feed.base.provider.MarketConst.*;
-import static com.barchart.util.values.provider.ValueConst.*;
+import static com.barchart.feed.base.provider.MarketConst.NULL_BAR;
+import static com.barchart.feed.base.provider.MarketConst.NULL_BOOK;
+import static com.barchart.feed.base.provider.MarketConst.NULL_BOOK_ENTRY;
+import static com.barchart.feed.base.provider.MarketConst.NULL_BOOK_TOP;
+import static com.barchart.feed.base.provider.MarketConst.NULL_CUVOL;
+import static com.barchart.feed.base.provider.MarketConst.NULL_CUVOL_ENTRY;
+import static com.barchart.feed.base.provider.MarketConst.NULL_MARKET;
+import static com.barchart.feed.base.provider.MarketConst.NULL_STATE;
+import static com.barchart.feed.base.provider.MarketConst.NULL_TRADE;
+import static com.barchart.feed.base.values.provider.ValueConst.NULL_TIME;
 
 import com.barchart.feed.base.bar.api.MarketBar;
 import com.barchart.feed.base.book.api.MarketBook;
 import com.barchart.feed.base.book.api.MarketBookEntry;
 import com.barchart.feed.base.book.api.MarketBookTop;
+import com.barchart.feed.base.collections.BitSetEnum;
 import com.barchart.feed.base.cuvol.api.MarketCuvol;
 import com.barchart.feed.base.cuvol.api.MarketCuvolEntry;
 import com.barchart.feed.base.market.api.Market;
 import com.barchart.feed.base.state.api.MarketState;
 import com.barchart.feed.base.trade.api.MarketTrade;
+import com.barchart.feed.base.values.api.TimeValue;
+import com.barchart.feed.base.values.api.Value;
 import com.barchart.util.anno.NotMutable;
-import com.barchart.util.collections.BitSetEnum;
 import com.barchart.util.enums.DictEnum;
 import com.barchart.util.enums.ParaEnumBase;
-import com.barchart.util.values.api.TimeValue;
-import com.barchart.util.values.api.Value;
 
 @NotMutable
 public final class MarketField<V extends Value<V>> extends

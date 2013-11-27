@@ -7,19 +7,19 @@
  */
 package com.barchart.feed.base.provider;
 
-import static com.barchart.feed.base.book.enums.MarketBookAction.*;
-import static com.barchart.util.values.provider.ValueBuilder.*;
+import static com.barchart.feed.base.book.enums.MarketBookAction.NOOP;
+import static com.barchart.feed.base.values.provider.ValueBuilder.newSize;
 
 import com.barchart.feed.api.model.data.Book;
 import com.barchart.feed.base.book.api.MarketDoBookEntry;
 import com.barchart.feed.base.book.enums.MarketBookAction;
+import com.barchart.feed.base.collections.ScadecRingBufferBase;
+import com.barchart.feed.base.values.api.PriceValue;
+import com.barchart.feed.base.values.api.SizeValue;
+import com.barchart.feed.base.values.provider.ValueBuilder;
+import com.barchart.feed.base.values.provider.ValueConst;
 import com.barchart.util.anno.NotThreadSafe;
-import com.barchart.util.collections.ScadecRingBufferBase;
 import com.barchart.util.math.MathExtra;
-import com.barchart.util.values.api.PriceValue;
-import com.barchart.util.values.api.SizeValue;
-import com.barchart.util.values.provider.ValueBuilder;
-import com.barchart.util.values.provider.ValueConst;
 
 /** this book side ring is limited to 32 levels */
 @NotThreadSafe

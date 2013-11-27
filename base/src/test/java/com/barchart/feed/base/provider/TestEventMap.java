@@ -7,7 +7,9 @@
  */
 package com.barchart.feed.base.provider;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Map.Entry;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -17,8 +19,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.barchart.feed.base.market.enums.MarketEvent;
-import com.barchart.feed.base.provider.EventMap;
-import com.barchart.util.thread.Runner;
+import com.barchart.feed.base.thread.Runner;
 
 public class TestEventMap {
 

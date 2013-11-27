@@ -7,10 +7,10 @@
  */
 package com.barchart.feed.base.provider;
 
+import com.barchart.feed.base.collections.FastEnumSet;
 import com.barchart.feed.base.state.api.MarketState;
 import com.barchart.feed.base.state.enums.MarketStateEntry;
 import com.barchart.util.anno.NotThreadSafe;
-import com.barchart.util.collections.FastEnumSet;
 
 @NotThreadSafe
 class DefState extends FastEnumSet<MarketStateEntry> implements

@@ -7,9 +7,9 @@
  */
 package com.barchart.feed.base.provider;
 
+import com.barchart.feed.base.collections.FastEnumSet;
 import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.util.anno.NotThreadSafe;
-import com.barchart.util.collections.FastEnumSet;
 
 @NotThreadSafe
 class FieldSet extends FastEnumSet<MarketField<?>> {

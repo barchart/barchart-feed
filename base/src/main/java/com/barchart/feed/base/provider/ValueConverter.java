@@ -1,14 +1,14 @@
 package com.barchart.feed.base.provider;
 
+import com.barchart.feed.base.values.api.PriceValue;
+import com.barchart.feed.base.values.api.SizeValue;
+import com.barchart.feed.base.values.api.TimeValue;
 import com.barchart.util.value.FactoryImpl;
 import com.barchart.util.value.api.Factory;
 import com.barchart.util.value.api.Fraction;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Size;
 import com.barchart.util.value.api.Time;
-import com.barchart.util.values.api.PriceValue;
-import com.barchart.util.values.api.SizeValue;
-import com.barchart.util.values.api.TimeValue;
 
 public final class ValueConverter {
 
@@ -26,7 +26,7 @@ public final class ValueConverter {
 		return factory.newTime(value.asMillisUTC(), "");
 	}
 	
-	public static Fraction fraction(final com.barchart.util.values.api.Fraction frac) {
+	public static Fraction fraction(final com.barchart.feed.base.values.api.Fraction frac) {
 		return factory.newFraction((int)frac.base(), (int)frac.exponent());
 	}
 	

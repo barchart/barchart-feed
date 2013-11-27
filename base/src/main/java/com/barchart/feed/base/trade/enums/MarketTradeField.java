@@ -10,18 +10,18 @@ package com.barchart.feed.base.trade.enums;
 import static com.barchart.feed.base.trade.enums.MarketTradeSequencing.NULL_TRADE_SEQUENCE;
 import static com.barchart.feed.base.trade.enums.MarketTradeSession.NULL_TRADE_SESSION;
 import static com.barchart.feed.base.trade.enums.MarketTradeType.NULL_TRADE_TYPE;
-import static com.barchart.util.values.provider.ValueConst.NULL_PRICE;
-import static com.barchart.util.values.provider.ValueConst.NULL_SIZE;
-import static com.barchart.util.values.provider.ValueConst.NULL_TIME;
+import static com.barchart.feed.base.values.provider.ValueConst.NULL_PRICE;
+import static com.barchart.feed.base.values.provider.ValueConst.NULL_SIZE;
+import static com.barchart.feed.base.values.provider.ValueConst.NULL_TIME;
 
+import com.barchart.feed.base.collections.BitSetEnum;
+import com.barchart.feed.base.values.api.PriceValue;
+import com.barchart.feed.base.values.api.SizeValue;
+import com.barchart.feed.base.values.api.TimeValue;
+import com.barchart.feed.base.values.api.Value;
 import com.barchart.util.anno.NotMutable;
-import com.barchart.util.collections.BitSetEnum;
 import com.barchart.util.enums.DictEnum;
 import com.barchart.util.enums.ParaEnumBase;
-import com.barchart.util.values.api.PriceValue;
-import com.barchart.util.values.api.SizeValue;
-import com.barchart.util.values.api.TimeValue;
-import com.barchart.util.values.api.Value;
 
 @NotMutable
 public final class MarketTradeField<V extends Value<V>> extends

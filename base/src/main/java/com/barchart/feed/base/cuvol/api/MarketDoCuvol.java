@@ -11,12 +11,12 @@ import java.util.Collections;
 import java.util.List;
 
 import com.barchart.feed.api.model.meta.Instrument;
+import com.barchart.feed.base.values.api.PriceValue;
+import com.barchart.feed.base.values.api.SizeValue;
+import com.barchart.feed.base.values.api.TimeValue;
+import com.barchart.feed.base.values.provider.ValueConst;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Time;
-import com.barchart.util.values.api.PriceValue;
-import com.barchart.util.values.api.SizeValue;
-import com.barchart.util.values.api.TimeValue;
-import com.barchart.util.values.provider.ValueConst;
 
 public interface MarketDoCuvol extends MarketCuvol {
 

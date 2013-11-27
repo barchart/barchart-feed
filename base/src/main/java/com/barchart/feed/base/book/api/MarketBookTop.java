@@ -8,9 +8,9 @@
 package com.barchart.feed.base.book.api;
 
 import com.barchart.feed.api.model.data.Book;
+import com.barchart.feed.base.values.api.TimeValue;
+import com.barchart.feed.base.values.api.Value;
 import com.barchart.util.anno.NotMutable;
-import com.barchart.util.values.api.TimeValue;
-import com.barchart.util.values.api.Value;
 
 @NotMutable
 public interface MarketBookTop extends Value<MarketBookTop>, Book.Top {

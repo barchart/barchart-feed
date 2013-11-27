@@ -7,8 +7,8 @@
  */
 package com.barchart.feed.base.provider;
 
-import static com.barchart.util.values.provider.ValueBuilder.newPrice;
-import static com.barchart.util.values.provider.ValueBuilder.newTime;
+import static com.barchart.feed.base.values.provider.ValueBuilder.newPrice;
+import static com.barchart.feed.base.values.provider.ValueBuilder.newTime;
 import static org.junit.Assert.assertEquals;
 
 import org.joda.time.DateTime;
@@ -18,11 +18,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.barchart.feed.base.market.api.MarketDisplay;
+import com.barchart.feed.base.values.api.PriceValue;
+import com.barchart.feed.base.values.api.TimeValue;
 import com.barchart.util.value.FactoryImpl;
 import com.barchart.util.value.api.Factory;
 import com.barchart.util.value.api.Fraction;
-import com.barchart.util.values.api.PriceValue;
-import com.barchart.util.values.api.TimeValue;
 
 public class TestMarketDisplayBaseImpl {
 	

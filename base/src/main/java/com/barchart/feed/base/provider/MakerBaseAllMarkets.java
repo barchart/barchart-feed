@@ -19,9 +19,9 @@ import com.barchart.feed.base.market.api.MarketMessage;
 import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.base.market.enums.MarketField;
+import com.barchart.feed.base.values.api.Value;
 import com.barchart.util.value.api.Fraction;
 import com.barchart.util.value.api.Price;
-import com.barchart.util.values.api.Value;
 
 public abstract class MakerBaseAllMarkets<Message extends MarketMessage>
 		extends MakerBase<Message> implements MarketMakerProvider<Message> {

@@ -7,16 +7,18 @@
  */
 package com.barchart.feed.base.bar.enums;
 
-import static com.barchart.util.values.provider.ValueConst.*;
+import static com.barchart.feed.base.values.provider.ValueConst.NULL_PRICE;
+import static com.barchart.feed.base.values.provider.ValueConst.NULL_SIZE;
+import static com.barchart.feed.base.values.provider.ValueConst.NULL_TIME;
 
+import com.barchart.feed.base.collections.BitSetEnum;
+import com.barchart.feed.base.values.api.PriceValue;
+import com.barchart.feed.base.values.api.SizeValue;
+import com.barchart.feed.base.values.api.TimeValue;
+import com.barchart.feed.base.values.api.Value;
 import com.barchart.util.anno.NotMutable;
-import com.barchart.util.collections.BitSetEnum;
 import com.barchart.util.enums.DictEnum;
 import com.barchart.util.enums.ParaEnumBase;
-import com.barchart.util.values.api.PriceValue;
-import com.barchart.util.values.api.SizeValue;
-import com.barchart.util.values.api.TimeValue;
-import com.barchart.util.values.api.Value;
 
 @NotMutable
 /** represents O-H-L-C market bar fields */

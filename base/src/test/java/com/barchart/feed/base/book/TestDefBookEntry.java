@@ -16,8 +16,8 @@ import org.junit.Test;
 import com.barchart.feed.api.model.data.Book;
 import com.barchart.feed.base.book.enums.MarketBookAction;
 import com.barchart.feed.base.provider.DefBookEntry;
+import com.barchart.feed.base.values.provider.ValueConst;
 import com.barchart.util.bench.size.JavaSize;
-import com.barchart.util.values.provider.ValueConst;
 
 public class TestDefBookEntry {
 

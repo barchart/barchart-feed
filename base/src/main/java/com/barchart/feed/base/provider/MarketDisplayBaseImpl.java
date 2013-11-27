@@ -16,13 +16,13 @@ import org.joda.time.format.DateTimeFormatter;
 
 import com.barchart.feed.base.market.api.MarketDisplay;
 import com.barchart.feed.base.util.ASCII;
+import com.barchart.feed.base.values.api.PriceValue;
+import com.barchart.feed.base.values.api.SizeValue;
+import com.barchart.feed.base.values.api.TimeValue;
+import com.barchart.feed.base.values.provider.ValueConst;
 import com.barchart.util.value.FactoryImpl;
 import com.barchart.util.value.api.Factory;
 import com.barchart.util.value.api.Fraction;
-import com.barchart.util.values.api.PriceValue;
-import com.barchart.util.values.api.SizeValue;
-import com.barchart.util.values.api.TimeValue;
-import com.barchart.util.values.provider.ValueConst;
 
 public class MarketDisplayBaseImpl implements MarketDisplay {
 	

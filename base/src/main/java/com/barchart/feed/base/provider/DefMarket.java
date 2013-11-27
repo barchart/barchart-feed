@@ -20,9 +20,9 @@ import com.barchart.feed.api.model.data.SessionSet;
 import com.barchart.feed.api.model.data.Trade;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.market.enums.MarketField;
+import com.barchart.feed.base.values.api.Value;
 import com.barchart.util.anno.NotMutable;
 import com.barchart.util.value.api.Time;
-import com.barchart.util.values.api.Value;
 
 @NotMutable
 public class DefMarket extends NulMarket {

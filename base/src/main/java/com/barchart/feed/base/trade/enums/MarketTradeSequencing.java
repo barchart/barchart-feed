@@ -8,7 +8,7 @@
 package com.barchart.feed.base.trade.enums;
 
 import com.barchart.feed.api.model.data.Trade;
-import com.barchart.util.values.api.Value;
+import com.barchart.feed.base.values.api.Value;
 
 public enum MarketTradeSequencing implements Value<MarketTradeSequencing> {
 

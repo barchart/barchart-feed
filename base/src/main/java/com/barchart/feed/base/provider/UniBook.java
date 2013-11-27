@@ -21,12 +21,12 @@ import com.barchart.feed.api.model.data.Book;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.book.api.MarketDoBookEntry;
 import com.barchart.feed.base.book.enums.UniBookResult;
+import com.barchart.feed.base.values.api.PriceValue;
+import com.barchart.feed.base.values.api.SizeValue;
+import com.barchart.feed.base.values.api.Value;
+import com.barchart.feed.base.values.provider.ValueFreezer;
 import com.barchart.util.anno.NotThreadSafe;
 import com.barchart.util.math.MathExtra;
-import com.barchart.util.values.api.PriceValue;
-import com.barchart.util.values.api.SizeValue;
-import com.barchart.util.values.api.Value;
-import com.barchart.util.values.provider.ValueFreezer;
 
 @NotThreadSafe
 // javaSize this = 8(obj) + 1(size) + 4(keyRef) + 4(bidsRef) + 4(asksRef) = 24

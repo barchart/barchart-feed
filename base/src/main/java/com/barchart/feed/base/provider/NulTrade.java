@@ -16,12 +16,12 @@ import com.barchart.feed.base.trade.enums.MarketTradeField;
 import com.barchart.feed.base.trade.enums.MarketTradeSequencing;
 import com.barchart.feed.base.trade.enums.MarketTradeSession;
 import com.barchart.feed.base.trade.enums.MarketTradeType;
+import com.barchart.feed.base.values.api.Value;
+import com.barchart.feed.base.values.provider.ValueConst;
+import com.barchart.feed.base.values.provider.ValueFreezer;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Size;
 import com.barchart.util.value.api.Time;
-import com.barchart.util.values.api.Value;
-import com.barchart.util.values.provider.ValueConst;
-import com.barchart.util.values.provider.ValueFreezer;
 
 public class NulTrade extends ValueFreezer<MarketTrade> implements MarketTrade {
 

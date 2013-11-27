@@ -16,7 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.base.market.enums.MarketField;
-import com.barchart.util.values.api.Value;
+import com.barchart.feed.base.values.api.Value;
 
 public class TestMarketField {
 

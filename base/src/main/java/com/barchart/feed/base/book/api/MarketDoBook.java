@@ -9,7 +9,7 @@ package com.barchart.feed.base.book.api;
 
 import com.barchart.feed.api.model.data.Book;
 import com.barchart.feed.base.book.enums.UniBookResult;
-import com.barchart.util.values.api.TimeValue;
+import com.barchart.feed.base.values.api.TimeValue;
 
 public interface MarketDoBook extends MarketBook {
 

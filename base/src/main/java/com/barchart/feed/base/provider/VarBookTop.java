@@ -10,9 +10,9 @@ package com.barchart.feed.base.provider;
 import com.barchart.feed.api.model.data.Book;
 import com.barchart.feed.base.book.api.MarketBookEntry;
 import com.barchart.feed.base.book.api.MarketBookTop;
+import com.barchart.feed.base.values.api.TimeValue;
+import com.barchart.feed.base.values.provider.ValueFreezer;
 import com.barchart.util.anno.ProxyTo;
-import com.barchart.util.values.api.TimeValue;
-import com.barchart.util.values.provider.ValueFreezer;
 
 @ProxyTo( { VarBook.class })
 final class VarBookTop extends ValueFreezer<MarketBookTop> implements

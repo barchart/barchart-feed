@@ -17,7 +17,7 @@ import static com.barchart.feed.base.market.enums.MarketField.BAR_PREVIOUS;
 import com.barchart.feed.base.bar.api.MarketBar;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.base.market.enums.MarketField;
-import com.barchart.util.values.api.Value;
+import com.barchart.feed.base.values.api.Value;
 
 /**
  * type of O-H-L-C market bars;

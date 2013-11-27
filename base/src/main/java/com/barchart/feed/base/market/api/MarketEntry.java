@@ -7,9 +7,9 @@
  */
 package com.barchart.feed.base.market.api;
 
+import com.barchart.feed.base.values.api.PriceValue;
+import com.barchart.feed.base.values.api.SizeValue;
 import com.barchart.util.anno.NotMutable;
-import com.barchart.util.values.api.PriceValue;
-import com.barchart.util.values.api.SizeValue;
 
 @NotMutable
 public interface MarketEntry {

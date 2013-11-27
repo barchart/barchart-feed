@@ -11,12 +11,12 @@ import com.barchart.feed.api.model.data.Cuvol;
 import com.barchart.feed.base.book.api.MarketBookEntry;
 import com.barchart.feed.base.cuvol.api.MarketCuvolEntry;
 import com.barchart.feed.base.cuvol.api.MarketDoCuvolEntry;
+import com.barchart.feed.base.values.api.PriceValue;
+import com.barchart.feed.base.values.api.SizeValue;
+import com.barchart.feed.base.values.provider.ValueFreezer;
 import com.barchart.util.anno.NotMutable;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Size;
-import com.barchart.util.values.api.PriceValue;
-import com.barchart.util.values.api.SizeValue;
-import com.barchart.util.values.provider.ValueFreezer;
 
 @NotMutable
 public class DefCuvolEntry extends ValueFreezer<MarketCuvolEntry> implements

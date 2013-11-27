@@ -48,9 +48,9 @@ import com.barchart.feed.base.state.enums.MarketStateEntry;
 import com.barchart.feed.base.sub.Sub;
 import com.barchart.feed.base.sub.SubscriptionHandler;
 import com.barchart.feed.base.sub.SubscriptionType;
+import com.barchart.feed.base.values.api.Value;
 import com.barchart.util.value.api.Fraction;
 import com.barchart.util.value.api.Price;
-import com.barchart.util.values.api.Value;
 
 public abstract class MarketProviderBase<Message extends MarketMessage> 
 		implements MarketService, MarketMakerProvider<Message>,

@@ -48,12 +48,12 @@ import com.barchart.feed.base.participant.FrameworkAgent;
 import com.barchart.feed.base.state.api.MarketState;
 import com.barchart.feed.base.trade.api.MarketDoTrade;
 import com.barchart.feed.base.trade.api.MarketTrade;
+import com.barchart.feed.base.values.api.PriceValue;
+import com.barchart.feed.base.values.api.SizeValue;
+import com.barchart.feed.base.values.api.Value;
+import com.barchart.feed.base.values.provider.ValueBuilder;
 import com.barchart.util.anno.Mutable;
 import com.barchart.util.anno.ThreadSafe;
-import com.barchart.util.values.api.PriceValue;
-import com.barchart.util.values.api.SizeValue;
-import com.barchart.util.values.api.Value;
-import com.barchart.util.values.provider.ValueBuilder;
 
 /**
  * basic market life cycle; NO event management logic here

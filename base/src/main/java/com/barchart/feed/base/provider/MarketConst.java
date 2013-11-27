@@ -7,9 +7,9 @@
  */
 package com.barchart.feed.base.provider;
 
-import static com.barchart.util.values.provider.ValueConst.NULL_PRICE;
-import static com.barchart.util.values.provider.ValueConst.NULL_SIZE;
-import static com.barchart.util.values.provider.ValueConst.NULL_TIME;
+import static com.barchart.feed.base.values.provider.ValueConst.NULL_PRICE;
+import static com.barchart.feed.base.values.provider.ValueConst.NULL_SIZE;
+import static com.barchart.feed.base.values.provider.ValueConst.NULL_TIME;
 
 import java.util.EnumSet;
 
@@ -28,7 +28,7 @@ import com.barchart.feed.base.cuvol.api.MarketCuvolEntry;
 import com.barchart.feed.base.market.api.Market;
 import com.barchart.feed.base.state.api.MarketState;
 import com.barchart.feed.base.trade.api.MarketTrade;
-import com.barchart.util.values.api.SizeValue;
+import com.barchart.feed.base.values.api.SizeValue;
 
 public final class MarketConst {
 

@@ -18,9 +18,9 @@ import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.market.api.Market;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.base.market.enums.MarketField;
+import com.barchart.feed.base.thread.Runner;
+import com.barchart.feed.base.values.api.Value;
 import com.barchart.util.anno.NotThreadSafe;
-import com.barchart.util.thread.Runner;
-import com.barchart.util.values.api.Value;
 
 @NotThreadSafe
 class RegCenter {

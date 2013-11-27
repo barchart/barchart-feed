@@ -10,8 +10,8 @@ package com.barchart.feed.base.provider;
 import java.util.Collections;
 import java.util.List;
 
+import com.barchart.feed.base.collections.FastArrayList;
 import com.barchart.util.anno.NotThreadSafe;
-import com.barchart.util.collections.FastArrayList;
 
 @NotThreadSafe
 final class RegTakerList extends FastArrayList<RegTaker<?>> {

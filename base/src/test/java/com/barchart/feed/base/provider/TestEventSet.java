@@ -7,9 +7,15 @@
  */
 package com.barchart.feed.base.provider;
 
-import static com.barchart.feed.base.market.enums.MarketEvent.*;
-import static java.lang.System.*;
-import static org.junit.Assert.*;
+import static com.barchart.feed.base.market.enums.MarketEvent.MARKET_STATUS_CLOSED;
+import static com.barchart.feed.base.market.enums.MarketEvent.MARKET_UPDATED;
+import static com.barchart.feed.base.market.enums.MarketEvent.NEW_BOOK_SNAPSHOT;
+import static com.barchart.feed.base.market.enums.MarketEvent.NEW_CLOSE;
+import static com.barchart.feed.base.market.enums.MarketEvent.NEW_INTEREST;
+import static java.lang.System.out;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -21,8 +27,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.barchart.feed.base.market.enums.MarketEvent;
-import com.barchart.feed.base.provider.EventSet;
-import com.barchart.util.thread.Runner;
+import com.barchart.feed.base.thread.Runner;
 
 public class TestEventSet {
 

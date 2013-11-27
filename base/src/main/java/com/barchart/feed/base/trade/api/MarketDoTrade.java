@@ -8,7 +8,7 @@
 package com.barchart.feed.base.trade.api;
 
 import com.barchart.feed.base.trade.enums.MarketTradeField;
-import com.barchart.util.values.api.Value;
+import com.barchart.feed.base.values.api.Value;
 
 public interface MarketDoTrade extends MarketTrade {
 

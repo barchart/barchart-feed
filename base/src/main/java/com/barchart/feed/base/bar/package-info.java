@@ -6,7 +6,7 @@
  * http://www.opensource.org/licenses/bsd-license.php
  */
 /**
- * market bar, a.k.a OHLC 
+ * market book a.k.a depth  
  */
 package com.barchart.feed.base.bar;
 

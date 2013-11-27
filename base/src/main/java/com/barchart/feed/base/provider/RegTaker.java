@@ -17,11 +17,11 @@ import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.base.market.enums.MarketField;
+import com.barchart.feed.base.thread.Runner;
+import com.barchart.feed.base.thread.RunnerLoop;
+import com.barchart.feed.base.values.api.Value;
 import com.barchart.util.anno.NotMutable;
 import com.barchart.util.anno.NotThreadSafe;
-import com.barchart.util.thread.Runner;
-import com.barchart.util.thread.RunnerLoop;
-import com.barchart.util.values.api.Value;
 
 @NotMutable
 @NotThreadSafe

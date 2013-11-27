@@ -2,10 +2,10 @@ package com.barchart.feed.base.market.api;
 
 import org.joda.time.DateTimeZone;
 
+import com.barchart.feed.base.values.api.PriceValue;
+import com.barchart.feed.base.values.api.SizeValue;
+import com.barchart.feed.base.values.api.TimeValue;
 import com.barchart.util.value.api.Fraction;
-import com.barchart.util.values.api.PriceValue;
-import com.barchart.util.values.api.SizeValue;
-import com.barchart.util.values.api.TimeValue;
 
 public interface MarketDisplay {
 	

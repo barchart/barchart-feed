@@ -14,9 +14,9 @@ import static com.barchart.feed.base.trade.enums.MarketTradeSequencing.NORMAL;
 import static com.barchart.feed.base.trade.enums.MarketTradeSession.DEFAULT;
 import static com.barchart.feed.base.trade.enums.MarketTradeType.FUTURE_ELECTRONIC;
 import static com.barchart.feed.base.trade.enums.MarketTradeType.FUTURE_PIT;
-import static com.barchart.util.values.provider.ValueBuilder.newPrice;
-import static com.barchart.util.values.provider.ValueBuilder.newSize;
-import static com.barchart.util.values.provider.ValueBuilder.newTime;
+import static com.barchart.feed.base.values.provider.ValueBuilder.newPrice;
+import static com.barchart.feed.base.values.provider.ValueBuilder.newSize;
+import static com.barchart.feed.base.values.provider.ValueBuilder.newTime;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -32,9 +32,9 @@ import com.barchart.feed.base.cuvol.api.MarketCuvolEntry;
 import com.barchart.feed.base.market.api.Market;
 import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.message.MockMsgTrade;
+import com.barchart.feed.base.values.api.SizeValue;
 import com.barchart.feed.inst.InstrumentService;
 import com.barchart.feed.inst.provider.MockDefinitionService;
-import com.barchart.util.values.api.SizeValue;
 
 public class TestProcessCuvol {
 

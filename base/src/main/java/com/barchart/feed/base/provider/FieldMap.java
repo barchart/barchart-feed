@@ -7,9 +7,9 @@
  */
 package com.barchart.feed.base.provider;
 
+import com.barchart.feed.base.collections.FastEnumMap;
 import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.util.anno.ThreadSafe;
-import com.barchart.util.collections.FastEnumMap;
 
 @ThreadSafe
 class FieldMap<T> extends FastEnumMap<MarketField<?>, T> {

@@ -7,7 +7,7 @@
  */
 package com.barchart.feed.base.book.enums;
 
-import com.barchart.util.values.api.Value;
+import com.barchart.feed.base.values.api.Value;
 
 public enum MarketBookAction implements Value<MarketBookAction> {
 

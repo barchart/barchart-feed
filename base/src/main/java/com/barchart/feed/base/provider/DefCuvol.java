@@ -12,11 +12,11 @@ import java.util.List;
 
 import com.barchart.feed.api.model.data.Cuvol;
 import com.barchart.feed.api.model.meta.Instrument;
+import com.barchart.feed.base.values.api.PriceValue;
+import com.barchart.feed.base.values.api.SizeValue;
 import com.barchart.util.anno.NotMutable;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Time;
-import com.barchart.util.values.api.PriceValue;
-import com.barchart.util.values.api.SizeValue;
 
 @NotMutable
 class DefCuvol extends NulCuvol {

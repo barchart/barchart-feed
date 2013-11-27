@@ -41,9 +41,9 @@ import com.barchart.feed.base.provider.MarketDataGetters.MDGetter;
 import com.barchart.feed.base.sub.Sub;
 import com.barchart.feed.base.sub.SubscriptionHandler;
 import com.barchart.feed.base.sub.SubscriptionType;
+import com.barchart.feed.base.values.api.Value;
 import com.barchart.feed.inst.InstrumentService;
 import com.barchart.util.value.api.Fraction;
-import com.barchart.util.values.api.Value;
 
 public abstract class MarketplaceBase<Message extends MarketMessage> implements
 		MarketMakerProvider<Message>, FrameworkAgentLifecycleHandler,

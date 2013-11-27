@@ -9,17 +9,17 @@ package com.barchart.feed.base.provider;
 
 import com.barchart.feed.api.model.data.Cuvol;
 import com.barchart.feed.api.model.meta.Instrument;
+import com.barchart.feed.base.collections.PriceArrayMap;
 import com.barchart.feed.base.cuvol.api.MarketCuvolEntry;
 import com.barchart.feed.base.cuvol.api.MarketDoCuvol;
+import com.barchart.feed.base.values.api.PriceValue;
+import com.barchart.feed.base.values.api.SizeValue;
+import com.barchart.feed.base.values.api.TimeValue;
+import com.barchart.feed.base.values.provider.ValueConst;
 import com.barchart.util.anno.Mutable;
 import com.barchart.util.anno.NotThreadSafe;
-import com.barchart.util.collections.PriceArrayMap;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Size;
-import com.barchart.util.values.api.PriceValue;
-import com.barchart.util.values.api.SizeValue;
-import com.barchart.util.values.api.TimeValue;
-import com.barchart.util.values.provider.ValueConst;
 
 @Mutable
 @NotThreadSafe

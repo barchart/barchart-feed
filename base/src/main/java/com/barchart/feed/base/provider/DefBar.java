@@ -11,8 +11,8 @@ import java.util.Set;
 
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.bar.enums.MarketBarField;
+import com.barchart.feed.base.values.api.Value;
 import com.barchart.util.anno.NotMutable;
-import com.barchart.util.values.api.Value;
 
 @NotMutable
 class DefBar extends NulBar {

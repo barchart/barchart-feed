@@ -13,11 +13,11 @@ import static com.barchart.feed.base.book.enums.MarketBookAction.REMOVE;
 import static com.barchart.feed.base.book.enums.UniBookResult.ERROR;
 import static com.barchart.feed.base.book.enums.UniBookResult.NORMAL;
 import static com.barchart.feed.base.book.enums.UniBookResult.TOP;
-import static com.barchart.util.values.provider.ValueBuilder.newPrice;
-import static com.barchart.util.values.provider.ValueBuilder.newSize;
-import static com.barchart.util.values.provider.ValueConst.NULL_PRICE;
-import static com.barchart.util.values.provider.ValueConst.NULL_SIZE;
-import static com.barchart.util.values.provider.ValueConst.ZERO_PRICE;
+import static com.barchart.feed.base.values.provider.ValueBuilder.newPrice;
+import static com.barchart.feed.base.values.provider.ValueBuilder.newSize;
+import static com.barchart.feed.base.values.provider.ValueConst.NULL_PRICE;
+import static com.barchart.feed.base.values.provider.ValueConst.NULL_SIZE;
+import static com.barchart.feed.base.values.provider.ValueConst.ZERO_PRICE;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -29,9 +29,9 @@ import com.barchart.feed.api.model.data.Book;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.book.api.MarketDoBookEntry;
 import com.barchart.feed.base.book.enums.UniBookResult;
+import com.barchart.feed.base.values.api.PriceValue;
+import com.barchart.feed.base.values.api.SizeValue;
 import com.barchart.util.bench.size.JavaSize;
-import com.barchart.util.values.api.PriceValue;
-import com.barchart.util.values.api.SizeValue;
 
 public class TestUniBook {
 
