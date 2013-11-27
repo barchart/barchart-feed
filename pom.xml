@@ -31,6 +31,7 @@
 		<module>inst</module>
 		<module>base</module>
 		<module>impl</module>
+		<module>series</module>
 	</modules>
 
 	<url>https://github.com/barchart/barchart-feed</url>
