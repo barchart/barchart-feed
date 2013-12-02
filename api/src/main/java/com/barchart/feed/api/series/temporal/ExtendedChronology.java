@@ -1,4 +1,4 @@
-package com.barchart.feed.api.series;
+package com.barchart.feed.api.series.temporal;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -292,16 +292,13 @@ public class ExtendedChronology extends AssembledChronology {
         }
 
         @Override
-        public long getDifferenceAsLong(long minuendInstant,
-                long subtrahendInstant) {
-            // TODO Auto-generated method stub
-            return 0;
+        public long getDifferenceAsLong(long minuendInstant, long subtrahendInstant) {
+            return (long)Math.abs((subtrahendInstant - minuendInstant) / iUnitMillis);
         }
 
         @Override
         public long getMillis(int value) {
-            // TODO Auto-generated method stub
-            return 0;
+            return iUnitMillis;
         }
 
         @Override

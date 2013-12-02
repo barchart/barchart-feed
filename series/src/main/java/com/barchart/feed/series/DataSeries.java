@@ -12,10 +12,10 @@ import org.junit.experimental.theories.DataPoints;
 import rx.Observer;
 import rx.Subscription;
 
-import com.barchart.feed.api.series.Period;
-import com.barchart.feed.api.series.PeriodType;
-import com.barchart.feed.api.series.Query;
 import com.barchart.feed.api.series.TimeSeries;
+import com.barchart.feed.api.series.assembly.Query;
+import com.barchart.feed.api.series.temporal.Period;
+import com.barchart.feed.api.series.temporal.PeriodType;
 import com.barchart.util.value.api.Time;
 
 public class DataSeries<E extends DataPoint> implements TimeSeries<E> {
@@ -434,7 +434,7 @@ public class DataSeries<E extends DataPoint> implements TimeSeries<E> {
 	 * 						to this series.
 	 * @return				
 	 */
-	public Subscription subscribe(Query query) {
+	public Subscription subscribe(Observer<E> observer) {
 		return null;
 	}
 }

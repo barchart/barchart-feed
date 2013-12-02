@@ -48,7 +48,7 @@ public class TestDataSeriesClient {
 		agent1.include(insts).subscribe(instObs());
 		
 		/////////////////
-	
+		//http://extras.ddfplus.com/instruments/?lookup
 		//http://ds01.ddfplus.com/historical/queryticks.ashx?username=username&password=password&
 //		historicalTest();
 		

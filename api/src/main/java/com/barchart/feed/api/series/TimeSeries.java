@@ -2,9 +2,13 @@ package com.barchart.feed.api.series;
 
 import java.util.Iterator;
 
+import org.junit.experimental.theories.DataPoint;
+
 import rx.Observer;
 import rx.Subscription;
 
+import com.barchart.feed.api.series.temporal.Period;
+import com.barchart.feed.api.series.temporal.PeriodType;
 import com.barchart.util.value.api.Time;
 
 /**
@@ -169,6 +173,6 @@ public interface TimeSeries<E extends TimePoint> {
 	 * 						to this series.
 	 * @return				
 	 */
-	public Subscription subscribe(Query query);
+	public Subscription subscribe(Observer<E> observer);
 
 }

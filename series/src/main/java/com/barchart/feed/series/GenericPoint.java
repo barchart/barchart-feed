@@ -4,7 +4,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.barchart.feed.api.series.Period;
+import com.barchart.feed.api.series.temporal.Period;
 import com.barchart.util.value.api.Existential;
 import com.barchart.util.value.api.Time;
 

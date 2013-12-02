@@ -1,4 +1,4 @@
-package com.barchart.feed.api.series;
+package com.barchart.feed.api.series.temporal;
 
 import org.joda.time.Chronology;
 import org.joda.time.DateTime;
