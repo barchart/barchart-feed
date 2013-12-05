@@ -37,7 +37,7 @@ public class TestDataSeriesClient {
 	public TestDataSeriesClient() throws InterruptedException {
 		provider = new BarchartMarketProvider("dray", "dray");
 		
-		new BarchartSeriesProvider(provider);
+		//new BarchartSeriesProvider(provider);
 		
 		/////////////////
 		
@@ -50,25 +50,26 @@ public class TestDataSeriesClient {
 	private static void historicalTest() {
 		try {
 			BufferedReader br = null;
-			DateTime now = new DateTime().minusDays(1);
+			DateTime now = new DateTime();//.minusDays(1);
 			DateTime next = new DateTime();
 			
 			while(true) {
 				String line;
-				String urlStr = "http://ds01.ddfplus.com/historical/queryticks.ashx?username=dray&password=dray&symbol=GOOG&";
-				urlStr += ("start="+nextDateStr(now)+"&end="+nextDateStr(next));
+				String urlStr = "http://ds01.ddfplus.com/historical/queryticks.ashx?username=dray&password=dray&symbol=ESZ13&";
+				urlStr += ("start="+nextDateStr(now));//+"&end="+nextDateStr(next));
 				System.out.println("url = " + urlStr);
 				br = nextConnection(urlStr);
 			    while((line = br.readLine()) != null) {
 			        System.out.println("Date: " + now);
 			        System.out.println(line + "\n");
 			        
-			        try {Thread.sleep(2000);}catch(Exception ex) { ex.printStackTrace(); }
+			        //try {Thread.sleep(2000);}catch(Exception ex) { ex.printStackTrace(); }
 			        
-			        break;
+			        //break;
 			    }
 			    if (null != br) {
 			       br.close();
+			       return;
 			    }
 			    now = now.minusDays(1);
 			    next = next.minusDays(1);

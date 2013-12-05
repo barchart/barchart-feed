@@ -80,20 +80,16 @@ public class BarchartSeriesProvider {
 		return null;
 	}
 	
-	private Distributor lookupNode(String symbol) {
+	private Distributor lookupNode(Query query) {
 		return null;
 	}
 	
 	private void startAndMonitorConnection() {
-		monitor = createObservableConnectionStateMonitor();
+		monitor = new ObservableMonitor();
 		marketProvider.bindConnectionStateListener(monitor);
 		marketProvider.startup();
 		
 		monitor.subscribe(getWaitForConnectionObserver());
-	}
-	
-	private ObservableMonitor createObservableConnectionStateMonitor() {
-		return new ObservableMonitor();
 	}
 	
 	private Observer<Pair<Connection, State>> getWaitForConnectionObserver() {
@@ -175,7 +171,6 @@ public class BarchartSeriesProvider {
 				
 				symbolObservers.get(symbol).onNext(pair);
 			}
-			
 		}
 	}
 	
