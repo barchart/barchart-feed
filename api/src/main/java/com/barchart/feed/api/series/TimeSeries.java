@@ -2,8 +2,6 @@ package com.barchart.feed.api.series;
 
 import java.util.Iterator;
 
-import org.junit.experimental.theories.DataPoint;
-
 import rx.Observer;
 import rx.Subscription;
 
