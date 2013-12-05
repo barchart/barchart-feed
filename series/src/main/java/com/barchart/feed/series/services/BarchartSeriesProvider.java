@@ -32,7 +32,7 @@ import com.barchart.feed.client.provider.BarchartMarketProvider;
  * @author David Ray
  */
 public class BarchartSeriesProvider {
-	private MarketService marketProvider;
+	private MarketService marketService;
 	private ConsumerAgent consumerAgent;
 	private ObservableMonitor monitor;
 	private MarketSubject market;
@@ -41,7 +41,7 @@ public class BarchartSeriesProvider {
 		Collections.synchronizedMap(new HashMap<String, Observer<Pair<String, Object>>>());
 	
 	private Object waitMonitor = new Object();
-	private AtomicBoolean isRunning = new AtomicBoolean(false);
+	private AtomicBoolean isConnected = new AtomicBoolean(false);
 	
 	
 	
@@ -51,7 +51,7 @@ public class BarchartSeriesProvider {
 	 * 					{@link BarchartMarketProvider}
 	 */
 	public BarchartSeriesProvider(MarketService service) {
-		this.marketProvider = service;
+		this.marketService = service;
 		
 		startAndMonitorConnection();
 	}
@@ -62,7 +62,7 @@ public class BarchartSeriesProvider {
 	 * @return
 	 */
 	public <T extends TimePoint> Observable<TimeSeries<T>> subscribe(Query query) {
-		if(!isRunning.get()) {
+		if(!isConnected.get()) {
 			synchronized(waitMonitor) {
 				try { waitMonitor.wait(); } catch(Exception e) { e.printStackTrace(); }
 			}
@@ -74,7 +74,7 @@ public class BarchartSeriesProvider {
 		Distributor distributor = new Distributor();
 		symbolObservers.put(symbol, distributor);
 		
-		//Multi-map the instrument Distributor to all possible symbols for the specified symbol
+		//Multi-map the instrument Distributor to all possible forms of the specified symbol.
 		consumerAgent.include(symbol).subscribe(createInstrumentObserver(distributor));
 		
 		return null;
@@ -86,8 +86,8 @@ public class BarchartSeriesProvider {
 	
 	private void startAndMonitorConnection() {
 		monitor = new ObservableMonitor();
-		marketProvider.bindConnectionStateListener(monitor);
-		marketProvider.startup();
+		marketService.bindConnectionStateListener(monitor);
+		marketService.startup();
 		
 		monitor.subscribe(getWaitForConnectionObserver());
 	}
@@ -102,13 +102,13 @@ public class BarchartSeriesProvider {
 				if(args.last == State.CONNECTED) {
 					synchronized(waitMonitor) {
 						try { 
-							isRunning.getAndSet(true);
+							isConnected.getAndSet(true);
 							waitMonitor.notifyAll();
 						}catch(Exception e) { e.printStackTrace(); }
 					}
 					
 					market = new MarketSubject();
-					consumerAgent = marketProvider.register(market, Market.class);
+					consumerAgent = marketService.register(market, Market.class);
 				}
 			}
 		};
@@ -158,9 +158,9 @@ public class BarchartSeriesProvider {
 	}
 	
 	/**
-	 * Used internally to 
-	 * @author David Ray
-	 *
+	 * Observer which receives notification when the {@link Market} has
+	 * been updated with a change of the previously registered "type(s)".
+	 * Next this class routes the received data to the 
 	 */
 	private class MarketSubject implements MarketObserver<Market> {
 		@Override
@@ -174,13 +174,18 @@ public class BarchartSeriesProvider {
 		}
 	}
 	
+	/**
+	 * {@link Observable} which is responsible for requesting historical data
+	 * based on multiple criteria and routing that data to the receiver based on
+	 * the registered query.
+	 */
 	private class HistoricalSubject {
 		List<Observer<? super Pair<String, Object>>> observers = 
 			Collections.synchronizedList(new ArrayList<Observer<? super Pair<String, Object>>>());
 	}
 	
 	/**
-	 * Observable market service connection state monitor
+	 * {@link Observable} market service connection state monitor
 	 */
 	private class ObservableMonitor implements Monitor {
 		List<Observer<? super Pair<Connection, State>>> observers = 
