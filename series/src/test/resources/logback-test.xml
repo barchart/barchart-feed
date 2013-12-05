@@ -1,0 +1,35 @@
+
+<configuration>
+
+	<property name="PATTERN"
+		value="%date %-5level [%-8thread{8}] %-32logger{32} %-20(%method@%line){20} %message %n" />
+
+	<appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>${PATTERN}</pattern>
+		</encoder>
+	</appender>
+
+	<!-- main log file located in ${user.dir} -->
+	<!-- <appender name="main" class="ch.qos.logback.core.FileAppender">
+		<file>${java.io.tmpdir}/.com.barchart.platform/logs/platform_main.log
+		</file>
+		<encoder>
+			<pattern>${PATTERN}</pattern>
+		</encoder>
+	</appender> -->
+
+	<logger name="root" level="debug">
+		<appender-ref ref="console" />
+		<appender-ref ref="main" />
+	</logger>
+
+
+	<logger name="org.apache" level="off" />
+
+	<logger name="com.barchart.feed"
+		level="error" />
+
+	
+
+</configuration>

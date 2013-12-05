@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.barchart.feed.api.series.TimePoint;
 import com.barchart.feed.api.series.temporal.Period;
 import com.barchart.util.value.api.Existential;
 import com.barchart.util.value.api.Time;
@@ -48,5 +49,7 @@ public abstract class GenericPoint<K, V extends Existential> extends DataPoint {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public abstract int compareTo(DataPoint dataPoint);
+	public <E extends TimePoint> int compareTo(E other) {
+		return  period.getPeriodType().compareAtResolution(date, ((DataPoint)other).date);
+	}
 }

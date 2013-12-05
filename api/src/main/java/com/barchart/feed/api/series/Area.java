@@ -1,6 +1,6 @@
 package com.barchart.feed.api.series;
 
-import com.barchart.util.value.api.Scaled;
+import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Time;
 
 
@@ -10,19 +10,19 @@ import com.barchart.util.value.api.Time;
  * 
  * @author David Ray
  */
-public interface Area<T extends Scaled<T>> extends Range<T> {
+public interface Area extends Range {
 	/**
 	 * Returns the high value at the future most time index.
 	 * 
 	 * @return	the high value at the future most time index.
 	 */
-	public Scaled<T> getNextHigh();
+	public Price getNextHigh();
 	/**
 	 * Returns the low value at the future most time index.
 	 * 
 	 * @return	the low value at the future most time index.
 	 */
-	public Scaled<T> getNextlow();
+	public Price getNextlow();
 	/**
 	 * Returns the future-most {@link Time}
 	 * @return	the future-most {@link Time}

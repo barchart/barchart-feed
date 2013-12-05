@@ -24,6 +24,7 @@ import com.barchart.feed.api.model.data.Book;
 import com.barchart.feed.api.model.data.Market;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.client.provider.BarchartMarketProvider;
+import com.barchart.feed.series.services.BarchartSeriesProvider;
 
 public class TestDataSeriesClient {
 	
@@ -36,21 +37,13 @@ public class TestDataSeriesClient {
 	public TestDataSeriesClient() throws InterruptedException {
 		provider = new BarchartMarketProvider("dray", "dray");
 		
-		final CountDownLatch lock = new CountDownLatch(1);
-		
-		provider.bindConnectionStateListener(listener(lock));
-		provider.startup();
-		
-		lock.await();
-		
-		agent1 = provider.register(marketObs(), Market.class);
-		
-		agent1.include(insts).subscribe(instObs());
+		new BarchartSeriesProvider(provider);
 		
 		/////////////////
-		//http://extras.ddfplus.com/instruments/?lookup
+		
+		//http://extras.ddfplus.com/instruments/?lookup=ES*3
 		//http://ds01.ddfplus.com/historical/queryticks.ashx?username=username&password=password&
-//		historicalTest();
+		historicalTest();
 		
 	}
 	
@@ -163,6 +156,7 @@ public class TestDataSeriesClient {
 	
 	public static void main(String[] args) {
 		try {
+			
 			new TestDataSeriesClient();
 			
 //			agent1.exclude(insts).subscribe(instObs());

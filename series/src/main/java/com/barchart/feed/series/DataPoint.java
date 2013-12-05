@@ -1,6 +1,7 @@
 package com.barchart.feed.series;
 
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 
 import com.barchart.feed.api.series.TimePoint;
 import com.barchart.feed.api.series.temporal.Period;
@@ -13,13 +14,13 @@ import com.barchart.util.value.api.Time;
  * 
  * @author David Ray
  */
-public abstract class DataPoint implements Comparable<DataPoint>, TimePoint {
+public abstract class DataPoint implements TimePoint {
 	/** The period describing the type and units of time */
 	protected Period period;
 	/** The time index of this {@code DataPoint} */
 	protected Time time;
 	/** Immutable internal representation for efficiency (note: this value is immutable anyway)*/
-	DateTime date; 
+	protected DateTime date; 
 	
 	
 	
@@ -32,7 +33,7 @@ public abstract class DataPoint implements Comparable<DataPoint>, TimePoint {
 	protected DataPoint(Period period, Time t) {
 		this.period = period;
 		this.time = t;
-		this.date = new DateTime(time.millisecond());
+		this.date = new DateTime(time.millisecond()).withZone(DateTimeZone.forID(t.zone()));
 	}
 	
 	/**
@@ -42,6 +43,16 @@ public abstract class DataPoint implements Comparable<DataPoint>, TimePoint {
 	@Override
 	public Time getTime() {
 		return time;
+	}
+	
+	/**
+	 * Returns the configured aggregation period.
+	 * 
+	 * @return period the configured aggregation period.
+	 */
+	@Override
+	public Period getPeriod() {
+		return period;
 	}
 	
 	/**
@@ -56,8 +67,8 @@ public abstract class DataPoint implements Comparable<DataPoint>, TimePoint {
 	 * the argument {@code DataPoint}.
 	 */
 	@Override
-	public int compareTo(DataPoint other) {
-		return  period.getPeriodType().compareAtResolution(date, other.date);
+	public <E extends TimePoint> int compareTo(E other) {
+		return  period.getPeriodType().compareAtResolution(date, ((DataPoint)other).date);
 	}
 	
 	/**

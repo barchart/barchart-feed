@@ -1,13 +1,13 @@
-package com.barchart.feed.series;
+package com.barchart.feed.series.services;
 
 import org.joda.time.DateTime;
 
 import com.barchart.feed.api.series.TimePoint;
-import com.barchart.feed.api.series.assembly.ContinuationPolicy;
-import com.barchart.feed.api.series.assembly.CorporateAction;
-import com.barchart.feed.api.series.assembly.Query;
-import com.barchart.feed.api.series.assembly.SaleCondition;
-import com.barchart.feed.api.series.assembly.VolumeType;
+import com.barchart.feed.api.series.services.ContinuationPolicy;
+import com.barchart.feed.api.series.services.CorporateAction;
+import com.barchart.feed.api.series.services.Query;
+import com.barchart.feed.api.series.services.SaleCondition;
+import com.barchart.feed.api.series.services.VolumeType;
 import com.barchart.feed.api.series.temporal.Period;
 import com.barchart.feed.api.series.temporal.PeriodType;
 import com.barchart.feed.api.series.temporal.TradingSession;
@@ -23,9 +23,9 @@ import com.barchart.feed.api.series.temporal.TradingWeek;
  * Typical usage is as follows:
  * <p>
  * <pre>
- * Query query = QueryBuilder.Builder().symbol("ESZ3").build();
- * Observable<TimeSeries<T>> node = Assembler.assemble(query).timeseries();
- * Subscription subscription = node.subscribe(myObserver);
+ * BarchartSeriesProvider provider = new BarchartSeriesProvider(MarketService);
+ * Query query = QueryBuilder.create().symbol("ESZ3").build();
+ * Observable<TimeSeries> series = provider.subscribe(query);
  * </pre>
  * <p>
  * 
@@ -33,11 +33,12 @@ import com.barchart.feed.api.series.temporal.TradingWeek;
  * 
  * @author David Ray
  */
-//@SuppressWarnings("unused")
+@SuppressWarnings("unused")
 public class QueryBuilder {
     private int padding;
     private int nearestOffset;
     private String specifier;
+    private String symbol;
     private DateTime start = PeriodType.DAY.resolutionInstant(new DateTime().minusDays(90));
     private DateTime end;
 	private DataQuery query;
@@ -51,7 +52,7 @@ public class QueryBuilder {
 	}
 	
 	public Query build() {
-		if(specifier == null) {
+		if(symbol == null) {
 			throw new IllegalStateException("No Symbol specified.");
 		}
 		
@@ -64,9 +65,17 @@ public class QueryBuilder {
 	
 	public QueryBuilder specifier(String specifier) {
 		if(specifier == null || specifier.length() < 1) {
-			throw new IllegalArgumentException("Symbol cannot be null, or of zero length");
+			throw new IllegalArgumentException("If specified, the analytic specifier cannot be null, or of zero length");
 		}
 		this.specifier = query.specifier = specifier;
+		return this;
+	}
+	
+	public QueryBuilder symbol(String symbol) {
+		if(symbol == null || symbol.length() < 1) {
+			throw new IllegalArgumentException("Symbol cannot be null, or of zero length");
+		}
+		this.symbol = query.symbol = symbol;
 		return this;
 	}
 	
@@ -141,6 +150,7 @@ public class QueryBuilder {
 	    private int padding;
 	    private int nearestOffset;
 	    private String specifier;
+	    private String symbol;
         private Period period = Period.DAY;
         private DateTime start = PeriodType.DAY.resolutionInstant(new DateTime().minusDays(90));
         private DateTime end;
@@ -160,6 +170,15 @@ public class QueryBuilder {
 	     */
 	    public String getSpecifier() {
 	        return specifier;
+	    }
+	    
+	    /**
+	     * Returns the symbol of the underying series data.
+	     * 
+	     * @return	the symbol of the underying series data.
+	     */
+	    public String getSymbol() {
+	    	return symbol;
 	    }
 
 	    /**

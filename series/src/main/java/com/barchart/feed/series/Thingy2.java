@@ -1,11 +1,10 @@
 package com.barchart.feed.series;
 
 
-
-public class Thingy implements rx.Subscription {
-	private Test<?> publisher;
+public class Thingy2 implements rx.Subscription {
+	private Test2 publisher;
 	
-	public <T> Thingy(Test<T> publisher) {
+	public Thingy2(Test2 publisher) {
 		this.publisher = publisher;
 	}
 	

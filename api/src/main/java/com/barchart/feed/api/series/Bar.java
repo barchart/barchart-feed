@@ -1,6 +1,7 @@
 package com.barchart.feed.api.series;
 
-import com.barchart.util.value.api.Scaled;
+import com.barchart.util.value.api.Price;
+import com.barchart.util.value.api.Size;
 
 
 /**
@@ -8,29 +9,29 @@ import com.barchart.util.value.api.Scaled;
  * 
  * @param <T>   core value-util type
  */
-public interface Bar<T extends Scaled<T>> extends TimePoint, Range<T> {
+public interface Bar extends TimePoint, Range {
 
 	/**
 	 * Returns the open price
 	 * @return the open price
 	 */
-	public T getOpen();
+	public Price getOpen();
 
 	/**
 	 * Returns the close price
 	 * @return the close price
 	 */
-	public T getClose();
+	public Price getClose();
 
 	/**
 	 * Returns the volume
 	 * @return the volume
 	 */
-	public T getVolume();
+	public Size getVolume();
 
 	/**
 	 * Returns the open interest (futures only)
 	 * @return the open interest
 	 */
-	public T getOpenInterest();
+	public Size getOpenInterest();
 }

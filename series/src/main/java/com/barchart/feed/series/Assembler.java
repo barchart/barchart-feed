@@ -2,7 +2,7 @@ package com.barchart.feed.series;
 
 import rx.Observable;
 
-import com.barchart.feed.api.series.assembly.Query;
+import com.barchart.feed.api.series.services.Query;
 
 
 /**

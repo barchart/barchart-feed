@@ -70,17 +70,17 @@ public class TradingWeek extends JodaWorkingWeek {
     public static final TradingWeek DEFAULT;
     static {
         DEFAULT_PROPS = new Properties();
-        DEFAULT_PROPS.put("DEFAULT.holidayDateFileLoadType", TradingWeek.LoadType.MEMORY);
-        DEFAULT_PROPS.put("DEFAULT.holidayDelimiter", ",");
-        DEFAULT_PROPS.put("DEFAULT.holidayDates", "1610-1-1");
+        DEFAULT_PROPS.put("DEFAULT_CALENDAR.holidayDateFileLoadType", TradingWeek.LoadType.MEMORY);
+        DEFAULT_PROPS.put("DEFAULT_CALENDAR.holidayDelimiter", ",");
+        DEFAULT_PROPS.put("DEFAULT_CALENDAR.holidayDates", "1610-1-1");
         
-        DEFAULT_PROPS.setProperty("TEST.sessionParamDelimiter", ",");
-        DEFAULT_PROPS.setProperty("TEST.sessionDelimiter", ";");
-        DEFAULT_PROPS.setProperty("TEST.sessions", "7,08:30:0:0,7,19:59:59:999;1,08:30:0:0,1,19:59:59:999;2,08:30:0:0,2,19:59:59:999;" +
+        DEFAULT_PROPS.setProperty("DEFAULT_SESSIONS.sessionParamDelimiter", ",");
+        DEFAULT_PROPS.setProperty("DEFAULT_SESSIONS.sessionDelimiter", ";");
+        DEFAULT_PROPS.setProperty("DEFAULT_SESSIONS.sessions", "7,08:30:0:0,7,19:59:59:999;1,08:30:0:0,1,19:59:59:999;2,08:30:0:0,2,19:59:59:999;" +
             "3,08:30:0:0,3,19:59:59:999;4,08:30:0:0,4,19:59:59:999;5,08:30:0:0,5,19:59:59:999;6,08:30:0:0,6,19:59:59:999");
         
         try {
-            DEFAULT = TradingWeek.configBuilder(DEFAULT_PROPS, "DEFAULT", "DEFAULT").build();
+            DEFAULT = TradingWeek.configBuilder(DEFAULT_PROPS, "DEFAULT_CALENDAR", "DEFAULT_SESSIONS").build();
         } catch(Exception e) { throw new IllegalStateException("could not initialize default trading session."); }
     }
      

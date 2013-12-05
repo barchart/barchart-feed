@@ -1,4 +1,4 @@
-package com.barchart.feed.api.series.assembly;
+package com.barchart.feed.api.series.services;
 
 import org.joda.time.DateTime;
 
@@ -11,11 +11,18 @@ import com.barchart.feed.api.series.temporal.TradingWeek;
  */
 public interface Query {
     /**
-	 * Returns the symbol, expression, or analytic name requested. Queries should request only one of an instrument,
+	 * Returns the analytic name requested. Queries should request only one of an instrument,
 	 * symbol, expression or analytic. Subsequent calls will overwrite the previous value.
 	 * @return	this query
 	 */
 	public String getSpecifier();
+	
+	/**
+	 * Returns the the symbol or expression requested. Queries should request only one of an instrument,
+	 * symbol, expression or analytic. Subsequent calls will overwrite the previous value.
+	 * @return	this query
+	 */
+	public String getSymbol();
 
 	/**
 	 * Returns the {@link Period} ({@link TimePoint} aggregation)
