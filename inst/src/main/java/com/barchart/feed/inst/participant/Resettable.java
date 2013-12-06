@@ -1,6 +1,6 @@
 package com.barchart.feed.inst.participant;
 
-import aQute.bnd.annotation.ProviderType;
+import com.barchart.util.common.anno.aQute.bnd.annotation.ProviderType;
 
 /**
  * Reset mutable object to a known state.

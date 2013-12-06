@@ -19,9 +19,9 @@ public class BarchartSeriesProviderTest {
 	private BarchartSeriesProvider provider;
 	
 	public void testInstantiate() {
-		BarchartMarketProvider marketService = new BarchartMarketProvider("dray", "dray");
-		HistoricalService<HistoricalResult> historicalService = new HistoricalService<HistoricalResult>("dray", "dray");
-		provider = new BarchartSeriesProvider(marketService, historicalService);
+//		BarchartMarketProvider marketService = new BarchartMarketProvider("dray", "dray");
+//		HistoricalService<HistoricalResult> historicalService = new HistoricalService<HistoricalResult>("dray", "dray");
+//		provider = new BarchartSeriesProvider(marketService, historicalService);
 	}
 	
 	public Observable<TimeSeries<TimePoint>> testSubscribe() {
