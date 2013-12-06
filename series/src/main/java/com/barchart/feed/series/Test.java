@@ -17,7 +17,7 @@ public class Test<T> extends Observable<T> implements Observer<T> {
 	
 	private final Thread EXEC_THREAD;
 	
-	Test(String name) {
+	public Test(String name) {
 		super(null);
 		lazyInitSubscribeHandler();
 		
