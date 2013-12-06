@@ -37,9 +37,9 @@ import com.barchart.feed.base.bar.api.MarketBar;
 import com.barchart.feed.base.market.api.Market;
 import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.message.MockMsgTrade;
+import com.barchart.feed.base.provider.MockDefinitionService;
 import com.barchart.feed.base.trade.api.MarketTrade;
 import com.barchart.feed.inst.InstrumentService;
-import com.barchart.feed.inst.provider.MockDefinitionService;
 
 public class TestProcessBar {
 
