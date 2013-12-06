@@ -5,7 +5,6 @@ import rx.Observable;
 import com.barchart.feed.api.series.TimePoint;
 import com.barchart.feed.api.series.TimeSeries;
 import com.barchart.feed.api.series.services.HistoricalResult;
-import com.barchart.feed.client.provider.BarchartMarketProvider;
 
 /**
  * <pre>
