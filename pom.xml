@@ -14,7 +14,7 @@
 	<parent>
 		<groupId>com.barchart.base</groupId>
 		<artifactId>barchart-archon</artifactId>
-		<version>2.5.12</version>
+		<version>2.5.13</version>
 		<relativePath/>
 	</parent>
 
@@ -30,7 +30,6 @@
 		<module>api</module>
 		<module>inst</module>
 		<module>base</module>
-		<module>impl</module>
 		<module>series</module>
 	</modules>
 

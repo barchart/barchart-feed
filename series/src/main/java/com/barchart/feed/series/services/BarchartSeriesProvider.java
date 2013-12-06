@@ -29,7 +29,6 @@ import com.barchart.feed.api.series.TimeSeries;
 import com.barchart.feed.api.series.services.HistoricalObserver;
 import com.barchart.feed.api.series.services.HistoricalResult;
 import com.barchart.feed.api.series.services.Query;
-import com.barchart.feed.client.provider.BarchartMarketProvider;
 
 /**
  * Queryable framework for providing {@link TimeSeries} objects.
