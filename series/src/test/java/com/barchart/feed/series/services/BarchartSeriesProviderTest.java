@@ -4,6 +4,7 @@ import rx.Observable;
 
 import com.barchart.feed.api.series.TimePoint;
 import com.barchart.feed.api.series.TimeSeries;
+import com.barchart.feed.api.series.services.HistoricalResult;
 import com.barchart.feed.client.provider.BarchartMarketProvider;
 
 /**
@@ -20,7 +21,8 @@ public class BarchartSeriesProviderTest {
 	
 	public void testInstantiate() {
 		BarchartMarketProvider marketService = new BarchartMarketProvider("dray", "dray");
-		provider = new BarchartSeriesProvider(marketService);
+		HistoricalService<HistoricalResult> historicalService = new HistoricalService<HistoricalResult>("dray", "dray");
+		provider = new BarchartSeriesProvider(marketService, historicalService);
 	}
 	
 	public Observable<TimeSeries<TimePoint>> testSubscribe() {
