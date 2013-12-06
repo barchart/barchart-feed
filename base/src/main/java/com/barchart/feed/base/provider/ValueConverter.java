@@ -3,8 +3,8 @@ package com.barchart.feed.base.provider;
 import com.barchart.feed.base.values.api.PriceValue;
 import com.barchart.feed.base.values.api.SizeValue;
 import com.barchart.feed.base.values.api.TimeValue;
-import com.barchart.util.value.FactoryImpl;
-import com.barchart.util.value.api.Factory;
+import com.barchart.util.value.ValueFactoryImpl;
+import com.barchart.util.value.api.ValueFactory;
 import com.barchart.util.value.api.Fraction;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Size;
@@ -12,7 +12,7 @@ import com.barchart.util.value.api.Time;
 
 public final class ValueConverter {
 
-	private static final Factory factory = new FactoryImpl();
+	private static final ValueFactory factory = new ValueFactoryImpl();
 	
 	public static Price price(final PriceValue value) {
 		return factory.newPrice(value.mantissa(), value.exponent());

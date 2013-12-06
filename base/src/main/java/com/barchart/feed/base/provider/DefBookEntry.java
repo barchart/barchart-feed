@@ -21,8 +21,8 @@ import com.barchart.feed.base.values.api.PriceValue;
 import com.barchart.feed.base.values.api.SizeValue;
 import com.barchart.feed.base.values.provider.ValueFreezer;
 import com.barchart.util.common.math.MathExtra;
-import com.barchart.util.value.FactoryImpl;
-import com.barchart.util.value.api.Factory;
+import com.barchart.util.value.ValueFactoryImpl;
+import com.barchart.util.value.api.ValueFactory;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Size;
 
@@ -30,7 +30,7 @@ import com.barchart.util.value.api.Size;
 public class DefBookEntry extends ValueFreezer<MarketBookEntry> implements
 		MarketDoBookEntry {
 	
-	private static final Factory factory = new FactoryImpl();
+	private static final ValueFactory factory = new ValueFactoryImpl();
 
 	private final static byte nulAct = NOOP.ord;
 	private final static byte nulSide = Book.Side.NULL.ord;

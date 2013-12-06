@@ -18,8 +18,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.api.model.meta.Instrument;
-import com.barchart.util.value.FactoryImpl;
-import com.barchart.util.value.api.Factory;
+import com.barchart.util.value.ValueFactoryImpl;
+import com.barchart.util.value.api.ValueFactory;
 import com.barchart.util.value.api.Fraction;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Schedule;
@@ -33,7 +33,7 @@ public final class InstrumentProtoBuilder {
 			.getLogger(InstrumentProtoBuilder.class);
 	
 	@SuppressWarnings("unused")
-	private static final Factory factory = new FactoryImpl();
+	private static final ValueFactory factory = new ValueFactoryImpl();
 
 	private static final BiEnumMap<Instrument.SecurityType, InstrumentType> secTypeMap = 
 			new BiEnumMap<Instrument.SecurityType, InstrumentType>(

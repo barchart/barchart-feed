@@ -1,6 +1,6 @@
 package com.barchart.feed.api.model.meta.id;
 
-import com.barchart.util.value.api.identifier.Identifier;
+import com.barchart.util.common.identifier.Identifier;
 
 public class InstrumentID extends Identifier<String, InstrumentID> {
 
