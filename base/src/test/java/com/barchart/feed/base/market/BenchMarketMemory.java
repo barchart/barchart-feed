@@ -10,10 +10,10 @@ package com.barchart.feed.base.market;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.market.api.Market;
 import com.barchart.feed.base.market.api.MarketTaker;
+import com.barchart.feed.base.provider.MockDefinitionService;
 import com.barchart.feed.base.values.api.TextValue;
 import com.barchart.feed.base.values.provider.ValueBuilder;
 import com.barchart.feed.inst.InstrumentService;
-import com.barchart.feed.inst.provider.MockDefinitionService;
 
 public class BenchMarketMemory {
 

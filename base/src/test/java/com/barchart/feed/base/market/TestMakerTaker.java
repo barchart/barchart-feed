@@ -33,9 +33,9 @@ import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.feed.base.message.MockMsgTrade;
+import com.barchart.feed.base.provider.MockDefinitionService;
 import com.barchart.feed.base.values.api.SizeValue;
 import com.barchart.feed.inst.InstrumentService;
-import com.barchart.feed.inst.provider.MockDefinitionService;
 
 public class TestMakerTaker {
 
