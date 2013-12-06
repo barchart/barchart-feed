@@ -68,7 +68,7 @@ public class BarchartSeriesProvider {
 	 * @param query
 	 * @return
 	 */
-	public <T extends TimePoint> Observable<TimeSeries<T>> subscribe(Query query) {
+	public <T extends TimePoint> Observable<TimeSeries<T>> subscribe(final Query query) {
 		if(!isConnected.get()) {
 			synchronized(waitMonitor) {
 				try { waitMonitor.wait(); } catch(Exception e) { e.printStackTrace(); }
@@ -82,8 +82,12 @@ public class BarchartSeriesProvider {
 		
 		marketService.instrument(query.getSymbol()).subscribe(new Action1<MetadataService.Result<Instrument>>() {
 			@Override
-			public void call(MetadataService.Result<Instrument> t1) {
-				System.out.println("and the winner is: " + t1.results().values().iterator().next().get(0).marketGUID());
+			public void call(MetadataService.Result<Instrument> result) {
+				InstrumentID id = result.results().values().iterator().next().get(0).id();
+				System.out.println("and the winner is: " + id);
+				symbolObservers.put(id, lookupNode(query));
+				historicalService.subscribe(historical, query);
+				//consumerAgent.include(id);
 			}
 		});
 		
@@ -94,7 +98,7 @@ public class BarchartSeriesProvider {
 	}
 	
 	private Distributor lookupNode(Query query) {
-		return null;
+		return new Distributor();
 	}
 	
 	private void startAndMonitorConnection() {
