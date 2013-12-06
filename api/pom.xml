@@ -12,7 +12,7 @@
 	</parent>
 
 	<artifactId>barchart-feed-api</artifactId>
-	<version>2.2.2-SNAPSHOT</version>
+	<version>2.2.3-SNAPSHOT</version>
 	<packaging>bundle</packaging>
 
 	<scm>
