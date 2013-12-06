@@ -1,8 +1,11 @@
 package com.barchart.feed.series.services;
 
-import rx.Observer;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
-import com.barchart.feed.series.services.BarchartSeriesProvider.Pair;
+import com.barchart.feed.api.model.data.Market;
+import com.barchart.feed.api.series.services.HistoricalResult;
 
 
 /**
@@ -13,21 +16,17 @@ import com.barchart.feed.series.services.BarchartSeriesProvider.Pair;
  * @author David Ray
  *
  */
-public class Distributor implements Observer<Pair<String, Object>> {
-
-	@Override
-	public void onCompleted() {
-		// TODO Auto-generated method stub
+public class Distributor {
+	private DateTimeFormatter format = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss.SSS");
+	
+	public void onNextMarket(Market m) {
+		String symbol = m.trade().instrument().symbol();
+		System.out.println(new StringBuilder(symbol).append(",").append(format.print(new DateTime(m.trade().time().millisecond()))).
+			append("          ").append(format.print(new DateTime(m.trade().time().millisecond()))).append(m.trade().price().asDouble()).append(",").append(m.trade().size()));
 	}
-
-	@Override
-	public void onError(Throwable e) {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public void onNext(Pair<String, Object> args) {
-		System.out.println(args.first);
+	
+	public <T extends HistoricalResult> void onNextHistorical(T result) {
+		System.out.println("onNextHistorical: " + result.getResult());
 	}
 
 }

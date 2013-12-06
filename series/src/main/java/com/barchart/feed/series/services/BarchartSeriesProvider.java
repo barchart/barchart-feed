@@ -10,6 +10,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import rx.Observable;
 import rx.Observer;
 import rx.Subscription;
+import rx.util.functions.Action1;
 
 import com.barchart.feed.api.MarketObserver;
 import com.barchart.feed.api.connection.Connection;
@@ -17,12 +18,16 @@ import com.barchart.feed.api.connection.Connection.Monitor;
 import com.barchart.feed.api.connection.Connection.State;
 import com.barchart.feed.api.consumer.ConsumerAgent;
 import com.barchart.feed.api.consumer.MarketService;
+import com.barchart.feed.api.consumer.MetadataService;
 import com.barchart.feed.api.consumer.MetadataService.Result;
 import com.barchart.feed.api.model.data.Market;
 import com.barchart.feed.api.model.data.Market.Component;
 import com.barchart.feed.api.model.meta.Instrument;
+import com.barchart.feed.api.model.meta.id.InstrumentID;
 import com.barchart.feed.api.series.TimePoint;
 import com.barchart.feed.api.series.TimeSeries;
+import com.barchart.feed.api.series.services.HistoricalObserver;
+import com.barchart.feed.api.series.services.HistoricalResult;
 import com.barchart.feed.api.series.services.Query;
 import com.barchart.feed.client.provider.BarchartMarketProvider;
 
@@ -33,12 +38,14 @@ import com.barchart.feed.client.provider.BarchartMarketProvider;
  */
 public class BarchartSeriesProvider {
 	private MarketService marketService;
+	private HistoricalService<HistoricalResult> historicalService;
 	private ConsumerAgent consumerAgent;
 	private ObservableMonitor monitor;
 	private MarketSubject market;
+	private HistoricalSubject historical;
 	
-	Map<String, Observer<Pair<String, Object>>> symbolObservers =
-		Collections.synchronizedMap(new HashMap<String, Observer<Pair<String, Object>>>());
+	Map<InstrumentID, Distributor> symbolObservers =
+		Collections.synchronizedMap(new HashMap<InstrumentID, Distributor>());
 	
 	private Object waitMonitor = new Object();
 	private AtomicBoolean isConnected = new AtomicBoolean(false);
@@ -47,12 +54,12 @@ public class BarchartSeriesProvider {
 	
 	/**
 	 * Instantiates a new {@code BarchartSeriesProvider}
-	 * @param service	an implementation of {@link MarketService} such as 
-	 * 					{@link BarchartMarketProvider}
+	 * @param mktService	an implementation of {@link MarketService} such as {@link BarchartMarketProvider}
+	 * @param histService	an implementation of {@link HistoricalService} such as {@link BarchartHistoricalProvider}
 	 */
-	public BarchartSeriesProvider(MarketService service) {
-		this.marketService = service;
-		
+	public BarchartSeriesProvider(MarketService mktService, HistoricalService<HistoricalResult> histService) {
+		this.marketService = mktService;
+		this.historicalService = histService;
 		startAndMonitorConnection();
 	}
 	
@@ -72,10 +79,16 @@ public class BarchartSeriesProvider {
 		
 		String symbol = query.getSymbol();
 		Distributor distributor = new Distributor();
-		symbolObservers.put(symbol, distributor);
+		
+		marketService.instrument(query.getSymbol()).subscribe(new Action1<MetadataService.Result<Instrument>>() {
+			@Override
+			public void call(MetadataService.Result<Instrument> t1) {
+				System.out.println("and the winner is: " + t1.results().values().iterator().next().get(0).marketGUID());
+			}
+		});
 		
 		//Multi-map the instrument Distributor to all possible forms of the specified symbol.
-		consumerAgent.include(symbol).subscribe(createInstrumentObserver(distributor));
+		//consumerAgent.include(symbol).subscribe(createInstrumentObserver(distributor, query));
 		
 		return null;
 	}
@@ -109,12 +122,14 @@ public class BarchartSeriesProvider {
 					
 					market = new MarketSubject();
 					consumerAgent = marketService.register(market, Market.class);
+					
+					historical = new HistoricalSubject();
 				}
 			}
 		};
 	}
 	
-	private Observer<Result<Instrument>> createInstrumentObserver(final Distributor distributor) {
+	private Observer<Result<Instrument>> createInstrumentObserver(final Distributor distributor, final Query query) {
 		return new Observer<Result<Instrument>>() {
 			@Override
 			public void onCompleted() {
@@ -127,13 +142,11 @@ public class BarchartSeriesProvider {
 			@Override
 			public void onNext(Result<Instrument> args) {
 				System.out.println("New Instrument Lookup and Registration " + args.results().keySet());
-				
-				for(List<Instrument> l : args.results().values()) {
-					for(Instrument i : l) {
-						symbolObservers.put(i.symbol(), distributor);
-					}
-				}
+				//Use first log message
+				symbolObservers.put(args.results().values().iterator().next().get(0).id(), distributor);
+				historicalService.subscribe(historical, query);
 			}
+			
 		};
 	}
 	
@@ -167,9 +180,7 @@ public class BarchartSeriesProvider {
 		public void onNext(final Market v) {
 			if(v.change().contains(Component.TRADE)) {
 				String symbol = v.trade().instrument().symbol();
-				Pair<String, Object> pair = new Pair<String, Object>(symbol, v);
-				
-				symbolObservers.get(symbol).onNext(pair);
+				symbolObservers.get(symbol).onNextMarket(v);
 			}
 		}
 	}
@@ -179,9 +190,13 @@ public class BarchartSeriesProvider {
 	 * based on multiple criteria and routing that data to the receiver based on
 	 * the registered query.
 	 */
-	private class HistoricalSubject {
-		List<Observer<? super Pair<String, Object>>> observers = 
-			Collections.synchronizedList(new ArrayList<Observer<? super Pair<String, Object>>>());
+	private class HistoricalSubject implements HistoricalObserver<HistoricalResult> {
+		@Override public void onCompleted() {}
+		@Override public void onError(Throwable e) {}
+		@Override
+		public void onNext(HistoricalResult historicalResult) {
+			symbolObservers.get(historicalResult.getQuery().getSymbol()).onNextHistorical(historicalResult);
+		}
 	}
 	
 	/**

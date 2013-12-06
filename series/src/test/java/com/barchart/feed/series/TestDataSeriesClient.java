@@ -50,7 +50,7 @@ public class TestDataSeriesClient {
 	private static void historicalTest() {
 		try {
 			BufferedReader br = null;
-			DateTime now = new DateTime();//.minusDays(1);
+			DateTime now = new DateTime().minusDays(90);
 			DateTime next = new DateTime();
 			
 			while(true) {
@@ -60,7 +60,7 @@ public class TestDataSeriesClient {
 				System.out.println("url = " + urlStr);
 				br = nextConnection(urlStr);
 			    while((line = br.readLine()) != null) {
-			        System.out.println("Date: " + now);
+			        //System.out.println("Date: " + now);
 			        System.out.println(line + "\n");
 			        
 			        //try {Thread.sleep(2000);}catch(Exception ex) { ex.printStackTrace(); }
@@ -71,8 +71,8 @@ public class TestDataSeriesClient {
 			       br.close();
 			       return;
 			    }
-			    now = now.minusDays(1);
-			    next = next.minusDays(1);
+//			    now = now.minusDays(1);
+//			    next = next.minusDays(1);
 		    }
 		}
 		catch (final IOException ioe) {}
