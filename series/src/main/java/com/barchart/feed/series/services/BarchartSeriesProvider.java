@@ -10,7 +10,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import rx.Observable;
 import rx.Observer;
 import rx.Subscription;
-import rx.util.functions.Action1;
 
 import com.barchart.feed.api.MarketObserver;
 import com.barchart.feed.api.connection.Connection;
@@ -18,7 +17,6 @@ import com.barchart.feed.api.connection.Connection.Monitor;
 import com.barchart.feed.api.connection.Connection.State;
 import com.barchart.feed.api.consumer.ConsumerAgent;
 import com.barchart.feed.api.consumer.MarketService;
-import com.barchart.feed.api.consumer.MetadataService;
 import com.barchart.feed.api.consumer.MetadataService.Result;
 import com.barchart.feed.api.model.data.Market;
 import com.barchart.feed.api.model.data.Market.Component;
@@ -28,7 +26,9 @@ import com.barchart.feed.api.series.TimePoint;
 import com.barchart.feed.api.series.TimeSeries;
 import com.barchart.feed.api.series.services.HistoricalObserver;
 import com.barchart.feed.api.series.services.HistoricalResult;
+import com.barchart.feed.api.series.services.NodeIODescriptor;
 import com.barchart.feed.api.series.services.Query;
+import com.barchart.feed.api.series.temporal.TimeFrame;
 
 /**
  * Queryable framework for providing {@link TimeSeries} objects.
@@ -76,28 +76,42 @@ public class BarchartSeriesProvider {
 		
 		Observable<TimeSeries<T>> returnVal = null;
 		
-		String symbol = query.getSymbol();
-		Distributor distributor = new Distributor();
+		Observer<Result<Instrument>> instrumentLookup = createInstrumentObserver(query);
+		marketService.instrument(query.getSymbol()).subscribe(instrumentLookup);
 		
-		marketService.instrument(query.getSymbol()).subscribe(new Action1<MetadataService.Result<Instrument>>() {
-			@Override
-			public void call(MetadataService.Result<Instrument> result) {
-				InstrumentID id = result.results().values().iterator().next().get(0).id();
-				System.out.println("and the winner is: " + id);
-				symbolObservers.put(id, lookupNode(query));
-				historicalService.subscribe(historical, query);
-				//consumerAgent.include(id);
-			}
-		});
-		
-		//Multi-map the instrument Distributor to all possible forms of the specified symbol.
-		//consumerAgent.include(symbol).subscribe(createInstrumentObserver(distributor, query));
-		
-		return null;
+		return returnVal;
 	}
 	
-	private Distributor lookupNode(Query query) {
+	private Distributor lookupNode(NodeIODescriptor nodeIO) {
 		return new Distributor();
+	}
+	
+	private NodeIODescriptor createNodeIODescriptor(Query query, Instrument i) {
+		return new NodeIODescriptor(null, i, query.getSymbol(), new TimeFrame[] { new TimeFrame(query.getPeriod(), query.getStart(), query.getEnd()) }, query.getTradingWeek());
+	}
+	
+	private Observer<Result<Instrument>> createInstrumentObserver(final Query query) {
+		return new Observer<Result<Instrument>>() {
+			@Override
+			public void onCompleted() {
+				System.out.println("Lookup and registration complete");
+			}
+			@Override
+			public void onError(Throwable e) {
+				System.out.println("Exception in lookup and registration \n{} "+ e);
+			}
+			@Override
+			public void onNext(Result<Instrument> result) {
+				System.out.println("New Instrument Lookup and Registration " + result.results().keySet());
+				
+				Instrument instr = result.results().values().iterator().next().get(0);
+				
+				NodeIODescriptor nodeIO = createNodeIODescriptor(query, instr);
+				symbolObservers.put(instr.id(), lookupNode(nodeIO));
+				consumerAgent.include(instr);
+				historicalService.subscribe(historical, nodeIO);
+			}
+		};
 	}
 	
 	private void startAndMonitorConnection() {
@@ -123,33 +137,13 @@ public class BarchartSeriesProvider {
 						}catch(Exception e) { e.printStackTrace(); }
 					}
 					
-					market = new MarketSubject();
-					consumerAgent = marketService.register(market, Market.class);
-					
-					historical = new HistoricalSubject();
+					if(market == null) {
+						market = new MarketSubject();
+						consumerAgent = marketService.register(market, Market.class);
+						historical = new HistoricalSubject();
+					}
 				}
 			}
-		};
-	}
-	
-	private Observer<Result<Instrument>> createInstrumentObserver(final Distributor distributor, final Query query) {
-		return new Observer<Result<Instrument>>() {
-			@Override
-			public void onCompleted() {
-				System.out.println("Lookup and registration complete");
-			}
-			@Override
-			public void onError(Throwable e) {
-				System.out.println("Exception in lookup and registration \n{} "+ e);
-			}
-			@Override
-			public void onNext(Result<Instrument> args) {
-				System.out.println("New Instrument Lookup and Registration " + args.results().keySet());
-				//Use first log message
-				symbolObservers.put(args.results().values().iterator().next().get(0).id(), distributor);
-				historicalService.subscribe(historical, query);
-			}
-			
 		};
 	}
 	
@@ -182,8 +176,8 @@ public class BarchartSeriesProvider {
 		@Override
 		public void onNext(final Market v) {
 			if(v.change().contains(Component.TRADE)) {
-				String symbol = v.trade().instrument().symbol();
-				symbolObservers.get(symbol).onNextMarket(v);
+				Instrument instr = v.trade().instrument();
+				symbolObservers.get(instr.id()).onNextMarket(v);
 			}
 		}
 	}
@@ -198,7 +192,8 @@ public class BarchartSeriesProvider {
 		@Override public void onError(Throwable e) {}
 		@Override
 		public void onNext(HistoricalResult historicalResult) {
-			symbolObservers.get(historicalResult.getQuery().getSymbol()).onNextHistorical(historicalResult);
+			System.out.println("HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
+			symbolObservers.get(historicalResult.getIODescriptor().getInstrument().id()).onNextHistorical(historicalResult);
 		}
 	}
 	
