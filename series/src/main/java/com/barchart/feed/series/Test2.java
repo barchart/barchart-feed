@@ -27,7 +27,7 @@ public class Test2 implements Observer<DateTime> {
 	
 	private final Thread EXEC_THREAD;
 	
-	Test2(String name) {
+	public Test2(String name) {
 		this.name = name;
 		EXEC_THREAD = init(name);
 	}
