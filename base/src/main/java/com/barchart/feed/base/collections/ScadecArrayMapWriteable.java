@@ -8,7 +8,7 @@
 package com.barchart.feed.base.collections;
 
 import com.barchart.feed.base.values.lang.ScaledDecimal;
-import com.barchart.util.anno.NotThreadSafe;
+import com.barchart.util.common.anno.NotThreadSafe;
 
 // TODO implement LIMIT
 

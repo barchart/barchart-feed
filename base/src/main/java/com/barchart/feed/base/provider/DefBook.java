@@ -23,7 +23,7 @@ import com.barchart.feed.base.values.api.SizeValue;
 import com.barchart.feed.base.values.api.TimeValue;
 import com.barchart.feed.base.values.provider.ValueConst;
 import com.barchart.feed.base.values.provider.ValueFreezer;
-import com.barchart.util.anno.NotMutable;
+import com.barchart.util.common.anno.NotMutable;
 import com.barchart.util.value.api.Time;
 
 @NotMutable

@@ -12,7 +12,7 @@ import java.util.Set;
 
 import com.barchart.feed.base.collections.FastEnumSet;
 import com.barchart.feed.base.market.enums.MarketEvent;
-import com.barchart.util.anno.NotThreadSafe;
+import com.barchart.util.common.anno.NotThreadSafe;
 
 @NotThreadSafe
 class EventSet extends FastEnumSet<MarketEvent> {

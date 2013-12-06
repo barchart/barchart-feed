@@ -20,8 +20,8 @@ import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.feed.base.thread.Runner;
 import com.barchart.feed.base.thread.RunnerLoop;
 import com.barchart.feed.base.values.api.Value;
-import com.barchart.util.anno.NotMutable;
-import com.barchart.util.anno.NotThreadSafe;
+import com.barchart.util.common.anno.NotMutable;
+import com.barchart.util.common.anno.NotThreadSafe;
 
 @NotMutable
 @NotThreadSafe

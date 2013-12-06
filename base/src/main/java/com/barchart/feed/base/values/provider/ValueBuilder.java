@@ -17,9 +17,9 @@ import com.barchart.feed.base.values.api.SizeValue;
 import com.barchart.feed.base.values.api.TextValue;
 import com.barchart.feed.base.values.api.TimeInterval;
 import com.barchart.feed.base.values.api.TimeValue;
-import com.barchart.util.math.DoubleParts;
-import com.barchart.util.math.MathExtra;
-import com.barchart.util.math.MathIEEE754;
+import com.barchart.util.common.math.DoubleParts;
+import com.barchart.util.common.math.MathExtra;
+import com.barchart.util.common.math.MathIEEE754;
 
 public final class ValueBuilder {
 

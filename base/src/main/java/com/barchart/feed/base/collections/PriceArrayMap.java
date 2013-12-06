@@ -9,7 +9,7 @@ package com.barchart.feed.base.collections;
 
 import com.barchart.feed.base.values.api.PriceValue;
 import com.barchart.feed.base.values.provider.ValueConst;
-import com.barchart.util.anno.NotThreadSafe;
+import com.barchart.util.common.anno.NotThreadSafe;
 
 @NotThreadSafe
 public class PriceArrayMap<V> extends ScadecArrayMapWriteable<PriceValue, V> {

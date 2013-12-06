@@ -7,7 +7,7 @@
  */
 package com.barchart.feed.base.values.api;
 
-import com.barchart.util.anno.NotMutable;
+import com.barchart.util.common.anno.NotMutable;
 
 /**
  * note: CharSequence is implemented by: TextValue, String, StringBuilder,

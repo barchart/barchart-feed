@@ -15,7 +15,7 @@ import com.barchart.feed.base.book.api.MarketBookEntry;
 import com.barchart.feed.base.book.api.MarketBookTop;
 import com.barchart.feed.base.values.api.TimeValue;
 import com.barchart.feed.base.values.provider.ValueFreezer;
-import com.barchart.util.anno.NotMutable;
+import com.barchart.util.common.anno.NotMutable;
 
 @NotMutable
 public class DefBookTop extends ValueFreezer<MarketBookTop> implements

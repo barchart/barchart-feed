@@ -44,8 +44,8 @@
 
 		<dependency>
 			<groupId>com.barchart.util</groupId>
-			<artifactId>barchart-util-concurrent</artifactId>
-			<version>[2-SNAPSHOT,3-SNAPSHOT)</version>
+			<artifactId>barchart-util-common</artifactId>
+			<version>[1-SNAPSHOT,2-SNAPSHOT)</version>
 		</dependency>
 
 		<dependency>

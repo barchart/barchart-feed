@@ -1,10 +1,9 @@
 package com.barchart.feed.api.filter;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.api.model.meta.Metadata;
-import com.barchart.util.anno.NotMutable;
+import com.barchart.util.common.anno.NotMutable;
+import com.barchart.util.common.anno.aQute.bnd.annotation.ProviderType;
 
 /**
  * Market data content request filter expression.

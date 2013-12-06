@@ -25,8 +25,8 @@ import com.barchart.feed.base.values.api.PriceValue;
 import com.barchart.feed.base.values.api.SizeValue;
 import com.barchart.feed.base.values.api.Value;
 import com.barchart.feed.base.values.provider.ValueFreezer;
-import com.barchart.util.anno.NotThreadSafe;
-import com.barchart.util.math.MathExtra;
+import com.barchart.util.common.anno.NotThreadSafe;
+import com.barchart.util.common.math.MathExtra;
 
 @NotThreadSafe
 // javaSize this = 8(obj) + 1(size) + 4(keyRef) + 4(bidsRef) + 4(asksRef) = 24

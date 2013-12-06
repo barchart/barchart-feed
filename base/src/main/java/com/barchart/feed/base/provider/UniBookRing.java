@@ -18,8 +18,8 @@ import com.barchart.feed.base.values.api.PriceValue;
 import com.barchart.feed.base.values.api.SizeValue;
 import com.barchart.feed.base.values.provider.ValueBuilder;
 import com.barchart.feed.base.values.provider.ValueConst;
-import com.barchart.util.anno.NotThreadSafe;
-import com.barchart.util.math.MathExtra;
+import com.barchart.util.common.anno.NotThreadSafe;
+import com.barchart.util.common.math.MathExtra;
 
 /** this book side ring is limited to 32 levels */
 @NotThreadSafe

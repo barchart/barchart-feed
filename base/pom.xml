@@ -5,10 +5,10 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>com.barchart.feed</groupId>
-		<artifactId>barchart-feed-a</artifactId>
-		<version>2.0.4</version>
-		<relativePath>../archon</relativePath>
+		<groupId>com.barchart.base</groupId>
+		<artifactId>barchart-archon</artifactId>
+		<version>2.5.13</version>
+		<relativePath />
 	</parent>
 
 	<artifactId>barchart-feed-base</artifactId>
@@ -38,16 +38,18 @@
 			<artifactId>barchart-feed-api</artifactId>
 			<version>[2-SNAPSHOT,3-SNAPSHOT)</version>
 		</dependency>
+		
+		<!-- DELETE ME --> 
+		<dependency>
+			<groupId>com.barchart.util</groupId>
+			<artifactId>barchart-util-common</artifactId>
+			<version>[1-SNAPSHOT,2-SNAPSHOT)</version>
+		</dependency>
+		
 		<dependency>
 			<groupId>com.barchart.feed</groupId>
 			<artifactId>barchart-feed-inst</artifactId>
 			<version>[2-SNAPSHOT, 3-SNAPSHOT)</version>
-		</dependency>
-
-		<dependency>
-			<groupId>com.barchart.util</groupId>
-			<artifactId>barchart-util-enums</artifactId>
-			<version>[2-SNAPSHOT,3-SNAPSHOT)</version>
 		</dependency>
 
 		<dependency>
@@ -66,21 +68,14 @@
 		</dependency>
 
 		<!-- TEST -->
-
-		<dependency>
+		
+		<!-- <dependency>
 			<groupId>com.barchart.feed</groupId>
 			<artifactId>barchart-feed-inst</artifactId>
 			<version>[2-SNAPSHOT, 3-SNAPSHOT)</version>
-			<classifier>tests</classifier>
 			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>com.barchart.util</groupId>
-			<artifactId>barchart-util-bench</artifactId>
-			<version>[2-SNAPSHOT,3-SNAPSHOT)</version>
-			<scope>test</scope>
-		</dependency>
+			<optional>true</optional>
+		</dependency> -->
 
 		<dependency>
 			<groupId>javolution</groupId>

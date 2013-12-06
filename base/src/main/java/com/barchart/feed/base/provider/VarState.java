@@ -8,7 +8,7 @@
 package com.barchart.feed.base.provider;
 
 import com.barchart.feed.base.state.api.MarketState;
-import com.barchart.util.anno.NotThreadSafe;
+import com.barchart.util.common.anno.NotThreadSafe;
 
 @NotThreadSafe
 public class VarState extends DefState {

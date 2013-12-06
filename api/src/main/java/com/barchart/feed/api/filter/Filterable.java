@@ -1,6 +1,6 @@
 package com.barchart.feed.api.filter;
 
-import aQute.bnd.annotation.ProviderType;
+import com.barchart.util.common.anno.aQute.bnd.annotation.ProviderType;
 
 /**
  * Instance can participate in filtering algebra.

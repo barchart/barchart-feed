@@ -7,7 +7,7 @@
  */
 package com.barchart.feed.base.collections;
 
-import com.barchart.util.anno.NotThreadSafe;
+import com.barchart.util.common.anno.NotThreadSafe;
 
 @NotThreadSafe
 public class RingBufferSimple<V> extends RingBufferBase<V> {

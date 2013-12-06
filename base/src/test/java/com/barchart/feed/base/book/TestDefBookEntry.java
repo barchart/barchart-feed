@@ -7,7 +7,7 @@
  */
 package com.barchart.feed.base.book;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.After;
 import org.junit.Before;
@@ -17,7 +17,7 @@ import com.barchart.feed.api.model.data.Book;
 import com.barchart.feed.base.book.enums.MarketBookAction;
 import com.barchart.feed.base.provider.DefBookEntry;
 import com.barchart.feed.base.values.provider.ValueConst;
-import com.barchart.util.bench.size.JavaSize;
+import com.barchart.util.common.bench.JavaSize;
 
 public class TestDefBookEntry {
 

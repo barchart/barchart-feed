@@ -31,7 +31,7 @@ import com.barchart.feed.base.book.api.MarketDoBookEntry;
 import com.barchart.feed.base.book.enums.UniBookResult;
 import com.barchart.feed.base.values.api.PriceValue;
 import com.barchart.feed.base.values.api.SizeValue;
-import com.barchart.util.bench.size.JavaSize;
+import com.barchart.util.common.bench.JavaSize;
 
 public class TestUniBook {
 

@@ -13,7 +13,7 @@ import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 
 import com.barchart.feed.base.values.api.TimeValue;
-import com.barchart.util.anno.NotMutable;
+import com.barchart.util.common.anno.NotMutable;
 
 @NotMutable
 abstract class BaseTime extends ValueFreezer<TimeValue> implements TimeValue {

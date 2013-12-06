@@ -12,7 +12,7 @@ import java.util.Date;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 
-import com.barchart.util.anno.NotMutable;
+import com.barchart.util.common.anno.NotMutable;
 
 @NotMutable
 public interface TimeValue extends Value<TimeValue>, Comparable<TimeValue> {

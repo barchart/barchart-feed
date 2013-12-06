@@ -11,7 +11,7 @@ import java.util.Set;
 
 import com.barchart.feed.base.state.enums.MarketStateEntry;
 import com.barchart.feed.base.values.api.Value;
-import com.barchart.util.anno.NotMutable;
+import com.barchart.util.common.anno.NotMutable;
 
 /**
  */

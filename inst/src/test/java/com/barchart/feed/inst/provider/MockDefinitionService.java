@@ -20,8 +20,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.api.model.meta.Instrument;
-import com.barchart.feed.inst.InstrumentFuture;
-import com.barchart.feed.inst.InstrumentFutureMap;
 import com.barchart.feed.inst.InstrumentService;
 import com.barchart.util.value.FactoryImpl;
 import com.barchart.util.value.api.Factory;
@@ -99,14 +97,6 @@ public class MockDefinitionService implements InstrumentService<CharSequence> {
 	}
 
 	@Override
-	public InstrumentFuture lookupAsync(final CharSequence symbol) {
-		
-		// TODO
-		throw new UnsupportedOperationException();
-		
-	}
-
-	@Override
 	public Map<CharSequence, Instrument> lookup(
 			final Collection<CharSequence> symbols) {
 		
@@ -120,11 +110,4 @@ public class MockDefinitionService implements InstrumentService<CharSequence> {
 		return insts;
 	}
 
-	@Override
-	public InstrumentFutureMap<CharSequence> lookupAsync(
-			final Collection<CharSequence> symbols) {
-		
-		return null;
-	}
-	
 }

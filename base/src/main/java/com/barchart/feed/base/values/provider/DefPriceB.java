@@ -7,7 +7,7 @@
  */
 package com.barchart.feed.base.values.provider;
 
-import com.barchart.util.anno.NotMutable;
+import com.barchart.util.common.anno.NotMutable;
 
 // 24 bytes on 32 bit JVM
 @NotMutable

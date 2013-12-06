@@ -13,8 +13,8 @@ import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.bar.api.MarketDoBar;
 import com.barchart.feed.base.bar.enums.MarketBarField;
 import com.barchart.feed.base.values.api.Value;
-import com.barchart.util.anno.Mutable;
-import com.barchart.util.anno.ThreadSafe;
+import com.barchart.util.common.anno.Mutable;
+import com.barchart.util.common.anno.ThreadSafe;
 
 @Mutable
 @ThreadSafe

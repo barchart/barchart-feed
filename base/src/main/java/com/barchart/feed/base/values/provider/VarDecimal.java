@@ -7,11 +7,11 @@
  */
 package com.barchart.feed.base.values.provider;
 
-import static com.barchart.feed.base.values.provider.ValueBuilder.*;
+import static com.barchart.feed.base.values.provider.ValueBuilder.newDecimal;
 
 import com.barchart.feed.base.values.api.DecimalValue;
-import com.barchart.util.anno.Mutable;
-import com.barchart.util.anno.NotThreadSafe;
+import com.barchart.util.common.anno.Mutable;
+import com.barchart.util.common.anno.NotThreadSafe;
 
 // 24 bytes on 32 bit JVM
 @Mutable

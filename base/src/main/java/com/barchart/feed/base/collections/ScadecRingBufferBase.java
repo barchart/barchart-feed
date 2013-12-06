@@ -8,7 +8,7 @@
 package com.barchart.feed.base.collections;
 
 import com.barchart.feed.base.values.lang.ScaledDecimal;
-import com.barchart.util.math.MathExtra;
+import com.barchart.util.common.math.MathExtra;
 
 public abstract class ScadecRingBufferBase<K extends ScaledDecimal<K, ?>, V>
 		extends RingBufferBase<V> implements ScadecRingBuffer<K, V> {

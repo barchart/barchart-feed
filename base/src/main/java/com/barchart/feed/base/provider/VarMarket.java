@@ -27,8 +27,8 @@ import java.util.concurrent.ConcurrentMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.feed.api.model.data.Cuvol;
 import com.barchart.feed.api.model.data.Book;
+import com.barchart.feed.api.model.data.Cuvol;
 import com.barchart.feed.api.model.data.MarketData;
 import com.barchart.feed.api.model.data.Session;
 import com.barchart.feed.api.model.data.Trade;
@@ -52,8 +52,8 @@ import com.barchart.feed.base.values.api.PriceValue;
 import com.barchart.feed.base.values.api.SizeValue;
 import com.barchart.feed.base.values.api.Value;
 import com.barchart.feed.base.values.provider.ValueBuilder;
-import com.barchart.util.anno.Mutable;
-import com.barchart.util.anno.ThreadSafe;
+import com.barchart.util.common.anno.Mutable;
+import com.barchart.util.common.anno.ThreadSafe;
 
 /**
  * basic market life cycle; NO event management logic here

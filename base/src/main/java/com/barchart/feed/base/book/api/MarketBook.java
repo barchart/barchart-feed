@@ -15,7 +15,7 @@ import com.barchart.feed.base.values.api.PriceValue;
 import com.barchart.feed.base.values.api.SizeValue;
 import com.barchart.feed.base.values.api.TimeValue;
 import com.barchart.feed.base.values.api.Value;
-import com.barchart.util.anno.NotMutable;
+import com.barchart.util.common.anno.NotMutable;
 
 @NotMutable
 public interface MarketBook extends Value<MarketBook>, Book {

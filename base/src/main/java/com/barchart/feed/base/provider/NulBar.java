@@ -15,7 +15,7 @@ import com.barchart.feed.base.bar.api.MarketBar;
 import com.barchart.feed.base.bar.enums.MarketBarField;
 import com.barchart.feed.base.values.api.Value;
 import com.barchart.feed.base.values.provider.ValueFreezer;
-import com.barchart.util.anno.NotMutable;
+import com.barchart.util.common.anno.NotMutable;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Size;
 import com.barchart.util.value.api.Time;

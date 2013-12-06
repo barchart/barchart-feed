@@ -7,13 +7,12 @@
  */
 package com.barchart.feed.base.values.lang;
 
-import static java.lang.Math.max;
 import static java.lang.Math.min;
 
 import com.barchart.feed.base.values.api.Value;
 import com.barchart.feed.base.values.provider.ValueFreezer;
-import com.barchart.util.anno.NotMutable;
-import com.barchart.util.math.MathExtra;
+import com.barchart.util.common.anno.NotMutable;
+import com.barchart.util.common.math.MathExtra;
 
 @NotMutable
 public abstract class ScaledDecimalValue<T extends ScaledDecimal<T, F> & Value<T>, F extends ScaledDecimal<F, F> & Value<F>>

@@ -7,14 +7,14 @@
  */
 package com.barchart.feed.base.book;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import com.barchart.feed.base.book.enums.MarketBookAction;
-import com.barchart.util.math.MathExtra;
+import com.barchart.util.common.math.MathExtra;
 
 public class TestMarketBookAction {
 

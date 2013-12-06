@@ -16,8 +16,8 @@ import java.util.Set;
 
 import com.barchart.feed.base.thread.Runner;
 import com.barchart.feed.base.thread.RunnerLoop;
-import com.barchart.util.anno.NotThreadSafe;
-import com.barchart.util.anno.ThreadSafe;
+import com.barchart.util.common.anno.NotThreadSafe;
+import com.barchart.util.common.anno.ThreadSafe;
 
 @NotThreadSafe
 public class FastEnumMap<K extends BitSetEnum<K>, V> extends FastEnumBase<K>

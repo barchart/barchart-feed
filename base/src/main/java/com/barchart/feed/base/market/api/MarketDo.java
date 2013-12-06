@@ -27,7 +27,7 @@ import com.barchart.feed.base.trade.enums.MarketTradeType;
 import com.barchart.feed.base.values.api.PriceValue;
 import com.barchart.feed.base.values.api.SizeValue;
 import com.barchart.feed.base.values.api.TimeValue;
-import com.barchart.util.anno.Mutable;
+import com.barchart.util.common.anno.Mutable;
 
 @Mutable
 public interface MarketDo extends Market, FrameworkAgentLifecycleHandler {

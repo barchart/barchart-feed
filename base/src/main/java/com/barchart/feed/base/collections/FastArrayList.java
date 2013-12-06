@@ -13,9 +13,9 @@ import java.util.List;
 
 import com.barchart.feed.base.thread.Runner;
 import com.barchart.feed.base.thread.RunnerLoop;
-import com.barchart.util.anno.NotThreadSafe;
-import com.barchart.util.anno.ThreadSafe;
-import com.barchart.util.anno.UsedOnce;
+import com.barchart.util.common.anno.NotThreadSafe;
+import com.barchart.util.common.anno.ThreadSafe;
+import com.barchart.util.common.anno.UsedOnce;
 
 @NotThreadSafe
 public class FastArrayList<T> extends UnsupportedList<T> implements

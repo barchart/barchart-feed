@@ -1,10 +1,9 @@
 package com.barchart.feed.api.connection;
 
-import aQute.bnd.annotation.ConsumerType;
-import aQute.bnd.annotation.ProviderType;
-
-import com.barchart.util.anno.Mutable;
-import com.barchart.util.anno.UsedOnce;
+import com.barchart.util.common.anno.Mutable;
+import com.barchart.util.common.anno.UsedOnce;
+import com.barchart.util.common.anno.aQute.bnd.annotation.ConsumerType;
+import com.barchart.util.common.anno.aQute.bnd.annotation.ProviderType;
 
 /**
  * Logical end-user connection to the remote feed services.
