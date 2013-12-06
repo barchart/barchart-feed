@@ -1,6 +1,6 @@
 package com.barchart.feed.api.connection;
 
-import com.barchart.util.value.api.identifier.Identifier;
+import com.barchart.util.common.identifier.Identifier;
 
 public class SessionID extends Identifier<String, SessionID> {
 	

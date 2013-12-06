@@ -20,13 +20,13 @@ import org.junit.Test;
 import com.barchart.feed.base.market.api.MarketDisplay;
 import com.barchart.feed.base.values.api.PriceValue;
 import com.barchart.feed.base.values.api.TimeValue;
-import com.barchart.util.value.FactoryImpl;
-import com.barchart.util.value.api.Factory;
+import com.barchart.util.value.ValueFactoryImpl;
+import com.barchart.util.value.api.ValueFactory;
 import com.barchart.util.value.api.Fraction;
 
 public class TestMarketDisplayBaseImpl {
 	
-	private static final Factory factory = new FactoryImpl();
+	private static final ValueFactory factory = new ValueFactoryImpl();
 	
 	public static MarketDisplay display = new MarketDisplayBaseImpl();
 	

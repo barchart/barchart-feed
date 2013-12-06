@@ -22,12 +22,12 @@ import org.slf4j.LoggerFactory;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.inst.InstrumentService;
 import com.barchart.feed.inst.provider.InstrumentFactory;
-import com.barchart.util.value.FactoryImpl;
-import com.barchart.util.value.api.Factory;
+import com.barchart.util.value.ValueFactoryImpl;
+import com.barchart.util.value.api.ValueFactory;
 
 public class MockDefinitionService implements InstrumentService<CharSequence> {
 	
-	private static final Factory factory = new FactoryImpl();
+	private static final ValueFactory factory = new ValueFactoryImpl();
 	
 	@SuppressWarnings("unused")
 	private static final Logger log = LoggerFactory

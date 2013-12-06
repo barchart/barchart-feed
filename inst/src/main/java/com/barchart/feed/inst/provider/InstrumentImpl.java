@@ -14,8 +14,8 @@ import com.barchart.feed.api.model.meta.Exchange;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.api.model.meta.id.InstrumentID;
 import com.barchart.feed.inst.participant.InstrumentState.State;
-import com.barchart.util.value.FactoryImpl;
-import com.barchart.util.value.api.Factory;
+import com.barchart.util.value.ValueFactoryImpl;
+import com.barchart.util.value.api.ValueFactory;
 import com.barchart.util.value.api.Fraction;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Schedule;
@@ -24,7 +24,7 @@ import com.barchart.util.value.api.TimeInterval;
 
 public class InstrumentImpl extends InstrumentBase implements Instrument {
 	
-	private static final Factory factory = new FactoryImpl();
+	private static final ValueFactory factory = new ValueFactoryImpl();
 	
 	protected volatile InstrumentDefinition def = 
 			InstrumentDefinition.getDefaultInstance();

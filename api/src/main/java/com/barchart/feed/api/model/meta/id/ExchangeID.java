@@ -1,6 +1,6 @@
 package com.barchart.feed.api.model.meta.id;
 
-import com.barchart.util.value.api.identifier.Identifier;
+import com.barchart.util.common.identifier.Identifier;
 
 public class ExchangeID extends Identifier<String, ExchangeID> {
 	

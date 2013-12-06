@@ -20,13 +20,13 @@ import com.barchart.feed.base.values.api.PriceValue;
 import com.barchart.feed.base.values.api.SizeValue;
 import com.barchart.feed.base.values.api.TimeValue;
 import com.barchart.feed.base.values.provider.ValueConst;
-import com.barchart.util.value.FactoryImpl;
-import com.barchart.util.value.api.Factory;
+import com.barchart.util.value.ValueFactoryImpl;
+import com.barchart.util.value.api.ValueFactory;
 import com.barchart.util.value.api.Fraction;
 
 public class MarketDisplayBaseImpl implements MarketDisplay {
 	
-	private static final Factory factory = new FactoryImpl();
+	private static final ValueFactory factory = new ValueFactoryImpl();
 	
 	private static TimeValue filter(final TimeValue time) {
 		if (time == null) {
