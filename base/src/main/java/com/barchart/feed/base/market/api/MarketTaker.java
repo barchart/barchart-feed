@@ -11,9 +11,9 @@ import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.feed.base.values.api.Value;
-import com.barchart.util.anno.EventListener;
-import com.barchart.util.anno.NotMutable;
-import com.barchart.util.anno.UsedOnce;
+import com.barchart.util.common.anno.EventListener;
+import com.barchart.util.common.anno.NotMutable;
+import com.barchart.util.common.anno.UsedOnce;
 
 /**
  * NOTE: bind happens only once at taker registration

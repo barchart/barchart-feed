@@ -7,7 +7,7 @@
  */
 package com.barchart.feed.base.values.provider;
 
-import com.barchart.util.anno.NotMutable;
+import com.barchart.util.common.anno.NotMutable;
 
 @NotMutable
 final class DefDecimal extends BaseDecimal {

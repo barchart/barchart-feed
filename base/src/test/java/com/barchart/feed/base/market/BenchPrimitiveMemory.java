@@ -21,7 +21,7 @@ import com.barchart.feed.base.values.api.PriceValue;
 import com.barchart.feed.base.values.api.SizeValue;
 import com.barchart.feed.base.values.api.TimeValue;
 import com.barchart.feed.base.values.provider.ValueBuilder;
-import com.barchart.util.bench.size.JavaSize;
+import com.barchart.util.common.bench.JavaSize;
 
 public class BenchPrimitiveMemory {
 

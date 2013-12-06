@@ -17,10 +17,6 @@ public interface InstrumentService<V> {
 	
 	Instrument lookup(V symbol);
 	
-	InstrumentFuture lookupAsync(V symbol);
-	
 	Map<V, Instrument> lookup(Collection<V> symbols);
-	
-	InstrumentFutureMap<V> lookupAsync(Collection<V> symbols);
 	
 }

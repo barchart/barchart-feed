@@ -20,7 +20,7 @@ import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.feed.base.thread.Runner;
 import com.barchart.feed.base.values.api.Value;
-import com.barchart.util.anno.NotThreadSafe;
+import com.barchart.util.common.anno.NotThreadSafe;
 
 @NotThreadSafe
 class RegCenter {

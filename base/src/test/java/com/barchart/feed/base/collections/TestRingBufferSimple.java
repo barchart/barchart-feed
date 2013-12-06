@@ -19,7 +19,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.barchart.util.bench.size.JavaSize;
+import com.barchart.util.common.bench.JavaSize;
 
 public class TestRingBufferSimple {
 

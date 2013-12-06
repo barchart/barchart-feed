@@ -25,14 +25,14 @@ import com.barchart.feed.base.book.api.MarketBookTop;
 import com.barchart.feed.base.collections.BitSetEnum;
 import com.barchart.feed.base.cuvol.api.MarketCuvol;
 import com.barchart.feed.base.cuvol.api.MarketCuvolEntry;
+import com.barchart.feed.base.enums.DictEnum;
+import com.barchart.feed.base.enums.ParaEnumBase;
 import com.barchart.feed.base.market.api.Market;
 import com.barchart.feed.base.state.api.MarketState;
 import com.barchart.feed.base.trade.api.MarketTrade;
 import com.barchart.feed.base.values.api.TimeValue;
 import com.barchart.feed.base.values.api.Value;
-import com.barchart.util.anno.NotMutable;
-import com.barchart.util.enums.DictEnum;
-import com.barchart.util.enums.ParaEnumBase;
+import com.barchart.util.common.anno.NotMutable;
 
 @NotMutable
 public final class MarketField<V extends Value<V>> extends

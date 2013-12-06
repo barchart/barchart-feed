@@ -1,8 +1,7 @@
 package com.barchart.feed.api.connection;
 
-import aQute.bnd.annotation.ProviderType;
-
-import com.barchart.util.anno.Mutable;
+import com.barchart.util.common.anno.Mutable;
+import com.barchart.util.common.anno.aQute.bnd.annotation.ProviderType;
 
 /**
  * Logical conversation with remote feed service.

@@ -7,7 +7,7 @@
  */
 package com.barchart.feed.base.cuvol.api;
 
-import com.barchart.util.anno.NotMutable;
+import com.barchart.util.common.anno.NotMutable;
 
 @NotMutable
 public interface MarketDoCuvolEntry extends MarketCuvolEntry {

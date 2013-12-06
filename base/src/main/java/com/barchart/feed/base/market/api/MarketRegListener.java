@@ -12,7 +12,7 @@ import java.util.Set;
 
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.market.enums.MarketEvent;
-import com.barchart.util.anno.EventListener;
+import com.barchart.util.common.anno.EventListener;
 
 public interface MarketRegListener {
 

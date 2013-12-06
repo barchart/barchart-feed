@@ -30,7 +30,7 @@ import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.feed.base.values.api.Value;
-import com.barchart.util.anno.ThreadSafe;
+import com.barchart.util.common.anno.ThreadSafe;
 import com.barchart.util.value.api.Fraction;
 import com.barchart.util.value.api.Price;
 

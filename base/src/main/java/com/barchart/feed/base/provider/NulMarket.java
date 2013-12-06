@@ -21,7 +21,7 @@ import com.barchart.feed.base.market.api.Market;
 import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.feed.base.values.api.Value;
 import com.barchart.feed.base.values.provider.ValueFreezer;
-import com.barchart.util.anno.NotMutable;
+import com.barchart.util.common.anno.NotMutable;
 import com.barchart.util.value.api.Time;
 
 @NotMutable

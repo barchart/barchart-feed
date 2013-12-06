@@ -9,7 +9,7 @@ package com.barchart.feed.base.collections;
 
 import java.util.Map.Entry;
 
-import com.barchart.util.anno.NotThreadSafe;
+import com.barchart.util.common.anno.NotThreadSafe;
 
 @NotThreadSafe
 class MapEntry<K, V> implements Entry<K, V> {

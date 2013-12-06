@@ -14,7 +14,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.barchart.feed.api.model.data.Book;
-import com.barchart.util.math.MathExtra;
+import com.barchart.util.common.math.MathExtra;
 
 public class TestMarketBookSide {
 

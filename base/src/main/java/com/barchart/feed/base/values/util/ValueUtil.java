@@ -11,7 +11,7 @@
 package com.barchart.feed.base.values.util;
 
 import com.barchart.feed.base.values.lang.ScaledDecimal;
-import com.barchart.util.math.MathExtra;
+import com.barchart.util.common.math.MathExtra;
 
 /**
  * Utility class for deriving primitive representations of Value objects.

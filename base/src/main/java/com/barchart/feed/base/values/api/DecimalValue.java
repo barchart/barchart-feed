@@ -8,7 +8,7 @@
 package com.barchart.feed.base.values.api;
 
 import com.barchart.feed.base.values.lang.ScaledDecimal;
-import com.barchart.util.anno.NotMutable;
+import com.barchart.util.common.anno.NotMutable;
 
 /** generic decimal value */
 @NotMutable

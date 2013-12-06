@@ -9,7 +9,7 @@ package com.barchart.feed.base.book.api;
 
 import com.barchart.feed.api.model.data.Book;
 import com.barchart.feed.base.book.enums.MarketBookAction;
-import com.barchart.util.anno.NotMutable;
+import com.barchart.util.common.anno.NotMutable;
 
 @NotMutable
 public interface MarketDoBookEntry extends MarketBookEntry {

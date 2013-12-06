@@ -12,13 +12,13 @@ import static com.barchart.feed.base.values.provider.ValueConst.NULL_SIZE;
 import static com.barchart.feed.base.values.provider.ValueConst.NULL_TIME;
 
 import com.barchart.feed.base.collections.BitSetEnum;
+import com.barchart.feed.base.enums.DictEnum;
+import com.barchart.feed.base.enums.ParaEnumBase;
 import com.barchart.feed.base.values.api.PriceValue;
 import com.barchart.feed.base.values.api.SizeValue;
 import com.barchart.feed.base.values.api.TimeValue;
 import com.barchart.feed.base.values.api.Value;
-import com.barchart.util.anno.NotMutable;
-import com.barchart.util.enums.DictEnum;
-import com.barchart.util.enums.ParaEnumBase;
+import com.barchart.util.common.anno.NotMutable;
 
 @NotMutable
 /** represents O-H-L-C market bar fields */

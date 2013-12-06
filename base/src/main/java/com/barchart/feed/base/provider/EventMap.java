@@ -9,7 +9,7 @@ package com.barchart.feed.base.provider;
 
 import com.barchart.feed.base.collections.FastEnumMap;
 import com.barchart.feed.base.market.enums.MarketEvent;
-import com.barchart.util.anno.ThreadSafe;
+import com.barchart.util.common.anno.ThreadSafe;
 
 @ThreadSafe
 class EventMap<T> extends FastEnumMap<MarketEvent, T> {

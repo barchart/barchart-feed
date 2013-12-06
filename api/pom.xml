@@ -5,10 +5,10 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>com.barchart.feed</groupId>
-		<artifactId>barchart-feed-a</artifactId>
-		<version>2.0.4</version>
-		<relativePath>../archon</relativePath>
+		<groupId>com.barchart.base</groupId>
+		<artifactId>barchart-archon</artifactId>
+		<version>2.5.13</version>
+		<relativePath />
 	</parent>
 
 	<artifactId>barchart-feed-api</artifactId>
@@ -27,6 +27,12 @@
 		<dependency>
 			<groupId>com.barchart.util</groupId>
 			<artifactId>barchart-util-value</artifactId>
+			<version>[1-SNAPSHOT,2-SNAPSHOT)</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.barchart.util</groupId>
+			<artifactId>barchart-util-common</artifactId>
 			<version>[1-SNAPSHOT,2-SNAPSHOT)</version>
 		</dependency>
 

@@ -22,7 +22,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.util.anno.ThreadSafe;
+import com.barchart.util.common.anno.ThreadSafe;
 
 /**
  * use this thread implementation to enable InterruptedException - like behavior

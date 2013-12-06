@@ -7,13 +7,13 @@
  */
 package com.barchart.feed.base.values.provider;
 
-import static com.barchart.feed.base.values.provider.ValueBuilder.*;
-import static com.barchart.feed.base.values.provider.ValueConst.*;
+import static com.barchart.feed.base.values.provider.ValueBuilder.newPrice;
+import static com.barchart.feed.base.values.provider.ValueConst.NULL_PRICE;
 
 import com.barchart.feed.base.values.api.DecimalValue;
 import com.barchart.feed.base.values.api.PriceValue;
 import com.barchart.feed.base.values.lang.ScaledDecimalValue;
-import com.barchart.util.anno.NotMutable;
+import com.barchart.util.common.anno.NotMutable;
 
 @NotMutable
 abstract class BasePrice extends ScaledDecimalValue<PriceValue, DecimalValue>
