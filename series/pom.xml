@@ -10,6 +10,7 @@
 	</parent>  
   
   <artifactId>barchart-feed-series</artifactId>
+  <groupId>com.barchart.feed</groupId>
   <version>1.0.1-SNAPSHOT</version>
   <packaging>bundle</packaging>
   
