@@ -87,7 +87,9 @@ public class BarchartSeriesProvider {
 	}
 	
 	private NodeIODescriptor createNodeIODescriptor(Query query, Instrument i) {
-		return new NodeIODescriptor(null, i, query.getSymbol(), new TimeFrame[] { new TimeFrame(query.getPeriod(), query.getStart(), query.getEnd()) }, query.getTradingWeek());
+		return new NodeIODescriptor(null, i, query.getSymbol(), 
+		    new TimeFrame[] { new TimeFrame(query.getPeriod(), query.getStart(), query.getEnd()) }, 
+		        query.getTradingWeek());
 	}
 	
 	private Observer<Result<Instrument>> createInstrumentObserver(final Query query) {
@@ -108,8 +110,8 @@ public class BarchartSeriesProvider {
 				
 				NodeIODescriptor nodeIO = createNodeIODescriptor(query, instr);
 				symbolObservers.put(instr.id(), lookupNode(nodeIO));
-				consumerAgent.include(instr);
-				historicalService.subscribe(historical, nodeIO);
+				consumerAgent.include(query.getSymbol());
+				//historicalService.subscribe(historical, nodeIO);
 			}
 		};
 	}
@@ -177,6 +179,7 @@ public class BarchartSeriesProvider {
 		public void onNext(final Market v) {
 			if(v.change().contains(Component.TRADE)) {
 				Instrument instr = v.trade().instrument();
+				System.out.println("onNext: " + symbolObservers.get(instr.id()));
 				symbolObservers.get(instr.id()).onNextMarket(v);
 			}
 		}

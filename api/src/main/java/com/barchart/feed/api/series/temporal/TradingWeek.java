@@ -72,7 +72,7 @@ public class TradingWeek extends JodaWorkingWeek {
         DEFAULT_PROPS = new Properties();
         DEFAULT_PROPS.put("DEFAULT_CALENDAR.holidayDateFileLoadType", TradingWeek.LoadType.MEMORY);
         DEFAULT_PROPS.put("DEFAULT_CALENDAR.holidayDelimiter", ",");
-        DEFAULT_PROPS.put("DEFAULT_CALENDAR.holidayDates", "1610-1-1");
+        DEFAULT_PROPS.put("DEFAULT_CALENDAR.holidayDates", "2013-1-1");
         
         DEFAULT_PROPS.setProperty("DEFAULT_SESSIONS.sessionParamDelimiter", ",");
         DEFAULT_PROPS.setProperty("DEFAULT_SESSIONS.sessionDelimiter", ";");
@@ -767,7 +767,7 @@ public class TradingWeek extends JodaWorkingWeek {
             
             calculator.setWorkingWeek(rawTradingWeek);
             rawTradingWeek.calculator = calculator;
-            System.out.println("internal isTradingDay ? " + !calculator.isNonWorkingDay(new DateTime("1610-1-1").toLocalDate()));
+            
             return rawTradingWeek;
         }
         
