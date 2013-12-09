@@ -32,7 +32,7 @@ public class Period {
 	private final PeriodType periodType;
 	private final int size;
 
-	protected Period(final PeriodType periodType, final int size) {
+	public Period(final PeriodType periodType, final int size) {
 		this.periodType = periodType;
 		this.size = size;
 	}

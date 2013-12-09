@@ -7,8 +7,9 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -20,6 +21,7 @@ import rx.Subscription;
 
 import com.barchart.feed.api.series.services.HistoricalObserver;
 import com.barchart.feed.api.series.services.HistoricalResult;
+import com.barchart.feed.api.series.services.NodeIODescriptor;
 import com.barchart.feed.api.series.services.Query;
 import com.barchart.feed.api.series.temporal.PeriodType;
 
@@ -36,7 +38,7 @@ public class HistoricalService<T extends HistoricalResult> extends Observable<T>
 	private String uname;
 	private String pword;
 	
-	private ExecutorService executorService = Executors.newCachedThreadPool();
+	private ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(10);
 	
 	
 	/**
@@ -56,22 +58,36 @@ public class HistoricalService<T extends HistoricalResult> extends Observable<T>
 	}
 	
 	/**
-	 * Immediately starts a task to produce query results which will be 
+	 * Starts a task after a short delay to produce query results which will be 
 	 * returned to the specified observer's {@link HistoricalObserver#onNext(HistoricalResult)}
 	 * method.
+	 * 
 	 * @param observer
-	 * @param query
+	 * @param nodeIO
 	 */
-	public void subscribe(HistoricalObserver<T> observer, Query query) {
-		executorService.submit(new HistoricalRetriever(observer, query));
+	public void subscribe(HistoricalObserver<T> observer, NodeIODescriptor nodeIO) {
+		scheduler.schedule(new HistoricalRetriever(observer, nodeIO, null), 2000, TimeUnit.MILLISECONDS);
 	}
 	
-	private String prepareURL(Query query) {
-		String baseUrl = query.getPeriod().getPeriodType() == PeriodType.TICK ? 
+	/**
+     * Starts a task after a short delay to produce query results which will be 
+     * returned to the specified observer's {@link HistoricalObserver#onNext(HistoricalResult)}
+     * method. 
+     * 
+     * @param observer
+     * @param nodeIO
+     * @param customQuery
+     */
+    public void subscribe(HistoricalObserver<T> observer, NodeIODescriptor nodeIO, Query customQuery) {
+        scheduler.schedule(new HistoricalRetriever(observer, nodeIO, customQuery), 2000, TimeUnit.MILLISECONDS);
+    }
+	
+	private String prepareURL(NodeIODescriptor io) {
+		String baseUrl = io.getTimeFrames()[0].getPeriod().getPeriodType() == PeriodType.TICK ? 
 			TICK_URL_SUFFIX : MINUTE_URL_SUFFIX;
 		
 		baseUrl = baseUrl.replaceFirst("\\$\\{UNAME\\}", uname).replaceFirst("\\$\\{PWORD\\}", pword).
-			replaceFirst("\\$\\{SYMB\\}", query.getSymbol());
+			replaceFirst("\\$\\{SYMB\\}", io.getSymbol());
 		
 		return URL_PREFIX.append(baseUrl).toString();
 	}
@@ -83,7 +99,8 @@ public class HistoricalService<T extends HistoricalResult> extends Observable<T>
 	
 	class HistoricalRetriever implements Runnable {
 		HistoricalObserver<T> observer;
-		Query query;
+		NodeIODescriptor nodeIO;
+		Query customQuery;
 		
 		Thread dispatcher;
 		Object dispatchLock = new Object();
@@ -91,9 +108,10 @@ public class HistoricalService<T extends HistoricalResult> extends Observable<T>
 		List<String> results = new ArrayList<String>();
 		
 		@SuppressWarnings("unchecked")
-		public HistoricalRetriever(HistoricalObserver<T> obs, Query q) {
+		public HistoricalRetriever(HistoricalObserver<T> obs, NodeIODescriptor io, Query query) {
 			this.observer = obs;
-			this.query = q;
+			this.nodeIO = io;
+			this.customQuery = query;
 			
 			dispatcher = new Thread() {
 				public void run() {
@@ -103,8 +121,8 @@ public class HistoricalService<T extends HistoricalResult> extends Observable<T>
 							
 							observer.onNext((T)new HistoricalResult() {
 								@Override
-								public Query getQuery() {
-									return query;
+								public NodeIODescriptor getIODescriptor() {
+									return nodeIO;
 								}
 								@Override
 								public List<String> getResult() {
@@ -117,18 +135,25 @@ public class HistoricalService<T extends HistoricalResult> extends Observable<T>
 					}
 				}
 			};
+			
+			dispatcher.start();
 		}
 		
 		public void run() {
-			String url = prepareURL(query);
+			String url = prepareURL(nodeIO);
 			
-			switch(query.getPeriod().getPeriodType()) {
-				case TICK: {
-					executeForTicks(url); break;
-				}
-				default: {
-					executeForMinutes(url); break;
-				}
+			if(customQuery != null) {
+			    url = url.concat(customQuery.getCustomQuery());
+			    executeCustom(url);
+			}else{
+			    switch(nodeIO.getTimeFrames()[0].getPeriod().getPeriodType()) {
+	                case TICK: {
+	                    executeForTicks(url); break;
+	                }
+	                default: {
+	                    executeForMinutes(url); break;
+	                }
+	            } 
 			}
 		}
 		
@@ -146,12 +171,12 @@ public class HistoricalService<T extends HistoricalResult> extends Observable<T>
 			return br;
 		}
 		
-		
 		public void executeForTicks(String url) {
+			BufferedReader br = null;
 			try {
-				BufferedReader br = null;
-				DateTime now = PeriodType.DAY.resolutionInstant(query.getEnd() == null ? new DateTime() : query.getEnd());
-				DateTime queryDate = query.getStart();
+				DateTime endDate = nodeIO.getTimeFrames()[0].getEndDate();
+				DateTime now = PeriodType.DAY.resolutionInstant(endDate == null ? new DateTime() : endDate);
+				DateTime queryDate = nodeIO.getTimeFrames()[0].getStartDate();
 				
 				while(PeriodType.DAY.resolutionInstant(queryDate).isBefore(now)) {
 					String line;
@@ -159,8 +184,10 @@ public class HistoricalService<T extends HistoricalResult> extends Observable<T>
 					System.out.println("url = " + urlStr);
 					br = nextConnection(urlStr);
 				    while((line = br.readLine()) != null) {
-				        System.out.println(line + "\n");
-				        results.add(line);
+				        //System.out.println(line + "\n");
+				        if(line.trim().length() > 0) {
+				            results.add(line);
+				        }
 				    }
 				    if (null != br) {
 				       br.close();
@@ -169,37 +196,81 @@ public class HistoricalService<T extends HistoricalResult> extends Observable<T>
 				}
 			}
 			catch (final IOException ioe) { ioe.printStackTrace(); }
+			finally {
+				try {
+					br.close();
+				}catch(Exception e) { e.printStackTrace(); }
+			}
 			
 			try {
 				synchronized(dispatchLock) {
-					dispatchLock.notify();
+				    dispatchLock.notify();
 				}
 			}catch(Exception e) { e.printStackTrace(); }
 		}
 		
+		public void executeCustom(String url) {
+            BufferedReader br = null;
+            try {
+                String urlStr = url;
+                System.out.println("custom url = " + urlStr);
+                
+                String line = null;
+                br = nextConnection(urlStr);
+                while((line = br.readLine()) != null) {
+                    //System.out.println(line + "\n");
+                    if(line.trim().length() > 0) {
+                        results.add(line);
+                    }
+                }
+                if (null != br) {
+                   br.close();
+                }
+            }
+            catch (final IOException ioe) { ioe.printStackTrace(); }
+            finally {
+                try {
+                    br.close();
+                }catch(Exception e) { e.printStackTrace(); }
+            }
+            
+            try {
+                synchronized(dispatchLock) {
+                    dispatchLock.notify();
+                }
+            }catch(Exception e) { e.printStackTrace(); }
+        }
+		
 		
 		public void executeForMinutes(String url) {
+			BufferedReader br = null;
 			try {
-				BufferedReader br = null;
-				DateTime queryDate = query.getStart();
-				
+				DateTime queryDate = nodeIO.getTimeFrames()[0].getStartDate();
+				DateTime endDate = nodeIO.getTimeFrames()[0].getEndDate();
 				String line;
 				
 				String urlStr = url + ("start="+nextDateStr(queryDate) +
-					(query.getEnd() == null ? "" : "&" + nextDateStr(query.getEnd())) + 
+					(endDate == null ? "" : "&" + nextDateStr(endDate)) + 
 						"&order=asc");
 				System.out.println("url = " + urlStr);
 				
 				br = nextConnection(urlStr);
 			    while((line = br.readLine()) != null) {
-			        System.out.println(line + "\n");
-			        results.add(line);
+			        //System.out.println(line + "\n");
+			        if(line.trim().length() > 0) {
+			            results.add(line);
+			        }
 			    }
 			    if (null != br) {
 			       br.close();
 			    }
 			}
 			catch (final IOException ioe) { ioe.printStackTrace(); }
+			finally {
+				try {
+					br.close();
+				}catch(Exception e) { e.printStackTrace(); }
+			}
 			
 			try {
 				synchronized(dispatchLock) {

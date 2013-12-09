@@ -10,6 +10,8 @@ import com.barchart.feed.api.series.temporal.TradingWeek;
  * A fluent interface for constructing time series queries.
  */
 public interface Query {
+    public boolean hasCustomQuery();
+    public String getCustomQuery();
     /**
 	 * Returns the analytic name requested. Queries should request only one of an instrument,
 	 * symbol, expression or analytic. Subsequent calls will overwrite the previous value.

@@ -39,6 +39,7 @@ public class QueryBuilder {
     private int nearestOffset;
     private String specifier;
     private String symbol;
+    private String customQuery;
     private DateTime start = PeriodType.DAY.resolutionInstant(new DateTime().minusDays(90));
     private DateTime end;
 	private DataQuery query;
@@ -61,6 +62,16 @@ public class QueryBuilder {
 	
 	public static QueryBuilder create() {
 		return new QueryBuilder();
+	}
+	
+	public QueryBuilder customQuery(String queryStr) {
+	    if(queryStr == null || queryStr.length() < 1) {
+	        throw new IllegalArgumentException("If specified, the query cannot be empty or null.");
+	    }
+	    
+	    this.customQuery = query.customQuery = queryStr;
+	    query.hasCustomQuery = true;
+	    return this;
 	}
 	
 	public QueryBuilder specifier(String specifier) {
@@ -149,6 +160,8 @@ public class QueryBuilder {
 	public class DataQuery implements Query {
 	    private int padding;
 	    private int nearestOffset;
+	    private boolean hasCustomQuery;
+	    private String customQuery;
 	    private String specifier;
 	    private String symbol;
         private Period period = Period.DAY;
@@ -162,6 +175,24 @@ public class QueryBuilder {
 		 * Constructs a new {@code DataQuery}
 		 */
 		private DataQuery() {}
+		
+		/**
+		 * Vehicle for passing through more specific and obscure
+		 * queries to the historical service. Returns true if this
+		 * {@code Query} object contains a custom query.
+		 */
+		@Override
+		public boolean hasCustomQuery() {
+		    return hasCustomQuery;
+		}
+		
+		/**
+		 * Returns the custom query parts if they exist.
+		 */
+		@Override
+		public String getCustomQuery() {
+		    return customQuery;
+		}
 		
 		/**
 	     * Returns the symbol requested. Queries should request only one of an instrument,
