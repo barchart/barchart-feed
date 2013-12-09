@@ -22,6 +22,7 @@ import rx.Subscription;
 import com.barchart.feed.api.series.services.HistoricalObserver;
 import com.barchart.feed.api.series.services.HistoricalResult;
 import com.barchart.feed.api.series.services.NodeIODescriptor;
+import com.barchart.feed.api.series.services.Query;
 import com.barchart.feed.api.series.temporal.PeriodType;
 
 
@@ -60,12 +61,26 @@ public class HistoricalService<T extends HistoricalResult> extends Observable<T>
 	 * Starts a task after a short delay to produce query results which will be 
 	 * returned to the specified observer's {@link HistoricalObserver#onNext(HistoricalResult)}
 	 * method.
+	 * 
 	 * @param observer
 	 * @param nodeIO
 	 */
 	public void subscribe(HistoricalObserver<T> observer, NodeIODescriptor nodeIO) {
-		scheduler.schedule(new HistoricalRetriever(observer, nodeIO), 2000, TimeUnit.MILLISECONDS);
+		scheduler.schedule(new HistoricalRetriever(observer, nodeIO, null), 2000, TimeUnit.MILLISECONDS);
 	}
+	
+	/**
+     * Starts a task after a short delay to produce query results which will be 
+     * returned to the specified observer's {@link HistoricalObserver#onNext(HistoricalResult)}
+     * method. 
+     * 
+     * @param observer
+     * @param nodeIO
+     * @param customQuery
+     */
+    public void subscribe(HistoricalObserver<T> observer, NodeIODescriptor nodeIO, Query customQuery) {
+        scheduler.schedule(new HistoricalRetriever(observer, nodeIO, customQuery), 2000, TimeUnit.MILLISECONDS);
+    }
 	
 	private String prepareURL(NodeIODescriptor io) {
 		String baseUrl = io.getTimeFrames()[0].getPeriod().getPeriodType() == PeriodType.TICK ? 
@@ -85,6 +100,7 @@ public class HistoricalService<T extends HistoricalResult> extends Observable<T>
 	class HistoricalRetriever implements Runnable {
 		HistoricalObserver<T> observer;
 		NodeIODescriptor nodeIO;
+		Query customQuery;
 		
 		Thread dispatcher;
 		Object dispatchLock = new Object();
@@ -92,9 +108,10 @@ public class HistoricalService<T extends HistoricalResult> extends Observable<T>
 		List<String> results = new ArrayList<String>();
 		
 		@SuppressWarnings("unchecked")
-		public HistoricalRetriever(HistoricalObserver<T> obs, NodeIODescriptor io) {
+		public HistoricalRetriever(HistoricalObserver<T> obs, NodeIODescriptor io, Query query) {
 			this.observer = obs;
 			this.nodeIO = io;
+			this.customQuery = query;
 			
 			dispatcher = new Thread() {
 				public void run() {
@@ -125,13 +142,18 @@ public class HistoricalService<T extends HistoricalResult> extends Observable<T>
 		public void run() {
 			String url = prepareURL(nodeIO);
 			
-			switch(nodeIO.getTimeFrames()[0].getPeriod().getPeriodType()) {
-				case TICK: {
-					executeForTicks(url); break;
-				}
-				default: {
-					executeForMinutes(url); break;
-				}
+			if(customQuery != null) {
+			    url = url.concat(customQuery.getCustomQuery());
+			    executeCustom(url);
+			}else{
+			    switch(nodeIO.getTimeFrames()[0].getPeriod().getPeriodType()) {
+	                case TICK: {
+	                    executeForTicks(url); break;
+	                }
+	                default: {
+	                    executeForMinutes(url); break;
+	                }
+	            } 
 			}
 		}
 		
@@ -149,7 +171,6 @@ public class HistoricalService<T extends HistoricalResult> extends Observable<T>
 			return br;
 		}
 		
-		
 		public void executeForTicks(String url) {
 			BufferedReader br = null;
 			try {
@@ -164,7 +185,9 @@ public class HistoricalService<T extends HistoricalResult> extends Observable<T>
 					br = nextConnection(urlStr);
 				    while((line = br.readLine()) != null) {
 				        //System.out.println(line + "\n");
-				        results.add(line);
+				        if(line.trim().length() > 0) {
+				            results.add(line);
+				        }
 				    }
 				    if (null != br) {
 				       br.close();
@@ -181,10 +204,42 @@ public class HistoricalService<T extends HistoricalResult> extends Observable<T>
 			
 			try {
 				synchronized(dispatchLock) {
-					dispatchLock.notify();
+				    dispatchLock.notify();
 				}
 			}catch(Exception e) { e.printStackTrace(); }
 		}
+		
+		public void executeCustom(String url) {
+            BufferedReader br = null;
+            try {
+                String urlStr = url;
+                System.out.println("custom url = " + urlStr);
+                
+                String line = null;
+                br = nextConnection(urlStr);
+                while((line = br.readLine()) != null) {
+                    //System.out.println(line + "\n");
+                    if(line.trim().length() > 0) {
+                        results.add(line);
+                    }
+                }
+                if (null != br) {
+                   br.close();
+                }
+            }
+            catch (final IOException ioe) { ioe.printStackTrace(); }
+            finally {
+                try {
+                    br.close();
+                }catch(Exception e) { e.printStackTrace(); }
+            }
+            
+            try {
+                synchronized(dispatchLock) {
+                    dispatchLock.notify();
+                }
+            }catch(Exception e) { e.printStackTrace(); }
+        }
 		
 		
 		public void executeForMinutes(String url) {
@@ -202,7 +257,9 @@ public class HistoricalService<T extends HistoricalResult> extends Observable<T>
 				br = nextConnection(urlStr);
 			    while((line = br.readLine()) != null) {
 			        //System.out.println(line + "\n");
-			        results.add(line);
+			        if(line.trim().length() > 0) {
+			            results.add(line);
+			        }
 			    }
 			    if (null != br) {
 			       br.close();
