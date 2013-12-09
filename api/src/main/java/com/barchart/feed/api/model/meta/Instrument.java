@@ -1,9 +1,12 @@
 package com.barchart.feed.api.model.meta;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.barchart.feed.api.model.meta.id.InstrumentID;
+import com.barchart.feed.api.model.meta.id.VendorID;
 import com.barchart.util.value.api.Fraction;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Schedule;
@@ -120,6 +123,8 @@ public interface Instrument extends Comparable<Instrument>, Metadata {
 
 	String instrumentDataVendor();
 
+	Map<VendorID, String> vendorSymbols();
+	
 	String symbol();
 
 	String description();
@@ -194,6 +199,11 @@ public interface Instrument extends Comparable<Instrument>, Metadata {
 		@Override
 		public String instrumentDataVendor() {
 			return "NULL VENDOR";
+		}
+		
+		@Override
+		public Map<VendorID, String> vendorSymbols() {
+			return new HashMap<VendorID, String>(0);
 		}
 
 		@Override
@@ -270,7 +280,7 @@ public interface Instrument extends Comparable<Instrument>, Metadata {
 		public String toString() {
 			return "NULL INSTRUMENT";
 		}
-		
+
 	};
 
 }

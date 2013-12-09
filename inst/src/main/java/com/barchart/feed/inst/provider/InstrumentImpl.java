@@ -2,17 +2,21 @@ package com.barchart.feed.inst.provider;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.TimeZone;
 
 import org.openfeed.proto.inst.Calendar;
 import org.openfeed.proto.inst.Decimal;
 import org.openfeed.proto.inst.InstrumentDefinition;
 import org.openfeed.proto.inst.Interval;
+import org.openfeed.proto.inst.Symbol;
 
 import com.barchart.feed.api.model.meta.Exchange;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.api.model.meta.id.InstrumentID;
+import com.barchart.feed.api.model.meta.id.VendorID;
 import com.barchart.feed.inst.participant.InstrumentState.State;
 import com.barchart.util.value.ValueFactoryImpl;
 import com.barchart.util.value.api.ValueFactory;
@@ -125,6 +129,18 @@ public class InstrumentImpl extends InstrumentBase implements Instrument {
 		}
 		
 		return def.getVendorId();
+	}
+	
+	@Override
+	public Map<VendorID, String> vendorSymbols() {
+		
+		final Map<VendorID, String> map = new HashMap<VendorID, String>();
+		
+		for(final Symbol symbol : def.getSymbolsList()) {
+			map.put(new VendorID(symbol.getVendor()), symbol.getSymbol());
+		}
+		
+		return Collections.unmodifiableMap(map);
 	}
 
 	@Override
