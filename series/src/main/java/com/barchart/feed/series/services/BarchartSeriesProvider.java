@@ -169,7 +169,7 @@ public class BarchartSeriesProvider {
 		@Override
 		public void onNext(final Market v) {
 			if(v.change().contains(Component.TRADE)) {
-				symbolObservers.get(v.trade().instrument()).onNextMarket(v);
+				symbolObservers.get(v.trade().instrument().id()).onNextMarket(v);
 			}
 		}
 	}
