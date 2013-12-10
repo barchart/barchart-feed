@@ -9,7 +9,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import rx.Observable;
 import rx.Observer;
-import rx.Subscription;
 
 import com.barchart.feed.api.MarketObserver;
 import com.barchart.feed.api.connection.Connection;
@@ -26,7 +25,7 @@ import com.barchart.feed.api.series.TimePoint;
 import com.barchart.feed.api.series.TimeSeries;
 import com.barchart.feed.api.series.services.HistoricalObserver;
 import com.barchart.feed.api.series.services.HistoricalResult;
-import com.barchart.feed.api.series.services.NodeIODescriptor;
+import com.barchart.feed.api.series.services.Subscription;
 import com.barchart.feed.api.series.services.Query;
 import com.barchart.feed.api.series.temporal.TimeFrame;
 
@@ -37,7 +36,7 @@ import com.barchart.feed.api.series.temporal.TimeFrame;
  */
 public class BarchartSeriesProvider {
 	private MarketService marketService;
-	private HistoricalService<HistoricalResult> historicalService;
+	private BarchartHistoricalService<HistoricalResult> historicalService;
 	private ConsumerAgent consumerAgent;
 	private ObservableMonitor monitor;
 	private MarketSubject market;
@@ -54,9 +53,9 @@ public class BarchartSeriesProvider {
 	/**
 	 * Instantiates a new {@code BarchartSeriesProvider}
 	 * @param mktService	an implementation of {@link MarketService} such as {@link BarchartMarketProvider}
-	 * @param histService	an implementation of {@link HistoricalService} such as {@link BarchartHistoricalProvider}
+	 * @param histService	an implementation of {@link BarchartHistoricalService} such as {@link BarchartHistoricalProvider}
 	 */
-	public BarchartSeriesProvider(MarketService mktService, HistoricalService<HistoricalResult> histService) {
+	public BarchartSeriesProvider(MarketService mktService, BarchartHistoricalService<HistoricalResult> histService) {
 		this.marketService = mktService;
 		this.historicalService = histService;
 		startAndMonitorConnection();
@@ -74,46 +73,38 @@ public class BarchartSeriesProvider {
 			}
 		}
 		
-		Observable<TimeSeries<T>> returnVal = null;
+		Instrument inst = lookupInstrument(query.getSymbol());
+		Subscription subscription = createSubscription(query, inst);
 		
-		Observer<Result<Instrument>> instrumentLookup = createInstrumentObserver(query);
-		marketService.instrument(query.getSymbol()).subscribe(instrumentLookup);
+		//Node node = getNode(nodeIO);
 		
-		return returnVal;
+		System.out.println("inst = " + inst.symbol());
+		
+//		Observable<TimeSeries<T>> returnVal = null;
+//		
+//		Observer<Result<Instrument>> instrumentLookup = createInstrumentObserver(query);
+//		marketService.instrument(query.getSymbol()).subscribe(instrumentLookup);
+		
+		symbolObservers.put(inst.id(), lookupNode(subscription));
+		consumerAgent.include(inst);
+		historicalService.subscribe(historical, subscription);
+		
+		return null;
 	}
 	
-	private Distributor lookupNode(NodeIODescriptor nodeIO) {
-		return new Distributor();
+	private Instrument lookupInstrument(String symbol) {
+		Result<Instrument> result = marketService.instrument(symbol).toBlockingObservable().single();
+		return result.results().values().iterator().next().get(0);
 	}
 	
-	private NodeIODescriptor createNodeIODescriptor(Query query, Instrument i) {
-		return new NodeIODescriptor(null, i, query.getSymbol(), 
+	private Subscription createSubscription(Query query, Instrument i) {
+		return new Subscription(null, i, query.getSymbol(), 
 		    new TimeFrame[] { new TimeFrame(query.getPeriod(), query.getStart(), query.getEnd()) }, 
 		        query.getTradingWeek());
 	}
 	
-	private Observer<Result<Instrument>> createInstrumentObserver(final Query query) {
-		return new Observer<Result<Instrument>>() {
-			@Override
-			public void onCompleted() {
-				System.out.println("Lookup and registration complete");
-			}
-			@Override
-			public void onError(Throwable e) {
-				System.out.println("Exception in lookup and registration \n{} "+ e);
-			}
-			@Override
-			public void onNext(Result<Instrument> result) {
-				System.out.println("New Instrument Lookup and Registration " + result.results().keySet());
-				
-				Instrument instr = result.results().values().iterator().next().get(0);
-				
-				NodeIODescriptor nodeIO = createNodeIODescriptor(query, instr);
-				symbolObservers.put(instr.id(), lookupNode(nodeIO));
-				consumerAgent.include(query.getSymbol());
-				//historicalService.subscribe(historical, nodeIO);
-			}
-		};
+	private Distributor lookupNode(Subscription nodeIO) {
+		return new Distributor();
 	}
 	
 	private void startAndMonitorConnection() {
@@ -178,9 +169,7 @@ public class BarchartSeriesProvider {
 		@Override
 		public void onNext(final Market v) {
 			if(v.change().contains(Component.TRADE)) {
-				Instrument instr = v.trade().instrument();
-				System.out.println("onNext: " + symbolObservers.get(instr.id()));
-				symbolObservers.get(instr.id()).onNextMarket(v);
+				symbolObservers.get(v.trade().instrument()).onNextMarket(v);
 			}
 		}
 	}
@@ -195,8 +184,7 @@ public class BarchartSeriesProvider {
 		@Override public void onError(Throwable e) {}
 		@Override
 		public void onNext(HistoricalResult historicalResult) {
-			System.out.println("HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
-			symbolObservers.get(historicalResult.getIODescriptor().getInstrument().id()).onNextHistorical(historicalResult);
+			symbolObservers.get(historicalResult.getSubscription().getInstrument().id()).onNextHistorical(historicalResult);
 		}
 	}
 	
@@ -222,7 +210,7 @@ public class BarchartSeriesProvider {
 		 * @param observer	the {@code Observer} to subscribe.
 		 * @return  {@link Subscription} to be used for unsubscribing.
 		 */
-		public Subscription subscribe(Observer<Pair<Connection, State>> observer) {
+		public rx.Subscription subscribe(Observer<Pair<Connection, State>> observer) {
 			return observable.onSubscribe(observer);
 		}
 		

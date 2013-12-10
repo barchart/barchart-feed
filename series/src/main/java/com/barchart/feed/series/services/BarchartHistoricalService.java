@@ -17,23 +17,25 @@ import org.joda.time.format.DateTimeFormatter;
 
 import rx.Observable;
 import rx.Observer;
-import rx.Subscription;
 
 import com.barchart.feed.api.series.services.HistoricalObserver;
 import com.barchart.feed.api.series.services.HistoricalResult;
-import com.barchart.feed.api.series.services.NodeIODescriptor;
+import com.barchart.feed.api.series.services.HistoricalService;
 import com.barchart.feed.api.series.services.Query;
+import com.barchart.feed.api.series.services.Subscription;
 import com.barchart.feed.api.series.temporal.PeriodType;
 
 
-public class HistoricalService<T extends HistoricalResult> extends Observable<T> {
-	private static final StringBuilder URL_PREFIX = new StringBuilder("http://ds01.ddfplus.com/historical/");
+/**
+ * For now this is a rudimentary implementation of a HistoricalService which
+ * will be further built out to handle more historical query options and nuances.
+ * 
+ * @author David Ray
+ *
+ * @param <T>
+ */
+public class BarchartHistoricalService<T extends HistoricalResult> extends HistoricalService<T> {
 	
-	private static final String TICK_URL_SUFFIX = 
-		"queryticks.ashx?username=${UNAME}&password=${PWORD}&symbol=${SYMB}&";
-	
-	private static final String MINUTE_URL_SUFFIX = 
-		"queryminutes.ashx?username=${UNAME}&password=${PWORD}&symbol=${SYMB}&";
 	
 	private String uname;
 	private String pword;
@@ -46,7 +48,7 @@ public class HistoricalService<T extends HistoricalResult> extends Observable<T>
 	 * @param username
 	 * @param password
 	 */
-	public HistoricalService(String username, String password) {
+	public BarchartHistoricalService(String username, String password) {
 		super(new Observable.OnSubscribeFunc<T>() {
 			@Override public Subscription onSubscribe(Observer<? super T> t1) {
 				return new Subscription() { @Override public void unsubscribe() {} };
@@ -65,7 +67,7 @@ public class HistoricalService<T extends HistoricalResult> extends Observable<T>
 	 * @param observer
 	 * @param nodeIO
 	 */
-	public void subscribe(HistoricalObserver<T> observer, NodeIODescriptor nodeIO) {
+	public void subscribe(HistoricalObserver<T> observer, Subscription nodeIO) {
 		scheduler.schedule(new HistoricalRetriever(observer, nodeIO, null), 2000, TimeUnit.MILLISECONDS);
 	}
 	
@@ -78,28 +80,47 @@ public class HistoricalService<T extends HistoricalResult> extends Observable<T>
      * @param nodeIO
      * @param customQuery
      */
-    public void subscribe(HistoricalObserver<T> observer, NodeIODescriptor nodeIO, Query customQuery) {
+    public void subscribe(HistoricalObserver<T> observer, Subscription nodeIO, Query customQuery) {
         scheduler.schedule(new HistoricalRetriever(observer, nodeIO, customQuery), 2000, TimeUnit.MILLISECONDS);
     }
 	
-	private String prepareURL(NodeIODescriptor io) {
-		String baseUrl = io.getTimeFrames()[0].getPeriod().getPeriodType() == PeriodType.TICK ? 
+    
+    /**
+     * Returns a partially completed URL with everything excepting any start date,
+     * end date or ordering specification.
+     * 
+     * @param subscription
+     * @return
+     */
+	private String prepareURL(Subscription subscription) {
+		String baseUrl = subscription.getTimeFrames()[0].getPeriod().getPeriodType() == PeriodType.TICK ? 
 			TICK_URL_SUFFIX : MINUTE_URL_SUFFIX;
 		
 		baseUrl = baseUrl.replaceFirst("\\$\\{UNAME\\}", uname).replaceFirst("\\$\\{PWORD\\}", pword).
-			replaceFirst("\\$\\{SYMB\\}", io.getSymbol());
+			replaceFirst("\\$\\{SYMB\\}", subscription.getSymbol());
 		
 		return URL_PREFIX.append(baseUrl).toString();
 	}
 	
+	/**
+	 * Returns the specified date formatted to a ddf plus historical query
+	 * string date.
+	 * 
+	 * @param current
+	 * @return
+	 */
 	private String nextDateStr(DateTime current) {
 		DateTimeFormatter format = DateTimeFormat.forPattern("yyyyMMdd");
 		return format.print(current);
 	}
 	
+	/**
+	 * Runnable which is fired to handle a single query (though TICK queries
+	 * may required several connections executed in a loop).
+	 */ 
 	class HistoricalRetriever implements Runnable {
 		HistoricalObserver<T> observer;
-		NodeIODescriptor nodeIO;
+		Subscription nodeIO;
 		Query customQuery;
 		
 		Thread dispatcher;
@@ -108,7 +129,7 @@ public class HistoricalService<T extends HistoricalResult> extends Observable<T>
 		List<String> results = new ArrayList<String>();
 		
 		@SuppressWarnings("unchecked")
-		public HistoricalRetriever(HistoricalObserver<T> obs, NodeIODescriptor io, Query query) {
+		public HistoricalRetriever(HistoricalObserver<T> obs, Subscription io, Query query) {
 			this.observer = obs;
 			this.nodeIO = io;
 			this.customQuery = query;
@@ -121,7 +142,7 @@ public class HistoricalService<T extends HistoricalResult> extends Observable<T>
 							
 							observer.onNext((T)new HistoricalResult() {
 								@Override
-								public NodeIODescriptor getIODescriptor() {
+								public Subscription getSubscription() {
 									return nodeIO;
 								}
 								@Override
@@ -139,6 +160,14 @@ public class HistoricalService<T extends HistoricalResult> extends Observable<T>
 			dispatcher.start();
 		}
 		
+		/**
+		 * Main dispatch point which routes to one of three methods:
+		 * <pre>
+		 * 	1. executeCustom()
+		 *  2. executeForTicks()
+		 *  3. executeForMinutes()
+		 * </pre>
+		 */
 		public void run() {
 			String url = prepareURL(nodeIO);
 			
@@ -157,6 +186,14 @@ public class HistoricalService<T extends HistoricalResult> extends Observable<T>
 			}
 		}
 		
+		/**
+		 * Opens a new connection on behalf of the looped connection method handling
+		 * pages of TICK requests.
+		 * 
+		 * @param urlString	the new url to use (with updated parameters for current
+		 * 					loop iteration).
+		 * @return	the new connection.
+		 */
 		private BufferedReader nextConnection(String urlString) {
 			BufferedReader br = null;
 			try {
@@ -171,6 +208,11 @@ public class HistoricalService<T extends HistoricalResult> extends Observable<T>
 			return br;
 		}
 		
+		/**
+		 * Executes TICKs query.
+		 * 
+		 * @param url
+		 */
 		public void executeForTicks(String url) {
 			BufferedReader br = null;
 			try {
@@ -209,6 +251,11 @@ public class HistoricalService<T extends HistoricalResult> extends Observable<T>
 			}catch(Exception e) { e.printStackTrace(); }
 		}
 		
+		/**
+		 * Executes custom query passed in from the client.
+		 * 
+		 * @param url
+		 */
 		public void executeCustom(String url) {
             BufferedReader br = null;
             try {
@@ -241,7 +288,11 @@ public class HistoricalService<T extends HistoricalResult> extends Observable<T>
             }catch(Exception e) { e.printStackTrace(); }
         }
 		
-		
+		/**
+		 * Executes minute query
+		 * 
+		 * @param url
+		 */
 		public void executeForMinutes(String url) {
 			BufferedReader br = null;
 			try {

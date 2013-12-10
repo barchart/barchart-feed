@@ -4,7 +4,7 @@ import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.api.series.temporal.TimeFrame;
 import com.barchart.feed.api.series.temporal.TradingWeek;
 
-public class NodeIODescriptor {
+public class Subscription implements rx.Subscription {
 	private String symbol;
 	private Instrument instrument;
     private TimeFrame[] timeFrames;
@@ -12,7 +12,9 @@ public class NodeIODescriptor {
     private TradingWeek tradingWeek;
     
     
-    public NodeIODescriptor(NodeDescriptor descriptor, Instrument i, String symbol, TimeFrame[] timeFrames, TradingWeek week) {
+    public Subscription() {}
+    
+    public Subscription(NodeDescriptor descriptor, Instrument i, String symbol, TimeFrame[] timeFrames, TradingWeek week) {
     	this.descriptor = descriptor;
     	this.instrument = i;
     	this.symbol = symbol;
@@ -59,6 +61,12 @@ public class NodeIODescriptor {
 	 */
 	public TradingWeek getTradingWeek() {
 		return tradingWeek;
+	}
+
+	@Override
+	public void unsubscribe() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

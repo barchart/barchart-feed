@@ -1,7 +1,6 @@
 package com.barchart.feed.api.series;
 
 import com.barchart.util.value.api.Price;
-import com.barchart.util.value.api.Time;
 
 
 /**
@@ -10,7 +9,7 @@ import com.barchart.util.value.api.Time;
  * 
  * @author David Ray
  */
-public interface Area extends Range {
+public interface Area extends Range, Span {
 	/**
 	 * Returns the high value at the future most time index.
 	 * 
@@ -23,15 +22,4 @@ public interface Area extends Range {
 	 * @return	the low value at the future most time index.
 	 */
 	public Price getNextlow();
-	/**
-	 * Returns the future-most {@link Time}
-	 * @return	the future-most {@link Time}
-	 */
-	public Time getNextTime();
-	/**
-	 * Returns the the future-most index.
-	 * 
-	 * @return	the the future-most index.
-	 */
-	public int getNextIndex();
 }
