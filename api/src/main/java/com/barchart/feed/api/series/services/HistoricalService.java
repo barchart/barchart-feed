@@ -38,9 +38,9 @@ public abstract class HistoricalService<T extends HistoricalResult> extends Obse
 	 * method.
 	 * 
 	 * @param observer
-	 * @param nodeIO
+	 * @param subscription
 	 */
-	public abstract void subscribe(HistoricalObserver<T> observer, Subscription nodeIO);
+	public abstract void subscribe(HistoricalObserver<T> observer, Subscription subscription);
 	
 	/**
      * Starts a task after a short delay to produce query results which will be 
@@ -48,9 +48,9 @@ public abstract class HistoricalService<T extends HistoricalResult> extends Obse
      * method. 
      * 
      * @param observer
-     * @param nodeIO
+     * @param subscription
      * @param customQuery
      */
-    public abstract void subscribe(HistoricalObserver<T> observer, Subscription nodeIO, Query customQuery);
+    public abstract void subscribe(HistoricalObserver<T> observer, Subscription subscription, Query customQuery);
 	
 }
