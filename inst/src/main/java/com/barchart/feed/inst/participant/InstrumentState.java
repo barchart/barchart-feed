@@ -1,13 +1,16 @@
 package com.barchart.feed.inst.participant;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.openfeed.proto.inst.InstrumentDefinition;
 
 import com.barchart.feed.api.model.meta.Exchange;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.api.model.meta.id.InstrumentID;
+import com.barchart.feed.api.model.meta.id.VendorID;
 import com.barchart.util.value.api.Fraction;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Schedule;
@@ -73,6 +76,11 @@ public interface InstrumentState extends Instrument, Resettable, Instrumentable 
 		@Override
 		public String symbol() {
 			return "NULL_SYMBOL";
+		}
+		
+		@Override
+		public Map<VendorID, String> vendorSymbols() {
+			return new HashMap<VendorID, String>(0);
 		}
 
 		@Override
@@ -174,7 +182,7 @@ public interface InstrumentState extends Instrument, Resettable, Instrumentable 
 		public void reset() {
 			
 		}
-		
+
 	};
 
 }

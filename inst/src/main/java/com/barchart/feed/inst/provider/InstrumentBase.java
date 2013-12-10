@@ -1,11 +1,14 @@
 package com.barchart.feed.inst.provider;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.barchart.feed.api.model.meta.Exchange;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.api.model.meta.id.InstrumentID;
+import com.barchart.feed.api.model.meta.id.VendorID;
 import com.barchart.util.value.api.Fraction;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Schedule;
@@ -37,6 +40,11 @@ public abstract class InstrumentBase implements Instrument {
 	@Override
 	public String instrumentDataVendor() {
 		return "Unknown Data Vendor";
+	}
+	
+	@Override
+	public Map<VendorID, String> vendorSymbols() {
+		return new HashMap<VendorID, String>(0);
 	}
 
 	@Override
