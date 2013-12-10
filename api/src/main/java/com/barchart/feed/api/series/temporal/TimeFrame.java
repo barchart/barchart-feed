@@ -54,4 +54,51 @@ public class TimeFrame {
 	public DateTime getEndDate() {
 		return endDate;
 	}
+
+	
+	/**
+	 * <em>All Dates modified</em> to enable comparison at the resolution of the given PeriodType.
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((endDate == null) ? 0 : period.getPeriodType().resolutionInstant(endDate).hashCode());
+		result = prime * result + ((period == null) ? 0 : period.hashCode());
+		result = prime * result
+				+ ((startDate == null) ? 0 : period.getPeriodType().resolutionInstant(startDate).hashCode());
+		return result;
+	}
+
+	/**
+	 * <em>All Dates modified</em> to enable comparison at the resolution of the given PeriodType.
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		TimeFrame other = (TimeFrame) obj;
+		if (endDate == null) {
+			if (other.endDate != null)
+				return false;
+		} else if (period.getPeriodType().compareAtResolution(endDate, other.endDate) != 0)
+			return false;
+		if (period == null) {
+			if (other.period != null)
+				return false;
+		} else if (!period.equals(other.period))
+			return false;
+		if (startDate == null) {
+			if (other.startDate != null)
+				return false;
+		} else if (period.getPeriodType().compareAtResolution(startDate, other.startDate) != 0)
+			return false;
+		return true;
+	}
 }

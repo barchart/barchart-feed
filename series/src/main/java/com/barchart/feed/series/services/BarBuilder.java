@@ -41,13 +41,13 @@ public class BarBuilder extends Node {
 	}
 
 	@Override
-	public <E extends TimePoint> TimeSeries<E> getOutputDataSeries(Subscription subscription) {
+	public <E extends TimePoint> TimeSeries<E> getOutputTimeSeries(Subscription subscription) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public <E extends TimePoint> TimeSeries<E> getInputDataSeries(Subscription subscription) {
+	public <E extends TimePoint> TimeSeries<E> getInputTimeSeries(Subscription subscription) {
 		// TODO Auto-generated method stub
 		return null;
 	}

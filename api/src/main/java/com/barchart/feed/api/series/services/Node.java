@@ -25,6 +25,9 @@ public abstract class Node implements Runnable {
 	/** Flag to control startup and shutdown barriers */
 	private boolean isRunning;
 	
+	/** Flag to indicated that a valid date range has been updated among source {@link TimeSeries} */
+	private boolean isUpdated;
+	
 	
 	
 	/**
@@ -60,8 +63,9 @@ public abstract class Node implements Runnable {
 	 * 
 	 * @param span				the {@link Span} of time processed.
 	 * @param subscriptions 	the List of {@link Subscription}s the ancestor node has processed.
+	 * @return	
 	 */
-	public void setModifiedSpan(Span span, List<Subscription>  subscriptions) {
+	public boolean setModifiedSpan(Span span, List<Subscription>  subscriptions) {
 		for(Subscription s : subscriptions) {
 			updateModifiedSpan(span, s);
 		}
@@ -73,21 +77,98 @@ public abstract class Node implements Runnable {
 		}catch(Exception e) { 
 			e.printStackTrace();
 		}
+		
+		return true;
 	}
 	
-	public abstract void updateModifiedSpan(Span span, Subscription subscription);
+	/**
+	 * Called to set a flag indicating that there is data to process.
+	 * 
+	 * @param isUpdated
+	 */
+	public void setUpdated(boolean isUpdated) {
+		this.isUpdated = isUpdated;
+	}
 	
-	public abstract boolean hasAllAncestorUpdates();
+	/**
+	 * Returns a flag indicated whether or not there is data to process.
+	 * 
+	 * @return	a flag indicated whether or not there is data to process.
+	 */
+	public boolean isUpdated() {
+		return isUpdated;
+	}
 	
-	public abstract Span process();
+	/**
+	 * Returns the 
+	 * @return
+	 */
+	protected Object getLock() {
+		return waitLock;
+	}
 	
-	public abstract List<Subscription> getOutputSubscriptions();
 	
-	public abstract List<Subscription> getInputSubscriptions();
+	///////////////////////////////////////////////////
+	//    ABSTRACT METHODS TO BE IMPLEMENTED BELOW   //
+	///////////////////////////////////////////////////
+	/**
+	 * Implemented by the node type handling data expected by this {@code Node}
+	 * 
+	 * Collects expected input from ancestor nodes and starts this {@code Node}'s
+	 * processing if all the expected inputs are present and in good form.
+	 * 
+	 * @param span				the {@link Span} processed.
+	 * @param subscription		the Subscription describing and identifying the specified input.
+	 */
+	protected abstract void updateModifiedSpan(Span span, Subscription subscription);
+	/**
+	 * Implemented by the node type handling data expected by this {@code Node}
+	 * 
+	 * Returns a flag indicating whether the implementing class has all of its expected input.
+	 * 
+	 * @return	a flag indicating whether the implementing class has all of its expected input.
+	 */
+	protected abstract boolean hasAllAncestorUpdates();
+	/**
+	 * Implemented by the node type handling data expected by this {@code Node}
+	 * 
+	 * Starts the processing of the previously set {@link Span}
+	 * @return	the updated Span
+	 */
+	protected abstract Span process();
+	/**
+	 * Implemented by the node type handling data expected by this {@code Node}
+	 * 
+	 * Returns a List of {@link Subscriptions} that the underlying Node supplies as output.
+	 * 
+	 * @return	a List of output {@link Subscriptions}
+	 */
+	protected abstract List<Subscription> getOutputSubscriptions();
+	/**
+	 * Implemented by the node type handling data expected by this {@code Node}
+	 * 
+	 * Returns a List of {@link Subscriptions} that the underlying Node expects as input.
+	 * 
+	 * @return	a List of expected input {@link Subscriptions}
+	 */
+	protected abstract List<Subscription> getInputSubscriptions();
+	/**
+	 * Returns the output {@link TimeSeries} corresponding to with the specified {@link Subscription}
+	 * 
+	 * @param subscription		the Subscription acting as key for the corresponding {@link TimeSeries}
+	 * @return	the output {@link TimeSeries}
+	 */
+	protected abstract <E extends TimePoint> TimeSeries<E> getOutputTimeSeries(Subscription subscription);
 	
-	public abstract <E extends TimePoint> TimeSeries<E> getOutputDataSeries(Subscription subscription);
+	/**
+	 * Returns the input {@link TimeSeries} corresponding to with the specified {@link Subscription}
+	 * 
+	 * @param subscription		the Subscription acting as key for the corresponding {@link TimeSeries}
+	 * @return	the input {@link TimeSeries}
+	 */
+	protected abstract <E extends TimePoint> TimeSeries<E> getInputTimeSeries(Subscription subscription);
 	
-	public abstract <E extends TimePoint> TimeSeries<E> getInputDataSeries(Subscription subscription);
+	
 	
 	/**
 	 * Main {@link Thread} body
@@ -95,23 +176,27 @@ public abstract class Node implements Runnable {
 	@Override
 	public void run() {
 		while(isRunning) {
-			if(hasAllAncestorUpdates()) {
-				Span span = this.process();
-				
-				if(span != null) {
-					List<Subscription> outputs = getOutputSubscriptions();
-					for(Node nextNode : childNodes) {
-						nextNode.setModifiedSpan(span, outputs);
+			if(isUpdated()) {
+				setUpdated(false);
+				if(hasAllAncestorUpdates()) {
+					Span span = this.process();
+					if(span != null) {
+						List<Subscription> outputs = getOutputSubscriptions();
+						for(Node nextNode : childNodes) {
+							nextNode.setModifiedSpan(span, outputs);
+						}
 					}
 				}
 			}
 			
-			try {
-				synchronized(waitLock) {
-					waitLock.wait();
+			if(!isUpdated()) {
+				try {
+					synchronized(waitLock) {
+						waitLock.wait();
+					}
+				}catch(Exception e) { 
+					e.printStackTrace();
 				}
-			}catch(Exception e) { 
-				e.printStackTrace();
 			}
 		}
 	}
