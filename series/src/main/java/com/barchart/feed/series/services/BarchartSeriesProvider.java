@@ -83,8 +83,11 @@ public class BarchartSeriesProvider {
 		
 		System.out.println("inst = " + inst.symbol());
 		
+		//The below map will not be used in the final implementation
+		//due to the fact that there will be a graph lookup and matching
+		//algorithm based on input/output subscriptions of nodes.
+		symbolObservers.put(inst.id(), (Distributor)lookupNode(subscription));
 		
-		//symbolObservers.put(inst.id(), lookupNode(subscription));
 		consumerAgent.include(inst);
 		historicalService.subscribe(historical, subscription);
 		
@@ -115,7 +118,7 @@ public class BarchartSeriesProvider {
 			//compatibleNode = node.lookup(subscription);
 		}
 		
-		return null;
+		return new Distributor();
 	}
 	
 	private void startAndMonitorConnection() {
