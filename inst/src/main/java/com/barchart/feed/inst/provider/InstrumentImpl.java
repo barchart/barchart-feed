@@ -10,6 +10,7 @@ import java.util.TimeZone;
 import org.openfeed.proto.inst.Calendar;
 import org.openfeed.proto.inst.Decimal;
 import org.openfeed.proto.inst.InstrumentDefinition;
+import org.openfeed.proto.inst.InstrumentType;
 import org.openfeed.proto.inst.Interval;
 import org.openfeed.proto.inst.Symbol;
 
@@ -53,7 +54,8 @@ public class InstrumentImpl extends InstrumentBase implements Instrument {
 	@Override
 	public SecurityType securityType() {
 		
-		if(!def.hasInstrumentType()) {
+		if(!def.hasInstrumentType() || 
+				def.getInstrumentType() == InstrumentType.NO_INSTRUMENT) {
 			return SecurityType.fromCFI(CFICode());
 		}
 		
