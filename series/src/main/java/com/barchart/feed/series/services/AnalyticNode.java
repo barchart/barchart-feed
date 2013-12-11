@@ -40,7 +40,7 @@ public class AnalyticNode extends Node {
 	
 	/**
 	 * Called by ancestors of this {@code Node} in the tree to set
-	 * the {@link Span} of time modified by that {@code Node}'s 
+	 * the {@link Span} of time modified by that ancestor's 
 	 * internal processing class.
 	 * 
 	 * @param span				the {@link Span} of time processed.

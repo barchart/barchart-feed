@@ -5,7 +5,9 @@ import com.barchart.feed.api.model.data.Market;
 /**
  * Assemblers "assemble" data fed from two inputs. Namely, live 
  * market data and historical data. This data is then merged and then
- * output to a {@link TimeSeries} 
+ * output to a {@link TimeSeries} <em><b>without</b></em> attention
+ * to {@link Period} aggregation or rule formatting (with regard to
+ * futures expiration or continuation, for example...) 
  * 
  * @author David Ray
  */
