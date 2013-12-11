@@ -15,6 +15,8 @@ import com.barchart.feed.api.series.TimeSeries;
  * @author David Ray
  */
 public abstract class Node implements Runnable {
+	/** Specifier used to identify IO nodes used for bar building operations */
+	public static final String TYPE_IO = "IO";
 	
 	/** List of {@code Node}s which are updated when this {@code Node} has finished processing. */
 	private ConcurrentLinkedQueue<Node> childNodes;
@@ -111,6 +113,23 @@ public abstract class Node implements Runnable {
 	///////////////////////////////////////////////////
 	//    ABSTRACT METHODS TO BE IMPLEMENTED BELOW   //
 	///////////////////////////////////////////////////
+	/**
+	 * Compares the specified {@link Subscription} with this {@code Node}'s
+	 * output Subscriptions:
+	 * 1. If there is an exact match, this Node is returned.
+	 * 2. If not, we test the specified Subscription to see if it is "derivable"
+	 *    from any of this Node's outputs. If so, then repeat this process on
+	 *    Nodes immediately preceding this Node in the hierarchy. If not, then
+	 *    return null. 
+	 * 3. If no Node which is an exact match is found but that Node has derivable
+	 * 	  output, use a "new" Node which can derive the output needed and attach
+	 * 	  it and return the new Node.
+	 * 	  
+	 * 
+	 * @param subscription
+	 * @return
+	 */
+	protected abstract Node lookup(Subscription subscription);
 	/**
 	 * Implemented by the node type handling data expected by this {@code Node}
 	 * 

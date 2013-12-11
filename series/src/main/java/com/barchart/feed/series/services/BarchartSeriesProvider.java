@@ -25,8 +25,10 @@ import com.barchart.feed.api.series.TimePoint;
 import com.barchart.feed.api.series.TimeSeries;
 import com.barchart.feed.api.series.services.HistoricalObserver;
 import com.barchart.feed.api.series.services.HistoricalResult;
-import com.barchart.feed.api.series.services.Subscription;
+import com.barchart.feed.api.series.services.HistoricalService;
+import com.barchart.feed.api.series.services.Node;
 import com.barchart.feed.api.series.services.Query;
+import com.barchart.feed.api.series.services.Subscription;
 import com.barchart.feed.api.series.temporal.TimeFrame;
 
 /**
@@ -36,7 +38,7 @@ import com.barchart.feed.api.series.temporal.TimeFrame;
  */
 public class BarchartSeriesProvider {
 	private MarketService marketService;
-	private BarchartHistoricalService<HistoricalResult> historicalService;
+	private HistoricalService<HistoricalResult> historicalService;
 	private ConsumerAgent consumerAgent;
 	private ObservableMonitor monitor;
 	private MarketSubject market;
@@ -48,6 +50,9 @@ public class BarchartSeriesProvider {
 	private Object waitMonitor = new Object();
 	private AtomicBoolean isConnected = new AtomicBoolean(false);
 	
+	/** Constains output-level/Subscribable IO nodes */
+	private List<Node> ioOutputNodes = Collections.synchronizedList(new ArrayList<Node>());
+	
 	
 	
 	/**
@@ -55,7 +60,7 @@ public class BarchartSeriesProvider {
 	 * @param mktService	an implementation of {@link MarketService} such as {@link BarchartMarketProvider}
 	 * @param histService	an implementation of {@link BarchartHistoricalService} such as {@link BarchartHistoricalProvider}
 	 */
-	public BarchartSeriesProvider(MarketService mktService, BarchartHistoricalService<HistoricalResult> histService) {
+	public BarchartSeriesProvider(MarketService mktService, HistoricalService<HistoricalResult> histService) {
 		this.marketService = mktService;
 		this.historicalService = histService;
 		startAndMonitorConnection();
@@ -66,7 +71,7 @@ public class BarchartSeriesProvider {
 	 * @param query
 	 * @return
 	 */
-	public <T extends TimePoint> Observable<TimeSeries<T>> subscribe(final Query query) {
+	public <T extends TimePoint> Observable<TimeSeries<T>> fetch(final Query query) {
 		if(!isConnected.get()) {
 			synchronized(waitMonitor) {
 				try { waitMonitor.wait(); } catch(Exception e) { e.printStackTrace(); }
@@ -76,16 +81,10 @@ public class BarchartSeriesProvider {
 		Instrument inst = lookupInstrument(query.getSymbol());
 		Subscription subscription = createSubscription(query, inst);
 		
-		//Node node = getNode(nodeIO);
-		
 		System.out.println("inst = " + inst.symbol());
 		
-//		Observable<TimeSeries<T>> returnVal = null;
-//		
-//		Observer<Result<Instrument>> instrumentLookup = createInstrumentObserver(query);
-//		marketService.instrument(query.getSymbol()).subscribe(instrumentLookup);
 		
-		symbolObservers.put(inst.id(), lookupNode(subscription));
+		//symbolObservers.put(inst.id(), lookupNode(subscription));
 		consumerAgent.include(inst);
 		historicalService.subscribe(historical, subscription);
 		
@@ -103,8 +102,20 @@ public class BarchartSeriesProvider {
 		        query.getTradingWeek());
 	}
 	
-	private Distributor lookupNode(Subscription nodeIO) {
+	private Node lookupNode(Subscription subscription) {
+		if(subscription.getNodeDescriptor().getSpecifier().equals(Node.TYPE_IO)) {
+			return lookupIONode(subscription);
+		}
 		return new Distributor();
+	}
+	
+	private Node lookupIONode(Subscription subscription) {
+		Node compatibleNode = null;
+		for(Node node : ioOutputNodes) {
+			//compatibleNode = node.lookup(subscription);
+		}
+		
+		return null;
 	}
 	
 	private void startAndMonitorConnection() {
@@ -126,15 +137,18 @@ public class BarchartSeriesProvider {
 					synchronized(waitMonitor) {
 						try { 
 							isConnected.getAndSet(true);
-							waitMonitor.notifyAll();
+							
+							if(market == null) {
+								market = new MarketSubject();
+								consumerAgent = marketService.register(market, Market.class);
+								historical = new HistoricalSubject();
+							}
+							
+							waitMonitor.notify();
 						}catch(Exception e) { e.printStackTrace(); }
 					}
 					
-					if(market == null) {
-						market = new MarketSubject();
-						consumerAgent = marketService.register(market, Market.class);
-						historical = new HistoricalSubject();
-					}
+					
 				}
 			}
 		};

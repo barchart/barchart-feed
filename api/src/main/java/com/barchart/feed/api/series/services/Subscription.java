@@ -21,6 +21,7 @@ public class Subscription implements rx.Subscription {
     	this.instrument = i;
     	this.symbol = symbol;
     	this.timeFrames = timeFrames;
+    	this.tradingWeek = week;
     }
     
     /**
@@ -64,6 +65,33 @@ public class Subscription implements rx.Subscription {
 	 */
 	public TradingWeek getTradingWeek() {
 		return tradingWeek;
+	}
+	
+	/**
+	 * Tests the "shareability" of this {@code Subscription}'s output
+	 * with the specified subscription. {@link NodeDescriptor} is not
+	 * tested here because if that can be simply determined and if the
+	 * test below is positive we can at least share this Subscription's
+	 * source or ancestor Subscription data.
+	 * 
+	 * @param other
+	 * @return
+	 */
+	public boolean isDerivableFrom(Subscription other) {
+		boolean retVal = false;
+		if(other.instrument.id().equals(instrument.id()) && 
+			other.tradingWeek.equals(tradingWeek)) {
+			retVal = true;
+		}
+		
+		if(retVal && other.timeFrames.length == timeFrames.length) {
+			for(int i = 0;i < timeFrames.length;i++) {
+				retVal &= timeFrames[i].isDerivableFrom(other.timeFrames[i]);
+				if(!retVal) break;
+			}
+		}
+				
+		return retVal;
 	}
 
 	@Override

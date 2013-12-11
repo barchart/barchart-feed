@@ -66,4 +66,10 @@ public class BarBuilder extends Node {
 		return null;
 	}
 
+	@Override
+	protected Node lookup(Subscription subscription) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
