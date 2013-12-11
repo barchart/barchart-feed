@@ -36,12 +36,16 @@ public class DefBook extends ValueFreezer<MarketBook> implements MarketBook {
 	private final MarketBookEntry[] bids;
 	private final MarketBookEntry[] asks;
 	
+	private final MarketBookEntry bidTop;
+	private final MarketBookEntry askTop;
+	
 	private final MarketBookEntry lastUpdate; 
 	
 	private Set<Component> changeSet;
 
 	public DefBook(final Instrument instrument, final TimeValue time, 
 			final MarketBookEntry[] bids, final MarketBookEntry[] asks,
+			final MarketBookEntry bidTop, final MarketBookEntry askTop,
 			final MarketBookEntry lastUpdate, 
 			final Set<Component> changeSet) {
 
@@ -55,6 +59,9 @@ public class DefBook extends ValueFreezer<MarketBook> implements MarketBook {
 
 		this.bids = bids;
 		this.asks = asks;
+		
+		this.bidTop = bidTop;
+		this.askTop = askTop;
 		
 		this.lastUpdate = lastUpdate;
 		
@@ -139,14 +146,14 @@ public class DefBook extends ValueFreezer<MarketBook> implements MarketBook {
 		switch (side) {
 		default:
 		case BID:
-			if (isValid(bids)) {
-				return bids[0].priceValue();
+			if (bidTop != null && !bidTop.isNull()) {
+				return bidTop.priceValue();
 			} else {
 				return ValueConst.NULL_PRICE;
 			}
 		case ASK:
-			if (isValid(asks)) {
-				return asks[0].priceValue();
+			if (askTop != null && !askTop.isNull()) {
+				return askTop.priceValue();
 			} else {
 				return ValueConst.NULL_PRICE;
 			}
@@ -158,14 +165,14 @@ public class DefBook extends ValueFreezer<MarketBook> implements MarketBook {
 		switch (side) {
 		default:
 		case BID:
-			if (isValid(bids)) {
-				return bids[0].sizeValue();
+			if (bidTop != null && !bidTop.isNull()) {
+				return bidTop.sizeValue();
 			} else {
 				return ValueConst.NULL_SIZE;
 			}
 		case ASK:
-			if (isValid(asks)) {
-				return asks[0].sizeValue();
+			if (askTop != null && !askTop.isNull()) {
+				return askTop.sizeValue();
 			} else {
 				return ValueConst.NULL_SIZE;
 			}
@@ -207,17 +214,17 @@ public class DefBook extends ValueFreezer<MarketBook> implements MarketBook {
 	public Top top() {
 		
 		final MarketBookEntry bid;
-		if(bids.length == 0 || bids[0] == null || bids[0].isNull()) {
+		if(bidTop == null || bidTop.isNull()) {
 			bid = NULL_BOOK_ENTRY;
 		} else {
-			bid = bids[0];
+			bid = bidTop;
 		}
 		
 		final MarketBookEntry ask;
-		if(asks.length == 0 || asks[0] == null || asks[0].isNull()) {
+		if(askTop == null || askTop.isNull()) {
 			ask = NULL_BOOK_ENTRY;
 		} else {
-			ask = asks[0];
+			ask = askTop;
 		}
 		
 		return new DefBookTop(instrument, time,	bid, ask);

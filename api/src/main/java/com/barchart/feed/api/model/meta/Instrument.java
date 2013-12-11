@@ -78,7 +78,7 @@ public interface Instrument extends Comparable<Instrument>, Metadata {
 	
 	enum SecurityType {
 
-		NULL_TYPE(""), //
+		NULL_TYPE("~"), //
 		FOREX("MRC"), //
 		INDEX("MRI"), //
 		EQUITY("E"), //
