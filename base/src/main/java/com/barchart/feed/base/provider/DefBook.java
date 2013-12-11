@@ -214,14 +214,14 @@ public class DefBook extends ValueFreezer<MarketBook> implements MarketBook {
 	public Top top() {
 		
 		final MarketBookEntry bid;
-		if(bidTop != null && !bidTop.isNull()) {
+		if(bidTop == null || bidTop.isNull()) {
 			bid = NULL_BOOK_ENTRY;
 		} else {
 			bid = bidTop;
 		}
 		
 		final MarketBookEntry ask;
-		if(askTop != null && !askTop.isNull()) {
+		if(askTop == null || askTop.isNull()) {
 			ask = NULL_BOOK_ENTRY;
 		} else {
 			ask = askTop;
