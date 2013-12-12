@@ -5,6 +5,7 @@ import org.joda.time.DateTime;
 import com.barchart.feed.api.series.TimePoint;
 import com.barchart.feed.api.series.services.ContinuationPolicy;
 import com.barchart.feed.api.series.services.CorporateAction;
+import com.barchart.feed.api.series.services.Node;
 import com.barchart.feed.api.series.services.Query;
 import com.barchart.feed.api.series.services.SaleCondition;
 import com.barchart.feed.api.series.services.VolumeType;
@@ -14,6 +15,9 @@ import com.barchart.feed.api.series.temporal.TradingSession;
 import com.barchart.feed.api.series.temporal.TradingWeek;
 
 /**
+ * Basically all lies now... ;)
+ * 
+ * 
  * Builds a new query. At the time of this writing, the only
  * "mandatory" entry is the symbol string, though the  period,
  * and startDate must also exist, they have defaults of {@link Period#DAY}
@@ -162,7 +166,7 @@ public class QueryBuilder {
 	    private int nearestOffset;
 	    private boolean hasCustomQuery;
 	    private String customQuery;
-	    private String specifier;
+	    private String specifier = Node.TYPE_IO;
 	    private String symbol;
         private Period period = Period.DAY;
         private DateTime start = PeriodType.DAY.resolutionInstant(new DateTime().minusDays(90));

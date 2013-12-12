@@ -54,8 +54,33 @@ public class TimeFrame {
 	public DateTime getEndDate() {
 		return endDate;
 	}
-
 	
+	/**
+	 * Tests the "derivability" data defined by this {@code TimeFrame}
+	 * to see if there is a chance of sharing between {@link Node}s 
+	 * defined by both.
+	 * 
+	 * @param other		the frame being tested for source compatibility
+	 * @return	true if compatible / derivable of false if not.
+	 */
+	public boolean isDerivableFrom(TimeFrame other) {
+		boolean retVal = false;
+		if(equals(other)) {
+			retVal = true;
+		}
+		
+		PeriodType otherType = other.getPeriod().getPeriodType();
+		int otherDuration = other.getPeriod().size();
+		
+		if(otherType.resolutionInstant(other.startDate).isAfter(period.getPeriodType().resolutionInstant(startDate))) {
+			retVal = false;
+		}else if(otherType.isLowerThan(period.getPeriodType()) && (otherType.isLowerThan(PeriodType.WEEK)) && (otherDuration == 1)) {
+			retVal = true;
+		}
+		
+		return retVal;
+	}
+
 	/**
 	 * <em>All Dates modified</em> to enable comparison at the resolution of the given PeriodType.
 	 * @see java.lang.Object#hashCode()

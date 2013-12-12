@@ -124,5 +124,10 @@ public class AnalyticNode extends Node {
 	public <E extends TimePoint> TimeSeries<E> getInputTimeSeries(Subscription subscription) {
 		return null;
 	}
+	
+	@Override
+	protected Node lookup(Subscription subscription) {
+		return null;
+	}
 
 }
