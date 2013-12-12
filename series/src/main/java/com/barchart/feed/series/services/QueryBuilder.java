@@ -14,6 +14,9 @@ import com.barchart.feed.api.series.temporal.TradingSession;
 import com.barchart.feed.api.series.temporal.TradingWeek;
 
 /**
+ * Basically all lies now... ;)
+ * 
+ * 
  * Builds a new query. At the time of this writing, the only
  * "mandatory" entry is the symbol string, though the  period,
  * and startDate must also exist, they have defaults of {@link Period#DAY}
