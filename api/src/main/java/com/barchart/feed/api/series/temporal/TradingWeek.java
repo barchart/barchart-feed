@@ -811,7 +811,7 @@ public class TradingWeek extends JodaWorkingWeek {
         
         private static final String SESSION_KEY = "sessions";
         private static final String HOLIDAY_FILEPATH_KEY = "holidayDateFileLocation";
-        private static final String HOLDIAY_FILE_DELIMITER = "holidayDelimiter";
+        private static final String HOLIDAY_FILE_DELIMITER = "holidayDelimiter";
         private static final String SESSION_PARAM_DELIMITER = "sessionParamDelimiter";
         private static final String SESSION_DELIMITER = "sessionDelimiter";
         private static final String HOLIDAY_FILE_LOADTYPE = "holidayDateFileLoadType";
@@ -1054,7 +1054,7 @@ public class TradingWeek extends JodaWorkingWeek {
                 throw new IllegalArgumentException("Could not find the holiday file path in config file for calendar: "+calendarName);
             }
             
-            String delimiter = properties.getProperty(calendarName + "." + HOLDIAY_FILE_DELIMITER, null);
+            String delimiter = properties.getProperty(calendarName + "." + HOLIDAY_FILE_DELIMITER, null);
             setHolidayDateFileLocation(filePath, delimiter);
             setHolidayCalendarName(calendarName);
         }
