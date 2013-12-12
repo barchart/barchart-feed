@@ -125,6 +125,43 @@ public class PeriodTypeTest {
 		
 		result = PeriodType.MINUTE.compareAtResolution(dt1, dt2);
 		assertEquals(0, result);
+		
+		dt1 = new DateTime(2010, 1, 5, 8, 0, 0, 0);
+        dt2 = new DateTime(2010, 1, 5, 8, 30, 30, 300);
+        
+        //Dates are the same up to minutes so minutes should show dt1 < dt2.
+        assertEquals(-1, PeriodType.MINUTE.compareAtResolution(dt1, dt2));
+        //The rest should be equal
+        assertEquals(0, PeriodType.HOUR.compareAtResolution(dt1, dt2));
+        assertEquals(0, PeriodType.DAY.compareAtResolution(dt1, dt2));
+        assertEquals(0, PeriodType.WEEK.compareAtResolution(dt1, dt2));
+        assertEquals(0, PeriodType.MONTH.compareAtResolution(dt1, dt2));
+        assertEquals(0, PeriodType.QUARTER.compareAtResolution(dt1, dt2));
+        assertEquals(0, PeriodType.YEAR.compareAtResolution(dt1, dt2));
+        
+        //Do some extra testing for weeks and quarters
+        
+        //Should still be in same quarter: MAR in same quarter
+        dt1 = new DateTime(2010, 1, 5, 8, 0, 0, 0);
+        dt2 = new DateTime(2010, 3, 5, 8, 30, 30, 300);
+        assertEquals(0, PeriodType.QUARTER.compareAtResolution(dt1, dt2));
+        
+        //dt2 should be in the next quarter: APRIL dt1 is in preceding quarter
+        dt1 = new DateTime(2010, 1, 5, 8, 0, 0, 0);
+        dt2 = new DateTime(2010, 4, 5, 8, 30, 30, 300);
+        assertEquals(-1, PeriodType.QUARTER.compareAtResolution(dt1, dt2));
+        
+        //Make sure that comparison is time comparison even though 
+        //date 1's day is a higher number than date 2 !!! 
+        //(i.e. first date should still be less)
+        assertEquals(-1, PeriodType.DAY.compareAtResolution(
+                new DateTime(2009, 12, 31, 8, 0, 0, 0), 
+                new DateTime(2010, 1, 1, 8, 0, 0, 0)));
+        
+        //Test opposite condition of above.
+        assertEquals(1, PeriodType.DAY.compareAtResolution(
+                new DateTime(2010, 1, 1, 8, 0, 0, 0),
+                new DateTime(2009, 12, 31, 8, 0, 0, 0)));
 	}
 	
 	@Test
