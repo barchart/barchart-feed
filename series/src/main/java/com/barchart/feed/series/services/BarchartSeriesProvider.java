@@ -27,6 +27,7 @@ import com.barchart.feed.api.series.services.HistoricalObserver;
 import com.barchart.feed.api.series.services.HistoricalResult;
 import com.barchart.feed.api.series.services.HistoricalService;
 import com.barchart.feed.api.series.services.Node;
+import com.barchart.feed.api.series.services.NodeDescriptor;
 import com.barchart.feed.api.series.services.Query;
 import com.barchart.feed.api.series.services.Subscription;
 import com.barchart.feed.api.series.temporal.TimeFrame;
@@ -100,7 +101,7 @@ public class BarchartSeriesProvider {
 	}
 	
 	private Subscription createSubscription(Query query, Instrument i) {
-		return new Subscription(null, i, query.getSymbol(), 
+		return new Subscription(new NodeDescriptor(query.getSpecifier()), i, query.getSymbol(), 
 		    new TimeFrame[] { new TimeFrame(query.getPeriod(), query.getStart(), query.getEnd()) }, 
 		        query.getTradingWeek());
 	}

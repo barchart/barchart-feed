@@ -18,6 +18,9 @@ public class BarchartSeriesProviderTest {
 		marketService.preSubscribe(FauxHistoricalService.DEFAULT_MINUTE_QUERY);
 		BarchartSeriesProvider provider = new BarchartSeriesProvider(marketService, new FauxHistoricalService(null));
 		
+		//Observable Should be null here until I finish the node lookup and graph construction I'm currently working on.
+		//Fails due to this is where I'm working (Test Driven Baby!)
+		//Finished first part which is determining equality and "derivability" of Subscriptions (now writing tests for them)
 		Observable<TimeSeries<TimePoint>> observable = provider.fetch(FauxHistoricalService.DEFAULT_MINUTE_QUERY);
 		
 		TestObserver<TimeSeries<TimePoint>> testObserver = new TestObserver<TimeSeries<TimePoint>>();
@@ -25,7 +28,7 @@ public class BarchartSeriesProviderTest {
 		
 		try {
 			TimeSeries<TimePoint> series = testObserver.sync().results.get(0);
-			assertNotNull(series); //Fails due to this is where I'm working (Test Driven Baby!)
+			assertNotNull(series); 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

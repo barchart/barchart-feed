@@ -5,6 +5,7 @@ import org.joda.time.DateTime;
 import com.barchart.feed.api.series.TimePoint;
 import com.barchart.feed.api.series.services.ContinuationPolicy;
 import com.barchart.feed.api.series.services.CorporateAction;
+import com.barchart.feed.api.series.services.Node;
 import com.barchart.feed.api.series.services.Query;
 import com.barchart.feed.api.series.services.SaleCondition;
 import com.barchart.feed.api.series.services.VolumeType;
@@ -165,7 +166,7 @@ public class QueryBuilder {
 	    private int nearestOffset;
 	    private boolean hasCustomQuery;
 	    private String customQuery;
-	    private String specifier;
+	    private String specifier = Node.TYPE_IO;
 	    private String symbol;
         private Period period = Period.DAY;
         private DateTime start = PeriodType.DAY.resolutionInstant(new DateTime().minusDays(90));
