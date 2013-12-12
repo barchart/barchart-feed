@@ -124,13 +124,11 @@ public class TradingWeek extends JodaWorkingWeek {
     
     /**
      * Returns a "Builder" for building a {@code TradingWeek} from a specified
-     * file path as a resource on the current classpath. 
+     * Properties object. 
      * 
-     * @param propertiesFilePath            the part of a given file path which describes
-     *                                      the location and name of a properties file located
-     *                                      in the current classpath. If the directory containing
-     *                                      a given filename is directly on the configured classpath,
-     *                                      then the name of the file is all that is needed.
+     * @param properties            		Properties object containing the needed properties to configure a
+     * 										TradingWeek much like the way it would be constructed from a file
+     * 										based input. See the "DEFAULT" trading session implementation above.
      * @param calendarName                  the name which can be used to identify a given calendar. Calendars
      *                                      are identified by their name and are reused once they are defined 
      *                                      and registered (this happens automatically, the user doesn't have
