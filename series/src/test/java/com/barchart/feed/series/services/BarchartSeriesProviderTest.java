@@ -25,7 +25,7 @@ public class BarchartSeriesProviderTest {
 		
 		try {
 			TimeSeries<TimePoint> series = testObserver.sync().results.get(0);
-			assertNotNull(series);
+			assertNotNull(series); //Fails due to this is where I'm working (Test Driven Baby!)
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
