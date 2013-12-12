@@ -294,7 +294,6 @@ public final class Symbology {
 		
 	}
 
-	// FIXME
 	public static String formatHistoricalSymbol(String symbol) {
 		
 		if(symbol == null) {
