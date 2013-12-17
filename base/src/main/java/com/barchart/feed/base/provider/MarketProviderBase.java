@@ -33,6 +33,7 @@ import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.api.model.meta.Metadata;
 import com.barchart.feed.api.model.meta.id.ExchangeID;
 import com.barchart.feed.api.model.meta.id.InstrumentID;
+import com.barchart.feed.api.model.meta.id.VendorID;
 import com.barchart.feed.base.market.api.MarketDo;
 import com.barchart.feed.base.market.api.MarketFactory;
 import com.barchart.feed.base.market.api.MarketMakerProvider;
@@ -309,7 +310,15 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 								exInsts.remove(i);
 								incInsts.add(i);
 								
-								newInterests.add(formatForJERQ(i.symbol()));
+								/* We have to use an alternate symbol for options
+								 * ...rolls eyes...
+								 */
+								final String symbol = i.symbol();
+								if(symbol.contains("|")) {
+									newInterests.add(i.vendorSymbols().get(VendorID.BARCHART));
+								} else {
+									newInterests.add(formatForJERQ(i.symbol()));
+								}
 								
 							} else {
 								/*
@@ -362,7 +371,15 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 								incInsts.remove(i);
 								exInsts.add(i);
 								
-								oldInterests.add(formatForJERQ(i.symbol()));
+								/* We have to use an alternate symbol for options
+								 * ...rolls eyes...
+								 */
+								final String symbol = i.symbol();
+								if(symbol.contains("|")) {
+									oldInterests.add(i.vendorSymbols().get(VendorID.BARCHART));
+								} else {
+									oldInterests.add(formatForJERQ(i.symbol()));
+								}
 								
 							} else {
 								/*
