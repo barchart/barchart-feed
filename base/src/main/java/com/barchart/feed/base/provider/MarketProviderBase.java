@@ -438,9 +438,22 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 					// Ignore 
 					continue;
 				case INSTRUMENT:
-					incInsts.add((Instrument)m);
-					exInsts.remove((Instrument)m);
-					newInterests.add(formatForJERQ(((Instrument)m).symbol()));
+					
+					final Instrument i = (Instrument)m;
+					
+					incInsts.add(i);
+					exInsts.remove(i);
+					
+					/* We have to use an alternate symbol for options
+					 * ...rolls eyes...
+					 */
+					final String symbol = i.symbol();
+					if(symbol.contains("|")) {
+						newInterests.add(i.vendorSymbols().get(VendorID.BARCHART));
+					} else {
+						newInterests.add(formatForJERQ(i.symbol()));
+					}
+					
 					continue;
 				case EXCHANGE:
 					incExchanges.add((Exchange)m);
@@ -477,9 +490,22 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 					// Ignore 
 					continue;
 				case INSTRUMENT:
-					exInsts.add((Instrument)m);
-					incInsts.remove((Instrument)m);
-					oldInterests.add(formatForJERQ(((Instrument)m).symbol()));
+					
+					final Instrument i = (Instrument)m;
+					
+					exInsts.add(i);
+					incInsts.remove(i);
+					
+					/* We have to use an alternate symbol for options
+					 * ...rolls eyes...
+					 */
+					final String symbol = i.symbol();
+					if(symbol.contains("|")) {
+						oldInterests.add(i.vendorSymbols().get(VendorID.BARCHART));
+					} else {
+						oldInterests.add(formatForJERQ(i.symbol()));
+					}
+					
 					continue;
 				case EXCHANGE:
 					exExchanges.add((Exchange)m);
