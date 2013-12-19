@@ -38,19 +38,13 @@
 		<dependency>
 			<groupId>com.barchart.feed</groupId>
 			<artifactId>barchart-feed-api</artifactId>
-			<version>[2-SNAPSHOT,3-SNAPSHOT)</version>
+			<version>[2.2.3-SNAPSHOT,3-SNAPSHOT)</version>
 		</dependency>
 
 		<dependency>
 			<groupId>com.barchart.util</groupId>
 			<artifactId>barchart-util-common</artifactId>
 			<version>[1-SNAPSHOT,2-SNAPSHOT)</version>
-		</dependency>
-
-		<dependency>
-			<groupId>com.sleepycat</groupId>
-			<artifactId>je</artifactId>
-			<version>5.0.73</version>
 		</dependency>
 
 		<dependency>

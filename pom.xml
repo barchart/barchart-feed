@@ -24,9 +24,6 @@
 	<packaging>pom</packaging>
 
 	<modules>
-	
-		<module>a</module>
-		
 		<module>api</module>
 		<module>inst</module>
 		<module>base</module>

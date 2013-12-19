@@ -7,6 +7,10 @@ import java.util.Properties;
 import org.joda.time.DateTime;
 import org.junit.Test;
 
+import com.barchart.feed.api.series.temporal.TradingWeek;
+import com.barchart.feed.api.series.temporal.TradingWeek.LoadType;
+
+
 public class TradingWeekTest {
     private final String TEST = "TEST";
     private final String TEST3 = "TEST3";

@@ -314,6 +314,13 @@ public final class Symbology {
 			return new StringBuilder(symbol).insert(symbol.length() - 1, O).toString();
 		}
 		
+		/* e.g. ESH2013 */
+		if(Character.isDigit(symbol.charAt(symbol.length() - 3))) {
+			return new StringBuilder(symbol).delete(symbol.length() - 4, 
+					symbol.length() - 2).toString();
+		}
+		
+		
 		return symbol;
 	}
 	
