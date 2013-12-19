@@ -27,6 +27,7 @@ import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
 
+
 /**
  * Represents the days of a given week in which trading occurs
  * in a particular financial market, for a given financial instrument.

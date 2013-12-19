@@ -4,6 +4,7 @@ import org.joda.time.DateTime;
 import org.joda.time.Hours;
 import org.joda.time.LocalTime;
 
+
 /**
  * Represents a period of time within which a session
  * of trading occurs.
