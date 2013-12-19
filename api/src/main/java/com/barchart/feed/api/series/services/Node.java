@@ -9,17 +9,14 @@ import com.barchart.feed.api.series.TimeSeries;
 
 /**
  * Base class which participates in an interconnected graph of executable objects,
- * which expect a number of preconfigured inputs and deliver one or more preconfigured
+ * which expect a number of pre-configured inputs and deliver one or more pre-configured
  * outputs.
  * 
  * @author David Ray
  */
 public abstract class Node implements Runnable {
-	/** Specifier used to identify IO nodes used for bar building operations */
-	public static final String TYPE_IO = "IO";
-	
 	/** List of {@code Node}s which are updated when this {@code Node} has finished processing. */
-	private ConcurrentLinkedQueue<Node> childNodes;
+	protected ConcurrentLinkedQueue<Node> childNodes;
 	
 	/** Thread monitor object */
 	private Object waitLock = new Object();
@@ -107,7 +104,7 @@ public abstract class Node implements Runnable {
 	 */
 	protected Object getLock() {
 		return waitLock;
-	}
+	}   
 	
 	
 	///////////////////////////////////////////////////
@@ -129,7 +126,7 @@ public abstract class Node implements Runnable {
 	 * @param subscription
 	 * @return
 	 */
-	protected abstract Node lookup(Subscription subscription);
+	public abstract Node[] lookup(Subscription subscription);
 	/**
 	 * Implemented by the node type handling data expected by this {@code Node}
 	 * 
@@ -162,7 +159,7 @@ public abstract class Node implements Runnable {
 	 * 
 	 * @return	a List of output {@link Subscriptions}
 	 */
-	protected abstract List<Subscription> getOutputSubscriptions();
+	public abstract List<Subscription> getOutputSubscriptions();
 	/**
 	 * Implemented by the node type handling data expected by this {@code Node}
 	 * 
@@ -170,7 +167,7 @@ public abstract class Node implements Runnable {
 	 * 
 	 * @return	a List of expected input {@link Subscriptions}
 	 */
-	protected abstract List<Subscription> getInputSubscriptions();
+	public abstract List<Subscription> getInputSubscriptions();
 	/**
 	 * Returns the output {@link TimeSeries} corresponding to with the specified {@link Subscription}
 	 * 
@@ -178,7 +175,6 @@ public abstract class Node implements Runnable {
 	 * @return	the output {@link TimeSeries}
 	 */
 	protected abstract <E extends TimePoint> TimeSeries<E> getOutputTimeSeries(Subscription subscription);
-	
 	/**
 	 * Returns the input {@link TimeSeries} corresponding to with the specified {@link Subscription}
 	 * 
@@ -186,7 +182,29 @@ public abstract class Node implements Runnable {
 	 * @return	the input {@link TimeSeries}
 	 */
 	protected abstract <E extends TimePoint> TimeSeries<E> getInputTimeSeries(Subscription subscription);
-	
+	/**
+	 * Returns the key for the {@link Subscription} that the specified subscription is derivable from.
+	 * 
+	 * @param subscription     the subscription for which to find the derivable subscription's key - amongst
+	 *                         this Node's output Subscriptions. 
+	 * @return                 the key for the Subscription from which the specified Subscription is derivable.
+	 */
+	public abstract String getDerivableOutputKey(Subscription subscription);
+	/**
+	 * Returns the  {@link Subscription} from which the specified Subscription is derivable.
+	 * 
+	 * @param subscription     the Subscription which can be derived from one of this {@code Node}'s outputs.
+	 * @return                 One of this Node's derivable outputs or null.
+	 */
+	public abstract Subscription getDerivableOutputSubscription(Subscription subscription);
+	/**
+	 * Allows the implementing class to add the specified child node which involves connecting the 
+	 * output specified by the {@link Subscription} to the specified output via input/output keys.
+	 * 
+	 * @param node
+	 * @param subscription
+	 */
+	public abstract void addChildNode(Node node, Subscription subscription);
 	
 	
 	/**

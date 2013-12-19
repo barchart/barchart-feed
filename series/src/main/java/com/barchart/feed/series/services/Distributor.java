@@ -62,35 +62,53 @@ public class Distributor extends Node implements Assembler {
 	}
 
 	@Override
-	protected List<Subscription> getOutputSubscriptions() {
+	public List<Subscription> getOutputSubscriptions() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	protected List<Subscription> getInputSubscriptions() {
+	public List<Subscription> getInputSubscriptions() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	protected <E extends TimePoint> TimeSeries<E> getOutputTimeSeries(
-			Subscription subscription) {
+	protected <E extends TimePoint> TimeSeries<E> getOutputTimeSeries(Subscription subscription) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	protected <E extends TimePoint> TimeSeries<E> getInputTimeSeries(
-			Subscription subscription) {
+	protected <E extends TimePoint> TimeSeries<E> getInputTimeSeries(Subscription subscription) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	protected Node lookup(Subscription subscription) {
+	public Node[] lookup(Subscription subscription) {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+    @Override
+    public String getDerivableOutputKey(Subscription subscription) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+    
+    @Override
+    public Subscription getDerivableOutputSubscription(Subscription subscription) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void addChildNode(Node node, Subscription subscription) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    
 
 }

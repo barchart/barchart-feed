@@ -8,8 +8,6 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicReference;
 
-import rx.subscriptions.Subscriptions;
-
 import com.barchart.feed.api.series.Span;
 import com.barchart.feed.api.series.TimePoint;
 import com.barchart.feed.api.series.TimeSeries;
@@ -20,13 +18,15 @@ import com.barchart.feed.api.series.services.Subscription;
 public class AnalyticNode extends Node {
 	public enum SpanOperation { UNION, INTERSECTION };
 	
-	/** Holds the keys which describe the input mappings and are used to correlate the inputs with their {@link Subscription}s */
-	private Map<String, Subscription> inputKeyMap = new ConcurrentHashMap<String, Subscription>();
-	/** Holds the keys which describe the output mappings and are used to correlate the output with their {@link Subscription}s */
-	private Map<String, Subscription> outputKeyMap = new ConcurrentHashMap<String, Subscription>();
+	/** Holds the keys which describe the input mappings and are used to correlate the inputs with their {@link SeriesSubscription}s */
+	private Map<String, SeriesSubscription> inputKeyMap = new ConcurrentHashMap<String, SeriesSubscription>();
+	/** Holds the keys which describe the output mappings and are used to correlate the output with their {@link SeriesSubscription}s */
+	private Map<String, SeriesSubscription> outputKeyMap = new ConcurrentHashMap<String, SeriesSubscription>();
+	/** Reverse SeriesSubscription map to lookup keys. */
+	private Map<SeriesSubscription, String> outputSubMap = new ConcurrentHashMap<SeriesSubscription, String>();
 	
-	/** Contains all currently inputted {@link Subscriptions}, to be tested on each process cycle to see if all required inputs have been received */
-	private Map<Subscription, Span> currentUpdates = Collections.synchronizedMap(new HashMap<Subscription, Span>());
+	/** Contains all currently input {@link SeriesSubscriptions}, to be tested on each process cycle to see if all required inputs have been received */
+	private Map<SeriesSubscription, Span> currentUpdates = Collections.synchronizedMap(new HashMap<SeriesSubscription, Span>());
 	
 	/** The currently updated {@link Span} for the current process cycle */
 	private volatile AtomicReference<Span> currentUpdateSpan;
@@ -44,7 +44,7 @@ public class AnalyticNode extends Node {
 	 * internal processing class.
 	 * 
 	 * @param span				the {@link Span} of time processed.
-	 * @param subscriptions 	the List of {@link Subscription}s the ancestor node has processed.
+	 * @param SeriesSubscriptions 	the List of {@link SeriesSubscription}s the ancestor node has processed.
 	 * @return	
 	 */
 	@Override
@@ -56,7 +56,7 @@ public class AnalyticNode extends Node {
 		setUpdated(currentUpdates.get(subscription).getNextTime().compareTo(span.getNextTime()) < 1);
 		currentUpdateSpan.set(currentUpdateSpan.get().union(span));
 		synchronized(currentUpdates) {
-			currentUpdates.put(subscription, span);
+			currentUpdates.put((SeriesSubscription)subscription, span);
 		}
 	}
 
@@ -69,11 +69,7 @@ public class AnalyticNode extends Node {
 	public boolean hasAllAncestorUpdates() {
 		return currentUpdates.keySet().containsAll(getInputSubscriptions());
 	}
-
-	/**
-	 * Starts the processing of the previously set {@link Span}
-	 * @return	the updated Span
-	 */
+	
 	@Override
 	public Span process() {
 		synchronized(currentUpdates) {
@@ -82,11 +78,11 @@ public class AnalyticNode extends Node {
 		}
 		return analytic.preProcess(currentProcessSpan);
 	}
-
+	
 	/**
-	 * Returns a List of {@link Subscriptions} that the underlying Node supplies as output.
+	 * Returns a List of {@link SeriesSubscriptions} that the underlying Node supplies as output.
 	 * 
-	 * @return	a List of output {@link Subscriptions}
+	 * @return	a List of output {@link SeriesSubscriptions}
 	 */
 	@Override
 	public List<Subscription> getOutputSubscriptions() {
@@ -94,9 +90,9 @@ public class AnalyticNode extends Node {
 	}
 
 	/**
-	 * Returns a List of {@link Subscriptions} that the underlying Node expects as input.
+	 * Returns a List of {@link SeriesSubscriptions} that the underlying Node expects as input.
 	 * 
-	 * @return	a List of expected input {@link Subscriptions}
+	 * @return	a List of expected input {@link SeriesSubscriptions}
 	 */
 	@Override
 	public List<Subscription> getInputSubscriptions() {
@@ -104,9 +100,9 @@ public class AnalyticNode extends Node {
 	}
 
 	/**
-	 * Returns the output {@link TimeSeries} corresponding to with the specified {@link Subscription}
+	 * Returns the output {@link TimeSeries} corresponding to with the specified {@link SeriesSubscription}
 	 * 
-	 * @param subscription		the Subscription acting as key for the corresponding {@link TimeSeries}
+	 * @param SeriesSubscription		the SeriesSubscription acting as key for the corresponding {@link TimeSeries}
 	 * @return	the output {@link TimeSeries}
 	 */
 	@Override
@@ -115,9 +111,9 @@ public class AnalyticNode extends Node {
 	}
 
 	/**
-	 * Returns the input {@link TimeSeries} corresponding to with the specified {@link Subscription}
+	 * Returns the input {@link TimeSeries} corresponding to with the specified {@link SeriesSubscription}
 	 * 
-	 * @param subscription		the Subscription acting as key for the corresponding {@link TimeSeries}
+	 * @param SeriesSubscription		the SeriesSubscription acting as key for the corresponding {@link TimeSeries}
 	 * @return	the input {@link TimeSeries}
 	 */
 	@Override
@@ -126,8 +122,52 @@ public class AnalyticNode extends Node {
 	}
 	
 	@Override
-	protected Node lookup(Subscription subscription) {
-		return null;
+	public Node[] lookup(Subscription subscription) {
+	    Node[] retVal = null;
+		for(SeriesSubscription sub : outputKeyMap.values()) {
+		    if(subscription.equals(sub)) {
+		        return new Node[] { this, null };
+		    }else if(retVal != null) {
+		        continue;
+		    }else if(subscription.isDerivableFrom(sub)) {
+		        retVal = new Node[] { null, this };
+		    }
+		}
+		
+		return retVal;
 	}
+	
+	/**
+     * Returns the  {@link Subscription} from which the specified Subscription is derivable.
+     * 
+     * @param subscription     the Subscription which can be derived from one of this {@code Node}'s outputs.
+     * @return                 One of this Node's derivable outputs or null.
+     */
+    public Subscription getDerivableOutputSubscription(Subscription subscription) {
+        return null;
+    }
+	
+	/**
+     * Returns the key for the {@link SeriesSubscription} that the specified SeriesSubscription is derivable from.
+     * 
+     * @param SeriesSubscription     the SeriesSubscription for which to find the derivable SeriesSubscription's key - amongst
+     *                         this Node's output SeriesSubscriptions. 
+     * @return                 the key for the SeriesSubscription from which the specified SeriesSubscription is derivable.
+     */
+	@Override
+    public String getDerivableOutputKey(Subscription subscription) {
+        for(Subscription sub : getOutputSubscriptions()) {
+            if(subscription.isDerivableFrom(sub)) {
+                return outputSubMap.get(sub);
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public void addChildNode(Node node, Subscription subscription) {
+        // TODO Auto-generated method stub
+        
+    }
 
 }

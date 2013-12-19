@@ -2,15 +2,15 @@ package com.barchart.feed.series.services;
 
 import org.joda.time.DateTime;
 
+import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.api.series.TimePoint;
 import com.barchart.feed.api.series.services.ContinuationPolicy;
-import com.barchart.feed.api.series.services.CorporateAction;
-import com.barchart.feed.api.series.services.Node;
+import com.barchart.feed.api.series.services.NodeDescriptor;
 import com.barchart.feed.api.series.services.Query;
-import com.barchart.feed.api.series.services.SaleCondition;
 import com.barchart.feed.api.series.services.VolumeType;
 import com.barchart.feed.api.series.temporal.Period;
 import com.barchart.feed.api.series.temporal.PeriodType;
+import com.barchart.feed.api.series.temporal.TimeFrame;
 import com.barchart.feed.api.series.temporal.TradingSession;
 import com.barchart.feed.api.series.temporal.TradingWeek;
 
@@ -56,7 +56,7 @@ public class QueryBuilder {
 		query = new DataQuery();
 	}
 	
-	public Query build() {
+	public DataQuery build() {
 		if(symbol == null) {
 			throw new IllegalStateException("No Symbol specified.");
 		}
@@ -166,7 +166,7 @@ public class QueryBuilder {
 	    private int nearestOffset;
 	    private boolean hasCustomQuery;
 	    private String customQuery;
-	    private String specifier = Node.TYPE_IO;
+	    private String specifier = NodeDescriptor.TYPE_IO;
 	    private String symbol;
         private Period period = Period.DAY;
         private DateTime start = PeriodType.DAY.resolutionInstant(new DateTime().minusDays(90));
@@ -197,6 +197,20 @@ public class QueryBuilder {
 		public String getCustomQuery() {
 		    return customQuery;
 		}
+		
+		/**
+	     * Transforms this {@code Query} to a more robust {@link SeriesSubscription} type.
+	     * 
+	     * @param   i     the {@code Instrument}
+	     * @return        this Query transformed to a {@link Subscripton}.
+	     */
+	    public SeriesSubscription toSubscription(Instrument i) {
+	        if(specifier != NodeDescriptor.TYPE_IO) return null; //For now... finish up Assemblers/Analytics later...
+	        
+	        return new SeriesSubscription(getSymbol(), i, new BarBuilderNodeDescriptor(), 
+                new TimeFrame[] { new TimeFrame(query.getPeriod(), query.getStart(), query.getEnd()) }, 
+                    query.getTradingWeek());
+	    }
 		
 		/**
 	     * Returns the symbol requested. Queries should request only one of an instrument,

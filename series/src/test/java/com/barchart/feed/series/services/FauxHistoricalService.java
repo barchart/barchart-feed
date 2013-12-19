@@ -54,18 +54,18 @@ public class FauxHistoricalService extends HistoricalService<HistoricalResult>{
 	 */
 	public FauxHistoricalService(rx.Observable.OnSubscribeFunc<HistoricalResult> func) {
 		super(func != null ? func : new Observable.OnSubscribeFunc<HistoricalResult>() {
-			@Override public Subscription onSubscribe(Observer<? super HistoricalResult> t1) {
-				return new Subscription() { @Override public void unsubscribe() {} };
+			@Override public SeriesSubscription onSubscribe(Observer<? super HistoricalResult> t1) {
+				return new SeriesSubscription() { @Override public void unsubscribe() {} };
 			};
 		});
 	}
 	
 	@Override
-	public void subscribe(HistoricalObserver<HistoricalResult> observer, final Subscription subscription) {
+	public <S extends Subscription> void subscribe(HistoricalObserver<HistoricalResult> observer, final S subscription) {
 		if(subscription.getTimeFrames()[0].getPeriod().getPeriodType() == PeriodType.TICK) {
 			HistoricalResult result = new HistoricalResult() {
 				@Override
-				public Subscription getSubscription() {
+				public S getSubscription() {
 					return subscription;
 				}
 
@@ -82,7 +82,7 @@ public class FauxHistoricalService extends HistoricalService<HistoricalResult>{
 		}else if(subscription.getTimeFrames()[0].getPeriod().getPeriodType() == PeriodType.MINUTE) {
 			HistoricalResult result = new HistoricalResult() {
 				@Override
-				public Subscription getSubscription() {
+				public S getSubscription() {
 					return subscription;
 				}
 
@@ -100,7 +100,7 @@ public class FauxHistoricalService extends HistoricalService<HistoricalResult>{
 		}
 	}
 	@Override
-	public void subscribe(HistoricalObserver<HistoricalResult> observer, Subscription subscription, Query customQuery) {
+	public <S extends Subscription> void subscribe(HistoricalObserver<HistoricalResult> observer, S subscription, Query customQuery) {
 		throw new UnsupportedOperationException("This version of subscribe() not supported in this test class.");
 	}
 	
@@ -122,6 +122,6 @@ public class FauxHistoricalService extends HistoricalService<HistoricalResult>{
 		
 		return retVal;
 	}
-	
-		
+
+    	
 }

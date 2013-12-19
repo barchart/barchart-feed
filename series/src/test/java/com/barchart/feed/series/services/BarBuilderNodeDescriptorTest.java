@@ -1,8 +1,7 @@
 package com.barchart.feed.series.services;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -14,6 +13,7 @@ import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.api.model.meta.id.InstrumentID;
 import com.barchart.feed.api.model.meta.id.VendorID;
 import com.barchart.feed.api.series.services.NodeDescriptor;
+import com.barchart.feed.api.series.services.Processor;
 import com.barchart.feed.api.series.temporal.Period;
 import com.barchart.feed.api.series.temporal.PeriodType;
 import com.barchart.feed.api.series.temporal.TimeFrame;
@@ -24,31 +24,26 @@ import com.barchart.util.value.api.Schedule;
 import com.barchart.util.value.api.Size;
 import com.barchart.util.value.api.TimeInterval;
 
-public class SubscriptionTest {
-
-    /**
-     * We need to test:
-     * 1. Symbols are same
-     * 2. TimeFrames: (assuming sub1 is the "source" and sub2 is the candidate "sink")
-     *      a. StartDates for sub2 are equal or sub2 is after sub1
-     *      b. For all TimeFrames:
-     *          I. sub1.PeriodType is lower than sub2.PeriodType
-     *          II. sub1.PeriodType is lower than PeriodType.WEEK (one of [TICK, MINUTE, HOUR, DAY] )
-     *          III. sub1.Period.Interval == 1
-     *          --OR--
-     *          I. sub1.PeriodType is equal than sub2.PeriodType
-     *          II. sub1.Period.Interval == 1
-     *      c. Sessions (TradingWeek(s)) are the same.
-     */ 
+public class BarBuilderNodeDescriptorTest {
+    
     @Test
-    public void testIsDerivableFrom() {
+    public void testGetLowerBaseType() {
+        BarBuilderNodeDescriptor nDesc = new BarBuilderNodeDescriptor();
+        PeriodType type = nDesc.getLowerBaseType(PeriodType.MONTH);
+        assertEquals(PeriodType.DAY, type);
+        
+        type = nDesc.getLowerBaseType(PeriodType.DAY);
+        assertEquals(PeriodType.MINUTE, type);
+        
+        type = nDesc.getLowerBaseType(PeriodType.MINUTE);
+        assertEquals(PeriodType.SECOND, type);
+    }
+
+    @Test
+    public void testGetProcessorChain() {
         String symbol = "ESZ13";
         Instrument instr = makeInstrument(symbol);
-        BarBuilderNodeDescriptor nDesc = new BarBuilderNodeDescriptor() {
-            public String getSpecifier() {
-                return NodeDescriptor.TYPE_IO;
-            }
-        };
+        BarBuilderNodeDescriptor nDesc = new BarBuilderNodeDescriptor();
         DateTime dt1 = new DateTime(2013, 12, 10, 12, 0, 0);
         TimeFrame tf1 = new TimeFrame(new Period(PeriodType.TICK, 1), dt1, null);
         
@@ -56,38 +51,27 @@ public class SubscriptionTest {
         
         symbol = "ESZ13";
         instr = makeInstrument(symbol);
-        nDesc = new BarBuilderNodeDescriptor() {
-            public String getSpecifier() {
-                return NodeDescriptor.TYPE_IO;
-            }
-        };
+        nDesc = new BarBuilderNodeDescriptor();
         DateTime dt2 = new DateTime(2013, 12, 10, 12, 0, 0);
-        TimeFrame tf2 = new TimeFrame(new Period(PeriodType.SECOND, 1), dt2, null);
+        TimeFrame tf2 = new TimeFrame(new Period(PeriodType.MONTH, 7), dt2, null);
         
         SeriesSubscription sub2 = new SeriesSubscription("ESZ13", instr, nDesc, new TimeFrame[] { tf2 }, TradingWeek.DEFAULT);
         
         assertTrue(sub2.isDerivableFrom(sub1));
         
-        //-----
-        
-        symbol = "ESZ13";
-        instr = makeInstrument(symbol);
-        nDesc = new BarBuilderNodeDescriptor() {
-            public String getSpecifier() {
-                return NodeDescriptor.TYPE_IO;
-            }
-        };
-        DateTime dt3 = new DateTime(2013, 12, 10, 12, 0, 0);
-        TimeFrame tf3 = new TimeFrame(new Period(PeriodType.SECOND, 1), dt3, null);
-        
-        SeriesSubscription sub3 = new SeriesSubscription("ESZ13", instr, nDesc, new TimeFrame[] { tf3 }, TradingWeek.DEFAULT);
-        
-        List<SeriesSubscription> subList = new ArrayList<SeriesSubscription>();
-        subList.add(sub2);
-        subList.add(sub1);
-        
-        assertTrue(subList.contains(sub3));
-        
+        List<Processor> pList = nDesc.getProcessorChain(sub1, sub2);
+        int size = pList.size();
+        assertEquals(5, size);
+        assertEquals(new Period(PeriodType.MONTH, 7), 
+            ((BarBuilder)pList.get(size - 1)).getOutputSubscription(NodeDescriptor.TYPE_IO).getTimeFrames()[0].getPeriod());
+        assertEquals(new Period(PeriodType.MONTH, 1), 
+            ((BarBuilder)pList.get(size - 2)).getOutputSubscription(NodeDescriptor.TYPE_IO).getTimeFrames()[0].getPeriod());
+        assertEquals(new Period(PeriodType.DAY, 1), 
+            ((BarBuilder)pList.get(size - 3)).getOutputSubscription(NodeDescriptor.TYPE_IO).getTimeFrames()[0].getPeriod());
+        assertEquals(new Period(PeriodType.MINUTE, 1), 
+            ((BarBuilder)pList.get(size - 4)).getOutputSubscription(NodeDescriptor.TYPE_IO).getTimeFrames()[0].getPeriod());
+        assertEquals(new Period(PeriodType.SECOND, 1), 
+            ((BarBuilder)pList.get(size - 5)).getOutputSubscription(NodeDescriptor.TYPE_IO).getTimeFrames()[0].getPeriod());
         
     }
     

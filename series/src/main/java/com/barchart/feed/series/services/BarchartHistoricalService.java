@@ -50,8 +50,8 @@ public class BarchartHistoricalService<T extends HistoricalResult> extends Histo
 	 */
 	public BarchartHistoricalService(String username, String password) {
 		super(new Observable.OnSubscribeFunc<T>() {
-			@Override public Subscription onSubscribe(Observer<? super T> t1) {
-				return new Subscription() { @Override public void unsubscribe() {} };
+			@Override public SeriesSubscription onSubscribe(Observer<? super T> t1) {
+				return new SeriesSubscription() { @Override public void unsubscribe() {} };
 			}
 		});
 		
@@ -67,8 +67,9 @@ public class BarchartHistoricalService<T extends HistoricalResult> extends Histo
 	 * @param observer
 	 * @param nodeIO
 	 */
-	public void subscribe(HistoricalObserver<T> observer, Subscription nodeIO) {
-		scheduler.schedule(new HistoricalRetriever(observer, nodeIO, null), 2000, TimeUnit.MILLISECONDS);
+	@Override
+	public <S extends Subscription> void subscribe(HistoricalObserver<T> observer, S nodeIO) {
+		scheduler.schedule(new HistoricalRetriever(observer, (SeriesSubscription)nodeIO, null), 2000, TimeUnit.MILLISECONDS);
 	}
 	
 	/**
@@ -80,8 +81,9 @@ public class BarchartHistoricalService<T extends HistoricalResult> extends Histo
      * @param nodeIO
      * @param customQuery
      */
-    public void subscribe(HistoricalObserver<T> observer, Subscription nodeIO, Query customQuery) {
-        scheduler.schedule(new HistoricalRetriever(observer, nodeIO, customQuery), 2000, TimeUnit.MILLISECONDS);
+	@Override
+    public <S extends Subscription> void subscribe(HistoricalObserver<T> observer, S nodeIO, Query customQuery) {
+        scheduler.schedule(new HistoricalRetriever(observer, (SeriesSubscription)nodeIO, customQuery), 2000, TimeUnit.MILLISECONDS);
     }
 	
     
@@ -92,7 +94,7 @@ public class BarchartHistoricalService<T extends HistoricalResult> extends Histo
      * @param subscription
      * @return
      */
-	private String prepareURL(Subscription subscription) {
+	private String prepareURL(SeriesSubscription subscription) {
 		String baseUrl = subscription.getTimeFrames()[0].getPeriod().getPeriodType() == PeriodType.TICK ? 
 			TICK_URL_SUFFIX : MINUTE_URL_SUFFIX;
 		
@@ -120,7 +122,7 @@ public class BarchartHistoricalService<T extends HistoricalResult> extends Histo
 	 */ 
 	class HistoricalRetriever implements Runnable {
 		HistoricalObserver<T> observer;
-		Subscription nodeIO;
+		SeriesSubscription nodeIO;
 		Query customQuery;
 		
 		Thread dispatcher;
@@ -129,7 +131,7 @@ public class BarchartHistoricalService<T extends HistoricalResult> extends Histo
 		List<String> results = new ArrayList<String>();
 		
 		@SuppressWarnings("unchecked")
-		public HistoricalRetriever(HistoricalObserver<T> obs, Subscription io, Query query) {
+		public HistoricalRetriever(HistoricalObserver<T> obs, SeriesSubscription io, Query query) {
 			this.observer = obs;
 			this.nodeIO = io;
 			this.customQuery = query;
@@ -142,7 +144,7 @@ public class BarchartHistoricalService<T extends HistoricalResult> extends Histo
 							
 							observer.onNext((T)new HistoricalResult() {
 								@Override
-								public Subscription getSubscription() {
+								public SeriesSubscription getSubscription() {
 									return nodeIO;
 								}
 								@Override
@@ -330,4 +332,5 @@ public class BarchartHistoricalService<T extends HistoricalResult> extends Histo
 			}catch(Exception e) { e.printStackTrace(); }
 		}
 	}
+
 }

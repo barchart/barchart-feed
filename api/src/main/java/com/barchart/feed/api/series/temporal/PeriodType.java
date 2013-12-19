@@ -52,14 +52,14 @@ public enum PeriodType {
         DateTimeComparator.getInstance(
             DateTimeFieldType.year()));
 	
-	/** Display string of this {@code TemporalType} */
+	/** Display string of this {@code PeriodType} */
 	private String type;
     /** Used for operations involving comparisons of time intervals */
     private DateTimeComparator typeComparator;
     
     
     /** 
-     * Constructs a new TemporalType
+     * Constructs a new PeriodType
      * 
      * @param type		the display String
      * @param dtc		joda time comparator
@@ -86,7 +86,7 @@ public enum PeriodType {
      * 
      * @param type		the type to increment
      * @param num		the number of times to increment.
-     * @return			the TemporalType specified incremented the amount
+     * @return			the PeriodType specified incremented the amount
      * 					of time specified or the type equal to the maximum or
      * 					minimum type.
      * @see #dec(PeriodType, int)
@@ -111,7 +111,7 @@ public enum PeriodType {
      * 
      * @param type		the type to decrement
      * @param num		the number of times to decrement.
-     * @return			the TemporalType specified decremented the amount
+     * @return			the PeriodType specified decremented the amount
      * 					of time specified or the type equal to the maximum or
      * 					minimum type.
      * @see #inc(PeriodType, int)
@@ -183,7 +183,7 @@ public enum PeriodType {
     }
     
     /**
-     * Convenience method to return the {@code TemporalType} for the specified
+     * Convenience method to return the {@code PeriodType} for the specified
      * string
      * 
      * @param typeString		the name of the type to return.
@@ -202,7 +202,7 @@ public enum PeriodType {
      * Returns a flag indicating whether the specified type is
      * of a greater aggregation than this one.
      * 
-     * @param type	the {@code TemporalType} to compare.
+     * @param type	the {@code PeriodType} to compare.
      * @return		true if so, false if not.
      */
     public boolean isHigherThan(PeriodType type) {
@@ -213,7 +213,7 @@ public enum PeriodType {
      * Returns a flag indicating whether the specified type is
      * of a lower aggregation than this one.
      * 
-     * @param type	the {@code TemporalType} to compare.
+     * @param type	the {@code PeriodType} to compare.
      * @return		true if so, false if not.
      */
     public boolean isLowerThan(PeriodType type) {
@@ -224,7 +224,7 @@ public enum PeriodType {
      * Returns an integer indicating whether the specified {@link DateTime} is
      * equal, less than or greater than this one <em>at the resolution of this {@link PeriodType}</em>.
      * 
-     * @param type	the {@code TemporalType} to compare.
+     * @param type	the {@code PeriodType} to compare.
      * @return		true if so, false if not.
      */
     public int compareAtResolution(DateTime dt1, DateTime dt2) {
@@ -243,7 +243,7 @@ public enum PeriodType {
      * would be returned because they are equal at the resolution of a 
      * {@link PeriodType#QUARTER}.
      * 
-     * @param type	the {@code TemporalType} to compare.
+     * @param type	the {@code PeriodType} to compare.
      * @return		true if so, false if not.
      */
     public boolean equalsAtResolution(DateTime dt1, DateTime dt2) {
@@ -256,7 +256,7 @@ public enum PeriodType {
     
     /**
      * Utility method to return a new DateTime instance with values only in the 
-     * relevant field indicated by this {@code TemporalType}. This method is also
+     * relevant field indicated by this {@code PeriodType}. This method is also
      * used for internal hashcode implementations of {@link DatePoint} derivatives.
      * 
      * @param 		dt the source date which will be used to establish base field values.

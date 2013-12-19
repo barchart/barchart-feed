@@ -65,17 +65,28 @@ public class TimeFrame {
 	 */
 	public boolean isDerivableFrom(TimeFrame other) {
 		boolean retVal = false;
-		if(equals(other)) {
-			retVal = true;
-		}
 		
 		PeriodType otherType = other.getPeriod().getPeriodType();
-		int otherDuration = other.getPeriod().size();
-		
-		if(otherType.resolutionInstant(other.startDate).isAfter(period.getPeriodType().resolutionInstant(startDate))) {
-			retVal = false;
-		}else if(otherType.isLowerThan(period.getPeriodType()) && (otherType.isLowerThan(PeriodType.WEEK)) && (otherDuration == 1)) {
+        int otherDuration = other.getPeriod().size();
+        
+		if(equals(other)) {
 			retVal = true;
+		}else{
+		    if((otherType == period.getPeriodType() || otherType.isLowerThan(period.getPeriodType())) && (otherType != PeriodType.WEEK) && (otherDuration == 1)) {
+		        retVal = true;
+            }
+    		
+		    //Use the highest resolution type to create comparison resolution instances.
+		    //(i.e. July being > May is more significant than 4:30 > 2:00)
+		    PeriodType resolutionDeterminer = otherType.isLowerThan(period.getPeriodType()) ? period.getPeriodType() : otherType == period.getPeriodType() ? otherType : otherType;
+    		if(resolutionDeterminer.resolutionInstant(other.startDate).isAfter(resolutionDeterminer.resolutionInstant(startDate))) {
+    			retVal = false;
+    		}
+    		
+    		if((other.endDate != null && endDate == null) || ((other.endDate != null && endDate != null) && 
+    		    resolutionDeterminer.resolutionInstant(other.endDate).isAfter(resolutionDeterminer.resolutionInstant(endDate)))) {
+    		    retVal = false;
+    		}
 		}
 		
 		return retVal;

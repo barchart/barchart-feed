@@ -2,6 +2,8 @@ package com.barchart.feed.api.series.services;
 
 import org.joda.time.DateTime;
 
+import com.barchart.feed.api.model.meta.Instrument;
+import com.barchart.feed.api.series.TimePoint;
 import com.barchart.feed.api.series.temporal.Period;
 import com.barchart.feed.api.series.temporal.TradingSession;
 import com.barchart.feed.api.series.temporal.TradingWeek;
@@ -12,6 +14,13 @@ import com.barchart.feed.api.series.temporal.TradingWeek;
 public interface Query {
     public boolean hasCustomQuery();
     public String getCustomQuery();
+    /**
+     * Transforms this {@code Query} to a more robust {@link Subscription} type.
+     * 
+     * @param   i     the {@code Instrument}
+     * @return        this Query transformed to a {@link Subscripton}.
+     */
+    public Subscription toSubscription(Instrument i);
     /**
 	 * Returns the analytic name requested. Queries should request only one of an instrument,
 	 * symbol, expression or analytic. Subsequent calls will overwrite the previous value.

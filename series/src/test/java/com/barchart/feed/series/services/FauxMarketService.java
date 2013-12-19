@@ -39,7 +39,6 @@ import com.barchart.feed.api.model.meta.id.VendorID;
 import com.barchart.feed.api.series.services.HistoricalObserver;
 import com.barchart.feed.api.series.services.HistoricalResult;
 import com.barchart.feed.api.series.services.Query;
-import com.barchart.feed.api.series.services.Subscription;
 import com.barchart.feed.api.series.temporal.PeriodType;
 import com.barchart.feed.api.series.temporal.TimeFrame;
 import com.barchart.feed.api.series.temporal.TradingWeek;
@@ -84,7 +83,7 @@ public class FauxMarketService implements MarketService {
             String[] csvArray = csv.split("\\,");
             
             SymbolTick config = new SymbolTick();
-            Subscription d = historicalResult.getSubscription();
+            SeriesSubscription d = (SeriesSubscription)historicalResult.getSubscription();
             config.desc = d;
             
             Price p = makePrice(csvArray[csvArray.length - 2]);
@@ -116,7 +115,7 @@ public class FauxMarketService implements MarketService {
         private Price lastPrice;
         private DateTime lastTime;
         private Size lastSize;
-        private Subscription desc;
+        private SeriesSubscription desc;
     }
     
     private Thread getServerThread() {
@@ -158,8 +157,8 @@ public class FauxMarketService implements MarketService {
         this.lastQuery = query;
     }
     
-    private Subscription createNodeIODescriptor(Query query, Instrument i) {
-        return new Subscription(null, i, query.getSymbol(), 
+    private SeriesSubscription createNodeIODescriptor(Query query, Instrument i) {
+        return new SeriesSubscription(query.getSymbol(), i, null, 
             new TimeFrame[] { new TimeFrame(query.getPeriod(), query.getStart(), query.getEnd()) }, 
                 query.getTradingWeek());
     }

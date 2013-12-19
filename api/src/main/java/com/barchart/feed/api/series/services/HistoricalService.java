@@ -40,7 +40,7 @@ public abstract class HistoricalService<T extends HistoricalResult> extends Obse
 	 * @param observer
 	 * @param subscription
 	 */
-	public abstract void subscribe(HistoricalObserver<T> observer, Subscription subscription);
+	public  abstract <S extends Subscription> void subscribe(HistoricalObserver<T> observer, S subscription);
 	
 	/**
      * Starts a task after a short delay to produce query results which will be 
@@ -51,6 +51,6 @@ public abstract class HistoricalService<T extends HistoricalResult> extends Obse
      * @param subscription
      * @param customQuery
      */
-    public abstract void subscribe(HistoricalObserver<T> observer, Subscription subscription, Query customQuery);
+    public abstract <S extends Subscription> void subscribe(HistoricalObserver<T> observer, S subscription, Query customQuery);
 	
 }

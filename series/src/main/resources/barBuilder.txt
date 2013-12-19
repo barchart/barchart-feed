@@ -1,0 +1,9 @@
+TICK;com.barchart.feed.series.services.BarBuilder;;IO;Input,LIVE
+SECOND;com.barchart.feed.series.services.BarBuilder;;IO;Input,TICK
+MINUTE;com.barchart.feed.series.services.BarBuilder;60;IO;Input,SECOND
+HOUR;com.barchart.feed.series.services.BarBuilder;60;IO;Input,MINUTE
+DAY;com.barchart.feed.series.services.BarBuilder;24;IO;Input,HOUR
+WEEK;com.barchart.feed.series.services.BarBuilder;7;IO;Input,DAY
+MONTH;com.barchart.feed.series.services.BarBuilder;;IO;Input,DAY
+QUARTER;com.barchart.feed.series.services.BarBuilder;3;IO;Input,MONTH
+YEAR;com.barchart.feed.series.services.BarBuilder;12;IO;Input,MONTH

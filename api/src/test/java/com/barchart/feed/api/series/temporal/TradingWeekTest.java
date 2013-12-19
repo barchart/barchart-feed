@@ -1,7 +1,6 @@
 package com.barchart.feed.api.series.temporal;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 
 import java.util.Properties;
 
@@ -9,21 +8,6 @@ import org.joda.time.DateTime;
 import org.junit.Test;
 
 public class TradingWeekTest {
-
-    private enum WeekType { 
-        DEFAULT("chart.testprops"); 
-        
-        private String path;
-        
-        private WeekType(String path) {
-            this.path = path;
-        }
-        
-        public String path() {
-            return path;
-        }
-    };
-    
     private final String TEST = "TEST";
     private final String TEST3 = "TEST3";
     
@@ -32,7 +16,7 @@ public class TradingWeekTest {
      */
     @Test
     public void testGetTradingSessionOnOrAfter() {
-        TradingWeek tradingWeek = getTestTradingWeek(WeekType.DEFAULT, TEST);
+        TradingWeek tradingWeek = getTestTradingWeek(TEST);
         
         assertEquals(7, tradingWeek.length());
         
@@ -89,7 +73,7 @@ public class TradingWeekTest {
      */
     @Test
     public void testGetNextSessionDate() {
-        TradingWeek tradingWeek = getTestTradingWeek(WeekType.DEFAULT, TEST);
+        TradingWeek tradingWeek = getTestTradingWeek(TEST);
         
         DateTime testDate = new DateTime(2009, 5, 1, 0, 0, 0, 999);
         
@@ -129,7 +113,7 @@ public class TradingWeekTest {
     
     @Test
     public void testGetMillisBetween() {
-        TradingWeek week = getTestTradingWeek(WeekType.DEFAULT, TEST);
+        TradingWeek week = getTestTradingWeek(TEST);
         
         //Test comparison convenience variables
         long millisInHour = 3600000;
@@ -188,14 +172,14 @@ public class TradingWeekTest {
     
     @Test
     public void testGetTradingDaysInMonth() {
-        TradingWeek week = getTestTradingWeek(WeekType.DEFAULT, TEST3);
+        TradingWeek week = getTestTradingWeek(TEST3);
         DateTime dt1 = new DateTime(2009, 10, 11, 8, 30, 0, 0);
         assertEquals(13, week.getTradingDaysInMonth(dt1));
     }
     
     private static Properties DEFAULT_PROPS; 
     public static TradingWeek DEFAULT;
-    private TradingWeek getTestTradingWeek(WeekType type, String symbol) {
+    private TradingWeek getTestTradingWeek(String symbol) {
         DEFAULT_PROPS = new Properties();
         DEFAULT_PROPS.put("DEFAULT.holidayDateFileLoadType", TradingWeek.LoadType.MEMORY);
         DEFAULT_PROPS.put("DEFAULT.holidayDelimiter", ",");

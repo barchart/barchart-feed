@@ -23,14 +23,15 @@ import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.api.model.meta.id.InstrumentID;
 import com.barchart.feed.api.series.TimePoint;
 import com.barchart.feed.api.series.TimeSeries;
+import com.barchart.feed.api.series.services.Analytic;
 import com.barchart.feed.api.series.services.HistoricalObserver;
 import com.barchart.feed.api.series.services.HistoricalResult;
 import com.barchart.feed.api.series.services.HistoricalService;
 import com.barchart.feed.api.series.services.Node;
 import com.barchart.feed.api.series.services.NodeDescriptor;
+import com.barchart.feed.api.series.services.Processor;
 import com.barchart.feed.api.series.services.Query;
 import com.barchart.feed.api.series.services.Subscription;
-import com.barchart.feed.api.series.temporal.TimeFrame;
 
 /**
  * Queryable framework for providing {@link TimeSeries} objects.
@@ -52,7 +53,9 @@ public class BarchartSeriesProvider {
 	private AtomicBoolean isConnected = new AtomicBoolean(false);
 	
 	/** Constains output-level/Subscribable IO nodes */
-	private List<Node> ioOutputNodes = Collections.synchronizedList(new ArrayList<Node>());
+	private List<Node> ioNodes = Collections.synchronizedList(new ArrayList<Node>());
+	/** Constains output-level/Subscribable {@link Analytic} nodes */
+    private List<Node> analyticNodes = Collections.synchronizedList(new ArrayList<Node>());
 	
 	
 	
@@ -80,7 +83,7 @@ public class BarchartSeriesProvider {
 		}
 		
 		Instrument inst = lookupInstrument(query.getSymbol());
-		Subscription subscription = createSubscription(query, inst);
+		SeriesSubscription subscription = (SeriesSubscription)query.toSubscription(inst);
 		
 		System.out.println("inst = " + inst.symbol());
 		
@@ -100,26 +103,53 @@ public class BarchartSeriesProvider {
 		return result.results().values().iterator().next().get(0);
 	}
 	
-	private Subscription createSubscription(Query query, Instrument i) {
-		return new Subscription(new NodeDescriptor(query.getSpecifier()), i, query.getSymbol(), 
-		    new TimeFrame[] { new TimeFrame(query.getPeriod(), query.getStart(), query.getEnd()) }, 
-		        query.getTradingWeek());
-	}
-	
 	private Node lookupNode(Subscription subscription) {
-		if(subscription.getNodeDescriptor().getSpecifier().equals(Node.TYPE_IO)) {
-			return lookupIONode(subscription);
-		}
-		return new Distributor();
+	    boolean isIO = subscription.getNodeDescriptor().getSpecifier().equals(NodeDescriptor.TYPE_IO);
+	    List<Node> derivables = null;
+	    Node derivableLookup = null;
+	    Node retVal = null;
+	    List<Node> searchList = isIO ? ioNodes : analyticNodes;
+	    for(Node node : searchList) {
+            if(node.getOutputSubscriptions().contains(subscription)) {
+                retVal = node;
+            }else if((derivableLookup = node.lookup(subscription)[1]) != null) {
+                if(derivables == null) {
+                    derivables = new ArrayList<Node>();
+                }
+                derivables.add(derivableLookup);
+            }
+        }
+	    
+	    if(retVal == null) {
+	        if(derivables != null) {
+	            Node derivableNode = getBestDerivableNode(derivables, subscription);//Need algorithm to determine best derivable node
+	            Subscription derivableSubscription = derivableNode.getDerivableOutputSubscription(subscription);
+                List<Processor> missingNodeLinks = subscription.getNodeDescriptor().getProcessorChain(derivableSubscription, subscription);
+                for(Processor p : missingNodeLinks) {
+                    switch(p.getCategory()) {
+                        case ASSEMBLER: { break; }//Add container for Assemblers
+                        case BAR_BUILDER: { ioNodes.add((BarBuilder)p); break; }
+                        case ANALYTIC: { break; }//Add the AnalyticNode later...
+                    }
+                }
+                
+                //Still need to hookup the above added nodes
+            }
+	        
+	        retVal = isIO ? new BarBuilder(subscription) : null;
+            List<Subscription> inputs = retVal.getInputSubscriptions();
+            for(Subscription s : inputs) {
+                Node n = lookupNode(s);
+                n.addChildNode(retVal, s);
+            }
+        }
+	    
+	    return retVal;
 	}
 	
-	private Node lookupIONode(Subscription subscription) {
-		Node compatibleNode = null;
-		for(Node node : ioOutputNodes) {
-			//compatibleNode = node.lookup(subscription);
-		}
-		
-		return new Distributor();
+	private Node getBestDerivableNode(List<Node> derivableNodes, Subscription subscription) {
+	    Node n = derivableNodes.get(0);//Optimize this later
+	    return n;
 	}
 	
 	private void startAndMonitorConnection() {
@@ -151,8 +181,6 @@ public class BarchartSeriesProvider {
 							waitMonitor.notify();
 						}catch(Exception e) { e.printStackTrace(); }
 					}
-					
-					
 				}
 			}
 		};
@@ -240,10 +268,10 @@ public class BarchartSeriesProvider {
 		private Observable.OnSubscribeFunc<Pair<Connection, State>> createSubscribeFunction() {
 			Observable.OnSubscribeFunc<Pair<Connection, State>> func = new Observable.OnSubscribeFunc<Pair<Connection, State>>() {
 				@Override
-				public Subscription onSubscribe(final Observer<? super Pair<Connection, State>> t1) {
+				public SeriesSubscription onSubscribe(final Observer<? super Pair<Connection, State>> t1) {
 					observers.add(t1);
 					
-					return new Subscription() {
+					return new SeriesSubscription() {
 						public void unsubscribe() {
 							//????  This is probably warranted no?
 							//marketProvider.unBindConnectionStateListener();

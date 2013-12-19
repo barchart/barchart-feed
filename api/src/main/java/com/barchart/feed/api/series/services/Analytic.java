@@ -2,7 +2,7 @@ package com.barchart.feed.api.series.services;
 
 import com.barchart.feed.api.series.Span;
 
-public interface Analytic {
+public interface Analytic extends Processor {
 	/**
 	 * Signals this {@code Analytic} to begin processing the
 	 * specified span. Provides the underlying {@link Analytic}

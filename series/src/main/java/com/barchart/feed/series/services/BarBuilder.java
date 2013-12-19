@@ -1,14 +1,27 @@
 package com.barchart.feed.series.services;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.barchart.feed.api.series.Span;
 import com.barchart.feed.api.series.TimePoint;
 import com.barchart.feed.api.series.TimeSeries;
 import com.barchart.feed.api.series.services.Node;
+import com.barchart.feed.api.series.services.Processor;
 import com.barchart.feed.api.series.services.Subscription;
 
-public class BarBuilder extends Node {
+public class BarBuilder extends Node implements Processor {
+    private SeriesSubscription inputSubscription;
+    private SeriesSubscription outputSubscription;
+    
+    private static final String INPUT_KEY = "Input";
+    private static final String OUTPUT_KEY = "Output";
+    
+    
+    
+    public BarBuilder(Subscription subscription) {
+        this.outputSubscription = (SeriesSubscription)subscription;
+    }
     
     /**
      * Called by ancestors of this {@code Node} in the tree to set
@@ -41,17 +54,47 @@ public class BarBuilder extends Node {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+	
 	@Override
+	public void addOutputSubscription(String key, Subscription subscription) {
+	    this.outputSubscription = (SeriesSubscription)subscription;
+	}
+	
+	@Override
+    public void addInputSubscription(String key, Subscription subscription) {
+        this.inputSubscription = (SeriesSubscription)subscription;
+    }
+	
+	/**
+     * Returns the input {@link Subscription} mapped to the specified key.
+     * @param key  the mapping for the input Subscription
+     * @return the Subscription corresponding to the specified key.
+     */
+    public Subscription getInputSubscription(String key) {
+        return inputSubscription;
+    }
+    /**
+     * Returns the {@link Subscription} corresponding to the specified key;
+     * 
+     * @param      key     the key mapped to the required output
+     * @return             the required output
+     */
+    public Subscription getOutputSubscription(String key) {
+        return outputSubscription;
+    }
+    
+    @Override
 	public List<Subscription> getOutputSubscriptions() {
-		// TODO Auto-generated method stub
-		return null;
+	    List<Subscription> l = new ArrayList<Subscription>();
+	    l.add(outputSubscription);
+		return l;
 	}
 
 	@Override
 	public List<Subscription> getInputSubscriptions() {
-		// TODO Auto-generated method stub
-		return null;
+	    List<Subscription> l = new ArrayList<Subscription>();
+        l.add(inputSubscription);
+        return l;
 	}
 
 	@Override
@@ -65,11 +108,45 @@ public class BarBuilder extends Node {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+	
 	@Override
-	protected Node lookup(Subscription subscription) {
-		// TODO Auto-generated method stub
-		return null;
+	public Node[] lookup(Subscription subscription) {
+		return subscription.equals(outputSubscription) ? new Node[] { this, null } : 
+		    subscription.isDerivableFrom(outputSubscription) ? new Node[] { null, this } : 
+		        null;
 	}
+	
+	/**
+     * Returns the  {@link Subscription} from which the specified Subscription is derivable.
+     * 
+     * @param subscription     the Subscription which can be derived from one of this {@code Node}'s outputs.
+     * @return                 One of this Node's derivable outputs or null.
+     */
+    public Subscription getDerivableOutputSubscription(Subscription subscription) {
+        return subscription.isDerivableFrom(outputSubscription) ? outputSubscription : null;
+    }
+	
+	/**
+     * Returns the key for the {@link Subscription} that the specified subscription is derivable from.
+     * 
+     * @param subscription     the subscription for which to find the derivable subscription's key - amongst
+     *                         this Node's output Subscriptions. 
+     * @return                 the key for the Subscription from which the specified Subscription is derivable.
+     */
+	@Override
+    public String getDerivableOutputKey(Subscription subscription) {
+        return subscription.isDerivableFrom(outputSubscription) ? OUTPUT_KEY : null;
+    }
+
+    @Override
+    public void addChildNode(Node node, Subscription subscription) {
+        childNodes.add(node);
+    }
+
+    @Override
+    public Category getCategory() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
 }

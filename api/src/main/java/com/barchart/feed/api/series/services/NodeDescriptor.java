@@ -1,9 +1,15 @@
 package com.barchart.feed.api.series.services;
 
-public class NodeDescriptor {
+import java.util.List;
+
+public abstract class NodeDescriptor {
+    /** Specifier used to identify IO nodes used for bar building operations */
+    public static final String TYPE_IO = "IO";
+    
 	private String specifier;
 	
-	public NodeDescriptor(String specifier) {
+    
+	protected NodeDescriptor(String specifier) {
 		this.specifier = specifier;
 	}
 	
@@ -11,12 +17,19 @@ public class NodeDescriptor {
     	return specifier;
     }
     
+    /**
+     * Uses the supplied
+     * @param subscription
+     * @return
+     */
+    public abstract List<Processor> getProcessorChain(Subscription derivableSubscription, Subscription targetSubscription);
+    
     public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)
 			return false;
-		if (getClass() != obj.getClass())
+		if (!NodeDescriptor.class.isAssignableFrom(obj.getClass()))
 			return false;
 		NodeDescriptor other = (NodeDescriptor) obj;
 		if (specifier == null) {

@@ -126,8 +126,8 @@ public class ExtendedChronology extends AssembledChronology {
     /**
      * Returns a new {@link DateTime} whose lesser fields are adjusted to the
      * Quarter period start of the specified DateTime.
-     * @param dt
-     * @return
+     * @param       dt    the DateTime to be adjusted to the nearest Quarter
+     * @return      the DateTime adjusted to the nearest Quarter.
      */
     public static DateTime withPeriodStart(DateTime dt) {
         int div = (dt.getMonthOfYear() % 3);

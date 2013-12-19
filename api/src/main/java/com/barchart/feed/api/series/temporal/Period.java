@@ -18,8 +18,8 @@ public class Period {
 			PeriodType.MINUTE, 15);
 	public static final Period THIRTY_MINUTE = new Period(
 			PeriodType.MINUTE, 30);
-	public static final Period SIXTY_MINUTE = new Period(
-			PeriodType.MINUTE, 60);
+	public static final Period ONE_HOUR = new Period(
+			PeriodType.HOUR, 1);
 	
 	public static final Period DAY = new Period(PeriodType.DAY, 1);
 	public static final Period WEEK = new Period(PeriodType.WEEK, 1);
@@ -43,6 +43,30 @@ public class Period {
 	public PeriodType getPeriodType() {
 		return periodType;
 	}
+	
+	/**
+	 * Returns a flag indicating whether the specified {@code Period} is
+	 * higher than this one. A Period is higher when its {@link PeriodType}
+	 * is higher <em>or</em> its PeriodType is the same but its size is larger.
+	 * @param p
+	 * @return true if so, false if not
+	 */
+	public boolean isHigherThan(Period p) {
+	    return periodType.isHigherThan(p.getPeriodType()) ||
+	        (periodType == p.periodType && size > p.size);
+	}
+	
+	/**
+     * Returns a flag indicating whether the specified {@code Period} is
+     * lower than this one. A Period is lower when its {@link PeriodType}
+     * is lower <em>or</em> its PeriodType is the same but its size is smaller.
+     * @param p
+     * @return  true if so, false if not
+     */
+	public boolean isLowerThan(Period p) {
+        return periodType.isLowerThan(p.getPeriodType()) ||
+            (periodType == p.periodType && size < p.size);
+    }
 
 	/**
 	 * The number of {@code Period}s contained in one bar
