@@ -81,6 +81,17 @@ public abstract class Node implements Runnable {
 	}
 	
 	/**
+	 * Allows the implementing class to add the specified child node which involves connecting the 
+	 * output specified by the {@link Subscription} to the specified output via input/output keys.
+	 * 
+	 * @param node
+	 * @param subscription
+	 */
+	public void addChildNode(Node node) {
+		childNodes.add(node);
+	}
+	
+	/**
 	 * Called to set a flag indicating that there is data to process.
 	 * 
 	 * @param isUpdated
@@ -174,7 +185,7 @@ public abstract class Node implements Runnable {
 	 * @param subscription		the Subscription acting as key for the corresponding {@link TimeSeries}
 	 * @return	the output {@link TimeSeries}
 	 */
-	protected abstract <E extends TimePoint> TimeSeries<E> getOutputTimeSeries(Subscription subscription);
+	public abstract <E extends TimePoint> TimeSeries<E> getOutputTimeSeries(Subscription subscription);
 	/**
 	 * Returns the input {@link TimeSeries} corresponding to with the specified {@link Subscription}
 	 * 
@@ -197,14 +208,7 @@ public abstract class Node implements Runnable {
 	 * @return                 One of this Node's derivable outputs or null.
 	 */
 	public abstract Subscription getDerivableOutputSubscription(Subscription subscription);
-	/**
-	 * Allows the implementing class to add the specified child node which involves connecting the 
-	 * output specified by the {@link Subscription} to the specified output via input/output keys.
-	 * 
-	 * @param node
-	 * @param subscription
-	 */
-	public abstract void addChildNode(Node node, Subscription subscription);
+	
 	
 	
 	/**

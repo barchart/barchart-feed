@@ -7,6 +7,7 @@ import java.util.ListIterator;
 import java.util.NoSuchElementException;
 
 import org.joda.time.DateTime;
+import org.junit.experimental.theories.DataPoints;
 
 import rx.Observer;
 import rx.Subscription;
@@ -14,10 +15,9 @@ import rx.Subscription;
 import com.barchart.feed.api.series.TimeSeries;
 import com.barchart.feed.api.series.temporal.Period;
 import com.barchart.feed.api.series.temporal.PeriodType;
-import com.barchart.util.value.api.Scaled;
 import com.barchart.util.value.api.Time;
 
-public class DataSeries<T extends Scaled<T>, E extends DataPoint> implements TimeSeries<E> {
+public class DataSeries<E extends DataPoint> implements TimeSeries<E> {
 	/** All {@link DataPoints} are aggregated according to this Period */
 	private Period period;
 	/** The backing data */

@@ -25,6 +25,9 @@ public class AnalyticNode extends Node {
 	/** Reverse SeriesSubscription map to lookup keys. */
 	private Map<SeriesSubscription, String> outputSubMap = new ConcurrentHashMap<SeriesSubscription, String>();
 	
+	/** Maps a given {@link TimeSeries} to a {@link Subscription} */
+	private Map<SeriesSubscription, TimeSeries<?>> inputTimeSeries = new ConcurrentHashMap<SeriesSubscription, TimeSeries<?>>();
+	
 	/** Contains all currently input {@link SeriesSubscriptions}, to be tested on each process cycle to see if all required inputs have been received */
 	private Map<SeriesSubscription, Span> currentUpdates = Collections.synchronizedMap(new HashMap<SeriesSubscription, Span>());
 	
@@ -109,7 +112,17 @@ public class AnalyticNode extends Node {
 	public <E extends TimePoint> TimeSeries<E> getOutputTimeSeries(Subscription subscription) {
 		return null;
 	}
-
+	
+	/**
+	 * Sets the input {@link TimeSeries} corresponding to with the specified {@link Subscription}
+	 * 
+	 * @param subscription		the Subscription acting as key for the corresponding {@link TimeSeries}
+	 * @param	the input {@link TimeSeries}
+	 */
+	<E extends TimePoint> void setInputTimeSeries(Subscription subscription, TimeSeries<E> timeSeries) {
+		inputTimeSeries.put((SeriesSubscription)subscription, timeSeries);
+	}
+	
 	/**
 	 * Returns the input {@link TimeSeries} corresponding to with the specified {@link SeriesSubscription}
 	 * 
@@ -165,7 +178,7 @@ public class AnalyticNode extends Node {
     }
 
     @Override
-    public void addChildNode(Node node, Subscription subscription) {
+    public void addChildNode(Node node) {
         // TODO Auto-generated method stub
         
     }

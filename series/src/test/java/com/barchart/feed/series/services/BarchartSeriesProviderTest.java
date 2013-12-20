@@ -19,7 +19,8 @@ public class BarchartSeriesProviderTest {
 		
 //		FauxMarketService marketService = new FauxMarketService("test", "test");
 //		marketService.preSubscribe(FauxHistoricalService.DEFAULT_MINUTE_QUERY);
-//		BarchartSeriesProvider provider = new BarchartSeriesProvider(marketService, new FauxHistoricalService(null));
+//		BarchartFeedService feed = new BarchartFeedService(marketService, new FauxHistoricalService(null));
+//		BarchartSeriesProvider provider = new BarchartSeriesProvider(feed);
 //		
 //		//Observable Should be null here until I finish the node lookup and graph construction I'm currently working on.
 //		//Fails due to this is where I'm working (Test Driven Baby!)

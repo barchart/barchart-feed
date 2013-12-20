@@ -27,6 +27,10 @@ public class BarBuilderNodeDescriptor extends NodeDescriptor {
         super(NodeDescriptor.TYPE_IO);
     }
     
+    public BarBuilderNodeDescriptor(String specifier) {
+        super(specifier);
+    }
+    
     private static void loadFromFile(String path) {
         loadFromStream(BarBuilderNodeDescriptor.class.getResourceAsStream(path));
     }
@@ -65,7 +69,7 @@ public class BarBuilderNodeDescriptor extends NodeDescriptor {
      * @param type
      * @return
      */
-    PeriodType getLowerBaseType(PeriodType type) {
+    static PeriodType getLowerBaseType(PeriodType type) {
         PeriodType retType = null;
         int idx = 0;
         while(idx < baseTypeSteps.size() && (retType == null || baseTypeSteps.get(idx).isLowerThan(type))) {
@@ -90,6 +94,20 @@ public class BarBuilderNodeDescriptor extends NodeDescriptor {
         BarBuilder bb = new BarBuilder(sSub);
         ((BarBuilder)chain.get(chain.size() - 1)).addInputSubscription(null, bb.getOutputSubscription(null));
         chain.add(bb);
+        return sSub;
+    }
+    
+    public static SeriesSubscription getLowerSubscription(SeriesSubscription input) {
+    	Period next = null;
+    	if(input.getTimeFrames()[0].getPeriod().size() > 1) {
+    		next = new Period(input.getTimeFrames()[0].getPeriod().getPeriodType(), 1);
+    	}else{
+    		next = new Period(getLowerBaseType(input.getTimeFrames()[0].getPeriod().getPeriodType()), 1);
+    	}
+    	
+    	SeriesSubscription sSub = new SeriesSubscription(input);
+        sSub.setTimeFrames(new TimeFrame[] {
+            new TimeFrame(next, input.getTimeFrames()[0].getStartDate(), input.getTimeFrames()[0].getEndDate()) });
         return sSub;
     }
     

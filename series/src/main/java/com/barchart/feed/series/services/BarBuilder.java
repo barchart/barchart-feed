@@ -7,8 +7,12 @@ import com.barchart.feed.api.series.Span;
 import com.barchart.feed.api.series.TimePoint;
 import com.barchart.feed.api.series.TimeSeries;
 import com.barchart.feed.api.series.services.Node;
+import com.barchart.feed.api.series.services.NodeDescriptor;
 import com.barchart.feed.api.series.services.Processor;
 import com.barchart.feed.api.series.services.Subscription;
+import com.barchart.feed.api.series.temporal.PeriodType;
+import com.barchart.feed.series.DataBar;
+import com.barchart.feed.series.DataSeries;
 
 public class BarBuilder extends Node implements Processor {
     private SeriesSubscription inputSubscription;
@@ -16,6 +20,9 @@ public class BarBuilder extends Node implements Processor {
     
     private static final String INPUT_KEY = "Input";
     private static final String OUTPUT_KEY = "Output";
+    
+    private TimeSeries<?> inputTimeSeries;
+    private TimeSeries<?> outputTimeSeries;
     
     
     
@@ -92,21 +99,51 @@ public class BarBuilder extends Node implements Processor {
 
 	@Override
 	public List<Subscription> getInputSubscriptions() {
+		if(outputSubscription == null) {
+			throw new IllegalStateException("Node: BarBuilder has no output Subscription - can't create an input Subscription.");
+		}
+		
 	    List<Subscription> l = new ArrayList<Subscription>();
+	    if(inputSubscription == null) {
+	    	inputSubscription = BarBuilderNodeDescriptor.getLowerSubscription(outputSubscription);
+	    	if(outputSubscription.getTimeFrames()[0].getPeriod().getPeriodType() == PeriodType.TICK) {
+	    		inputSubscription = new SeriesSubscription(inputSubscription.getSymbol(), inputSubscription.getInstrument(), 
+	    			new BarBuilderNodeDescriptor(NodeDescriptor.TYPE_ASSEMBLER), outputSubscription.getTimeFrames(), outputSubscription.getTradingWeek());
+	    	}
+	    }
         l.add(inputSubscription);
         return l;
 	}
 
+	/**
+	 * Returns the output {@link TimeSeries}
+	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public <E extends TimePoint> TimeSeries<E> getOutputTimeSeries(Subscription subscription) {
-		// TODO Auto-generated method stub
-		return null;
+		if(outputTimeSeries == null) {
+			this.outputTimeSeries = new DataSeries<DataBar>(subscription.getTimeFrames()[0].getPeriod());
+		}
+		return (TimeSeries<E>)this.outputTimeSeries;
 	}
 
+	/**
+	 * Returns the input {@link TimeSeries}
+	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public <E extends TimePoint> TimeSeries<E> getInputTimeSeries(Subscription subscription) {
-		// TODO Auto-generated method stub
-		return null;
+		return (TimeSeries<E>) this.inputTimeSeries;
+	}
+	
+	/**
+	 * Sets the input {@link TimeSeries} corresponding to with the specified {@link Subscription}
+	 * 
+	 * @param subscription		the Subscription acting as key for the corresponding {@link TimeSeries}
+	 * @param	the input {@link TimeSeries}
+	 */
+	<E extends TimePoint> void setInputTimeSeries(Subscription subscription, TimeSeries<E> timeSeries) {
+		this.inputTimeSeries = timeSeries;
 	}
 	
 	@Override
@@ -138,8 +175,14 @@ public class BarBuilder extends Node implements Processor {
         return subscription.isDerivableFrom(outputSubscription) ? OUTPUT_KEY : null;
     }
 
+	/**
+	 * Adds a child node which will be woken up and made to process
+	 * when it's parents release data.
+	 * 
+	 * @param 	node 		a child node.
+	 */
     @Override
-    public void addChildNode(Node node, Subscription subscription) {
+    public void addChildNode(Node node) {
         childNodes.add(node);
     }
 

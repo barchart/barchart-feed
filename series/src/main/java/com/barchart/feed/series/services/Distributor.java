@@ -14,6 +14,8 @@ import com.barchart.feed.api.series.services.Assembler;
 import com.barchart.feed.api.series.services.HistoricalResult;
 import com.barchart.feed.api.series.services.Node;
 import com.barchart.feed.api.series.services.Subscription;
+import com.barchart.feed.series.DataBar;
+import com.barchart.feed.series.DataSeries;
 
 
 /**
@@ -26,6 +28,17 @@ import com.barchart.feed.api.series.services.Subscription;
  */
 public class Distributor extends Node implements Assembler {
 	private DateTimeFormatter format = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss.SSS");
+	private SeriesSubscription subscription;
+	
+	private TimeSeries<?> outputTimeSeries;
+	
+	public Distributor() {
+		
+	}
+	
+	public Distributor(SeriesSubscription subscription) {
+		this.subscription = subscription;
+	}
 	
 	@Override
 	public void onNextMarket(Market m) {
@@ -73,10 +86,16 @@ public class Distributor extends Node implements Assembler {
 		return null;
 	}
 
+	/**
+	 * Returns the output {@link TimeSeries}
+	 */
+	@SuppressWarnings("unchecked")
 	@Override
-	protected <E extends TimePoint> TimeSeries<E> getOutputTimeSeries(Subscription subscription) {
-		// TODO Auto-generated method stub
-		return null;
+	public <E extends TimePoint> TimeSeries<E> getOutputTimeSeries(Subscription subscription) {
+		if(outputTimeSeries == null) {
+			this.outputTimeSeries = new DataSeries<DataBar>(subscription.getTimeFrames()[0].getPeriod());
+		}
+		return (TimeSeries<E>)this.outputTimeSeries;
 	}
 
 	@Override
@@ -104,11 +123,8 @@ public class Distributor extends Node implements Assembler {
     }
 
     @Override
-    public void addChildNode(Node node, Subscription subscription) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    
+	public Subscription getSubscription() {
+		return this.subscription;
+	}
 
 }

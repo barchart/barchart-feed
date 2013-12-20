@@ -13,6 +13,13 @@ import com.barchart.feed.api.model.data.Market;
  */
 public interface Assembler {
 	/**
+	 * Returns the {@link Subscription} this Assembler is initialized with.
+	 * 
+	 * @return
+	 */
+	public Subscription getSubscription();
+	
+	/**
 	 * Called by {@link MarketObserver<Market>} 
 	 * @param m
 	 */

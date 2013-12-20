@@ -5,6 +5,7 @@ import java.util.List;
 public abstract class NodeDescriptor {
     /** Specifier used to identify IO nodes used for bar building operations */
     public static final String TYPE_IO = "IO";
+    public static final String TYPE_ASSEMBLER = "RAW";
     
 	private String specifier;
 	
