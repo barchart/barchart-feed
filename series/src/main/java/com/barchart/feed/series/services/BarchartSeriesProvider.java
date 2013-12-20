@@ -131,11 +131,13 @@ public class BarchartSeriesProvider {
         }else if(isAssembler) {
             Distributor assembler = new Distributor((SeriesSubscription)subscription);
         	assemblers.add(assembler);
+        	
         	List<Distributor> dists = null;
         	if((dists = subscriberAssemblers.get(original)) == null) {
         	    subscriberAssemblers.put(original, dists = new ArrayList<Distributor>());
         	}
         	dists.add(assembler);
+        	
         	retVal = assembler;
         }
 	    
@@ -158,14 +160,14 @@ public class BarchartSeriesProvider {
 	    @SuppressWarnings("unchecked")
         @Override
         public rx.Subscription onSubscribe(Observer<? super Span> t1) {
+	    	subscribers.put(this.subscription, (Observer<Span>)t1);
+	        this.subscribedNode.startUp();
+	        
 	        for(Distributor d : subscriberAssemblers.get(subscription)) {
 	            System.out.println("registering assembler: " + d);
 	            feedService.registerAssembler(d);
 	        }
-	        
-	        subscribers.put(this.subscription, (Observer<Span>)t1);
-	        this.subscribedNode.startUp();
-            return null;
+	        return null;
         }
 	    
 	}

@@ -3,6 +3,8 @@ package com.barchart.feed.series.services;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.joda.time.DateTime;
+
 import com.barchart.feed.api.series.Span;
 import com.barchart.feed.api.series.TimePoint;
 import com.barchart.feed.api.series.TimeSeries;
@@ -12,6 +14,7 @@ import com.barchart.feed.api.series.services.Processor;
 import com.barchart.feed.api.series.services.Subscription;
 import com.barchart.feed.api.series.temporal.PeriodType;
 import com.barchart.feed.series.DataBar;
+import com.barchart.feed.series.DataPoint;
 import com.barchart.feed.series.DataSeries;
 
 public class BarBuilder extends Node implements Processor {
@@ -24,7 +27,8 @@ public class BarBuilder extends Node implements Processor {
     private TimeSeries<?> inputTimeSeries;
     private TimeSeries<?> outputTimeSeries;
     
-    private Span currentSpan;
+    private Span inputSpan;
+    private Span outputSpan;
     
     public BarBuilder(Subscription subscription) {
         this.outputSubscription = (SeriesSubscription)subscription;
@@ -41,7 +45,8 @@ public class BarBuilder extends Node implements Processor {
      */
 	@Override
 	public void updateModifiedSpan(Span span, Subscription subscription) {
-		this.currentSpan = span;
+		setUpdated(!span.equals(inputSpan));
+		this.inputSpan = span;
 	}
 
 	/**
@@ -64,6 +69,23 @@ public class BarBuilder extends Node implements Processor {
 
 	@Override
 	public Span process() {
+		PeriodType inputType = inputSubscription.getTimeFrames()[0].getPeriod().getPeriodType();
+		PeriodType outputType = outputSubscription.getTimeFrames()[0].getPeriod().getPeriodType();
+		System.out.println("input type = " + inputType + ",  output type = " + outputType + " , " + getInputTimeSeries(inputSubscription).size() + "  --  " + inputSpan);
+		
+		DataSeries<DataPoint> series = (DataSeries)getInputTimeSeries(inputSubscription);
+		int inputStartIdx = getInputTimeSeries(inputSubscription).closestIndexOf(inputSpan.getTime(), 0, series.size(), true);
+		int inputLastIdx = getInputTimeSeries(inputSubscription).closestIndexOf(inputSpan.getNextTime(),  0, series.size(), true);
+		System.out.println("inputStartIdx = " + inputStartIdx + "  -  " + (new DateTime(inputSpan.getTime().millisecond())));
+		System.out.println("inputLastIdx = " + inputLastIdx + "  -  " + (new DateTime(inputSpan.getNextTime().millisecond())) + " >> " + (new DateTime(series.get(inputLastIdx).getTime().millisecond())));
+		for(int i = 1;i < series.size();i++) {
+			DateTime t = (new DateTime(series.get(i - 1).getTime().millisecond()));
+			DateTime t1 = (new DateTime(series.get(i).getTime().millisecond()));
+			if(!(t1.isEqual(t) || t1.isAfter(t))) {
+				throw new IllegalStateException("error at " + t + " -- " + t1);
+			}
+			System.out.println(i + "\t\t " + (new DateTime(series.get(i).getTime().millisecond())));
+		}
 		return null;
 	}
 	

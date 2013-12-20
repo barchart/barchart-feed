@@ -1,7 +1,9 @@
 package com.barchart.feed.series.services;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
+import org.joda.time.DateTime;
 import org.junit.Test;
 
 import com.barchart.feed.api.series.Span;
@@ -31,13 +33,13 @@ public class BarchartSeriesProviderTest {
 		
 		TestObserver<Span> testObserver = new TestObserver<Span>();
 		observable.subscribe(testObserver);
-//		try {
-//			Span span = testObserver.sync().results.get(0);
-//			assertNotNull(span); 
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			fail();
-//		}
+		try {
+			Span span = testObserver.sync().results.get(0);
+			assertNotNull(span); 
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail();
+		}
 		
 	}
 	

@@ -253,9 +253,12 @@ public abstract class Node implements Runnable {
 	public void run() {
 		while(isRunning) {
 			if(isUpdated()) {
+				System.out.println("Node: " + getOutputSubscriptions().get(0).getTimeFrames()[0].getPeriod() + " isUpdated");
 				setUpdated(false);
 				if(hasAllAncestorUpdates()) {
+					System.out.println("Node: " + getOutputSubscriptions().get(0).getTimeFrames()[0].getPeriod() + " hasAllAncestorUpdates()");
 					Span span = this.process();
+					System.out.println("Node: " + getOutputSubscriptions().get(0).getTimeFrames()[0].getPeriod() + " called Process: new Span = " + span);
 					if(span != null) {
 						List<Subscription> outputs = getOutputSubscriptions();
 						for(Node nextNode : childNodes) {
@@ -268,7 +271,9 @@ public abstract class Node implements Runnable {
 			if(!isUpdated()) {
 				try {
 					synchronized(waitLock) {
+						System.out.println("Node: " + getOutputSubscriptions().get(0).getTimeFrames()[0].getPeriod() + " waiting...");
 						waitLock.wait();
+						System.out.println("Node: " + getOutputSubscriptions().get(0).getTimeFrames()[0].getPeriod() + " waking up");
 					}
 				}catch(Exception e) { 
 					e.printStackTrace();

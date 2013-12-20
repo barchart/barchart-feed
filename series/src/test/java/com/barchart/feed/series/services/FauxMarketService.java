@@ -95,7 +95,7 @@ public class FauxMarketService implements MarketService {
             }else{
                 tradeTime = tickFormat.parseDateTime(csvArray[0]);
             }
-            config.lastTime = tradeTime;
+            config.lastTime = tradeTime.plusMinutes(1);
             
             config.lastSize = makeSize(csvArray[csvArray.length - 1]);
             
@@ -133,9 +133,9 @@ public class FauxMarketService implements MarketService {
                             
                             SymbolTick lastTick = lastTicks.get(i);
                             double newPrice = lastTick.lastPrice.asDouble() + added;
-                            System.out.println("newPrice for Instrument: " + i.symbol() + " = " + newPrice);
+//                            System.out.println("newPrice for Instrument: " + i.symbol() + " = " + newPrice);
                             lastTick.lastPrice = makePrice("" + newPrice);
-                            lastTick.lastTime = week.getNextSessionDate(lastTick.lastTime, lastTick.desc.getTimeFrames()[0].getPeriod());
+                            lastTick.lastTime = new DateTime(lastTick.lastTime.plusMillis((int)(500 * random.nextDouble())));//week.getNextSessionDate(lastTick.lastTime, lastTick.desc.getTimeFrames()[0].getPeriod());
                             lastTick.lastSize = makeSize("" + random.nextInt(10));
                             
                             Market m = makeMarket(lastTick.lastTime, lastTick.desc.getInstrument(), 
@@ -596,8 +596,6 @@ public class FauxMarketService implements MarketService {
     }
     
     private Price makePrice(String dblStr) {
-        System.out.println("makePrice() got dblStr = " + dblStr);
-        //final double db = Double.parseDouble(dblStr);
         final double db = new BigDecimal(dblStr).setScale(2, RoundingMode.HALF_UP).doubleValue();
         
         final int exponent = (int)DoubleUtil.fracPart(db);

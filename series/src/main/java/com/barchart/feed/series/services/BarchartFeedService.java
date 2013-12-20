@@ -74,6 +74,12 @@ public class BarchartFeedService implements FeedMonitorService {
 	 */
 	@Override
 	public void registerAssembler(Assembler assembler) {
+		if(!isConnected.get()) {
+			synchronized(waitMonitor) {
+				try { waitMonitor.wait(); } catch(Exception e) { e.printStackTrace(); }
+			}
+		}
+		
 		SeriesSubscription subscription = (SeriesSubscription)assembler.getSubscription();
 		symbolObservers.put(subscription.getInstrument().id(), (Distributor)assembler);
 		consumerAgent.include(subscription.getInstrument());

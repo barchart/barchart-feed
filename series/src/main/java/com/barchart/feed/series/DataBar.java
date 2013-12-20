@@ -23,19 +23,25 @@ public class DataBar extends DataPoint implements Bar {
 	/**
 	 * Instantiates a new {@code DataBar}
 	 * 
-	 * @param date
-	 * @param period
-	 * @param open
-	 * @param high
-	 * @param low
-	 * @param close
-	 * @param volume
-	 * @param openInterest
+	 * @param date				the {@link Time} of this bar.
+	 * @param period			the Period interval and type of this bar.
+	 * @param open				the Open {@link Price} of this bar.
+	 * @param high				the High {@link Price} of this bar.
+	 * @param low				the Low {@link Price} of this bar.
+	 * @param close				the Close {@link Price} of this bar.
+	 * @param volume			the Volume {@link Size} of this bar.
+	 * @param openInterest		the Open Interest {@link Size} of this bar.
 	 */
 	public DataBar(Time date, Period period, Price open, Price high, 
 		Price low, Price close, Size volume, Size openInterest) {
 		
 		super(period, (Time)date);
+		
+		this.open = open;
+		this.high = high;
+		this.low = low;
+		this.close = close;
+		this.openInterest = openInterest;
 	}
 	
 	/**

@@ -92,7 +92,8 @@ public interface TimeSeries<E extends TimePoint> {
      * <p>
      * <pre>
 	 * NOTE: 	All time based comparisons are made at the same {@link PeriodType} resolution as the 
-	 * 			PeriodType this series is configured with, ignoring other date fields.
+	 * 			PeriodType this series is configured with, ignoring other date fields --IF--
+	 * 			"compareAtRes" is set to true.
 	 * </pre>
      * <br><br>
      * <em><b>Warning: this method is not thread-safe.</b></em>
@@ -100,10 +101,11 @@ public interface TimeSeries<E extends TimePoint> {
      * @param date          the date for which the location index is searched.
      * @param idxUpper      the upper bounds of the search.
      * @param idxLower      the lower bounds of the search.
+     * @param compareAtRes	the flag indicating to do comparisons at the PeriodType resolution configured
      * @return              the index of the "proper location" whether the date
      *                      exists in this {@code TimeSeries} or not.
      */
-	public int closestIndexOf(Time time, int idxLower, int idxUpper);
+	public int closestIndexOf(Time time, int idxLower, int idxUpper, boolean compareAtRes);
 	
 	/**
      * Performs an optimized search returning either the index of the proper location

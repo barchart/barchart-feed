@@ -19,7 +19,7 @@ public enum PeriodType {
 	TICK("Tick", 
 		DateTimeComparator.getInstance(
             DateTimeFieldType.millisOfSecond(),
-        		DateTimeFieldType.secondOfMinute())),
+        		DateTimeFieldType.millisOfDay())),
     SECOND("Second", 
         DateTimeComparator.getInstance(
             DateTimeFieldType.secondOfMinute(),
