@@ -1,7 +1,10 @@
 package com.barchart.feed.api.series.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
+
+import rx.subscriptions.Subscriptions;
 
 import com.barchart.feed.api.series.Span;
 import com.barchart.feed.api.series.TimePoint;
@@ -17,6 +20,9 @@ import com.barchart.feed.api.series.TimeSeries;
 public abstract class Node implements Runnable {
 	/** List of {@code Node}s which are updated when this {@code Node} has finished processing. */
 	protected ConcurrentLinkedQueue<Node> childNodes;
+	
+	/** Parent path */
+	protected List<Node> parentNodes;
 	
 	/** Thread monitor object */
 	private Object waitLock = new Object();
@@ -34,6 +40,7 @@ public abstract class Node implements Runnable {
 	 */
 	public Node() {
 		childNodes = new ConcurrentLinkedQueue<Node>();
+		parentNodes = new ArrayList<Node>();
 	}
 	
 	/**
@@ -44,15 +51,24 @@ public abstract class Node implements Runnable {
 			this.isRunning = true;
 			(new Thread(this)).start();
 		}
+		
+		for(Node n : parentNodes) {
+		    n.startUp();
+		}
 	}
 	
 	/**
 	 * Shuts down this {@code Node}.
 	 */
 	public void shutDown() {
-		if(isRunning) {
-			this.isRunning = false;
-		}
+	    this.isRunning = false;
+	    try {
+            synchronized(waitLock) {
+                waitLock.notify();
+            }
+        }catch(Exception e) { 
+            e.printStackTrace();
+        }
 	}
 	
 	/**
@@ -90,6 +106,25 @@ public abstract class Node implements Runnable {
 	public void addChildNode(Node node) {
 		childNodes.add(node);
 	}
+	
+	/**
+     * Allows the implementing class to add the specified child node which involves connecting the 
+     * output specified by the {@link Subscription} to the specified output via input/output keys.
+     * 
+     * @param node
+     * @param subscription
+     */
+    public void addParentNode(Node node) {
+        parentNodes.add(node);
+    }
+    
+    /**
+     * Returns the List of parent {@code Node}s.
+     * @return  the List of parent {@code Node}s.
+     */
+    public List<Node> getParentNodes() {
+        return parentNodes;
+    }
 	
 	/**
 	 * Called to set a flag indicating that there is data to process.

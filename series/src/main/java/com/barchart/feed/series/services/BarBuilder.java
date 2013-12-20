@@ -24,7 +24,7 @@ public class BarBuilder extends Node implements Processor {
     private TimeSeries<?> inputTimeSeries;
     private TimeSeries<?> outputTimeSeries;
     
-    
+    private Span currentSpan;
     
     public BarBuilder(Subscription subscription) {
         this.outputSubscription = (SeriesSubscription)subscription;
@@ -41,7 +41,7 @@ public class BarBuilder extends Node implements Processor {
      */
 	@Override
 	public void updateModifiedSpan(Span span, Subscription subscription) {
-		
+		this.currentSpan = span;
 	}
 
 	/**
@@ -55,10 +55,15 @@ public class BarBuilder extends Node implements Processor {
 	public boolean hasAllAncestorUpdates() {
 		return true;
 	}
+	
+	@Override
+	public void startUp() {
+	    System.out.println("NODE: BarBuilder - " + outputSubscription.getTimeFrames()[0].getPeriod().getPeriodType() + " starting...");
+	    super.startUp();
+	}
 
 	@Override
 	public Span process() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	
@@ -188,8 +193,7 @@ public class BarBuilder extends Node implements Processor {
 
     @Override
     public Category getCategory() {
-        // TODO Auto-generated method stub
-        return null;
+        return Category.BAR_BUILDER;
     }
 
 }

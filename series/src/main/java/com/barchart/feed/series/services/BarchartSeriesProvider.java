@@ -2,13 +2,18 @@ package com.barchart.feed.series.services;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import rx.Observable;
+import rx.Observer;
 
 import com.barchart.feed.api.model.meta.Instrument;
+import com.barchart.feed.api.series.Span;
 import com.barchart.feed.api.series.TimePoint;
 import com.barchart.feed.api.series.TimeSeries;
+import com.barchart.feed.api.series.TimeSeriesObservable;
 import com.barchart.feed.api.series.services.Analytic;
 import com.barchart.feed.api.series.services.Assembler;
 import com.barchart.feed.api.series.services.FeedMonitorService;
@@ -32,7 +37,9 @@ public class BarchartSeriesProvider {
     private List<Node> analyticNodes = Collections.synchronizedList(new ArrayList<Node>());
     /** Constains output-level/Subscribable {@link Analytic} nodes */
     private List<Node> assemblers = Collections.synchronizedList(new ArrayList<Node>());
-	
+	/** Subscribers for a particular {@link Subscription} */
+    private Map<Subscription, Observer<Span>> subscribers = new HashMap<Subscription, Observer<Span>>();
+    private Map<Subscription, List<Distributor>> subscriberAssemblers = new HashMap<Subscription, List<Distributor>>();
 	
 	
 	/**
@@ -48,23 +55,20 @@ public class BarchartSeriesProvider {
 	 * @param query
 	 * @return
 	 */
-	public <T extends TimePoint> Observable<TimeSeries<T>> fetch(final Query query) {
-		Instrument inst = lookupInstrument(query.getSymbol());
+	public <T extends TimePoint> TimeSeriesObservable fetch(final Query query) {
+		Instrument inst = feedService.lookupInstrument(query.getSymbol());
 		SeriesSubscription subscription = (SeriesSubscription)query.toSubscription(inst);
-		
 		System.out.println("inst = " + inst.symbol());
+		Node node = lookupNode(subscription, subscription);
+		TimeSeries<T> series = node.getOutputTimeSeries(subscription);
 		
-		Node node = lookupNode(subscription);
-		
-		return null;
+		return (new TimeSeriesObservable(new SeriesSubscriber(subscription, node), series) {
+		    @SuppressWarnings("unchecked")
+            public TimeSeries<?> getTimeSeries() { return (TimeSeries<TimePoint>)this.series; }
+		});
 	}
 	
-	private Instrument lookupInstrument(String symbol) {
-		Instrument inst = feedService.lookupInstrument(symbol);
-		return inst;
-	}
-	
-	private Node lookupNode(Subscription subscription) {
+	private Node lookupNode(Subscription subscription, Subscription original) {
 	    boolean isIO = subscription.getNodeDescriptor().getSpecifier().equals(NodeDescriptor.TYPE_IO);
 	    boolean isAssembler = subscription.getNodeDescriptor().getSpecifier().equals(NodeDescriptor.TYPE_ASSEMBLER);
 	    
@@ -97,6 +101,7 @@ public class BarchartSeriesProvider {
                         	BarBuilder child = (BarBuilder)p;
                         	ioNodes.add(child);
                         	derivableNode.addChildNode(child);
+                        	child.addParentNode(derivableNode);
                         	child.setInputTimeSeries(child.getInputSubscription(null), 
                         		derivableNode.getOutputTimeSeries(child.getInputSubscription(null)));
                         	derivableNode = child;
@@ -104,6 +109,7 @@ public class BarchartSeriesProvider {
                         	break; 
                         }
                         case ANALYTIC: { break; }//Add the AnalyticNode later...
+                        default:
                     }
                 }
             }
@@ -111,8 +117,9 @@ public class BarchartSeriesProvider {
 	        retVal = isIO ? new BarBuilder(subscription) : null;
             List<Subscription> inputs = retVal.getInputSubscriptions();
             for(Subscription s : inputs) {
-                Node n = lookupNode(s);
+                Node n = lookupNode(s, original);
                 n.addChildNode(retVal);
+                retVal.addParentNode(n);
                 if(isIO) {
                 	ioNodes.add(retVal);
                 	((BarBuilder)retVal).setInputTimeSeries(s, n.getOutputTimeSeries(s));
@@ -122,9 +129,14 @@ public class BarchartSeriesProvider {
                 }
             }
         }else if(isAssembler) {
-        	Assembler assembler = new Distributor((SeriesSubscription)subscription);
-        	assemblers.add((Node)assembler);
-        	retVal = (Node)assembler;
+            Distributor assembler = new Distributor((SeriesSubscription)subscription);
+        	assemblers.add(assembler);
+        	List<Distributor> dists = null;
+        	if((dists = subscriberAssemblers.get(original)) == null) {
+        	    subscriberAssemblers.put(original, dists = new ArrayList<Distributor>());
+        	}
+        	dists.add(assembler);
+        	retVal = assembler;
         }
 	    
 	    return retVal;
@@ -135,4 +147,26 @@ public class BarchartSeriesProvider {
 	    return n;
 	}
 	
+	public class SeriesSubscriber implements Observable.OnSubscribeFunc<Span> {
+	    private Subscription subscription;
+	    private Node subscribedNode;
+	    
+	    private SeriesSubscriber(Subscription subscription, Node node) {
+	        this.subscribedNode = node;
+	        this.subscription = subscription;
+	    }
+	    @SuppressWarnings("unchecked")
+        @Override
+        public rx.Subscription onSubscribe(Observer<? super Span> t1) {
+	        for(Distributor d : subscriberAssemblers.get(subscription)) {
+	            System.out.println("registering assembler: " + d);
+	            feedService.registerAssembler(d);
+	        }
+	        
+	        subscribers.put(this.subscription, (Observer<Span>)t1);
+	        this.subscribedNode.startUp();
+            return null;
+        }
+	    
+	}
 }

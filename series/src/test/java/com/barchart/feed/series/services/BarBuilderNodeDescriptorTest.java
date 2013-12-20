@@ -28,14 +28,13 @@ public class BarBuilderNodeDescriptorTest {
     
     @Test
     public void testGetLowerBaseType() {
-        BarBuilderNodeDescriptor nDesc = new BarBuilderNodeDescriptor();
-        PeriodType type = nDesc.getLowerBaseType(PeriodType.MONTH);
+        PeriodType type = BarBuilderNodeDescriptor.getLowerBaseType(PeriodType.MONTH);
         assertEquals(PeriodType.DAY, type);
         
-        type = nDesc.getLowerBaseType(PeriodType.DAY);
+        type = BarBuilderNodeDescriptor.getLowerBaseType(PeriodType.DAY);
         assertEquals(PeriodType.MINUTE, type);
         
-        type = nDesc.getLowerBaseType(PeriodType.MINUTE);
+        type = BarBuilderNodeDescriptor.getLowerBaseType(PeriodType.MINUTE);
         assertEquals(PeriodType.SECOND, type);
     }
 
