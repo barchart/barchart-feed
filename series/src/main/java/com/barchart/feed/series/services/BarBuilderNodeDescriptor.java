@@ -16,10 +16,13 @@ import com.barchart.feed.api.series.temporal.PeriodType;
 import com.barchart.feed.api.series.temporal.TimeFrame;
 
 public class BarBuilderNodeDescriptor extends NodeDescriptor {
-    private static final String BASE_STEP_FILE = "baseSteps.txt";
+    private static final String BASE_STEP_FILE = "/baseSteps.txt";
     
     private static List<PeriodType> baseTypeSteps;
     static {
+    	for(String s : System.getProperty("java.class.path").split("[\\:]+")) {
+    		System.out.println(s);
+    	}
         loadFromFile("baseSteps.txt");
     }
     

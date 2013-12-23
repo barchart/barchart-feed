@@ -20,6 +20,14 @@
         <developerConnection>scm:git:ssh://git@github.com/barchart/barchart-feed.git</developerConnection>
         <tag>master</tag>
     </scm>
+    
+    <build>
+        <testResources>
+          <testResource>
+            <directory>src/test/resources</directory>
+          </testResource>
+        </testResources>
+    </build>
 
     <dependencies>
         <dependency>
