@@ -2,6 +2,7 @@ package com.barchart.feed.series.services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -15,6 +16,7 @@ import com.barchart.feed.api.series.services.Assembler;
 import com.barchart.feed.api.series.services.HistoricalResult;
 import com.barchart.feed.api.series.services.Node;
 import com.barchart.feed.api.series.services.Subscription;
+import com.barchart.feed.api.series.services.Processor.Category;
 import com.barchart.feed.api.series.temporal.Period;
 import com.barchart.feed.series.DataBar;
 import com.barchart.feed.series.DataSeries;
@@ -26,6 +28,9 @@ import com.barchart.util.value.api.Time;
 
 
 /**
+ * Implementation of {@link Assembler} carrying out the contract which is to
+ * receive event based raw data for both historical and live market data and
+ * output that data to configured child {@link Node}s.
  * 
  * @author David Ray
  *
@@ -45,6 +50,10 @@ public class Distributor extends Node implements Assembler {
 	
 	private Object lock = new Object();
 	
+	private ConcurrentLinkedQueue<Span> dataQueue;
+	
+	
+	
 	public Distributor() {
 		
 	}
@@ -54,6 +63,7 @@ public class Distributor extends Node implements Assembler {
 		this.period = subscription.getTimeFrames()[0].getPeriod();
 		this.outputSubscriptions = new ArrayList<Subscription>();
 		this.outputSubscriptions.add(subscription);
+		this.dataQueue = new ConcurrentLinkedQueue<Span>();
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -65,8 +75,9 @@ public class Distributor extends Node implements Assembler {
 		    DataSeries<DataBar> series = (DataSeries)getOutputTimeSeries(subscription);
 		    bar = new DataBar(m.trade().time(), period, null, null, null, m.trade().price(), m.trade().size(), null);
 		    series.insertData(bar);
+		    
+		    setModifiedSpan(new SpanImpl(period, bar.getTime(), bar.getTime()), outputSubscriptions);
 		}
-		updateModifiedSpan(new SpanImpl(period, bar.getTime(), bar.getTime()), subscription);
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -96,9 +107,9 @@ public class Distributor extends Node implements Assembler {
 				}
 				series.insertData(bar);
 			}
+			
+			setModifiedSpan(span, outputSubscriptions);
 		}
-		
-		updateModifiedSpan(span, subscription);
 	}
 	
 	private DataBar createBarFromTickCSV(String[] array) {
@@ -143,22 +154,21 @@ public class Distributor extends Node implements Assembler {
 	}
 
 	@Override
-	protected void updateModifiedSpan(Span span, Subscription subscription) {
-		for(Node n : childNodes) {
-			n.setModifiedSpan(new SpanImpl((SpanImpl)span), getOutputSubscriptions());
-		}
+	protected <S extends Span, U extends Subscription> void updateModifiedSpan(S span, U subscription) {
+		dataQueue.offer((S) span);
+		setUpdated(true);
 	}
 
 	@Override
 	protected boolean hasAllAncestorUpdates() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
 	protected Span process() {
-		// TODO Auto-generated method stub
-		return null;
+		Span span = dataQueue.poll();
+		System.out.println(this + " processing span: " + span);
+		return span;
 	}
 
 	@Override
@@ -168,8 +178,7 @@ public class Distributor extends Node implements Assembler {
 
 	@Override
 	public List<Subscription> getInputSubscriptions() {
-		// TODO Auto-generated method stub
-		return null;
+		return outputSubscriptions;
 	}
 
 	/**
@@ -212,5 +221,14 @@ public class Distributor extends Node implements Assembler {
 	public Subscription getSubscription() {
 		return this.subscription;
 	}
+    
+    public Category getCategory() {
+        return Category.ASSEMBLER;
+    }
+    
+    public String toString() {
+        StringBuilder sb = new StringBuilder(getCategory().toString()).append(": ").append(" ---> ").append(subscription);
+        return sb.toString();
+    }
 
 }

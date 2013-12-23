@@ -8,17 +8,13 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicReference;
 
-import org.joda.time.DateTime;
-
 import com.barchart.feed.api.series.Span;
 import com.barchart.feed.api.series.TimePoint;
 import com.barchart.feed.api.series.TimeSeries;
 import com.barchart.feed.api.series.services.Analytic;
 import com.barchart.feed.api.series.services.Node;
 import com.barchart.feed.api.series.services.Subscription;
-import com.barchart.feed.api.series.temporal.Period;
 import com.barchart.feed.series.SpanImpl;
-import com.barchart.util.value.ValueFactoryImpl;
 
 public class AnalyticNode extends Node {
 	public enum SpanOperation { UNION, INTERSECTION };
@@ -54,11 +50,7 @@ public class AnalyticNode extends Node {
 	 */
 	public AnalyticNode(Analytic analytic) {
 	    this.analytic = analytic;
-	    this.currentProcessSpan = new SpanImpl(
-	            new SpanImpl(
-                Period.DAY, 
-                ValueFactoryImpl.factory.newTime(new DateTime(1980, 1, 1, 0, 0, 0).getMillis()),
-                ValueFactoryImpl.factory.newTime(new DateTime(1980, 1, 1, 0, 0, 0).getMillis())));
+	    this.currentProcessSpan = new SpanImpl(SpanImpl.INITIAL);
 	}
 	
 	/**

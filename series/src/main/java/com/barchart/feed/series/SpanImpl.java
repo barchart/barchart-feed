@@ -12,6 +12,12 @@ public class SpanImpl extends DataPoint implements Span {
 	private Time nextTime;
 	private DateTime nextDate;
 	
+	public static final SpanImpl INITIAL = new SpanImpl(
+            new SpanImpl(
+                    Period.DAY, 
+                    ValueFactoryImpl.factory.newTime(new DateTime(1980, 1, 1, 0, 0, 0).getMillis()),
+                    ValueFactoryImpl.factory.newTime(new DateTime(1980, 1, 1, 0, 0, 0).getMillis())));
+	
 	public SpanImpl(Period period, Time t, Time next) {
 		super(period, t);
 		this.nextTime = next;

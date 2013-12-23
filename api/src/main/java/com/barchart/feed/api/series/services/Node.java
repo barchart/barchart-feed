@@ -49,7 +49,7 @@ public abstract class Node implements Runnable {
 	public void startUp() {
 		if(!isRunning) {
 			this.isRunning = true;
-			(new Thread(this)).start();
+			(new Thread(this, this.toString())).start();
 		}
 		
 		for(Node n : parentNodes) {
@@ -76,7 +76,7 @@ public abstract class Node implements Runnable {
 	 * the {@link Span} of time modified by that {@code Node}'s 
 	 * internal processing class.
 	 * 
-	 * @param span				the {@link Span} of time processed.
+	 * @param span							the {@link Span} of time processed.
 	 * @param ancestorOutputSubscriptions 	the List of {@link Subscription}s the ancestor node has processed.
 	 * @return	
 	 */
@@ -184,7 +184,7 @@ public abstract class Node implements Runnable {
 	 * @param span				the {@link Span} processed.
 	 * @param subscription		the Subscription describing and identifying the specified input.
 	 */
-	protected abstract void updateModifiedSpan(Span span, Subscription subscription);
+	protected abstract <T extends Span, S extends Subscription> void updateModifiedSpan(T span, S subscription);
 	/**
 	 * Implemented by the node type handling data expected by this {@code Node}
 	 * 
@@ -255,12 +255,11 @@ public abstract class Node implements Runnable {
 	public void run() {
 		while(isRunning) {
 			if(isUpdated()) {
-				System.out.println("Node: " + this + " isUpdated");
+				System.out.println(this + " isUpdated");
 				setUpdated(false);
 				if(hasAllAncestorUpdates()) {
-					System.out.println("Node: " + this + " hasAllAncestorUpdates()");
+					System.out.println(this + " hasAllAncestorUpdates()");
 					Span span = this.process();
-					System.out.println("Node: " + this + " called Process: new Span = " + span);
 					if(span != null) {
 						List<Subscription> outputs = getOutputSubscriptions();
 						for(Node nextNode : childNodes) {
@@ -273,9 +272,9 @@ public abstract class Node implements Runnable {
 			if(!isUpdated()) {
 				try {
 					synchronized(waitLock) {
-						System.out.println("Node: " + this + " waiting...");
+						System.out.println(this + " waiting...");
 						waitLock.wait();
-						System.out.println("Node: " + this + " waking up");
+						System.out.println(this + " waking up");
 					}
 				}catch(Exception e) { 
 					e.printStackTrace();

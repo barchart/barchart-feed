@@ -62,16 +62,17 @@ public class BarBuilder extends Node implements Processor {
 	
 	@Override
 	public void startUp() {
-	    System.out.println("NODE: BarBuilder - " + outputSubscription.getTimeFrames()[0].getPeriod().getPeriodType() + " starting...");
+	    System.out.println("NODE: " + this + " starting...");
 	    super.startUp();
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
 	public Span process() {
+		System.out.println(this + " processing span: " + inputSpan);
+		
 		PeriodType inputType = inputSubscription.getTimeFrames()[0].getPeriod().getPeriodType();
 		PeriodType outputType = outputSubscription.getTimeFrames()[0].getPeriod().getPeriodType();
-		System.out.println("input type = " + inputType + ",  output type = " + outputType + " , " + getInputTimeSeries(inputSubscription).size() + "  --  " + inputSpan);
 		
 		DataSeries<DataPoint> outputSeries = (DataSeries)getOutputTimeSeries(outputSubscription);
 		DataSeries<DataPoint> inputSeries = (DataSeries)getInputTimeSeries(inputSubscription);
@@ -203,18 +204,7 @@ public class BarBuilder extends Node implements Processor {
         return subscription.isDerivableFrom(outputSubscription) ? OUTPUT_KEY : null;
     }
 
-	/**
-	 * Adds a child node which will be woken up and made to process
-	 * when it's parents release data.
-	 * 
-	 * @param 	node 		a child node.
-	 */
-    @Override
-    public void addChildNode(Node node) {
-        childNodes.add(node);
-    }
-
-    @Override
+	@Override
     public Category getCategory() {
         return Category.BAR_BUILDER;
     }
