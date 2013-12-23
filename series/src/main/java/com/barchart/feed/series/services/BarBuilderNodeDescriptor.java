@@ -23,7 +23,7 @@ public class BarBuilderNodeDescriptor extends NodeDescriptor {
     	for(String s : System.getProperty("java.class.path").split("[\\:]+")) {
     		System.out.println(s);
     	}
-        loadFromFile("baseSteps.txt");
+        loadFromFile(BASE_STEP_FILE);
     }
     
     public BarBuilderNodeDescriptor() {
