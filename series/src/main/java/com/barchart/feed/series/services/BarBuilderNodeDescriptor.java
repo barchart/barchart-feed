@@ -158,5 +158,9 @@ public class BarBuilderNodeDescriptor extends NodeDescriptor {
         
         return retVal;
     }
+    
+    public String toString() {
+        return getSpecifier();
+    }
 
 }

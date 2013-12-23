@@ -77,12 +77,14 @@ public abstract class Node implements Runnable {
 	 * internal processing class.
 	 * 
 	 * @param span				the {@link Span} of time processed.
-	 * @param subscriptions 	the List of {@link Subscription}s the ancestor node has processed.
+	 * @param ancestorOutputSubscriptions 	the List of {@link Subscription}s the ancestor node has processed.
 	 * @return	
 	 */
-	public boolean setModifiedSpan(Span span, List<Subscription>  subscriptions) {
-		for(Subscription s : subscriptions) {
-			updateModifiedSpan(span, s);
+	public boolean setModifiedSpan(Span span, List<Subscription>  ancestorOutputSubscriptions) {
+		for(Subscription s : ancestorOutputSubscriptions) {
+		    if(getInputSubscriptions().contains(s)) {
+		        updateModifiedSpan(span, s);
+		    }
 		}
 		
 		try {
@@ -195,6 +197,7 @@ public abstract class Node implements Runnable {
 	 * Implemented by the node type handling data expected by this {@code Node}
 	 * 
 	 * Starts the processing of the previously set {@link Span}
+	 * @param span TODO
 	 * @return	the updated Span
 	 */
 	protected abstract Span process();
@@ -245,7 +248,6 @@ public abstract class Node implements Runnable {
 	public abstract Subscription getDerivableOutputSubscription(Subscription subscription);
 	
 	
-	
 	/**
 	 * Main {@link Thread} body
 	 */
@@ -253,12 +255,12 @@ public abstract class Node implements Runnable {
 	public void run() {
 		while(isRunning) {
 			if(isUpdated()) {
-				System.out.println("Node: " + getOutputSubscriptions().get(0).getTimeFrames()[0].getPeriod() + " isUpdated");
+				System.out.println("Node: " + this + " isUpdated");
 				setUpdated(false);
 				if(hasAllAncestorUpdates()) {
-					System.out.println("Node: " + getOutputSubscriptions().get(0).getTimeFrames()[0].getPeriod() + " hasAllAncestorUpdates()");
+					System.out.println("Node: " + this + " hasAllAncestorUpdates()");
 					Span span = this.process();
-					System.out.println("Node: " + getOutputSubscriptions().get(0).getTimeFrames()[0].getPeriod() + " called Process: new Span = " + span);
+					System.out.println("Node: " + this + " called Process: new Span = " + span);
 					if(span != null) {
 						List<Subscription> outputs = getOutputSubscriptions();
 						for(Node nextNode : childNodes) {
@@ -271,9 +273,9 @@ public abstract class Node implements Runnable {
 			if(!isUpdated()) {
 				try {
 					synchronized(waitLock) {
-						System.out.println("Node: " + getOutputSubscriptions().get(0).getTimeFrames()[0].getPeriod() + " waiting...");
+						System.out.println("Node: " + this + " waiting...");
 						waitLock.wait();
-						System.out.println("Node: " + getOutputSubscriptions().get(0).getTimeFrames()[0].getPeriod() + " waking up");
+						System.out.println("Node: " + this + " waking up");
 					}
 				}catch(Exception e) { 
 					e.printStackTrace();

@@ -23,6 +23,14 @@ public class SpanImpl extends DataPoint implements Span {
 		this.nextDate = new DateTime(other.nextDate.getMillis());
 		this.nextTime = ValueFactoryImpl.factory.newTime(nextDate.getMillis());
 	}
+	
+	public void setSpan(SpanImpl other) {
+	    this.period = new Period(other.period.getPeriodType(), other.period.size());
+	    this.time = ValueFactoryImpl.factory.newTime(other.time.millisecond());
+	    this.date = new DateTime(time.millisecond());
+	    this.nextTime = ValueFactoryImpl.factory.newTime(other.nextTime.millisecond());
+	    this.nextDate = new DateTime(other.nextDate.getMillis());
+	}
 
 	@Override
 	public <E extends TimePoint> int compareTo(E other) {
@@ -57,8 +65,8 @@ public class SpanImpl extends DataPoint implements Span {
 			append("  --  ").append(new DateTime(nextTime.millisecond())).toString();
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#hashCode()
+	/**
+	 * {@inheritDoc}
 	 */
 	@Override
 	public int hashCode() {
@@ -71,9 +79,9 @@ public class SpanImpl extends DataPoint implements Span {
 		return result;
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
+	/**
+     * {@inheritDoc}
+     */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -95,19 +103,50 @@ public class SpanImpl extends DataPoint implements Span {
 			return false;
 		return true;
 	}
+	
+	/**
+     * Returns true if the specified span intersects this span 
+     * and has a start time less than this start time or a next
+     * time greater than this start time.
+     * 
+     * @param span     the span tested for extends quality
+     * @return         true if so, false if not
+     */
+    public <T extends Span> boolean extendsSpan(T span) {
+        return span.intersection(this) != null && ((this.time.millisecond() < span.getTime().millisecond()) || 
+                (this.nextTime.millisecond() > span.getNextTime().millisecond()));
+    }
 
-	@Override
-	public Span union(Span span) {
+    /**
+     * Expands the lower and upper bounds of this {@code Span} to
+     * include the extremes of the specified Span if not already
+     * included.
+     * 
+     * @param span
+     * @return the union of this Span and the specified Span
+     */
+	@SuppressWarnings("unchecked")
+    @Override
+	public <T extends Span> T union(T span) {
 		Time start = null;
 		Time end = null;
 		start = this.time.millisecond() < span.getTime().millisecond() ?  this.time : span.getTime();
 		end = this.nextTime.millisecond() < span.getNextTime().millisecond() ? span.getNextTime() : this.nextTime;
 		
-		return new SpanImpl(span.getPeriod(), start, end);
+		return (T)new SpanImpl(span.getPeriod(), start, end);
 	}
 
-	@Override
-	public Span intersection(Span span) {
+	/**
+     * Returns a {@code Span} whose range is the intersection of this
+     * {@code Span} and the specified Span.
+     * 
+     * @param   span  the Span with which to combine to produce an intersection.
+     * @return  a Span containing the interecting range of this Span and the 
+     *          Span specified.
+     */
+	@SuppressWarnings("unchecked")
+    @Override
+	public <T extends Span> T intersection(T span) {
 		if((!(span.getTime().millisecond() < nextTime.millisecond())) && 
 			(!(time.millisecond() < span.getNextTime().millisecond()))) {
 			return null;
@@ -117,7 +156,7 @@ public class SpanImpl extends DataPoint implements Span {
 		start = this.time.millisecond() < span.getTime().millisecond() ?  span.getTime() : this.time;
 		end = this.nextTime.millisecond() < span.getNextTime().millisecond() ? this.nextTime : span.getNextTime();
 		
-		return new SpanImpl(span.getPeriod(), start, end);
+		return (T)new SpanImpl(span.getPeriod(), start, end);
 	}
 
 }

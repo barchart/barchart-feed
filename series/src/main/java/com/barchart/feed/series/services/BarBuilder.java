@@ -3,8 +3,6 @@ package com.barchart.feed.series.services;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.joda.time.DateTime;
-
 import com.barchart.feed.api.series.Span;
 import com.barchart.feed.api.series.TimePoint;
 import com.barchart.feed.api.series.TimeSeries;
@@ -16,6 +14,7 @@ import com.barchart.feed.api.series.temporal.PeriodType;
 import com.barchart.feed.series.DataBar;
 import com.barchart.feed.series.DataPoint;
 import com.barchart.feed.series.DataSeries;
+import com.barchart.feed.series.SpanImpl;
 
 public class BarBuilder extends Node implements Processor {
     private SeriesSubscription inputSubscription;
@@ -67,25 +66,27 @@ public class BarBuilder extends Node implements Processor {
 	    super.startUp();
 	}
 
-	@Override
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+    @Override
 	public Span process() {
 		PeriodType inputType = inputSubscription.getTimeFrames()[0].getPeriod().getPeriodType();
 		PeriodType outputType = outputSubscription.getTimeFrames()[0].getPeriod().getPeriodType();
 		System.out.println("input type = " + inputType + ",  output type = " + outputType + " , " + getInputTimeSeries(inputSubscription).size() + "  --  " + inputSpan);
 		
-		DataSeries<DataPoint> series = (DataSeries)getInputTimeSeries(inputSubscription);
-		int inputStartIdx = getInputTimeSeries(inputSubscription).closestIndexOf(inputSpan.getTime(), 0, series.size(), true);
-		int inputLastIdx = getInputTimeSeries(inputSubscription).closestIndexOf(inputSpan.getNextTime(),  0, series.size(), true);
-		System.out.println("inputStartIdx = " + inputStartIdx + "  -  " + (new DateTime(inputSpan.getTime().millisecond())));
-		System.out.println("inputLastIdx = " + inputLastIdx + "  -  " + (new DateTime(inputSpan.getNextTime().millisecond())) + " >> " + (new DateTime(series.get(inputLastIdx).getTime().millisecond())));
-		for(int i = 1;i < series.size();i++) {
-			DateTime t = (new DateTime(series.get(i - 1).getTime().millisecond()));
-			DateTime t1 = (new DateTime(series.get(i).getTime().millisecond()));
-			if(!(t1.isEqual(t) || t1.isAfter(t))) {
-				throw new IllegalStateException("error at " + t + " -- " + t1);
-			}
-			System.out.println(i + "\t\t " + (new DateTime(series.get(i).getTime().millisecond())));
+		DataSeries<DataPoint> outputSeries = (DataSeries)getOutputTimeSeries(outputSubscription);
+		DataSeries<DataPoint> inputSeries = (DataSeries)getInputTimeSeries(inputSubscription);
+		int inputStartIdx = inputSeries.indexOf(inputSpan.getTime(), false);
+		int inputLastIdx = inputSeries.indexOf(inputSpan.getNextTime(), false);
+		
+		if(inputType == outputType) {
+		    for(int i = inputStartIdx;i <= inputLastIdx;i++) {
+		        outputSeries.insertData(inputSeries.get(i));
+		    }
+		    return new SpanImpl((SpanImpl)inputSpan);
+		}else{
+		    
 		}
+		
 		return null;
 	}
 	
@@ -216,6 +217,12 @@ public class BarBuilder extends Node implements Processor {
     @Override
     public Category getCategory() {
         return Category.BAR_BUILDER;
+    }
+    
+    public String toString() {
+        StringBuilder sb = new StringBuilder(getCategory().toString()).append(": ").
+            append(inputSubscription).append(" ---> ").append(outputSubscription);
+        return sb.toString();
     }
 
 }

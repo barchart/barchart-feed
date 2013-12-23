@@ -15,7 +15,6 @@ import com.barchart.feed.api.series.TimePoint;
 import com.barchart.feed.api.series.TimeSeries;
 import com.barchart.feed.api.series.TimeSeriesObservable;
 import com.barchart.feed.api.series.services.Analytic;
-import com.barchart.feed.api.series.services.Assembler;
 import com.barchart.feed.api.series.services.FeedMonitorService;
 import com.barchart.feed.api.series.services.Node;
 import com.barchart.feed.api.series.services.NodeDescriptor;

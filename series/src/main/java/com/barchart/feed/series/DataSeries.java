@@ -25,6 +25,8 @@ public class DataSeries<E extends DataPoint> implements TimeSeries<E> {
 	/** The backing data */
 	private List<DataPoint> data = Collections.synchronizedList(new ArrayList<DataPoint>());
 	
+	private Object INSERT_LOCK = new Object();
+	
 	/**
 	 * Constructs a new {@link DataSeries} whose {@link DataPoints} adhere to
 	 * the time constraints specified.
@@ -247,7 +249,7 @@ public class DataSeries<E extends DataPoint> implements TimeSeries<E> {
         if(mid < 0) {
             mid = isExact ? 0 : -1;
         }else if(mid > size){
-            mid = isExact ? size : -1;
+            mid = size;
         }
         return mid;
     }
@@ -384,6 +386,12 @@ public class DataSeries<E extends DataPoint> implements TimeSeries<E> {
     @SuppressWarnings("unchecked")
     public E[] toArray() {
     	return (E[])data.toArray();
+    }
+    
+    public void insertData(E e) {
+        synchronized(INSERT_LOCK) {
+            data.add(indexOf(e.time, false), e);
+        }
     }
     
 	/**

@@ -17,9 +17,8 @@ import org.joda.time.convert.InstantConverter;
  */
 public enum PeriodType {
 	TICK("Tick", 
-		DateTimeComparator.getInstance(
-            DateTimeFieldType.millisOfSecond(),
-        		DateTimeFieldType.millisOfDay())),
+		DateTimeComparator.getInstance(null)),
+            //DateTimeFieldType.millisOfSecond())),
     SECOND("Second", 
         DateTimeComparator.getInstance(
             DateTimeFieldType.secondOfMinute(),
@@ -271,7 +270,7 @@ public enum PeriodType {
         //The below DateTime will be queried for a Chronology if it is null.
         Chronology lhsChrono = conv.getChronology(dt, (Chronology)null);
         long lhsMillis = conv.getInstantMillis(dt, lhsChrono);
-        lhsMillis = typeComparator.getLowerLimit().getField(lhsChrono).roundFloor(lhsMillis);
+        lhsMillis = typeComparator.getLowerLimit() == null ? lhsMillis : typeComparator.getLowerLimit().getField(lhsChrono).roundFloor(lhsMillis);
         return new DateTime(lhsMillis);
     }
 }

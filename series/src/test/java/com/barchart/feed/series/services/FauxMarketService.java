@@ -157,12 +157,6 @@ public class FauxMarketService implements MarketService {
         this.lastQuery = query;
     }
     
-    private SeriesSubscription createNodeIODescriptor(Query query, Instrument i) {
-        return new SeriesSubscription(query.getSymbol(), i, null, 
-            new TimeFrame[] { new TimeFrame(query.getPeriod(), query.getStart(), query.getEnd()) }, 
-                query.getTradingWeek());
-    }
-    
     @SuppressWarnings("unchecked")
 	@Override
     public <V extends MarketData<V>> ConsumerAgent register(MarketObserver<V> callback, Class<V> clazz) {
@@ -174,9 +168,9 @@ public class FauxMarketService implements MarketService {
             public Observable<Result<Instrument>> include(String... symbols) {
                 //Use the historical service to get the last price for accurate simulation.
                 if(lastQuery.hasCustomQuery()) {
-                    histService.subscribe(new HistoricalSubject(), createNodeIODescriptor(lastQuery, makeInstrument(symbols[0])), lastQuery);
+                    histService.subscribe(new HistoricalSubject(), lastQuery.toSubscription(makeInstrument(symbols[0])), lastQuery);
                 }else{
-                    histService.subscribe(new HistoricalSubject(), createNodeIODescriptor(lastQuery, makeInstrument(symbols[0])));
+                    histService.subscribe(new HistoricalSubject(), lastQuery.toSubscription(makeInstrument(symbols[0])));
                 }
                 return instrument(symbols);
             }

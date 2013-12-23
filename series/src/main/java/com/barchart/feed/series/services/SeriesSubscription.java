@@ -213,5 +213,10 @@ public class SeriesSubscription implements rx.Subscription, Subscription {
 			return false;
 		return true;
 	}
+	
+	public String toString() {
+	    return new StringBuilder("[ ").append(descriptor).append(" ").append(symbol).
+	        append(" ").append(timeFrames[0]).append(" ]").toString();
+	}
 
 }

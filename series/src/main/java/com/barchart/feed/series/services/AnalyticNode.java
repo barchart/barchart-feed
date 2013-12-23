@@ -8,12 +8,17 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.joda.time.DateTime;
+
 import com.barchart.feed.api.series.Span;
 import com.barchart.feed.api.series.TimePoint;
 import com.barchart.feed.api.series.TimeSeries;
 import com.barchart.feed.api.series.services.Analytic;
 import com.barchart.feed.api.series.services.Node;
 import com.barchart.feed.api.series.services.Subscription;
+import com.barchart.feed.api.series.temporal.Period;
+import com.barchart.feed.series.SpanImpl;
+import com.barchart.util.value.ValueFactoryImpl;
 
 public class AnalyticNode extends Node {
 	public enum SpanOperation { UNION, INTERSECTION };
@@ -29,17 +34,32 @@ public class AnalyticNode extends Node {
 	private Map<SeriesSubscription, TimeSeries<?>> inputTimeSeries = new ConcurrentHashMap<SeriesSubscription, TimeSeries<?>>();
 	
 	/** Contains all currently input {@link SeriesSubscriptions}, to be tested on each process cycle to see if all required inputs have been received */
-	private Map<SeriesSubscription, Span> currentUpdates = Collections.synchronizedMap(new HashMap<SeriesSubscription, Span>());
+	private Map<SeriesSubscription, SpanImpl> currentUpdates = Collections.synchronizedMap(new HashMap<SeriesSubscription, SpanImpl>());
 	
 	/** The currently updated {@link Span} for the current process cycle */
-	private volatile AtomicReference<Span> currentUpdateSpan;
+	private volatile AtomicReference<SpanImpl> currentUpdateSpan = new AtomicReference<SpanImpl>();
 	
-	/** Snapshot of the update Span used during processing */
-	private Span currentProcessSpan;
+	/** Owned Span object internally mapped in child nodes of the update Span used during processing */
+	private SpanImpl currentProcessSpan;
 	
 	/** The specific analytic indicator type */
 	private Analytic analytic;
 
+	
+	/**
+	 * Constructs a new {@code AnalyticNode} to "hook in" the specified
+	 * Processor to the analytic network.
+	 * 
+	 * @param analytic
+	 */
+	public AnalyticNode(Analytic analytic) {
+	    this.analytic = analytic;
+	    this.currentProcessSpan = new SpanImpl(
+	            new SpanImpl(
+                Period.DAY, 
+                ValueFactoryImpl.factory.newTime(new DateTime(1980, 1, 1, 0, 0, 0).getMillis()),
+                ValueFactoryImpl.factory.newTime(new DateTime(1980, 1, 1, 0, 0, 0).getMillis())));
+	}
 	
 	/**
 	 * Called by ancestors of this {@code Node} in the tree to set
@@ -51,15 +71,21 @@ public class AnalyticNode extends Node {
 	 * @return	
 	 */
 	@Override
-	public void updateModifiedSpan(Span span, Subscription subscription) {
+	public void updateModifiedSpan(Span s, Subscription subscription) {
+	    SpanImpl span = (SpanImpl)s;
 		if(currentUpdateSpan.get() == null) {
 			currentUpdateSpan.set(span);
 		}
 		
-		setUpdated(currentUpdates.get(subscription).getNextTime().compareTo(span.getNextTime()) < 1);
-		currentUpdateSpan.set(currentUpdateSpan.get().union(span));
 		synchronized(currentUpdates) {
-			currentUpdates.put((SeriesSubscription)subscription, span);
+		    boolean wasNewForScript = false;
+		    if(currentUpdates.get(subscription) == null) {
+		        wasNewForScript = true;
+		        currentUpdates.put((SeriesSubscription)subscription, span);
+	        }
+		    
+	        setUpdated(isUpdated() || wasNewForScript || span.extendsSpan(currentUpdates.get(subscription)));
+	        currentUpdateSpan.getAndSet(currentUpdateSpan.get().union(span));
 		}
 	}
 
@@ -70,14 +96,19 @@ public class AnalyticNode extends Node {
 	 */
 	@Override
 	public boolean hasAllAncestorUpdates() {
-		return currentUpdates.keySet().containsAll(getInputSubscriptions());
+	    boolean hasAllUpdates = currentUpdates.values().size() == getInputSubscriptions().size();
+	    synchronized(currentUpdates) {
+	        for(SpanImpl s : currentUpdates.values()) {
+	            hasAllUpdates &= s.extendsSpan(currentProcessSpan);
+	        }
+	    }
+		return hasAllUpdates;
 	}
 	
 	@Override
 	public Span process() {
 		synchronized(currentUpdates) {
-			currentProcessSpan = currentUpdateSpan.get();
-			currentUpdates.clear();
+			currentProcessSpan.setSpan(currentUpdateSpan.get());
 		}
 		return analytic.preProcess(currentProcessSpan);
 	}
@@ -100,6 +131,10 @@ public class AnalyticNode extends Node {
 	@Override
 	public List<Subscription> getInputSubscriptions() {
 		return new ArrayList<Subscription>(inputKeyMap.values());
+	}
+	
+	public void addInputSubscription(String key, SeriesSubscription s) {
+	    inputKeyMap.put(key, s);
 	}
 
 	/**
@@ -175,12 +210,6 @@ public class AnalyticNode extends Node {
             }
         }
         return null;
-    }
-
-    @Override
-    public void addChildNode(Node node) {
-        // TODO Auto-generated method stub
-        
     }
 
 }

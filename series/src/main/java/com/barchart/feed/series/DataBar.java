@@ -35,7 +35,7 @@ public class DataBar extends DataPoint implements Bar {
 	public DataBar(Time date, Period period, Price open, Price high, 
 		Price low, Price close, Size volume, Size openInterest) {
 		
-		super(period, (Time)date);
+		super(period, date);
 		
 		this.open = open;
 		this.high = high;

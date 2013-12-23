@@ -43,6 +43,8 @@ public class Distributor extends Node implements Assembler {
 	
 	private DateTime last = null;
 	
+	private Object lock = new Object();
+	
 	public Distributor() {
 		
 	}
@@ -57,57 +59,43 @@ public class Distributor extends Node implements Assembler {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public void onNextMarket(Market m) {
-//		System.out.println("onNextMarket: " + m.instrument().symbol() + ", " + m.trade().instrument().symbol() + ", " + m.trade().price().asDouble());
-//		DataSeries<DataBar> series = (DataSeries)getOutputTimeSeries(subscription);
-//		synchronized(series) {
-//			DataBar bar = new DataBar(m.trade().time(), period, null, null, null, m.trade().price(), m.trade().size(), null);
-//			int insertionIdx = series.indexOf(bar.getTime(), false);
-//			System.out.println("onNextMarket index = " + insertionIdx + ",  " + (new DateTime(bar.getTime().millisecond())) + ",  size = " + series.size());
-//			series.add(insertionIdx, bar);
-//			if(series.get(insertionIdx).getTime().millisecond() < bar.getTime().millisecond()) {
-//				throw new IllegalStateException(series.get(insertionIdx).getTime().millisecond() +  "   " + bar.getTime().millisecond());
-//			}else{
-//				System.out.println("insert: " + series.get(insertionIdx).getTime().millisecond() + "  -  " + (new DateTime(series.get(insertionIdx).getTime().millisecond())) + "  <-->  " + bar.getTime().millisecond() + "  -  " + (new DateTime(bar.getTime().millisecond())));
-//			}
-//		}
+		System.out.println("onNextMarket: " + m.instrument().symbol() + ", " + m.trade().instrument().symbol() + ", " + m.trade().price().asDouble());
+		DataBar bar = null;
+		synchronized(lock) {
+		    DataSeries<DataBar> series = (DataSeries)getOutputTimeSeries(subscription);
+		    bar = new DataBar(m.trade().time(), period, null, null, null, m.trade().price(), m.trade().size(), null);
+		    series.insertData(bar);
+		}
+		updateModifiedSpan(new SpanImpl(period, bar.getTime(), bar.getTime()), subscription);
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public <T extends HistoricalResult> void onNextHistorical(T result) {
 		System.out.println("onNextHistorical: ");
-		SpanImpl span = null;
 		
-		DataSeries<DataBar> series = (DataSeries)getOutputTimeSeries(subscription);System.out.println("first check: " + series.hashCode());
+		SpanImpl span = null;
+		DataSeries<DataBar> series = (DataSeries)getOutputTimeSeries(subscription);
 		List<String> results = result.getResult();
 		
-		synchronized(series) {
-			DataBar bar = null;
-			int i = 0;
-			int insertionIdx = 0;
+		synchronized(lock) {
+		    DataBar bar = null;
+			boolean isFirst = false;
 			for(String s : results) {	
-//				System.out.println(s);
 				String[] resultArray = s.split("[\\,]+");
 				
-				if(resultArray.length > 5) {
-					bar = createBarFromMinuteCSV(resultArray);
-				}else{
-					bar = createBarFromTickCSV(resultArray);
-				}
+				bar = resultArray.length > 5 ? 
+				    createBarFromMinuteCSV(resultArray) : 
+				        createBarFromTickCSV(resultArray);
 				
-				if(i == 0) {
-					insertionIdx = series.indexOf(bar.getTime(), false);
+				if(!isFirst) {
+				    isFirst = true;
 					span = new SpanImpl(period, bar.getTime(), bar.getTime());
 				}else{
 					span.setNextTime(bar.getTime());
 				}
-				
-				series.add(insertionIdx + i, bar);
-				
-				i++;
+				series.insertData(bar);
 			}
-			
-			System.out.println("highest span = " + series.size());
 		}
 		
 		updateModifiedSpan(span, subscription);
