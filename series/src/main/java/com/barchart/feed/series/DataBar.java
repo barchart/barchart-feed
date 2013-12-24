@@ -45,6 +45,7 @@ public class DataBar extends DataPoint implements Bar {
 		this.high = high;
 		this.low = low;
 		this.close = close;
+		this.volume = volume;
 		this.openInterest = openInterest;
 	}
 	
@@ -69,6 +70,7 @@ public class DataBar extends DataPoint implements Bar {
 		this.high = high;
 		this.low = low;
 		this.close = close;
+		this.volume = volume;
 		this.openInterest = openInterest;
 	}
 	
@@ -81,11 +83,13 @@ public class DataBar extends DataPoint implements Bar {
 			ValueFactoryImpl.factory.newTime(other.date.getMillis(), other.date.getZone().getID()));
 		
 		this.open = ValueFactoryImpl.factory.newPrice(other.getOpen().asDouble());
-		this.high = ValueFactoryImpl.factory.newPrice(other.getHigh().asDouble());;
-		this.low = ValueFactoryImpl.factory.newPrice(other.getLow().asDouble());;
-		this.close = ValueFactoryImpl.factory.newPrice(other.getClose().asDouble());;
+		this.high = ValueFactoryImpl.factory.newPrice(other.getHigh().asDouble());
+		this.low = ValueFactoryImpl.factory.newPrice(other.getLow().asDouble());
+		this.close = ValueFactoryImpl.factory.newPrice(other.getClose().asDouble());
+		this.volume = ValueFactoryImpl.factory.newSize(other.getVolume().mantissa(),
+			other.getVolume().exponent());
 		this.openInterest = ValueFactoryImpl.factory.newSize(
-			other.getOpenInterest().mantissa(), other.getOpenInterest().exponent());;
+			other.getOpenInterest().mantissa(), other.getOpenInterest().exponent());
 	}
 	
 	/**

@@ -57,8 +57,8 @@ public class BarBuilderTest {
         
         List<DataBar> list = getBars();
         SpanImpl span = new SpanImpl(new Period(PeriodType.MINUTE, 5),
-        	ValueFactoryImpl.factory.newTime(new DateTime(2013, 12, 10, 1, 0, 0).getMillis()),
-        	ValueFactoryImpl.factory.newTime(new DateTime(2013, 12, 10, 1, 30, 0).getMillis()));
+        	ValueFactoryImpl.factory.newTime(new DateTime(2013, 12, 10, 12, 0, 0).getMillis()),
+        	ValueFactoryImpl.factory.newTime(new DateTime(2013, 12, 10, 12, 30, 0).getMillis()));
         
         builder2.updateModifiedSpan(span, sub1);
         
@@ -74,7 +74,7 @@ public class BarBuilderTest {
 		int min = 0;
 		List<DataBar> l = new ArrayList<DataBar>();
 		for(int i = 0;i < 30;i++, min++) {
-			DataBar db = new DataBar(new DateTime(2013, 12, 10, 1, min, 0), Period.ONE_MINUTE, 
+			DataBar db = new DataBar(new DateTime(2013, 12, 10, 12, min, 0), Period.ONE_MINUTE, 
 				ValueFactoryImpl.factory.newPrice(5),
 				ValueFactoryImpl.factory.newPrice(5),
 				ValueFactoryImpl.factory.newPrice(5),

@@ -116,6 +116,7 @@ public class BarBuilder<E extends DataBar> extends Node implements Processor {
 				if(currentIdxBar.getDate().isAfter(workingTargetDate)) {
 					workingTargetDate = getNextSessionDate(workingTargetDate, outputPeriod);
 					currentMergeBar = new DataBar(currentIdxBar);
+					currentMergeBar.setDate(workingTargetDate);
 					this.workingSpan.setDate(currentMergeBar.getDate());
 					this.workingSpan.setNextDate(currentMergeBar.getDate());
 					

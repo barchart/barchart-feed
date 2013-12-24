@@ -1,7 +1,6 @@
 package com.barchart.feed.series;
 
 import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
 
 import com.barchart.feed.api.series.TimePoint;
 import com.barchart.feed.api.series.temporal.Period;
@@ -34,7 +33,7 @@ public abstract class DataPoint implements TimePoint {
 	protected DataPoint(Period period, Time t) {
 		this.period = period;
 		this.time = t;
-		this.date = new DateTime(time.millisecond()).withZone(DateTimeZone.forID(t.zone()));
+		this.date = new DateTime(time.millisecond());
 	}
 	
 	/**
