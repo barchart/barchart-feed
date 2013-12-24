@@ -3,31 +3,38 @@ package com.barchart.feed.series.services;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.joda.time.DateTime;
+
 import com.barchart.feed.api.series.Span;
-import com.barchart.feed.api.series.TimePoint;
 import com.barchart.feed.api.series.TimeSeries;
 import com.barchart.feed.api.series.services.Node;
 import com.barchart.feed.api.series.services.NodeDescriptor;
 import com.barchart.feed.api.series.services.Processor;
 import com.barchart.feed.api.series.services.Subscription;
+import com.barchart.feed.api.series.temporal.Period;
 import com.barchart.feed.api.series.temporal.PeriodType;
 import com.barchart.feed.series.DataBar;
 import com.barchart.feed.series.DataPoint;
 import com.barchart.feed.series.DataSeries;
 import com.barchart.feed.series.SpanImpl;
 
-public class BarBuilder extends Node implements Processor {
+public class BarBuilder<E extends DataBar> extends Node implements Processor {
     private SeriesSubscription inputSubscription;
     private SeriesSubscription outputSubscription;
     
     private static final String INPUT_KEY = "Input";
     private static final String OUTPUT_KEY = "Output";
     
-    private TimeSeries<?> inputTimeSeries;
-    private TimeSeries<?> outputTimeSeries;
+    private DataSeries<DataBar> inputTimeSeries;
+    private DataSeries<DataBar> outputTimeSeries;
     
-    private Span inputSpan;
-    private Span outputSpan;
+    private SpanImpl inputSpan = new SpanImpl(SpanImpl.INITIAL);
+    private SpanImpl workingSpan;
+    
+    private DataBar currentMergeBar;
+    private DateTime workingTargetDate;
+    
+    private int aggregationCount = -1;
     
     public BarBuilder(Subscription subscription) {
         this.outputSubscription = (SeriesSubscription)subscription;
@@ -44,8 +51,11 @@ public class BarBuilder extends Node implements Processor {
      */
 	@Override
 	public void updateModifiedSpan(Span span, Subscription subscription) {
-		setUpdated(!span.equals(inputSpan));
-		this.inputSpan = span;
+		setUpdated(span.extendsSpan(inputSpan));
+		this.inputSpan = (SpanImpl)span;
+		if(workingSpan == null) {
+			workingSpan = new SpanImpl(inputSpan);
+		}
 	}
 
 	/**
@@ -71,24 +81,60 @@ public class BarBuilder extends Node implements Processor {
 	public Span process() {
 		System.out.println(this + " processing span: " + inputSpan);
 		
-		PeriodType inputType = inputSubscription.getTimeFrames()[0].getPeriod().getPeriodType();
-		PeriodType outputType = outputSubscription.getTimeFrames()[0].getPeriod().getPeriodType();
+		Period inputPeriod = inputSubscription.getTimeFrames()[0].getPeriod();
+		Period outputPeriod = outputSubscription.getTimeFrames()[0].getPeriod();
 		
 		DataSeries<DataPoint> outputSeries = (DataSeries)getOutputTimeSeries(outputSubscription);
 		DataSeries<DataPoint> inputSeries = (DataSeries)getInputTimeSeries(inputSubscription);
 		int inputStartIdx = inputSeries.indexOf(inputSpan.getTime(), false);
 		int inputLastIdx = inputSeries.indexOf(inputSpan.getNextTime(), false);
 		
-		if(inputType == outputType) {
+		if(inputPeriod == outputPeriod) {
 		    for(int i = inputStartIdx;i <= inputLastIdx;i++) {
 		        outputSeries.insertData(inputSeries.get(i));
 		    }
 		    return new SpanImpl((SpanImpl)inputSpan);
-		}else{
-		    
+		}else if(inputPeriod.getPeriodType() == outputPeriod.getPeriodType()){ //Types are equal but output interval is > 1
+			if(inputPeriod.size() > 1) {
+				throw new IllegalStateException(
+					"Can't build bars from Type with an Interval that's not 1. Input=" + 
+						inputPeriod + ", output=" + outputPeriod);
+			}
+			
+			if(currentMergeBar == null) {
+				currentMergeBar = (DataBar)inputSeries.get(inputStartIdx); 
+				workingTargetDate = outputSubscription.getTradingWeek().getNextSessionDate(currentMergeBar.getDate(), outputPeriod);
+				currentMergeBar.setDate(workingTargetDate);
+				this.workingSpan.setDate(currentMergeBar.getDate());
+				this.workingSpan.setNextDate(currentMergeBar.getDate());
+				
+				outputSeries.add(currentMergeBar);
+			}
+			
+			for(int i = inputStartIdx;i < inputLastIdx + 1;i++) {
+				DataBar currentIdxBar = (DataBar)inputSeries.get(i);
+				if(currentIdxBar.getDate().isAfter(workingTargetDate)) {
+					workingTargetDate = getNextSessionDate(workingTargetDate, outputPeriod);
+					currentMergeBar = new DataBar(currentIdxBar);
+					this.workingSpan.setDate(currentMergeBar.getDate());
+					this.workingSpan.setNextDate(currentMergeBar.getDate());
+					
+					outputSeries.add(currentMergeBar);
+					
+				}else{
+					currentMergeBar.merge(currentIdxBar, false);
+				}
+				//fire onNext event
+			}
+		}else{ //Period types are not equal
+			
 		}
 		
 		return null;
+	}
+	
+	private DateTime getNextSessionDate(DateTime dt, Period period) {
+		return outputSubscription.getTradingWeek().getNextSessionDate(currentMergeBar.getDate(), period);
 	}
 	
 	@Override
@@ -149,11 +195,11 @@ public class BarBuilder extends Node implements Processor {
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public <E extends TimePoint> TimeSeries<E> getOutputTimeSeries(Subscription subscription) {
+	public DataSeries<DataBar> getOutputTimeSeries(Subscription subscription) {
 		if(outputTimeSeries == null) {
 			this.outputTimeSeries = new DataSeries<DataBar>(subscription.getTimeFrames()[0].getPeriod());
 		}
-		return (TimeSeries<E>)this.outputTimeSeries;
+		return (DataSeries<DataBar>) this.outputTimeSeries;
 	}
 
 	/**
@@ -161,8 +207,8 @@ public class BarBuilder extends Node implements Processor {
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public <E extends TimePoint> TimeSeries<E> getInputTimeSeries(Subscription subscription) {
-		return (TimeSeries<E>) this.inputTimeSeries;
+	public DataSeries<DataBar> getInputTimeSeries(Subscription subscription) {
+		return (DataSeries<DataBar>) this.inputTimeSeries;
 	}
 	
 	/**
@@ -171,8 +217,8 @@ public class BarBuilder extends Node implements Processor {
 	 * @param subscription		the Subscription acting as key for the corresponding {@link TimeSeries}
 	 * @param	the input {@link TimeSeries}
 	 */
-	<E extends TimePoint> void setInputTimeSeries(Subscription subscription, TimeSeries<E> timeSeries) {
-		this.inputTimeSeries = timeSeries;
+	void setInputTimeSeries(Subscription subscription, TimeSeries<DataBar> timeSeries) {
+		this.inputTimeSeries = (DataSeries<DataBar>) timeSeries;
 	}
 	
 	@Override

@@ -77,7 +77,9 @@ public class AnalyticNode extends Node {
 	        }
 		    
 	        setUpdated(isUpdated() || wasNewForScript || span.extendsSpan(currentUpdates.get(subscription)));
-	        currentUpdateSpan.getAndSet(currentUpdateSpan.get().union(span));
+	        if(isUpdated()) {
+	        	currentUpdateSpan.getAndSet(currentUpdateSpan.get().union(span));
+	        }
 		}
 	}
 

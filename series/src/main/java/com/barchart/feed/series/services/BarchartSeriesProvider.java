@@ -21,6 +21,8 @@ import com.barchart.feed.api.series.services.NodeDescriptor;
 import com.barchart.feed.api.series.services.Processor;
 import com.barchart.feed.api.series.services.Query;
 import com.barchart.feed.api.series.services.Subscription;
+import com.barchart.feed.series.DataBar;
+import com.barchart.feed.series.DataSeries;
 
 /**
  * Queryable framework for providing {@link TimeSeries} objects.
@@ -67,6 +69,7 @@ public class BarchartSeriesProvider {
 		});
 	}
 	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private Node lookupNode(Subscription subscription, Subscription original) {
 	    boolean isIO = subscription.getNodeDescriptor().getSpecifier().equals(NodeDescriptor.TYPE_IO);
 	    boolean isAssembler = subscription.getNodeDescriptor().getSpecifier().equals(NodeDescriptor.TYPE_ASSEMBLER);
@@ -97,12 +100,12 @@ public class BarchartSeriesProvider {
                 	Processor p = processorChain.get(i);
                     switch(p.getCategory()) {
                         case BAR_BUILDER: { 
-                        	BarBuilder child = (BarBuilder)p;
+                        	BarBuilder<DataBar> child = (BarBuilder<DataBar>)p;
                         	ioNodes.add(child);
                         	derivableNode.addChildNode(child);
                         	child.addParentNode(derivableNode);
                         	child.setInputTimeSeries(child.getInputSubscription(null), 
-                        		derivableNode.getOutputTimeSeries(child.getInputSubscription(null)));
+                        		(DataSeries)derivableNode.getOutputTimeSeries(child.getInputSubscription(null)));
                         	derivableNode = child;
                         	
                         	break; 
@@ -113,7 +116,7 @@ public class BarchartSeriesProvider {
                 }
             }
 	        
-	        retVal = isIO ? new BarBuilder(subscription) : null;
+	        retVal = isIO ? new BarBuilder<DataBar>(subscription) : null;
             List<Subscription> inputs = retVal.getInputSubscriptions();
             for(Subscription s : inputs) {
                 Node n = lookupNode(s, original);

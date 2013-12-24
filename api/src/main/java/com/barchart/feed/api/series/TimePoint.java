@@ -31,5 +31,5 @@ public interface TimePoint {
 	 * the argument {@code DataPoint}.
 	 */
 	public <E extends TimePoint> int compareTo(E other);
-
+	
 }

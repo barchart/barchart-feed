@@ -5,6 +5,7 @@ import org.joda.time.DateTimeZone;
 
 import com.barchart.feed.api.series.TimePoint;
 import com.barchart.feed.api.series.temporal.Period;
+import com.barchart.util.value.ValueFactoryImpl;
 import com.barchart.util.value.api.Time;
 
 
@@ -43,6 +44,24 @@ public abstract class DataPoint implements TimePoint {
 	@Override
 	public Time getTime() {
 		return time;
+	}
+	
+	/**
+	 * Returns the {@link DateTime}
+	 * 
+	 * @return
+	 */
+	public DateTime getDate() {
+		return date;
+	}
+	
+	/**
+	 * Sets the {@link DateTime} object
+	 * @param dt
+	 */
+	public void setDate(DateTime dt) {
+		this.date = dt;
+		this.time = ValueFactoryImpl.factory.newTime(date.getMillis());
 	}
 	
 	/**

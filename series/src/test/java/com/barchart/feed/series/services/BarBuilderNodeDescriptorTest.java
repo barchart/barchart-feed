@@ -18,6 +18,7 @@ import com.barchart.feed.api.series.temporal.Period;
 import com.barchart.feed.api.series.temporal.PeriodType;
 import com.barchart.feed.api.series.temporal.TimeFrame;
 import com.barchart.feed.api.series.temporal.TradingWeek;
+import com.barchart.feed.series.DataBar;
 import com.barchart.util.value.api.Fraction;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Schedule;
@@ -38,7 +39,8 @@ public class BarBuilderNodeDescriptorTest {
         assertEquals(PeriodType.SECOND, type);
     }
 
-    @Test
+    @SuppressWarnings("unchecked")
+	@Test
     public void testGetProcessorChain() {
         String symbol = "ESZ13";
         Instrument instr = makeInstrument(symbol);
@@ -62,15 +64,15 @@ public class BarBuilderNodeDescriptorTest {
         int size = pList.size();
         assertEquals(5, size);
         assertEquals(new Period(PeriodType.MONTH, 7), 
-            ((BarBuilder)pList.get(size - 1)).getOutputSubscription(NodeDescriptor.TYPE_IO).getTimeFrames()[0].getPeriod());
+            ((BarBuilder<DataBar>)pList.get(size - 1)).getOutputSubscription(NodeDescriptor.TYPE_IO).getTimeFrames()[0].getPeriod());
         assertEquals(new Period(PeriodType.MONTH, 1), 
-            ((BarBuilder)pList.get(size - 2)).getOutputSubscription(NodeDescriptor.TYPE_IO).getTimeFrames()[0].getPeriod());
+            ((BarBuilder<DataBar>)pList.get(size - 2)).getOutputSubscription(NodeDescriptor.TYPE_IO).getTimeFrames()[0].getPeriod());
         assertEquals(new Period(PeriodType.DAY, 1), 
-            ((BarBuilder)pList.get(size - 3)).getOutputSubscription(NodeDescriptor.TYPE_IO).getTimeFrames()[0].getPeriod());
+            ((BarBuilder<DataBar>)pList.get(size - 3)).getOutputSubscription(NodeDescriptor.TYPE_IO).getTimeFrames()[0].getPeriod());
         assertEquals(new Period(PeriodType.MINUTE, 1), 
-            ((BarBuilder)pList.get(size - 4)).getOutputSubscription(NodeDescriptor.TYPE_IO).getTimeFrames()[0].getPeriod());
+            ((BarBuilder<DataBar>)pList.get(size - 4)).getOutputSubscription(NodeDescriptor.TYPE_IO).getTimeFrames()[0].getPeriod());
         assertEquals(new Period(PeriodType.SECOND, 1), 
-            ((BarBuilder)pList.get(size - 5)).getOutputSubscription(NodeDescriptor.TYPE_IO).getTimeFrames()[0].getPeriod());
+            ((BarBuilder<DataBar>)pList.get(size - 5)).getOutputSubscription(NodeDescriptor.TYPE_IO).getTimeFrames()[0].getPeriod());
         
     }
     

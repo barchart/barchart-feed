@@ -1,6 +1,7 @@
 package com.barchart.feed.series;
 
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 
 import com.barchart.feed.api.series.Span;
 import com.barchart.feed.api.series.TimePoint;
@@ -43,7 +44,12 @@ public class SpanImpl extends DataPoint implements Span {
 		// TODO Auto-generated method stub
 		return 0;
 	}
-
+	
+	public void setTime(Time t) {
+		this.time = t;
+		this.date = new DateTime(time.millisecond(), DateTimeZone.forID(time.zone()));
+	}
+	
 	@Override
 	public Time getNextTime() {
 		return nextTime;
@@ -51,7 +57,12 @@ public class SpanImpl extends DataPoint implements Span {
 	
 	public void setNextTime(Time t) {
 		this.nextTime = t;
-		this.nextDate = new DateTime(nextTime.millisecond());
+		this.nextDate = new DateTime(nextTime.millisecond(), DateTimeZone.forID(nextTime.zone()));
+	}
+	
+	public void setNextDate(DateTime dt) {
+		this.nextDate = dt;
+		this.nextTime = ValueFactoryImpl.factory.newTime(dt.getMillis(), dt.getZone().getID());
 	}
 
 	@Override
@@ -164,5 +175,5 @@ public class SpanImpl extends DataPoint implements Span {
 		
 		return (T)new SpanImpl(span.getPeriod(), start, end);
 	}
-
+	
 }

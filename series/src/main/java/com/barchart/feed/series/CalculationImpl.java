@@ -19,7 +19,7 @@ public class CalculationImpl extends DataPoint implements Calculation {
 	}
 
 	@Override
-	public void setValue(Decimal value) {
+	public void setValue(double value) {
 		
 	}
 

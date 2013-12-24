@@ -13,5 +13,5 @@ public interface Calculation extends TimePoint {
 	 * Sets the two-dimensional value of this {@code Calculation}
 	 * @param the value of this Calculation
 	 */
-	public void setValue(Decimal value);
+	public void setValue(double value);
 }

@@ -18,7 +18,7 @@ import com.barchart.feed.api.series.temporal.Period;
 import com.barchart.feed.api.series.temporal.PeriodType;
 import com.barchart.util.value.api.Time;
 
-public class DataSeries<E extends DataPoint> implements TimeSeries<E> {
+public class DataSeries<E extends TimePoint> implements TimeSeries<E> {
 	/** All {@link DataPoints} are aggregated according to this Period */
 	private Period period;
 	/** The backing data */
@@ -365,12 +365,12 @@ public class DataSeries<E extends DataPoint> implements TimeSeries<E> {
 
 			@Override
 			public void set(E e) {
-				data.set(index, e);
+				data.set(index, (DataPoint) e);
 			}
 
 			@Override
 			public void add(E e) {
-				data.add(e);
+				data.add((DataPoint) e);
 			}
 		};
 	}
@@ -389,7 +389,7 @@ public class DataSeries<E extends DataPoint> implements TimeSeries<E> {
     
     public void insertData(E e) {
         synchronized(INSERT_LOCK) {
-            data.add(indexOf(e.time, false), e);
+            data.add(indexOf(e.getTime(), false), (DataPoint) e);
         }
     }
     
@@ -406,7 +406,7 @@ public class DataSeries<E extends DataPoint> implements TimeSeries<E> {
      */
     public boolean add(E e) {
     	if(data.contains(e)) return false;
-    	data.add(e);
+    	data.add((DataPoint) e);
     	return true;
     }
     
@@ -420,7 +420,7 @@ public class DataSeries<E extends DataPoint> implements TimeSeries<E> {
      * @param   e   the Object to be set.
      */
     public E add(int index, E e) {
-    	data.add(index, e);
+    	data.add(index, (DataPoint) e);
 		return e;
     }
     
@@ -434,7 +434,7 @@ public class DataSeries<E extends DataPoint> implements TimeSeries<E> {
      * @param   e   the Object to be set.
      */
     public E set(int index, E e) {
-    	data.set(index, e);
+    	data.set(index, (DataPoint) e);
     	return e;
     }
     

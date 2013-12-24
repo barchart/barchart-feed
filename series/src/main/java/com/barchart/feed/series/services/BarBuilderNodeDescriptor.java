@@ -14,16 +14,14 @@ import com.barchart.feed.api.series.services.Subscription;
 import com.barchart.feed.api.series.temporal.Period;
 import com.barchart.feed.api.series.temporal.PeriodType;
 import com.barchart.feed.api.series.temporal.TimeFrame;
+import com.barchart.feed.series.DataBar;
 
 public class BarBuilderNodeDescriptor extends NodeDescriptor {
     private static final String BASE_STEP_FILE = "/baseSteps.txt";
     
     private static List<PeriodType> baseTypeSteps;
     static {
-    	for(String s : System.getProperty("java.class.path").split("[\\:]+")) {
-    		System.out.println(s);
-    	}
-        loadFromFile(BASE_STEP_FILE);
+    	loadFromFile(BASE_STEP_FILE);
     }
     
     public BarBuilderNodeDescriptor() {
@@ -94,8 +92,8 @@ public class BarBuilderNodeDescriptor extends NodeDescriptor {
         SeriesSubscription sSub = new SeriesSubscription(input);
         sSub.setTimeFrames(new TimeFrame[] {
             new TimeFrame(next, input.getTimeFrames()[0].getStartDate(), input.getTimeFrames()[0].getEndDate()) });
-        BarBuilder bb = new BarBuilder(sSub);
-        ((BarBuilder)chain.get(chain.size() - 1)).addInputSubscription(null, bb.getOutputSubscription(null));
+        BarBuilder<DataBar> bb = new BarBuilder<DataBar>(sSub);
+        chain.get(chain.size() - 1).addInputSubscription(null, bb.getOutputSubscription(null));
         chain.add(bb);
         return sSub;
     }
@@ -140,7 +138,7 @@ public class BarBuilderNodeDescriptor extends NodeDescriptor {
         SeriesSubscription lower = (SeriesSubscription)derivableSubscription;
         
         List<Processor> retVal = new ArrayList<Processor>();
-        BarBuilder bb = new BarBuilder(higher);
+        BarBuilder<DataBar> bb = new BarBuilder<DataBar>(higher);
         retVal.add(bb);
         
         //First reduce the interval and add a node for that.

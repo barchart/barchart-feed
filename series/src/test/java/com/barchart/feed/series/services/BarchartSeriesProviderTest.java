@@ -33,7 +33,7 @@ public class BarchartSeriesProviderTest {
 		TestObserver<Span> testObserver = new TestObserver<Span>();
 		observable.subscribe(testObserver);
 		try {
-			Span span = testObserver.sync().results.get(0);
+			Span span = testObserver.sync(10000).results.get(0);
 			assertNotNull(span); 
 		} catch (Exception e) {
 			e.printStackTrace();
