@@ -18,7 +18,7 @@ import com.barchart.feed.api.series.temporal.Period;
 import com.barchart.feed.api.series.temporal.PeriodType;
 import com.barchart.util.value.api.Time;
 
-public class DataSeries<E extends TimePoint> implements TimeSeries<E> {
+public class DataSeries<E extends DataPoint> implements TimeSeries<E> {
 	/** All {@link DataPoints} are aggregated according to this Period */
 	private Period period;
 	/** The backing data */

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.joda.time.DateTime;
-import org.junit.Ignore;
+import org.junit.Test;
 
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.api.series.temporal.Period;
@@ -17,14 +17,12 @@ import com.barchart.feed.api.series.temporal.TradingWeek;
 import com.barchart.feed.series.DataBar;
 import com.barchart.feed.series.DataSeries;
 import com.barchart.feed.series.SpanImpl;
-import com.barchart.feed.series.service.BarBuilderNodeDescriptor;
-import com.barchart.feed.series.service.BarBuilderOld;
-import com.barchart.feed.series.service.SeriesSubscription;
 import com.barchart.util.value.ValueFactoryImpl;
 
 public class BarBuilderOldTest {
 
-	@Ignore
+	@SuppressWarnings("unchecked")
+	@Test
 	public void test() {
 		String symbol = "ESZ13";
         Instrument instr = TestHarness.makeInstrument(symbol);
@@ -43,7 +41,7 @@ public class BarBuilderOldTest {
         SeriesSubscription sub2 = new SeriesSubscription("ESZ13", instr, nDesc, new TimeFrame[] { tf2 }, TradingWeek.DEFAULT);
 		
 //        BarBuilder<DataBar> builder1 = new BarBuilder<DataBar>(sub1);
-        BarBuilderOld<DataBar> builder2 = new BarBuilderOld<DataBar>(sub2);
+        BarBuilderOld builder2 = new BarBuilderOld(sub2);
         
 //        builder1.addChildNode(builder2);
 //        builder1.setInputTimeSeries(sub1, new DataSeries<DataBar>(new Period(PeriodType.MINUTE, 1)));
@@ -55,8 +53,8 @@ public class BarBuilderOldTest {
         DataSeries<DataBar> series2 = builder2.getInputTimeSeries(sub1);
         assertNotNull(series2);
         
-        DataSeries<DataBar> series3 = builder2.getOutputTimeSeries(sub2);
-        assertEquals(new Period(PeriodType.MINUTE, 5), series3.getPeriod());
+        DataSeries<DataBar> outputSeries = builder2.getOutputTimeSeries(sub2);
+        assertEquals(new Period(PeriodType.MINUTE, 5), outputSeries.getPeriod());
         
         List<DataBar> list = getBars();
         SpanImpl span = new SpanImpl(new Period(PeriodType.MINUTE, 5),
@@ -71,6 +69,8 @@ public class BarBuilderOldTest {
         
         builder2.process();
         
+        assertEquals(6, outputSeries.size());
+        
 	}
 	
 	private List<DataBar> getBars() {
@@ -79,7 +79,7 @@ public class BarBuilderOldTest {
 		for(int i = 0;i < 30;i++, min++) {
 			DataBar db = new DataBar(new DateTime(2013, 12, 10, 12, min, 0), Period.ONE_MINUTE, 
 				ValueFactoryImpl.factory.newPrice(5),
-				ValueFactoryImpl.factory.newPrice(5),
+				ValueFactoryImpl.factory.newPrice(5 + min),
 				ValueFactoryImpl.factory.newPrice(5),
 				ValueFactoryImpl.factory.newPrice(5),
 				ValueFactoryImpl.factory.newSize(5, 0),

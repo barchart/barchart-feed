@@ -3,19 +3,17 @@ package com.barchart.feed.series.service;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
-import org.junit.Ignore;
+import org.junit.Test;
 
 import com.barchart.feed.api.series.Span;
 import com.barchart.feed.api.series.TimePoint;
 import com.barchart.feed.api.series.TimeSeries;
 import com.barchart.feed.api.series.TimeSeriesObservable;
-import com.barchart.feed.series.service.BarchartFeedService;
-import com.barchart.feed.series.service.BarchartSeriesProvider;
 import com.barchart.util.test.concurrent.TestObserver;
 
 public class BarchartSeriesProviderTest {
 
-	@Ignore
+	@Test
 	public void testFetch() {
 		
 		// Test was failing in Jenkins

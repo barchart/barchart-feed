@@ -8,9 +8,8 @@ import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.api.model.meta.id.InstrumentID;
 import com.barchart.feed.api.model.meta.id.VendorID;
 import com.barchart.feed.api.series.Span;
-import com.barchart.feed.api.series.service.Analytic;
-import com.barchart.feed.api.series.service.Subscription;
-import com.barchart.feed.api.series.service.Processor.Category;
+import com.barchart.feed.api.series.analytics.Analytic;
+import com.barchart.feed.api.series.service.AnalyticContainer;
 import com.barchart.util.value.api.Fraction;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Schedule;
@@ -168,40 +167,7 @@ public class TestHarness {
     
     public static Analytic makeEmptyAnalytic() {
         return new Analytic() {
-
-            @Override
-            public Category getCategory() {
-                // TODO Auto-generated method stub
-                return null;
-            }
-
-            @Override
-            public void addInputSubscription(String key,
-                    Subscription subscription) {
-                // TODO Auto-generated method stub
-                
-            }
-
-            @Override
-            public void addOutputSubscription(String key,
-                    Subscription subscription) {
-                // TODO Auto-generated method stub
-                
-            }
-
-            @Override
-            public Subscription getInputSubscription(String key) {
-                // TODO Auto-generated method stub
-                return null;
-            }
-
-            @Override
-            public Subscription getOutputSubscription(String key) {
-                // TODO Auto-generated method stub
-                return null;
-            }
-
-            @Override
+        	@Override
             public Span preProcess(Span span) {
                 // TODO Auto-generated method stub
                 return null;
@@ -211,6 +177,25 @@ public class TestHarness {
             public Span process(Span span) {
                 // TODO Auto-generated method stub
                 return null;
-            }};
+            }
+
+			@Override
+			public void setAnalyticContainer(AnalyticContainer processor) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public List<String> getInputKeys() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public List<String> getOutputKeys() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+		};
     }
 }

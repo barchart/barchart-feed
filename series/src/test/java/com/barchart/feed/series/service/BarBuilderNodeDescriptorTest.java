@@ -1,6 +1,7 @@
 package com.barchart.feed.series.service;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 import java.util.Map;
@@ -12,16 +13,12 @@ import com.barchart.feed.api.model.meta.Exchange;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.api.model.meta.id.InstrumentID;
 import com.barchart.feed.api.model.meta.id.VendorID;
+import com.barchart.feed.api.series.service.AnalyticContainer;
 import com.barchart.feed.api.series.service.NodeDescriptor;
-import com.barchart.feed.api.series.service.Processor;
 import com.barchart.feed.api.series.temporal.Period;
 import com.barchart.feed.api.series.temporal.PeriodType;
 import com.barchart.feed.api.series.temporal.TimeFrame;
 import com.barchart.feed.api.series.temporal.TradingWeek;
-import com.barchart.feed.series.DataBar;
-import com.barchart.feed.series.service.BarBuilderNodeDescriptor;
-import com.barchart.feed.series.service.BarBuilderOld;
-import com.barchart.feed.series.service.SeriesSubscription;
 import com.barchart.util.value.api.Fraction;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Schedule;
@@ -42,8 +39,7 @@ public class BarBuilderNodeDescriptorTest {
         assertEquals(PeriodType.SECOND, type);
     }
 
-    @SuppressWarnings("unchecked")
-	@Test
+    @Test
     public void testGetProcessorChain() {
         String symbol = "ESZ13";
         Instrument instr = makeInstrument(symbol);
@@ -63,19 +59,19 @@ public class BarBuilderNodeDescriptorTest {
         
         assertTrue(sub2.isDerivableFrom(sub1));
         
-        List<Processor> pList = nDesc.getProcessorChain(sub1, sub2);
+        List<AnalyticContainer> pList = nDesc.getProcessorChain(sub1, sub2);
         int size = pList.size();
         assertEquals(5, size);
         assertEquals(new Period(PeriodType.MONTH, 7), 
-            ((BarBuilderOld<DataBar>)pList.get(size - 1)).getOutputSubscription(NodeDescriptor.TYPE_IO).getTimeFrames()[0].getPeriod());
+            ((BarBuilderOld)pList.get(size - 1)).getOutputSubscription(NodeDescriptor.TYPE_IO).getTimeFrames()[0].getPeriod());
         assertEquals(new Period(PeriodType.MONTH, 1), 
-            ((BarBuilderOld<DataBar>)pList.get(size - 2)).getOutputSubscription(NodeDescriptor.TYPE_IO).getTimeFrames()[0].getPeriod());
+            ((BarBuilderOld)pList.get(size - 2)).getOutputSubscription(NodeDescriptor.TYPE_IO).getTimeFrames()[0].getPeriod());
         assertEquals(new Period(PeriodType.DAY, 1), 
-            ((BarBuilderOld<DataBar>)pList.get(size - 3)).getOutputSubscription(NodeDescriptor.TYPE_IO).getTimeFrames()[0].getPeriod());
+            ((BarBuilderOld)pList.get(size - 3)).getOutputSubscription(NodeDescriptor.TYPE_IO).getTimeFrames()[0].getPeriod());
         assertEquals(new Period(PeriodType.MINUTE, 1), 
-            ((BarBuilderOld<DataBar>)pList.get(size - 4)).getOutputSubscription(NodeDescriptor.TYPE_IO).getTimeFrames()[0].getPeriod());
+            ((BarBuilderOld)pList.get(size - 4)).getOutputSubscription(NodeDescriptor.TYPE_IO).getTimeFrames()[0].getPeriod());
         assertEquals(new Period(PeriodType.SECOND, 1), 
-            ((BarBuilderOld<DataBar>)pList.get(size - 5)).getOutputSubscription(NodeDescriptor.TYPE_IO).getTimeFrames()[0].getPeriod());
+            ((BarBuilderOld)pList.get(size - 5)).getOutputSubscription(NodeDescriptor.TYPE_IO).getTimeFrames()[0].getPeriod());
         
     }
     

@@ -23,7 +23,7 @@ public abstract class NodeDescriptor {
      * @param subscription
      * @return
      */
-    public abstract List<Processor> getProcessorChain(Subscription derivableSubscription, Subscription targetSubscription);
+    public abstract List<AnalyticContainer> getProcessorChain(Subscription derivableSubscription, Subscription targetSubscription);
     
     public boolean equals(Object obj) {
 		if (this == obj)

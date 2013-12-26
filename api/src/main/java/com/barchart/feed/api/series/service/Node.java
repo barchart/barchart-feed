@@ -1,6 +1,7 @@
 package com.barchart.feed.api.series.service;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -110,6 +111,30 @@ public abstract class Node implements Runnable {
 	}
 	
 	/**
+	 * Removes the specified {@link Node} from the list of this {@link Node}'s children.
+	 * 
+	 * @param node	the {@link Node} to remove.
+	 */
+	public void removeChildNode(Node node) {
+		childNodes.remove(node);
+	}
+	
+	/**
+	 * Returns a {@link List} view of the child {@link Node}s of this {@code Node}.
+	 * <em>Note:</em> Modifications to the returned list have no effect on the internal
+	 * structure of this {@link Node}.
+	 * 
+	 * @return		a {@link List} view of the child {@link Node}s of this {@code Node}.
+	 */
+	public List<Node> getChildNodes() {
+		List<Node> nodes = new ArrayList<Node>();
+		for(Iterator<Node> i = childNodes.iterator();i.hasNext();) {
+			nodes.add(i.next());
+		}
+		return nodes;
+	}
+	
+	/**
      * Allows the implementing class to add the specified child node which involves connecting the 
      * output specified by the {@link Subscription} to the specified output via input/output keys.
      * 
@@ -117,15 +142,30 @@ public abstract class Node implements Runnable {
      * @param subscription
      */
     public void addParentNode(Node node) {
-        parentNodes.add(node);
+    	synchronized(parentNodes) {
+    		parentNodes.add(node);
+    	}
     }
+    
+    /**
+	 * Removes the specified {@link Node} from the list of this {@link Node}'s children.
+	 * 
+	 * @param node	the {@link Node} to remove.
+	 */
+	public void removeParentNode(Node node) {
+		synchronized(parentNodes) {
+			childNodes.remove(node);
+		}
+	}
     
     /**
      * Returns the List of parent {@code Node}s.
      * @return  the List of parent {@code Node}s.
      */
     public List<Node> getParentNodes() {
-        return parentNodes;
+    	synchronized(parentNodes) {
+    		return new ArrayList<Node>(parentNodes);
+    	}
     }
 	
 	/**
@@ -159,22 +199,14 @@ public abstract class Node implements Runnable {
 	//    ABSTRACT METHODS TO BE IMPLEMENTED BELOW   //
 	///////////////////////////////////////////////////
 	/**
-	 * Compares the specified {@link Subscription} with this {@code Node}'s
-	 * output Subscriptions:
-	 * 1. If there is an exact match, this Node is returned.
-	 * 2. If not, we test the specified Subscription to see if it is "derivable"
-	 *    from any of this Node's outputs. If so, then repeat this process on
-	 *    Nodes immediately preceding this Node in the hierarchy. If not, then
-	 *    return null. 
-	 * 3. If no Node which is an exact match is found but that Node has derivable
-	 * 	  output, use a "new" Node which can derive the output needed and attach
-	 * 	  it and return the new Node.
-	 * 	  
+	 * Returns a flag indicating whether this {@link Node} has an output which the specified
+	 * {@link Subscription} information can be derived from.
 	 * 
-	 * @param subscription
-	 * @return
+	 * @param	subscription	the Subscription which may or may not be derivable from one of 
+	 * 							this Node's outputs.
+	 * @return 	true if so, false if not.
 	 */
-	public abstract Node[] lookup(Subscription subscription);
+	public abstract boolean isDerivableSource(Subscription subscription);
 	/**
 	 * Implemented by the node type handling data expected by this {@code Node}
 	 * 
@@ -218,29 +250,8 @@ public abstract class Node implements Runnable {
 	 */
 	public abstract List<Subscription> getInputSubscriptions();
 	/**
-	 * Returns the output {@link TimeSeries} corresponding to with the specified {@link Subscription}
-	 * 
-	 * @param subscription		the Subscription acting as key for the corresponding {@link TimeSeries}
-	 * @return	the output {@link TimeSeries}
-	 */
-	public abstract <E extends TimePoint> TimeSeries<E> getOutputTimeSeries(Subscription subscription);
-	/**
-	 * Returns the input {@link TimeSeries} corresponding to with the specified {@link Subscription}
-	 * 
-	 * @param subscription		the Subscription acting as key for the corresponding {@link TimeSeries}
-	 * @return	the input {@link TimeSeries}
-	 */
-	protected abstract <E extends TimePoint> TimeSeries<E> getInputTimeSeries(Subscription subscription);
-	/**
-	 * Returns the key for the {@link Subscription} that the specified subscription is derivable from.
-	 * 
-	 * @param subscription     the subscription for which to find the derivable subscription's key - amongst
-	 *                         this Node's output Subscriptions. 
-	 * @return                 the key for the Subscription from which the specified Subscription is derivable.
-	 */
-	public abstract String getDerivableOutputKey(Subscription subscription);
-	/**
-	 * Returns the  {@link Subscription} from which the specified Subscription is derivable.
+	 * Returns the  {@link Subscription} from among the many possible node outputs this node may have -  
+	 * from which the specified Subscription is derivable.
 	 * 
 	 * @param subscription     the Subscription which can be derived from one of this {@code Node}'s outputs.
 	 * @return                 One of this Node's derivable outputs or null.

@@ -16,7 +16,7 @@ import com.barchart.feed.api.series.service.Assembler;
 import com.barchart.feed.api.series.service.HistoricalResult;
 import com.barchart.feed.api.series.service.Node;
 import com.barchart.feed.api.series.service.Subscription;
-import com.barchart.feed.api.series.service.Processor.Category;
+import com.barchart.feed.api.series.service.AnalyticContainer.Category;
 import com.barchart.feed.api.series.temporal.Period;
 import com.barchart.feed.series.DataBar;
 import com.barchart.feed.series.DataSeries;
@@ -185,7 +185,6 @@ public class Distributor extends Node implements Assembler {
 	 * Returns the output {@link TimeSeries}
 	 */
 	@SuppressWarnings("unchecked")
-	@Override
 	public <E extends TimePoint> TimeSeries<E> getOutputTimeSeries(Subscription subscription) {
 		if(outputTimeSeries == null) {
 			this.outputTimeSeries = new DataSeries<DataBar>(subscription.getTimeFrames()[0].getPeriod());
@@ -194,23 +193,11 @@ public class Distributor extends Node implements Assembler {
 	}
 
 	@Override
-	protected <E extends TimePoint> TimeSeries<E> getInputTimeSeries(Subscription subscription) {
+	public boolean isDerivableSource(Subscription subscription) {
 		// TODO Auto-generated method stub
-		return null;
+		return false;
 	}
 
-	@Override
-	public Node[] lookup(Subscription subscription) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-    @Override
-    public String getDerivableOutputKey(Subscription subscription) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-    
     @Override
     public Subscription getDerivableOutputSubscription(Subscription subscription) {
         // TODO Auto-generated method stub

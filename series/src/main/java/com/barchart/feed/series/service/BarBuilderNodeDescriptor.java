@@ -7,14 +7,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.barchart.feed.api.series.service.AnalyticContainer;
 import com.barchart.feed.api.series.service.Node;
 import com.barchart.feed.api.series.service.NodeDescriptor;
-import com.barchart.feed.api.series.service.Processor;
 import com.barchart.feed.api.series.service.Subscription;
 import com.barchart.feed.api.series.temporal.Period;
 import com.barchart.feed.api.series.temporal.PeriodType;
 import com.barchart.feed.api.series.temporal.TimeFrame;
-import com.barchart.feed.series.DataBar;
 
 public class BarBuilderNodeDescriptor extends NodeDescriptor {
     private static final String BASE_STEP_FILE = "/baseSteps.txt";
@@ -88,11 +87,11 @@ public class BarBuilderNodeDescriptor extends NodeDescriptor {
      * @param next
      * @return
      */
-    private SeriesSubscription addNextNodeToChain(List<Processor> chain, SeriesSubscription input, Period next) {
+    private SeriesSubscription addNextNodeToChain(List<AnalyticContainer> chain, SeriesSubscription input, Period next) {
         SeriesSubscription sSub = new SeriesSubscription(input);
         sSub.setTimeFrames(new TimeFrame[] {
             new TimeFrame(next, input.getTimeFrames()[0].getStartDate(), input.getTimeFrames()[0].getEndDate()) });
-        BarBuilderOld<DataBar> bb = new BarBuilderOld<DataBar>(sSub);
+        BarBuilderOld bb = new BarBuilderOld(sSub);
         chain.get(chain.size() - 1).addInputSubscription(null, bb.getOutputSubscription(null));
         chain.add(bb);
         return sSub;
@@ -113,7 +112,7 @@ public class BarBuilderNodeDescriptor extends NodeDescriptor {
     }
     
     /**
-     * Returns an ordered {@link List} of {@link Processor} nodes, which are ordered according
+     * Returns an ordered {@link List} of {@link AnalyticContainer} nodes, which are ordered according
      * to their output {@link Subscription} {@link Period}s. The nodes themselves are not connected
      * to each other, but are understood to represent the steps needed to proceed from the specified
      * "derivableSubscription" to the parameter "subscriptionTarget".
@@ -129,7 +128,7 @@ public class BarBuilderNodeDescriptor extends NodeDescriptor {
                 the first parameter, to the Node whose output {@link Subscription} is the second.
      */
     @Override
-    public List<Processor> getProcessorChain(Subscription derivableSubscription, Subscription subscriptionTarget) {
+    public List<AnalyticContainer> getProcessorChain(Subscription derivableSubscription, Subscription subscriptionTarget) {
         if(derivableSubscription == null || subscriptionTarget == null || derivableSubscription.equals(subscriptionTarget)) {
             throw new IllegalArgumentException("Source and target cannot be null or equal to each other.");
         }
@@ -137,8 +136,8 @@ public class BarBuilderNodeDescriptor extends NodeDescriptor {
         SeriesSubscription higher = (SeriesSubscription)subscriptionTarget;
         SeriesSubscription lower = (SeriesSubscription)derivableSubscription;
         
-        List<Processor> retVal = new ArrayList<Processor>();
-        BarBuilderOld<DataBar> bb = new BarBuilderOld<DataBar>(higher);
+        List<AnalyticContainer> retVal = new ArrayList<AnalyticContainer>();
+        BarBuilderOld bb = new BarBuilderOld(higher);
         retVal.add(bb);
         
         //First reduce the interval and add a node for that.

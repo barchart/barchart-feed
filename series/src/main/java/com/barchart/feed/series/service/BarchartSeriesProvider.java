@@ -14,14 +14,13 @@ import com.barchart.feed.api.series.Span;
 import com.barchart.feed.api.series.TimePoint;
 import com.barchart.feed.api.series.TimeSeries;
 import com.barchart.feed.api.series.TimeSeriesObservable;
-import com.barchart.feed.api.series.service.Analytic;
+import com.barchart.feed.api.series.analytics.Analytic;
+import com.barchart.feed.api.series.service.AnalyticContainer;
 import com.barchart.feed.api.series.service.FeedMonitorService;
 import com.barchart.feed.api.series.service.Node;
 import com.barchart.feed.api.series.service.NodeDescriptor;
-import com.barchart.feed.api.series.service.Processor;
 import com.barchart.feed.api.series.service.Query;
 import com.barchart.feed.api.series.service.Subscription;
-import com.barchart.feed.series.DataBar;
 import com.barchart.feed.series.DataSeries;
 
 /**
@@ -60,7 +59,7 @@ public class BarchartSeriesProvider {
 		Instrument inst = feedService.lookupInstrument(query.getSymbol());
 		SeriesSubscription subscription = (SeriesSubscription)query.toSubscription(inst);
 		System.out.println("inst = " + inst.symbol());
-		Node node = lookupNode(subscription, subscription);
+		AnalyticNode node = lookupNode(subscription, subscription);
 		TimeSeries<T> series = node.getOutputTimeSeries(subscription);
 		
 		return (new TimeSeriesObservable(new SeriesSubscriber(subscription, node), series) {
@@ -70,37 +69,36 @@ public class BarchartSeriesProvider {
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private Node lookupNode(Subscription subscription, Subscription original) {
+	private AnalyticNode lookupNode(Subscription subscription, Subscription original) {
 	    boolean isIO = subscription.getNodeDescriptor().getSpecifier().equals(NodeDescriptor.TYPE_IO);
 	    boolean isAssembler = subscription.getNodeDescriptor().getSpecifier().equals(NodeDescriptor.TYPE_ASSEMBLER);
 	    
 	    Node retVal = null;
 	    List<Node> derivables = null;
 	    if(!isAssembler) {
-		    Node derivableLookup = null;
 		    List<Node> searchList = isIO ? ioNodes : analyticNodes;
 		    for(Node node : searchList) {
 	            if(node.getOutputSubscriptions().contains(subscription)) {
 	                retVal = node;
-	            }else if((derivableLookup = node.lookup(subscription)[1]) != null) {
+	            }else if(node.isDerivableSource(subscription)) {
 	                if(derivables == null) {
 	                    derivables = new ArrayList<Node>();
 	                }
-	                derivables.add(derivableLookup);
+	                derivables.add(node);
 	            }
 	        }
 	    }
 	    
 	    if(!isAssembler && retVal == null) {
 	        if(derivables != null) {
-	            Node derivableNode = getBestDerivableNode(derivables, subscription);//Need algorithm to determine best derivable node
+	        	AnalyticNode derivableNode = (AnalyticNode)getBestDerivableNode(derivables, subscription);//Need algorithm to determine best derivable node
 	            Subscription derivableSubscription = derivableNode.getDerivableOutputSubscription(subscription);
-                List<Processor> processorChain = subscription.getNodeDescriptor().getProcessorChain(derivableSubscription, subscription);
+                List<AnalyticContainer> processorChain = subscription.getNodeDescriptor().getProcessorChain(derivableSubscription, subscription);
                 for(int i = 0;i < processorChain.size();i++) {
-                	Processor p = processorChain.get(i);
+                	AnalyticContainer p = processorChain.get(i);
                     switch(p.getCategory()) {
                         case BAR_BUILDER: { 
-                        	BarBuilderOld<DataBar> child = (BarBuilderOld<DataBar>)p;
+                        	BarBuilderOld child = (BarBuilderOld)p;
                         	ioNodes.add(child);
                         	derivableNode.addChildNode(child);
                         	child.addParentNode(derivableNode);
@@ -116,15 +114,15 @@ public class BarchartSeriesProvider {
                 }
             }
 	        
-	        retVal = isIO ? new BarBuilderOld<DataBar>(subscription) : null;
+	        retVal = isIO ? new BarBuilderOld(subscription) : null;
             List<Subscription> inputs = retVal.getInputSubscriptions();
             for(Subscription s : inputs) {
-                Node n = lookupNode(s, original);
+                AnalyticNode n = lookupNode(s, original);
                 n.addChildNode(retVal);
                 retVal.addParentNode(n);
                 if(isIO) {
                 	ioNodes.add(retVal);
-                	((BarBuilderOld)retVal).setInputTimeSeries(s, n.getOutputTimeSeries(s));
+                	((BarBuilderOld)retVal).setInputTimeSeries(s, (DataSeries)n.getOutputTimeSeries(s));
                 }else{
                 	analyticNodes.add(retVal);
                 	((AnalyticNode)retVal).setInputTimeSeries(s, n.getOutputTimeSeries(s));
@@ -143,7 +141,7 @@ public class BarchartSeriesProvider {
         	retVal = assembler;
         }
 	    
-	    return retVal;
+	    return (AnalyticNode)retVal;
 	}
 	
 	private Node getBestDerivableNode(List<Node> derivableNodes, Subscription subscription) {

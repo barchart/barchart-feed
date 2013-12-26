@@ -6,10 +6,11 @@ import java.util.List;
 import org.joda.time.DateTime;
 
 import com.barchart.feed.api.series.Span;
+import com.barchart.feed.api.series.TimePoint;
 import com.barchart.feed.api.series.TimeSeries;
+import com.barchart.feed.api.series.service.AnalyticContainer;
 import com.barchart.feed.api.series.service.Node;
 import com.barchart.feed.api.series.service.NodeDescriptor;
-import com.barchart.feed.api.series.service.Processor;
 import com.barchart.feed.api.series.service.Subscription;
 import com.barchart.feed.api.series.temporal.Period;
 import com.barchart.feed.api.series.temporal.PeriodType;
@@ -18,15 +19,12 @@ import com.barchart.feed.series.DataPoint;
 import com.barchart.feed.series.DataSeries;
 import com.barchart.feed.series.SpanImpl;
 
-public class BarBuilderOld<E extends DataBar> extends Node implements Processor {
+public class BarBuilderOld extends AnalyticNode implements AnalyticContainer {
     private SeriesSubscription inputSubscription;
     private SeriesSubscription outputSubscription;
     
     private static final String INPUT_KEY = "Input";
     private static final String OUTPUT_KEY = "Output";
-    
-    private DataSeries<DataBar> inputTimeSeries;
-    private DataSeries<DataBar> outputTimeSeries;
     
     private SpanImpl inputSpan = new SpanImpl(SpanImpl.INITIAL);
     private SpanImpl workingSpan;
@@ -37,6 +35,7 @@ public class BarBuilderOld<E extends DataBar> extends Node implements Processor 
     private int aggregationCount = -1;
     
     public BarBuilderOld(Subscription subscription) {
+    	super(null);
         this.outputSubscription = (SeriesSubscription)subscription;
     }
     
@@ -111,7 +110,7 @@ public class BarBuilderOld<E extends DataBar> extends Node implements Processor 
 				outputSeries.add(currentMergeBar);
 			}
 			
-			for(int i = inputStartIdx;i < inputLastIdx + 1;i++) {
+			for(int i = inputStartIdx;i < inputLastIdx;i++) {
 				DataBar currentIdxBar = (DataBar)inputSeries.get(i);
 				if(currentIdxBar.getDate().isAfter(workingTargetDate)) {
 					workingTargetDate = getNextSessionDate(workingTargetDate, outputPeriod);
@@ -121,7 +120,6 @@ public class BarBuilderOld<E extends DataBar> extends Node implements Processor 
 					this.workingSpan.setNextDate(currentMergeBar.getDate());
 					
 					outputSeries.add(currentMergeBar);
-					
 				}else{
 					currentMergeBar.merge(currentIdxBar, false);
 				}
@@ -192,41 +190,16 @@ public class BarBuilderOld<E extends DataBar> extends Node implements Processor 
 	}
 
 	/**
-	 * Returns the output {@link TimeSeries}
-	 */
-	@SuppressWarnings("unchecked")
-	@Override
-	public DataSeries<DataBar> getOutputTimeSeries(Subscription subscription) {
-		if(outputTimeSeries == null) {
-			this.outputTimeSeries = new DataSeries<DataBar>(subscription.getTimeFrames()[0].getPeriod());
-		}
-		return (DataSeries<DataBar>) this.outputTimeSeries;
-	}
-
-	/**
-	 * Returns the input {@link TimeSeries}
-	 */
-	@SuppressWarnings("unchecked")
-	@Override
-	public DataSeries<DataBar> getInputTimeSeries(Subscription subscription) {
-		return (DataSeries<DataBar>) this.inputTimeSeries;
-	}
-	
-	/**
-	 * Sets the input {@link TimeSeries} corresponding to with the specified {@link Subscription}
+	 * Returns a flag indicating whether this {@link Node} has an output which the specified
+	 * {@link Subscription} information can be derived from.
 	 * 
-	 * @param subscription		the Subscription acting as key for the corresponding {@link TimeSeries}
-	 * @param	the input {@link TimeSeries}
+	 * @param	subscription	the Subscription which may or may not be derivable from one of 
+	 * 							this Node's outputs.
+	 * @return 	true if so, false if not.
 	 */
-	void setInputTimeSeries(Subscription subscription, TimeSeries<DataBar> timeSeries) {
-		this.inputTimeSeries = (DataSeries<DataBar>) timeSeries;
-	}
-	
 	@Override
-	public Node[] lookup(Subscription subscription) {
-		return subscription.equals(outputSubscription) ? new Node[] { this, null } : 
-		    subscription.isDerivableFrom(outputSubscription) ? new Node[] { null, this } : 
-		        null;
+	public boolean isDerivableSource(Subscription subscription) {
+		return subscription.isDerivableFrom(outputSubscription);
 	}
 	
 	/**
@@ -239,18 +212,6 @@ public class BarBuilderOld<E extends DataBar> extends Node implements Processor 
         return subscription.isDerivableFrom(outputSubscription) ? outputSubscription : null;
     }
 	
-	/**
-     * Returns the key for the {@link Subscription} that the specified subscription is derivable from.
-     * 
-     * @param subscription     the subscription for which to find the derivable subscription's key - amongst
-     *                         this Node's output Subscriptions. 
-     * @return                 the key for the Subscription from which the specified Subscription is derivable.
-     */
-	@Override
-    public String getDerivableOutputKey(Subscription subscription) {
-        return subscription.isDerivableFrom(outputSubscription) ? OUTPUT_KEY : null;
-    }
-
 	@Override
     public Category getCategory() {
         return Category.BAR_BUILDER;
@@ -262,4 +223,30 @@ public class BarBuilderOld<E extends DataBar> extends Node implements Processor 
         return sb.toString();
     }
 
+	@Override
+	public void valueUpdated(DateTime time) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setCalculation(DateTime time, String key, double value) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setRange(DateTime time, String key, double high, double low) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setArea(DateTime time, DateTime nextTime, String key,
+			double high, double low, double nextHigh, double nextLow) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	
 }
