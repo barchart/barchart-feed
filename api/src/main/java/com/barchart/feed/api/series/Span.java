@@ -30,9 +30,8 @@ public interface Span extends TimePoint {
 	public int getIndex();
 	
 	/**
-	 * Returns true if the specified span intersects this span 
-	 * and has a start time less than this start time or a next
-	 * time greater than this start time.
+	 * Returns true if the specified span start time less than 
+	 * this start time or a next time greater than this start time.
 	 * 
 	 * @param span     the span tested for extends quality
 	 * @return         true if so, false if not
