@@ -8,24 +8,18 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicReference;
 
-import org.joda.time.DateTime;
-
+import com.barchart.feed.api.series.Analytic;
 import com.barchart.feed.api.series.Span;
-import com.barchart.feed.api.series.TimePoint;
 import com.barchart.feed.api.series.TimeSeries;
-import com.barchart.feed.api.series.analytics.Analytic;
 import com.barchart.feed.api.series.service.AnalyticContainer;
 import com.barchart.feed.api.series.service.Node;
 import com.barchart.feed.api.series.service.Subscription;
-import com.barchart.feed.api.series.temporal.Period;
 import com.barchart.feed.api.series.temporal.TimeFrame;
-import com.barchart.feed.series.CalculationImpl;
 import com.barchart.feed.series.DataPoint;
 import com.barchart.feed.series.DataSeries;
 import com.barchart.feed.series.SpanImpl;
-import com.barchart.util.value.ValueFactoryImpl;
 
-public class AnalyticNode<E extends DataPoint> extends Node implements AnalyticContainer {
+public class AnalyticNode<E extends DataPoint> extends Node<SeriesSubscription> implements AnalyticContainer<SeriesSubscription> {
 	public enum SpanOperation { UNION, INTERSECTION };
 	
 	/** Holds the keys which describe the input mappings and are used to correlate the inputs with their {@link SeriesSubscription}s */
@@ -72,7 +66,7 @@ public class AnalyticNode<E extends DataPoint> extends Node implements AnalyticC
 	 * @return	
 	 */
 	@Override
-	public void updateModifiedSpan(Span s, Subscription subscription) {
+	public <T extends Span> void updateModifiedSpan(T s, SeriesSubscription subscription) {
 	    SpanImpl span = (SpanImpl)s;
 		if(currentUpdateSpan.get() == null) {
 			currentUpdateSpan.set(span);
@@ -122,8 +116,8 @@ public class AnalyticNode<E extends DataPoint> extends Node implements AnalyticC
 	 * @return	a List of output {@link SeriesSubscriptions}
 	 */
 	@Override
-	public List<Subscription> getOutputSubscriptions() {
-		return new ArrayList<Subscription>(outputKeyMap.values());
+	public List<SeriesSubscription> getOutputSubscriptions() {
+		return new ArrayList<SeriesSubscription>(outputKeyMap.values());
 	}
 
 	/**
@@ -132,8 +126,8 @@ public class AnalyticNode<E extends DataPoint> extends Node implements AnalyticC
 	 * @return	a List of expected input {@link SeriesSubscriptions}
 	 */
 	@Override
-	public List<Subscription> getInputSubscriptions() {
-		return new ArrayList<Subscription>(inputKeyMap.values());
+	public List<SeriesSubscription> getInputSubscriptions() {
+		return new ArrayList<SeriesSubscription>(inputKeyMap.values());
 	}
 	
 	/**
@@ -143,7 +137,7 @@ public class AnalyticNode<E extends DataPoint> extends Node implements AnalyticC
 	 * @return	the output {@link TimeSeries}
 	 */
 	@SuppressWarnings("unchecked")
-	public DataSeries<E> getOutputTimeSeries(Subscription subscription) {
+	public DataSeries<E> getOutputTimeSeries(SeriesSubscription subscription) {
 		if(outputTimeSeries == null) {
 			this.outputTimeSeries = (Map<SeriesSubscription, DataSeries<E>>)new DataSeries<E>(subscription.getTimeFrames()[0].getPeriod());
 		}
@@ -161,7 +155,7 @@ public class AnalyticNode<E extends DataPoint> extends Node implements AnalyticC
 	 * @param subscription		the Subscription acting as key for the corresponding {@link TimeSeries}
 	 * @param	the input {@link TimeSeries}
 	 */
-	void setInputTimeSeries(Subscription subscription, DataSeries<E> timeSeries) {
+	void setInputTimeSeries(SeriesSubscription subscription, DataSeries<E> timeSeries) {
 		inputTimeSeries.put((SeriesSubscription)subscription, timeSeries);
 	}
 	
@@ -171,7 +165,7 @@ public class AnalyticNode<E extends DataPoint> extends Node implements AnalyticC
 	 * @param SeriesSubscription		the SeriesSubscription acting as key for the corresponding {@link TimeSeries}
 	 * @return	the input {@link TimeSeries}
 	 */
-	public DataSeries<E> getInputTimeSeries(Subscription subscription) {
+	public DataSeries<E> getInputTimeSeries(SeriesSubscription subscription) {
 		return (DataSeries<E>) inputTimeSeries.get(subscription);
 	}
 	
@@ -184,7 +178,7 @@ public class AnalyticNode<E extends DataPoint> extends Node implements AnalyticC
 	 * @return 	true if so, false if not.
 	 */
 	@Override
-	public boolean isDerivableSource(Subscription subscription) {
+	public boolean isDerivableSource(SeriesSubscription subscription) {
 	    for(SeriesSubscription sub : outputKeyMap.values()) {
 			if(subscription.isDerivableFrom(sub)) {
 		        return true;
@@ -200,83 +194,99 @@ public class AnalyticNode<E extends DataPoint> extends Node implements AnalyticC
      * @param subscription     the Subscription which can be derived from one of this {@code Node}'s outputs.
      * @return                 One of this Node's derivable outputs or null.
      */
-    public Subscription getDerivableOutputSubscription(Subscription subscription) {
+    public SeriesSubscription getDerivableOutputSubscription(SeriesSubscription subscription) {
         return null;
     }
 
+    /**
+     * Adds an input {@link Subscription} mapped to the specified key.
+     * 
+     * @param subscription
+     * @param key
+     */
 	@Override
-	public AnalyticContainer.Category getCategory() {
-		return null;
-	}
-
-	@Override
-	public void addInputSubscription(String key, Subscription subscription) {
+	public void addInputSubscription(String key, SeriesSubscription subscription) {
 		inputKeyMap.put(key, (SeriesSubscription)subscription);
 	}
 
+	/**
+     * Adds an output {@link Subscription} mapped to the specified key.
+     * 
+     * @param subscription
+     * @param key
+     */
 	@Override
-	public void addOutputSubscription(String key, Subscription subscription) {
+	public void addOutputSubscription(String key, SeriesSubscription subscription) {
 		outputKeyMap.put(key, (SeriesSubscription)subscription);
 	}
 
+	/**
+     * Returns the input {@link Subscription} mapped to the specified key.
+     * @param key  the mapping for the input Subscription
+     * @return the Subscription corresponding to the specified key.
+     */
 	@Override
-	public Subscription getInputSubscription(String key) {
+	public SeriesSubscription getInputSubscription(String key) {
 		return inputKeyMap.get(key);
 	}
 
+	/**
+     * Returns the {@link Subscription} corresponding to the specified key;
+     * 
+     * @param      key     the key mapped to the required output
+     * @return             the required output
+     */
 	@Override
-	public Subscription getOutputSubscription(String key) {
+	public SeriesSubscription getOutputSubscription(String key) {
 		return outputKeyMap.get(key);
 	}
 
-	@Override
-	public void valueUpdated(DateTime time) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public <E extends TimePoint> void setValue(DateTime time, E e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void setCalculation(DateTime time, String key, double value) {
-		
-	}
-
-	@Override
-	public void setRange(DateTime time, String key, double high, double low) {
-		
-	}
-
-	@Override
-	public void setArea(DateTime time, DateTime nextTime, String key,
-			double high, double low, double nextHigh, double nextLow) {
-		
-	}
-
+	/**
+     * Returns the {@link TimeSeries} mapped to the specified key.
+     * 
+     * @param key	the input key.
+     * @return	the {@link TimeSeries} mapped to the specified key.
+     */
 	@SuppressWarnings("unchecked")
 	@Override
-	public TimeSeries<E> getInputTimeSeries(String key) {
+	public DataSeries<E> getInputTimeSeries(String key) {
 		return inputTimeSeries.get(key);
 	}
 
+	/**
+     * Returns the {@link TimeSeries} mapped to the specified key.
+     * 
+     * @param key	the output key.
+     * @return	the {@link TimeSeries} mapped to the specified key.
+     */
 	@SuppressWarnings("unchecked")
 	@Override
 	public DataSeries<E> getOutputTimeSeries(String key) {
 		return outputTimeSeries.get(key);
 	}
 
+	/**
+     * Returns the input {@link TimeFrame} configured for the specified index for 
+     * the {@link Subscription} who's key is the specified key.
+     * 
+     * @param timeFrameIndex
+     * @return	the {@link TimeFrame} configured for the specified index.
+     */
 	@Override
 	public TimeFrame getInputTimeFrame(String key, int timeFrameIndex) {
 		return inputKeyMap.get(key).getTimeFrames()[timeFrameIndex];
 	}
 
+	/**
+     * Returns the output {@link TimeFrame} configured for the specified index for 
+     * the {@link Subscription} who's key is the specified key.
+     * 
+     * @param timeFrameIndex
+     * @return	the {@link TimeFrame} configured for the specified index.
+     */
 	@Override
 	public TimeFrame getOutputTimeFrame(String key, int timeFrameIndex) {
 		return outputKeyMap.get(key).getTimeFrames()[timeFrameIndex];
 	}
-	
+
 }

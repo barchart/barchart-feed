@@ -1,29 +1,27 @@
 package com.barchart.feed.series.analytics;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.joda.time.DateTime;
 
+import com.barchart.feed.api.series.Analytic;
 import com.barchart.feed.api.series.Span;
 import com.barchart.feed.api.series.TimeSeries;
-import com.barchart.feed.api.series.analytics.Analytic;
-import com.barchart.feed.api.series.analytics.BarBuilder;
 import com.barchart.feed.api.series.service.AnalyticContainer;
+import com.barchart.feed.api.series.service.Subscription;
 import com.barchart.feed.api.series.temporal.Period;
 import com.barchart.feed.series.DataBar;
 import com.barchart.feed.series.DataPoint;
 import com.barchart.feed.series.DataSeries;
 import com.barchart.feed.series.SpanImpl;
+import com.barchart.feed.series.service.SeriesSubscription;
 
-public class BarBuilderImpl implements Analytic, BarBuilder {
-	private AnalyticContainer analyticNode;
+public class BarBuilder extends Analytic {
+	private AnalyticContainer<SeriesSubscription> analyticNode;
 	
 	private static final String INPUT_KEY = "Input";
     private static final String OUTPUT_KEY = "Output";
     
-    private List<String> inputs = new ArrayList<String>();
-    private List<String> outputs = new ArrayList<String>();
+    private static String[] inputs = new String[] { INPUT_KEY };
+    private static String[] outputs = new String[] { OUTPUT_KEY };
     
     private DataBar currentMergeBar;
     
@@ -39,9 +37,7 @@ public class BarBuilderImpl implements Analytic, BarBuilder {
 	 * 
 	 * @param analytic
 	 */
-	public BarBuilderImpl() {
-		inputs.add(INPUT_KEY);
-		outputs.add(OUTPUT_KEY);
+	public BarBuilder() {
 	}
 
 	/**
@@ -115,8 +111,10 @@ public class BarBuilderImpl implements Analytic, BarBuilder {
 				}else{
 					currentMergeBar.merge(currentIdxBar, false);
 				}
-				//fire onNext event
 			}
+			
+			//Notify of change
+			valueUpdated();
 		}else{ //Period types are not equal
 			
 		}
@@ -131,9 +129,10 @@ public class BarBuilderImpl implements Analytic, BarBuilder {
 	 * 
 	 * @param processor		this analytic's container.
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
-	public void setAnalyticContainer(AnalyticContainer processor) {
-		this.analyticNode = processor;
+	public <S extends Subscription> void setAnalyticContainer(AnalyticContainer<S> processor) {
+		this.analyticNode = (AnalyticContainer<SeriesSubscription>) processor;
 	}
 
 	/**
@@ -141,7 +140,7 @@ public class BarBuilderImpl implements Analytic, BarBuilder {
 	 * 
 	 * @return	a list of this {@code Analytic}'s input keys.
 	 */
-	public List<String> getInputKeys() {
+	public static String[] getInputKeys() {
 		return inputs;
 	}
 	
@@ -150,8 +149,8 @@ public class BarBuilderImpl implements Analytic, BarBuilder {
 	 * 
 	 * @return	a list of this {@code Analytic}'s output keys.
 	 */
-	public List<String> getOutputKeys() {
+	public static String[] getOutputKeys() {
 		return outputs;
 	}
-	
+
 }

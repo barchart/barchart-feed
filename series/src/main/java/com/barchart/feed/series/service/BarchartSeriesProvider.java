@@ -10,11 +10,11 @@ import rx.Observable;
 import rx.Observer;
 
 import com.barchart.feed.api.model.meta.Instrument;
+import com.barchart.feed.api.series.Analytic;
 import com.barchart.feed.api.series.Span;
 import com.barchart.feed.api.series.TimePoint;
 import com.barchart.feed.api.series.TimeSeries;
 import com.barchart.feed.api.series.TimeSeriesObservable;
-import com.barchart.feed.api.series.analytics.Analytic;
 import com.barchart.feed.api.series.service.AnalyticContainer;
 import com.barchart.feed.api.series.service.FeedMonitorService;
 import com.barchart.feed.api.series.service.Node;
@@ -69,7 +69,7 @@ public class BarchartSeriesProvider {
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private AnalyticNode lookupNode(Subscription subscription, Subscription original) {
+	private AnalyticNode lookupNode(SeriesSubscription subscription, SeriesSubscription original) {
 	    boolean isIO = subscription.getNodeDescriptor().getSpecifier().equals(NodeDescriptor.TYPE_IO);
 	    boolean isAssembler = subscription.getNodeDescriptor().getSpecifier().equals(NodeDescriptor.TYPE_ASSEMBLER);
 	    
@@ -79,7 +79,8 @@ public class BarchartSeriesProvider {
 		    List<Node> searchList = isIO ? ioNodes : analyticNodes;
 		    for(Node node : searchList) {
 	            if(node.getOutputSubscriptions().contains(subscription)) {
-	                retVal = node;
+	                retVal = node; 
+	                break;
 	            }else if(node.isDerivableSource(subscription)) {
 	                if(derivables == null) {
 	                    derivables = new ArrayList<Node>();
@@ -92,31 +93,31 @@ public class BarchartSeriesProvider {
 	    if(!isAssembler && retVal == null) {
 	        if(derivables != null) {
 	        	AnalyticNode derivableNode = (AnalyticNode)getBestDerivableNode(derivables, subscription);//Need algorithm to determine best derivable node
-	            Subscription derivableSubscription = derivableNode.getDerivableOutputSubscription(subscription);
-                List<AnalyticContainer> processorChain = subscription.getNodeDescriptor().getProcessorChain(derivableSubscription, subscription);
-                for(int i = 0;i < processorChain.size();i++) {
-                	AnalyticContainer p = processorChain.get(i);
-                    switch(p.getCategory()) {
-                        case BAR_BUILDER: { 
-                        	BarBuilderOld child = (BarBuilderOld)p;
-                        	ioNodes.add(child);
-                        	derivableNode.addChildNode(child);
-                        	child.addParentNode(derivableNode);
-                        	child.setInputTimeSeries(child.getInputSubscription(null), 
-                        		(DataSeries)derivableNode.getOutputTimeSeries(child.getInputSubscription(null)));
-                        	derivableNode = child;
-                        	
-                        	break; 
-                        }
-                        case ANALYTIC: { break; }//Add the AnalyticNode later...
-                        default:
-                    }
+	            SeriesSubscription derivableSubscription = derivableNode.getDerivableOutputSubscription(subscription);
+                List<Node<SeriesSubscription>> nodeChain = subscription.getNodeDescriptor().getNodeChain(derivableSubscription, subscription);
+                for(int i = 0;i < nodeChain.size();i++) {
+//                	Node c = nodeChain.get(i);
+//                    switch(c.getCategory()) {
+//                        case BAR_BUILDER: { 
+//                        	BarBuilderOld child = (BarBuilderOld)c;
+//                        	ioNodes.add(child);
+//                        	derivableNode.addChildNode(child);
+//                        	child.addParentNode(derivableNode);
+//                        	child.setInputTimeSeries(child.getInputSubscription(null), 
+//                        		(DataSeries)derivableNode.getOutputTimeSeries(child.getInputSubscription(null)));
+//                        	derivableNode = child;
+//                        	
+//                        	break; 
+//                        }
+//                        case ANALYTIC: { break; }//Add the AnalyticNode later...
+//                        default:
+//                    }
                 }
             }
 	        
 	        retVal = isIO ? new BarBuilderOld(subscription) : null;
-            List<Subscription> inputs = retVal.getInputSubscriptions();
-            for(Subscription s : inputs) {
+            List<SeriesSubscription> inputs = retVal.getInputSubscriptions();
+            for(SeriesSubscription s : inputs) {
                 AnalyticNode n = lookupNode(s, original);
                 n.addChildNode(retVal);
                 retVal.addParentNode(n);

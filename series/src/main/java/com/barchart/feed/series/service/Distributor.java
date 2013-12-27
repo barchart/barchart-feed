@@ -16,7 +16,6 @@ import com.barchart.feed.api.series.service.Assembler;
 import com.barchart.feed.api.series.service.HistoricalResult;
 import com.barchart.feed.api.series.service.Node;
 import com.barchart.feed.api.series.service.Subscription;
-import com.barchart.feed.api.series.service.AnalyticContainer.Category;
 import com.barchart.feed.api.series.temporal.Period;
 import com.barchart.feed.series.DataBar;
 import com.barchart.feed.series.DataSeries;
@@ -35,16 +34,16 @@ import com.barchart.util.value.api.Time;
  * @author David Ray
  *
  */
-public class Distributor extends Node implements Assembler {
+public class Distributor extends Node<SeriesSubscription> implements Assembler {
 	private DateTimeFormatter tickFormat = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss.SSS");
 	private DateTimeFormatter minuteFormat = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm");
 	
 	private SeriesSubscription subscription;
 	private Period period;
 	
-	private TimeSeries<?> outputTimeSeries;
+	private DataSeries<?> outputTimeSeries;
 	
-	private List<Subscription> outputSubscriptions;
+	private List<SeriesSubscription> outputSubscriptions;
 	
 	private DateTime last = null;
 	
@@ -61,7 +60,7 @@ public class Distributor extends Node implements Assembler {
 	public Distributor(SeriesSubscription subscription) {
 		this.subscription = subscription;
 		this.period = subscription.getTimeFrames()[0].getPeriod();
-		this.outputSubscriptions = new ArrayList<Subscription>();
+		this.outputSubscriptions = new ArrayList<SeriesSubscription>();
 		this.outputSubscriptions.add(subscription);
 		this.dataQueue = new ConcurrentLinkedQueue<Span>();
 	}
@@ -154,7 +153,7 @@ public class Distributor extends Node implements Assembler {
 	}
 
 	@Override
-	protected <S extends Span, U extends Subscription> void updateModifiedSpan(S span, U subscription) {
+	protected <S extends Span> void updateModifiedSpan(S span, SeriesSubscription subscription) {
 		dataQueue.offer((S) span);
 		setUpdated(true);
 	}
@@ -172,12 +171,12 @@ public class Distributor extends Node implements Assembler {
 	}
 
 	@Override
-	public List<Subscription> getOutputSubscriptions() {
+	public List<SeriesSubscription> getOutputSubscriptions() {
 		return outputSubscriptions;
 	}
 
 	@Override
-	public List<Subscription> getInputSubscriptions() {
+	public List<SeriesSubscription> getInputSubscriptions() {
 		return outputSubscriptions;
 	}
 
@@ -193,15 +192,13 @@ public class Distributor extends Node implements Assembler {
 	}
 
 	@Override
-	public boolean isDerivableSource(Subscription subscription) {
-		// TODO Auto-generated method stub
+	public boolean isDerivableSource(SeriesSubscription subscription) {
 		return false;
 	}
 
     @Override
-    public Subscription getDerivableOutputSubscription(Subscription subscription) {
-        // TODO Auto-generated method stub
-        return null;
+    public SeriesSubscription getDerivableOutputSubscription(SeriesSubscription subscription) {
+        throw new UnsupportedOperationException("Assemblers do not support derivation");
     }
 
     @Override
@@ -209,12 +206,8 @@ public class Distributor extends Node implements Assembler {
 		return this.subscription;
 	}
     
-    public Category getCategory() {
-        return Category.ASSEMBLER;
-    }
-    
     public String toString() {
-        StringBuilder sb = new StringBuilder(getCategory().toString()).append(": ").append(" ---> ").append(subscription);
+        StringBuilder sb = new StringBuilder("ASSEMBLER").append(": ").append(" ---> ").append(subscription);
         return sb.toString();
     }
 

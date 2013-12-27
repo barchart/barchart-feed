@@ -14,6 +14,7 @@ import com.barchart.feed.api.series.service.Subscription;
 import com.barchart.feed.api.series.temporal.Period;
 import com.barchart.feed.api.series.temporal.PeriodType;
 import com.barchart.feed.api.series.temporal.TimeFrame;
+import com.barchart.feed.series.DataBar;
 
 public class BarBuilderNodeDescriptor extends NodeDescriptor {
     private static final String BASE_STEP_FILE = "/baseSteps.txt";
@@ -87,7 +88,7 @@ public class BarBuilderNodeDescriptor extends NodeDescriptor {
      * @param next
      * @return
      */
-    private SeriesSubscription addNextNodeToChain(List<AnalyticContainer> chain, SeriesSubscription input, Period next) {
+    private SeriesSubscription addNextNodeToChain(List<AnalyticNode<DataBar>> chain, SeriesSubscription input, Period next) {
         SeriesSubscription sSub = new SeriesSubscription(input);
         sSub.setTimeFrames(new TimeFrame[] {
             new TimeFrame(next, input.getTimeFrames()[0].getStartDate(), input.getTimeFrames()[0].getEndDate()) });
@@ -128,7 +129,7 @@ public class BarBuilderNodeDescriptor extends NodeDescriptor {
                 the first parameter, to the Node whose output {@link Subscription} is the second.
      */
     @Override
-    public List<AnalyticContainer> getProcessorChain(Subscription derivableSubscription, Subscription subscriptionTarget) {
+    public List<AnalyticNode<DataBar>> getNodeChain(Subscription derivableSubscription, Subscription subscriptionTarget) {
         if(derivableSubscription == null || subscriptionTarget == null || derivableSubscription.equals(subscriptionTarget)) {
             throw new IllegalArgumentException("Source and target cannot be null or equal to each other.");
         }
@@ -136,7 +137,7 @@ public class BarBuilderNodeDescriptor extends NodeDescriptor {
         SeriesSubscription higher = (SeriesSubscription)subscriptionTarget;
         SeriesSubscription lower = (SeriesSubscription)derivableSubscription;
         
-        List<AnalyticContainer> retVal = new ArrayList<AnalyticContainer>();
+        List<AnalyticNode<DataBar>> retVal = new ArrayList<AnalyticNode<DataBar>>();
         BarBuilderOld bb = new BarBuilderOld(higher);
         retVal.add(bb);
         
@@ -160,7 +161,7 @@ public class BarBuilderNodeDescriptor extends NodeDescriptor {
     }
     
     public String toString() {
-        return getSpecifier();
+        return "BarBuilderNodeDescriptor";
     }
 
 }

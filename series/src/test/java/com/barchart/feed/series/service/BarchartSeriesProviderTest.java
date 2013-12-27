@@ -16,8 +16,6 @@ public class BarchartSeriesProviderTest {
 	@Test
 	public void testFetch() {
 		
-		// Test was failing in Jenkins
-		
 		FauxMarketService marketService = new FauxMarketService("test", "test");
 		marketService.preSubscribe(FauxHistoricalService.DEFAULT_MINUTE_QUERY);
 		BarchartFeedService feed = new BarchartFeedService(marketService, new FauxHistoricalService(null));

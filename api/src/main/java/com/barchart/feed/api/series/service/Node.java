@@ -8,7 +8,6 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import rx.subscriptions.Subscriptions;
 
 import com.barchart.feed.api.series.Span;
-import com.barchart.feed.api.series.TimePoint;
 import com.barchart.feed.api.series.TimeSeries;
 
 /**
@@ -18,12 +17,12 @@ import com.barchart.feed.api.series.TimeSeries;
  * 
  * @author David Ray
  */
-public abstract class Node implements Runnable {
+public abstract class Node<S extends Subscription> implements Runnable {
 	/** List of {@code Node}s which are updated when this {@code Node} has finished processing. */
-	protected ConcurrentLinkedQueue<Node> childNodes;
+	protected ConcurrentLinkedQueue<Node<S>> childNodes;
 	
 	/** Parent path */
-	protected List<Node> parentNodes;
+	protected List<Node<S>> parentNodes;
 	
 	/** Thread monitor object */
 	private Object waitLock = new Object();
@@ -40,8 +39,8 @@ public abstract class Node implements Runnable {
 	 * Constructs a new {@code Node}
 	 */
 	public Node() {
-		childNodes = new ConcurrentLinkedQueue<Node>();
-		parentNodes = new ArrayList<Node>();
+		childNodes = new ConcurrentLinkedQueue<Node<S>>();
+		parentNodes = new ArrayList<Node<S>>();
 	}
 	
 	/**
@@ -53,7 +52,7 @@ public abstract class Node implements Runnable {
 			(new Thread(this, this.toString())).start();
 		}
 		
-		for(Node n : parentNodes) {
+		for(Node<S> n : parentNodes) {
 		    n.startUp();
 		}
 	}
@@ -81,8 +80,8 @@ public abstract class Node implements Runnable {
 	 * @param ancestorOutputSubscriptions 	the List of {@link Subscription}s the ancestor node has processed.
 	 * @return	
 	 */
-	public boolean setModifiedSpan(Span span, List<Subscription>  ancestorOutputSubscriptions) {
-		for(Subscription s : ancestorOutputSubscriptions) {
+	public boolean setModifiedSpan(Span span, List<S>  ancestorOutputSubscriptions) {
+		for(S s : ancestorOutputSubscriptions) {
 		    if(getInputSubscriptions().contains(s)) {
 		        updateModifiedSpan(span, s);
 		    }
@@ -106,7 +105,7 @@ public abstract class Node implements Runnable {
 	 * @param node
 	 * @param subscription
 	 */
-	public void addChildNode(Node node) {
+	public void addChildNode(Node<S> node) {
 		childNodes.add(node);
 	}
 	
@@ -115,7 +114,7 @@ public abstract class Node implements Runnable {
 	 * 
 	 * @param node	the {@link Node} to remove.
 	 */
-	public void removeChildNode(Node node) {
+	public void removeChildNode(Node<S> node) {
 		childNodes.remove(node);
 	}
 	
@@ -126,9 +125,9 @@ public abstract class Node implements Runnable {
 	 * 
 	 * @return		a {@link List} view of the child {@link Node}s of this {@code Node}.
 	 */
-	public List<Node> getChildNodes() {
-		List<Node> nodes = new ArrayList<Node>();
-		for(Iterator<Node> i = childNodes.iterator();i.hasNext();) {
+	public List<Node<S>> getChildNodes() {
+		List<Node<S>> nodes = new ArrayList<Node<S>>();
+		for(Iterator<Node<S>> i = childNodes.iterator();i.hasNext();) {
 			nodes.add(i.next());
 		}
 		return nodes;
@@ -141,7 +140,7 @@ public abstract class Node implements Runnable {
      * @param node
      * @param subscription
      */
-    public void addParentNode(Node node) {
+    public void addParentNode(Node<S> node) {
     	synchronized(parentNodes) {
     		parentNodes.add(node);
     	}
@@ -152,7 +151,7 @@ public abstract class Node implements Runnable {
 	 * 
 	 * @param node	the {@link Node} to remove.
 	 */
-	public void removeParentNode(Node node) {
+	public void removeParentNode(Node<S> node) {
 		synchronized(parentNodes) {
 			childNodes.remove(node);
 		}
@@ -162,9 +161,9 @@ public abstract class Node implements Runnable {
      * Returns the List of parent {@code Node}s.
      * @return  the List of parent {@code Node}s.
      */
-    public List<Node> getParentNodes() {
+    public List<Node<S>> getParentNodes() {
     	synchronized(parentNodes) {
-    		return new ArrayList<Node>(parentNodes);
+    		return new ArrayList<Node<S>>(parentNodes);
     	}
     }
 	
@@ -206,7 +205,7 @@ public abstract class Node implements Runnable {
 	 * 							this Node's outputs.
 	 * @return 	true if so, false if not.
 	 */
-	public abstract boolean isDerivableSource(Subscription subscription);
+	public abstract boolean isDerivableSource(S subscription);
 	/**
 	 * Implemented by the node type handling data expected by this {@code Node}
 	 * 
@@ -216,7 +215,7 @@ public abstract class Node implements Runnable {
 	 * @param span				the {@link Span} processed.
 	 * @param subscription		the Subscription describing and identifying the specified input.
 	 */
-	protected abstract <T extends Span, S extends Subscription> void updateModifiedSpan(T span, S subscription);
+	protected abstract <T extends Span> void updateModifiedSpan(T span, S subscription);
 	/**
 	 * Implemented by the node type handling data expected by this {@code Node}
 	 * 
@@ -240,7 +239,7 @@ public abstract class Node implements Runnable {
 	 * 
 	 * @return	a List of output {@link Subscriptions}
 	 */
-	public abstract List<Subscription> getOutputSubscriptions();
+	public abstract List<S> getOutputSubscriptions();
 	/**
 	 * Implemented by the node type handling data expected by this {@code Node}
 	 * 
@@ -248,7 +247,7 @@ public abstract class Node implements Runnable {
 	 * 
 	 * @return	a List of expected input {@link Subscriptions}
 	 */
-	public abstract List<Subscription> getInputSubscriptions();
+	public abstract List<S> getInputSubscriptions();
 	/**
 	 * Returns the  {@link Subscription} from among the many possible node outputs this node may have -  
 	 * from which the specified Subscription is derivable.
@@ -256,7 +255,7 @@ public abstract class Node implements Runnable {
 	 * @param subscription     the Subscription which can be derived from one of this {@code Node}'s outputs.
 	 * @return                 One of this Node's derivable outputs or null.
 	 */
-	public abstract Subscription getDerivableOutputSubscription(Subscription subscription);
+	public abstract S getDerivableOutputSubscription(S subscription);
 	
 	
 	/**
@@ -272,8 +271,8 @@ public abstract class Node implements Runnable {
 					System.out.println(this + " hasAllAncestorUpdates()");
 					Span span = this.process();
 					if(span != null) {
-						List<Subscription> outputs = getOutputSubscriptions();
-						for(Node nextNode : childNodes) {
+						List<S> outputs = getOutputSubscriptions();
+						for(Node<S> nextNode : childNodes) {
 							nextNode.setModifiedSpan(span, outputs);
 						}
 					}

@@ -6,8 +6,6 @@ import java.util.List;
 import org.joda.time.DateTime;
 
 import com.barchart.feed.api.series.Span;
-import com.barchart.feed.api.series.TimePoint;
-import com.barchart.feed.api.series.TimeSeries;
 import com.barchart.feed.api.series.service.AnalyticContainer;
 import com.barchart.feed.api.series.service.Node;
 import com.barchart.feed.api.series.service.NodeDescriptor;
@@ -49,7 +47,7 @@ public class BarBuilderOld extends AnalyticNode implements AnalyticContainer {
      * @return  
      */
 	@Override
-	public void updateModifiedSpan(Span span, Subscription subscription) {
+	public void updateModifiedSpan(Span span, SeriesSubscription subscription) {
 		setUpdated(span.extendsSpan(inputSpan));
 		this.inputSpan = (SpanImpl)span;
 		if(workingSpan == null) {
@@ -137,12 +135,12 @@ public class BarBuilderOld extends AnalyticNode implements AnalyticContainer {
 	}
 	
 	@Override
-	public void addOutputSubscription(String key, Subscription subscription) {
+	public void addOutputSubscription(String key, SeriesSubscription subscription) {
 	    this.outputSubscription = (SeriesSubscription)subscription;
 	}
 	
 	@Override
-    public void addInputSubscription(String key, Subscription subscription) {
+    public void addInputSubscription(String key, SeriesSubscription subscription) {
         this.inputSubscription = (SeriesSubscription)subscription;
     }
 	
@@ -151,7 +149,7 @@ public class BarBuilderOld extends AnalyticNode implements AnalyticContainer {
      * @param key  the mapping for the input Subscription
      * @return the Subscription corresponding to the specified key.
      */
-    public Subscription getInputSubscription(String key) {
+    public SeriesSubscription getInputSubscription(String key) {
         return inputSubscription;
     }
     /**
@@ -160,7 +158,7 @@ public class BarBuilderOld extends AnalyticNode implements AnalyticContainer {
      * @param      key     the key mapped to the required output
      * @return             the required output
      */
-    public Subscription getOutputSubscription(String key) {
+    public SeriesSubscription getOutputSubscription(String key) {
         return outputSubscription;
     }
     
@@ -198,7 +196,7 @@ public class BarBuilderOld extends AnalyticNode implements AnalyticContainer {
 	 * @return 	true if so, false if not.
 	 */
 	@Override
-	public boolean isDerivableSource(Subscription subscription) {
+	public boolean isDerivableSource(SeriesSubscription subscription) {
 		return subscription.isDerivableFrom(outputSubscription);
 	}
 	
@@ -212,41 +210,9 @@ public class BarBuilderOld extends AnalyticNode implements AnalyticContainer {
         return subscription.isDerivableFrom(outputSubscription) ? outputSubscription : null;
     }
 	
-	@Override
-    public Category getCategory() {
-        return Category.BAR_BUILDER;
-    }
-    
-    public String toString() {
-        StringBuilder sb = new StringBuilder(getCategory().toString()).append(": ").
+	public String toString() {
+        StringBuilder sb = new StringBuilder("BAR_BUILDER").append(": ").
             append(inputSubscription).append(" ---> ").append(outputSubscription);
         return sb.toString();
     }
-
-	@Override
-	public void valueUpdated(DateTime time) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void setCalculation(DateTime time, String key, double value) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void setRange(DateTime time, String key, double high, double low) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void setArea(DateTime time, DateTime nextTime, String key,
-			double high, double low, double nextHigh, double nextLow) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	
 }

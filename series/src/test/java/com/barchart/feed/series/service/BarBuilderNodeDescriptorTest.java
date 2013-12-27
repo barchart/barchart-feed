@@ -13,12 +13,12 @@ import com.barchart.feed.api.model.meta.Exchange;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.api.model.meta.id.InstrumentID;
 import com.barchart.feed.api.model.meta.id.VendorID;
-import com.barchart.feed.api.series.service.AnalyticContainer;
 import com.barchart.feed.api.series.service.NodeDescriptor;
 import com.barchart.feed.api.series.temporal.Period;
 import com.barchart.feed.api.series.temporal.PeriodType;
 import com.barchart.feed.api.series.temporal.TimeFrame;
 import com.barchart.feed.api.series.temporal.TradingWeek;
+import com.barchart.feed.series.DataBar;
 import com.barchart.util.value.api.Fraction;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Schedule;
@@ -59,7 +59,7 @@ public class BarBuilderNodeDescriptorTest {
         
         assertTrue(sub2.isDerivableFrom(sub1));
         
-        List<AnalyticContainer> pList = nDesc.getProcessorChain(sub1, sub2);
+        List<AnalyticNode<DataBar>> pList = nDesc.getNodeChain(sub1, sub2);
         int size = pList.size();
         assertEquals(5, size);
         assertEquals(new Period(PeriodType.MONTH, 7), 

@@ -7,9 +7,10 @@ import com.barchart.feed.api.model.meta.Exchange;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.api.model.meta.id.InstrumentID;
 import com.barchart.feed.api.model.meta.id.VendorID;
+import com.barchart.feed.api.series.Analytic;
 import com.barchart.feed.api.series.Span;
-import com.barchart.feed.api.series.analytics.Analytic;
 import com.barchart.feed.api.series.service.AnalyticContainer;
+import com.barchart.feed.api.series.service.Subscription;
 import com.barchart.util.value.api.Fraction;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Schedule;
@@ -180,21 +181,9 @@ public class TestHarness {
             }
 
 			@Override
-			public void setAnalyticContainer(AnalyticContainer processor) {
+			public <S extends Subscription> void setAnalyticContainer(AnalyticContainer<S> processor) {
 				// TODO Auto-generated method stub
 				
-			}
-
-			@Override
-			public List<String> getInputKeys() {
-				// TODO Auto-generated method stub
-				return null;
-			}
-
-			@Override
-			public List<String> getOutputKeys() {
-				// TODO Auto-generated method stub
-				return null;
 			}
 		};
     }

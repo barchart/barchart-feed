@@ -23,8 +23,14 @@ public abstract class NodeDescriptor {
      * @param subscription
      * @return
      */
-    public abstract List<AnalyticContainer> getProcessorChain(Subscription derivableSubscription, Subscription targetSubscription);
+    public abstract <N extends Node<S>, S extends Subscription> List<Node<S>> getNodeChain(S derivableSubscription, S targetSubscription);
     
+    /**
+     * Returns a flag indicating whether the specified Object is
+     * equal to this one.
+     * 
+     * @return	true if equal, false if not
+     */
     public boolean equals(Object obj) {
 		if (this == obj)
 			return true;

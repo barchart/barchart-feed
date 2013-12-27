@@ -139,9 +139,10 @@ public class SeriesSubscription implements rx.Subscription, Subscription {
 			    other.tradingWeek.equals(tradingWeek)) {
 			retVal = true;
 		}
-		
-		if(retVal && (retVal = (other.timeFrames.length == timeFrames.length))) {
-			for(int i = 0;i < timeFrames.length;i++) {
+		 
+		boolean lenEq = false;
+		if(retVal && (retVal = lenEq = (other.timeFrames.length == timeFrames.length))) {
+			for(int i = 0;i < timeFrames.length && lenEq;i++) {
 				retVal &= timeFrames[i].isDerivableFrom(other.timeFrames[i]);
 				if(!retVal) break;
 			}
