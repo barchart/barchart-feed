@@ -3,20 +3,21 @@ package com.barchart.feed.series.service;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import com.barchart.feed.api.series.service.AnalyticContainer;
+import com.barchart.feed.api.series.analytics.Analytic;
+import com.barchart.feed.api.series.analytics.BarBuilderDescriptor;
 import com.barchart.feed.api.series.service.Node;
-import com.barchart.feed.api.series.service.NodeDescriptor;
+import com.barchart.feed.api.series.service.NodeType;
 import com.barchart.feed.api.series.service.Subscription;
 import com.barchart.feed.api.series.temporal.Period;
 import com.barchart.feed.api.series.temporal.PeriodType;
 import com.barchart.feed.api.series.temporal.TimeFrame;
-import com.barchart.feed.series.DataBar;
 
-public class BarBuilderNodeDescriptor extends NodeDescriptor {
+public class BarBuilderNodeDescriptor implements BarBuilderDescriptor {
     private static final String BASE_STEP_FILE = "/baseSteps.txt";
     
     private static List<PeriodType> baseTypeSteps;
@@ -24,13 +25,18 @@ public class BarBuilderNodeDescriptor extends NodeDescriptor {
     	loadFromFile(BASE_STEP_FILE);
     }
     
-    public BarBuilderNodeDescriptor() {
-        super(NodeDescriptor.TYPE_IO);
-    }
+    /** The class of type {@link Analytic} to instantiate */
+    private Class<? extends Analytic> analyticsClass;
+    /** The constructor argument */
+    private Subscription constructorArg;
+    /** Constructor ags for conventional {@link Analytic} style instantiation. */
+    private int[] constructorArgs;
     
-    public BarBuilderNodeDescriptor(String specifier) {
-        super(specifier);
-    }
+    
+    /**
+     * Constructs a new {@code BarBuilderNodeDescriptor}
+     */
+    public BarBuilderNodeDescriptor() {}
     
     private static void loadFromFile(String path) {
         loadFromStream(BarBuilderNodeDescriptor.class.getResourceAsStream(path));
@@ -80,6 +86,29 @@ public class BarBuilderNodeDescriptor extends NodeDescriptor {
     }
     
     /**
+     * Returns a {@link Subscription} containing a  {@link TimeFrame} whose {@link Period}
+     * is of a lower type <em>AND</em> is pre-configured to be an acceptable bar building
+     * {@link PeriodType} suitable for bar building.
+     * 
+     * @param input     the Subscription whose Period should be lowered
+     * @return          a new {@link SeriesSubscription} containing the pre-approved 
+     *                  lowered {@link Period} type.
+     */
+    public static SeriesSubscription getLowerSubscription(SeriesSubscription input) {
+        Period next = null;
+        if(input.getTimeFrames()[0].getPeriod().size() > 1) {
+            next = new Period(input.getTimeFrames()[0].getPeriod().getPeriodType(), 1);
+        }else{
+            next = new Period(getLowerBaseType(input.getTimeFrames()[0].getPeriod().getPeriodType()), 1);
+        }
+        
+        SeriesSubscription sSub = new SeriesSubscription(input);
+        sSub.setTimeFrames(new TimeFrame[] {
+            new TimeFrame(next, input.getTimeFrames()[0].getStartDate(), input.getTimeFrames()[0].getEndDate()) });
+        return sSub;
+    }
+    
+    /**
      * Adds a new {@link BarBuilderOld} to the specified List, using the input {@link Subscription}
      * and new {@link Period}
      * 
@@ -88,27 +117,13 @@ public class BarBuilderNodeDescriptor extends NodeDescriptor {
      * @param next
      * @return
      */
-    private SeriesSubscription addNextNodeToChain(List<AnalyticNode<DataBar>> chain, SeriesSubscription input, Period next) {
+    private SeriesSubscription addNextNodeToChain(List<AnalyticNode> chain, SeriesSubscription input, Period next) {
         SeriesSubscription sSub = new SeriesSubscription(input);
         sSub.setTimeFrames(new TimeFrame[] {
             new TimeFrame(next, input.getTimeFrames()[0].getStartDate(), input.getTimeFrames()[0].getEndDate()) });
         BarBuilderOld bb = new BarBuilderOld(sSub);
-        chain.get(chain.size() - 1).addInputSubscription(null, bb.getOutputSubscription(null));
+        chain.get(chain.size() - 1).addInputKeyMapping(null, bb.getOutputSubscription(null));
         chain.add(bb);
-        return sSub;
-    }
-    
-    public static SeriesSubscription getLowerSubscription(SeriesSubscription input) {
-    	Period next = null;
-    	if(input.getTimeFrames()[0].getPeriod().size() > 1) {
-    		next = new Period(input.getTimeFrames()[0].getPeriod().getPeriodType(), 1);
-    	}else{
-    		next = new Period(getLowerBaseType(input.getTimeFrames()[0].getPeriod().getPeriodType()), 1);
-    	}
-    	
-    	SeriesSubscription sSub = new SeriesSubscription(input);
-        sSub.setTimeFrames(new TimeFrame[] {
-            new TimeFrame(next, input.getTimeFrames()[0].getStartDate(), input.getTimeFrames()[0].getEndDate()) });
         return sSub;
     }
     
@@ -128,8 +143,9 @@ public class BarBuilderNodeDescriptor extends NodeDescriptor {
      * @return  the list of nodes proceeding from the {@link Node} which will connect to the Node whose subscription is 
                 the first parameter, to the Node whose output {@link Subscription} is the second.
      */
+    @SuppressWarnings("unchecked")
     @Override
-    public List<AnalyticNode<DataBar>> getNodeChain(Subscription derivableSubscription, Subscription subscriptionTarget) {
+    public List<AnalyticNode> getNodeChain(Subscription derivableSubscription, Subscription subscriptionTarget) {
         if(derivableSubscription == null || subscriptionTarget == null || derivableSubscription.equals(subscriptionTarget)) {
             throw new IllegalArgumentException("Source and target cannot be null or equal to each other.");
         }
@@ -137,7 +153,7 @@ public class BarBuilderNodeDescriptor extends NodeDescriptor {
         SeriesSubscription higher = (SeriesSubscription)subscriptionTarget;
         SeriesSubscription lower = (SeriesSubscription)derivableSubscription;
         
-        List<AnalyticNode<DataBar>> retVal = new ArrayList<AnalyticNode<DataBar>>();
+        List<AnalyticNode> retVal = new ArrayList<AnalyticNode>();
         BarBuilderOld bb = new BarBuilderOld(higher);
         retVal.add(bb);
         
@@ -162,6 +178,92 @@ public class BarBuilderNodeDescriptor extends NodeDescriptor {
     
     public String toString() {
         return "BarBuilderNodeDescriptor";
+    }
+
+    @Override
+    public Class<? extends Analytic> getAnalyticClass() {
+        return analyticsClass;
+    }
+
+    @Override
+    public void setAnalyticClass(Class<? extends Analytic> clazz) {
+        this.analyticsClass = clazz;
+    }
+
+    @Override
+    public int[] getConstructorArgs() {
+        return constructorArgs;
+    }
+
+    /**
+     * Intentionally not implemented.
+     */
+    @Override
+    public void setConstructorArgs(int[] args) {
+        this.constructorArgs = args;
+    }
+
+    
+    @Override
+    public Analytic instantiateAnalytic() {
+        Constructor<?>[] constructorArray = analyticsClass.getConstructors();
+        for (Constructor<?> constructor : constructorArray) {
+            Class<?>[] parameterTypes = constructor.getParameterTypes();
+            if(parameterTypes.length == constructorArgs.length) {
+                Object[] parameters = new Object[parameterTypes.length];
+                for (int i = 0;i < parameterTypes.length;i++) {
+                    parameters[i] = new Integer(this.constructorArgs[i]);
+                }
+                try {
+                    return (Analytic)constructor.newInstance(parameters);
+                }catch(Exception e) { }
+            }
+        }
+        throw new IllegalStateException("Unable to instantiate Analytic class using constructor containing " + 
+            (constructorArgs == null ? 0:constructorArgs.length) + " arguments");
+    }
+    
+    /**
+     * Instantiates the sub type of the {@link Analytic} class specified.
+     * 
+     * @param s     a derivative of {@link Subscription}
+     * @return      the instantiated Analytic
+     */
+    @Override
+    public Analytic instantiateBuilderAnalytic() {
+        Constructor<?>[] constructorArray = analyticsClass.getDeclaredConstructors();
+        for (Constructor<?> constructor : constructorArray) {
+            constructor.setAccessible(true);
+            Class<?>[] parameterTypes = constructor.getParameterTypes();
+            if(parameterTypes.length == 1 && (getConstructorArg().getClass().equals(parameterTypes[0]))) {
+                try {
+                    return (Analytic)constructor.newInstance(new Object[] { getConstructorArg() });
+                }catch(Exception e) { e.printStackTrace(); }
+            }
+        }
+        throw new IllegalStateException("Unable to instantiate Analytic class using constructor containing " + 
+             "1 arguments of type <S extends Subscription> using argument: [s=" + getConstructorArg().getClass().getName() + "]");
+    }
+
+    @Override
+    public String getSpecifier() {
+        return NodeType.IO.toString();
+    }
+
+    @Override
+    public NodeType getType() {
+        return NodeType.IO;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T extends Subscription> T getConstructorArg() {
+        return (T)constructorArg;
+    }
+
+    @Override
+    public <T extends Subscription> void setConstructorArg(T arg) {
+        this.constructorArg = arg;
     }
 
 }

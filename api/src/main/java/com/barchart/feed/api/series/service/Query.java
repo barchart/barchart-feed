@@ -1,5 +1,7 @@
 package com.barchart.feed.api.series.service;
 
+import java.util.List;
+
 import org.joda.time.DateTime;
 
 import com.barchart.feed.api.model.meta.Instrument;
@@ -12,47 +14,52 @@ import com.barchart.feed.api.series.temporal.TradingWeek;
  * A fluent interface for constructing time series queries.
  */
 public interface Query {
+    /**
+     * Returns a flag indicating whether this Query has a 
+     * custom query configured.
+     * 
+     * @return  true if so, false if not.
+     */
     public boolean hasCustomQuery();
+    /**
+     * Returns the custom query configured.
+     * @return
+     */
     public String getCustomQuery();
     /**
      * Transforms this {@code Query} to a more robust {@link Subscription} type.
      * 
      * @param   i     the {@code Instrument}
-     * @return        this Query transformed to a {@link Subscripton}.
+     * @return        this Query transformed to a {@link Subscription}.
      */
     public Subscription toSubscription(Instrument i);
     /**
-	 * Returns the analytic name requested. Queries should request only one of an instrument,
-	 * symbol, expression or analytic. Subsequent calls will overwrite the previous value.
+	 * Returns the analytic name requested. Queries should request only one of an instrument/
+	 * symbol and one of either an expression or analytic. Subsequent calls will overwrite the previous value.
 	 * @return	this query
 	 */
-	public String getSpecifier();
-	
+	public String getAnalyticSpecifier();
 	/**
-	 * Returns the the symbol or expression requested. Queries should request only one of an instrument,
-	 * symbol, expression or analytic. Subsequent calls will overwrite the previous value.
+	 * Returns the the symbol or expression requested. 
+	 * Subsequent calls will overwrite the previous value.
 	 * @return	this query
 	 */
-	public String getSymbol();
-
+	public List<String> getSymbols();
 	/**
 	 * Returns the {@link Period} ({@link TimePoint} aggregation)
 	 * @return	the {@link Period}
 	 */
-	public Period getPeriod();
-
+	public List<Period> getPeriods();
 	/**
 	 * Returns the start date (earliest bar)
 	 * @return	the start date
 	 */
 	public DateTime getStart();
-
 	/**
 	 * Returns the end date (latest bar)
 	 * @return	the end date
 	 */
 	public DateTime getEnd();
-
 	/**
 	 * The number of bars to request. When used in conjunction with end date,
 	 * it specifies the number of bars in the future to retrieve. When used with
@@ -74,7 +81,6 @@ public interface Query {
 	 * @return	the {@link ContinuationPolicy}
 	 */
 	public ContinuationPolicy getContinuationPolicy();
-
 	/**
 	 * The "nearest month" offset for ContinuationPolicy.NEAREST time series
 	 * requests (defaults to 1, the front month)
@@ -82,7 +88,6 @@ public interface Query {
 	 * @return	the nearest offset for the {@link ContinuationPolicy}
 	 */
 	public int getNearestOffset();
-
 	/**
 	 * Returns the volume type to return for futures time series (single-contract, or
 	 * total of all contracts for a root)
@@ -90,7 +95,6 @@ public interface Query {
 	 * @return	the {@link VolumeType}
 	 */
 	public VolumeType getVolumeType();
-	
 	/**
 	 * Returns the {@link TradingWeek} which is a collection of {@link TradingSession}s comprising an average 
 	 * week of trading.

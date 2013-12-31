@@ -240,7 +240,7 @@ public class FauxMarketService implements MarketService {
             @Override
             public void include(Metadata... meta) {
                 if(meta[0] instanceof Instrument) {
-                	this.include(lastQuery.getSymbol());
+                	this.include(lastQuery.getSymbols().get(0));
                 }
             }
 

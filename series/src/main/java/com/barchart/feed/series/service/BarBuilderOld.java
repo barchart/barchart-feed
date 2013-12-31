@@ -6,9 +6,8 @@ import java.util.List;
 import org.joda.time.DateTime;
 
 import com.barchart.feed.api.series.Span;
-import com.barchart.feed.api.series.service.AnalyticContainer;
 import com.barchart.feed.api.series.service.Node;
-import com.barchart.feed.api.series.service.NodeDescriptor;
+import com.barchart.feed.api.series.service.NodeType;
 import com.barchart.feed.api.series.service.Subscription;
 import com.barchart.feed.api.series.temporal.Period;
 import com.barchart.feed.api.series.temporal.PeriodType;
@@ -17,7 +16,7 @@ import com.barchart.feed.series.DataPoint;
 import com.barchart.feed.series.DataSeries;
 import com.barchart.feed.series.SpanImpl;
 
-public class BarBuilderOld extends AnalyticNode implements AnalyticContainer {
+public class BarBuilderOld extends AnalyticNode {
     private SeriesSubscription inputSubscription;
     private SeriesSubscription outputSubscription;
     
@@ -135,12 +134,12 @@ public class BarBuilderOld extends AnalyticNode implements AnalyticContainer {
 	}
 	
 	@Override
-	public void addOutputSubscription(String key, SeriesSubscription subscription) {
+	public void addOutputKeyMapping(String key, SeriesSubscription subscription) {
 	    this.outputSubscription = (SeriesSubscription)subscription;
 	}
 	
 	@Override
-    public void addInputSubscription(String key, SeriesSubscription subscription) {
+    public void addInputKeyMapping(String key, SeriesSubscription subscription) {
         this.inputSubscription = (SeriesSubscription)subscription;
     }
 	
@@ -163,24 +162,24 @@ public class BarBuilderOld extends AnalyticNode implements AnalyticContainer {
     }
     
     @Override
-	public List<Subscription> getOutputSubscriptions() {
-	    List<Subscription> l = new ArrayList<Subscription>();
+	public List<SeriesSubscription> getOutputSubscriptions() {
+	    List<SeriesSubscription> l = new ArrayList<SeriesSubscription>();
 	    l.add(outputSubscription);
 		return l;
 	}
 
 	@Override
-	public List<Subscription> getInputSubscriptions() {
+	public List<SeriesSubscription> getInputSubscriptions() {
 		if(outputSubscription == null) {
 			throw new IllegalStateException("Node: BarBuilder has no output Subscription - can't create an input Subscription.");
 		}
 		
-	    List<Subscription> l = new ArrayList<Subscription>();
+	    List<SeriesSubscription> l = new ArrayList<SeriesSubscription>();
 	    if(inputSubscription == null) {
 	    	inputSubscription = BarBuilderNodeDescriptor.getLowerSubscription(outputSubscription);
 	    	if(outputSubscription.getTimeFrames()[0].getPeriod().getPeriodType() == PeriodType.TICK) {
 	    		inputSubscription = new SeriesSubscription(inputSubscription.getSymbol(), inputSubscription.getInstrument(), 
-	    			new BarBuilderNodeDescriptor(NodeDescriptor.TYPE_ASSEMBLER), outputSubscription.getTimeFrames(), outputSubscription.getTradingWeek());
+	    			NodeType.IO.toString(), outputSubscription.getTimeFrames(), outputSubscription.getTradingWeek());
 	    	}
 	    }
         l.add(inputSubscription);
@@ -206,7 +205,7 @@ public class BarBuilderOld extends AnalyticNode implements AnalyticContainer {
      * @param subscription     the Subscription which can be derived from one of this {@code Node}'s outputs.
      * @return                 One of this Node's derivable outputs or null.
      */
-    public Subscription getDerivableOutputSubscription(Subscription subscription) {
+    public SeriesSubscription getDerivableOutputSubscription(SeriesSubscription subscription) {
         return subscription.isDerivableFrom(outputSubscription) ? outputSubscription : null;
     }
 	

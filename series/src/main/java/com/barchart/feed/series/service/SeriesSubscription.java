@@ -22,11 +22,11 @@ import com.barchart.feed.api.series.temporal.TradingWeek;
  * {@link rx.Subscription}s by providing implementations of the {@link rx.Subscription#unsubscribe()}
  * method.
  */
-public class SeriesSubscription implements rx.Subscription, Subscription {
+public class SeriesSubscription implements Subscription {
 	private String symbol;
 	private Instrument instrument;
+	private String analyticSpecifier;
 	private TimeFrame[] timeFrames;
-    private NodeDescriptor descriptor;
     private TradingWeek tradingWeek;
     
     /**
@@ -34,16 +34,16 @@ public class SeriesSubscription implements rx.Subscription, Subscription {
      */
     public SeriesSubscription() {}
     
-    public SeriesSubscription(String symbol, Instrument i, NodeDescriptor descriptor, TimeFrame[] timeFrames, TradingWeek week) {
-    	this.descriptor = descriptor;
+    public SeriesSubscription(String symbol, Instrument i, String analyticSpecifier, TimeFrame[] timeFrames, TradingWeek week) {
     	this.instrument = i;
     	this.symbol = symbol;
+    	this.analyticSpecifier = analyticSpecifier;
     	this.timeFrames = timeFrames;
     	this.tradingWeek = week;
     }
     
     public SeriesSubscription(SeriesSubscription ss) {
-        this.descriptor = ss.descriptor;
+        this.analyticSpecifier = ss.analyticSpecifier;
         this.instrument = ss.instrument;
         this.symbol = ss.symbol;
         this.timeFrames = new TimeFrame[ss.timeFrames.length]; int i = 0;
@@ -101,13 +101,17 @@ public class SeriesSubscription implements rx.Subscription, Subscription {
 	    this.timeFrames = array;
 	}
 	
+	public TimeFrame getTimeFrame(int index) {
+	    return timeFrames[index];
+	}
+	
 	/**
-     * Returns the {@link NodeDescriptor}
-     * @return the node descriptor
+     * Returns the id of a required analytic if one is required.
+     * @return the analytic specifier
      */
 	@Override
-    public NodeDescriptor getNodeDescriptor() {
-		return descriptor;
+    public String getAnalyticSpecifier() {
+		return analyticSpecifier;
 	}
 	
 	/**
@@ -150,6 +154,29 @@ public class SeriesSubscription implements rx.Subscription, Subscription {
 				
 		return retVal;
 	}
+	
+	public void loadFromNodeDescriptor(String sourceKey, SeriesSubscription nextSubscription, AnalyticNodeDescriptor desc) {
+        AnalyticNodeDescriptor id = desc.getInputNodeDescriptor(sourceKey);
+        if (id == null)
+            this.analyticSpecifier = "IO";
+        else {
+            this.analyticSpecifier = id.getSpecifier();
+        }
+        
+        this.symbol = nextSubscription.symbol;
+        this.timeFrames = new TimeFrame[0];
+        String[] timeframes = desc.getInputTimeframes(sourceKey);
+        if ((timeframes == null) || (timeframes.length == 0)) {
+            this.addTimeFrame(nextSubscription.getTimeFrame(0));
+        } else {
+            for (String timeframe: timeframes) {
+                int index = desc.getTimeframeIndex(timeframe);
+                if (index >= 0) {
+                    this.addTimeFrame(nextSubscription.getTimeFrame(index));
+                }
+            }
+        }
+   }
 
 	/** 
      * Unsubscribes the submitted {@link Observer} from notifications
@@ -168,7 +195,7 @@ public class SeriesSubscription implements rx.Subscription, Subscription {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result
-				+ ((descriptor == null) ? 0 : descriptor.hashCode());
+				+ ((analyticSpecifier == null) ? 0 : analyticSpecifier.hashCode());
 		result = prime * result
 				+ ((instrument.id() == null) ? 0 : instrument.id().hashCode());
 		result = prime * result + ((symbol == null) ? 0 : symbol.hashCode());
@@ -190,10 +217,10 @@ public class SeriesSubscription implements rx.Subscription, Subscription {
 		if (getClass() != obj.getClass())
 			return false;
 		SeriesSubscription other = (SeriesSubscription) obj;
-		if (descriptor == null) {
-			if (other.descriptor != null)
+		if (analyticSpecifier == null) {
+			if (other.analyticSpecifier != null)
 				return false;
-		} else if (!descriptor.equals(other.descriptor))
+		} else if (!analyticSpecifier.equals(other.analyticSpecifier))
 			return false;
 		if (instrument == null) {
 			if (other.instrument != null)
@@ -216,7 +243,7 @@ public class SeriesSubscription implements rx.Subscription, Subscription {
 	}
 	
 	public String toString() {
-	    return new StringBuilder("[ ").append(descriptor).append(" ").append(symbol).
+	    return new StringBuilder("[ ").append(analyticSpecifier).append(" ").append(symbol).
 	        append(" ").append(timeFrames[0]).append(" ]").toString();
 	}
 

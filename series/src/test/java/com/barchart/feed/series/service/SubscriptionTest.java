@@ -13,13 +13,10 @@ import com.barchart.feed.api.model.meta.Exchange;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.api.model.meta.id.InstrumentID;
 import com.barchart.feed.api.model.meta.id.VendorID;
-import com.barchart.feed.api.series.service.NodeDescriptor;
 import com.barchart.feed.api.series.temporal.Period;
 import com.barchart.feed.api.series.temporal.PeriodType;
 import com.barchart.feed.api.series.temporal.TimeFrame;
 import com.barchart.feed.api.series.temporal.TradingWeek;
-import com.barchart.feed.series.service.BarBuilderNodeDescriptor;
-import com.barchart.feed.series.service.SeriesSubscription;
 import com.barchart.util.value.api.Fraction;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Schedule;
@@ -46,27 +43,17 @@ public class SubscriptionTest {
     public void testIsDerivableFrom() {
         String symbol = "ESZ13";
         Instrument instr = makeInstrument(symbol);
-        BarBuilderNodeDescriptor nDesc = new BarBuilderNodeDescriptor() {
-            public String getSpecifier() {
-                return NodeDescriptor.TYPE_IO;
-            }
-        };
         DateTime dt1 = new DateTime(2013, 12, 10, 12, 0, 0);
         TimeFrame tf1 = new TimeFrame(new Period(PeriodType.TICK, 1), dt1, null);
         
-        SeriesSubscription sub1 = new SeriesSubscription("ESZ13", instr, nDesc, new TimeFrame[] { tf1 }, TradingWeek.DEFAULT);
+        SeriesSubscription sub1 = new SeriesSubscription("ESZ13", instr, "IO", new TimeFrame[] { tf1 }, TradingWeek.DEFAULT);
         
         symbol = "ESZ13";
         instr = makeInstrument(symbol);
-        nDesc = new BarBuilderNodeDescriptor() {
-            public String getSpecifier() {
-                return NodeDescriptor.TYPE_IO;
-            }
-        };
         DateTime dt2 = new DateTime(2013, 12, 10, 12, 0, 0);
         TimeFrame tf2 = new TimeFrame(new Period(PeriodType.SECOND, 1), dt2, null);
         
-        SeriesSubscription sub2 = new SeriesSubscription("ESZ13", instr, nDesc, new TimeFrame[] { tf2 }, TradingWeek.DEFAULT);
+        SeriesSubscription sub2 = new SeriesSubscription("ESZ13", instr, "IO", new TimeFrame[] { tf2 }, TradingWeek.DEFAULT);
         
         assertTrue(sub2.isDerivableFrom(sub1));
         
@@ -74,15 +61,10 @@ public class SubscriptionTest {
         
         symbol = "ESZ13";
         instr = makeInstrument(symbol);
-        nDesc = new BarBuilderNodeDescriptor() {
-            public String getSpecifier() {
-                return NodeDescriptor.TYPE_IO;
-            }
-        };
         DateTime dt3 = new DateTime(2013, 12, 10, 12, 0, 0);
         TimeFrame tf3 = new TimeFrame(new Period(PeriodType.SECOND, 1), dt3, null);
         
-        SeriesSubscription sub3 = new SeriesSubscription("ESZ13", instr, nDesc, new TimeFrame[] { tf3 }, TradingWeek.DEFAULT);
+        SeriesSubscription sub3 = new SeriesSubscription("ESZ13", instr, "IO", new TimeFrame[] { tf3 }, TradingWeek.DEFAULT);
         
         List<SeriesSubscription> subList = new ArrayList<SeriesSubscription>();
         subList.add(sub2);

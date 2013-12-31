@@ -30,10 +30,10 @@ public interface Subscription extends rx.Subscription {
     public TimeFrame[] getTimeFrames();
 
     /**
-     * Returns the {@link NodeDescriptor}
-     * @return the node descriptor
+     * Returns the id of a required analytic if one is required.
+     * @return the analytic specifier
      */
-    public NodeDescriptor getNodeDescriptor();
+    public String getAnalyticSpecifier();
 
     /**
      * Returns the {@link TradingWeek}

@@ -2,10 +2,8 @@ package com.barchart.feed.series.analytics;
 
 import org.joda.time.DateTime;
 
-import com.barchart.feed.api.series.Analytic;
 import com.barchart.feed.api.series.Span;
-import com.barchart.feed.api.series.TimeSeries;
-import com.barchart.feed.api.series.service.AnalyticContainer;
+import com.barchart.feed.api.series.analytics.Analytic;
 import com.barchart.feed.api.series.service.Subscription;
 import com.barchart.feed.api.series.temporal.Period;
 import com.barchart.feed.series.DataBar;
@@ -14,9 +12,7 @@ import com.barchart.feed.series.DataSeries;
 import com.barchart.feed.series.SpanImpl;
 import com.barchart.feed.series.service.SeriesSubscription;
 
-public class BarBuilder extends Analytic {
-	private AnalyticContainer<SeriesSubscription> analyticNode;
-	
+public class BarBuilder extends AnalyticBase {
 	private static final String INPUT_KEY = "Input";
     private static final String OUTPUT_KEY = "Output";
     
@@ -30,28 +26,33 @@ public class BarBuilder extends Analytic {
     
     private DateTime workingTargetDate;
     
+    /** The {@link Subscription} used to determine the output {@link Period} information */
+    private SeriesSubscription subscription;
+    
     
     
 	/**
-	 * Instantiates a new {@code BarBuilder}
+	 * Instantiates a new {@code BarBuilder}. It is important that
+	 * the {@link Subscription} passed in has only one {@link TimeFrame} since
+	 * a BarBuilder's job is to produce one TimeFrame of data and only one.
+	 * Therefore, this constructor will usually only be called from internal
+	 * resources or Test classes which have this special knowledge, hence this
+	 * constructor is package private.
 	 * 
-	 * @param analytic
+	 * @param s    the configured {@link SeriesSubscription}
 	 */
-	public BarBuilder() {
+	BarBuilder(SeriesSubscription s) {
+	    this.subscription = s;
 	}
-
+	
 	/**
-	 * Signals this {@code Analytic} to begin processing the
-	 * specified span. Provides the underlying {@link Analytic}
-	 * a chance to pre-process the data prior to having {@link Analytic#process(Span)}
-	 * called on it.
+	 * Returns the {@link Subscription} used to obtain underlying {@link Period}
+	 * information.
 	 * 
-	 * @param span	the span of time in the {@link TimeSeries} to process.
-	 * @return the span processed.
+	 * @return     the configured {@link Subscription}
 	 */
-	@Override
-	public Span preProcess(Span span) {
-		return process(span);
+	public SeriesSubscription getSubscription() { 
+	    return subscription;
 	}
 
 	/**
@@ -66,15 +67,15 @@ public class BarBuilder extends Analytic {
 	public Span process(Span span) {
 		System.out.println(this + " processing span: " + inputSpan);
 		
-		Period inputPeriod = analyticNode.getInputTimeFrame(INPUT_KEY, 0).getPeriod();
-		Period outputPeriod = analyticNode.getOutputTimeFrame(OUTPUT_KEY, 0).getPeriod();
-		
-		DataSeries<DataPoint> outputSeries = (DataSeries)analyticNode.getOutputTimeSeries(OUTPUT_KEY);
-		DataSeries<DataPoint> inputSeries = (DataSeries)analyticNode.getInputTimeSeries(INPUT_KEY);
+		DataSeries<DataPoint> outputSeries = (DataSeries)getOutputTimeSeries(BarBuilder.OUTPUT_KEY);
+		DataSeries<DataPoint> inputSeries = (DataSeries)getInputTimeSeries(BarBuilder.INPUT_KEY);
 		int inputStartIdx = inputSeries.indexOf(inputSpan.getTime(), false);
 		int inputLastIdx = inputSeries.indexOf(inputSpan.getNextTime(), false);
 		
-		if(inputPeriod == outputPeriod) {
+		Period inputPeriod = inputSeries.getPeriod();
+        Period outputPeriod = outputSeries.getPeriod();
+        
+        if(inputPeriod == outputPeriod) {
 		    for(int i = inputStartIdx;i <= inputLastIdx;i++) {
 		        outputSeries.insertData(inputSeries.get(i));
 		    }
@@ -88,7 +89,7 @@ public class BarBuilder extends Analytic {
 			
 			if(currentMergeBar == null) {
 				currentMergeBar = (DataBar)inputSeries.get(inputStartIdx); 
-				workingTargetDate = analyticNode.getOutputSubscription(OUTPUT_KEY).getTradingWeek().
+				workingTargetDate = subscription.getTradingWeek().
 					getNextSessionDate(currentMergeBar.getDate(), outputPeriod);
 				currentMergeBar.setDate(workingTargetDate);
 				this.workingSpan.setDate(currentMergeBar.getDate());
@@ -100,7 +101,7 @@ public class BarBuilder extends Analytic {
 			for(int i = inputStartIdx;i < inputLastIdx;i++) {
 				DataBar currentIdxBar = (DataBar)inputSeries.get(i);
 				if(currentIdxBar.getDate().isAfter(workingTargetDate)) {
-					workingTargetDate = analyticNode.getOutputSubscription(OUTPUT_KEY).
+					workingTargetDate = subscription.
 						getTradingWeek().getNextSessionDate(workingTargetDate, outputPeriod);
 					currentMergeBar = new DataBar(currentIdxBar);
 					currentMergeBar.setDate(workingTargetDate);
@@ -122,19 +123,6 @@ public class BarBuilder extends Analytic {
 		return null;
 	}
 	
-	/**
-	 * Provides the communication path back up the graph to notify the containing
-	 * parent of this {@code Analytic}'s completion of processing and means by
-	 * which the input and output mapping can be referenced underneath.
-	 * 
-	 * @param processor		this analytic's container.
-	 */
-	@SuppressWarnings("unchecked")
-	@Override
-	public <S extends Subscription> void setAnalyticContainer(AnalyticContainer<S> processor) {
-		this.analyticNode = (AnalyticContainer<SeriesSubscription>) processor;
-	}
-
 	/**
 	 * Returns a list of this {@code Analytic}'s input keys.
 	 * 

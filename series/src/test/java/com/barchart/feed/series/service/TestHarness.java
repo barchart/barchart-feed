@@ -3,14 +3,16 @@ package com.barchart.feed.series.service;
 import java.util.List;
 import java.util.Map;
 
+import org.joda.time.DateTime;
+
 import com.barchart.feed.api.model.meta.Exchange;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.api.model.meta.id.InstrumentID;
 import com.barchart.feed.api.model.meta.id.VendorID;
-import com.barchart.feed.api.series.Analytic;
 import com.barchart.feed.api.series.Span;
-import com.barchart.feed.api.series.service.AnalyticContainer;
-import com.barchart.feed.api.series.service.Subscription;
+import com.barchart.feed.api.series.TimePoint;
+import com.barchart.feed.api.series.TimeSeries;
+import com.barchart.feed.api.series.analytics.Analytic;
 import com.barchart.util.value.api.Fraction;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Schedule;
@@ -169,22 +171,70 @@ public class TestHarness {
     public static Analytic makeEmptyAnalytic() {
         return new Analytic() {
         	@Override
-            public Span preProcess(Span span) {
-                // TODO Auto-generated method stub
-                return null;
-            }
-
-            @Override
             public Span process(Span span) {
                 // TODO Auto-generated method stub
                 return null;
             }
 
 			@Override
-			public <S extends Subscription> void setAnalyticContainer(AnalyticContainer<S> processor) {
-				// TODO Auto-generated method stub
-				
-			}
+            public <E extends TimePoint> void addInputTimeSeries(String key,
+                    TimeSeries<E> timeSeries) {
+                // TODO Auto-generated method stub
+                
+            }
+
+            @Override
+            public <E extends TimePoint> TimeSeries<E> getInputTimeSeries(
+                    String key) {
+                // TODO Auto-generated method stub
+                return null;
+            }
+
+            @Override
+            public <E extends TimePoint> void addOutputTimeSeries(String key,
+                    TimeSeries<E> timeSeries) {
+                // TODO Auto-generated method stub
+                
+            }
+
+            @Override
+            public <E extends TimePoint> TimeSeries<E> getOutputTimeSeries(
+                    String key) {
+                // TODO Auto-generated method stub
+                return null;
+            }
+
+            @Override
+            public void valueUpdated() {
+                // TODO Auto-generated method stub
+                
+            }
+
+            @Override
+            public <E extends TimePoint> void setValue(DateTime time, E e) {
+                // TODO Auto-generated method stub
+                
+            }
+
+            @Override
+            public void setCalculation(DateTime time, String key, double value) {
+                // TODO Auto-generated method stub
+                
+            }
+
+            @Override
+            public void setRange(DateTime time, String key, double high,
+                    double low) {
+                // TODO Auto-generated method stub
+                
+            }
+
+            @Override
+            public void setArea(DateTime time, DateTime nextTime, String key,
+                    double high, double low, double nextHigh, double nextLow) {
+                // TODO Auto-generated method stub
+                
+            }
 		};
     }
 }

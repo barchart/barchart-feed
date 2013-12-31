@@ -1,6 +1,5 @@
 package com.barchart.feed.series.analytics;
 
-import com.barchart.feed.api.series.Analytic;
 import com.barchart.feed.api.series.Span;
 
 /**
@@ -16,7 +15,7 @@ import com.barchart.feed.api.series.Span;
  * 
  * @author David Ray
  */
-public class PivotPointAnalytic extends Analytic {
+public class PivotPoint extends AnalyticBase {
 	public static final String RESIST3 = "Resist3";
 	public static final String RESIST2 = "Resist2";
 	public static final String RESIST1 = "Resist1";
@@ -29,6 +28,11 @@ public class PivotPointAnalytic extends Analytic {
 	private static final String[] OUTPUT_KEYS = 
 		new String[] { RESIST3, RESIST2, RESIST1, PIVOT, SUPPORT1, SUPPORT2, SUPPORT3 };
 	
+	
+	public PivotPoint(int numTimeFrames) {
+	    
+	}
+	
 	public static String[] getInputKeys() {
 		return INPUT_KEYS;
 	}
@@ -38,14 +42,9 @@ public class PivotPointAnalytic extends Analytic {
 	}
 
 	@Override
-	public Span preProcess(Span span) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public Span process(Span span) {
 		return null;
 	}
 
+    
 }

@@ -1,11 +1,15 @@
 package com.barchart.feed.series.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.joda.time.DateTime;
 
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.api.series.TimePoint;
 import com.barchart.feed.api.series.service.ContinuationPolicy;
 import com.barchart.feed.api.series.service.NodeDescriptor;
+import com.barchart.feed.api.series.service.NodeType;
 import com.barchart.feed.api.series.service.Query;
 import com.barchart.feed.api.series.service.VolumeType;
 import com.barchart.feed.api.series.temporal.Period;
@@ -33,7 +37,7 @@ import com.barchart.feed.api.series.temporal.TradingWeek;
  * </pre>
  * <p>
  * 
- * <em><b>Note: These defaults may change</b></em>
+ * <em><b>Note: These defaults may(have) changed</b></em>
  * 
  * @author David Ray
  */
@@ -41,13 +45,14 @@ import com.barchart.feed.api.series.temporal.TradingWeek;
 public class QueryBuilder {
     private int padding;
     private int nearestOffset;
-    private String specifier;
-    private String symbol;
+    private NodeType nodeType;
+    private String analyticSpecifier;
+    private List<String> symbols = new ArrayList<String>();
     private String customQuery;
     private DateTime start = PeriodType.DAY.resolutionInstant(new DateTime().minusDays(90));
     private DateTime end;
 	private DataQuery query;
-	private Period period = Period.DAY;
+	private List<Period> periods = new ArrayList<Period>();
 	private ContinuationPolicy policy;
 	private VolumeType volumeType;
 	private TradingWeek tradingWeek;
@@ -57,9 +62,23 @@ public class QueryBuilder {
 	}
 	
 	public DataQuery build() {
-		if(symbol == null) {
+		if(symbols.size() < 1) {
 			throw new IllegalStateException("No Symbol specified.");
 		}
+		
+		if(periods.size() < 1) {
+		    periods.add(Period.DAY);
+		    query.periods.add(Period.DAY);
+		}
+		
+		if(analyticSpecifier == null && nodeType == null) {
+		    nodeType = NodeType.IO;
+		    analyticSpecifier = query.analyticSpecifier = NodeType.IO.toString();
+		}else if(analyticSpecifier != null && nodeType == null) {
+		    nodeType = NodeType.ANALYTIC;
+		}
+		
+		query.nodeType = nodeType;
 		
 		return query;
 	}
@@ -78,11 +97,19 @@ public class QueryBuilder {
 	    return this;
 	}
 	
+	public QueryBuilder nodeType(NodeType type) {
+	    if(type == null) {
+	        throw new IllegalArgumentException("If specified, the NodeType must be non null");
+	    }
+	    this.nodeType = query.nodeType = type;
+	    return this;
+	}
+	
 	public QueryBuilder specifier(String specifier) {
 		if(specifier == null || specifier.length() < 1) {
 			throw new IllegalArgumentException("If specified, the analytic specifier cannot be null, or of zero length");
 		}
-		this.specifier = query.specifier = specifier;
+		this.analyticSpecifier = query.analyticSpecifier = specifier;
 		return this;
 	}
 	
@@ -90,7 +117,8 @@ public class QueryBuilder {
 		if(symbol == null || symbol.length() < 1) {
 			throw new IllegalArgumentException("Symbol cannot be null, or of zero length");
 		}
-		this.symbol = query.symbol = symbol;
+		this.symbols.add(symbol);
+		query.symbols.add(symbol);
 		return this;
 	}
 	
@@ -98,7 +126,8 @@ public class QueryBuilder {
 		if(period == null) {
 			throw new IllegalArgumentException("Must specify a non null period");
 		}
-		this.period = query.period = period;
+		this.periods.add(period);
+		query.periods.add(period);
 		return this;
 	}
 	
@@ -166,9 +195,10 @@ public class QueryBuilder {
 	    private int nearestOffset;
 	    private boolean hasCustomQuery;
 	    private String customQuery;
-	    private String specifier = NodeDescriptor.TYPE_IO;
-	    private String symbol;
-        private Period period = Period.DAY;
+	    private NodeType nodeType;
+	    private String analyticSpecifier;
+	    private List<String> symbols = new ArrayList<String>();
+        private List<Period> periods = new ArrayList<Period>();
         private DateTime start = PeriodType.DAY.resolutionInstant(new DateTime().minusDays(90));
         private DateTime end;
 	    private ContinuationPolicy policy;
@@ -205,11 +235,23 @@ public class QueryBuilder {
 	     * @return        this Query transformed to a {@link Subscripton}.
 	     */
 	    public SeriesSubscription toSubscription(Instrument i) {
-	        if(specifier != NodeDescriptor.TYPE_IO) return null; //For now... finish up Assemblers/Analytics later...
+	        List<Period> queryPeriods = query.getPeriods();
+	        TimeFrame[] timeFrames = new TimeFrame[queryPeriods.size()];
+	        for(int idx = 0;idx < timeFrames.length;idx++) {
+	            timeFrames[idx] = new TimeFrame(queryPeriods.get(idx), query.getStart(), query.getEnd());
+	        }
 	        
-	        return new SeriesSubscription(getSymbol(), i, new BarBuilderNodeDescriptor(), 
-                new TimeFrame[] { new TimeFrame(query.getPeriod(), query.getStart(), query.getEnd()) }, 
-                    query.getTradingWeek());
+	        //Flatten out the symbols list for now...
+	        return new SeriesSubscription(getSymbols().get(0), i, analyticSpecifier, timeFrames, query.getTradingWeek());
+	    }
+	    
+	    /**
+	     * Returns the specified {@link NodeType}
+	     * 
+	     * @return     the user-specified {@link NodeType}
+	     */
+	    public NodeType getNodeType() {
+	        return this.nodeType;
 	    }
 		
 		/**
@@ -217,8 +259,8 @@ public class QueryBuilder {
 	     * symbol or expression. Subsequent calls will overwrite the previous value.
 	     * @return  this query
 	     */
-	    public String getSpecifier() {
-	        return specifier;
+	    public String getAnalyticSpecifier() {
+	        return analyticSpecifier;
 	    }
 	    
 	    /**
@@ -226,16 +268,17 @@ public class QueryBuilder {
 	     * 
 	     * @return	the symbol of the underying series data.
 	     */
-	    public String getSymbol() {
-	    	return symbol;
+	    public List<String> getSymbols() {
+	    	return symbols;
 	    }
 
 	    /**
-	     * Returns the {@link Period} ({@link TimePoint} aggregation)
-	     * @return  the {@link Period}
+	     * Returns a list of configured {@link Period}s.
+	     * 
+	     * @return     a list of Periods.
 	     */
-	    public Period getPeriod() {
-	        return period;
+	    public List<Period> getPeriods() {
+	        return periods;
 	    }
 
 	    /**
