@@ -15,9 +15,6 @@ import com.barchart.feed.api.series.temporal.PeriodType;
 import com.barchart.feed.api.series.temporal.TimeFrame;
 import com.barchart.feed.api.series.temporal.TradingWeek;
 import com.barchart.feed.series.SpanImpl;
-import com.barchart.feed.series.service.AnalyticNode;
-import com.barchart.feed.series.service.BarBuilderNodeDescriptor;
-import com.barchart.feed.series.service.SeriesSubscription;
 import com.barchart.util.value.ValueFactoryImpl;
 import com.barchart.util.value.api.Time;
 
@@ -49,8 +46,10 @@ public class AnalyticNodeTest {
         Time t2 = ValueFactoryImpl.factory.newTime(new DateTime(2013, 12, 11, 13, 0, 0).getMillis());
         SpanImpl newSpan = new SpanImpl(Period.ONE_HOUR, t, t2);
         testNode.updateModifiedSpan(newSpan, sub1);
+        assertFalse(testNode.hasAllAncestorUpdates());  //Only one has been updated... 
+        
         testNode.updateModifiedSpan(newSpan, sub2);
-        assertTrue(testNode.hasAllAncestorUpdates());   //Has been updated
+        assertTrue(testNode.hasAllAncestorUpdates());   //Both have been updated
         
         testNode.process();                             //Processing resets modification state to unmodified
         

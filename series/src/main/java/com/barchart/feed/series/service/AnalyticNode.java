@@ -12,10 +12,13 @@ import com.barchart.feed.api.series.Span;
 import com.barchart.feed.api.series.TimeSeries;
 import com.barchart.feed.api.series.analytics.Analytic;
 import com.barchart.feed.api.series.service.Node;
+import com.barchart.feed.api.series.service.NodeType;
 import com.barchart.feed.api.series.service.Subscription;
+import com.barchart.feed.api.series.temporal.PeriodType;
 import com.barchart.feed.series.DataPoint;
 import com.barchart.feed.series.DataSeries;
 import com.barchart.feed.series.SpanImpl;
+import com.barchart.feed.series.analytics.BarBuilder;
 
 public class AnalyticNode extends Node<SeriesSubscription> {
 	public enum SpanOperation { UNION, INTERSECTION };
@@ -122,7 +125,25 @@ public class AnalyticNode extends Node<SeriesSubscription> {
 	 */
 	@Override
 	public List<SeriesSubscription> getInputSubscriptions() {
+		if(BarBuilder.class.equals(analytic.getClass())) {
+			return makeInputSubscriptions(getOutputSubscriptions().get(0));
+		}
 		return new ArrayList<SeriesSubscription>(inputKeyMap.keySet());
+	}
+	
+	private List<SeriesSubscription> makeInputSubscriptions(SeriesSubscription outputSubscription) {
+		if(outputSubscription == null) {
+			throw new IllegalStateException("Node: BarBuilder has no output Subscription - can't create an input Subscription.");
+		}
+		
+	    List<SeriesSubscription> l = new ArrayList<SeriesSubscription>();
+	    SeriesSubscription inputSubscription = BarBuilderNodeDescriptor.getLowerSubscription(outputSubscription);
+    	if(outputSubscription.getTimeFrames()[0].getPeriod().getPeriodType() == PeriodType.TICK) {
+    		inputSubscription = new SeriesSubscription(inputSubscription.getSymbol(), inputSubscription.getInstrument(), 
+    			NodeType.ASSEMBLER.toString(), outputSubscription.getTimeFrames(), outputSubscription.getTradingWeek());
+    	}
+        l.add(inputSubscription);
+        return l;
 	}
 	
 	/**
@@ -146,6 +167,7 @@ public class AnalyticNode extends Node<SeriesSubscription> {
         DataSeries<E> dataSeries = (DataSeries<E>)this.analytic.getOutputTimeSeries(outputKey);
 	    if(dataSeries == null) {
 	        dataSeries = new DataSeries<E>(subscription.getTimeFrame(0).getPeriod());
+	        this.analytic.addOutputTimeSeries(outputKey, dataSeries);
 	    }
         return dataSeries;
     }

@@ -51,15 +51,15 @@ public class BarBuilderNodeDescriptorTest {
         int size = pList.size();
         assertEquals(5, size);
         assertEquals(new Period(PeriodType.MONTH, 7), 
-            ((BarBuilderOld)pList.get(size - 1)).getOutputSubscription(null).getTimeFrames()[0].getPeriod());
+        	pList.get(size - 1).getOutputSubscriptions().get(0).getTimeFrames()[0].getPeriod());
         assertEquals(new Period(PeriodType.MONTH, 1), 
-            ((BarBuilderOld)pList.get(size - 2)).getOutputSubscription(null).getTimeFrames()[0].getPeriod());
+        	pList.get(size - 2).getOutputSubscriptions().get(0).getTimeFrames()[0].getPeriod());
         assertEquals(new Period(PeriodType.DAY, 1), 
-            ((BarBuilderOld)pList.get(size - 3)).getOutputSubscription(null).getTimeFrames()[0].getPeriod());
+        	pList.get(size - 3).getOutputSubscriptions().get(0).getTimeFrames()[0].getPeriod());
         assertEquals(new Period(PeriodType.MINUTE, 1), 
-            ((BarBuilderOld)pList.get(size - 4)).getOutputSubscription(null).getTimeFrames()[0].getPeriod());
+        	pList.get(size - 4).getOutputSubscriptions().get(0).getTimeFrames()[0].getPeriod());
         assertEquals(new Period(PeriodType.SECOND, 1), 
-            ((BarBuilderOld)pList.get(size - 5)).getOutputSubscription(null).getTimeFrames()[0].getPeriod());
+        	pList.get(size - 5).getOutputSubscriptions().get(0).getTimeFrames()[0].getPeriod());
         
     }
     

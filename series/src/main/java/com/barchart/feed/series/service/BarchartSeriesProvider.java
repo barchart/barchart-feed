@@ -24,6 +24,7 @@ import com.barchart.feed.api.series.service.Query;
 import com.barchart.feed.api.series.service.Subscription;
 import com.barchart.feed.api.series.temporal.TimeFrame;
 import com.barchart.feed.series.DataSeries;
+import com.barchart.feed.series.analytics.BarBuilder;
 
 /**
  * Queryable framework for providing {@link TimeSeries} objects.
@@ -110,7 +111,8 @@ public class BarchartSeriesProvider {
 	public AnalyticNode getNode(SeriesSubscription subscription, AnalyticNodeDescriptor desc) {
 	    AnalyticNode searchNode = null;
 	    SearchDescriptor searchKey = new SearchDescriptor(subscription, desc);
-	    if((searchNode = searchMap.get(searchKey)) == null) {
+	    //SearchDescriptor's equals() altered to be independent of TimeFrame[] ordering.
+	    if((searchNode = searchMap.get(searchKey)) == null) { 
 	        searchNode = new AnalyticNode(desc.instantiateAnalytic());
 	        searchMap.put(searchKey, searchNode);
 	        searchNode.addOutputKeyMapping(desc.getOutputKey(), subscription);
@@ -120,14 +122,16 @@ public class BarchartSeriesProvider {
 	            searchNode.addInputKeyMapping(key, sub);
 	            AnalyticNodeDescriptor parentDesc = NetworkSchema.lookup(sub.getAnalyticSpecifier(), sub.getTimeFrames().length);
 	            if(parentDesc == null) {
-	                AnalyticNode ioNode = lookupIONode(sub, sub); 
+	                AnalyticNode ioNode = null;//lookupIONode(sub, sub); 
 	                ioNode.addChildNode(searchNode);
 	                searchNode.addParentNode(ioNode);
+	                ioNode.addOutputKeyMapping(key, sub);
 	                searchNode.addInputTimeSeries(sub, ioNode.getOutputTimeSeries(sub));
 	            }else{
 	                AnalyticNode priorNode = this.getNode(sub, parentDesc);
                     priorNode.addChildNode(searchNode);
-                    priorNode.addOutputKeyMapping(parentDesc.getSpecifier(), sub);
+                    searchNode.addParentNode(priorNode);
+                    priorNode.addOutputKeyMapping(parentDesc.getOutputKey(), sub);
                     searchNode.addInputTimeSeries(sub, priorNode.getOutputTimeSeries(sub));
 	            }
 	        }
@@ -136,15 +140,14 @@ public class BarchartSeriesProvider {
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private AnalyticNode lookupIONode(SeriesSubscription subscription, SeriesSubscription original) {
-	    boolean isIO = subscription.getAnalyticSpecifier().equals(NodeType.IO.toString());
+	Node lookupIONode(SeriesSubscription subscription, SeriesSubscription original) {
 	    boolean isAssembler = subscription.getAnalyticSpecifier().equals(NodeType.ASSEMBLER.toString());
 	    
 	    Node retVal = null;
 	    List<Node<SeriesSubscription>> derivables = null;
 	    for(Node node : ioNodes) {
             if(node.getOutputSubscriptions().contains(subscription)) {
-                retVal = node; 
+                retVal = (AnalyticNode)node; 
                 break;
             }else if(node.isDerivableSource(subscription)) {
                 if(derivables == null) {
@@ -156,29 +159,25 @@ public class BarchartSeriesProvider {
 	    
 	    if(!isAssembler && retVal == null) {
 	        if(derivables != null) {
-	        	AnalyticNode derivableNode = (AnalyticNode)getBestDerivableNode(derivables, subscription);//Need algorithm to determine best derivable node
-	            SeriesSubscription derivableSubscription = derivableNode.getDerivableOutputSubscription(subscription);
-                List<AnalyticNode> nodeChain = new BarBuilderNodeDescriptor().getNodeChain(derivableSubscription, subscription);
-                for(int i = 0;i < nodeChain.size();i++) {
-                    Node c = nodeChain.get(i);
-                    BarBuilderOld child = (BarBuilderOld)c;
-                    ioNodes.add(child);
-                    derivableNode.addChildNode(child);
-                    child.addParentNode(derivableNode);
-                    child.addInputTimeSeries(child.getInputSubscription(null), 
-                        (DataSeries)derivableNode.getOutputTimeSeries(child.getInputSubscription(null)));
-                    derivableNode = child;
-                }
+	        	linkBestDerivableIONodeToNewChain(derivables, subscription);
             }
 	        
-	        retVal = isIO ? new BarBuilderOld(subscription) : null;
+	        BarBuilderNodeDescriptor bbDesc = new BarBuilderNodeDescriptor();
+	        bbDesc.setAnalyticClass(BarBuilder.class);
+	        bbDesc.setConstructorArg(subscription);
+	        retVal = new AnalyticNode(bbDesc.instantiateBuilderAnalytic());
+	        ((AnalyticNode)retVal).addOutputKeyMapping(BarBuilder.OUTPUT_KEY, subscription);
             List<SeriesSubscription> inputs = retVal.getInputSubscriptions();
             for(SeriesSubscription s : inputs) {
-                AnalyticNode n = lookupIONode(s, original);
+                Node n = lookupIONode(s, original);
                 n.addChildNode(retVal);
                 retVal.addParentNode(n);
+                if(((SeriesSubscription)n.getOutputSubscriptions().get(0)).getAnalyticSpecifier().equals(NodeType.ASSEMBLER.toString())) {
+                	continue;
+                }
                 ioNodes.add(retVal);
-                ((BarBuilderOld)retVal).addInputTimeSeries(s, (DataSeries)n.getOutputTimeSeries(s));
+                ((AnalyticNode)n).addOutputKeyMapping(BarBuilder.OUTPUT_KEY, s);
+                ((AnalyticNode)retVal).addInputTimeSeries(s, (DataSeries)((AnalyticNode)n).getOutputTimeSeries(s));
             }
         }else if(isAssembler) {
             Distributor assembler = new Distributor((SeriesSubscription)subscription);
@@ -193,7 +192,24 @@ public class BarchartSeriesProvider {
         	retVal = assembler;
         }
 	    
-	    return (AnalyticNode)retVal;
+	    return retVal;
+	}
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private void linkBestDerivableIONodeToNewChain(List<Node<SeriesSubscription>> derivables, SeriesSubscription subscription) {
+		AnalyticNode derivableNode = (AnalyticNode)getBestDerivableNode(derivables, subscription);//Need algorithm to determine best derivable node
+		
+        SeriesSubscription derivableSubscription = derivableNode.getDerivableOutputSubscription(subscription);
+        List<AnalyticNode> nodeChain = new BarBuilderNodeDescriptor().getNodeChain(derivableSubscription, subscription);
+        for(int i = 0;i < nodeChain.size();i++) {
+            AnalyticNode child = nodeChain.get(i);
+            ioNodes.add(child);
+            derivableNode.addChildNode(child);
+            child.addParentNode(derivableNode);
+            child.addInputTimeSeries(child.getInputSubscriptions().get(0), 
+                (DataSeries)derivableNode.getOutputTimeSeries(derivableNode.getOutputSubscriptions().get(0)));
+            derivableNode = child;
+        }
 	}
 	
 	static class SearchDescriptor {

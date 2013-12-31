@@ -42,14 +42,14 @@ public class SubscriptionTest {
     @Test
     public void testIsDerivableFrom() {
         String symbol = "ESZ13";
-        Instrument instr = makeInstrument(symbol);
+        Instrument instr = TestHarness.makeInstrument(symbol);
         DateTime dt1 = new DateTime(2013, 12, 10, 12, 0, 0);
         TimeFrame tf1 = new TimeFrame(new Period(PeriodType.TICK, 1), dt1, null);
         
         SeriesSubscription sub1 = new SeriesSubscription("ESZ13", instr, "IO", new TimeFrame[] { tf1 }, TradingWeek.DEFAULT);
         
         symbol = "ESZ13";
-        instr = makeInstrument(symbol);
+        instr = TestHarness.makeInstrument(symbol);
         DateTime dt2 = new DateTime(2013, 12, 10, 12, 0, 0);
         TimeFrame tf2 = new TimeFrame(new Period(PeriodType.SECOND, 1), dt2, null);
         
@@ -60,7 +60,7 @@ public class SubscriptionTest {
         //-----
         
         symbol = "ESZ13";
-        instr = makeInstrument(symbol);
+        instr = TestHarness.makeInstrument(symbol);
         DateTime dt3 = new DateTime(2013, 12, 10, 12, 0, 0);
         TimeFrame tf3 = new TimeFrame(new Period(PeriodType.SECOND, 1), dt3, null);
         
@@ -75,152 +75,5 @@ public class SubscriptionTest {
         
     }
     
-    public Instrument makeInstrument(final String symbol) {
-        return new Instrument() {
-
-            @Override
-            public int compareTo(Instrument arg0) {
-                // TODO Auto-generated method stub
-                return 0;
-            }
-
-            @Override
-            public boolean isNull() {
-                // TODO Auto-generated method stub
-                return false;
-            }
-
-            @Override
-            public MetaType type() {
-                // TODO Auto-generated method stub
-                return null;
-            }
-
-            @Override
-            public InstrumentID id() {
-                return new InstrumentID(symbol);
-            }
-
-            @Override
-            public String marketGUID() {
-                // TODO Auto-generated method stub
-                return null;
-            }
-
-            @Override
-            public SecurityType securityType() {
-                // TODO Auto-generated method stub
-                return null;
-            }
-
-            @Override
-            public BookLiquidityType liquidityType() {
-                // TODO Auto-generated method stub
-                return null;
-            }
-
-            @Override
-            public BookStructureType bookStructure() {
-                // TODO Auto-generated method stub
-                return null;
-            }
-
-            @Override
-            public Size maxBookDepth() {
-                // TODO Auto-generated method stub
-                return null;
-            }
-
-            @Override
-            public String instrumentDataVendor() {
-                // TODO Auto-generated method stub
-                return null;
-            }
-
-            @Override
-            public String symbol() {
-               return symbol;
-            }
-
-            @Override
-            public String description() {
-                // TODO Auto-generated method stub
-                return null;
-            }
-
-            @Override
-            public String CFICode() {
-                // TODO Auto-generated method stub
-                return null;
-            }
-
-            @Override
-            public Exchange exchange() {
-                // TODO Auto-generated method stub
-                return null;
-            }
-
-            @Override
-            public String exchangeCode() {
-                // TODO Auto-generated method stub
-                return null;
-            }
-
-            @Override
-            public Price tickSize() {
-                // TODO Auto-generated method stub
-                return null;
-            }
-
-            @Override
-            public Price pointValue() {
-                // TODO Auto-generated method stub
-                return null;
-            }
-
-            @Override
-            public Fraction displayFraction() {
-                // TODO Auto-generated method stub
-                return null;
-            }
-
-            @Override
-            public TimeInterval lifetime() {
-                // TODO Auto-generated method stub
-                return null;
-            }
-
-            @Override
-            public Schedule marketHours() {
-                // TODO Auto-generated method stub
-                return null;
-            }
-
-            @Override
-            public long timeZoneOffset() {
-                // TODO Auto-generated method stub
-                return 0;
-            }
-
-            @Override
-            public String timeZoneName() {
-                // TODO Auto-generated method stub
-                return null;
-            }
-
-            @Override
-            public List<InstrumentID> componentLegs() {
-                // TODO Auto-generated method stub
-                return null;
-            }
-
-            @Override
-            public Map<VendorID, String> vendorSymbols() {
-                // TODO Auto-generated method stub
-                return null;
-            }
-            
-        };
-    }
 
 }

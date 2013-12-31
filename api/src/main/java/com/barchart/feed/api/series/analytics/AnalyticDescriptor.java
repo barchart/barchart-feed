@@ -9,6 +9,16 @@ import com.barchart.feed.api.series.service.NodeDescriptor;
  * @author metaware
  */
 public interface AnalyticDescriptor extends NodeDescriptor {
+	/**
+     * Returns the output key used by the underlying {@link Analytic}
+     * @return  the output key
+     */
+    public String getOutputKey();
+    /**
+     * Sets the output key used by the underlying {@link Analytic}
+     * @param  key     the output key
+     */
+    public void setOutputKey(String key);
     /**
      * Returns the {@link Analytic}'s class.
      * @return  the analytic's class.

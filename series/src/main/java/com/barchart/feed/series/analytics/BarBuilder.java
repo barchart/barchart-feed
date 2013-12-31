@@ -13,8 +13,8 @@ import com.barchart.feed.series.SpanImpl;
 import com.barchart.feed.series.service.SeriesSubscription;
 
 public class BarBuilder extends AnalyticBase {
-	private static final String INPUT_KEY = "Input";
-    private static final String OUTPUT_KEY = "Output";
+	public static final String INPUT_KEY = "Input";
+    public static final String OUTPUT_KEY = "Output";
     
     private static String[] inputs = new String[] { INPUT_KEY };
     private static String[] outputs = new String[] { OUTPUT_KEY };

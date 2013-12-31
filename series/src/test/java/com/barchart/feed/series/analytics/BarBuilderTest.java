@@ -1,7 +1,6 @@
-package com.barchart.feed.series.service;
+package com.barchart.feed.series.analytics;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,11 +16,13 @@ import com.barchart.feed.api.series.temporal.TradingWeek;
 import com.barchart.feed.series.DataBar;
 import com.barchart.feed.series.DataSeries;
 import com.barchart.feed.series.SpanImpl;
+import com.barchart.feed.series.service.SeriesSubscription;
+import com.barchart.feed.series.service.TestHarness;
 import com.barchart.util.value.ValueFactoryImpl;
 
-public class BarBuilderOldTest {
+public class BarBuilderTest {
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Test
 	public void test() {
 		String symbol = "ESZ13";
@@ -37,37 +38,29 @@ public class BarBuilderOldTest {
         TimeFrame tf2 = new TimeFrame(new Period(PeriodType.MINUTE, 5), dt2, null);
         
         SeriesSubscription sub2 = new SeriesSubscription("ESZ13", instr, "IO", new TimeFrame[] { tf2 }, TradingWeek.DEFAULT);
+        
+        BarBuilder barBuilder = new BarBuilder(sub2);
+		barBuilder.addInputTimeSeries(BarBuilder.INPUT_KEY, new DataSeries<DataBar>(new Period(PeriodType.MINUTE, 1)));
+		DataSeries<DataBar> inputSeries = (DataSeries)barBuilder.getInputTimeSeries(BarBuilder.INPUT_KEY);
+		assertNotNull(inputSeries);
 		
-//        BarBuilder<DataBar> builder1 = new BarBuilder<DataBar>(sub1);
-        BarBuilderOld builder2 = new BarBuilderOld(sub2);
-        
-//        builder1.addChildNode(builder2);
-//        builder1.setInputTimeSeries(sub1, new DataSeries<DataBar>(new Period(PeriodType.MINUTE, 1)));
-//        DataSeries<DataBar> series1 = builder1.getInputTimeSeries(sub1);
-//        assertNotNull(series1);
-        
-        builder2.addInputKeyMapping("Key", sub1);
-        builder2.setInputTimeSeries(sub1, new DataSeries<DataBar>(new Period(PeriodType.MINUTE, 1)));
-        DataSeries<DataBar> series2 = builder2.getInputTimeSeries(sub1);
-        assertNotNull(series2);
-        
-        DataSeries<DataBar> outputSeries = builder2.getOutputTimeSeries(sub2);
-        assertEquals(new Period(PeriodType.MINUTE, 5), outputSeries.getPeriod());
-        
-        List<DataBar> list = getBars();
+		barBuilder.addOutputTimeSeries(BarBuilder.OUTPUT_KEY, new DataSeries<DataBar>(new Period(PeriodType.MINUTE, 5)));
+		DataSeries<DataBar> outputSeries = (DataSeries)barBuilder.getOutputTimeSeries(BarBuilder.OUTPUT_KEY);
+		assertNotNull(outputSeries);
+		assertEquals(new Period(PeriodType.MINUTE, 5), outputSeries.getPeriod());
+		
+		List<DataBar> list = getBars();
         SpanImpl span = new SpanImpl(new Period(PeriodType.MINUTE, 5),
         	ValueFactoryImpl.factory.newTime(new DateTime(2013, 12, 10, 12, 0, 0).getMillis()),
-        	ValueFactoryImpl.factory.newTime(new DateTime(2013, 12, 10, 12, 30, 0).getMillis()));
+        		ValueFactoryImpl.factory.newTime(new DateTime(2013, 12, 10, 12, 30, 0).getMillis()));
         
-        builder2.updateModifiedSpan(span, sub1);
+        barBuilder.process(span);
         
         for(int i = 0;i < list.size();i++) {
-        	series2.add(list.get(i));
+        	inputSeries.add(list.get(i));
         }
         
-        builder2.process();
-        
-        assertEquals(6, outputSeries.size());
+        System.out.println("size = " + outputSeries.size());
         
 	}
 	

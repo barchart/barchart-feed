@@ -16,6 +16,7 @@ import com.barchart.feed.api.series.service.Subscription;
 import com.barchart.feed.api.series.temporal.Period;
 import com.barchart.feed.api.series.temporal.PeriodType;
 import com.barchart.feed.api.series.temporal.TimeFrame;
+import com.barchart.feed.series.analytics.BarBuilder;
 
 public class BarBuilderNodeDescriptor implements BarBuilderDescriptor {
     private static final String BASE_STEP_FILE = "/baseSteps.txt";
@@ -31,6 +32,9 @@ public class BarBuilderNodeDescriptor implements BarBuilderDescriptor {
     private Subscription constructorArg;
     /** Constructor ags for conventional {@link Analytic} style instantiation. */
     private int[] constructorArgs;
+    
+    /** The output key */
+    private String outputKey;
     
     
     /**
@@ -121,8 +125,10 @@ public class BarBuilderNodeDescriptor implements BarBuilderDescriptor {
         SeriesSubscription sSub = new SeriesSubscription(input);
         sSub.setTimeFrames(new TimeFrame[] {
             new TimeFrame(next, input.getTimeFrames()[0].getStartDate(), input.getTimeFrames()[0].getEndDate()) });
-        BarBuilderOld bb = new BarBuilderOld(sSub);
-        chain.get(chain.size() - 1).addInputKeyMapping(null, bb.getOutputSubscription(null));
+        setConstructorArg(sSub);
+        AnalyticNode bb = new AnalyticNode(instantiateBuilderAnalytic());
+        bb.addOutputKeyMapping(BarBuilder.OUTPUT_KEY, sSub);
+        chain.get(chain.size() - 1).addInputKeyMapping(BarBuilder.INPUT_KEY, bb.getOutputSubscriptions().get(0));
         chain.add(bb);
         return sSub;
     }
@@ -154,7 +160,10 @@ public class BarBuilderNodeDescriptor implements BarBuilderDescriptor {
         SeriesSubscription lower = (SeriesSubscription)derivableSubscription;
         
         List<AnalyticNode> retVal = new ArrayList<AnalyticNode>();
-        BarBuilderOld bb = new BarBuilderOld(higher);
+        setAnalyticClass(BarBuilder.class);
+        setConstructorArg(higher);
+        AnalyticNode bb = new AnalyticNode(instantiateBuilderAnalytic());
+        bb.addOutputKeyMapping(BarBuilder.OUTPUT_KEY, higher);
         retVal.add(bb);
         
         //First reduce the interval and add a node for that.
@@ -201,6 +210,24 @@ public class BarBuilderNodeDescriptor implements BarBuilderDescriptor {
     @Override
     public void setConstructorArgs(int[] args) {
         this.constructorArgs = args;
+    }
+    
+    /**
+     * Returns the output key used by the underlying {@link Analytic}
+     * @return  the output key
+     */
+    @Override
+    public String getOutputKey() {
+        return outputKey;
+    }
+    
+    /**
+     * Sets the output key used by the underlying {@link Analytic}
+     * @param  key     the output key
+     */
+    @Override
+    public void setOutputKey(String key) {
+        this.outputKey = key;
     }
 
     
