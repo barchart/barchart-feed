@@ -1,5 +1,6 @@
 package com.barchart.feed.series.service;
 
+import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -30,6 +31,25 @@ public class NetworkSchemaTest {
         assertEquals(2, descList.get(0).getTimeFrames().length);
         assertEquals("Overlay", descList.get(0).getTimeFrames()[0]);
         assertEquals("Base", descList.get(0).getTimeFrames()[1]);
+    }
+    
+    @Test
+    public void testGetMainPublishers() {
+    	NetworkSchema.setSchemaFilePath("testNetworks.txt");
+    	NetworkSchema.reloadDefinitions();
+    	
+    	NetworkSchema schema = NetworkSchema.getNetwork("PivotPoint");
+    	assertNotNull(schema);
+    	
+    	assertEquals("PivotPoint", schema.getNetworkName());
+    	assertEquals(8, schema.getNetworkNodes().size());
+    	
+    	List<AnalyticNodeDescriptor> publishers = schema.getMainPublishers();
+    	assertTrue(!publishers.isEmpty());
+    	assertEquals(7, publishers.size());
+    	for(AnalyticNodeDescriptor and : publishers) {
+    		assertTrue(!and.getSpecifier().equals("PP_R2"));
+    	}
     }
 
 }

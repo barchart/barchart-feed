@@ -1,7 +1,9 @@
 package com.barchart.feed.series.service;
 
 import java.lang.reflect.Constructor;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.barchart.feed.api.series.analytics.Analytic;
@@ -179,6 +181,15 @@ public class AnalyticNodeDescriptor implements AnalyticDescriptor {
         }
         throw new IllegalStateException("Unable to instantiate Analytic class using constructor containing " + 
             (constructorArgs == null ? 0:constructorArgs.length) + " arguments");
+    }
+    
+    /**
+     * Returns a {@link List} of all input {@code AnalyticNodeDescriptor}s
+     * 
+     * @return	a {@link List} of all input {@code AnalyticNodeDescriptor}s
+     */
+    public List<AnalyticNodeDescriptor> getInputNodeDescriptors() {
+    	return new ArrayList<AnalyticNodeDescriptor>(inputDescriptors.values());
     }
     
     public AnalyticNodeDescriptor getInputNodeDescriptor(String sourceKey) {

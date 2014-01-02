@@ -30,6 +30,8 @@ public class NetworkSchema implements NodeDescriptor {
     private String name;
     private List<AnalyticNodeDescriptor> nodes;
     
+    private List<AnalyticNodeDescriptor> mainPublishers;
+    
     
     public NetworkSchema(String name) {
         this(name, null);
@@ -66,6 +68,47 @@ public class NetworkSchema implements NodeDescriptor {
         this.nodes = nodes;
     }
     
+    /**
+     * Returns a list of {@link AnalyticNodeDescriptor}s which are not themselves
+     * listed as input for subsequent nodes *<em>WITHIN THEIR NETWORK</em>*, 
+     * (i.e. they are at the bottom of their respective network), and therefore 
+     * represent the major nodes one would subscribe to in order to fully 
+     * instantiate this entire network.
+     * 
+     * @return	a list of nodes required to instantiate the whole network if subscribed to.
+     * @throws	IllegalStateException	if this network has no configured or loaded nodes.
+     */
+    public List<AnalyticNodeDescriptor> getMainPublishers() {
+    	if(nodes == null || nodes.size() < 1) {
+    		throw new IllegalStateException("Network: " + name + " was initialized with no nodes!");
+    	}
+    	
+    	if(mainPublishers == null) {
+    		mainPublishers = new ArrayList<AnalyticNodeDescriptor>();
+    	}
+    	
+    	int len = nodes.size();
+    	for(int i = 0;i < len;i++) {
+    		AnalyticNodeDescriptor currCheck = nodes.get(i);
+    		boolean isPublisher = true;
+    		for(int j = 0;j < len;j++) {
+    			AnalyticNodeDescriptor iter = nodes.get(j);
+    			if(!(isPublisher = !iter.getInputNodeDescriptors().contains(currCheck))) {
+    				break;
+    			}
+    		}
+    		if(isPublisher) mainPublishers.add(currCheck);
+    	}
+    	return mainPublishers;
+    }
+    
+    /**
+     * Returns a flag indicating whether a configured network
+     * by the name specified exists.
+     * 
+     * @param networkName		the name of the network to check
+     * @return	true if so, false if not.
+     */
     public static boolean hasNetworkByName(String networkName) {
         if(allDescriptors.size() < 1 || descriptorsByNetwork.size() < 1) {
             reloadDefinitions();

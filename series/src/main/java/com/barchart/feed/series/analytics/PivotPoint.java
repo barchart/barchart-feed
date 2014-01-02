@@ -28,6 +28,7 @@ public class PivotPoint extends AnalyticBase {
 	private static final String[] OUTPUT_KEYS = 
 		new String[] { RESIST3, RESIST2, RESIST1, PIVOT, SUPPORT1, SUPPORT2, SUPPORT3 };
 	
+	public PivotPoint() {}
 	
 	public PivotPoint(int numTimeFrames) {
 	    

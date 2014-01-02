@@ -55,7 +55,7 @@ public class QueryBuilder {
 	private List<Period> periods = new ArrayList<Period>();
 	private ContinuationPolicy policy;
 	private VolumeType volumeType;
-	private TradingWeek tradingWeek;
+	private TradingWeek tradingWeek = TradingWeek.DEFAULT;
 	
 	public QueryBuilder() {
 		query = new DataQuery();
@@ -203,7 +203,7 @@ public class QueryBuilder {
         private DateTime end;
 	    private ContinuationPolicy policy;
 	    private VolumeType volumeType;
-	    private TradingWeek tradingWeek;
+	    private TradingWeek tradingWeek = TradingWeek.DEFAULT;
 	    
 		/**
 		 * Constructs a new {@code DataQuery}

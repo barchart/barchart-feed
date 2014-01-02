@@ -1,0 +1,8 @@
+PivotPoint;PP_R3;com.barchart.feed.series.analytics.PivotPoint;;Resist3;Input,IO
+PivotPoint;PP_R2;com.barchart.feed.series.analytics.PivotPoint;;Resist2;Input,IO
+PivotPoint;PP_R1;com.barchart.feed.series.analytics.PivotPoint;;Resist1;Input,IO
+PivotPoint;PP_P;com.barchart.feed.series.analytics.PivotPoint;;Pivot;Input,IO
+PivotPoint;PP_S1;com.barchart.feed.series.analytics.PivotPoint;;Support1;Input,IO
+PivotPoint;PP_S2;com.barchart.feed.series.analytics.PivotPoint;;Support2;Input,IO
+PivotPoint;PP_S3;com.barchart.feed.series.analytics.PivotPoint;;Support3;Input,IO
+PivotPoint;PP_S4;com.barchart.feed.series.analytics.PivotPoint;;Support3;Input,PP_R2

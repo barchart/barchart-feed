@@ -152,6 +152,14 @@ public class AnalyticNode extends Node<SeriesSubscription> {
 	 */
 	public <E extends DataPoint> DataSeries<E> getOutputTimeSeries(SeriesSubscription subscription) {
 	    String key = outputSubscriptionKeyMap.get(subscription);
+	    if(key == null) {
+	    	StringBuilder error = new StringBuilder("Could not find key for subscription: ").append(subscription.toString()).append("\n");
+	    		for(Map.Entry<SeriesSubscription, String> e : outputSubscriptionKeyMap.entrySet()) {
+	    			error.append("\t").append(e.toString()).append("\n");
+	    		}
+	    			
+	    	throw new IllegalArgumentException(error.toString());
+	    }
         return getOutputTimeSeries(key, subscription);
 	}
 	
@@ -169,6 +177,18 @@ public class AnalyticNode extends Node<SeriesSubscription> {
 	    }
         return dataSeries;
     }
+	
+	/**
+	 * Used for testing only... Users should use the other methods for retrieving
+	 * a {@link TimeSeries} so that one is created if it is not found.
+	 * 
+	 * @param outputKey
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public <E extends DataPoint> DataSeries<E> getOutputTimeSeries(String outputKey) {
+		return (DataSeries<E>)this.analytic.getOutputTimeSeries(outputKey);
+	}
 	
 	/**
 	 * Sets the input {@link TimeSeries} corresponding to with the specified {@link Subscription}

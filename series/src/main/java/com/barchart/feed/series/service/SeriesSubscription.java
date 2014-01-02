@@ -164,6 +164,7 @@ public class SeriesSubscription implements Subscription {
         }
         
         this.symbol = nextSubscription.symbol;
+        this.instrument = nextSubscription.instrument;
         this.timeFrames = new TimeFrame[0];
         String[] timeframes = desc.getInputTimeframes(sourceKey);
         if ((timeframes == null) || (timeframes.length == 0)) {
@@ -176,6 +177,7 @@ public class SeriesSubscription implements Subscription {
                 }
             }
         }
+        this.tradingWeek = nextSubscription.tradingWeek;
    }
 
 	/** 
@@ -243,8 +245,12 @@ public class SeriesSubscription implements Subscription {
 	}
 	
 	public String toString() {
-	    return new StringBuilder("[ ").append(analyticSpecifier).append(" ").append(symbol).
-	        append(" ").append(timeFrames[0]).append(" ]").toString();
+	    StringBuilder sb = new StringBuilder("[ ").append(analyticSpecifier).append(" ").append(symbol).append(" ");
+	    for(TimeFrame tf : timeFrames) {
+	    	sb.append(tf).append(" ");
+	    }
+	    sb.append("]");
+	    return sb.toString();
 	}
 
 }
