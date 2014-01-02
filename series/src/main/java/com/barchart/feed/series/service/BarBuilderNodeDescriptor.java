@@ -128,7 +128,7 @@ public class BarBuilderNodeDescriptor implements BarBuilderDescriptor {
         setConstructorArg(sSub);
         AnalyticNode bb = new AnalyticNode(instantiateBuilderAnalytic());
         bb.addOutputKeyMapping(BarBuilder.OUTPUT_KEY, sSub);
-        chain.get(chain.size() - 1).addInputKeyMapping(BarBuilder.INPUT_KEY, bb.getOutputSubscriptions().get(0));
+        chain.get(chain.size() - 1).addInputKeyMapping(BarBuilder.INPUT_KEY, sSub);
         chain.add(bb);
         return sSub;
     }

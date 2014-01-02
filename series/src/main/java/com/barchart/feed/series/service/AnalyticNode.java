@@ -125,26 +125,24 @@ public class AnalyticNode extends Node<SeriesSubscription> {
 	 */
 	@Override
 	public List<SeriesSubscription> getInputSubscriptions() {
-		if(BarBuilder.class.equals(analytic.getClass())) {
-			return makeInputSubscriptions(getOutputSubscriptions().get(0));
+		if(inputKeyMap.isEmpty() && BarBuilder.class.equals(analytic.getClass())) {
+			makeInputSubscription(getOutputSubscriptions().get(0));
 		}
 		return new ArrayList<SeriesSubscription>(inputKeyMap.keySet());
 	}
 	
-	private List<SeriesSubscription> makeInputSubscriptions(SeriesSubscription outputSubscription) {
+	private void makeInputSubscription(SeriesSubscription outputSubscription) {
 		if(outputSubscription == null) {
 			throw new IllegalStateException("Node: BarBuilder has no output Subscription - can't create an input Subscription.");
 		}
 		
-	    List<SeriesSubscription> l = new ArrayList<SeriesSubscription>();
 	    SeriesSubscription inputSubscription = BarBuilderNodeDescriptor.getLowerSubscription(outputSubscription);
     	if(outputSubscription.getTimeFrames()[0].getPeriod().getPeriodType() == PeriodType.TICK) {
     		inputSubscription = new SeriesSubscription(inputSubscription.getSymbol(), inputSubscription.getInstrument(), 
     			NodeType.ASSEMBLER.toString(), outputSubscription.getTimeFrames(), outputSubscription.getTradingWeek());
     	}
-        l.add(inputSubscription);
-        return l;
-	}
+    	inputKeyMap.put(inputSubscription, BarBuilder.INPUT_KEY);
+    }
 	
 	/**
 	 * Returns the output {@link TimeSeries} corresponding to with the specified {@link SeriesSubscription}
@@ -179,7 +177,7 @@ public class AnalyticNode extends Node<SeriesSubscription> {
 	 * @param	the input {@link TimeSeries}
 	 */
 	public <E extends DataPoint> void addInputTimeSeries(SeriesSubscription subscription, DataSeries<E> timeSeries) {
-		this.analytic.addInputTimeSeries(outputSubscriptionKeyMap.get(subscription), timeSeries);
+		this.analytic.addInputTimeSeries(inputKeyMap.get(subscription), timeSeries);
 	}
 	
 	/**
@@ -219,6 +217,11 @@ public class AnalyticNode extends Node<SeriesSubscription> {
      * @return                 One of this Node's derivable outputs or null.
      */
     public SeriesSubscription getDerivableOutputSubscription(SeriesSubscription subscription) {
+        for(SeriesSubscription s : outputKeyMap.values()) {
+            if(subscription.isDerivableFrom(s)) {
+                return s;
+            }
+        }
         return null;
     }
 

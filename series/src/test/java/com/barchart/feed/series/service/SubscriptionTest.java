@@ -71,9 +71,7 @@ public class SubscriptionTest {
         subList.add(sub1);
         
         assertTrue(subList.contains(sub3));
-        
-        
     }
+        
     
-
 }

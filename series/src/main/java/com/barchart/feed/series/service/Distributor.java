@@ -27,36 +27,46 @@ import com.barchart.util.value.api.Time;
 
 
 /**
- * Implementation of {@link Assembler} carrying out the contract which is to
- * receive event based raw data for both historical and live market data and
- * output that data to configured child {@link Node}s.
+ * Implementation of {@link Assembler} which receives event based raw data 
+ * from two different sources (historical batched, and market tick data), and
+ * output that data to a single {@link TimeSeries} that is then consumed by child
+ * nodes which are linked up to this node's output. 
  * 
  * @author David Ray
  *
  */
 public class Distributor extends Node<SeriesSubscription> implements Assembler {
+    /** Size parameter used to distinguish a line of tick data from minute data*/
+    private static final int TICK_FORMAT_LENGTH = 5;
+    /** Formatter to operate on dates as they appear in batched tick query results */
 	private DateTimeFormatter tickFormat = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss.SSS");
+	/** Formatter to operate on dates as they appear in batched minute query results */
 	private DateTimeFormatter minuteFormat = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm");
-	
+	/** {@link Subscription} describing this distributor's output */
 	private SeriesSubscription subscription;
+	/** Holds the {@link Period} of this {@code Distributor}'s output {@link Subscription} */
 	private Period period;
-	
+	/** The {@link TimeSeries} object containing this node's output */
 	private DataSeries<?> outputTimeSeries;
-	
+	/** List containing this {@code Distributor}'s one output {@link Subscription} */
 	private List<SeriesSubscription> outputSubscriptions;
-	
+	/** The last date processed */
 	private DateTime last = null;
-	
+	/** Monitor to synchronize historical and live updates during original load */
 	private Object lock = new Object();
-	
+	/** Queue to synchronize updated time {@link Span}s. */
 	private ConcurrentLinkedQueue<Span> dataQueue;
 	
 	
+	/**
+	 * Constructs a new {@code Distributor}
+	 */
+	public Distributor() {}
 	
-	public Distributor() {
-		
-	}
-	
+	/**
+	 * Constructs a new functional {@code Distributor} 
+	 * @param subscription     the {@link SeriesSubscription} supplying needed init params.
+	 */
 	public Distributor(SeriesSubscription subscription) {
 		this.subscription = subscription;
 		this.period = subscription.getTimeFrames()[0].getPeriod();
@@ -94,7 +104,7 @@ public class Distributor extends Node<SeriesSubscription> implements Assembler {
 			for(String s : results) {	
 				String[] resultArray = s.split("[\\,]+");
 				
-				bar = resultArray.length > 5 ? 
+				bar = resultArray.length > TICK_FORMAT_LENGTH ? 
 				    createBarFromMinuteCSV(resultArray) : 
 				        createBarFromTickCSV(resultArray);
 				
