@@ -44,6 +44,8 @@ public class BarchartSeriesProvider {
     private Map<Subscription, List<Distributor>> subscriberAssemblers = new HashMap<Subscription, List<Distributor>>();
     /** Contains all instantiated Nodes mapped to {@link SearchDescriptor}s */
     private Map<SearchDescriptor,AnalyticNode> searchMap = Collections.synchronizedMap(new HashMap<SearchDescriptor,AnalyticNode>());
+    /** Monitor for the {@link #searchMap} */
+    private Object searchLock = new Object();
 	
 	
 	/**
@@ -95,6 +97,14 @@ public class BarchartSeriesProvider {
         return null;
     }
 	
+	/**
+	 * Returns a {@link NodeDescriptor} of the type necessary to produce the
+	 * data described by the specified {@Query}.
+	 * 
+	 * @param query        the request object describing the desired output.
+	 * @return             a {@link NodeDescriptor} of the type necessary to produce the
+     *                     data described by the specified {@Query}
+	 */
 	public NodeDescriptor lookupDescriptor(Query query) {
 	    NodeDescriptor descriptor;
 	    String specifier = query.getAnalyticSpecifier();
@@ -109,13 +119,34 @@ public class BarchartSeriesProvider {
 	    return descriptor;
 	}
 	
+	/**
+	 * Recursively calls itself to create or link created nodes to produce the 
+	 * graph of nodes necessary to obtained the output data specified by the
+	 * {@link SeriesSubscription} passed in. 
+	 * <p>
+	 * The returned node, (though not started) is fully configured and connected to all 
+	 * required resources, and will produce the data specified by the subscription. 
+	 * <p>
+	 * This method successively requests the required inputs of each of it's ancestor nodes 
+	 * as it locates or creates the ancestor nodes necessary to produced the input of each 
+	 * preceding node until it reaches the top ({@link Assembler} or {@link Distributor}) 
+	 * node which becomes the last node created or linked in if one with the required data 
+	 * already exists.
+	 * 
+	 * @param subscription     the subscription describing the required output.
+	 * @param original         the same subscription as the above subscription.
+	 * @param desc             an {@link AnalyticNodeDescriptor} which serves as the schema
+	 *                         of the returned node.
+	 * @return                 a fully functional source of the data described by the specified
+	 *                         {@link SeriesSubscription}
+	 */
 	public AnalyticNode getOrCreateNode(SeriesSubscription subscription, SeriesSubscription original, AnalyticNodeDescriptor desc) {
 	    AnalyticNode searchNode = null;
 	    SearchDescriptor searchKey = new SearchDescriptor(subscription, desc);
 	    //SearchDescriptor's equals() method altered to be independent of TimeFrame[] ordering.
-	    if((searchNode = searchMap.get(searchKey)) == null) { 
+	    if((searchNode = lookupSearchDescriptor(searchKey)) == null) { 
 	        searchNode = new AnalyticNode(desc.instantiateAnalytic());
-	        searchMap.put(searchKey, searchNode);
+	        mapSearchDescriptor(searchKey, searchNode);
 	        searchNode.addOutputKeyMapping(desc.getOutputKey(), subscription);
 	        Map<String, SeriesSubscription> requiredSubs = desc.getRequiredSubscriptions(subscription);
 	        for(String key : requiredSubs.keySet()) {
@@ -140,6 +171,19 @@ public class BarchartSeriesProvider {
 	    return searchNode;
 	}
 	
+	/**
+	 * Returns a list of either derivable nodes or a single node which
+	 * exactly matches the specified {@link SeriesSubscription}'s constraints.
+	 * 
+	 * Derivable nodes are nodes which produce data that is compatible with the 
+	 * specified subscription and can be further modified to produce the exact
+	 * data required by the subscription.
+	 * 
+	 * @param subscription     the subscription describing the data a matching node
+	 *                         would have to match.
+	 * @return                 a list of derivable nodes, a single matching node or
+	 *                         an empty list. This method never returns null.
+	 */
 	private List<Node<SeriesSubscription>> findMatchingIONodes(SeriesSubscription subscription) {
 	    List<Node<SeriesSubscription>> derivables = new ArrayList<Node<SeriesSubscription>>();
         for(Node<SeriesSubscription> node : ioNodes) {
@@ -155,9 +199,23 @@ public class BarchartSeriesProvider {
 	}
 	
 	/**
+	 * This method recursively calls itself to build and/or locate existing nodes
+	 * which exist in a chain of nodes which successively modify data to produce the
+	 * time frame of data requested.
 	 * 
-	 * @param subscription
-	 * @param original
+	 * It returns the last leaf node of a connected chain of IO nodes, configured to
+	 * produce the {@link SeriesSubscription} specified. The returned node can
+	 * be connected to other nodes and supply them with the series data configured
+	 * with the time constraints specified as required by their input specifications.
+	 * 
+	 * IO nodes are analytic nodes that are specialized to receive one input and produce
+	 * a single output which modifies the data according to the time constraints of that
+	 * particular IO node.
+	 * 
+	 * @param subscription         the subscription describing the required output.
+	 * @param original             the original subscription, as this method recursively calls
+	 *                             itself to build or attach to a supporting network, altering
+	 *                             the first subscription parameter with each call.
 	 * @return
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -252,6 +310,30 @@ public class BarchartSeriesProvider {
 			retVal = new Distributor(s);
 		}
 		return retVal;
+	}
+	
+	/** 
+	 * Provides thread-safe access to the map of live nodes.
+	 * 
+	 * @param sd       a {@link SearchDescriptor} describing the required node to return.
+	 * @return         the matching {@link Node} if it exists.
+	 */
+	private AnalyticNode lookupSearchDescriptor(SearchDescriptor sd) {
+	    synchronized(searchLock) {
+	        return searchMap.get(sd);
+	    }
+	}
+	
+	/**
+	 * Stores a mapping of {@link SearchDescriptor} to the specified {@link AnalyticNode}
+	 * 
+	 * @param sd       a {@link SearchDescriptor} describing the required node to store.
+	 * @param nodeToStore      the node to store.
+	 */
+	private void mapSearchDescriptor(SearchDescriptor sd, AnalyticNode nodeToStore) {
+	    synchronized(searchLock) {
+	        searchMap.put(sd, nodeToStore);
+	    }
 	}
 	
 	/**
