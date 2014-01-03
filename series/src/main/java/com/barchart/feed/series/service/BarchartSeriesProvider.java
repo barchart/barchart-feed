@@ -23,7 +23,9 @@ import com.barchart.feed.api.series.service.NodeDescriptor;
 import com.barchart.feed.api.series.service.NodeType;
 import com.barchart.feed.api.series.service.Query;
 import com.barchart.feed.api.series.service.Subscription;
+import com.barchart.feed.api.series.temporal.Period;
 import com.barchart.feed.api.series.temporal.TimeFrame;
+import com.barchart.feed.series.DataPoint;
 import com.barchart.feed.series.DataSeries;
 import com.barchart.feed.series.analytics.BarBuilder;
 
@@ -75,11 +77,11 @@ public class BarchartSeriesProvider {
 //		});
 		
 		NodeDescriptor descriptor = lookupDescriptor(query);
-		Observable observable = publishNetwork((SeriesSubscription)query.toSubscription(inst), descriptor);
+		Observable observable = getObservable((SeriesSubscription)query.toSubscription(inst), descriptor);
 		return (TimeSeriesObservable)observable;
 	}
 	
-	public Observable publishNetwork(SeriesSubscription subscription, NodeDescriptor descriptor) {
+	public Observable getObservable(SeriesSubscription subscription, NodeDescriptor descriptor) {
         switch(descriptor.getType()) {
             case IO: {
                 Node<SeriesSubscription> node = getOrCreateIONode(subscription, subscription);
@@ -93,7 +95,8 @@ public class BarchartSeriesProvider {
                 NetworkSchema schema = (NetworkSchema)descriptor;
                 List<Node<SeriesSubscription>> subscriptionNodes = new ArrayList<Node<SeriesSubscription>>();
                 for(AnalyticNodeDescriptor desc : schema.getMainPublishers()) {
-                    
+                	Node<SeriesSubscription> newNode = getOrCreateNode(subscription, subscription, desc);
+                    subscriptionNodes.add(newNode);
                 }
                 break;
             }
@@ -225,12 +228,11 @@ public class BarchartSeriesProvider {
 	 *                             the first subscription parameter with each call.
 	 * @return
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	Node<SeriesSubscription> getOrCreateIONode(SeriesSubscription subscription, SeriesSubscription original) {
 	    boolean isAssembler = subscription.getAnalyticSpecifier().equals(NodeType.ASSEMBLER.toString());
 	    
 	    List<Node<SeriesSubscription>> derivables = findMatchingIONodes(subscription);
-	    Node retVal = derivables.size() == 1 && 
+	    Node<SeriesSubscription> retVal = derivables.size() == 1 && 
 	    	(retVal = derivables.get(0)).getOutputSubscriptions().contains(subscription) ? retVal : null;
 	    
 	    if(!isAssembler && (retVal == null || retVal.getParentNodes().isEmpty())) {
@@ -238,25 +240,22 @@ public class BarchartSeriesProvider {
 	        	AnalyticNode derivableNode = (AnalyticNode)getBestDerivableNode(derivables, subscription);//Need algorithm to determine best derivable node
 	        	retVal = linkBestDerivableIONodeToNewChain(derivableNode, subscription);
             } else if(retVal == null) {
-                BarBuilderNodeDescriptor bbDesc = new BarBuilderNodeDescriptor();
-                bbDesc.setAnalyticClass(BarBuilder.class);
-                bbDesc.setConstructorArg(subscription);
-                retVal = new AnalyticNode(bbDesc.instantiateBuilderAnalytic());
+            	retVal = createIONode(subscription);
             }
 	        
 	        ((AnalyticNode)retVal).addOutputKeyMapping(BarBuilder.OUTPUT_KEY, subscription);
             List<SeriesSubscription> inputs = retVal.getInputSubscriptions();
             for(SeriesSubscription s : inputs) {
-                Node n = getOrCreateIONode(s, original);
+                Node<SeriesSubscription> n = getOrCreateIONode(s, original);
                 n.addChildNode(retVal);
                 retVal.addParentNode(n);
                 ((AnalyticNode)retVal).addInputKeyMapping(BarBuilder.INPUT_KEY, (SeriesSubscription)n.getOutputSubscriptions().get(0));
                 if(!isAssembler(n)) {
                     ioNodes.add(retVal);
                     ((AnalyticNode)n).addOutputKeyMapping(BarBuilder.OUTPUT_KEY, s);
-                    ((AnalyticNode)retVal).addInputTimeSeries(s, (DataSeries)((AnalyticNode)n).getOutputTimeSeries(s));
+                    ((AnalyticNode)retVal).addInputTimeSeries(s, (DataSeries<DataPoint>)((AnalyticNode)n).getOutputTimeSeries(s));
                 }else{
-                    ((AnalyticNode)retVal).addInputTimeSeries(s, (DataSeries)((Distributor)n).getOutputTimeSeries(s));
+                    ((AnalyticNode)retVal).addInputTimeSeries(s, (DataSeries<DataPoint>)((Distributor)n).getOutputTimeSeries(s));
                 }
             }
         }else if(isAssembler) {
@@ -277,13 +276,23 @@ public class BarchartSeriesProvider {
 	 */
 	@SuppressWarnings("unchecked")
 	private void addAssembler(SeriesSubscription s, Assembler a) {
-		assemblers.add((Node<SeriesSubscription>) a);
+		if(s == null) {
+			throw new IllegalArgumentException("Attempt to use a null subscription as key for Assembler storage.");
+		}else if(a == null) {
+			throw new IllegalArgumentException("Attempt to store a null Assembler for subscription: " + s);
+		}
+		
+		if(!assemblers.contains(a)) {
+			assemblers.add((Node<SeriesSubscription>) a);
+		}
     	
     	List<Distributor> dists = null;
     	if((dists = subscriberAssemblers.get(s)) == null) {
     	    subscriberAssemblers.put(s, dists = new ArrayList<Distributor>());
     	}
-    	dists.add((Distributor) a);
+    	if(!dists.contains(a)) {
+    		dists.add((Distributor) a);
+    	}
 	}
 	
 	/**
@@ -509,13 +518,18 @@ public class BarchartSeriesProvider {
 	}
 	
 	public class SeriesSubscriber implements Observable.OnSubscribeFunc<Span> {
-	    private Subscription subscription;
+	    private SeriesSubscription subscription;
 	    private Node<SeriesSubscription> subscribedNode;
 	    
-	    private SeriesSubscriber(Subscription subscription, Node<SeriesSubscription> node) {
+	    public SeriesSubscriber(SeriesSubscription subscription, Node<SeriesSubscription> node) {
 	        this.subscribedNode = node;
 	        this.subscription = subscription;
 	    }
+	    
+	    public SeriesSubscriber(SeriesSubscription subscription, List<Node<SeriesSubscription>> publishers) {
+	    	
+	    }
+	    
 	    @SuppressWarnings("unchecked")
         @Override
         public rx.Subscription onSubscribe(Observer<? super Span> t1) {

@@ -17,44 +17,46 @@ import org.joda.time.convert.InstantConverter;
  */
 public enum PeriodType {
 	TICK("Tick", 
-		DateTimeComparator.getInstance(null)),
+		DateTimeComparator.getInstance(null), 1000),
             //DateTimeFieldType.millisOfSecond())),
     SECOND("Second", 
         DateTimeComparator.getInstance(
             DateTimeFieldType.secondOfMinute(),
-            	DateTimeFieldType.minuteOfHour())),
+            	DateTimeFieldType.minuteOfHour()), 60),
     MINUTE("Minute", 
         DateTimeComparator.getInstance(
             DateTimeFieldType.minuteOfHour(),
-            	DateTimeFieldType.hourOfDay())),
+            	DateTimeFieldType.hourOfDay()), 60),
     HOUR("Hour",
         DateTimeComparator.getInstance(
             DateTimeFieldType.hourOfDay(),
-            	DateTimeFieldType.dayOfWeek())),
+            	DateTimeFieldType.dayOfWeek()), 24),
     DAY("Day",
         DateTimeComparator.getInstance(
             DateTimeFieldType.dayOfWeek(),
-            	DateTimeFieldType.weekOfWeekyear())),        	
+            	DateTimeFieldType.weekOfWeekyear()), 7),        	
     WEEK("Week",
         DateTimeComparator.getInstance(
             DateTimeFieldType.weekOfWeekyear(),
-            	DateTimeFieldType.monthOfYear())),
+            	DateTimeFieldType.monthOfYear()), 4),
     MONTH("Month",
         DateTimeComparator.getInstance(
             DateTimeFieldType.monthOfYear(),
-            	DateTimeFieldType.year())),
+            	DateTimeFieldType.year()), 3),
     QUARTER("Quarter", 
         DateTimeComparator.getInstance(
             DateTimeFieldType.monthOfYear(),
-            	DateTimeFieldType.year())),
+            	DateTimeFieldType.year()), 4),
     YEAR("Year",
         DateTimeComparator.getInstance(
-            DateTimeFieldType.year()));
+            DateTimeFieldType.year()), 0);
 	
 	/** Display string of this {@code PeriodType} */
 	private String type;
     /** Used for operations involving comparisons of time intervals */
     private DateTimeComparator typeComparator;
+    /** The amount of units of this type to make the next */
+    private long unitsForNext;
     
     
     /** 
@@ -63,9 +65,10 @@ public enum PeriodType {
      * @param type		the display String
      * @param dtc		joda time comparator
      */
-    private PeriodType(String type, DateTimeComparator dtc) {
+    private PeriodType(String type, DateTimeComparator dtc, long unitsForNext) {
         this.type = type;
         this.typeComparator = dtc;
+        this.unitsForNext = unitsForNext;
     }
     
     /**
@@ -217,6 +220,22 @@ public enum PeriodType {
      */
     public boolean isLowerThan(PeriodType type) {
         return type.ordinal() > ordinal();
+    }
+    
+    /**
+     * Returns a count of the number of units of the lower, that 
+     * it takes to equal the upper.
+     * 
+     * @param lower		the {@code PeriodType} to start from
+     * @param upper		the {@code PeriodType} to end with
+     * @return		the sum of the units of lower it takes to equal upper.
+     */
+    public static long unitsBetween(PeriodType lower, PeriodType upper) {
+    	long sum = lower.unitsForNext;
+    	while((lower = PeriodType.inc(lower, 1)).isLowerThan(upper)) {
+    		sum *= lower.unitsForNext;
+    	}
+    	return sum;
     }
     
     /**

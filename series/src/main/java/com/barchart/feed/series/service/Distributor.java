@@ -10,7 +10,6 @@ import org.joda.time.format.DateTimeFormatter;
 
 import com.barchart.feed.api.model.data.Market;
 import com.barchart.feed.api.series.Span;
-import com.barchart.feed.api.series.TimePoint;
 import com.barchart.feed.api.series.TimeSeries;
 import com.barchart.feed.api.series.service.Assembler;
 import com.barchart.feed.api.series.service.HistoricalResult;
@@ -18,6 +17,7 @@ import com.barchart.feed.api.series.service.Node;
 import com.barchart.feed.api.series.service.Subscription;
 import com.barchart.feed.api.series.temporal.Period;
 import com.barchart.feed.series.DataBar;
+import com.barchart.feed.series.DataPoint;
 import com.barchart.feed.series.DataSeries;
 import com.barchart.feed.series.SpanImpl;
 import com.barchart.util.value.ValueFactoryImpl;
@@ -194,11 +194,11 @@ public class Distributor extends Node<SeriesSubscription> implements Assembler {
 	 * Returns the output {@link TimeSeries}
 	 */
 	@SuppressWarnings("unchecked")
-	public <E extends TimePoint> TimeSeries<E> getOutputTimeSeries(Subscription subscription) {
+	public <E extends DataPoint> DataSeries<E> getOutputTimeSeries(Subscription subscription) {
 		if(outputTimeSeries == null) {
 			this.outputTimeSeries = new DataSeries<DataBar>(subscription.getTimeFrames()[0].getPeriod());
 		}
-		return (TimeSeries<E>)this.outputTimeSeries;
+		return (DataSeries<E>)this.outputTimeSeries;
 	}
 
 	@Override

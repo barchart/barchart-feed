@@ -65,7 +65,8 @@ public class BarBuilder extends AnalyticBase {
 	@SuppressWarnings(value = { "unchecked", "rawtypes" })
 	@Override
 	public Span process(Span span) {
-		System.out.println(this + " processing span: " + inputSpan);
+		//System.out.println(this + " processing span: " + span);
+		this.inputSpan = (SpanImpl)span;
 		
 		DataSeries<DataPoint> outputSeries = (DataSeries)getOutputTimeSeries(BarBuilder.OUTPUT_KEY);
 		DataSeries<DataPoint> inputSeries = (DataSeries)getInputTimeSeries(BarBuilder.INPUT_KEY);
@@ -75,12 +76,12 @@ public class BarBuilder extends AnalyticBase {
 		Period inputPeriod = inputSeries.getPeriod();
         Period outputPeriod = outputSeries.getPeriod();
         
-        if(inputPeriod == outputPeriod) {
+        if(inputPeriod.equals(outputPeriod)) {
 		    for(int i = inputStartIdx;i <= inputLastIdx;i++) {
 		        outputSeries.insertData(inputSeries.get(i));
 		    }
-		    return new SpanImpl((SpanImpl)inputSpan);
-		}else if(inputPeriod.getPeriodType() == outputPeriod.getPeriodType()){ //Types are equal but output interval is > 1
+		    return new SpanImpl(inputSpan);
+		}else{ //if(inputPeriod.getPeriodType() == outputPeriod.getPeriodType()){ //Types are equal but output interval is > 1
 			if(inputPeriod.size() > 1) {
 				throw new IllegalStateException(
 					"Can't build bars from Type with an Interval that's not 1. Input=" + 
@@ -89,23 +90,24 @@ public class BarBuilder extends AnalyticBase {
 			
 			if(currentMergeBar == null) {
 				currentMergeBar = (DataBar)inputSeries.get(inputStartIdx); 
-				workingTargetDate = subscription.getTradingWeek().
-					getNextSessionDate(currentMergeBar.getDate(), outputPeriod);
+				workingTargetDate = subscription.getTradingWeek().getNextSessionDate(currentMergeBar.getDate(), outputPeriod);
 				currentMergeBar.setDate(workingTargetDate);
+				workingSpan = new SpanImpl(subscription.getTimeFrame(0).getPeriod(), inputSpan.getTime(), inputSpan.getNextTime());
 				this.workingSpan.setDate(currentMergeBar.getDate());
 				this.workingSpan.setNextDate(currentMergeBar.getDate());
 				
 				outputSeries.add(currentMergeBar);
+			}else{
+				workingSpan.setDate(workingTargetDate);
 			}
 			
-			for(int i = inputStartIdx;i < inputLastIdx;i++) {
+			for(int i = inputStartIdx;i <= inputLastIdx;i++) {
 				DataBar currentIdxBar = (DataBar)inputSeries.get(i);
 				if(currentIdxBar.getDate().isAfter(workingTargetDate)) {
 					workingTargetDate = subscription.
 						getTradingWeek().getNextSessionDate(workingTargetDate, outputPeriod);
 					currentMergeBar = new DataBar(currentIdxBar);
 					currentMergeBar.setDate(workingTargetDate);
-					this.workingSpan.setDate(currentMergeBar.getDate());
 					this.workingSpan.setNextDate(currentMergeBar.getDate());
 					
 					outputSeries.add(currentMergeBar);
@@ -116,11 +118,9 @@ public class BarBuilder extends AnalyticBase {
 			
 			//Notify of change
 			valueUpdated();
-		}else{ //Period types are not equal
-			
 		}
-		
-		return null;
+        
+		return workingSpan;
 	}
 	
 	/**

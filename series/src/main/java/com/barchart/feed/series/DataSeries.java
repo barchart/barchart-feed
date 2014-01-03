@@ -291,7 +291,7 @@ public class DataSeries<E extends DataPoint> implements TimeSeries<E> {
         while (low <= high) {
             mid = (high + low) / 2;
             if(mid >= size) return exactOnly ? -1 : mid;
-            int comparison = period.getPeriodType().compareAtResolution(date, data.get(mid).date);
+            int comparison = date.compareTo(data.get(mid).date);//period.getPeriodType().compareAtResolution(date, data.get(mid).date);
             if(comparison == 0) break;
             if(low == mid && high == mid) return exactOnly ? -1 : mid;
             
@@ -387,6 +387,13 @@ public class DataSeries<E extends DataPoint> implements TimeSeries<E> {
     	return (E[])data.toArray();
     }
     
+    /**
+     * Inserts the {@link DataPoint} specified into the backing
+     * list in the appropriate location indicated by the DataPoint's
+     * time element.
+     * 
+     * @param e		the subclass of {@link DataPoint} to insert.
+     */
     public void insertData(E e) {
         synchronized(INSERT_LOCK) {
             data.add(indexOf(e.getTime(), false), (DataPoint) e);
@@ -405,7 +412,6 @@ public class DataSeries<E extends DataPoint> implements TimeSeries<E> {
      * 			or is otherwise malformed.  
      */
     public boolean add(E e) {
-    	if(data.contains(e)) return false;
     	data.add((DataPoint) e);
     	return true;
     }

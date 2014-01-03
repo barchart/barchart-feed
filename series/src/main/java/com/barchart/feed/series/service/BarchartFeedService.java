@@ -64,6 +64,13 @@ public class BarchartFeedService implements FeedMonitorService {
 		startAndMonitorConnection();
 	}
 	
+	/**
+	 * Returns the {@link Instrument} object whose symbol is the 
+	 * symbol specified.
+	 * 
+	 * @param	symbol		the symbol for which to do an Instrument lookup
+	 * @return	the Instrument found or null.
+	 */
 	@Override
 	public Instrument lookupInstrument(String symbol) {
 		Result<Instrument> result = marketService.instrument(symbol).toBlockingObservable().single();
@@ -145,8 +152,6 @@ public class BarchartFeedService implements FeedMonitorService {
 	 * Simple pair class to contain the results of a connection state 
 	 * change notification. This is to be used with any clients wishing 
 	 * to monitor this connection.
-	 * 
-	 * @author David Ray
 	 *
 	 * @param <K>
 	 * @param <V>

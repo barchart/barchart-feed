@@ -53,7 +53,6 @@ public class BarchartSeriesProviderTest {
 		
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Test
 	public void testGetOrCreateIONode() {
 		BarchartSeriesProvider provider = new BarchartSeriesProvider(null);
