@@ -21,7 +21,6 @@ import com.barchart.feed.api.model.data.Market;
 import com.barchart.feed.api.model.data.Market.Component;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.api.model.meta.id.InstrumentID;
-import com.barchart.feed.api.series.TimeSeries;
 import com.barchart.feed.api.series.service.Assembler;
 import com.barchart.feed.api.series.service.FeedMonitorService;
 import com.barchart.feed.api.series.service.HistoricalObserver;
@@ -30,7 +29,12 @@ import com.barchart.feed.api.series.service.HistoricalService;
 import com.barchart.feed.api.series.service.Subscription;
 
 /**
- * Queryable framework for providing {@link TimeSeries} objects.
+ * Combined live quote data and historical data feed specialized to 
+ * provide data to registered {@link Assemblers}. Instances of this 
+ * class provide all supportive functions necessary to interact with
+ * data supplying services, such as {@link Instrument} lookup and
+ * register/unregister functions together with connection monitoring
+ * and quote message specification.
  * 
  * @author David Ray
  */

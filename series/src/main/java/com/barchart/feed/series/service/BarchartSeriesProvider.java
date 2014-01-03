@@ -75,20 +75,27 @@ public class BarchartSeriesProvider {
 //		});
 		
 		NodeDescriptor descriptor = lookupDescriptor(query);
-		Observable observable = publishNetwork(query, descriptor);
+		Observable observable = publishNetwork((SeriesSubscription)query.toSubscription(inst), descriptor);
 		return (TimeSeriesObservable)observable;
 	}
 	
-	public Observable publishNetwork(Query query, NodeDescriptor descriptor) {
+	public Observable publishNetwork(SeriesSubscription subscription, NodeDescriptor descriptor) {
         switch(descriptor.getType()) {
             case IO: {
-                
+                Node<SeriesSubscription> node = getOrCreateIONode(subscription, subscription);
+                break;
             }
             case ANALYTIC: {
-                
+                Node<SeriesSubscription> node = getOrCreateNode(subscription, subscription, (AnalyticNodeDescriptor)descriptor);
+                break;
             }
             case NETWORK: {
-                
+                NetworkSchema schema = (NetworkSchema)descriptor;
+                List<Node<SeriesSubscription>> subscriptionNodes = new ArrayList<Node<SeriesSubscription>>();
+                for(AnalyticNodeDescriptor desc : schema.getMainPublishers()) {
+                    
+                }
+                break;
             }
             default: {
                 //No other implementations for now...
@@ -219,7 +226,7 @@ public class BarchartSeriesProvider {
 	 * @return
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	Node getOrCreateIONode(SeriesSubscription subscription, SeriesSubscription original) {
+	Node<SeriesSubscription> getOrCreateIONode(SeriesSubscription subscription, SeriesSubscription original) {
 	    boolean isAssembler = subscription.getAnalyticSpecifier().equals(NodeType.ASSEMBLER.toString());
 	    
 	    List<Node<SeriesSubscription>> derivables = findMatchingIONodes(subscription);
