@@ -1,6 +1,7 @@
 package com.barchart.feed.api.series.temporal;
 
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
 
 /**
  * Basic time unit aggregation used during comparison of participants
@@ -136,5 +137,10 @@ public class TimeFrame {
 		} else if (period.getPeriodType().compareAtResolution(startDate, other.startDate) != 0)
 			return false;
 		return true;
+	}
+	
+	public String toString() {
+	    return new StringBuilder().append(DateTimeFormat.forPattern("yyyy-MM-dd HH:mm ").print(startDate)).
+	        append(period).toString();
 	}
 }

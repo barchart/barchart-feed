@@ -107,4 +107,7 @@ public class Period {
 		return true;
 	}
 
+	public String toString() {
+	    return new StringBuilder(periodType.toString()).append("(").append(size).append(")").toString();
+	}
 }

@@ -1,7 +1,11 @@
 package com.barchart.feed.series;
 
+import org.joda.time.DateTime;
+
 import com.barchart.feed.api.series.Bar;
 import com.barchart.feed.api.series.temporal.Period;
+import com.barchart.feed.api.series.temporal.PeriodType;
+import com.barchart.util.value.ValueFactoryImpl;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Size;
 import com.barchart.util.value.api.Time;
@@ -23,19 +27,69 @@ public class DataBar extends DataPoint implements Bar {
 	/**
 	 * Instantiates a new {@code DataBar}
 	 * 
-	 * @param date
-	 * @param period
-	 * @param open
-	 * @param high
-	 * @param low
-	 * @param close
-	 * @param volume
-	 * @param openInterest
+	 * @param date				the {@link Time} of this bar.
+	 * @param period			the Period interval and type of this bar.
+	 * @param open				the Open {@link Price} of this bar.
+	 * @param high				the High {@link Price} of this bar.
+	 * @param low				the Low {@link Price} of this bar.
+	 * @param close				the Close {@link Price} of this bar.
+	 * @param volume			the Volume {@link Size} of this bar.
+	 * @param openInterest		the Open Interest {@link Size} of this bar.
 	 */
 	public DataBar(Time date, Period period, Price open, Price high, 
 		Price low, Price close, Size volume, Size openInterest) {
 		
-		super(period, (Time)date);
+		super(period, date);
+		
+		this.open = open;
+		this.high = high;
+		this.low = low;
+		this.close = close;
+		this.volume = volume;
+		this.openInterest = openInterest;
+	}
+	
+	/**
+	 * Instantiates a new {@code DataBar}
+	 * 
+	 * @param date				the {@link DateTime} of this bar.
+	 * @param period			the Period interval and type of this bar.
+	 * @param open				the Open {@link Price} of this bar.
+	 * @param high				the High {@link Price} of this bar.
+	 * @param low				the Low {@link Price} of this bar.
+	 * @param close				the Close {@link Price} of this bar.
+	 * @param volume			the Volume {@link Size} of this bar.
+	 * @param openInterest		the Open Interest {@link Size} of this bar.
+	 */
+	public DataBar(DateTime date, Period period, Price open, Price high, 
+		Price low, Price close, Size volume, Size openInterest) {
+		
+		super(period, ValueFactoryImpl.factory.newTime(date.getMillis(), date.getZone().getID()));
+		
+		this.open = open;
+		this.high = high;
+		this.low = low;
+		this.close = close;
+		this.volume = volume;
+		this.openInterest = openInterest;
+	}
+	
+	/**
+	 * Copy constructor
+	 * @param other
+	 */
+	public DataBar(DataBar other) {
+		super(new Period(other.period.getPeriodType(), other.period.size()), 
+			ValueFactoryImpl.factory.newTime(other.date.getMillis(), other.date.getZone().getID()));
+		
+		this.open = ValueFactoryImpl.factory.newPrice(other.getOpen().asDouble());
+		this.high = ValueFactoryImpl.factory.newPrice(other.getHigh().asDouble());
+		this.low = ValueFactoryImpl.factory.newPrice(other.getLow().asDouble());
+		this.close = ValueFactoryImpl.factory.newPrice(other.getClose().asDouble());
+		this.volume = ValueFactoryImpl.factory.newSize(other.getVolume().mantissa(),
+			other.getVolume().exponent());
+		this.openInterest = ValueFactoryImpl.factory.newSize(
+			other.getOpenInterest().mantissa(), other.getOpenInterest().exponent());
 	}
 	
 	/**
@@ -178,7 +232,36 @@ public class DataBar extends DataPoint implements Bar {
 	public void setTime(Time t) {
 		this.time = t;
 	}
-
+	
+	/**
+	 * Merges the specified <@link Bar> with this one, possibly updating any
+	 * barrier elements (i.e. High, Low, etc) given the underlying type. Used for
+	 * aggregating information based on {@link PeriodType}
+	 * 
+	 * Returns a boolean indicating whether this time point should be closed - refusing
+	 * any subsequent merges. If this Bar should be closed, this method returns
+	 * true, false if not.
+	 *  
+	 * @param other		the other Bar to merge.
+	 * @param advanceTime	true if the time should also be merged, false if not
+	 */
+	@Override
+	public <E extends Bar> void merge(E other, boolean advanceTime) {
+		if(other.getHigh().greaterThan(high)) {
+			high = other.getHigh();
+		}
+		if(other.getLow().lessThan(low)) {
+			low = other.getLow();
+		}
+		close = other.getClose();
+		volume = volume.add(other.getVolume());
+		
+		if(advanceTime) {
+			time = other.getTime();
+			date = new DateTime(time.millisecond());
+		}
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */

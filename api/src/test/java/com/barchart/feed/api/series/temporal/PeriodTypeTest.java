@@ -84,6 +84,15 @@ public class PeriodTypeTest {
 	}
 	
 	@Test
+	public void testUnitsBetween() {
+		assertEquals(60, PeriodType.unitsBetween(PeriodType.SECOND, PeriodType.MINUTE));
+		assertEquals(3600, PeriodType.unitsBetween(PeriodType.SECOND, PeriodType.HOUR));
+		assertEquals(24 * 3600, PeriodType.unitsBetween(PeriodType.SECOND, PeriodType.DAY));
+		
+		assertEquals(60 * 24, PeriodType.unitsBetween(PeriodType.MINUTE, PeriodType.DAY));
+	}
+	
+	@Test
 	public void testEqualsAtResolution() {
 		DateTime dt1 = new DateTime(2013, 11, 5, 14, 30, 30);
 		DateTime dt2 = new DateTime(2013, 12, 6, 15, 31, 31);

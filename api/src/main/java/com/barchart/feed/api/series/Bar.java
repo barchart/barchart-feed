@@ -34,4 +34,18 @@ public interface Bar extends TimePoint, Range {
 	 * @return the open interest
 	 */
 	public Size getOpenInterest();
+	
+	/**
+	 * Merges the specified <@link Bar> with this one, possibly updating any
+	 * barrier elements (i.e. High, Low, etc) given the underlying type. Used for
+	 * aggregating information based on {@link PeriodType}
+	 * 
+	 * Returns a boolean indicating whether this time point should be closed - refusing
+	 * any subsequent merges. If this Bar should be closed, this method returns
+	 * true, false if not.
+	 *  
+	 * @param other			the other Bar to merge.
+	 * @param advanceTime	true if the time should also be merged, false if not
+	 */
+	public <E extends Bar> void merge(E other, boolean advanceTime);
 }

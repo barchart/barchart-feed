@@ -486,7 +486,16 @@ public class TradingWeek extends JodaWorkingWeek {
                 break;
             }
             case TICK: {
-            	//Figure this out
+            	tradingSession = getTradingSessionOnOrAfter(dt);
+                if(!tradingSession.contains(dt)) {
+                    if(tradingSession.day() < dt.getDayOfWeek()) {
+                        dt = dt.plusDays((DateTimeConstants.SUNDAY - dt.getDayOfWeek()) + 1);
+                    }
+                    dt = dt.withDayOfWeek(tradingSession.day());
+                    LocalTime lt = tradingSession.start();
+                    dt = dt.withHourOfDay(lt.getHourOfDay()).withMinuteOfHour(lt.getMinuteOfHour());
+                    dt = dt.withSecondOfMinute(lt.getSecondOfMinute()).withMillisOfSecond(0);
+                }
             }
             
             // Guarantee new date is aligned to a business date.

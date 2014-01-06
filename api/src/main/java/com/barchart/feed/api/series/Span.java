@@ -30,6 +30,15 @@ public interface Span extends TimePoint {
 	public int getIndex();
 	
 	/**
+	 * Returns true if the specified span start time less than 
+	 * this start time or a next time greater than this start time.
+	 * 
+	 * @param span     the span tested for extends quality
+	 * @return         true if so, false if not
+	 */
+	public <T extends Span> boolean extendsSpan(T span);
+	
+	/**
 	 * Expands the lower and upper bounds of this {@code Span} to
 	 * include the extremes of the specified Span if not already
 	 * included.
@@ -37,7 +46,7 @@ public interface Span extends TimePoint {
 	 * @param span
 	 * @return the union of this Span and the specified Span
 	 */
-	public Span union(Span span);
+	public <T extends Span> T union(T span);
 	
 	/**
 	 * Returns a {@code Span} whose range is the intersection of this
@@ -47,5 +56,5 @@ public interface Span extends TimePoint {
 	 * @return	a Span containing the interecting range of this Span and the 
 	 * 			Span specified.
 	 */
-	public Span intersection(Span span);
+	public <T extends Span> T intersection(T span);
 }

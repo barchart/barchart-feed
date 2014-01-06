@@ -1,0 +1,2 @@
+PivotPoint;PP_R2,Overlay,Base;com.barchart.feed.series.analytics.PivotPoint;;Resist2;Overlay,IO,Overlay;Base,IO,Base
+PivotPoint;PP_S4,Overlay,Base;com.barchart.feed.series.analytics.PivotPoint;;Support3;Input,PP_R2,Overlay,Base

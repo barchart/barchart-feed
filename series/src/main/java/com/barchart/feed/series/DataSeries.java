@@ -1,6 +1,7 @@
 package com.barchart.feed.series;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
@@ -11,17 +12,19 @@ import org.joda.time.DateTime;
 import rx.Observer;
 import rx.Subscription;
 
+import com.barchart.feed.api.series.TimePoint;
 import com.barchart.feed.api.series.TimeSeries;
 import com.barchart.feed.api.series.temporal.Period;
 import com.barchart.feed.api.series.temporal.PeriodType;
-import com.barchart.util.value.api.Scaled;
 import com.barchart.util.value.api.Time;
 
-public class DataSeries<T extends Scaled<T>, E extends DataPoint> implements TimeSeries<E> {
+public class DataSeries<E extends DataPoint> implements TimeSeries<E> {
 	/** All {@link DataPoints} are aggregated according to this Period */
 	private Period period;
 	/** The backing data */
-	private List<DataPoint> data = new ArrayList<DataPoint>();
+	private List<DataPoint> data = Collections.synchronizedList(new ArrayList<DataPoint>());
+	
+	private Object INSERT_LOCK = new Object();
 	
 	/**
 	 * Constructs a new {@link DataSeries} whose {@link DataPoints} adhere to
@@ -138,18 +141,19 @@ public class DataSeries<T extends Scaled<T>, E extends DataPoint> implements Tim
 	}
 
 	/**
-     * Executes a binary search returning the index of the {@link DataPoint}
-     * containing the date specified, or the index of the previous DataPoint 
-     * if the the specified DataPoint is not found. 
+     * Executes a binary search returning the index of the {@link TimePoint}
+     * containing the date specified, or the index of the previous TimePoint 
+     * if the the specified TimePoint is not found. 
      * <p>
      * This method will always return a valid index. If the specified date
-     * is before the first date within the first DataPoint, 0 will be returned.
-     * Likewise, if the date is after the last date within the last DataPoint
-     * in this series, the index of the last DataPoint will be returned.
+     * is before the first date within the first TimePoint, 0 will be returned.
+     * Likewise, if the date is after the last date within the last TimePoint
+     * in this series, the index of the last TimePoint will be returned.
      * <p>
      * <pre>
 	 * NOTE: 	All time based comparisons are made at the same {@link PeriodType} resolution as the 
-	 * 			PeriodType this series is configured with, ignoring other date fields.
+	 * 			PeriodType this series is configured with, ignoring other date fields --IF--
+	 * 			"compareAtRes" is set to true.
 	 * </pre>
      * <br><br>
      * <em><b>Warning: this method is not thread-safe.</b></em>
@@ -157,23 +161,28 @@ public class DataSeries<T extends Scaled<T>, E extends DataPoint> implements Tim
      * @param date          the date for which the location index is searched.
      * @param idxUpper      the upper bounds of the search.
      * @param idxLower      the lower bounds of the search.
+     * @param compareAtRes	the flag indicating to do comparisons at the PeriodType resolution configured
      * @return              the index of the "proper location" whether the date
      *                      exists in this {@code TimeSeries} or not.
      */
 	@Override
-	public int closestIndexOf(Time time, int idxLower, int idxUpper) {
+	public int closestIndexOf(Time time, int idxLower, int idxUpper, boolean compareAtRes) {
 		if(time == null) return -1;
 		DateTime date = new DateTime(time.millisecond());
 	      
         int half = idxLower + (idxUpper - idxLower) / 2;
-        if(period.getPeriodType().compareAtResolution(date, data.get(half).date) == 0) return half;
+        if(compareAtRes) {
+        	if(period.getPeriodType().compareAtResolution(date, data.get(half).date) == 0) return half;
+        }else{
+        	if(date.compareTo(data.get(half).date) == 0) return half;
+        }
         if(half == idxLower){
               return Math.min(data.size(), half + 1);
         }
         if(date.isAfter(data.get(half).date)) {
-            return closestIndexOf(time, idxUpper, half);
+            return closestIndexOf(time, idxUpper, half, compareAtRes);
         }else{
-            return closestIndexOf(time, half, idxLower);
+            return closestIndexOf(time, half, idxLower, compareAtRes);
         }
 	}
 	
@@ -239,7 +248,7 @@ public class DataSeries<T extends Scaled<T>, E extends DataPoint> implements Tim
         if(mid < 0) {
             mid = isExact ? 0 : -1;
         }else if(mid > size){
-            mid = isExact ? size : -1;
+            mid = size;
         }
         return mid;
     }
@@ -282,7 +291,7 @@ public class DataSeries<T extends Scaled<T>, E extends DataPoint> implements Tim
         while (low <= high) {
             mid = (high + low) / 2;
             if(mid >= size) return exactOnly ? -1 : mid;
-            int comparison = period.getPeriodType().compareAtResolution(date, data.get(mid).date);
+            int comparison = date.compareTo(data.get(mid).date);//period.getPeriodType().compareAtResolution(date, data.get(mid).date);
             if(comparison == 0) break;
             if(low == mid && high == mid) return exactOnly ? -1 : mid;
             
@@ -356,12 +365,12 @@ public class DataSeries<T extends Scaled<T>, E extends DataPoint> implements Tim
 
 			@Override
 			public void set(E e) {
-				data.set(index, e);
+				data.set(index, (DataPoint) e);
 			}
 
 			@Override
 			public void add(E e) {
-				data.add(e);
+				data.add((DataPoint) e);
 			}
 		};
 	}
@@ -378,6 +387,19 @@ public class DataSeries<T extends Scaled<T>, E extends DataPoint> implements Tim
     	return (E[])data.toArray();
     }
     
+    /**
+     * Inserts the {@link DataPoint} specified into the backing
+     * list in the appropriate location indicated by the DataPoint's
+     * time element.
+     * 
+     * @param e		the subclass of {@link DataPoint} to insert.
+     */
+    public void insertData(E e) {
+        synchronized(INSERT_LOCK) {
+            data.add(indexOf(e.getTime(), false), (DataPoint) e);
+        }
+    }
+    
 	/**
      * Adds a {@link DataPoint} to the end of this {@code TimeSeries}.
      * 
@@ -390,9 +412,22 @@ public class DataSeries<T extends Scaled<T>, E extends DataPoint> implements Tim
      * 			or is otherwise malformed.  
      */
     public boolean add(E e) {
-    	if(data.contains(e)) return false;
-    	data.add(e);
+    	data.add((DataPoint) e);
     	return true;
+    }
+    
+    /**
+     * Adds the specified Object to be the Object residing at the
+     * specified index shifting others to the right.
+     *
+     * <br><br>
+     * <em><b>Warning: this method is not thread-safe.
+     * @param   index   the index to insert the specified object.
+     * @param   e   the Object to be set.
+     */
+    public E add(int index, E e) {
+    	data.add(index, (DataPoint) e);
+		return e;
     }
     
     /**
@@ -405,7 +440,7 @@ public class DataSeries<T extends Scaled<T>, E extends DataPoint> implements Tim
      * @param   e   the Object to be set.
      */
     public E set(int index, E e) {
-    	data.set(index, e);
+    	data.set(index, (DataPoint) e);
     	return e;
     }
     
