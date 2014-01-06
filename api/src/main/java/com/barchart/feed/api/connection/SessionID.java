@@ -2,7 +2,7 @@ package com.barchart.feed.api.connection;
 
 import com.barchart.util.common.identifier.Identifier;
 
-public class SessionID extends Identifier<String, SessionID> {
+class SessionID extends Identifier<String, SessionID> {
 	
 	public SessionID(final String id) {
 		super(id, SessionID.class);

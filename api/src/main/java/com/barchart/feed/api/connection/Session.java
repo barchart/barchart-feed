@@ -10,7 +10,7 @@ import com.barchart.util.common.anno.aQute.bnd.annotation.ProviderType;
  */
 @Mutable
 @ProviderType
-public interface Session {
+interface Session {
 	
 	/**
 	 * Unique session token GUID, used to authenticate additional services.

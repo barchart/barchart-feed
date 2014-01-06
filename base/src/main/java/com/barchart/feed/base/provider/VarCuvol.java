@@ -159,7 +159,6 @@ public final class VarCuvol extends NulCuvol implements MarketDoCuvol {
 		}
 		
 		if(map.size() == 0) {
-			System.out.println("Cuvol Map Was Size 0 for " + instrument.symbol());
 			return MarketConst.NULL_CUVOL_ENTRY;
 		}
 
