@@ -9,7 +9,7 @@ import com.barchart.util.value.api.Size;
  * 
  * @param <T>   core value-util type
  */
-public interface Bar extends TimePoint, Range {
+public interface Bar extends Range {
 
 	/**
 	 * Returns the open price
