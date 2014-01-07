@@ -155,6 +155,15 @@ public class SeriesSubscription implements Subscription {
 		return retVal;
 	}
 	
+	/**
+	 * Loads this {@link SeriesSubscription} with data defined by the specified child subscription's
+	 * inputs and separates out the time frames indexed under source key to be the time frames
+	 * assigned to this subscription.
+	 * 
+	 * @param sourceKey            the index which specifies the time frames this subscription defines.
+	 * @param nextSubscription     the child subscription from which this subscription's time frames are retrieved.
+	 * @param desc                 the descriptor defining this subscription's node.
+	 */
 	public void loadFromNodeDescriptor(String sourceKey, SeriesSubscription nextSubscription, AnalyticNodeDescriptor desc) {
         AnalyticNodeDescriptor id = desc.getInputNodeDescriptor(sourceKey);
         if (id == null)
@@ -172,7 +181,7 @@ public class SeriesSubscription implements Subscription {
         } else {
             for (String timeframe: timeframes) {
                 int index = desc.getTimeframeIndex(timeframe);
-                if (index >= 0) {
+                if (index > -1) {
                     this.addTimeFrame(nextSubscription.getTimeFrame(index));
                 }
             }

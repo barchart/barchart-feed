@@ -230,7 +230,7 @@ public class TestHarness {
             }
 
             @Override
-            public void setArea(DateTime time, DateTime nextTime, String key,
+            public void setZone(DateTime time, DateTime nextTime, String key,
                     double high, double low, double nextHigh, double nextLow) {
                 // TODO Auto-generated method stub
                 

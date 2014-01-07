@@ -9,7 +9,7 @@ import com.barchart.util.value.api.Price;
  * 
  * @author David Ray
  */
-public interface Area extends Range, Span {
+public interface Zone extends Range, Span {
 	/**
 	 * Returns the high value at the future most time index.
 	 * 

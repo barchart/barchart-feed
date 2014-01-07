@@ -3,7 +3,7 @@ package com.barchart.feed.api.series.service;
 import rx.Observable;
 
 /**
- * Observable which handles historical querys. For now this and its known 
+ * Observable which handles historical queries. For now this and its known 
  * implementor are very rudimentary.
  * 
  * @author David Ray

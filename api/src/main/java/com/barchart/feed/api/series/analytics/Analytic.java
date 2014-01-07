@@ -2,7 +2,7 @@ package com.barchart.feed.api.series.analytics;
 
 import org.joda.time.DateTime;
 
-import com.barchart.feed.api.series.Area;
+import com.barchart.feed.api.series.Zone;
 import com.barchart.feed.api.series.Range;
 import com.barchart.feed.api.series.Span;
 import com.barchart.feed.api.series.TimePoint;
@@ -74,13 +74,13 @@ public interface Analytic {
 	 */
 	public void setRange(DateTime time, String key, double high, double low);
 	/**
-	 * Called to update the 2-dimensional {@link Area} calculation for the specified key.
+	 * Called to update the 2-dimensional {@link Zone} calculation for the specified key.
 	 * 
 	 * @param time		the time of the result.
 	 * @param key		the identifier for the result.
 	 * @param high		the high value of the range.
 	 * @param low		the low value of the range.
 	 */
-	public void setArea(DateTime time, DateTime nextTime, String key, double high, double low, double nextHigh, double nextLow);
+	public void setZone(DateTime time, DateTime nextTime, String key, double high, double low, double nextHigh, double nextLow);
 	
 }

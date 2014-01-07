@@ -18,6 +18,7 @@ import com.barchart.feed.api.series.TimeSeriesObservable;
 import com.barchart.feed.api.series.analytics.Analytic;
 import com.barchart.feed.api.series.service.Assembler;
 import com.barchart.feed.api.series.service.FeedMonitorService;
+import com.barchart.feed.api.series.service.NetworkDescriptor;
 import com.barchart.feed.api.series.service.Node;
 import com.barchart.feed.api.series.service.NodeDescriptor;
 import com.barchart.feed.api.series.service.NodeType;
@@ -92,10 +93,11 @@ public class BarchartSeriesProvider {
                 break;
             }
             case NETWORK: {
-                NetworkSchema schema = (NetworkSchema)descriptor;
+                NetworkDescriptor schema = (NetworkDescriptor)descriptor;
                 List<Node<SeriesSubscription>> subscriptionNodes = new ArrayList<Node<SeriesSubscription>>();
-                for(AnalyticNodeDescriptor desc : schema.getMainPublishers()) {
-                	Node<SeriesSubscription> newNode = getOrCreateNode(subscription, subscription, desc);
+                for(NodeDescriptor desc : schema.getMainPublishers()) {
+                	Node<SeriesSubscription> newNode = getOrCreateNode(
+                	    subscription, subscription, (AnalyticNodeDescriptor)desc);
                     subscriptionNodes.add(newNode);
                 }
                 break;
@@ -131,7 +133,7 @@ public class BarchartSeriesProvider {
 	
 	/**
 	 * Recursively calls itself to create or link created nodes to produce the 
-	 * graph of nodes necessary to obtained the output data specified by the
+	 * graph of nodes necessary to obtain the output data specified by the
 	 * {@link SeriesSubscription} passed in. 
 	 * <p>
 	 * The returned node, (though not started) is fully configured and connected to all 
@@ -404,8 +406,9 @@ public class BarchartSeriesProvider {
 	}
 	
 	
-	//////////////////////////////////////////////// Inner Class Definitions ////////////////////////////////////////////////
-	
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//                                               Inner Class Definitions                                               //
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
 	 * Special descriptor for use as a key for lookups when searching for
@@ -433,7 +436,8 @@ public class BarchartSeriesProvider {
 	    }
 	    
 	    /**
-	     * Loads the distinguishing fields from the specified {@link SeriesSubscription}.
+	     * Loads the distinguishing fields from the specified {@link SeriesSubscription} and
+	     * {@link AnalyticNodeDescriptor}
 	     * 
 	     * @param subscription		the subscription supply the distinguishing search fields.
 	     * @param desc				the descriptor indexed by this {@code SearchDescriptor}.

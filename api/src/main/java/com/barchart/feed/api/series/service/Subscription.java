@@ -30,7 +30,7 @@ public interface Subscription extends rx.Subscription {
     public TimeFrame[] getTimeFrames();
 
     /**
-     * Returns the id of a required analytic if one is required.
+     * Returns the id of the required analytic if one is required.
      * @return the analytic specifier
      */
     public String getAnalyticSpecifier();

@@ -6,7 +6,7 @@ import com.barchart.feed.api.series.service.NodeDescriptor;
  * Further extension of {@link NodeDescriptor} to emphasize the needed
  * {@link Analytic} functionality. 
  * 
- * @author metaware
+ * @author David Ray
  */
 public interface AnalyticDescriptor extends NodeDescriptor {
 	/**

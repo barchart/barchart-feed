@@ -3,7 +3,7 @@ package com.barchart.feed.api.series.service;
 import rx.Observer;
 
 /**
- * Implemented by the {@link BarchartSeriesProvider} specifically or any other
+ * Implemented by any {@link Observer} 
  * object interested in being provided with historical query data using the 
  * idioms of reactive programming.
  * 

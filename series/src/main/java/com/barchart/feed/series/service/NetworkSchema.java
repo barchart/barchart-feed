@@ -10,10 +10,11 @@ import java.util.List;
 import java.util.Map;
 
 import com.barchart.feed.api.series.analytics.Analytic;
+import com.barchart.feed.api.series.service.NetworkDescriptor;
 import com.barchart.feed.api.series.service.NodeDescriptor;
 import com.barchart.feed.api.series.service.NodeType;
 
-public class NetworkSchema implements NodeDescriptor {
+public class NetworkSchema implements NetworkDescriptor {
     /** the default filename of the file storing the local schema definitions */
     private static final String DEFAULT_SCHEMA_FILENAME = "networks.txt";
     
@@ -52,20 +53,26 @@ public class NetworkSchema implements NodeDescriptor {
         return NodeType.NETWORK;
     }
     
+    @Override
     public String getNetworkName() {
         return name;
     }
     
+    @Override
     public void setNetworkName(String name) {
         this.name = name;
     }
     
+    @SuppressWarnings("unchecked")
+    @Override
     public List<AnalyticNodeDescriptor> getNetworkNodes() {
         return nodes;
     }
     
-    public void setNetworkNodes(List<AnalyticNodeDescriptor> nodes) {
-        this.nodes = nodes;
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T extends NodeDescriptor> void setNetworkNodes(List<T> nodes) {
+        this.nodes = (List<AnalyticNodeDescriptor>)nodes;
     }
     
     /**
@@ -78,6 +85,8 @@ public class NetworkSchema implements NodeDescriptor {
      * @return	a list of nodes required to instantiate the whole network if subscribed to.
      * @throws	IllegalStateException	if this network has no configured or loaded nodes.
      */
+    @SuppressWarnings("unchecked")
+    @Override
     public List<AnalyticNodeDescriptor> getMainPublishers() {
     	if(nodes == null || nodes.size() < 1) {
     		throw new IllegalStateException("Network: " + name + " was initialized with no nodes!");

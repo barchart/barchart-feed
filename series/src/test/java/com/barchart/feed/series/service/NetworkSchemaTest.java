@@ -1,18 +1,18 @@
 package com.barchart.feed.series.service;
 
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
 import java.util.List;
 
 import org.junit.Test;
 
+import com.barchart.feed.api.series.service.NetworkDescriptor;
+
 public class NetworkSchemaTest {
 
     @Test
     public void testGetNetwork() {
-        NetworkSchema schema = NetworkSchema.getNetwork("PivotPointOverlay");
+        NetworkDescriptor schema = NetworkSchema.getNetwork("PivotPointOverlay");
         assertNotNull(schema);
         
         assertEquals("PivotPointOverlay", schema.getNetworkName());
@@ -38,7 +38,7 @@ public class NetworkSchemaTest {
     	NetworkSchema.setSchemaFilePath("testNetworks.txt");
     	NetworkSchema.reloadDefinitions();
     	
-    	NetworkSchema schema = NetworkSchema.getNetwork("PivotPoint");
+    	NetworkDescriptor schema = NetworkSchema.getNetwork("PivotPoint");
     	assertNotNull(schema);
     	
     	assertEquals("PivotPoint", schema.getNetworkName());

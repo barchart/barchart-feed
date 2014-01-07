@@ -132,15 +132,13 @@ public class BarchartFeedService implements FeedMonitorService {
 				if(args.last == State.CONNECTED) {
 					synchronized(waitMonitor) {
 						try { 
-							isConnected.getAndSet(true);
-							
 							if(market == null) {
 								market = new MarketSubject();
 								consumerAgent = marketService.register(market, Market.class);
 								historical = new HistoricalSubject();
 							}
-							
-							waitMonitor.notify();
+							isConnected.getAndSet(true);
+                            waitMonitor.notify();
 						}catch(Exception e) { e.printStackTrace(); }
 					}
 				}

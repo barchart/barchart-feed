@@ -5,7 +5,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.joda.time.DateTime;
 
-import com.barchart.feed.api.series.Area;
+import com.barchart.feed.api.series.Zone;
 import com.barchart.feed.api.series.Range;
 import com.barchart.feed.api.series.Span;
 import com.barchart.feed.api.series.TimePoint;
@@ -27,6 +27,7 @@ public abstract class AnalyticBase implements Analytic {
      * @return  an array of this {@code Analytic}'s input keys.
      */
     public static String[] getInputKeys() { return null; }
+    
     /**
      * Returns an array of this {@code Analytic}'s output keys.
      * 
@@ -80,6 +81,7 @@ public abstract class AnalyticBase implements Analytic {
      * @return     the actual downstream processes should process.
      */
     public abstract Span process(Span span);
+    
     /**
      * Called to notify observers of an internal change which should result in notification
      * but no data additions.
@@ -87,6 +89,7 @@ public abstract class AnalyticBase implements Analytic {
     public void valueUpdated() {
         
     }
+    
     /**
      * Called to update the current calculation with a formal series model object.
      * 
@@ -96,6 +99,7 @@ public abstract class AnalyticBase implements Analytic {
     public <E extends TimePoint> void setValue(DateTime time, E e) {
         
     }
+    
     /**
      * Called to update the current calculation for the specified key.
      * 
@@ -106,6 +110,7 @@ public abstract class AnalyticBase implements Analytic {
     public void setCalculation(DateTime time, String key, double value) {
         
     }
+    
     /**
      * Called to update the {@link Range} calculation for the specified key.
      * 
@@ -117,15 +122,16 @@ public abstract class AnalyticBase implements Analytic {
     public void setRange(DateTime time, String key, double high, double low) {
         
     }
+    
     /**
-     * Called to update the 2-dimensional {@link Area} calculation for the specified key.
+     * Called to update the 2-dimensional {@link Zone} calculation for the specified key.
      * 
      * @param time      the time of the result.
      * @param key       the identifier for the result.
      * @param high      the high value of the range.
      * @param low       the low value of the range.
      */
-    public void setArea(DateTime time, DateTime nextTime, String key, double high, double low, double nextHigh, double nextLow) {
+    public void setZone(DateTime time, DateTime nextTime, String key, double high, double low, double nextHigh, double nextLow) {
         
     }
 }

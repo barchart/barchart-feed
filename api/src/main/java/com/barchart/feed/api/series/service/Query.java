@@ -72,6 +72,13 @@ public interface Query {
 	 * @return	the padding
 	 */
 	public int getPadding();
+	/**
+     * Returns the {@link TradingWeek} which is a collection of {@link TradingSession}s comprising an average 
+     * week of trading.
+     * 
+     * @return  the {@link TradingWeek}
+     */
+    public TradingWeek getTradingWeek();
 
 	// FUTURES ONLY
 
@@ -95,12 +102,5 @@ public interface Query {
 	 * @return	the {@link VolumeType}
 	 */
 	public VolumeType getVolumeType();
-	/**
-	 * Returns the {@link TradingWeek} which is a collection of {@link TradingSession}s comprising an average 
-	 * week of trading.
-	 * 
-	 * @return	the {@link TradingWeek}
-	 */
-	public TradingWeek getTradingWeek();
 
 }

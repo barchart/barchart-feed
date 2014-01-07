@@ -11,6 +11,19 @@ import com.barchart.feed.api.series.analytics.AnalyticDescriptor;
 import com.barchart.feed.api.series.service.NodeType;
 import com.barchart.feed.series.service.BarchartSeriesProvider.SearchDescriptor;
 
+
+/**
+ * Represents a {@link Node}'s meta information or schema. This class
+ * fully contains information about its relationships to preceding 
+ * {@link Node}s and their underlying processing units called {@link Analytic}s.
+ * Additionally these descriptors are capable of and contain all the information
+ * necessary to instantiate an instance of the {@link Analytic} without having 
+ * knowledge or concern for the specific type being instantiated.
+ * 
+ * @author metaware
+ * @see {@link Analytic}
+ * @see {@link AnalyticDescriptor}
+ */
 public class AnalyticNodeDescriptor implements AnalyticDescriptor {
     private String networkName;
     private String nodeName;
@@ -192,14 +205,36 @@ public class AnalyticNodeDescriptor implements AnalyticDescriptor {
     	return new ArrayList<AnalyticNodeDescriptor>(inputDescriptors.values());
     }
     
+    /**
+     * Returns the {@code AnalyticNodeDescriptor} which corresponds to the 
+     * specified input key.
+     * 
+     * @param sourceKey     the key the descriptor is mapped to.
+     * @return              the mapped node descriptor.
+     */
     public AnalyticNodeDescriptor getInputNodeDescriptor(String sourceKey) {
         return this.inputDescriptors.get(sourceKey);
     }
     
+    /**
+     * Returns the names acting as place-holder-keys which identify which
+     * time frame data is input to which outputs of the preceding node.
+     *  
+     * @param sourceKey     the key the {@link TimeFrame} is mapped to.
+     * @return              the time frame's key.
+     */
     public String[] getInputTimeframes(String sourceKey) {
         return this.inputTimeFrames.get(sourceKey);
     }
     
+    /**
+     * Returns the index of the {@link TimeFrame} identified by "key"
+     * in the order it is declared.
+     * 
+     * @param tf      the identifier which corresponds with the {@link TimeFrame}
+     *                for which the index is being returned. 
+     * @return
+     */
     public int getTimeframeIndex(String tf) {
         for(int i = 0;i < timeFrames.length;i++) {
             if(timeFrames[i].equals(tf)) {
@@ -209,6 +244,14 @@ public class AnalyticNodeDescriptor implements AnalyticDescriptor {
         return -1;
     }
     
+    /**
+     * Loads the specified {@link SearchDescriptor} with input definitions obtained
+     * from this {@code AnalyticNodeDescriptor}, and the specified {@link SeriesSubscription}.
+     * 
+     * @param desc              the {@link SearchDescriptor} being initialized.
+     * @param subscription      the {@link SeriesSubscription} describing the node indexed by
+     *                          the specified SearchDescriptor.
+     */
     public void loadSearchDescriptor(SearchDescriptor desc, SeriesSubscription subscription) {
         for (String key : this.inputDescriptors.keySet()) {
             AnalyticNodeDescriptor inputDesc = this.inputDescriptors.get(key);
@@ -220,6 +263,22 @@ public class AnalyticNodeDescriptor implements AnalyticDescriptor {
         }
     }
     
+    /**
+     * Returns a mapping of Strings which are keys mapped to {@link SeriesSubscription}s 
+     * created within this method to identify the configured i/o {@link Period} data
+     * that each {@link TimeFrame} will resolve to given the place holder key that data
+     * is assigned to and the order of declaration within the underlying schema definition.
+     * 
+     * Each mapping returned is a statement of required input which will be represented by
+     * a node found within a given existing network, or a newly created node which will supply
+     * the required data. In this way, (by subsequently querying each ancestor for its required
+     * input), an entire network can be newly built or partially built with some nodes arriving 
+     * from components derived from pre-existing network nodes.
+     * 
+     * @param subscription  a {@link Subscription} defining the type and "@link TimeFrame} of data required.
+     * @return  a mapping of keys to {@link SeriesSubscription}s which describe the data individuated into
+     *          its required time frames.
+     */
     public Map<String,SeriesSubscription> getRequiredSubscriptions(SeriesSubscription subscription) {
         Map<String, SeriesSubscription> req = new HashMap<String, SeriesSubscription>();
 
