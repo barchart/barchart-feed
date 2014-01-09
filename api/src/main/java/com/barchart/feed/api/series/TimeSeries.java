@@ -5,8 +5,6 @@ import java.util.Iterator;
 import rx.Observer;
 import rx.Subscription;
 
-import com.barchart.feed.api.series.temporal.Period;
-import com.barchart.feed.api.series.temporal.PeriodType;
 import com.barchart.util.value.api.Time;
 
 /**

@@ -1,4 +1,4 @@
-package com.barchart.feed.api.series.temporal;
+package com.barchart.feed.api.series;
 
 
 /**

@@ -48,18 +48,6 @@
 			<artifactId>joda-time</artifactId>
 		</dependency>
 		
-		<!-- DELETE ME -->
-		<dependency>
-		  <groupId>net.objectlab.kit</groupId>
-		  <artifactId>datecalc-common</artifactId>
-		  <version>1.2.0</version>
-		</dependency>
-		<dependency>
-		  <groupId>net.objectlab.kit</groupId>
-		  <artifactId>datecalc-joda</artifactId>
-		  <version>1.2.0</version>
-		</dependency>
-
 	</dependencies>
 
 </project>

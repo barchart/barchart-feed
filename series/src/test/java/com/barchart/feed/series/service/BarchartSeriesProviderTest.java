@@ -10,6 +10,8 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import com.barchart.feed.api.model.meta.Instrument;
+import com.barchart.feed.api.series.Period;
+import com.barchart.feed.api.series.PeriodType;
 import com.barchart.feed.api.series.Span;
 import com.barchart.feed.api.series.TimePoint;
 import com.barchart.feed.api.series.TimeSeries;
@@ -18,10 +20,8 @@ import com.barchart.feed.api.series.service.Assembler;
 import com.barchart.feed.api.series.service.Node;
 import com.barchart.feed.api.series.service.NodeDescriptor;
 import com.barchart.feed.api.series.service.Query;
-import com.barchart.feed.api.series.temporal.Period;
-import com.barchart.feed.api.series.temporal.PeriodType;
-import com.barchart.feed.api.series.temporal.TimeFrame;
-import com.barchart.feed.api.series.temporal.TradingWeek;
+import com.barchart.feed.series.TimeFrame;
+import com.barchart.feed.series.TradingWeek;
 import com.barchart.util.test.concurrent.TestObserver;
 
 public class BarchartSeriesProviderTest {

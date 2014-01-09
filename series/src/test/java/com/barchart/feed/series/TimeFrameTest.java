@@ -1,10 +1,14 @@
-package com.barchart.feed.api.series.temporal;
+package com.barchart.feed.series;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.joda.time.DateTime;
 import org.junit.Test;
+
+import com.barchart.feed.api.series.Period;
+import com.barchart.feed.api.series.PeriodType;
+import com.barchart.feed.series.TimeFrame;
 
 public class TimeFrameTest {
 

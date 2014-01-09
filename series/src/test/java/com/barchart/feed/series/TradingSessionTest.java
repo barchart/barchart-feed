@@ -1,4 +1,4 @@
-package com.barchart.feed.api.series.temporal;
+package com.barchart.feed.series;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -8,6 +8,9 @@ import org.joda.time.DateTime;
 import org.joda.time.DateTimeConstants;
 import org.joda.time.LocalTime;
 import org.junit.Test;
+
+import com.barchart.feed.api.series.ITradingSession;
+import com.barchart.feed.series.TradingSession;
 
 public class TradingSessionTest {
 

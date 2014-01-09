@@ -1,6 +1,5 @@
 package com.barchart.feed.api.series;
 
-import com.barchart.feed.api.series.temporal.Period;
 import com.barchart.util.value.api.Time;
 
 public interface TimePoint {

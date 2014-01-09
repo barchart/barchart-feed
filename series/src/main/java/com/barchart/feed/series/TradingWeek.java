@@ -1,4 +1,4 @@
-package com.barchart.feed.api.series.temporal;
+package com.barchart.feed.series;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -25,6 +25,12 @@ import org.joda.time.DateTimeConstants;
 import org.joda.time.Days;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
+
+import com.barchart.feed.api.series.ExtendedChronology;
+import com.barchart.feed.api.series.ITradingSession;
+import com.barchart.feed.api.series.ITradingWeek;
+import com.barchart.feed.api.series.Period;
+import com.barchart.feed.api.series.PeriodType;
 
 
 

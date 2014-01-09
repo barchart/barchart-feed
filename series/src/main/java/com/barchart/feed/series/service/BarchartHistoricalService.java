@@ -18,12 +18,12 @@ import org.joda.time.format.DateTimeFormatter;
 import rx.Observable;
 import rx.Observer;
 
+import com.barchart.feed.api.series.PeriodType;
 import com.barchart.feed.api.series.service.HistoricalObserver;
 import com.barchart.feed.api.series.service.HistoricalResult;
 import com.barchart.feed.api.series.service.HistoricalService;
 import com.barchart.feed.api.series.service.Query;
 import com.barchart.feed.api.series.service.Subscription;
-import com.barchart.feed.api.series.temporal.PeriodType;
 
 
 /**

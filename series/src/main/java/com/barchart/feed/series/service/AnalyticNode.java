@@ -8,13 +8,13 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicReference;
 
+import com.barchart.feed.api.series.PeriodType;
 import com.barchart.feed.api.series.Span;
 import com.barchart.feed.api.series.TimeSeries;
 import com.barchart.feed.api.series.analytics.Analytic;
 import com.barchart.feed.api.series.service.Node;
 import com.barchart.feed.api.series.service.NodeType;
 import com.barchart.feed.api.series.service.Subscription;
-import com.barchart.feed.api.series.temporal.PeriodType;
 import com.barchart.feed.series.DataPoint;
 import com.barchart.feed.series.DataSeries;
 import com.barchart.feed.series.SpanImpl;

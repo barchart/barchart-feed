@@ -1,8 +1,11 @@
-package com.barchart.feed.api.series.temporal;
+package com.barchart.feed.series;
 
 import static org.junit.Assert.*;
 
 import org.junit.Test;
+
+import com.barchart.feed.api.series.Period;
+import com.barchart.feed.api.series.PeriodType;
 
 public class PeriodTest {
 

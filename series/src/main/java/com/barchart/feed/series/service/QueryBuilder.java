@@ -6,18 +6,18 @@ import java.util.List;
 import org.joda.time.DateTime;
 
 import com.barchart.feed.api.model.meta.Instrument;
+import com.barchart.feed.api.series.ITradingWeek;
+import com.barchart.feed.api.series.Period;
+import com.barchart.feed.api.series.PeriodType;
 import com.barchart.feed.api.series.TimePoint;
 import com.barchart.feed.api.series.service.ContinuationPolicy;
 import com.barchart.feed.api.series.service.NodeDescriptor;
 import com.barchart.feed.api.series.service.NodeType;
 import com.barchart.feed.api.series.service.Query;
 import com.barchart.feed.api.series.service.VolumeType;
-import com.barchart.feed.api.series.temporal.ITradingWeek;
-import com.barchart.feed.api.series.temporal.Period;
-import com.barchart.feed.api.series.temporal.PeriodType;
-import com.barchart.feed.api.series.temporal.TimeFrame;
-import com.barchart.feed.api.series.temporal.TradingSession;
-import com.barchart.feed.api.series.temporal.TradingWeek;
+import com.barchart.feed.series.TimeFrame;
+import com.barchart.feed.series.TradingSession;
+import com.barchart.feed.series.TradingWeek;
 
 /**
  * Basically all lies now... ;)

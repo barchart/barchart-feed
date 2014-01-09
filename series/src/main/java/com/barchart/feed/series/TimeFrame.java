@@ -1,7 +1,11 @@
-package com.barchart.feed.api.series.temporal;
+package com.barchart.feed.series;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
+
+import com.barchart.feed.api.series.ITimeFrame;
+import com.barchart.feed.api.series.Period;
+import com.barchart.feed.api.series.PeriodType;
 
 /**
  * Basic time unit aggregation used during comparison of participants

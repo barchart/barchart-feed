@@ -2,8 +2,8 @@ package com.barchart.feed.series;
 
 import org.joda.time.DateTime;
 
+import com.barchart.feed.api.series.Period;
 import com.barchart.feed.api.series.TimePoint;
-import com.barchart.feed.api.series.temporal.Period;
 import com.barchart.util.value.ValueFactoryImpl;
 import com.barchart.util.value.api.Time;
 

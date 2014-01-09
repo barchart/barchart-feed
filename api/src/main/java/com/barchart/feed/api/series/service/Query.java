@@ -5,11 +5,9 @@ import java.util.List;
 import org.joda.time.DateTime;
 
 import com.barchart.feed.api.model.meta.Instrument;
+import com.barchart.feed.api.series.ITradingWeek;
+import com.barchart.feed.api.series.Period;
 import com.barchart.feed.api.series.TimePoint;
-import com.barchart.feed.api.series.temporal.ITradingWeek;
-import com.barchart.feed.api.series.temporal.Period;
-import com.barchart.feed.api.series.temporal.TradingSession;
-import com.barchart.feed.api.series.temporal.TradingWeek;
 
 /**
  * A fluent interface for constructing time series queries.
@@ -74,10 +72,10 @@ public interface Query {
 	 */
 	public int getPadding();
 	/**
-     * Returns the {@link TradingWeek} which is a collection of {@link TradingSession}s comprising an average 
+     * Returns the {@link ITradingWeek} which is a collection of {@link TradingSession}s comprising an average 
      * week of trading.
      * 
-     * @return  the {@link TradingWeek}
+     * @return  the {@link ITradingWeek}
      */
     public ITradingWeek getTradingWeek();
 

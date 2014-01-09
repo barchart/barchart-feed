@@ -1,7 +1,7 @@
 package com.barchart.feed.series;
 
 import com.barchart.feed.api.series.Calculation;
-import com.barchart.feed.api.series.temporal.Period;
+import com.barchart.feed.api.series.Period;
 import com.barchart.util.value.api.Decimal;
 import com.barchart.util.value.api.Time;
 

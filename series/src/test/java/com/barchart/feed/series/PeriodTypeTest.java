@@ -1,4 +1,4 @@
-package com.barchart.feed.api.series.temporal;
+package com.barchart.feed.series;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -12,6 +12,9 @@ import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.junit.Test;
+
+import com.barchart.feed.api.series.ExtendedChronology;
+import com.barchart.feed.api.series.PeriodType;
 
 /**
  * Tests common functionality of the {@link PeriodType} enum.

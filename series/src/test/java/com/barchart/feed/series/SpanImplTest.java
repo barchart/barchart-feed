@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 import org.joda.time.DateTime;
 import org.junit.Test;
 
-import com.barchart.feed.api.series.temporal.Period;
+import com.barchart.feed.api.series.Period;
 import com.barchart.util.value.ValueFactoryImpl;
 import com.barchart.util.value.api.Time;
 

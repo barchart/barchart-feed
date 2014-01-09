@@ -12,10 +12,10 @@ import org.joda.time.DateTime;
 import rx.Observer;
 import rx.Subscription;
 
+import com.barchart.feed.api.series.Period;
+import com.barchart.feed.api.series.PeriodType;
 import com.barchart.feed.api.series.TimePoint;
 import com.barchart.feed.api.series.TimeSeries;
-import com.barchart.feed.api.series.temporal.Period;
-import com.barchart.feed.api.series.temporal.PeriodType;
 import com.barchart.util.value.api.Time;
 
 public class DataSeries<E extends DataPoint> implements TimeSeries<E> {

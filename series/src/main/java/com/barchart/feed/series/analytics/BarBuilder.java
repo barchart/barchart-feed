@@ -2,10 +2,10 @@ package com.barchart.feed.series.analytics;
 
 import org.joda.time.DateTime;
 
+import com.barchart.feed.api.series.Period;
 import com.barchart.feed.api.series.Span;
 import com.barchart.feed.api.series.analytics.Analytic;
 import com.barchart.feed.api.series.service.Subscription;
-import com.barchart.feed.api.series.temporal.Period;
 import com.barchart.feed.series.DataBar;
 import com.barchart.feed.series.DataPoint;
 import com.barchart.feed.series.DataSeries;

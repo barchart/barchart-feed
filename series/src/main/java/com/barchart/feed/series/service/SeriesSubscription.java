@@ -6,14 +6,14 @@ import rx.Observable;
 import rx.Observer;
 
 import com.barchart.feed.api.model.meta.Instrument;
+import com.barchart.feed.api.series.ITimeFrame;
+import com.barchart.feed.api.series.ITradingWeek;
 import com.barchart.feed.api.series.service.Node;
 import com.barchart.feed.api.series.service.NodeDescriptor;
 import com.barchart.feed.api.series.service.Query;
 import com.barchart.feed.api.series.service.Subscription;
-import com.barchart.feed.api.series.temporal.ITimeFrame;
-import com.barchart.feed.api.series.temporal.ITradingWeek;
-import com.barchart.feed.api.series.temporal.TimeFrame;
-import com.barchart.feed.api.series.temporal.TradingWeek;
+import com.barchart.feed.series.TimeFrame;
+import com.barchart.feed.series.TradingWeek;
 
 
 /**

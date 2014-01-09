@@ -9,10 +9,10 @@ import org.joda.time.DateTime;
 import org.junit.Test;
 
 import com.barchart.feed.api.model.meta.Instrument;
-import com.barchart.feed.api.series.temporal.Period;
-import com.barchart.feed.api.series.temporal.PeriodType;
-import com.barchart.feed.api.series.temporal.TimeFrame;
-import com.barchart.feed.api.series.temporal.TradingWeek;
+import com.barchart.feed.api.series.Period;
+import com.barchart.feed.api.series.PeriodType;
+import com.barchart.feed.series.TimeFrame;
+import com.barchart.feed.series.TradingWeek;
 
 public class SubscriptionTest {
 

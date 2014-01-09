@@ -1,4 +1,4 @@
-package com.barchart.feed.api.series.temporal;
+package com.barchart.feed.api.series;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;

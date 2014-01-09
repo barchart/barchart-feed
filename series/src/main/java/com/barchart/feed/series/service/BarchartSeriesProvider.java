@@ -11,6 +11,8 @@ import rx.Observable;
 import rx.Observer;
 
 import com.barchart.feed.api.model.meta.Instrument;
+import com.barchart.feed.api.series.ITimeFrame;
+import com.barchart.feed.api.series.Period;
 import com.barchart.feed.api.series.Span;
 import com.barchart.feed.api.series.TimePoint;
 import com.barchart.feed.api.series.TimeSeries;
@@ -24,11 +26,9 @@ import com.barchart.feed.api.series.service.NodeDescriptor;
 import com.barchart.feed.api.series.service.NodeType;
 import com.barchart.feed.api.series.service.Query;
 import com.barchart.feed.api.series.service.Subscription;
-import com.barchart.feed.api.series.temporal.ITimeFrame;
-import com.barchart.feed.api.series.temporal.Period;
-import com.barchart.feed.api.series.temporal.TimeFrame;
 import com.barchart.feed.series.DataPoint;
 import com.barchart.feed.series.DataSeries;
+import com.barchart.feed.series.TimeFrame;
 import com.barchart.feed.series.analytics.BarBuilder;
 
 /**

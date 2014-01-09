@@ -1,8 +1,11 @@
-package com.barchart.feed.api.series.temporal;
+package com.barchart.feed.series;
 
 import org.joda.time.DateTime;
 import org.joda.time.Hours;
 import org.joda.time.LocalTime;
+
+import com.barchart.feed.api.series.ExtendedChronology;
+import com.barchart.feed.api.series.ITradingSession;
 
 
 /**

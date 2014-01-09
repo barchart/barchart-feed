@@ -9,13 +9,13 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import com.barchart.feed.api.model.data.Market;
+import com.barchart.feed.api.series.Period;
 import com.barchart.feed.api.series.Span;
 import com.barchart.feed.api.series.TimeSeries;
 import com.barchart.feed.api.series.service.Assembler;
 import com.barchart.feed.api.series.service.HistoricalResult;
 import com.barchart.feed.api.series.service.Node;
 import com.barchart.feed.api.series.service.Subscription;
-import com.barchart.feed.api.series.temporal.Period;
 import com.barchart.feed.series.DataBar;
 import com.barchart.feed.series.DataPoint;
 import com.barchart.feed.series.DataSeries;

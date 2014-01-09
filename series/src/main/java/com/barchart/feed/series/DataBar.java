@@ -3,8 +3,8 @@ package com.barchart.feed.series;
 import org.joda.time.DateTime;
 
 import com.barchart.feed.api.series.Bar;
-import com.barchart.feed.api.series.temporal.Period;
-import com.barchart.feed.api.series.temporal.PeriodType;
+import com.barchart.feed.api.series.Period;
+import com.barchart.feed.api.series.PeriodType;
 import com.barchart.util.value.ValueFactoryImpl;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Size;
