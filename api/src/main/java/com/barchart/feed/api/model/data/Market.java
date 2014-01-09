@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.Set;
 
 import com.barchart.feed.api.model.meta.Instrument;
+import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Time;
 
 public interface Market extends MarketData<Market> {
@@ -60,6 +61,40 @@ public interface Market extends MarketData<Market> {
 	 */
 	Set<Component> change();
 	
+	// TODO
+	/*enum MarketState {
+		NULL, PRE_OPEN, OPEN, SUSPENDED, CLOSED
+	}
+	
+	MarketState marketState();*/
+	
+	interface LastPrice {
+		
+		/**
+		 * In order of lowest to highest priority
+		 */
+		enum Source {
+			NULL, PREV_SETTLE, LAST_TRADE, CLOSE, SETTLE
+		}
+		
+		Source source();
+		
+		Price price();
+		
+		LastPrice NULL = new LastPrice() {
+
+			@Override
+			public Source source() {return Source.NULL;}
+
+			@Override
+			public Price price() {return Price.NULL;}
+			
+		};
+		
+	}
+	
+	LastPrice lastPrice();
+	
 	/** Last trade. */
 	Trade trade();
 
@@ -76,59 +111,40 @@ public interface Market extends MarketData<Market> {
 	Market NULL = new Market() {
 
 		@Override
-		public Instrument instrument() {
-			return Instrument.NULL;
-		}
+		public Instrument instrument() {return Instrument.NULL;}
 
 		@Override
-		public Time updated() {
-			return Time.NULL;
-		}
+		public Time updated() {return Time.NULL;}
 
 		@Override
-		public Trade trade() {
-			return Trade.NULL;
-		}
+		public Trade trade() {return Trade.NULL;}
 
 		@Override
-		public Book book() {
-			return Book.NULL;
-		}
+		public Book book() {return Book.NULL;}
 
 		@Override
-		public BookSet bookSet() {
-			return BookSet.NULL;
-		}
+		public BookSet bookSet() {return BookSet.NULL;}
 
 		@Override
-		public Cuvol cuvol() {
-			return Cuvol.NULL;
-		}
+		public Cuvol cuvol() {return Cuvol.NULL;}
 
 		@Override
-		public Session session() {
-			return Session.NULL;
-		}
+		public Session session() {return Session.NULL;}
 
 		@Override
-		public SessionSet sessionSet() {
-			return SessionSet.NULL;
-		}
+		public SessionSet sessionSet() {return SessionSet.NULL;}
 
 		@Override
-		public boolean isNull() {
-			return true;
-		}
+		public boolean isNull() {return true;}
 		
 		@Override
-		public String toString() {
-			return "NULL_MARKET";
-		}
+		public String toString() {return "NULL_MARKET";}
 
 		@Override
-		public Set<Component> change() {
-			return Collections.emptySet();
-		}
+		public Set<Component> change() {return Collections.<Component> emptySet();}
+		
+		@Override
+		public LastPrice lastPrice() {return LastPrice.NULL;}
 
 	};
 

@@ -7,6 +7,7 @@ import rx.Observable;
 
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.api.model.meta.Metadata;
+import com.barchart.feed.api.model.meta.id.InstrumentID;
 import com.barchart.util.value.api.Existential;
 
 public interface MetadataService {
@@ -44,6 +45,13 @@ public interface MetadataService {
 		
 	}
 
+	/**
+	 * 
+	 * @param ids
+	 * @return
+	 */
+	Observable<Instrument> instrument(InstrumentID... ids);
+	
 	/**
 	 * 
 	 * @param symbols

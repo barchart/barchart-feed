@@ -105,12 +105,16 @@ class NulMarket extends ValueFreezer<Market> implements Market {
 	@Override
 	public BookSet bookSet() {
 		throw new UnsupportedOperationException("Currently not supported");
-		//return BookSet.NULL;
 	}
 
 	@Override
 	public Set<Component> change() {
-		return Collections.emptySet();
+		return Collections.<Component> emptySet();
+	}
+	
+	@Override
+	public LastPrice lastPrice() {
+		return LastPrice.NULL;
 	}
 	
 }

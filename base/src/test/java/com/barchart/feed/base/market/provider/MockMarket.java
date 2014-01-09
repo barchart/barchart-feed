@@ -198,6 +198,11 @@ public class MockMarket extends VarMarket {
 		updateMarket(time);
 
 	}
+	
+	@Override
+	public void setLastPrice(final LastPrice lastPrice) {
+		this.lastPrice = lastPrice;
+	}
 
 	private final void updateMarket(final TimeValue time) {
 

@@ -19,7 +19,5 @@ import com.barchart.feed.base.values.api.Value;
 public interface MarketBar extends Value<MarketBar>, Session {
 
 	<V extends Value<V>> V get(MarketBarField<V> field);
-	
-	
 
 }

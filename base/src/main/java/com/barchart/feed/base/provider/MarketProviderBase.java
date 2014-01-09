@@ -770,6 +770,11 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 	// ######################## // ########################
 
 	@Override
+	public Observable<Instrument> instrument(InstrumentID... ids) {
+		return metaService.instrument(ids);
+	}
+	
+	@Override
 	public Observable<Result<Instrument>> instrument(String... symbols) {
 		return metaService.instrument(symbols);
 	}

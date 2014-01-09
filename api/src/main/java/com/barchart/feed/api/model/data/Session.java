@@ -79,7 +79,6 @@ public interface Session extends MarketData<Session>, SessionData,
 	 */
 	Price previousClose();
 	
-	/** FIXME kill */
 	boolean isSettled();
 
 	@Override
@@ -187,7 +186,7 @@ public interface Session extends MarketData<Session>, SessionData,
 
 		@Override
 		public String toString() {
-			return "NULL SESSION";
+			return "NULL_SESSION";
 		}
 
 		@Override
@@ -197,7 +196,7 @@ public interface Session extends MarketData<Session>, SessionData,
 
 		@Override
 		public Set<Component> change() {
-			return Collections.emptySet();
+			return Collections.<Component> emptySet();
 		}
 
 	};

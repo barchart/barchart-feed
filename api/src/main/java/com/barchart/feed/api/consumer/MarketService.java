@@ -67,6 +67,14 @@ public interface MarketService extends ConnectionLifecycle<MarketService>,
 	
 	/**
 	 * 
+	 * @param ids
+	 * @return
+	 */
+	@Override
+	Observable<Instrument> instrument(InstrumentID... ids);
+	
+	/**
+	 * 
 	 * @param symbols
 	 * @return
 	 */

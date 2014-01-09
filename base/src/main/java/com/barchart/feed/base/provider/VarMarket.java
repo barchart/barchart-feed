@@ -54,6 +54,7 @@ import com.barchart.feed.base.values.api.Value;
 import com.barchart.feed.base.values.provider.ValueBuilder;
 import com.barchart.util.common.anno.Mutable;
 import com.barchart.util.common.anno.ThreadSafe;
+import com.barchart.util.value.api.Price;
 
 /**
  * basic market life cycle; NO event management logic here
@@ -257,9 +258,34 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 		that.changeSet.addAll(changeSet);
 		// XXX keep null
 		// target[marketOrdinal] = that;
+		
+		that.lastPrice = new FrozenLastPrice(lastPrice);
 
 		return that;
 
+	}
+	
+	/* To freeze the VarMarket's last price for DefMarket */
+	private class FrozenLastPrice implements LastPrice {
+
+		private final Source source;
+		private final Price price;
+		
+		public FrozenLastPrice(final LastPrice lp) {
+			source = lp.source();
+			price = lp.price();
+		}
+		
+		@Override
+		public Source source() {
+			return source;
+		}
+
+		@Override
+		public Price price() {
+			return price;
+		}
+		
 	}
 
 	@Override

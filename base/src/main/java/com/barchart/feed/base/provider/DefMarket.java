@@ -38,6 +38,8 @@ public class DefMarket extends NulMarket {
 	
 	protected volatile Instrument instrument;
 	
+	protected volatile LastPrice lastPrice = LastPrice.NULL;
+	
 	protected final Set<Component> changeSet = 
 		EnumSet.noneOf(Component.class);
 
@@ -105,6 +107,11 @@ public class DefMarket extends NulMarket {
 	public Set<Component> change() {
 		log.debug("Change set had {} elements", changeSet.size());
 		return EnumSet.copyOf(changeSet);
+	}
+	
+	@Override
+	public LastPrice lastPrice() {
+		return lastPrice;
 	}
 	
 }

@@ -17,7 +17,6 @@ import com.barchart.feed.base.trade.enums.MarketTradeSequencing;
 import com.barchart.feed.base.trade.enums.MarketTradeSession;
 import com.barchart.feed.base.trade.enums.MarketTradeType;
 import com.barchart.feed.base.values.api.Value;
-import com.barchart.feed.base.values.provider.ValueConst;
 import com.barchart.feed.base.values.provider.ValueFreezer;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Size;

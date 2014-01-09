@@ -5,7 +5,26 @@ import com.barchart.util.value.api.Size;
 import com.barchart.util.value.api.Time;
 
 public interface SessionData {
-
+	
+	// TODO Review for later
+	interface Settle extends Comparable<Settle> {
+		
+		enum SettleType {
+			NULL, PRELIM, FINAL, THEO
+		}
+		
+		SettleType type();
+		Price settle();
+		Time time();
+		
+		/**
+		 * Compares time of settle
+		 */
+		@Override
+		int compareTo(Settle that);
+		
+	}
+	
 	Price open();
 
 	Price high();
@@ -14,7 +33,16 @@ public interface SessionData {
 
 	Price close();
 
+	/**
+	 * @return The last settle recieved in this session
+	 */
 	Price settle();
+	
+	/**
+	 * @return Lists ordered by time of settle
+	 */
+	// TODO Review for later
+	/*List<Settle> settles();*/
 
 	Size volume();
 

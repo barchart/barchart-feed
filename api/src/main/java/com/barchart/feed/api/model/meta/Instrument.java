@@ -1,7 +1,6 @@
 package com.barchart.feed.api.model.meta;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -173,22 +172,22 @@ public interface Instrument extends Comparable<Instrument>, Metadata {
 
 		@Override
 		public String marketGUID() {
-			return "NULL GUID";
+			return "NULL_GUID";
 		}
 
 		@Override
 		public SecurityType securityType() {
-			return null;
+			return SecurityType.NULL_TYPE;
 		}
 
 		@Override
 		public BookLiquidityType liquidityType() {
-			return null;
+			return BookLiquidityType.NONE;
 		}
 
 		@Override
 		public BookStructureType bookStructure() {
-			return null;
+			return BookStructureType.NONE;
 		}
 
 		@Override
@@ -203,7 +202,7 @@ public interface Instrument extends Comparable<Instrument>, Metadata {
 		
 		@Override
 		public Map<VendorID, String> vendorSymbols() {
-			return new HashMap<VendorID, String>(0);
+			return Collections.<VendorID, String> emptyMap();
 		}
 
 		@Override
@@ -268,7 +267,7 @@ public interface Instrument extends Comparable<Instrument>, Metadata {
 
 		@Override
 		public List<InstrumentID> componentLegs() {
-			return Collections.emptyList();
+			return Collections.<InstrumentID> emptyList();
 		}
 
 		@Override
