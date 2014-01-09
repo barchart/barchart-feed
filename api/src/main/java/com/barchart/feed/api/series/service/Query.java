@@ -6,6 +6,7 @@ import org.joda.time.DateTime;
 
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.api.series.TimePoint;
+import com.barchart.feed.api.series.temporal.ITradingWeek;
 import com.barchart.feed.api.series.temporal.Period;
 import com.barchart.feed.api.series.temporal.TradingSession;
 import com.barchart.feed.api.series.temporal.TradingWeek;
@@ -78,7 +79,7 @@ public interface Query {
      * 
      * @return  the {@link TradingWeek}
      */
-    public TradingWeek getTradingWeek();
+    public ITradingWeek getTradingWeek();
 
 	// FUTURES ONLY
 

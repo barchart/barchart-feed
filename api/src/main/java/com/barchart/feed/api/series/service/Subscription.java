@@ -4,6 +4,8 @@ import rx.Observable;
 import rx.Observer;
 
 import com.barchart.feed.api.model.meta.Instrument;
+import com.barchart.feed.api.series.temporal.ITimeFrame;
+import com.barchart.feed.api.series.temporal.ITradingWeek;
 import com.barchart.feed.api.series.temporal.TimeFrame;
 import com.barchart.feed.api.series.temporal.TradingWeek;
 
@@ -27,7 +29,7 @@ public interface Subscription extends rx.Subscription {
      * Returns the underlying time frames.
      * @return the {@link TimeFrame}s
      */
-    public TimeFrame[] getTimeFrames();
+    public ITimeFrame[] getTimeFrames();
 
     /**
      * Returns the id of the required analytic if one is required.
@@ -40,7 +42,7 @@ public interface Subscription extends rx.Subscription {
      * 
      * @return the {@link TradingWeek}
      */
-    public TradingWeek getTradingWeek();
+    public ITradingWeek getTradingWeek();
 
     /**
      * Tests the "shareability" of this {@code Subscription}'s output

@@ -1,6 +1,8 @@
 package com.barchart.feed.series.service;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
 
 import org.joda.time.DateTime;
 import org.junit.Test;

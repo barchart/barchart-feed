@@ -24,6 +24,7 @@ import com.barchart.feed.api.series.service.NodeDescriptor;
 import com.barchart.feed.api.series.service.NodeType;
 import com.barchart.feed.api.series.service.Query;
 import com.barchart.feed.api.series.service.Subscription;
+import com.barchart.feed.api.series.temporal.ITimeFrame;
 import com.barchart.feed.api.series.temporal.Period;
 import com.barchart.feed.api.series.temporal.TimeFrame;
 import com.barchart.feed.series.DataPoint;
@@ -472,7 +473,7 @@ public class BarchartSeriesProvider {
 	    private String symbol;
 	    
 	    /** the timeframes of data */
-	    private TimeFrame[] timeFrames = new TimeFrame[0];
+	    private ITimeFrame[] timeFrames = new ITimeFrame[0];
 	    
 	    private Map<SeriesSubscription,String> inputKeyMap = new HashMap<SeriesSubscription,String>();
 	    
@@ -553,9 +554,9 @@ public class BarchartSeriesProvider {
                     return false;
             } else if(!symbol.equals(other.symbol))
                 return false;
-            for(TimeFrame tf : timeFrames) { //Don't use order dependency like Arrays.equals()
+            for(ITimeFrame tf : timeFrames) { //Don't use order dependency like Arrays.equals()
                 boolean found = false;
-                for(TimeFrame tf2 : other.timeFrames) {
+                for(ITimeFrame tf2 : other.timeFrames) {
                     found = tf.equals(tf2);
                     if(found) break;
                 }

@@ -16,7 +16,7 @@ import org.joda.time.field.FieldUtils;
  * @see GJYearOfEraDateTimeField
  * @since 1.0
  */
-class ISOYearOfEraDateTimeField extends DecoratedDateTimeField {
+final class ISOYearOfEraDateTimeField extends DecoratedDateTimeField {
 
     /**
      * Singleton instance

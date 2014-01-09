@@ -12,6 +12,7 @@ import com.barchart.feed.api.series.service.NodeDescriptor;
 import com.barchart.feed.api.series.service.NodeType;
 import com.barchart.feed.api.series.service.Query;
 import com.barchart.feed.api.series.service.VolumeType;
+import com.barchart.feed.api.series.temporal.ITradingWeek;
 import com.barchart.feed.api.series.temporal.Period;
 import com.barchart.feed.api.series.temporal.PeriodType;
 import com.barchart.feed.api.series.temporal.TimeFrame;
@@ -55,7 +56,7 @@ public class QueryBuilder {
 	private List<Period> periods = new ArrayList<Period>();
 	private ContinuationPolicy policy;
 	private VolumeType volumeType;
-	private TradingWeek tradingWeek = TradingWeek.DEFAULT;
+	private ITradingWeek tradingWeek = TradingWeek.DEFAULT;
 	
 	public QueryBuilder() {
 		query = new DataQuery();
@@ -179,7 +180,7 @@ public class QueryBuilder {
 	    return this;
 	}
 	
-	public QueryBuilder tradingWeek(TradingWeek week) {
+	public QueryBuilder tradingWeek(ITradingWeek week) {
         if(week == null || week.length() < 1) {
             throw new IllegalArgumentException("If specified, the TradingWeek must be non null and contain configured sessions");
         }
@@ -203,7 +204,7 @@ public class QueryBuilder {
         private DateTime end;
 	    private ContinuationPolicy policy;
 	    private VolumeType volumeType;
-	    private TradingWeek tradingWeek = TradingWeek.DEFAULT;
+	    private ITradingWeek tradingWeek = TradingWeek.DEFAULT;
 	    
 		/**
 		 * Constructs a new {@code DataQuery}
@@ -350,7 +351,7 @@ public class QueryBuilder {
 	     * @return  the {@link TradingWeek}
 	     */
 	    @Override
-	    public TradingWeek getTradingWeek() {
+	    public ITradingWeek getTradingWeek() {
 	        return tradingWeek;
 	    }
 

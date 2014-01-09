@@ -10,6 +10,8 @@ import com.barchart.feed.api.series.service.Node;
 import com.barchart.feed.api.series.service.NodeDescriptor;
 import com.barchart.feed.api.series.service.Query;
 import com.barchart.feed.api.series.service.Subscription;
+import com.barchart.feed.api.series.temporal.ITimeFrame;
+import com.barchart.feed.api.series.temporal.ITradingWeek;
 import com.barchart.feed.api.series.temporal.TimeFrame;
 import com.barchart.feed.api.series.temporal.TradingWeek;
 
@@ -34,12 +36,12 @@ public class SeriesSubscription implements Subscription {
      */
     public SeriesSubscription() {}
     
-    public SeriesSubscription(String symbol, Instrument i, String analyticSpecifier, TimeFrame[] timeFrames, TradingWeek week) {
+    public SeriesSubscription(String symbol, Instrument i, String analyticSpecifier, ITimeFrame[] timeFrames, ITradingWeek week) {
     	this.instrument = i;
     	this.symbol = symbol;
     	this.analyticSpecifier = analyticSpecifier;
-    	this.timeFrames = timeFrames;
-    	this.tradingWeek = week;
+    	this.timeFrames = (TimeFrame[])timeFrames;
+    	this.tradingWeek = (TradingWeek)week;
     }
     
     public SeriesSubscription(SeriesSubscription ss) {
@@ -78,7 +80,7 @@ public class SeriesSubscription implements Subscription {
      * @return the {@link TimeFrame}s
      */
 	@Override
-    public TimeFrame[] getTimeFrames() {
+    public ITimeFrame[] getTimeFrames() {
 		return timeFrames;
 	}
 	
@@ -120,7 +122,7 @@ public class SeriesSubscription implements Subscription {
      * @return the {@link TradingWeek}
      */
 	@Override
-    public TradingWeek getTradingWeek() {
+    public ITradingWeek getTradingWeek() {
 		return tradingWeek;
 	}
 	
@@ -269,7 +271,7 @@ public class SeriesSubscription implements Subscription {
 	
 	public String toString() {
 	    StringBuilder sb = new StringBuilder("[ ").append(analyticSpecifier).append(" ").append(symbol).append(" ");
-	    for(TimeFrame tf : timeFrames) {
+	    for(ITimeFrame tf : timeFrames) {
 	    	sb.append(tf).append(" ");
 	    }
 	    sb.append("]");

@@ -58,7 +58,7 @@ import org.joda.time.LocalTime;
  * 
  * @author David Ray
  */
-public class TradingWeek extends JodaWorkingWeek {
+public class TradingWeek extends JodaWorkingWeek implements ITradingWeek {
 	public enum LoadType { MEMORY, FILE };
 	
     private long weekMillis = -1;
@@ -67,8 +67,9 @@ public class TradingWeek extends JodaWorkingWeek {
     
     private DateCalculator<LocalDate> calculator;
     
+    public static final ITradingWeek DEFAULT;
+    		
     private static final Properties DEFAULT_PROPS; 
-    public static final TradingWeek DEFAULT;
     static {
         DEFAULT_PROPS = new Properties();
         DEFAULT_PROPS.put("DEFAULT_CALENDAR.holidayDateFileLoadType", TradingWeek.LoadType.MEMORY);
@@ -154,7 +155,8 @@ public class TradingWeek extends JodaWorkingWeek {
      * 
      * @return  the number of {@link TradingSession}s within this {@code TradingWeek}.
      */
-    public int length() {
+    @Override
+	public int length() {
         return sessions.size();
     }
     
@@ -163,21 +165,11 @@ public class TradingWeek extends JodaWorkingWeek {
      * 
      * @param session   the {@code TradingSession} to add.
      */
-    void addTradingSession(TradingSession session) {
-        sessions.add(session);
+    @Override
+    public void addTradingSession(ITradingSession session) {
+        sessions.add((TradingSession)session);
         weekMillis = -1;
         setWeekMillis();
-    }
-    
-    /**
-     * Sets the {@link DateCalculator} this {@code TradingWeek} uses to
-     * calculate its holidays and trading days.
-     * 
-     * @param calc  the {@link DateCalculator} this {@code TradingWeek} uses to
-     *              calculate its holidays and trading days.
-     */
-    void setCalculator(DateCalculator<LocalDate> calc) {
-        this.calculator = calc;
     }
     
     /**
@@ -185,7 +177,8 @@ public class TradingWeek extends JodaWorkingWeek {
      * 
      * @return the first {@link TradingSession} in this {@code TradingWeek}.
      */
-    public TradingSession getStartSession() {
+    @Override
+	public ITradingSession getStartSession() {
         return sessions.get(0);
     }
     
@@ -194,7 +187,8 @@ public class TradingWeek extends JodaWorkingWeek {
      * 
      * @return the last {@link TradingSession} in this {@code TradingWeek}.
      */
-    public TradingSession getEndSession() {
+    @Override
+	public ITradingSession getEndSession() {
         return sessions.get(sessions.size() - 1);
     }
     
@@ -206,7 +200,8 @@ public class TradingWeek extends JodaWorkingWeek {
      * @return      the number of valid trading days within the month
      *              of the specified date.
      */
-    public int getTradingDaysInMonth(DateTime dt) {
+    @Override
+	public int getTradingDaysInMonth(DateTime dt) {
         //Get the first valid/configured trading date within the specified date's month
         dt = getSessionTradingDate(dt.dayOfMonth().withMinimumValue());
         
@@ -237,7 +232,8 @@ public class TradingWeek extends JodaWorkingWeek {
         return tradingDayCount;
     }
     
-    public boolean isTradingDay(DateTime dt) {
+    @Override
+	public boolean isTradingDay(DateTime dt) {
     	return !this.calculator.isNonWorkingDay(dt.toLocalDate());
     }
     
@@ -251,7 +247,8 @@ public class TradingWeek extends JodaWorkingWeek {
      * @return            the current date if it is a valid trading date
      *                    or the very next valid trading date.
      */
-    public DateTime getSessionTradingDate(DateTime dt) {
+    @Override
+	public DateTime getSessionTradingDate(DateTime dt) {
         DateTime workingDate = new DateTime(dt);
         while(calculator.isNonWorkingDay(workingDate.toLocalDate()) ||
             !isWorkingDay(workingDate.toLocalDate())) {
@@ -267,7 +264,7 @@ public class TradingWeek extends JodaWorkingWeek {
     private void setWeekMillis() {
         if(weekMillis == -1) {
             weekMillis = 0;
-            for(TradingSession session : sessions) {
+            for(ITradingSession session : sessions) {
                 weekMillis += session.sessionMillis();
             }
         }
@@ -280,7 +277,8 @@ public class TradingWeek extends JodaWorkingWeek {
      * @return  the number of milliseconds within this {@code TradingWeek}'s 
      *          configured trading sessions.
      */
-    public long getWeekMillis() {
+    @Override
+	public long getWeekMillis() {
         return weekMillis;
     }
     
@@ -297,8 +295,9 @@ public class TradingWeek extends JodaWorkingWeek {
      * @return          the number of <em>session</em> milliseconds between
      *                  the two dates specified 
      */
-    public long getSessionMillisBetween(DateTime dt1, DateTime dt2) {
-        TradingSession currentSession = getTradingSessionOnOrAfter(dt1);
+    @Override
+	public long getSessionMillisBetween(DateTime dt1, DateTime dt2) {
+        ITradingSession currentSession = getTradingSessionOnOrAfter(dt1);
         int daysBetween = Days.daysBetween(dt1, dt2).getDays();
         long resultMillis = 0;
         if(currentSession.contains(dt2) && daysBetween == 0) {
@@ -309,7 +308,7 @@ public class TradingWeek extends JodaWorkingWeek {
             
             int weekDiff = daysBetween / 7;
             int len = sessions.size();
-            TradingSession  endSession = getTradingSessionOnOrAfter(dt2);
+            ITradingSession  endSession = getTradingSessionOnOrAfter(dt2);
             if(weekDiff > 0) {
                 int sessionIdx = sessions.indexOf(currentSession);
                 //Add the rest of the week's milliseconds.
@@ -352,7 +351,8 @@ public class TradingWeek extends JodaWorkingWeek {
      * @return      the {@link TradingSession} containing the specified date, or 
      *              the very next {@code TradingSession} after the specified {@link DateTime}.
      */
-    public TradingSession getTradingSessionOnOrAfter(DateTime date) {
+    @Override
+	public ITradingSession getTradingSessionOnOrAfter(DateTime date) {
         if(sessions.size() == 0) {
             throw new IllegalStateException("Trading week has no sessions configured!");
         }
@@ -363,7 +363,7 @@ public class TradingWeek extends JodaWorkingWeek {
         LocalTime lt = date.toLocalTime();
         int len = sessions.size();
         for(int i = 0;i < len;i++) {
-            TradingSession ts = sessions.get(i);
+            ITradingSession ts = sessions.get(i);
             if(ts.contains(date)) {
                 return ts;
             }else if(ts.day() == otherDay){
@@ -388,14 +388,15 @@ public class TradingWeek extends JodaWorkingWeek {
      *          the boundaries of a {@link TradingSession} within this {@code TradingWeek},
      *          using the granularity of the specified {@link Period}.
      */
-    public DateTime getNextSessionDate(DateTime dt, Period period) {
+    @Override
+	public DateTime getNextSessionDate(DateTime dt, Period period) {
         if(dt == null) {
             return null;
         }
         int interval = period.size();
         PeriodType periodType = period.getPeriodType();
         dt = dt.millisOfSecond().withMinimumValue();
-        TradingSession tradingSession = getTradingSessionOnOrAfter(dt);
+        ITradingSession tradingSession = getTradingSessionOnOrAfter(dt);
         boolean skip = false;
         switch(periodType) {
             case YEAR: {
@@ -519,7 +520,7 @@ public class TradingWeek extends JodaWorkingWeek {
      * 
      * @return  a default {@link TradingWeek}.
      */
-    public static TradingWeek loadDefaultTradingWeek() {
+    public static ITradingWeek loadDefaultTradingWeek() {
         int[] days = new int[] { 
             DateTimeConstants.SUNDAY,
             DateTimeConstants.MONDAY,
@@ -553,7 +554,7 @@ public class TradingWeek extends JodaWorkingWeek {
     @Override
     public boolean isWorkingDay(LocalDate date) {
         int day = date.getDayOfWeek();
-        for(TradingSession ts : sessions) {
+        for(ITradingSession ts : sessions) {
             if(ts.day() == day) return true;
         }
         return false;
@@ -629,8 +630,8 @@ public class TradingWeek extends JodaWorkingWeek {
     }
     
     private boolean equalSessions(List<TradingSession> l) {
-        for(TradingSession ts : sessions) {
-            for(TradingSession ts2 : l) {
+        for(ITradingSession ts : sessions) {
+            for(ITradingSession ts2 : l) {
                 if(!ts.equals(ts2)) return false;
             }
         }
@@ -640,7 +641,7 @@ public class TradingWeek extends JodaWorkingWeek {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("TradingWeek:\n");
-        for(TradingSession ts : sessions) {
+        for(ITradingSession ts : sessions) {
             sb.append("\t"+ts+"\n");
         }
         return sb.toString();
@@ -740,7 +741,7 @@ public class TradingWeek extends JodaWorkingWeek {
          *                                  from the parameters specified, or there are no 
          *                                  {@link TradingSession}s configured.
          */
-        public TradingWeek build() throws IllegalStateException {
+        public ITradingWeek build() throws IllegalStateException {
             calendar = LocalDateKitCalculatorsFactory.getDefaultInstance().getHolidayCalendar(holidayCalendarName);
             if(calendar == null) {
                 try {
@@ -871,7 +872,7 @@ public class TradingWeek extends JodaWorkingWeek {
          * Returns a properly constructed {@link TradingWeek}
          */
         @Override
-        public TradingWeek build() throws IllegalStateException {
+        public ITradingWeek build() throws IllegalStateException {
             validateAndSetCalendarParams(properties, calendarName);
             validateAndSetSessionParamDelimiters(properties, tradingWeekName);
             return super.build();

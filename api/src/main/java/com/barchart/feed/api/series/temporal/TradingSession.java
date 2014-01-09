@@ -11,7 +11,7 @@ import org.joda.time.LocalTime;
  * 
  * @author David Ray
  */
-public class TradingSession implements Comparable<TradingSession> {
+public class TradingSession implements ITradingSession {
     /** The day of the week this trading session occurs on. */
     private int day;
     /** The day of the week this trading session ends on. */
@@ -44,7 +44,8 @@ public class TradingSession implements Comparable<TradingSession> {
         SESSION_MILLIS = sessionMillis(day, start, endDay, end);
     }
     
-    public int hourCount() {
+    @Override
+	public int hourCount() {
         return Hours.hoursBetween(start, end).getHours();
     }
     
@@ -53,7 +54,8 @@ public class TradingSession implements Comparable<TradingSession> {
      * represented as an int.
      * @return  this {@code TradingSession}'s day represented as an int.
      */
-    public int day() {
+    @Override
+	public int day() {
         return day;
     }
     
@@ -63,7 +65,8 @@ public class TradingSession implements Comparable<TradingSession> {
      * @return  this {@code TradingSession}'s end day
      *          represented as an int.
      */
-    public int endDay() {
+    @Override
+	public int endDay() {
         return endDay;
     }
     
@@ -71,7 +74,8 @@ public class TradingSession implements Comparable<TradingSession> {
      * Returns this {@code TradingSession}'s start time.
      * @return  this {@code TradingSession}'s start time.
      */
-    public LocalTime start() {
+    @Override
+	public LocalTime start() {
         return start;
     }
     
@@ -79,7 +83,8 @@ public class TradingSession implements Comparable<TradingSession> {
      * Returns this {@code TradingSession}'s end time.
      * @return  this {@code TradingSession}'s end time.
      */
-    public LocalTime end() {
+    @Override
+	public LocalTime end() {
         return end;
     }
     
@@ -87,7 +92,8 @@ public class TradingSession implements Comparable<TradingSession> {
      *  Returns the number of milliseconds in this TradingSession.
      * @return  the number of milliseconds in this TradingSession.
      */
-    public long sessionMillis() {
+    @Override
+	public long sessionMillis() {
         return SESSION_MILLIS;
     }
     
@@ -138,7 +144,8 @@ public class TradingSession implements Comparable<TradingSession> {
      * Convenience method to return the day of week of this {@code TradingSession}.
      * @return  this TradingSession's day in string form.
      */
-    public String dayToString() {
+    @Override
+	public String dayToString() {
         return TradingWeek.dayToString(day);
     }
     
@@ -149,7 +156,8 @@ public class TradingSession implements Comparable<TradingSession> {
      * @param   date  the query date.
      * @return  true if the specified date is within this session, false if not.
      */
-    public boolean contains(DateTime date) {
+    @Override
+	public boolean contains(DateTime date) {
         int otherDay = date.getDayOfWeek();
         LocalTime lt = date.toLocalTime();
         
@@ -195,10 +203,11 @@ public class TradingSession implements Comparable<TradingSession> {
      * @return the int comparison value.
      */
     @Override
-    public int compareTo(TradingSession other) {
-        if(day == other.day && endDay == other.endDay) {
-            return start.compareTo(other.start); 
-        }else if(endDay < other.day) {
+    public int compareTo(ITradingSession other) {
+    	TradingSession o = (TradingSession)other;
+        if(day == o.day && endDay == o.endDay) {
+            return start.compareTo(o.start); 
+        }else if(endDay < o.day) {
             return -1;
         }
         return 1;

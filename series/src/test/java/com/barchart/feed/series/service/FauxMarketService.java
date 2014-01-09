@@ -40,9 +40,6 @@ import com.barchart.feed.api.series.service.HistoricalObserver;
 import com.barchart.feed.api.series.service.HistoricalResult;
 import com.barchart.feed.api.series.service.Query;
 import com.barchart.feed.api.series.temporal.PeriodType;
-import com.barchart.feed.api.series.temporal.TimeFrame;
-import com.barchart.feed.api.series.temporal.TradingWeek;
-import com.barchart.feed.series.service.SeriesSubscription;
 import com.barchart.util.value.api.Fraction;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Scaled;
@@ -121,7 +118,6 @@ public class FauxMarketService implements MarketService {
     
     private Thread getServerThread() {
         return new Thread() {
-            TradingWeek week = TradingWeek.DEFAULT;
             Random random = new Random();
             boolean isNeg;
             

@@ -4,24 +4,15 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.joda.time.DateTime;
 import org.junit.Test;
 
-import com.barchart.feed.api.model.meta.Exchange;
 import com.barchart.feed.api.model.meta.Instrument;
-import com.barchart.feed.api.model.meta.id.InstrumentID;
-import com.barchart.feed.api.model.meta.id.VendorID;
 import com.barchart.feed.api.series.temporal.Period;
 import com.barchart.feed.api.series.temporal.PeriodType;
 import com.barchart.feed.api.series.temporal.TimeFrame;
 import com.barchart.feed.api.series.temporal.TradingWeek;
-import com.barchart.util.value.api.Fraction;
-import com.barchart.util.value.api.Price;
-import com.barchart.util.value.api.Schedule;
-import com.barchart.util.value.api.Size;
-import com.barchart.util.value.api.TimeInterval;
 
 public class SubscriptionTest {
 

@@ -9,7 +9,7 @@ import org.joda.time.format.DateTimeFormat;
  * 
  * @author David Ray
  */
-public class TimeFrame {
+public class TimeFrame implements ITimeFrame {
 	/** Meta characteristics of this {@code TimeFrame} */
 	private Period period;
 	/** The start date */
@@ -34,6 +34,7 @@ public class TimeFrame {
 	 * 
 	 * @return	the meta characteristics of this {@link TimeFrame}
 	 */
+	@Override
 	public Period getPeriod() {
 		return period;
 	}
@@ -43,6 +44,7 @@ public class TimeFrame {
 	 * 
 	 * @return	the start date.
 	 */
+	@Override
 	public DateTime getStartDate() {
 		return startDate;
 	}
@@ -52,6 +54,7 @@ public class TimeFrame {
 	 * 
 	 * @return	ending date of this {@code TimeFrame}
 	 */
+	@Override
 	public DateTime getEndDate() {
 		return endDate;
 	}
@@ -64,7 +67,9 @@ public class TimeFrame {
 	 * @param other		the frame being tested for source compatibility
 	 * @return	true if compatible / derivable of false if not.
 	 */
-	public boolean isDerivableFrom(TimeFrame other) {
+	@Override
+	public boolean isDerivableFrom(ITimeFrame tf) {
+		TimeFrame other = (TimeFrame)tf;
 		boolean retVal = false;
 		
 		PeriodType otherType = other.getPeriod().getPeriodType();

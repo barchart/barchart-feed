@@ -3,12 +3,12 @@ package com.barchart.feed.api.series.temporal;
 
 /**
  * A combination of a {@link PeriodType} and a duration, which together
- * specify the unit of time contained within a single {@link DataPoint}.
+ * specify the unit of time contained within a single {@link TimePoint}.
  * 
  * @author Jeremy
  * @author David Ray
  */
-public class Period {
+public final class Period {
 
 	public static final Period ONE_MINUTE = new Period(
 			PeriodType.MINUTE, 1);

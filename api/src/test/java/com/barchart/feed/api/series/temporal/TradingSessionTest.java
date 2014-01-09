@@ -13,7 +13,7 @@ public class TradingSessionTest {
 
     @Test
     public void testContains() {
-        TradingSession session = new TradingSession(DateTimeConstants.FRIDAY, DateTimeConstants.FRIDAY, new LocalTime(8, 30), new LocalTime(15, 30));
+        ITradingSession session = new TradingSession(DateTimeConstants.FRIDAY, DateTimeConstants.FRIDAY, new LocalTime(8, 30), new LocalTime(15, 30));
         DateTime test = new DateTime(2010, 9, 10, 8, 30, 0, 0);
         assertTrue(session.contains(test));
         

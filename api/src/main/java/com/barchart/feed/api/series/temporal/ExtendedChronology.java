@@ -49,7 +49,7 @@ import org.joda.time.field.RemainderDateTimeField;
  * @since 1.0
  */
 @SuppressWarnings("serial")
-public class ExtendedChronology extends AssembledChronology {
+public final class ExtendedChronology extends AssembledChronology {
     
     /** Singleton instance of a UTC ISOChronology */
     private static final ExtendedChronology INSTANCE_UTC;

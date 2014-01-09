@@ -7,9 +7,6 @@ import java.util.Properties;
 import org.joda.time.DateTime;
 import org.junit.Test;
 
-import com.barchart.feed.api.series.temporal.TradingWeek;
-import com.barchart.feed.api.series.temporal.TradingWeek.LoadType;
-
 
 public class TradingWeekTest {
     private final String TEST = "TEST";
@@ -20,13 +17,13 @@ public class TradingWeekTest {
      */
     @Test
     public void testGetTradingSessionOnOrAfter() {
-        TradingWeek tradingWeek = getTestTradingWeek(TEST);
+        ITradingWeek tradingWeek = getTestTradingWeek(TEST);
         
         assertEquals(7, tradingWeek.length());
         
         //FIRST: Test within bounds Sunday, May 3 - Saturday, May 9
         DateTime testDate = new DateTime(2009, 5, 3, 8, 30, 0, 0);
-        TradingSession session = tradingWeek.getTradingSessionOnOrAfter(testDate);
+        ITradingSession session = tradingWeek.getTradingSessionOnOrAfter(testDate);
         assertEquals("Sunday(08:30:00.000-15:30:00.000)", session.toString());
         
         testDate = new DateTime(2009, 5, 4, 8, 30, 0, 0);
@@ -77,7 +74,7 @@ public class TradingWeekTest {
      */
     @Test
     public void testGetNextSessionDate() {
-        TradingWeek tradingWeek = getTestTradingWeek(TEST);
+        ITradingWeek tradingWeek = getTestTradingWeek(TEST);
         
         DateTime testDate = new DateTime(2009, 5, 1, 0, 0, 0, 999);
         
@@ -117,7 +114,7 @@ public class TradingWeekTest {
     
     @Test
     public void testGetMillisBetween() {
-        TradingWeek week = getTestTradingWeek(TEST);
+        ITradingWeek week = getTestTradingWeek(TEST);
         
         //Test comparison convenience variables
         long millisInHour = 3600000;
@@ -176,14 +173,14 @@ public class TradingWeekTest {
     
     @Test
     public void testGetTradingDaysInMonth() {
-        TradingWeek week = getTestTradingWeek(TEST3);
+        ITradingWeek week = getTestTradingWeek(TEST3);
         DateTime dt1 = new DateTime(2009, 10, 11, 8, 30, 0, 0);
         assertEquals(13, week.getTradingDaysInMonth(dt1));
     }
     
     private static Properties DEFAULT_PROPS; 
-    public static TradingWeek DEFAULT;
-    private TradingWeek getTestTradingWeek(String symbol) {
+    public static ITradingWeek DEFAULT;
+    private ITradingWeek getTestTradingWeek(String symbol) {
         DEFAULT_PROPS = new Properties();
         DEFAULT_PROPS.put("DEFAULT.holidayDateFileLoadType", TradingWeek.LoadType.MEMORY);
         DEFAULT_PROPS.put("DEFAULT.holidayDelimiter", ",");
