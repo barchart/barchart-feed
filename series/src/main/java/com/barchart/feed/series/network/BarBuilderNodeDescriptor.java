@@ -10,10 +10,10 @@ import java.util.List;
 
 import com.barchart.feed.api.series.Period;
 import com.barchart.feed.api.series.PeriodType;
-import com.barchart.feed.api.series.analytics.Analytic;
-import com.barchart.feed.api.series.analytics.BarBuilderDescriptor;
-import com.barchart.feed.api.series.analytics.NodeType;
-import com.barchart.feed.api.series.analytics.Subscription;
+import com.barchart.feed.api.series.network.Analytic;
+import com.barchart.feed.api.series.network.BarBuilderDescriptor;
+import com.barchart.feed.api.series.network.NodeType;
+import com.barchart.feed.api.series.network.Subscription;
 import com.barchart.feed.series.TimeFrameImpl;
 
 public class BarBuilderNodeDescriptor implements BarBuilderDescriptor {

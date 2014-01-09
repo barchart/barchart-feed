@@ -1,4 +1,4 @@
-package com.barchart.feed.series.analytics;
+package com.barchart.feed.series.network;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -10,7 +10,7 @@ import com.barchart.feed.api.series.Range;
 import com.barchart.feed.api.series.Span;
 import com.barchart.feed.api.series.DataPoint;
 import com.barchart.feed.api.series.DataSeries;
-import com.barchart.feed.api.series.analytics.Analytic;
+import com.barchart.feed.api.series.network.Analytic;
 import com.barchart.feed.series.DataSeriesImpl;
 
 public abstract class AnalyticBase implements Analytic {

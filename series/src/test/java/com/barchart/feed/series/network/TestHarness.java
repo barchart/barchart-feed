@@ -12,7 +12,7 @@ import com.barchart.feed.api.model.meta.id.VendorID;
 import com.barchart.feed.api.series.Span;
 import com.barchart.feed.api.series.DataPoint;
 import com.barchart.feed.api.series.DataSeries;
-import com.barchart.feed.api.series.analytics.Analytic;
+import com.barchart.feed.api.series.network.Analytic;
 import com.barchart.util.value.api.Fraction;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Schedule;

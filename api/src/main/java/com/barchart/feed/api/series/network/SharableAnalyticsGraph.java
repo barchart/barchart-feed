@@ -1,4 +1,4 @@
-package com.barchart.feed.api.series.analytics;
+package com.barchart.feed.api.series.network;
 
 /**
  * Graph of {@link Node}s which refine one or more inputs to produce one 

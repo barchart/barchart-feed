@@ -4,7 +4,7 @@ import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
 
-import com.barchart.feed.api.series.analytics.Analytic;
+import com.barchart.feed.api.series.network.Analytic;
 
 public class AnalyticNodeDescriptorTest {
 

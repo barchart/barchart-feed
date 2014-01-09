@@ -4,12 +4,13 @@ import org.joda.time.DateTime;
 
 import com.barchart.feed.api.series.Period;
 import com.barchart.feed.api.series.Span;
-import com.barchart.feed.api.series.analytics.Analytic;
-import com.barchart.feed.api.series.analytics.Subscription;
+import com.barchart.feed.api.series.network.Analytic;
+import com.barchart.feed.api.series.network.Subscription;
 import com.barchart.feed.series.BarImpl;
 import com.barchart.feed.series.DataPointImpl;
 import com.barchart.feed.series.DataSeriesImpl;
 import com.barchart.feed.series.SpanImpl;
+import com.barchart.feed.series.network.AnalyticBase;
 import com.barchart.feed.series.network.SeriesSubscription;
 
 public class BarBuilder extends AnalyticBase {

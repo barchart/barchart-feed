@@ -8,10 +8,10 @@ import rx.Observer;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.api.series.TimeFrame;
 import com.barchart.feed.api.series.TradingWeek;
-import com.barchart.feed.api.series.analytics.Node;
-import com.barchart.feed.api.series.analytics.NodeDescriptor;
-import com.barchart.feed.api.series.analytics.Query;
-import com.barchart.feed.api.series.analytics.Subscription;
+import com.barchart.feed.api.series.network.Node;
+import com.barchart.feed.api.series.network.NodeDescriptor;
+import com.barchart.feed.api.series.network.Query;
+import com.barchart.feed.api.series.network.Subscription;
 import com.barchart.feed.series.TimeFrameImpl;
 import com.barchart.feed.series.TradingWeekImpl;
 

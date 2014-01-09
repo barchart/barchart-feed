@@ -4,7 +4,7 @@ import java.util.Map;
 
 import rx.Observable;
 
-import com.barchart.feed.api.series.analytics.Query;
+import com.barchart.feed.api.series.network.Query;
 
 public abstract class TimeSeriesObservable extends Observable<Span> {
     protected DataSeries<? extends DataPoint> series;

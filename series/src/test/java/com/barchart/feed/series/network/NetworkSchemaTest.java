@@ -8,7 +8,7 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.barchart.feed.api.series.analytics.NetworkDescriptor;
+import com.barchart.feed.api.series.network.NetworkDescriptor;
 
 public class NetworkSchemaTest {
 

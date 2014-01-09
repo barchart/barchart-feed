@@ -1,4 +1,4 @@
-package com.barchart.feed.api.series.analytics;
+package com.barchart.feed.api.series.network;
 
 import com.barchart.feed.api.model.data.Market;
 import com.barchart.feed.api.series.service.HistoricalObserver;

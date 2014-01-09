@@ -11,7 +11,7 @@ import org.junit.Test;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.api.series.Period;
 import com.barchart.feed.api.series.PeriodType;
-import com.barchart.feed.api.series.analytics.Analytic;
+import com.barchart.feed.api.series.network.Analytic;
 import com.barchart.feed.series.SpanImpl;
 import com.barchart.feed.series.TimeFrameImpl;
 import com.barchart.feed.series.TradingWeekImpl;

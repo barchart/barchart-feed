@@ -9,10 +9,10 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.barchart.feed.api.series.analytics.Analytic;
-import com.barchart.feed.api.series.analytics.NetworkDescriptor;
-import com.barchart.feed.api.series.analytics.NodeDescriptor;
-import com.barchart.feed.api.series.analytics.NodeType;
+import com.barchart.feed.api.series.network.Analytic;
+import com.barchart.feed.api.series.network.NetworkDescriptor;
+import com.barchart.feed.api.series.network.NodeDescriptor;
+import com.barchart.feed.api.series.network.NodeType;
 
 public class NetworkSchema implements NetworkDescriptor {
     /** the default filename of the file storing the local schema definitions */

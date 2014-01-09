@@ -1,7 +1,7 @@
 package com.barchart.feed.api.series.service;
 
 import com.barchart.feed.api.model.meta.Instrument;
-import com.barchart.feed.api.series.analytics.Assembler;
+import com.barchart.feed.api.series.network.Assembler;
 
 public interface SeriesFeedService {
 	/**

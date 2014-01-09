@@ -37,7 +37,7 @@ import com.barchart.feed.api.model.meta.id.ExchangeID;
 import com.barchart.feed.api.model.meta.id.InstrumentID;
 import com.barchart.feed.api.model.meta.id.VendorID;
 import com.barchart.feed.api.series.PeriodType;
-import com.barchart.feed.api.series.analytics.Query;
+import com.barchart.feed.api.series.network.Query;
 import com.barchart.feed.api.series.service.HistoricalObserver;
 import com.barchart.feed.api.series.service.HistoricalResult;
 import com.barchart.feed.series.network.SeriesSubscription;

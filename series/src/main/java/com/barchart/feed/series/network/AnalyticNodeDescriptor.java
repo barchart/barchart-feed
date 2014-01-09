@@ -6,9 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.barchart.feed.api.series.analytics.Analytic;
-import com.barchart.feed.api.series.analytics.AnalyticDescriptor;
-import com.barchart.feed.api.series.analytics.NodeType;
+import com.barchart.feed.api.series.network.Analytic;
+import com.barchart.feed.api.series.network.AnalyticDescriptor;
+import com.barchart.feed.api.series.network.NodeType;
 import com.barchart.feed.series.network.BarchartSeriesProvider.SearchDescriptor;
 
 

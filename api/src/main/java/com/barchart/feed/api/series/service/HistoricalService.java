@@ -1,7 +1,7 @@
 package com.barchart.feed.api.series.service;
 
-import com.barchart.feed.api.series.analytics.Query;
-import com.barchart.feed.api.series.analytics.Subscription;
+import com.barchart.feed.api.series.network.Query;
+import com.barchart.feed.api.series.network.Subscription;
 
 import rx.Observable;
 

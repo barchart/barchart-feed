@@ -1,4 +1,4 @@
-package com.barchart.feed.api.series.analytics;
+package com.barchart.feed.api.series.network;
 
 import org.joda.time.DateTime;
 

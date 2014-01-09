@@ -1,4 +1,4 @@
-package com.barchart.feed.api.series.analytics;
+package com.barchart.feed.api.series.network;
 
 /**
  * Identifies the type of {@link Node} for use within the Barchart

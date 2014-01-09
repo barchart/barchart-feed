@@ -19,8 +19,8 @@ import rx.Observable;
 import rx.Observer;
 
 import com.barchart.feed.api.series.PeriodType;
-import com.barchart.feed.api.series.analytics.Query;
-import com.barchart.feed.api.series.analytics.Subscription;
+import com.barchart.feed.api.series.network.Query;
+import com.barchart.feed.api.series.network.Subscription;
 import com.barchart.feed.api.series.service.HistoricalObserver;
 import com.barchart.feed.api.series.service.HistoricalResult;
 import com.barchart.feed.api.series.service.HistoricalService;
