@@ -8,16 +8,16 @@ import org.joda.time.DateTime;
 import com.barchart.feed.api.series.Zone;
 import com.barchart.feed.api.series.Range;
 import com.barchart.feed.api.series.Span;
-import com.barchart.feed.api.series.TimePoint;
-import com.barchart.feed.api.series.TimeSeries;
+import com.barchart.feed.api.series.DataPoint;
+import com.barchart.feed.api.series.DataSeries;
 import com.barchart.feed.api.series.analytics.Analytic;
-import com.barchart.feed.series.DataSeries;
+import com.barchart.feed.series.DataSeriesImpl;
 
 public abstract class AnalyticBase implements Analytic {
-    /** Maps a given {@link TimeSeries} to a {@link Subscription} */
-    private Map<String, TimeSeries<?>> inputTimeSeries = new ConcurrentHashMap<String, TimeSeries<?>>();
-    /** Maps a given {@link TimeSeries} to a {@link Subscription} */
-    private Map<String, TimeSeries<?>> outputTimeSeries = new ConcurrentHashMap<String, TimeSeries<?>>();
+    /** Maps a given {@link DataSeries} to a {@link Subscription} */
+    private Map<String, DataSeries<?>> inputTimeSeries = new ConcurrentHashMap<String, DataSeries<?>>();
+    /** Maps a given {@link DataSeries} to a {@link Subscription} */
+    private Map<String, DataSeries<?>> outputTimeSeries = new ConcurrentHashMap<String, DataSeries<?>>();
 
     
     
@@ -36,13 +36,13 @@ public abstract class AnalyticBase implements Analytic {
     public static String[] getOutputKeys() { return null; }
     
     /**
-     * Returns the output {@link TimeSeries}
+     * Returns the output {@link DataSeries}
      * @param key  the mapping output key
-     * @return the output {@link TimeSeries}
+     * @return the output {@link DataSeries}
      */
     @SuppressWarnings("unchecked")
-    public <E extends TimePoint> TimeSeries<E> getOutputTimeSeries(String key) {
-        return (TimeSeries<E>)outputTimeSeries.get(key);
+    public <E extends DataPoint> DataSeries<E> getOutputTimeSeries(String key) {
+        return (DataSeries<E>)outputTimeSeries.get(key);
     }
     
     /**
@@ -50,18 +50,18 @@ public abstract class AnalyticBase implements Analytic {
      * @param key
      * @param series
      */
-    public <E extends TimePoint> void addOutputTimeSeries(String key, TimeSeries<E> series) {
-        this.outputTimeSeries.put(key, (DataSeries<?>)series);
+    public <E extends DataPoint> void addOutputTimeSeries(String key, DataSeries<E> series) {
+        this.outputTimeSeries.put(key, (DataSeriesImpl<?>)series);
     }
     
     /**
-     * Returns the output {@link TimeSeries}
+     * Returns the output {@link DataSeries}
      * @param key  the mapping output key
-     * @return the output {@link TimeSeries}
+     * @return the output {@link DataSeries}
      */
     @SuppressWarnings("unchecked")
-    public <E extends TimePoint> TimeSeries<E> getInputTimeSeries(String key) {
-        return (TimeSeries<E>)inputTimeSeries.get(key);
+    public <E extends DataPoint> DataSeries<E> getInputTimeSeries(String key) {
+        return (DataSeries<E>)inputTimeSeries.get(key);
     }
     
     /**
@@ -69,8 +69,8 @@ public abstract class AnalyticBase implements Analytic {
      * @param key
      * @param series
      */
-    public <E extends TimePoint> void addInputTimeSeries(String key, TimeSeries<E> series) {
-        this.inputTimeSeries.put(key, (DataSeries<?>)series);
+    public <E extends DataPoint> void addInputTimeSeries(String key, DataSeries<E> series) {
+        this.inputTimeSeries.put(key, (DataSeriesImpl<?>)series);
     }
     
     /**
@@ -96,7 +96,7 @@ public abstract class AnalyticBase implements Analytic {
      * @param time      the time of the result.
      * @param e         a result of the type {@link E}
      */
-    public <E extends TimePoint> void setValue(DateTime time, E e) {
+    public <E extends DataPoint> void setValue(DateTime time, E e) {
         
     }
     

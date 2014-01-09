@@ -5,12 +5,12 @@ import org.joda.time.DateTime;
 import com.barchart.feed.api.series.Period;
 import com.barchart.feed.api.series.Span;
 import com.barchart.feed.api.series.analytics.Analytic;
-import com.barchart.feed.api.series.service.Subscription;
-import com.barchart.feed.series.DataBar;
-import com.barchart.feed.series.DataPoint;
-import com.barchart.feed.series.DataSeries;
+import com.barchart.feed.api.series.analytics.Subscription;
+import com.barchart.feed.series.BarImpl;
+import com.barchart.feed.series.DataPointImpl;
+import com.barchart.feed.series.DataSeriesImpl;
 import com.barchart.feed.series.SpanImpl;
-import com.barchart.feed.series.service.SeriesSubscription;
+import com.barchart.feed.series.network.SeriesSubscription;
 
 public class BarBuilder extends AnalyticBase {
 	public static final String INPUT_KEY = "Input";
@@ -19,7 +19,7 @@ public class BarBuilder extends AnalyticBase {
     private static String[] inputs = new String[] { INPUT_KEY };
     private static String[] outputs = new String[] { OUTPUT_KEY };
     
-    private DataBar currentMergeBar;
+    private BarImpl currentMergeBar;
     
     private SpanImpl inputSpan;
     private SpanImpl workingSpan;
@@ -33,7 +33,7 @@ public class BarBuilder extends AnalyticBase {
     
 	/**
 	 * Instantiates a new {@code BarBuilder}. It is important that
-	 * the {@link Subscription} passed in has only one {@link TimeFrame} since
+	 * the {@link Subscription} passed in has only one {@link TimeFrameImpl} since
 	 * a BarBuilder's job is to produce one TimeFrame of data and only one.
 	 * Therefore, this constructor will usually only be called from internal
 	 * resources or Test classes which have this special knowledge, hence this
@@ -68,8 +68,8 @@ public class BarBuilder extends AnalyticBase {
 		//System.out.println(this + " processing span: " + span);
 		this.inputSpan = (SpanImpl)span;
 		
-		DataSeries<DataPoint> outputSeries = (DataSeries)getOutputTimeSeries(BarBuilder.OUTPUT_KEY);
-		DataSeries<DataPoint> inputSeries = (DataSeries)getInputTimeSeries(BarBuilder.INPUT_KEY);
+		DataSeriesImpl<DataPointImpl> outputSeries = (DataSeriesImpl)getOutputTimeSeries(BarBuilder.OUTPUT_KEY);
+		DataSeriesImpl<DataPointImpl> inputSeries = (DataSeriesImpl)getInputTimeSeries(BarBuilder.INPUT_KEY);
 		int inputStartIdx = inputSeries.indexOf(inputSpan.getTime(), false);
 		int inputLastIdx = inputSeries.indexOf(inputSpan.getNextTime(), false);
 		
@@ -89,7 +89,7 @@ public class BarBuilder extends AnalyticBase {
 			}
 			
 			if(currentMergeBar == null) {
-				currentMergeBar = (DataBar)inputSeries.get(inputStartIdx); 
+				currentMergeBar = (BarImpl)inputSeries.get(inputStartIdx); 
 				workingTargetDate = subscription.getTradingWeek().getNextSessionDate(currentMergeBar.getDate(), outputPeriod);
 				currentMergeBar.setDate(workingTargetDate);
 				workingSpan = new SpanImpl(subscription.getTimeFrame(0).getPeriod(), inputSpan.getTime(), inputSpan.getNextTime());
@@ -102,11 +102,11 @@ public class BarBuilder extends AnalyticBase {
 			}
 			
 			for(int i = inputStartIdx;i <= inputLastIdx;i++) {
-				DataBar currentIdxBar = (DataBar)inputSeries.get(i);
+				BarImpl currentIdxBar = (BarImpl)inputSeries.get(i);
 				if(currentIdxBar.getDate().isAfter(workingTargetDate)) {
 					workingTargetDate = subscription.
 						getTradingWeek().getNextSessionDate(workingTargetDate, outputPeriod);
-					currentMergeBar = new DataBar(currentIdxBar);
+					currentMergeBar = new BarImpl(currentIdxBar);
 					currentMergeBar.setDate(workingTargetDate);
 					this.workingSpan.setNextDate(currentMergeBar.getDate());
 					

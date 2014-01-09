@@ -12,15 +12,15 @@ import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.api.series.Period;
 import com.barchart.feed.api.series.PeriodType;
 import com.barchart.feed.api.series.Span;
-import com.barchart.feed.api.series.TimePoint;
-import com.barchart.feed.api.series.TimeSeries;
+import com.barchart.feed.api.series.DataPoint;
+import com.barchart.feed.api.series.DataSeries;
 import com.barchart.feed.api.series.TimeSeriesObservable;
-import com.barchart.feed.api.series.service.Node;
-import com.barchart.feed.api.series.service.Query;
-import com.barchart.feed.series.service.BarchartSeriesProvider;
-import com.barchart.feed.series.service.BarchartSeriesProvider.SeriesSubscriber;
-import com.barchart.feed.series.service.SeriesSubscription;
-import com.barchart.feed.series.service.TestHarness;
+import com.barchart.feed.api.series.analytics.Node;
+import com.barchart.feed.api.series.analytics.Query;
+import com.barchart.feed.series.network.BarchartSeriesProvider;
+import com.barchart.feed.series.network.SeriesSubscription;
+import com.barchart.feed.series.network.TestHarness;
+import com.barchart.feed.series.network.BarchartSeriesProvider.SeriesSubscriber;
 
 public class TimeSeriesObserverTest {
 
@@ -31,11 +31,11 @@ public class TimeSeriesObserverTest {
 		String symbol2 = "ESZ13";
         Instrument instr2 = TestHarness.makeInstrument(symbol2);
         DateTime dt2 = new DateTime(2013, 12, 10, 12, 0, 0);
-        TimeFrame tf2 = new TimeFrame(new Period(PeriodType.HOUR, 12), dt2, null);
-        SeriesSubscription sub = new SeriesSubscription("ESZ13", instr2, "IO", new TimeFrame[] { tf2 }, TradingWeek.DEFAULT);
+        TimeFrameImpl tf2 = new TimeFrameImpl(new Period(PeriodType.HOUR, 12), dt2, null);
+        SeriesSubscription sub = new SeriesSubscription("ESZ13", instr2, "IO", new TimeFrameImpl[] { tf2 }, TradingWeekImpl.DEFAULT);
         
 		SeriesSubscriber ss = provider.new SeriesSubscriber(sub, getTestNode());
-		TimeSeriesObservable tso = new TimeSeriesObservable(ss, new DataSeries<DataPoint>(Period.ONE_HOUR)) {
+		TimeSeriesObservable tso = new TimeSeriesObservable(ss, new DataSeriesImpl<DataPointImpl>(Period.ONE_HOUR)) {
 
 			@Override
 			public Query getQuery() {
@@ -44,13 +44,13 @@ public class TimeSeriesObserverTest {
 			}
 
 			@Override
-			public <E extends TimePoint> TimeSeries<E> getTimeSeries() {
+			public <E extends DataPoint> DataSeries<E> getTimeSeries() {
 				// TODO Auto-generated method stub
 				return null;
 			}
 
 			@Override
-			public <E extends TimePoint> Map<String, TimeSeries<? extends TimePoint>> getTimeSeriesMap() {
+			public <E extends DataPoint> Map<String, DataSeries<? extends DataPoint>> getTimeSeriesMap() {
 				// TODO Auto-generated method stub
 				return null;
 			}

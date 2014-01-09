@@ -11,13 +11,13 @@ import rx.Observer;
 
 import com.barchart.feed.api.series.Period;
 import com.barchart.feed.api.series.PeriodType;
+import com.barchart.feed.api.series.analytics.Query;
+import com.barchart.feed.api.series.analytics.Subscription;
 import com.barchart.feed.api.series.service.HistoricalObserver;
 import com.barchart.feed.api.series.service.HistoricalResult;
 import com.barchart.feed.api.series.service.HistoricalService;
-import com.barchart.feed.api.series.service.Query;
-import com.barchart.feed.api.series.service.Subscription;
-import com.barchart.feed.series.service.QueryBuilder;
-import com.barchart.feed.series.service.SeriesSubscription;
+import com.barchart.feed.series.network.QueryBuilderImpl;
+import com.barchart.feed.series.network.SeriesSubscription;
 
 /**
  * Returns data for one minute query: 2013-12-10 09:00  --> 2013-12-10 11:59
@@ -31,14 +31,14 @@ import com.barchart.feed.series.service.SeriesSubscription;
  */
 public class FauxHistoricalService extends HistoricalService<HistoricalResult>{
 	/** Test Query for minutes - can be used as convient means of constructing {@link Query} or {@link Subscription}*/
-	public static final Query DEFAULT_MINUTE_QUERY = QueryBuilder.create().
+	public static final Query DEFAULT_MINUTE_QUERY = QueryBuilderImpl.create().
 		symbol("ESZ13").
 		start(new DateTime(2013, 12, 10, 9, 0)).
 		end(new DateTime(2013, 12, 10, 12, 0)).
 		period(Period.ONE_MINUTE).
 		build();
 	/** Test Query for ticks - can be used as convient means of constructing {@link Query} or {@link Subscription} */
-	public static final Query DEFAULT_TICK_QUERY = QueryBuilder.create().
+	public static final Query DEFAULT_TICK_QUERY = QueryBuilderImpl.create().
 		symbol("ESZ13"). 
 		start(new DateTime(2013, 12, 10, 9, 0)).
 		end(new DateTime(2013, 12, 10, 12, 0)).

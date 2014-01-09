@@ -5,19 +5,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.barchart.feed.api.series.Period;
-import com.barchart.feed.api.series.TimePoint;
+import com.barchart.feed.api.series.DataPoint;
 import com.barchart.util.value.api.Existential;
 import com.barchart.util.value.api.Time;
 
 /**
- * Abstraction of a {@link DataPoint} with custom value fields.
+ * Abstraction of a {@link DataPointImpl} with custom value fields.
  * 
  * @author David Ray
  *
  * @param <K>		an object acting as key
  * @param <V>		the subclass of Existential which must be some value api entity
  */
-public abstract class GenericPoint<K, V extends Existential> extends DataPoint {
+public abstract class GenericPoint<K, V extends Existential> extends DataPointImpl {
 	
 	protected GenericPoint(Period period, Time t) {
 		super(period, t);
@@ -49,7 +49,7 @@ public abstract class GenericPoint<K, V extends Existential> extends DataPoint {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public <E extends TimePoint> int compareTo(E other) {
-		return  period.getPeriodType().compareAtResolution(date, ((DataPoint)other).date);
+	public <E extends DataPoint> int compareTo(E other) {
+		return  period.getPeriodType().compareAtResolution(date, ((DataPointImpl)other).date);
 	}
 }

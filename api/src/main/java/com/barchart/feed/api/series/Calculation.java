@@ -2,7 +2,7 @@ package com.barchart.feed.api.series;
 
 import com.barchart.util.value.api.Decimal;
 
-public interface Calculation extends TimePoint {
+public interface Calculation extends DataPoint {
 	/**
 	 * Returns the two-dimensional value of this {@code Calculation}
 	 * @return the value of this Calculation

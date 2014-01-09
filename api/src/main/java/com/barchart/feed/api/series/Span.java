@@ -3,12 +3,12 @@ package com.barchart.feed.api.series;
 import com.barchart.util.value.api.Time;
 
 /**
- * Indicates a duration of time starting at {@link TimePoint#getTime()} and
+ * Indicates a duration of time starting at {@link DataPoint#getTime()} and
  * ending at {@link #getNextTime()}.
  * 
  * @author David Ray
  */
-public interface Span extends TimePoint {
+public interface Span extends DataPoint {
 	/**
 	 * Returns the future-most {@link Time}
 	 * @return	the future-most {@link Time}
@@ -23,7 +23,7 @@ public interface Span extends TimePoint {
 	
 	/**
 	 * Return the specific index of this {@code Span} within
-	 * its parent {@link TimeSeries}
+	 * its parent {@link DataSeries}
 	 * 
 	 * @return	the starting index of this {@code Span}
 	 */

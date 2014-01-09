@@ -5,11 +5,11 @@ import org.joda.time.DateTimeZone;
 
 import com.barchart.feed.api.series.Period;
 import com.barchart.feed.api.series.Span;
-import com.barchart.feed.api.series.TimePoint;
+import com.barchart.feed.api.series.DataPoint;
 import com.barchart.util.value.ValueFactoryImpl;
 import com.barchart.util.value.api.Time;
 
-public class SpanImpl extends DataPoint implements Span {
+public class SpanImpl extends DataPointImpl implements Span {
 	private Time nextTime;
 	private DateTime nextDate;
 	
@@ -40,7 +40,7 @@ public class SpanImpl extends DataPoint implements Span {
 	}
 
 	@Override
-	public <E extends TimePoint> int compareTo(E other) {
+	public <E extends DataPoint> int compareTo(E other) {
 		// TODO Auto-generated method stub
 		return 0;
 	}

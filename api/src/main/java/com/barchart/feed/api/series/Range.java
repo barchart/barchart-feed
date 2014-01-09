@@ -8,7 +8,7 @@ import com.barchart.util.value.api.Price;
  * 
  * @author David Ray
  */
-public interface Range extends TimePoint {
+public interface Range extends DataPoint {
 	/**
 	 * Returns the high value at this {@code Range}'s time index.
 	 * @return	the high value at this {@code Range}'s time index.

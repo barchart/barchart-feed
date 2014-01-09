@@ -5,37 +5,37 @@ import org.joda.time.DateTime;
 import com.barchart.feed.api.series.Zone;
 import com.barchart.feed.api.series.Range;
 import com.barchart.feed.api.series.Span;
-import com.barchart.feed.api.series.TimePoint;
-import com.barchart.feed.api.series.TimeSeries;
+import com.barchart.feed.api.series.DataPoint;
+import com.barchart.feed.api.series.DataSeries;
 
 public interface Analytic {
     /**
-     * Sets the input {@link TimeSeries} corresponding to with the specified key
+     * Sets the input {@link DataSeries} corresponding to with the specified key
      * 
-     * @param key      the String acting as key for the corresponding {@link TimeSeries}
-     * @param   the input {@link TimeSeries}
+     * @param key      the String acting as key for the corresponding {@link DataSeries}
+     * @param   the input {@link DataSeries}
      */
-    public <E extends TimePoint> void addInputTimeSeries(String key, TimeSeries<E> timeSeries);
+    public <E extends DataPoint> void addInputTimeSeries(String key, DataSeries<E> timeSeries);
     /**
-     * Returns the input {@link TimeSeries} corresponding to with the specified key
+     * Returns the input {@link DataSeries} corresponding to with the specified key
      * 
-     * @param key        the String acting as key for the corresponding {@link TimeSeries}
-     * @return  the input {@link TimeSeries}
+     * @param key        the String acting as key for the corresponding {@link DataSeries}
+     * @return  the input {@link DataSeries}
      */
-    public <E extends TimePoint> TimeSeries<E> getInputTimeSeries(String key);
+    public <E extends DataPoint> DataSeries<E> getInputTimeSeries(String key);
     /**
-     * Sets the output {@link TimeSeries} corresponding to with the specified key
+     * Sets the output {@link DataSeries} corresponding to with the specified key
      * 
-     * @param key      the String acting as key for the corresponding {@link TimeSeries}
-     * @param   the input {@link TimeSeries}
+     * @param key      the String acting as key for the corresponding {@link DataSeries}
+     * @param   the input {@link DataSeries}
      */
-    public <E extends TimePoint> void addOutputTimeSeries(String key, TimeSeries<E> timeSeries);
+    public <E extends DataPoint> void addOutputTimeSeries(String key, DataSeries<E> timeSeries);
 	/**
-	 * Returns the output {@link TimeSeries}
+	 * Returns the output {@link DataSeries}
 	 * @param key  the mapping output key
-	 * @return the output {@link TimeSeries}
+	 * @return the output {@link DataSeries}
 	 */
-	public <E extends TimePoint> TimeSeries<E> getOutputTimeSeries(String key);
+	public <E extends DataPoint> DataSeries<E> getOutputTimeSeries(String key);
 	/**
 	 * Called immediately following the call to {@link Analytic#preProcess(Span)}
 	 * to do the main work of the executing body of code.
@@ -55,7 +55,7 @@ public interface Analytic {
 	 * @param time		the time of the result.
 	 * @param e			a result of the type {@link E}
 	 */
-	public <E extends TimePoint> void setValue(DateTime time, E e);
+	public <E extends DataPoint> void setValue(DateTime time, E e);
 	/**
 	 * Called to update the current calculation for the specified key.
 	 * 

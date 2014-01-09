@@ -1,6 +1,5 @@
 package com.barchart.feed.api.series.analytics;
 
-import com.barchart.feed.api.series.service.NodeDescriptor;
 
 /**
  * Further extension of {@link NodeDescriptor} to emphasize the needed

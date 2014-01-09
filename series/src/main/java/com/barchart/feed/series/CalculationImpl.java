@@ -5,7 +5,7 @@ import com.barchart.feed.api.series.Period;
 import com.barchart.util.value.api.Decimal;
 import com.barchart.util.value.api.Time;
 
-public class CalculationImpl extends DataPoint implements Calculation {
+public class CalculationImpl extends DataPointImpl implements Calculation {
 	private Decimal value;
 	
 	protected CalculationImpl(Period period, Time t, Decimal value) {
