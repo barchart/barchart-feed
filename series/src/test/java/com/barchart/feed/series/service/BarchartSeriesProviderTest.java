@@ -106,6 +106,40 @@ public class BarchartSeriesProviderTest {
 	}
 	
 	@Test
+    public void testGetOrCreateIONode_find_derivable() {
+	    BarchartSeriesProvider provider = new BarchartSeriesProvider(null);
+        
+        String symbol = "ESZ13";
+        Instrument instr = TestHarness.makeInstrument(symbol);
+        DateTime dt = new DateTime(2013, 12, 10, 12, 0, 0);
+        TimeFrame tf = new TimeFrame(new Period(PeriodType.HOUR, 12), dt, null);
+        SeriesSubscription sub = new SeriesSubscription("ESZ13", instr, "IO", new TimeFrame[] { tf }, TradingWeek.DEFAULT);
+        
+        Node<SeriesSubscription> node = provider.getOrCreateIONode(sub, sub);
+        
+        Node<SeriesSubscription> derivable = node.getParentNodes().get(0).getParentNodes().get(0);
+        Period p = ((AnalyticNode)derivable).getOutputSubscriptions().get(0).getTimeFrame(0).getPeriod();
+        assertEquals(1, p.size());
+        assertEquals(PeriodType.MINUTE, p.getPeriodType());
+        
+        String symbol2 = "ESZ13";
+        Instrument instr2 = TestHarness.makeInstrument(symbol2);
+        DateTime dt2 = new DateTime(2013, 12, 10, 12, 0, 0);
+        TimeFrame tf2 = new TimeFrame(new Period(PeriodType.MINUTE, 12), dt2, null);
+        SeriesSubscription sub2 = new SeriesSubscription("ESZ13", instr2, "IO", new TimeFrame[] { tf2 }, TradingWeek.DEFAULT);
+        
+        Node<SeriesSubscription> found = provider.getOrCreateIONode(sub2, sub2);
+        
+        Node<SeriesSubscription> derivableMatch = found.getParentNodes().get(0);
+        p = ((AnalyticNode)derivableMatch).getOutputSubscriptions().get(0).getTimeFrame(0).getPeriod();
+        assertEquals(1, p.size());
+        assertEquals(PeriodType.MINUTE, p.getPeriodType());
+        
+        assertTrue(derivable == derivableMatch);
+        assertTrue(provider.hasAssemblerParent(derivableMatch));
+	}
+	
+	@Test
 	public void testGetOrCreateNode() {
 	    BarchartSeriesProvider provider = new BarchartSeriesProvider(null);
 	    NetworkSchema.setSchemaFilePath("testNetworks2.txt");

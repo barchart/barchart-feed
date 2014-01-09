@@ -156,6 +156,20 @@ public class SeriesSubscription implements Subscription {
 	}
 	
 	/**
+	 * Returns a flag indicating whether the {@link Period} contained within the
+	 * zero'th {@link TimeFrame} of this {@code Subscription}, is closer to the 
+	 * one of the target than the comparison {@code Subscription}.
+	 * 
+	 * @param target          the Subscription containing the Period to compare nearness to.
+	 * @param comparison      the Subscription containing the competing Period.
+	 * @return true if so, false if not.
+	 */
+	public boolean isCloserTo(Subscription target, Subscription comparison) {
+	    return timeFrames[0].getPeriod().isCloserTo(target.getTimeFrames()[0].getPeriod(), 
+	        comparison.getTimeFrames()[0].getPeriod());
+	}
+	
+	/**
 	 * Loads this {@link SeriesSubscription} with data defined by the specified child subscription's
 	 * inputs and separates out the time frames indexed under source key to be the time frames
 	 * assigned to this subscription.

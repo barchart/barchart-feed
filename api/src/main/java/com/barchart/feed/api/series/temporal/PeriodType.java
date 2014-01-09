@@ -82,6 +82,20 @@ public enum PeriodType {
     }
     
     /**
+     * Returns the ordinal difference between this {@code PeriodType}
+     * and the PeriodType specified. The returned value will be negative
+     * if the specified PeriodType is further from the origin than this
+     * PeriodType.
+     * 
+     * @param       type    the PeriodType to compare.
+     * @return      the distance (ordinal difference) between this PeriodType
+     *              and the PeriodType specified.
+     */
+    public int distance(PeriodType type) {
+        return ordinal() - type.ordinal();
+    }
+    
+    /**
      * Convenience method to return a "higher" or "lower" type (num
      * may be negative in which case {@link #dec(PeriodType, int)}
      * will be returned).

@@ -169,12 +169,17 @@ public class BarBuilderNodeDescriptor implements BarBuilderDescriptor {
         //First reduce the interval and add a node for that.
         if(higher.getTimeFrames()[0].getPeriod().size() > 1) {
             Period smaller = new Period(higher.getTimeFrames()[0].getPeriod().getPeriodType(), 1);
-            higher = addNextNodeToChain(retVal, higher, smaller);
+            if(!smaller.equals(lower.getTimeFrames()[0].getPeriod())) {
+                higher = addNextNodeToChain(retVal, higher, smaller);
+            }else{
+                higher = lower;
+            }
         }
         
         //Next add processors to fill base type gap between "derivable" and target.
         PeriodType smallerType = higher.getTimeFrames()[0].getPeriod().getPeriodType();
-        while((smallerType = getLowerBaseType(smallerType)) != lower.getTimeFrames()[0].getPeriod().getPeriodType()) {
+        while(higher.getTimeFrames()[0].getPeriod().getPeriodType() !=  lower.getTimeFrames()[0].getPeriod().getPeriodType() && 
+            (smallerType = getLowerBaseType(smallerType)) != lower.getTimeFrames()[0].getPeriod().getPeriodType()) {
             Period smaller = new Period(smallerType, 1);
             higher = addNextNodeToChain(retVal, higher, smaller);
         }

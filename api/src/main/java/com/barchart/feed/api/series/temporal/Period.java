@@ -45,6 +45,23 @@ public class Period {
 	}
 	
 	/**
+	 * Returns a flag indicating whether the specified comparison Period is 
+	 * closer to the target Period than this Period.
+	 * 
+	 * @param target       the Period to measure the distance from
+	 * @param comparison   the Period competing with this Period.
+	 * @return     true if so, false if not
+	 */
+	public boolean isCloserTo(Period target, Period comparison) {
+	    if(Math.abs(periodType.distance(target.getPeriodType())) <
+	        Math.abs(comparison.getPeriodType().distance(target.getPeriodType()))) {
+	        return true;
+	    }
+	    
+	    return Math.abs(size - target.size()) < Math.abs(comparison.size() - target.size());
+	}
+	
+	/**
 	 * Returns a flag indicating whether the specified {@code Period} is
 	 * higher than this one. A Period is higher when its {@link PeriodType}
 	 * is higher <em>or</em> its PeriodType is the same but its size is larger.

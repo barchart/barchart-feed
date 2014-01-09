@@ -231,21 +231,15 @@ public class BarchartSeriesProvider {
 	 * @return
 	 */
 	Node<SeriesSubscription> getOrCreateIONode(SeriesSubscription subscription, SeriesSubscription original) {
+	    Node<SeriesSubscription> retVal = null;
+	    
 	    boolean isAssembler = subscription.getAnalyticSpecifier().equals(NodeType.ASSEMBLER.toString());
-	    
-	    List<Node<SeriesSubscription>> derivables = findMatchingIONodes(subscription);
-	    Node<SeriesSubscription> retVal = derivables.size() == 1 && 
-	    	(retVal = derivables.get(0)).getOutputSubscriptions().contains(subscription) ? retVal : null;
-	    
-	    if(!isAssembler && (retVal == null || retVal.getParentNodes().isEmpty())) {
-	        if(derivables.size() > 0 && retVal == null) {
-	        	AnalyticNode derivableNode = (AnalyticNode)getBestDerivableNode(derivables, subscription);//Need algorithm to determine best derivable node
-	        	retVal = linkBestDerivableIONodeToNewChain(derivableNode, subscription);
-            } else if(retVal == null) {
-            	retVal = createIONode(subscription);
-            }
-	        
-	        ((AnalyticNode)retVal).addOutputKeyMapping(BarBuilder.OUTPUT_KEY, subscription);
+	    if(isAssembler) {
+            retVal = createIONode(subscription);
+            addAssembler(original, (Assembler)retVal);
+        }else if((retVal = findDerivableIONode(subscription)) == null || !hasAssemblerParent(retVal)) {
+            retVal = retVal == null ? createIONode(subscription) : retVal;
+            ((AnalyticNode)retVal).addOutputKeyMapping(BarBuilder.OUTPUT_KEY, subscription);
             List<SeriesSubscription> inputs = retVal.getInputSubscriptions();
             for(SeriesSubscription s : inputs) {
                 Node<SeriesSubscription> n = getOrCreateIONode(s, original);
@@ -260,12 +254,31 @@ public class BarchartSeriesProvider {
                     ((AnalyticNode)retVal).addInputTimeSeries(s, (DataSeries<DataPoint>)((Distributor)n).getOutputTimeSeries(s));
                 }
             }
-        }else if(isAssembler) {
-        	retVal = createIONode(subscription);
-        	addAssembler(original, (Assembler)retVal);
         }
 	    
 	    return retVal;
+	}
+	
+	/**
+	 * Returns a flag indicating whether the specified <em>IO</em> {@link Node} has
+	 * an {@link Assembler} parent.
+	 * 
+	 * @param      n   the node to check for assembler parentage
+	 * @return     true if so, false if not
+	 */
+	boolean hasAssemblerParent(Node<SeriesSubscription> n) {
+	    if(!n.getOutputSubscriptions().get(0).getAnalyticSpecifier().equals(NodeType.IO.toString()) &&
+	        !n.getOutputSubscriptions().get(0).getAnalyticSpecifier().equals(NodeType.ASSEMBLER.toString())) {
+	        throw new IllegalArgumentException("Can only check for assembler parentage of a node with a single input");
+	    }
+	    Node<SeriesSubscription> parent = n;
+	    do {
+	        if(parent.getOutputSubscriptions().get(0).getAnalyticSpecifier().equals(NodeType.ASSEMBLER.toString())) {
+	            return true;
+	        }
+	    } while((parent = parent.getParentNodes().get(0)) != null);
+	    
+	    return false;
 	}
 	
 	/**
@@ -355,6 +368,31 @@ public class BarchartSeriesProvider {
 	}
 	
 	/**
+     * Returns a {@link Node} which is directly or indirectly attached to
+     * a node whose output data is sufficient to act as input to a node
+     * specified by the {@link SeriesSubscription} passed in.
+     * 
+     * @param      subscription    the Subscription specifying the node to return.
+     * @return     the specified node or null if no node outputs derivable data as
+     *             specified by the Subscription passed in.
+     */
+    private Node<SeriesSubscription> findDerivableIONode(SeriesSubscription subscription) {
+        Node<SeriesSubscription> retVal = null;
+        
+        List<Node<SeriesSubscription>> derivables = findMatchingIONodes(subscription);
+        if(derivables.size() > 0) {
+            retVal = derivables.size() == 1 && 
+                (retVal = derivables.get(0)).getOutputSubscriptions().contains(subscription) ? retVal : null;
+            
+            if(retVal == null) {
+                AnalyticNode derivableNode = (AnalyticNode)getBestDerivableNode(derivables, subscription);//Need algorithm to determine best derivable node
+                retVal = linkBestDerivableIONodeToNewChain(derivableNode, subscription);
+            }
+        }
+        return retVal;
+    }
+	
+	/**
 	 * Because "derivable" nodes are not always an exact match, but are a node
 	 * from which other nodes can be built (derived) due to their compatible 
 	 * {@link Period}s, we must build those "in-between" nodes to account for the
@@ -402,6 +440,13 @@ public class BarchartSeriesProvider {
 	 */
 	private Node<SeriesSubscription> getBestDerivableNode(List<Node<SeriesSubscription>> derivableNodes, Subscription subscription) {
 	    Node<SeriesSubscription> n = derivableNodes.get(0);//Optimize this later
+	    if(!n.getOutputSubscriptions().contains(subscription)) {
+	        for(Node<SeriesSubscription> search : derivableNodes) {
+	            if(search.getOutputSubscriptions().get(0).isCloserTo(subscription, n.getOutputSubscriptions().get(0))) {
+	                n = search;
+	            }
+	        }
+	    }
 	    return n;
 	}
 	
