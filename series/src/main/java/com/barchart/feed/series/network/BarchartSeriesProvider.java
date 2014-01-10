@@ -11,16 +11,16 @@ import rx.Observable;
 import rx.Observer;
 
 import com.barchart.feed.api.model.meta.Instrument;
-import com.barchart.feed.api.series.TimeFrame;
-import com.barchart.feed.api.series.Period;
-import com.barchart.feed.api.series.PeriodType;
-import com.barchart.feed.api.series.Span;
 import com.barchart.feed.api.series.DataPoint;
 import com.barchart.feed.api.series.DataSeries;
-import com.barchart.feed.api.series.TimeSeriesObservable;
+import com.barchart.feed.api.series.Period;
+import com.barchart.feed.api.series.PeriodType;
+import com.barchart.feed.api.series.TimeFrame;
 import com.barchart.feed.api.series.network.Analytic;
 import com.barchart.feed.api.series.network.Assembler;
 import com.barchart.feed.api.series.network.NetworkDescriptor;
+import com.barchart.feed.api.series.network.NetworkNotification;
+import com.barchart.feed.api.series.network.NetworkObservable;
 import com.barchart.feed.api.series.network.Node;
 import com.barchart.feed.api.series.network.NodeDescriptor;
 import com.barchart.feed.api.series.network.NodeType;
@@ -45,7 +45,7 @@ public class BarchartSeriesProvider {
 	/** Contains output-level/Subscribable {@link Analytic} nodes */
     private List<Node<SeriesSubscription>> assemblers = Collections.synchronizedList(new ArrayList<Node<SeriesSubscription>>());
 	/** Subscribers for a particular {@link Subscription} */
-    private Map<Subscription, Observer<Span>> subscribers = new HashMap<Subscription, Observer<Span>>();
+    private Map<Subscription, Observer<NetworkNotification>> subscribers = new HashMap<Subscription, Observer<NetworkNotification>>();
     private Map<Subscription, List<Distributor>> subscriberAssemblers = new HashMap<Subscription, List<Distributor>>();
     /** Contains all instantiated Nodes mapped to {@link SearchDescriptor}s */
     private Map<SearchDescriptor,AnalyticNode> searchMap = Collections.synchronizedMap(new HashMap<SearchDescriptor,AnalyticNode>());
@@ -66,28 +66,38 @@ public class BarchartSeriesProvider {
 	 * @param query
 	 * @return
 	 */
-	public <T extends DataPoint> TimeSeriesObservable fetch(final Query query) {
-		Instrument inst = feedService.lookupInstrument(query.getSymbols().get(0)); //Supports multiple symbols for spreads/expressions
+	public <T extends DataPoint> NetworkObservable fetch(final Query query) {
+		List<Instrument> instList = new ArrayList<Instrument>();
+		for(String symbol : query.getSymbols()) {
+			instList.add(feedService.lookupInstrument(symbol));//Supports multiple symbols for spreads/expressions
+		}
 		
 //		SeriesSubscription subscription = (SeriesSubscription)query.toSubscription(inst);
 //		System.out.println("inst = " + inst.symbol());
 //		AnalyticNode node = lookupNode(subscription, subscription);
 //		DataSeries<?> series = node.getOutputTimeSeries(subscription);
 //		
-//		return (new TimeSeriesObservable(new SeriesSubscriber(subscription, node), series) {
+//		return (new NetworkObservable(new SeriesSubscriber(subscription, node), series) {
 //		    @SuppressWarnings("unchecked")
 //            public TimeSeries<?> getTimeSeries() { return (TimeSeries<TimePoint>)this.series; }
 //		});
 		
 		NodeDescriptor descriptor = lookupDescriptor(query);
-		Observable observable = getObservable((SeriesSubscription)query.toSubscription(inst), descriptor);
-		return (TimeSeriesObservable)observable;
+		Observable observable = getObservable(instList, query, descriptor);
+		return (NetworkObservable)observable;
 	}
 	
-	public Observable getObservable(SeriesSubscription subscription, NodeDescriptor descriptor) {
+	public Observable getObservable(List<Instrument> instList, Query query, NodeDescriptor descriptor) {
+		SeriesSubscription subscription = (SeriesSubscription)query.toSubscription(instList.get(0));
+		List<Node<SeriesSubscription>> subscriptionNodes = new ArrayList<Node<SeriesSubscription>>();
         switch(descriptor.getType()) {
             case IO: {
                 Node<SeriesSubscription> node = getOrCreateIONode(subscription, subscription);
+                subscriptionNodes.add(node);
+                Map<String, DataSeries<? extends DataPoint>> map = new HashMap<String, DataSeries<? extends DataPoint>>();
+                map.put(subscription.toString(), ((AnalyticNode)node).getOutputTimeSeries(BarBuilder.OUTPUT_KEY));
+                NetworkObservable no = new NetworkObservableImpl(new SeriesSubscriber(subscription, subscriptionNodes), map);
+                //return no;
                 break;
             }
             case ANALYTIC: {
@@ -96,12 +106,15 @@ public class BarchartSeriesProvider {
             }
             case NETWORK: {
                 NetworkDescriptor schema = (NetworkDescriptor)descriptor;
-                List<Node<SeriesSubscription>> subscriptionNodes = new ArrayList<Node<SeriesSubscription>>();
+                
                 for(NodeDescriptor desc : schema.getMainPublishers()) {
-                	Node<SeriesSubscription> newNode = getOrCreateNode(
-                	    subscription, subscription, (AnalyticNodeDescriptor)desc);
+                	subscription = new SeriesSubscription(subscription);
+                	subscription.setAnalyticSpecifier(desc.getSpecifier());
+                	Node<SeriesSubscription> newNode = getOrCreateNode(subscription, subscription, (AnalyticNodeDescriptor)desc);
                     subscriptionNodes.add(newNode);
                 }
+                
+                System.out.println("subscription nodes = " + subscriptionNodes);
                 break;
             }
             default: {
@@ -647,31 +660,53 @@ public class BarchartSeriesProvider {
         }
 	}
 	
-	public class SeriesSubscriber implements Observable.OnSubscribeFunc<Span> {
+	/**
+	 * {@link Observable.OnSubscribeFunc} implementation specialized to handle the
+	 * access to subscribed {@link Node}s and their {@link DataSeries}.
+	 */
+	public class SeriesSubscriber implements Observable.OnSubscribeFunc<NetworkNotification> {
 	    private SeriesSubscription subscription;
-	    private Node<SeriesSubscription> subscribedNode;
-	    
-	    public SeriesSubscriber(SeriesSubscription subscription, Node<SeriesSubscription> node) {
-	        this.subscribedNode = node;
-	        this.subscription = subscription;
-	    }
+	    private List<Node<SeriesSubscription>> subscribedNodes;
 	    
 	    public SeriesSubscriber(SeriesSubscription subscription, List<Node<SeriesSubscription>> publishers) {
-	    	
+	    	this.subscription = subscription;
+	    	this.subscribedNodes = publishers;
 	    }
 	    
 	    @SuppressWarnings("unchecked")
         @Override
-        public rx.Subscription onSubscribe(Observer<? super Span> t1) {
-	    	subscribers.put(this.subscription, (Observer<Span>)t1);
-	        this.subscribedNode.startUp();
+        public rx.Subscription onSubscribe(Observer<? super NetworkNotification> t1) {
+	    	subscribers.put(this.subscription, (Observer<NetworkNotification>)t1);
+	    	for(Node<SeriesSubscription> n : subscribedNodes) {
+	    		n.startUp();
+	    	}
+	    	
+	    	List<Distributor> assemblers = subscriberAssemblers.get(subscription);
+	    	if(assemblers == null || assemblers.size() < 1) {
+	    		throw new IllegalStateException("Could not find assembler supplying required input for subscription: " + subscription);
+	    	}
 	        
 	        for(Distributor d : subscriberAssemblers.get(subscription)) {
 	            System.out.println("registering assembler: " + d);
 	            feedService.registerAssembler(d);
 	        }
-	        return null;
+	       
+	        return new rx.Subscription() {
+	        	@Override
+				public void unsubscribe() {
+					
+				}
+	        	
+	        };
         }
+	    
+	    /**
+	     * Returns this {@code SeriesSubscriber}'s list of publisher nodes.
+	     * @return	this {@code SeriesSubscriber}'s list of publisher nodes.
+	     */
+	    List<Node<SeriesSubscription>> getNodes() {
+	    	return subscribedNodes;
+	    }
 	    
 	}
 }

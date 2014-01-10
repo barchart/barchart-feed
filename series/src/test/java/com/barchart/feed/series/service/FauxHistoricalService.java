@@ -45,8 +45,8 @@ public class FauxHistoricalService extends HistoricalService<HistoricalResult>{
 		period(new Period(PeriodType.TICK, 1)).
 		build();
 	
-	private static final List<String> TICK_DATA = loadFromFile("fauxTickData.txt");
-	private static final List<String> MINUTE_DATA = loadFromFile("fauxMinuteData.txt");
+	private static final List<String> TICK_DATA = loadFromFile("/fauxTickData.txt");
+	private static final List<String> MINUTE_DATA = loadFromFile("/fauxMinuteData.txt");
 	
 	
 	/**

@@ -8,17 +8,15 @@ import static org.junit.Assert.fail;
 import java.util.List;
 
 import org.joda.time.DateTime;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.api.series.Period;
 import com.barchart.feed.api.series.PeriodType;
 import com.barchart.feed.api.series.Span;
-import com.barchart.feed.api.series.DataPoint;
-import com.barchart.feed.api.series.DataSeries;
-import com.barchart.feed.api.series.TimeSeriesObservable;
 import com.barchart.feed.api.series.network.Assembler;
+import com.barchart.feed.api.series.network.NetworkNotification;
+import com.barchart.feed.api.series.network.NetworkObservable;
 import com.barchart.feed.api.series.network.Node;
 import com.barchart.feed.api.series.network.NodeDescriptor;
 import com.barchart.feed.api.series.network.Query;
@@ -31,7 +29,7 @@ import com.barchart.util.test.concurrent.TestObserver;
 
 public class BarchartSeriesProviderTest {
 
-	@Ignore
+	@Test
 	public void testFetch() {
 		
 		FauxMarketService marketService = new FauxMarketService("test", "test");
@@ -42,14 +40,25 @@ public class BarchartSeriesProviderTest {
 		//Observable Should be null here until I finish the node lookup and graph construction I'm currently working on.
 		//Fails due to this is where I'm working (Test Driven Baby!)
 		//Finished first part which is determining equality and "derivability" of Subscriptions (now writing tests for them)
-		TimeSeriesObservable observable = provider.fetch(FauxHistoricalService.DEFAULT_MINUTE_QUERY);
-		DataSeries<DataPoint> series = observable.getTimeSeries();
-		assertNotNull(series);
+//		NetworkObservable observable = provider.fetch(FauxHistoricalService.DEFAULT_MINUTE_QUERY);
+//		DataSeries<DataPoint> series = observable.getTimeSeries();
+//		assertNotNull(series);
 		
-		TestObserver<Span> testObserver = new TestObserver<Span>();
-		observable.subscribe(testObserver);
+		
+		NetworkSchema.setSchemaFilePath("networks.txt");
+		Query query = QueryBuilderImpl.create().
+				symbol("ESZ13").
+				specifier("PivotPoint").
+				start(new DateTime(2013, 12, 10, 12, 0)).
+				period(Period.ONE_MINUTE).
+				period(new Period(PeriodType.MINUTE, 5)).build();
+		
+		NetworkObservable observable = provider.fetch(query);
+		
+		TestObserver<NetworkNotification> testObserver = new TestObserver<NetworkNotification>();
+		observable.subscribe(testObserver, "test");
 		try {
-			Span span = testObserver.sync(10000).results.get(0);
+			NetworkNotification span = testObserver.sync(10000).results.get(0);
 			assertNotNull(span); 
 		} catch (Exception e) {
 			e.printStackTrace();

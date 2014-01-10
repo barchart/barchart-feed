@@ -45,9 +45,9 @@ public class SeriesSubscription implements Subscription {
     }
     
     public SeriesSubscription(SeriesSubscription ss) {
-        this.analyticSpecifier = ss.analyticSpecifier;
         this.instrument = ss.instrument;
         this.symbol = ss.symbol;
+        this.analyticSpecifier = ss.analyticSpecifier;
         this.timeFrames = new TimeFrameImpl[ss.timeFrames.length]; int i = 0;
         for(TimeFrameImpl tf : ss.timeFrames) {
             timeFrames[i++] = tf;
@@ -114,6 +114,15 @@ public class SeriesSubscription implements Subscription {
 	@Override
     public String getAnalyticSpecifier() {
 		return analyticSpecifier;
+	}
+	
+	/**
+	 * Sets the string specifying the particular node to use.
+	 * 
+	 * @param specifier
+	 */
+	public void setAnalyticSpecifier(String specifier) {
+		this.analyticSpecifier = specifier;
 	}
 	
 	/**
