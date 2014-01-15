@@ -47,6 +47,7 @@ public enum SubscriptionType {
 			result.add(QUOTE_SNAPSHOT);
 		} else if(clazz.equals(Book.class)) {
 			result.add(QUOTE_UPDATE);
+			result.add(QUOTE_SNAPSHOT);
 			result.add(BOOK_UPDATE);
 			result.add(BOOK_SNAPSHOT);
 		} else if(clazz.equals(Cuvol.class)) {
