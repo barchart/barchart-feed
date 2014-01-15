@@ -13,38 +13,38 @@ import org.junit.Test;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.api.series.Period;
 import com.barchart.feed.api.series.PeriodType;
-import com.barchart.feed.series.DataBar;
-import com.barchart.feed.series.DataSeries;
+import com.barchart.feed.series.BarImpl;
+import com.barchart.feed.series.DataSeriesImpl;
 import com.barchart.feed.series.SpanImpl;
-import com.barchart.feed.series.TimeFrame;
-import com.barchart.feed.series.TradingWeek;
-import com.barchart.feed.series.service.SeriesSubscription;
-import com.barchart.feed.series.service.TestHarness;
+import com.barchart.feed.series.TimeFrameImpl;
+import com.barchart.feed.series.TradingWeekImpl;
+import com.barchart.feed.series.network.SeriesSubscription;
+import com.barchart.feed.series.network.TestHarness;
 import com.barchart.util.value.ValueFactoryImpl;
 
 public class BarBuilderTest {
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@Ignore
+	@Test
 	public void testMinuteTo5Minute() {
 		String symbol = "ESZ13";
         Instrument instr = TestHarness.makeInstrument(symbol);
         DateTime dt2 = new DateTime(2013, 12, 10, 12, 0, 0);
-        TimeFrame tf2 = new TimeFrame(new Period(PeriodType.MINUTE, 5), dt2, null);
+        TimeFrameImpl tf2 = new TimeFrameImpl(new Period(PeriodType.MINUTE, 5), dt2, null);
         
-        SeriesSubscription sub2 = new SeriesSubscription("ESZ13", instr, "IO", new TimeFrame[] { tf2 }, TradingWeek.DEFAULT);
+        SeriesSubscription sub2 = new SeriesSubscription("ESZ13", instr, "IO", new TimeFrameImpl[] { tf2 }, TradingWeekImpl.DEFAULT);
         
         BarBuilder barBuilder = new BarBuilder(sub2);
-		barBuilder.addInputTimeSeries(BarBuilder.INPUT_KEY, new DataSeries<DataBar>(new Period(PeriodType.MINUTE, 1)));
-		DataSeries<DataBar> inputSeries = (DataSeries)barBuilder.getInputTimeSeries(BarBuilder.INPUT_KEY);
+		barBuilder.addInputTimeSeries(BarBuilder.INPUT_KEY, new DataSeriesImpl<BarImpl>(new Period(PeriodType.MINUTE, 1)));
+		DataSeriesImpl<BarImpl> inputSeries = (DataSeriesImpl)barBuilder.getInputTimeSeries(BarBuilder.INPUT_KEY);
 		assertNotNull(inputSeries);
 		
-		barBuilder.addOutputTimeSeries(BarBuilder.OUTPUT_KEY, new DataSeries<DataBar>(new Period(PeriodType.MINUTE, 5)));
-		DataSeries<DataBar> outputSeries = (DataSeries)barBuilder.getOutputTimeSeries(BarBuilder.OUTPUT_KEY);
+		barBuilder.addOutputTimeSeries(BarBuilder.OUTPUT_KEY, new DataSeriesImpl<BarImpl>(new Period(PeriodType.MINUTE, 5)));
+		DataSeriesImpl<BarImpl> outputSeries = (DataSeriesImpl)barBuilder.getOutputTimeSeries(BarBuilder.OUTPUT_KEY);
 		assertNotNull(outputSeries);
 		assertEquals(new Period(PeriodType.MINUTE, 5), outputSeries.getPeriod());
 		
-		List<DataBar> list = getBars();
+		List<BarImpl> list = getBars();
         SpanImpl span = new SpanImpl(new Period(PeriodType.MINUTE, 5),
         	ValueFactoryImpl.factory.newTime(new DateTime(2013, 12, 10, 12, 0, 0).getMillis()),
         		ValueFactoryImpl.factory.newTime(new DateTime(2013, 12, 10, 12, 30, 0).getMillis()));
@@ -64,7 +64,7 @@ public class BarBuilderTest {
         }
         
         list = getBars2();
-        for(DataBar db : list) {
+        for(BarImpl db : list) {
         	inputSeries.add(db);
         	span.setDate(db.getDate());
         	span.setNextDate(db.getDate());
@@ -75,26 +75,26 @@ public class BarBuilderTest {
     }
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@Ignore
+	@Test
 	public void testSecondsToMinutes() {
 		String symbol = "ESZ13";
         Instrument instr = TestHarness.makeInstrument(symbol);
         DateTime dt2 = new DateTime(2013, 12, 10, 12, 0, 0);
-        TimeFrame tf2 = new TimeFrame(new Period(PeriodType.MINUTE, 1), dt2, null);
+        TimeFrameImpl tf2 = new TimeFrameImpl(new Period(PeriodType.MINUTE, 1), dt2, null);
         
-        SeriesSubscription sub2 = new SeriesSubscription("ESZ13", instr, "IO", new TimeFrame[] { tf2 }, TradingWeek.DEFAULT);
+        SeriesSubscription sub2 = new SeriesSubscription("ESZ13", instr, "IO", new TimeFrameImpl[] { tf2 }, TradingWeekImpl.DEFAULT);
         
         BarBuilder barBuilder = new BarBuilder(sub2);
-		barBuilder.addInputTimeSeries(BarBuilder.INPUT_KEY, new DataSeries<DataBar>(new Period(PeriodType.SECOND, 1)));
-		DataSeries<DataBar> inputSeries = (DataSeries)barBuilder.getInputTimeSeries(BarBuilder.INPUT_KEY);
+		barBuilder.addInputTimeSeries(BarBuilder.INPUT_KEY, new DataSeriesImpl<BarImpl>(new Period(PeriodType.SECOND, 1)));
+		DataSeriesImpl<BarImpl> inputSeries = (DataSeriesImpl)barBuilder.getInputTimeSeries(BarBuilder.INPUT_KEY);
 		assertNotNull(inputSeries);
 		
-		barBuilder.addOutputTimeSeries(BarBuilder.OUTPUT_KEY, new DataSeries<DataBar>(new Period(PeriodType.MINUTE, 1)));
-		DataSeries<DataBar> outputSeries = (DataSeries)barBuilder.getOutputTimeSeries(BarBuilder.OUTPUT_KEY);
+		barBuilder.addOutputTimeSeries(BarBuilder.OUTPUT_KEY, new DataSeriesImpl<BarImpl>(new Period(PeriodType.MINUTE, 1)));
+		DataSeriesImpl<BarImpl> outputSeries = (DataSeriesImpl)barBuilder.getOutputTimeSeries(BarBuilder.OUTPUT_KEY);
 		assertNotNull(outputSeries);
 		assertEquals(new Period(PeriodType.MINUTE, 1), outputSeries.getPeriod());
 		
-		List<DataBar> list = getBars3();
+		List<BarImpl> list = getBars3();
         SpanImpl span = new SpanImpl(new Period(PeriodType.SECOND, 1),
         	ValueFactoryImpl.factory.newTime(new DateTime(2013, 12, 10, 12, 0, 0).getMillis()),
         		ValueFactoryImpl.factory.newTime(new DateTime(2013, 12, 10, 12, 0, 0).getMillis()));
@@ -110,7 +110,7 @@ public class BarBuilderTest {
         assertEquals(6, outputSeries.size());
         
         list = getBars4();
-        for(DataBar db : list) {
+        for(BarImpl db : list) {
         	inputSeries.add(db);
         	span.setDate(db.getDate());
         	span.setNextDate(db.getDate());
@@ -127,21 +127,21 @@ public class BarBuilderTest {
 		String symbol = "ESZ13";
         Instrument instr = TestHarness.makeInstrument(symbol);
         DateTime dt2 = new DateTime(2013, 12, 10, 0, 0, 0);
-        TimeFrame tf2 = new TimeFrame(new Period(PeriodType.HOUR, 3), dt2, null);
+        TimeFrameImpl tf2 = new TimeFrameImpl(new Period(PeriodType.HOUR, 3), dt2, null);
         
-        SeriesSubscription sub2 = new SeriesSubscription("ESZ13", instr, "IO", new TimeFrame[] { tf2 }, TradingWeek.DEFAULT);
+        SeriesSubscription sub2 = new SeriesSubscription("ESZ13", instr, "IO", new TimeFrameImpl[] { tf2 }, TradingWeekImpl.DEFAULT);
         
         BarBuilder barBuilder = new BarBuilder(sub2);
-		barBuilder.addInputTimeSeries(BarBuilder.INPUT_KEY, new DataSeries<DataBar>(new Period(PeriodType.SECOND, 1)));
-		DataSeries<DataBar> inputSeries = (DataSeries)barBuilder.getInputTimeSeries(BarBuilder.INPUT_KEY);
+		barBuilder.addInputTimeSeries(BarBuilder.INPUT_KEY, new DataSeriesImpl<BarImpl>(new Period(PeriodType.SECOND, 1)));
+		DataSeriesImpl<BarImpl> inputSeries = (DataSeriesImpl)barBuilder.getInputTimeSeries(BarBuilder.INPUT_KEY);
 		assertNotNull(inputSeries);
 		
-		barBuilder.addOutputTimeSeries(BarBuilder.OUTPUT_KEY, new DataSeries<DataBar>(new Period(PeriodType.HOUR, 3)));
-		DataSeries<DataBar> outputSeries = (DataSeries)barBuilder.getOutputTimeSeries(BarBuilder.OUTPUT_KEY);
+		barBuilder.addOutputTimeSeries(BarBuilder.OUTPUT_KEY, new DataSeriesImpl<BarImpl>(new Period(PeriodType.HOUR, 3)));
+		DataSeriesImpl<BarImpl> outputSeries = (DataSeriesImpl)barBuilder.getOutputTimeSeries(BarBuilder.OUTPUT_KEY);
 		assertNotNull(outputSeries);
 		assertEquals(new Period(PeriodType.HOUR, 3), outputSeries.getPeriod());
 		
-		List<DataBar> list = getBars5();
+		List<BarImpl> list = getBars5();
 		System.out.println("got " + list.size() + " bars");
         SpanImpl span = new SpanImpl(new Period(PeriodType.SECOND, 1),
         	ValueFactoryImpl.factory.newTime(new DateTime(2013, 12, 10, 0, 0, 0).getMillis()),
@@ -162,7 +162,7 @@ public class BarBuilderTest {
         assertEquals(2, outputSeries.size());
         
         list = getBars6();
-        for(DataBar db : list) {
+        for(BarImpl db : list) {
         	inputSeries.add(db);
         	span.setDate(db.getDate());
         	span.setNextDate(db.getDate());
@@ -176,11 +176,11 @@ public class BarBuilderTest {
         System.out.println("output series size: " + outputSeries.size());
 	}
 	
-	private List<DataBar> getBars() {
+	private List<BarImpl> getBars() {
 		int min = 0;
-		List<DataBar> l = new ArrayList<DataBar>();
+		List<BarImpl> l = new ArrayList<BarImpl>();
 		for(int i = 0;i < 30;i++, min++) {
-			DataBar db = new DataBar(new DateTime(2013, 12, 10, 12, min, 0), Period.ONE_MINUTE, 
+			BarImpl db = new BarImpl(new DateTime(2013, 12, 10, 12, min, 0), Period.ONE_MINUTE, 
 				ValueFactoryImpl.factory.newPrice(5),
 				ValueFactoryImpl.factory.newPrice(5 + min),
 				ValueFactoryImpl.factory.newPrice(5),
@@ -192,12 +192,12 @@ public class BarBuilderTest {
 		return l;
 	}
 	
-	private List<DataBar> getBars2() {
+	private List<BarImpl> getBars2() {
 		int min = 29;
 		DateTime time = new DateTime(2013, 12, 10, 12, min, 0);
-		List<DataBar> l = new ArrayList<DataBar>();
+		List<BarImpl> l = new ArrayList<BarImpl>();
 		for(int i = 0;i < 30;i++, min++) {
-			DataBar db = new DataBar(time = time.plusMinutes(1), Period.ONE_MINUTE, 
+			BarImpl db = new BarImpl(time = time.plusMinutes(1), Period.ONE_MINUTE, 
 				ValueFactoryImpl.factory.newPrice(5),
 				ValueFactoryImpl.factory.newPrice(5 + min + i),
 				ValueFactoryImpl.factory.newPrice(5),
@@ -209,11 +209,11 @@ public class BarBuilderTest {
 		return l;
 	}
 	
-	private List<DataBar> getBars3() {
+	private List<BarImpl> getBars3() {
 		DateTime time = new DateTime(2013, 12, 10, 12, 0, 0);
-		List<DataBar> l = new ArrayList<DataBar>();
+		List<BarImpl> l = new ArrayList<BarImpl>();
 		for(int i = 0;i < 360;i++) {
-			DataBar db = new DataBar(time = time.plusSeconds(1), new Period(PeriodType.SECOND, 1), 
+			BarImpl db = new BarImpl(time = time.plusSeconds(1), new Period(PeriodType.SECOND, 1), 
 				ValueFactoryImpl.factory.newPrice(5),
 				ValueFactoryImpl.factory.newPrice(5 + i),
 				ValueFactoryImpl.factory.newPrice(5),
@@ -225,11 +225,11 @@ public class BarBuilderTest {
 		return l;
 	}
 	
-	private List<DataBar> getBars4() {
+	private List<BarImpl> getBars4() {
 		DateTime time = new DateTime(2013, 12, 10, 12, 6, 0);
-		List<DataBar> l = new ArrayList<DataBar>();
+		List<BarImpl> l = new ArrayList<BarImpl>();
 		for(int i = 0;i < 360;i++) {
-			DataBar db = new DataBar(time = time.plusSeconds(1), new Period(PeriodType.SECOND, 1), 
+			BarImpl db = new BarImpl(time = time.plusSeconds(1), new Period(PeriodType.SECOND, 1), 
 				ValueFactoryImpl.factory.newPrice(5),
 				ValueFactoryImpl.factory.newPrice(5 + i),
 				ValueFactoryImpl.factory.newPrice(5),
@@ -243,11 +243,11 @@ public class BarBuilderTest {
 	
 	/////////////////
 	
-	private List<DataBar> getBars5() {
+	private List<BarImpl> getBars5() {
 		DateTime time = new DateTime(2013, 12, 10, 0, 0, 0);
-		List<DataBar> l = new ArrayList<DataBar>();
+		List<BarImpl> l = new ArrayList<BarImpl>();
 		for(int i = 0;i < 32400;i++) {
-			DataBar db = new DataBar(time = time.plusSeconds(1), new Period(PeriodType.SECOND, 1), 
+			BarImpl db = new BarImpl(time = time.plusSeconds(1), new Period(PeriodType.SECOND, 1), 
 				ValueFactoryImpl.factory.newPrice(5),
 				ValueFactoryImpl.factory.newPrice(5 + i),
 				ValueFactoryImpl.factory.newPrice(5),
@@ -259,11 +259,11 @@ public class BarBuilderTest {
 		return l;
 	}
 	
-	private List<DataBar> getBars6() {
+	private List<BarImpl> getBars6() {
 		DateTime time = new DateTime(2013, 12, 10, 9, 0, 0);
-		List<DataBar> l = new ArrayList<DataBar>();
+		List<BarImpl> l = new ArrayList<BarImpl>();
 		for(int i = 0;i < 32400;i++) {
-			DataBar db = new DataBar(time = time.plusSeconds(1), new Period(PeriodType.SECOND, 1), 
+			BarImpl db = new BarImpl(time = time.plusSeconds(1), new Period(PeriodType.SECOND, 1), 
 				ValueFactoryImpl.factory.newPrice(5),
 				ValueFactoryImpl.factory.newPrice(5 + i),
 				ValueFactoryImpl.factory.newPrice(5),

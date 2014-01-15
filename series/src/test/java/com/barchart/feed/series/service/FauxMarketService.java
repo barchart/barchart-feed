@@ -37,9 +37,10 @@ import com.barchart.feed.api.model.meta.id.ExchangeID;
 import com.barchart.feed.api.model.meta.id.InstrumentID;
 import com.barchart.feed.api.model.meta.id.VendorID;
 import com.barchart.feed.api.series.PeriodType;
+import com.barchart.feed.api.series.network.Query;
 import com.barchart.feed.api.series.service.HistoricalObserver;
 import com.barchart.feed.api.series.service.HistoricalResult;
-import com.barchart.feed.api.series.service.Query;
+import com.barchart.feed.series.network.SeriesSubscription;
 import com.barchart.util.value.api.Fraction;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Scaled;
@@ -450,6 +451,12 @@ public class FauxMarketService implements MarketService {
                 // TODO Auto-generated method stub
                 return null;
             }
+
+			@Override
+			public LastPrice lastPrice() {
+				// TODO Auto-generated method stub
+				return null;
+			}
             
         };
     }
@@ -904,4 +911,10 @@ public class FauxMarketService implements MarketService {
         // TODO Auto-generated method stub
         return null;
     }
+
+	@Override
+	public Observable<Instrument> instrument(InstrumentID... ids) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

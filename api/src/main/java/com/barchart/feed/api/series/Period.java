@@ -3,7 +3,7 @@ package com.barchart.feed.api.series;
 
 /**
  * A combination of a {@link PeriodType} and a duration, which together
- * specify the unit of time contained within a single {@link TimePoint}.
+ * specify the unit of time contained within a single {@link DataPoint}.
  * 
  * @author Jeremy
  * @author David Ray

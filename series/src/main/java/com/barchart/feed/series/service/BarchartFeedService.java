@@ -21,12 +21,14 @@ import com.barchart.feed.api.model.data.Market;
 import com.barchart.feed.api.model.data.Market.Component;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.api.model.meta.id.InstrumentID;
-import com.barchart.feed.api.series.service.Assembler;
-import com.barchart.feed.api.series.service.FeedMonitorService;
+import com.barchart.feed.api.series.network.Assembler;
+import com.barchart.feed.api.series.network.Subscription;
+import com.barchart.feed.api.series.service.SeriesFeedService;
 import com.barchart.feed.api.series.service.HistoricalObserver;
 import com.barchart.feed.api.series.service.HistoricalResult;
 import com.barchart.feed.api.series.service.HistoricalService;
-import com.barchart.feed.api.series.service.Subscription;
+import com.barchart.feed.series.network.Distributor;
+import com.barchart.feed.series.network.SeriesSubscription;
 
 /**
  * Combined live quote data and historical data feed specialized to 
@@ -38,7 +40,7 @@ import com.barchart.feed.api.series.service.Subscription;
  * 
  * @author David Ray
  */
-public class BarchartFeedService implements FeedMonitorService {
+public class BarchartFeedService implements SeriesFeedService {
 	private MarketService marketService;
 	private HistoricalService<HistoricalResult> historicalService;
 	private ConsumerAgent consumerAgent;
