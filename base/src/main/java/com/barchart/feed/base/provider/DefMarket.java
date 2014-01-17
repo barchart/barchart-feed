@@ -15,13 +15,18 @@ import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.api.model.data.Book;
 import com.barchart.feed.api.model.data.Cuvol;
+import com.barchart.feed.api.model.data.Market;
+import com.barchart.feed.api.model.data.Market.LastPrice.Source;
 import com.barchart.feed.api.model.data.Session;
+import com.barchart.feed.api.model.data.Session.Type;
+import com.barchart.feed.api.model.data.SessionData;
 import com.barchart.feed.api.model.data.SessionSet;
 import com.barchart.feed.api.model.data.Trade;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.feed.base.values.api.Value;
 import com.barchart.util.common.anno.NotMutable;
+import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Time;
 
 @NotMutable
@@ -37,8 +42,6 @@ public class DefMarket extends NulMarket {
 	protected volatile Time lastUpdateTime = Time.NULL;
 	
 	protected volatile Instrument instrument;
-	
-	protected volatile LastPrice lastPrice = LastPrice.NULL;
 	
 	protected final Set<Component> changeSet = 
 		EnumSet.noneOf(Component.class);
@@ -111,7 +114,49 @@ public class DefMarket extends NulMarket {
 	
 	@Override
 	public LastPrice lastPrice() {
-		return lastPrice;
+		
+		final Session current = session();
+		if(!current.settle().isNull()) {
+			return new LastPriceImpl(Source.SETTLE, current.settle());
+		}
+		
+		if(!current.close().isNull()) {
+			return new LastPriceImpl(Source.LAST_TRADE, current.close());
+		}
+		
+		final SessionData previous = sessionSet().session(Type.DEFAULT_PREVIOUS);
+		
+		if(!previous.settle().isNull()) {
+			return new LastPriceImpl(Source.PREV_SETTLE, previous.settle());
+		}
+		
+		if(!previous.close().isNull()) {
+			return new LastPriceImpl(Source.PREV_CLOSE, previous.close());
+		}
+		
+		return LastPrice.NULL;
+	}
+	
+	private class LastPriceImpl implements Market.LastPrice {
+
+		private final Source source; 
+		private final Price price;
+		
+		public LastPriceImpl(final Source source, final Price price) {
+			this.source = source;
+			this.price = price;
+		}
+		
+		@Override
+		public Source source() {
+			return source;
+		}
+
+		@Override
+		public Price price() {
+			return price;
+		}
+		
 	}
 	
 }

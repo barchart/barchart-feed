@@ -81,8 +81,6 @@ public interface MarketDo extends Market, FrameworkAgentLifecycleHandler {
 
 	void setState(MarketStateEntry entry, boolean isOn);
 	
-	void setLastPrice(LastPrice lastPrice);
-
 	/* RUN SAFE */
 
 	/** run task inside exclusive market context */

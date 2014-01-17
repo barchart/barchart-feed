@@ -74,7 +74,7 @@ public interface Market extends MarketData<Market> {
 		 * In order of lowest to highest priority
 		 */
 		enum Source {
-			NULL, PREV_SETTLE, LAST_TRADE, CLOSE, SETTLE
+			NULL, PREV_CLOSE, PREV_SETTLE, LAST_TRADE, CLOSE, SETTLE
 		}
 		
 		Source source();
