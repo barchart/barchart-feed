@@ -7,6 +7,7 @@
  */
 package com.barchart.feed.base.bar.enums;
 
+import static com.barchart.feed.base.values.provider.ValueConst.NULL_BOOLEAN;
 import static com.barchart.feed.base.values.provider.ValueConst.NULL_PRICE;
 import static com.barchart.feed.base.values.provider.ValueConst.NULL_SIZE;
 import static com.barchart.feed.base.values.provider.ValueConst.NULL_TIME;
@@ -14,6 +15,7 @@ import static com.barchart.feed.base.values.provider.ValueConst.NULL_TIME;
 import com.barchart.feed.base.collections.BitSetEnum;
 import com.barchart.feed.base.enums.DictEnum;
 import com.barchart.feed.base.enums.ParaEnumBase;
+import com.barchart.feed.base.values.api.BooleanValue;
 import com.barchart.feed.base.values.api.PriceValue;
 import com.barchart.feed.base.values.api.SizeValue;
 import com.barchart.feed.base.values.api.TimeValue;
@@ -36,6 +38,7 @@ public final class MarketBarField<V extends Value<V>> extends
 	public static final MarketBarField<PriceValue> CLOSE = NEW(NULL_PRICE); // 3
 	public static final MarketBarField<PriceValue> SETTLE = NEW(NULL_PRICE); // 4
 	
+	public static final MarketBarField<BooleanValue> IS_SETTLED = NEW(NULL_BOOLEAN); // 5
 	public static final MarketBarField<PriceValue> SETTLE_PREVIOUS = NEW(NULL_PRICE); // 5
 
 	// sizes

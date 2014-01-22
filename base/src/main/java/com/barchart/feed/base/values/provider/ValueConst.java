@@ -10,6 +10,7 @@ package com.barchart.feed.base.values.provider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.barchart.feed.base.values.api.BooleanValue;
 import com.barchart.feed.base.values.api.DecimalValue;
 import com.barchart.feed.base.values.api.Fraction;
 import com.barchart.feed.base.values.api.PriceValue;
@@ -27,6 +28,9 @@ public final class ValueConst {
 
 	public static final DecimalValue NULL_DECIMAL = //
 	new DefDecimal(0, 0);
+
+	public static final BooleanValue NULL_BOOLEAN = //
+	new NulBoolean();
 
 	public static final TextValue NULL_TEXT = //
 	new NulText();

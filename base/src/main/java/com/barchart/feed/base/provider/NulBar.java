@@ -114,7 +114,7 @@ public class NulBar extends ValueFreezer<MarketBar> implements MarketBar {
 
 	@Override
 	public boolean isSettled() {
-		return false;
+		return get(MarketBarField.IS_SETTLED).asBoolean();
 	}
 
 	@Override

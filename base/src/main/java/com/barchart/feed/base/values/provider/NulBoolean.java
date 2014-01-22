@@ -7,27 +7,15 @@
  */
 package com.barchart.feed.base.values.provider;
 
-import com.barchart.feed.base.values.api.PriceValue;
 import com.barchart.util.common.anno.NotMutable;
 
 // 8 bytes on 32 bit JVM
 @NotMutable
-final class NulPrice extends BasePrice {
+final class NulBoolean extends BaseBoolean {
 
 	@Override
-	public long mantissa() {
-		return 0;
-	}
-
-	@Override
-	public int exponent() {
-		this.isNull();
-		return 0;
-	}
-
-	@Override
-	protected PriceValue result(long mantissa, int exponent) {
-		return ValueBuilder.newPrice(mantissa, exponent);
+	public boolean asBoolean() {
+		return false;
 	}
 
 }
