@@ -116,7 +116,7 @@ public class DefMarket extends NulMarket {
 	public LastPrice lastPrice() {
 		
 		final Session current = session();
-		if(!current.settle().isNull()) {
+		if(current.isSettled()) {
 			return new LastPriceImpl(Source.SETTLE, current.settle());
 		}
 		
@@ -126,7 +126,7 @@ public class DefMarket extends NulMarket {
 		
 		final SessionData previous = sessionSet().session(Type.DEFAULT_PREVIOUS);
 		
-		if(!previous.settle().isNull()) {
+		if (!previous.settle().isNull()) {
 			return new LastPriceImpl(Source.PREV_SETTLE, previous.settle());
 		}
 		
