@@ -74,7 +74,29 @@ public interface Market extends MarketData<Market> {
 		 * In order of lowest to highest priority
 		 */
 		enum Source {
-			NULL, PREV_CLOSE, PREV_SETTLE, LAST_TRADE, CLOSE, SETTLE
+
+			NULL(""),
+
+			PREV_CLOSE("p"),
+
+			PREV_SETTLE("p"),
+
+			LAST_TRADE(""),
+
+			CLOSE(""),
+
+			SETTLE("s");
+
+			private final String flag;
+
+			private Source(String flag_) {
+				flag = flag_;
+			}
+
+			public String flag() {
+				return flag;
+			}
+
 		}
 		
 		Source source();
