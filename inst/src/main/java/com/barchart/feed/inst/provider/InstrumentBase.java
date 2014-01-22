@@ -85,7 +85,7 @@ public abstract class InstrumentBase implements Instrument {
 			return vals.newPrice(1, -2);
 		}
 		
-		return Price.NULL;
+		return Price.ONE;
 	}
 	
 	@Override
