@@ -103,7 +103,7 @@ public class DefMarket extends NulMarket {
 	
 	@Override
 	public Time updated() {
-		return Time.NULL;
+		return ValueConverter.time(get(MarketField.MARKET_TIME));
 	}
 	
 	@Override
