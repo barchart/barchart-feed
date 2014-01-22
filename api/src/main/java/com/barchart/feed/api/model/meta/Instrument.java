@@ -126,6 +126,7 @@ public interface Instrument extends Comparable<Instrument>, Metadata {
 	
 	String symbol();
 
+	@Override
 	String description();
 
 	String CFICode();
@@ -137,6 +138,17 @@ public interface Instrument extends Comparable<Instrument>, Metadata {
 	Price tickSize();
 
 	Price pointValue();
+
+	/**
+	 * For some contracts (e.g. SI, HG), the exchange will report transaction
+	 * prices to counterparties in different units than those reported in
+	 * general market data. For example, prices for silver futures are reported
+	 * in dollars, but the fill prices in FIX messages are in cents. For most
+	 * contracts this value will be 1.
+	 * 
+	 * @return
+	 */
+	Price transactionPriceConversionFactor();
 
 	Fraction displayFraction();
 
@@ -237,6 +249,11 @@ public interface Instrument extends Comparable<Instrument>, Metadata {
 
 		@Override
 		public Price pointValue() {
+			return Price.NULL;
+		}
+
+		@Override
+		public Price transactionPriceConversionFactor() {
 			return Price.NULL;
 		}
 

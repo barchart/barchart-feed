@@ -9,13 +9,17 @@ import com.barchart.feed.api.model.meta.Exchange;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.api.model.meta.id.InstrumentID;
 import com.barchart.feed.api.model.meta.id.VendorID;
+import com.barchart.util.value.ValueFactoryImpl;
 import com.barchart.util.value.api.Fraction;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Schedule;
 import com.barchart.util.value.api.Size;
 import com.barchart.util.value.api.TimeInterval;
+import com.barchart.util.value.api.ValueFactory;
 
 public abstract class InstrumentBase implements Instrument {
+
+	protected static final ValueFactory vals = new ValueFactoryImpl();
 
 	@Override
 	public SecurityType securityType() {
@@ -54,7 +58,7 @@ public abstract class InstrumentBase implements Instrument {
 	
 	@Override
 	public String CFICode() {
-		return "Unknown CFI Code";
+		return "XXXXXX";
 	}
 
 	@Override
@@ -69,6 +73,18 @@ public abstract class InstrumentBase implements Instrument {
 	
 	@Override
 	public Price pointValue() {
+		return Price.NULL;
+	}
+
+	@Override
+	public Price transactionPriceConversionFactor() {
+		
+		// TODO This field needs to be added to the inst def proto, but in the name of time
+		// im just hacking it in here.  This logic will be moved to the xml decoder
+		if(CFICode().startsWith("F") && (symbol().startsWith("SI") || symbol().startsWith("HG"))) {
+			return vals.newPrice(1, -2);
+		}
+		
 		return Price.NULL;
 	}
 	
@@ -89,7 +105,7 @@ public abstract class InstrumentBase implements Instrument {
 	
 	@Override
 	public String timeZoneName() {
-		return "Null Time Zone";
+		return "Null_Time_Zone";
 	}
 	
 	@Override
@@ -99,7 +115,7 @@ public abstract class InstrumentBase implements Instrument {
 	
 	@Override
 	public List<InstrumentID> componentLegs() {
-		return Collections.emptyList();
+		return Collections.<InstrumentID> emptyList();
 	}
 	
 	@Override
@@ -138,6 +154,11 @@ public abstract class InstrumentBase implements Instrument {
 		return MetaType.INSTRUMENT;
 	}
 	
+	@Override
+	public String symbol() {
+		return "NULL_SYMBOL";
+	}
+
 	@Override
 	public String toString() {
 		return id().toString();

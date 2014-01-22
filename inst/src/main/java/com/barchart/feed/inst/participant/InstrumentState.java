@@ -114,6 +114,11 @@ public interface InstrumentState extends Instrument, Resettable, Instrumentable 
 		}
 
 		@Override
+		public Price transactionPriceConversionFactor() {
+			return Price.NULL;
+		}
+
+		@Override
 		public Fraction displayFraction() {
 			return Fraction.NULL;
 		}
