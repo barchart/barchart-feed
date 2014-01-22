@@ -1,5 +1,6 @@
 package com.barchart.feed.api.model.data;
 
+import com.barchart.util.value.api.Bool;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Size;
 import com.barchart.util.value.api.Time;
@@ -39,6 +40,12 @@ public interface SessionData {
 	Price settle();
 	
 	/**
+	 * True if the final settlement price has been received (for applicable
+	 * markets.)
+	 */
+	Bool isSettled();
+
+	/**
 	 * @return Lists ordered by time of settle
 	 */
 	// TODO Review for later
@@ -77,6 +84,11 @@ public interface SessionData {
 		@Override
 		public Price settle() {
 			return Price.NULL;
+		}
+
+		@Override
+		public Bool isSettled() {
+			return null;
 		}
 
 		@Override

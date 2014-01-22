@@ -29,6 +29,12 @@ public final class ValueConst {
 	public static final DecimalValue NULL_DECIMAL = //
 	new DefDecimal(0, 0);
 
+	public static final BooleanValue TRUE_BOOLEAN = //
+	new DefBoolean(true);
+
+	public static final BooleanValue FALSE_BOOLEAN = //
+	new DefBoolean(false);
+
 	public static final BooleanValue NULL_BOOLEAN = //
 	new NulBoolean();
 

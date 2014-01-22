@@ -14,8 +14,8 @@ import com.barchart.util.common.anno.NotMutable;
 final class NulBoolean extends BaseBoolean {
 
 	@Override
-	public boolean asBoolean() {
-		return false;
+	public Boolean asBoolean() {
+		return Boolean.FALSE;
 	}
 
 }

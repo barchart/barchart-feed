@@ -5,6 +5,7 @@ import java.util.Set;
 
 import com.barchart.feed.api.model.ChangeSet;
 import com.barchart.feed.api.model.meta.Instrument;
+import com.barchart.util.value.api.Bool;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Size;
 import com.barchart.util.value.api.Time;
@@ -79,7 +80,8 @@ public interface Session extends MarketData<Session>, SessionData,
 	 */
 	Price previousClose();
 	
-	boolean isSettled();
+	@Override
+	Bool isSettled();
 
 	@Override
 	Time updated();
@@ -180,8 +182,8 @@ public interface Session extends MarketData<Session>, SessionData,
 		}
 
 		@Override
-		public boolean isSettled() {
-			return false;
+		public Bool isSettled() {
+			return Bool.NULL;
 		}
 
 		@Override

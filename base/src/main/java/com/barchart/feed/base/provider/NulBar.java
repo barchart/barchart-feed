@@ -16,6 +16,7 @@ import com.barchart.feed.base.bar.enums.MarketBarField;
 import com.barchart.feed.base.values.api.Value;
 import com.barchart.feed.base.values.provider.ValueFreezer;
 import com.barchart.util.common.anno.NotMutable;
+import com.barchart.util.value.api.Bool;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Size;
 import com.barchart.util.value.api.Time;
@@ -113,8 +114,8 @@ public class NulBar extends ValueFreezer<MarketBar> implements MarketBar {
 	}
 
 	@Override
-	public boolean isSettled() {
-		return get(MarketBarField.IS_SETTLED).asBoolean();
+	public Bool isSettled() {
+		return ValueConverter.bool(get(MarketBarField.IS_SETTLED));
 	}
 
 	@Override

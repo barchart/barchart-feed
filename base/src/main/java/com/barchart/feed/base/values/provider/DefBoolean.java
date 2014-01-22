@@ -2,14 +2,14 @@ package com.barchart.feed.base.values.provider;
 
 public class DefBoolean extends BaseBoolean {
 
-	private final boolean value;
+	private final Boolean value;
 
-	public DefBoolean(boolean value) {
+	public DefBoolean(Boolean value) {
 		this.value = value;
 	}
 
 	@Override
-	public boolean asBoolean() {
+	public Boolean asBoolean() {
 		return value;
 	}
 
