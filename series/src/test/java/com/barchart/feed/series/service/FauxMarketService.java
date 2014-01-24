@@ -595,8 +595,7 @@ public class FauxMarketService implements MarketService {
                 // TODO Auto-generated method stub
                 return null;
             }
-            
-        };
+       };
     }
     
     private Price makePrice(String dblStr) {
@@ -732,7 +731,6 @@ public class FauxMarketService implements MarketService {
                 // TODO Auto-generated method stub
                 return null;
             }
-            
         };
         
         return p;
@@ -883,12 +881,11 @@ public class FauxMarketService implements MarketService {
 				return null;
 			}
 
-            @Override
-            public Price transactionPriceConversionFactor() {
-                // TODO Auto-generated method stub
-                return null;
-            }
-            
+			@Override
+			public Price transactionPriceConversionFactor() {
+				// TODO Auto-generated method stub
+				return null;
+			}
         };
     }
 

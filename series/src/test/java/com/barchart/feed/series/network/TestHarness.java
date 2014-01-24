@@ -165,12 +165,11 @@ public class TestHarness {
                 return null;
             }
 
-            @Override
-            public Price transactionPriceConversionFactor() {
-                // TODO Auto-generated method stub
-                return null;
-            }
-            
+			@Override
+			public Price transactionPriceConversionFactor() {
+				// TODO Auto-generated method stub
+				return null;
+			}
         };
     }
     
