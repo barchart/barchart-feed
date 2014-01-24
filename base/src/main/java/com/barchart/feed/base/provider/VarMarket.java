@@ -35,6 +35,8 @@ import com.barchart.feed.api.model.data.Trade;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.bar.api.MarketBar;
 import com.barchart.feed.base.bar.api.MarketDoBar;
+import com.barchart.feed.base.bar.enums.MarketBarField;
+import com.barchart.feed.base.bar.enums.MarketBarType;
 import com.barchart.feed.base.book.api.MarketBook;
 import com.barchart.feed.base.book.api.MarketDoBook;
 import com.barchart.feed.base.cuvol.api.MarketCuvol;
@@ -50,6 +52,7 @@ import com.barchart.feed.base.trade.api.MarketDoTrade;
 import com.barchart.feed.base.trade.api.MarketTrade;
 import com.barchart.feed.base.values.api.PriceValue;
 import com.barchart.feed.base.values.api.SizeValue;
+import com.barchart.feed.base.values.api.TimeValue;
 import com.barchart.feed.base.values.api.Value;
 import com.barchart.feed.base.values.provider.ValueBuilder;
 import com.barchart.util.common.anno.Mutable;
@@ -61,11 +64,11 @@ import com.barchart.util.common.anno.ThreadSafe;
 @Mutable
 @ThreadSafe(rule = "must use runSafe()")
 public abstract class VarMarket extends DefMarket implements MarketDo {
-	
+
 	protected final Map<Class<? extends MarketData<?>>, Set<FrameworkAgent<?>>> agentMap =
 		new HashMap<Class<? extends MarketData<?>>, Set<FrameworkAgent<?>>>();
-	
-	private final ConcurrentMap<FrameworkAgent<?>, Boolean> agentSet = 
+
+	private final ConcurrentMap<FrameworkAgent<?>, Boolean> agentSet =
 			new ConcurrentHashMap<FrameworkAgent<?>, Boolean>();
 
 	// @SuppressWarnings("unused")
@@ -74,13 +77,13 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 	RegCenter reg = new RegCenter(this);
 
 	public VarMarket(final Instrument instrument) {
-		
+
 		super(instrument);
 
 		/** set self reference */
 		set(MARKET, this);
-		
-		agentMap.put(com.barchart.feed.api.model.data.Market.class, 
+
+		agentMap.put(com.barchart.feed.api.model.data.Market.class,
 				new HashSet<FrameworkAgent<?>>());
 		agentMap.put(Trade.class, new HashSet<FrameworkAgent<?>>());
 		agentMap.put(Book.class, new HashSet<FrameworkAgent<?>>());
@@ -90,52 +93,52 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 	}
 
 	/* ***** ***** Agent Lifecycle ***** ***** */
-	
+
 	@Override
 	public synchronized void attachAgent(final FrameworkAgent<?> agent) {
-		
+
 		if(agentSet.containsKey(agent)) {
 			updateAgent(agent);
 			return;
 		}
-		
+
 		if(!agent.hasMatch(instrument())) {
 			return;
 		}
-		
+
 		agentSet.put(agent, new Boolean(false));
-		
+
 		agentMap.get(agent.type()).add(agent);
-		
+
 	}
-	
+
 	@Override
 	public synchronized void updateAgent(final FrameworkAgent<?> agent) {
-		
+
 		if(!agentSet.containsKey(agent)) {
 			attachAgent(agent);
 			return;
 		}
-		
+
 		if(!agent.hasMatch(instrument())) {
 			detachAgent(agent);
 		}
-		
+
 	}
-	
+
 	@Override
 	public synchronized void detachAgent(final FrameworkAgent<?> agent) {
-		
+
 		if(!agentSet.containsKey(agent)) {
 			return;
 		}
-		
+
 		agentSet.remove(agent);
-		
+
 		agentMap.get(agent.type()).remove(agent);
-		
+
 	}
-	
+
 	//
 
 	@Override
@@ -259,7 +262,7 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 		return that;
 
 	}
-	
+
 	@Override
 	public final <Result, Param> Result runSafe(
 			final MarketSafeRunner<Result, Param> task, final Param param) {
@@ -308,19 +311,19 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 		if(instrument.tickSize().mantissa() == 0) {
 			return MarketDoCuvol.NULL;
 		}
-		
+
 		MarketCuvol cuvol = get(CUVOL);
-		
+
 		if (cuvol.isFrozen()) {
 
 			final PriceValue priceStep = ValueBuilder.newPrice(
-					instrument.tickSize().mantissa(), 
+					instrument.tickSize().mantissa(),
 					instrument.tickSize().exponent());
 
 			if(priceStep.mantissa() == 0) {
 				System.out.println();
 			}
-			
+
 			final VarCuvol varCuvol = new VarCuvol(instrument, priceStep);
 			final VarCuvolLast varCuvolLast = new VarCuvolLast(varCuvol);
 
@@ -349,6 +352,59 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 		}
 
 		return (MarketDoBar) bar;
+
+	}
+
+	@Override
+	public MarketBarType ensureBar(final TimeValue date) {
+
+		final MarketDoBar bar = loadBar(MarketBarType.CURRENT.field);
+
+		final TimeValue currDate = bar.get(MarketBarField.TRADE_DATE);
+
+		if (currDate.equals(date)) {
+			return MarketBarType.CURRENT;
+		}
+
+		final MarketDoBar prev = loadBar(MarketBarType.PREVIOUS.field);
+
+		// Check for new trading session
+		if (currDate.asMillisUTC() < date.asMillisUTC()) {
+
+			log.debug("New session: old=" + currDate + "; new=" + date);
+
+			// Roll values to previous
+			prev.copy(bar);
+
+			// Reset current
+			bar.clear();
+			bar.set(MarketBarField.TRADE_DATE, date);
+			// Copy last updated time from previous session for continuity
+			bar.set(MarketBarField.BAR_TIME, prev.get(MarketBarField.BAR_TIME));
+
+			// Reset extended
+			loadBar(MarketBarType.CURRENT_EXT.field).copy(bar);
+
+			// Notify change tracking
+			setBar(MarketBarType.PREVIOUS, prev);
+			setBar(MarketBarType.CURRENT, bar);
+
+			return MarketBarType.CURRENT;
+
+		}
+
+		// Check previous bar
+		final TimeValue prevDate = prev.get(MarketBarField.TRADE_DATE);
+
+		if (prevDate.isNull()) {
+			prev.set(MarketBarField.TRADE_DATE, date);
+			return MarketBarType.PREVIOUS;
+		} else if (prevDate.equals(date)) {
+			return MarketBarType.PREVIOUS;
+		}
+
+		// No match, nothing to update
+		return MarketBarType.NULL_BAR_TYPE;
 
 	}
 
@@ -382,10 +438,10 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 			}
 
 			final SizeValue size = LIMIT; // inst.get(BOOK_SIZE);
-			
+
 			// ValueConverter
 			final PriceValue step = ValueBuilder.newPrice(
-					instrument.tickSize().mantissa(), 
+					instrument.tickSize().mantissa(),
 					instrument.tickSize().exponent());
 
 			final VarBook varBook = new VarBook(instrument, type, size, step);
@@ -408,7 +464,7 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 
 		//TODO Value Converter
 		final PriceValue priceStep = ValueBuilder.newPrice(
-				instrument.tickSize().mantissa(), 
+				instrument.tickSize().mantissa(),
 				instrument.tickSize().exponent());
 
 		if (!price.equalsScale(priceStep)) {

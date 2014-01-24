@@ -24,6 +24,7 @@ import com.barchart.feed.base.state.enums.MarketStateEntry;
 import com.barchart.feed.base.trade.enums.MarketTradeSequencing;
 import com.barchart.feed.base.trade.enums.MarketTradeSession;
 import com.barchart.feed.base.trade.enums.MarketTradeType;
+import com.barchart.feed.base.values.api.BooleanValue;
 import com.barchart.feed.base.values.api.PriceValue;
 import com.barchart.feed.base.values.api.SizeValue;
 import com.barchart.feed.base.values.api.TimeValue;
@@ -47,11 +48,11 @@ public interface MarketDo extends Market, FrameworkAgentLifecycleHandler {
 	List<RegTaker<?>> regList();
 
 	Set<MarketEvent> regEvents();
-	
+
 	void setChange(Component c);
-	
+
 	void clearChanges();
-	
+
 	/* VALUES */
 
 	/** one time instrument initialization */
@@ -71,6 +72,15 @@ public interface MarketDo extends Market, FrameworkAgentLifecycleHandler {
 
 	/**  */
 	void setBar(MarketBarType type, MarketDoBar bar);
+
+	/**
+	 * Find the bar matching the given trade date and update its values. If any
+	 * fields are null, they will be ignored instead of being nulled out (this
+	 * does not include fields is isNull() == true).
+	 */
+	void setSnapshot(TimeValue tradeDate, PriceValue open, PriceValue high, PriceValue low, PriceValue close,
+			PriceValue settle, PriceValue previousSettle, SizeValue volume, SizeValue interest,
+			BooleanValue isSettled, TimeValue barTime);
 
 	/**  */
 	void setTrade(MarketTradeType type, MarketTradeSession session,
@@ -92,5 +102,19 @@ public interface MarketDo extends Market, FrameworkAgentLifecycleHandler {
 	//
 
 	MarketDoBar loadBar(MarketField<MarketBar> barField);
+
+	/**
+	 * Ensure that a session/bar with the matching trading session date exists
+	 * in this market. If the current session is earlier than the given trading
+	 * session date, the current session will be rolled to the previous and the
+	 * current session will be reset. This automatically marks the sessions as
+	 * changed in the Market object.
+	 *
+	 * Note that if a session is rolled, the current session will have all null
+	 * values, and the caller is responsible for properly initializing it.
+	 *
+	 * @param date The trading session date
+	 */
+	MarketBarType ensureBar(TimeValue date);
 
 }

@@ -14,4 +14,8 @@ public interface MarketDoBar extends MarketBar {
 
 	<V extends Value<V>> void set(final MarketBarField<V> field, final V value);
 
+	void copy(MarketBar bar);
+
+	void clear();
+
 }

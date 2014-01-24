@@ -10,6 +10,7 @@ package com.barchart.feed.base.provider;
 import java.util.EnumSet;
 
 import com.barchart.feed.api.model.meta.Instrument;
+import com.barchart.feed.base.bar.api.MarketBar;
 import com.barchart.feed.base.bar.api.MarketDoBar;
 import com.barchart.feed.base.bar.enums.MarketBarField;
 import com.barchart.feed.base.values.api.Value;
@@ -20,10 +21,10 @@ import com.barchart.util.common.anno.ThreadSafe;
 @ThreadSafe
 public final class VarBar extends DefBar implements MarketDoBar {
 
-	protected final EnumSet<Component> changeSet = 
+	protected final EnumSet<Component> changeSet =
 			EnumSet.noneOf(Component.class);
-	
-	VarBar(Instrument instrument) {
+
+	VarBar(final Instrument instrument) {
 		super(instrument, EnumSet.noneOf(Component.class));
 	}
 
@@ -37,10 +38,10 @@ public final class VarBar extends DefBar implements MarketDoBar {
 		assert value != null;
 
 		valueArray[field.ordinal()] = value;
-		
+
 		/* Update change set */
 		changeSet.clear();
-		
+
 		switch(field.ordinal()) {
 		default:
 			break;
@@ -67,6 +68,30 @@ public final class VarBar extends DefBar implements MarketDoBar {
 			break;
 		}
 
+	}
+
+	@Override
+	public void copy(final MarketBar source) {
+
+		// Not freezing values because we're just moving furniture
+		set(MarketBarField.OPEN, source.get(MarketBarField.OPEN));
+		set(MarketBarField.HIGH, source.get(MarketBarField.HIGH));
+		set(MarketBarField.LOW, source.get(MarketBarField.LOW));
+		set(MarketBarField.CLOSE, source.get(MarketBarField.CLOSE));
+		set(MarketBarField.SETTLE, source.get(MarketBarField.SETTLE));
+		set(MarketBarField.SETTLE_PREVIOUS, source.get(MarketBarField.SETTLE_PREVIOUS));
+		set(MarketBarField.VOLUME, source.get(MarketBarField.VOLUME));
+		set(MarketBarField.INTEREST, source.get(MarketBarField.INTEREST));
+		set(MarketBarField.IS_SETTLED, source.get(MarketBarField.IS_SETTLED));
+		set(MarketBarField.BAR_TIME, source.get(MarketBarField.BAR_TIME));
+		set(MarketBarField.TRADE_DATE, source.get(MarketBarField.TRADE_DATE));
+
+	}
+
+	@Override
+	public void clear() {
+		for (int i = 0; i < valueArray.length; i++)
+			valueArray[i] = null;
 	}
 
 	// remember to freeze values when switching to mutable

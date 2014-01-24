@@ -6,7 +6,7 @@
  * http://www.opensource.org/licenses/bsd-license.php
  */
 /**
- * 
+ *
  */
 package com.barchart.feed.base.market.provider;
 
@@ -33,6 +33,7 @@ import static com.barchart.feed.base.trade.enums.MarketTradeField.TYPE;
 
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.bar.api.MarketDoBar;
+import com.barchart.feed.base.bar.enums.MarketBarField;
 import com.barchart.feed.base.bar.enums.MarketBarType;
 import com.barchart.feed.base.book.api.MarketDoBook;
 import com.barchart.feed.base.book.api.MarketDoBookEntry;
@@ -47,13 +48,14 @@ import com.barchart.feed.base.trade.enums.MarketTradeField;
 import com.barchart.feed.base.trade.enums.MarketTradeSequencing;
 import com.barchart.feed.base.trade.enums.MarketTradeSession;
 import com.barchart.feed.base.trade.enums.MarketTradeType;
+import com.barchart.feed.base.values.api.BooleanValue;
 import com.barchart.feed.base.values.api.PriceValue;
 import com.barchart.feed.base.values.api.SizeValue;
 import com.barchart.feed.base.values.api.TimeValue;
 
 public class MockMarket extends VarMarket {
 
-	public MockMarket(Instrument instrument) {
+	public MockMarket(final Instrument instrument) {
 		super(instrument);
 	}
 
@@ -198,7 +200,7 @@ public class MockMarket extends VarMarket {
 		updateMarket(time);
 
 	}
-	
+
 	private final void updateMarket(final TimeValue time) {
 
 		set(MARKET_TIME, time);
@@ -260,7 +262,7 @@ public class MockMarket extends VarMarket {
 	}
 
 	@Override
-	public void setChange(Component c) {
+	public void setChange(final Component c) {
 		changeSet.add(c);
 	}
 
@@ -272,6 +274,43 @@ public class MockMarket extends VarMarket {
 	@Override
 	public void fireCallbacks() {
 		// TODO Auto-generated method stub
+	}
+
+	public void setSnapshot(final TimeValue tradeDate, final PriceValue open, final PriceValue high,
+			final PriceValue low, final PriceValue close,
+			final PriceValue settle, final PriceValue previousSettle, final SizeValue volume, final SizeValue interest,
+			final BooleanValue isSettled,
+			final TimeValue barTime) {
+
+		final MarketBarType type = ensureBar(tradeDate);
+
+		if (type.isNull())
+			return;
+
+		final MarketDoBar bar = loadBar(type.field);
+
+		if (open != null)
+			bar.set(MarketBarField.OPEN, open);
+		if (high != null)
+			bar.set(MarketBarField.HIGH, high);
+		if (low != null)
+			bar.set(MarketBarField.LOW, low);
+		if (close != null)
+			bar.set(MarketBarField.CLOSE, close);
+		if (settle != null)
+			bar.set(MarketBarField.SETTLE, settle);
+		if (previousSettle != null)
+			bar.set(MarketBarField.SETTLE_PREVIOUS, previousSettle);
+		if (volume != null)
+			bar.set(MarketBarField.VOLUME, volume);
+		if (interest != null)
+			bar.set(MarketBarField.INTEREST, interest);
+		if (isSettled != null)
+			bar.set(MarketBarField.IS_SETTLED, isSettled);
+		if (barTime != null)
+			bar.set(MarketBarField.BAR_TIME, barTime);
+
+		setBar(type, bar);
 
 	}
 
