@@ -164,6 +164,12 @@ public class TestHarness {
                 // TODO Auto-generated method stub
                 return null;
             }
+
+            @Override
+            public Price transactionPriceConversionFactor() {
+                // TODO Auto-generated method stub
+                return null;
+            }
             
         };
     }
@@ -211,7 +217,7 @@ public class TestHarness {
             }
 
             @Override
-            public <E extends DataPoint> void setValue(DateTime time, E e) {
+            public <E extends DataPoint> void setValue(DateTime time, String key, E e) {
                 // TODO Auto-generated method stub
                 
             }
@@ -234,6 +240,18 @@ public class TestHarness {
                     double high, double low, double nextHigh, double nextLow) {
                 // TODO Auto-generated method stub
                 
+            }
+
+            @Override
+            public void setName(String name) {
+                // TODO Auto-generated method stub
+                
+            }
+
+            @Override
+            public String getName() {
+                // TODO Auto-generated method stub
+                return null;
             }
 		};
     }

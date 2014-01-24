@@ -28,8 +28,8 @@ public class SeriesSubscription implements Subscription {
 	private String symbol;
 	private Instrument instrument;
 	private String analyticSpecifier;
-	private TimeFrameImpl[] timeFrames;
-    private TradingWeekImpl tradingWeek;
+	private TimeFrame[] timeFrames;
+    private TradingWeek tradingWeek;
     
     /**
      * Constructs a new {@code Subscription} objects.
@@ -40,16 +40,16 @@ public class SeriesSubscription implements Subscription {
     	this.instrument = i;
     	this.symbol = symbol;
     	this.analyticSpecifier = analyticSpecifier;
-    	this.timeFrames = (TimeFrameImpl[])timeFrames;
-    	this.tradingWeek = (TradingWeekImpl)week;
+    	this.timeFrames = timeFrames;
+    	this.tradingWeek = week;
     }
     
     public SeriesSubscription(SeriesSubscription ss) {
         this.instrument = ss.instrument;
         this.symbol = ss.symbol;
         this.analyticSpecifier = ss.analyticSpecifier;
-        this.timeFrames = new TimeFrameImpl[ss.timeFrames.length]; int i = 0;
-        for(TimeFrameImpl tf : ss.timeFrames) {
+        this.timeFrames = new TimeFrame[ss.timeFrames.length]; int i = 0;
+        for(TimeFrame tf : ss.timeFrames) {
             timeFrames[i++] = tf;
         }
         this.tradingWeek = ss.tradingWeek;
@@ -88,7 +88,7 @@ public class SeriesSubscription implements Subscription {
 	 * Sets the {@link TimeFrameImpl} array
 	 * @param tf
 	 */
-	public void setTimeFrames(TimeFrameImpl[] tf) {
+	public void setTimeFrames(TimeFrame[] tf) {
 	    this.timeFrames = tf;
 	}
 	
@@ -96,14 +96,14 @@ public class SeriesSubscription implements Subscription {
 	 * Adds the specified {@link TimeFrameImpl} to this {@code Subscription}
 	 * @param tf
 	 */
-	public void addTimeFrame(TimeFrameImpl tf) {
-	    TimeFrameImpl[] array = new TimeFrameImpl[timeFrames.length + 1];
+	public void addTimeFrame(TimeFrame tf) {
+	    TimeFrame[] array = new TimeFrame[timeFrames.length + 1];
 	    System.arraycopy(timeFrames, 0, array, 0, timeFrames.length);
 	    array[array.length - 1] = tf;
 	    this.timeFrames = array;
 	}
 	
-	public TimeFrameImpl getTimeFrame(int index) {
+	public TimeFrame getTimeFrame(int index) {
 	    return timeFrames[index];
 	}
 	
@@ -199,7 +199,7 @@ public class SeriesSubscription implements Subscription {
         
         this.symbol = nextSubscription.symbol;
         this.instrument = nextSubscription.instrument;
-        this.timeFrames = new TimeFrameImpl[0];
+        this.timeFrames = new TimeFrame[0];
         String[] timeframes = desc.getInputTimeframes(sourceKey);
         if ((timeframes == null) || (timeframes.length == 0)) {
             this.addTimeFrame(nextSubscription.getTimeFrame(0));

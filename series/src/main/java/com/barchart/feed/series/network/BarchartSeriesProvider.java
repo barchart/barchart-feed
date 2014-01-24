@@ -27,7 +27,6 @@ import com.barchart.feed.api.series.network.NodeType;
 import com.barchart.feed.api.series.network.Query;
 import com.barchart.feed.api.series.network.Subscription;
 import com.barchart.feed.api.series.service.SeriesFeedService;
-import com.barchart.feed.series.DataPointImpl;
 import com.barchart.feed.series.DataSeriesImpl;
 import com.barchart.feed.series.TimeFrameImpl;
 import com.barchart.feed.series.analytics.BarBuilder;
@@ -66,7 +65,7 @@ public class BarchartSeriesProvider {
 	 * @param query
 	 * @return
 	 */
-	public <T extends DataPoint> NetworkObservable fetch(final Query query) {
+	public NetworkObservable fetch(final Query query) {
 		List<Instrument> instList = new ArrayList<Instrument>();
 		for(String symbol : query.getSymbols()) {
 			instList.add(feedService.lookupInstrument(symbol));//Supports multiple symbols for spreads/expressions
@@ -83,45 +82,50 @@ public class BarchartSeriesProvider {
 //		});
 		
 		NodeDescriptor descriptor = lookupDescriptor(query);
-		Observable observable = getObservable(instList, query, descriptor);
+		Observable<?> observable = getObservable(instList, query, descriptor);
 		return (NetworkObservable)observable;
 	}
 	
-	public Observable getObservable(List<Instrument> instList, Query query, NodeDescriptor descriptor) {
+	public NetworkObservable getObservable(List<Instrument> instList, Query query, NodeDescriptor descriptor) {
+	    NetworkObservable retVal = null;
+	    
 		SeriesSubscription subscription = (SeriesSubscription)query.toSubscription(instList.get(0));
 		List<Node<SeriesSubscription>> subscriptionNodes = new ArrayList<Node<SeriesSubscription>>();
+		Map<String, DataSeries<? extends DataPoint>> map = new HashMap<String, DataSeries<? extends DataPoint>>();
+		
         switch(descriptor.getType()) {
             case IO: {
                 Node<SeriesSubscription> node = getOrCreateIONode(subscription, subscription);
                 subscriptionNodes.add(node);
-                Map<String, DataSeries<? extends DataPoint>> map = new HashMap<String, DataSeries<? extends DataPoint>>();
                 map.put(subscription.toString(), ((AnalyticNode)node).getOutputTimeSeries(BarBuilder.OUTPUT_KEY));
-                NetworkObservable no = new NetworkObservableImpl(new SeriesSubscriber(subscription, subscriptionNodes), map);
-                //return no;
+                retVal = new NetworkObservableImpl(new SeriesSubscribeFunc(subscription, subscriptionNodes), map);
                 break;
             }
             case ANALYTIC: {
-                Node<SeriesSubscription> node = getOrCreateNode(subscription, subscription, (AnalyticNodeDescriptor)descriptor);
+                AnalyticNode node = getOrCreateNode(subscription, subscription, (AnalyticNodeDescriptor)descriptor);
+                subscriptionNodes.add(node);
+                map.put(query.getAnalyticSpecifier(), ((AnalyticNode)node).getOutputTimeSeries(subscription));
+                retVal = new NetworkObservableImpl(new SeriesSubscribeFunc(subscription, subscriptionNodes), map);
                 break;
             }
             case NETWORK: {
                 NetworkDescriptor schema = (NetworkDescriptor)descriptor;
-                
+                SeriesSubscription originalSubscription = subscription;
                 for(NodeDescriptor desc : schema.getMainPublishers()) {
                 	subscription = new SeriesSubscription(subscription);
                 	subscription.setAnalyticSpecifier(desc.getSpecifier());
-                	Node<SeriesSubscription> newNode = getOrCreateNode(subscription, subscription, (AnalyticNodeDescriptor)desc);
+                	Node<SeriesSubscription> newNode = getOrCreateNode(subscription, originalSubscription, (AnalyticNodeDescriptor)desc);
                     subscriptionNodes.add(newNode);
+                    map.put(desc.getSpecifier(), ((AnalyticNode)newNode).getOutputTimeSeries(subscription));
                 }
-                
-                System.out.println("subscription nodes = " + subscriptionNodes);
+                retVal = new NetworkObservableImpl(new SeriesSubscribeFunc(subscription, subscriptionNodes), map);
                 break;
             }
             default: {
                 //No other implementations for now...
             }
         }
-        return null;
+        return retVal;
     }
 	
 	/**
@@ -161,7 +165,7 @@ public class BarchartSeriesProvider {
 	 * already exists.
 	 * 
 	 * @param subscription     the subscription describing the required output.
-	 * @param original         the same subscription as the above subscription.
+	 * @param original         when first calling, its the same subscription as the above subscription.
 	 * @param desc             an {@link AnalyticNodeDescriptor} which serves as the schema
 	 *                         of the returned node.
 	 * @return                 a fully functional source of the data described by the specified
@@ -179,7 +183,7 @@ public class BarchartSeriesProvider {
 	        for(String key : requiredSubs.keySet()) {
 	            SeriesSubscription sub = requiredSubs.get(key);
 	            searchNode.addInputKeyMapping(key, sub);
-	            AnalyticNodeDescriptor parentDesc = NetworkSchema.lookup(sub.getAnalyticSpecifier(), sub.getTimeFrames().length);
+	            AnalyticNodeDescriptor parentDesc = NetworkSchema.lookup(sub);
 	            if(parentDesc == null) {
 	                AnalyticNode ioNode = (AnalyticNode)getOrCreateIONode(sub, original); 
 	                ioNode.addChildNode(searchNode);
@@ -264,9 +268,9 @@ public class BarchartSeriesProvider {
                 if(!isAssembler(n)) {
                     ioNodes.add(retVal);
                     ((AnalyticNode)n).addOutputKeyMapping(BarBuilder.OUTPUT_KEY, s);
-                    ((AnalyticNode)retVal).addInputTimeSeries(s, (DataSeriesImpl<DataPointImpl>)((AnalyticNode)n).getOutputTimeSeries(s));
+                    ((AnalyticNode)retVal).addInputTimeSeries(s, (DataSeries<DataPoint>)((AnalyticNode)n).getOutputTimeSeries(s));
                 }else{
-                    ((AnalyticNode)retVal).addInputTimeSeries(s, (DataSeriesImpl<DataPointImpl>)((Distributor)n).getOutputTimeSeries(s));
+                    ((AnalyticNode)retVal).addInputTimeSeries(s, (DataSeries<DataPoint>)((Distributor)n).getOutputTimeSeries(s));
                 }
             }
         }
@@ -664,11 +668,12 @@ public class BarchartSeriesProvider {
 	 * {@link Observable.OnSubscribeFunc} implementation specialized to handle the
 	 * access to subscribed {@link Node}s and their {@link DataSeries}.
 	 */
-	public class SeriesSubscriber implements Observable.OnSubscribeFunc<NetworkNotification> {
+	public class SeriesSubscribeFunc implements Observable.OnSubscribeFunc<NetworkNotification> {
 	    private SeriesSubscription subscription;
 	    private List<Node<SeriesSubscription>> subscribedNodes;
+	    private NetworkObservable observable;
 	    
-	    public SeriesSubscriber(SeriesSubscription subscription, List<Node<SeriesSubscription>> publishers) {
+	    public SeriesSubscribeFunc(SeriesSubscription subscription, List<Node<SeriesSubscription>> publishers) {
 	    	this.subscription = subscription;
 	    	this.subscribedNodes = publishers;
 	    }
@@ -678,6 +683,10 @@ public class BarchartSeriesProvider {
         public rx.Subscription onSubscribe(Observer<? super NetworkNotification> t1) {
 	    	subscribers.put(this.subscription, (Observer<NetworkNotification>)t1);
 	    	for(Node<SeriesSubscription> n : subscribedNodes) {
+	    	    for(Observer<NetworkNotification> o : observable.getObservers(((AnalyticNode)n).getName())) {
+	    	        ((AnalyticNode)n).addObserver(o);
+	    	    }
+	    	    
 	    		n.startUp();
 	    	}
 	    	
@@ -691,7 +700,7 @@ public class BarchartSeriesProvider {
 	            feedService.registerAssembler(d);
 	        }
 	       
-	        return new rx.Subscription() {
+	        return new rx.subscriptions.CompositeSubscription() {
 	        	@Override
 				public void unsubscribe() {
 					
@@ -708,5 +717,12 @@ public class BarchartSeriesProvider {
 	    	return subscribedNodes;
 	    }
 	    
+	    /**
+	     * Sets the {@link Observable
+	     * @param observable
+	     */
+	    void setObservable(NetworkObservable observable) {
+	        this.observable = observable;
+	    }
 	}
 }

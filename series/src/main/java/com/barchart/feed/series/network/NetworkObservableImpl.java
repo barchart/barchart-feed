@@ -1,8 +1,10 @@
 package com.barchart.feed.series.network;
 
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import rx.Observable;
 import rx.Observer;
@@ -17,29 +19,22 @@ import com.barchart.feed.api.series.network.NetworkObservable;
 import com.barchart.feed.api.series.network.Node;
 import com.barchart.feed.api.series.network.Query;
 
-public class NetworkObservableImpl implements NetworkObservable {
-	protected Map<String, DataSeries<? extends DataPoint>> seriesMap;
-	private Observable<NetworkNotification> delegate;
+public class NetworkObservableImpl extends NetworkObservable {
+	protected Map<String, DataSeries<? extends DataPoint>> availablePublisherMap;
+	private Map<String, Set<Observer<NetworkNotification>>> observerMap = new ConcurrentHashMap<String, Set<Observer<NetworkNotification>>>();
+	private Map<Observer<NetworkNotification>, Set<String>> specifierMap = new ConcurrentHashMap<Observer<NetworkNotification>, Set<String>>();
 	
-	protected <E extends DataPoint> NetworkObservableImpl(final BarchartSeriesProvider.SeriesSubscriber onSubscribe, 
+	
+	protected <E extends DataPoint> NetworkObservableImpl(final BarchartSeriesProvider.SeriesSubscribeFunc onSubscribe, 
     	Map<String, DataSeries<? extends DataPoint>> specifierToSeriesMap) {
-		delegate = new rx.Observable<NetworkNotification>(onSubscribe) {
-			public rx.Subscription subscribe(Observer<? super NetworkNotification> o) {
-				return super.subscribe(o);
-			}
-		};
-    	this.seriesMap = specifierToSeriesMap;
+	    
+	    super(onSubscribe);
+	    
+	    onSubscribe.setObservable(this);
+	    
+		this.availablePublisherMap = specifierToSeriesMap;
     }
 	
-	private void loadSeriesMap(List<Node<SeriesSubscription>> l) {
-		if(seriesMap == null) {
-			seriesMap = new HashMap<String, DataSeries<? extends DataPoint>>();
-		}
-		for(Node<SeriesSubscription> n : l) {
-			
-		}
-	}
-
 	/**
      * Returns the original {@link Query} used to obtain this {@code NetworkObservable}
      * 
@@ -48,6 +43,36 @@ public class NetworkObservableImpl implements NetworkObservable {
 	@Override
 	public Query getQuery() {
 		return null;
+	}
+	
+	/**
+	 * Returns a {@link Subscription} and starts the {@link DataSeries} update process.
+	 * 
+	 * This method overrides the rx.Observable.subscribe(Observer) method to include checks necessary for
+	 * a key-based subscription mechanism. This method may be called by clients <em>after</em> 
+	 * calling {@link #registerTo(Observer, String)} which sets up the mapping between the observer
+	 * and the specific data the client is interested in. The former also allows this observable
+	 * to be used in the composite fashion intended by the RxJava library.
+	 * 
+	 * The preferred method of subscription is to simply call {@link #subscribe(Observer, String)} or
+	 * {@link #subscribeAll(Observer)} which registers the observer for notification for a particular
+	 * set of data and internally calls {@link #registerTo(Observer, String)} making it unnecessary for
+	 * clients to do so.
+	 * 
+	 * @param  obs     the Observer to be notified of updates.
+	 * @throws IllegalStateException if {@link #registerTo(Observer, String)} has not been called prior to this method.
+	 */
+	@Override
+	public Subscription subscribe(Observer<? super NetworkNotification> obs) {
+	    if(obs == null) {
+	        throw new IllegalArgumentException("Cannot subscribe a null Observer");
+	    }
+	    if(!specifierMap.containsKey(obs) || specifierMap.get(obs).isEmpty()) {
+	        throw new IllegalStateException("The registerTo() method must be called prior to subscribe() -OR PREFERRABLY-" +
+	            " the subscribe(Observer, String) / subscribeAll() methods should be called instead.");
+	    }
+	    
+	    return super.subscribe(obs);
 	}
 
 	/**
@@ -64,12 +89,37 @@ public class NetworkObservableImpl implements NetworkObservable {
      */
 	@Override
 	public Subscription subscribe(Observer<NetworkNotification> obs, String specifier) {
-		return delegate.subscribe(obs);
+	    if(obs == null) {
+	        throw new IllegalArgumentException("Cannot subscribe a null observer");
+	    }else if(specifier == null) {
+	        throw new IllegalArgumentException("Specifier was null.");
+	    }
+	    
+	    Set<Observer<NetworkNotification>> l = null;
+	    if((l = observerMap.get(specifier)) == null) {
+	        observerMap.put(specifier, l = new HashSet<Observer<NetworkNotification>>());
+	    }
+	    if(!l.contains(obs)) {
+	        l.add(obs);
+	        registerTo(obs, specifier);
+	    }
+	    
+		return super.subscribe(obs);
+	}
+	
+	@Override
+	public Set<Observer<NetworkNotification>> getObservers(String specifier) {
+	    return observerMap.get(specifier);
+	}
+	
+	@Override
+	public Set<String> getSubscribedNodeNames(Observer<NetworkNotification> obs) {
+	    return specifierMap.get(obs);
 	}
 
 	/**
      * Subscribes to update notifications for all {@link DataSeries} 
-     * which are the known outputs of a given network or analytic.
+     * which are the known outputs ("main publishers") of a given network or analytic.
      * 
      * Interim notifications (notifications from outputs which participate 
      * in forming the end result but are not considered to be "end result" data),
@@ -80,20 +130,30 @@ public class NetworkObservableImpl implements NetworkObservable {
      * unsubscribe or "turn off" notifications. When a network no-longer has 
      * subscribed clients, the entire network may be expelled meaning any attempts
      * to "re-subscribe" to this {@link Observable} will fail. As long as a given
-     * network has not be dismantled, it can still be "re-subscribed" to. This can
+     * network has not be disposed of, it can still be "re-subscribed" to. This can
      * be checked using the {@link #isSubscribableHold}.
      * 
      * @return	
      */
 	@Override
 	public CompositeSubscription subscribeAll(Observer<NetworkNotification> obs) {
-		return null;
+	    for(String key : availablePublisherMap.keySet()) {
+	        Set<Observer<NetworkNotification>> l = null;
+	        if((l = observerMap.get(key)) == null) {
+	            observerMap.put(key, l = new HashSet<Observer<NetworkNotification>>());
+	        }
+	        if(!l.contains(obs)) {
+	            l.add(obs);
+	            registerTo(obs, key);
+	        }
+	    }
+	    return (CompositeSubscription)subscribe(obs);
 	}
 
 	/**
      * Returns a boolean indicating whether this {@link Observable} is in a state
      * where it can allow "re-subscribing" or not. If this method returns true, 
-     * it is gauranteed subscribable for long enough to make a follow up call to
+     * it is guaranteed subscribable for long enough to make a follow up call to
      * {@link #subscribe(String)} or {@link #subscribeAll()} (5 seconds).
      * 
      * Gauranteed subscribable in this context is determined in "computer" time 
@@ -111,12 +171,12 @@ public class NetworkObservableImpl implements NetworkObservable {
 	}
 
 	/**
-     * Returns a list of the output keys of the main publishers of a given 
+     * Returns a list of the output analytic specifier (keys) of the main publishers of a given 
      * network or {@link Analytic}
-     * @return	list of the output keys
+     * @return  list of the output keys
      */
 	@Override
-	public List<String> getAllOutputKeys() {
+	public List<String> getMainPublisherSpecifiers() {
 		return null;
 	}
 
@@ -130,6 +190,16 @@ public class NetworkObservableImpl implements NetworkObservable {
 	public <E extends DataPoint> DataSeries<E> getDataSeries(String key) {
 		return null;
 	}
+	
+	/**
+     * Returns a {@link Map} of {@link DataSeries} specified by the {@link Set} of 
+     * unique identifiers ({@link Node} names or specifiers) for those series.
+     * @param keys  a set of identifiers which specify which series to return.
+     * @return  a map view of the specified {@link DataSeries}.
+     */
+    public <E extends DataPoint> Map<String, DataSeries<E>> getDataSeries(Set<String> keys) {
+        return null;
+    }
 
 	/**
      * Returns a list of all {@link DataSeries} which are the main publishers 
@@ -138,7 +208,60 @@ public class NetworkObservableImpl implements NetworkObservable {
      * @return	a list of main publisher DataSeries.
      */
 	@Override
-	public <E extends DataPoint> List<DataSeries<E>> getAllDataSeries() {
+	public <E extends DataPoint> Map<String, DataSeries<E>> getMainPublisherSeries() {
 		return null;
 	}
+	
+	/**
+     * This method <em><b>must</b></em> be called prior to calling any method on this observer which would
+     * result in a subsequent call to {@link #subscribe(Observer)} being executed either overtly
+     * or "under the hood" via the many composition methods available on this {@link Observable}'s parent
+     * class. It may be necessary to call this method once for every specifier a particular observer is
+     * interested in observing, depending on the methods being called on this observer.
+     * <p>
+     * This method is an effort to allow this observer to participate in the many compositional 
+     * configurations allowed by the rx framework. It is necessary because a subscription in this 
+     * context involves both an {@link Observer} <em>AND</em> a subscribed-to target (indicated by 
+     * the specifier node-name key). An attempt to subscribe without indicating a node (hence, desired
+     * output) has no meaning in this context, therefore prior mapping of the observer to the output
+     * desired is necessary. 
+     * <p>
+     * NOTE: It is <em><b>NOT</b></em> necessary to call this method if {@link #subscribe(Observer, String)} or
+     * {@link #subscribeAll(Observer)} are called - because those methods make a call to this method 
+     * automatically.
+     * 
+     * @param o           the {@link Observer} being registered  
+     * @param specifier   one of the keys/outputs the specified observer is interested in observing.
+     */
+	@Override
+	public void registerTo(Observer<NetworkNotification> obs, String specifier) {
+	    Set<String> obsList = null;
+	    if((obsList = specifierMap.get(obs)) == null) {
+	        specifierMap.put(obs, obsList = new HashSet<String>());
+	    }
+	    if(!obsList.contains(specifier)) {
+	        obsList.add(specifier);
+	    }
+	    
+	    Set<Observer<NetworkNotification>> l = null;
+        if((l = observerMap.get(specifier)) == null) {
+            observerMap.put(specifier, l = new HashSet<Observer<NetworkNotification>>());
+        }
+        if(!l.contains(obs)) {
+            l.add(obs);
+        }
+	}
+	
+	/**
+     * Returns a flag indicating whether the {@link Observer} specified has been registered for
+     * specific outputs.
+     * 
+     * @param o        the observer to check
+     * @return         true if so, false if not.
+     */
+	@Override
+	public boolean isRegistered(Observer<NetworkNotification> o) {
+	    return specifierMap.containsKey(o) && specifierMap.get(o).size() > 0;
+	}
+
 }

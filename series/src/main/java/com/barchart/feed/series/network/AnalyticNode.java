@@ -3,19 +3,24 @@ package com.barchart.feed.series.network;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicReference;
 
+import rx.Observer;
+
+import com.barchart.feed.api.series.DataPoint;
+import com.barchart.feed.api.series.DataSeries;
 import com.barchart.feed.api.series.PeriodType;
 import com.barchart.feed.api.series.Span;
-import com.barchart.feed.api.series.DataSeries;
 import com.barchart.feed.api.series.network.Analytic;
+import com.barchart.feed.api.series.network.NetworkNotification;
 import com.barchart.feed.api.series.network.Node;
 import com.barchart.feed.api.series.network.NodeType;
 import com.barchart.feed.api.series.network.Subscription;
-import com.barchart.feed.series.DataPointImpl;
 import com.barchart.feed.series.DataSeriesImpl;
 import com.barchart.feed.series.SpanImpl;
 import com.barchart.feed.series.analytics.BarBuilder;
@@ -32,6 +37,9 @@ public class AnalyticNode extends Node<SeriesSubscription> {
 		
 	/** Contains all currently input {@link SeriesSubscriptions}, to be tested on each process cycle to see if all required inputs have been received */
 	private Map<SeriesSubscription, SpanImpl> currentUpdates = Collections.synchronizedMap(new HashMap<SeriesSubscription, SpanImpl>());
+	
+	/** Set of Observers to be notified upon finished processing */
+	private Set<Observer<NetworkNotification>> observers = Collections.synchronizedSet(new HashSet<Observer<NetworkNotification>>());
 	
 	/** The currently updated {@link Span} for the current process cycle */
 	private volatile AtomicReference<SpanImpl> currentUpdateSpan = new AtomicReference<SpanImpl>();
@@ -54,6 +62,10 @@ public class AnalyticNode extends Node<SeriesSubscription> {
 	    this.currentProcessSpan = new SpanImpl(SpanImpl.INITIAL);
 	}
 	
+	public String getName() {
+	    return analytic.getName();
+	}
+	
 	/**
 	 * Called by ancestors of this {@code Node} in the tree to set
 	 * the {@link Span} of time modified by that ancestor's 
@@ -72,9 +84,8 @@ public class AnalyticNode extends Node<SeriesSubscription> {
 		
 		synchronized(currentUpdates) {
 		    boolean wasNewForScript = false;
-		    if(currentUpdates.get(subscription) == null) {
-		        wasNewForScript = true;
-		        currentUpdates.put((SeriesSubscription)subscription, span);
+		    if(wasNewForScript = currentUpdates.get(subscription) == null) {
+		        currentUpdates.put(subscription, span);
 	        }
 		    
 	        setUpdated(isUpdated() || wasNewForScript || span.extendsSpan(currentUpdates.get(subscription)));
@@ -105,7 +116,53 @@ public class AnalyticNode extends Node<SeriesSubscription> {
 		synchronized(currentUpdates) {
 			currentProcessSpan.setSpan(currentUpdateSpan.get());
 		}
-		return analytic.process(currentProcessSpan);
+		
+		Span span = analytic.process(currentProcessSpan);
+		NetworkNotificationImpl note = new NetworkNotificationImpl(analytic.getName(), span);
+		for(Observer<NetworkNotification> obs : observers) {
+		    obs.onNext(note);
+		}
+		return span;
+	}
+	
+	/**
+	 * Adds an {@link Observer} to be notified of ongoing updates.
+	 * @param obs      the observer to be notified.
+	 */
+	public void addObserver(Observer<NetworkNotification> obs) {
+	    if(obs == null) {
+	        throw new IllegalArgumentException("Attempt to add a null observer.");
+	    }
+	    observers.add(obs);
+	}
+	
+	/**
+	 * Removes the specified Observer from notifications.
+	 * @param obs
+	 */
+	public void removeObserver(Observer<NetworkNotification> obs) {
+	    if(obs == null) {
+            throw new IllegalArgumentException("Attempt to add a null observer.");
+        }
+        observers.add(obs);
+	}
+	
+	/**
+	 * Clears out all Observer references.
+	 */
+	public void removeAllObservers() {
+	    observers.clear();
+	}
+	
+	/**
+	 * Returns a flag indicating whether the specified {@link Observer} is
+	 * registered to receive notifications from this {@code AnalyticNode}
+	 * 
+	 * @param obs      the {@link Observer} who's registration is being tested.
+	 * @return         true if so, false if not.
+	 */
+	public boolean hasObserver(Observer<NetworkNotification> obs) {
+	    return observers.contains(obs);
 	}
 	
 	/**
@@ -150,7 +207,7 @@ public class AnalyticNode extends Node<SeriesSubscription> {
 	 * @param SeriesSubscription		the SeriesSubscription acting as key for the corresponding {@link DataSeries}
 	 * @return	the output {@link DataSeries}
 	 */
-	public <E extends DataPointImpl> DataSeriesImpl<E> getOutputTimeSeries(SeriesSubscription subscription) {
+	public <E extends DataPoint> DataSeries<E> getOutputTimeSeries(SeriesSubscription subscription) {
 	    String key = outputSubscriptionKeyMap.get(subscription);
 	    if(key == null) {
 	    	StringBuilder error = new StringBuilder("Could not find key for subscription: ").append(subscription.toString()).append("\n");
@@ -168,9 +225,8 @@ public class AnalyticNode extends Node<SeriesSubscription> {
      * @param key  the mapping output key
      * @return the output {@link DataSeries}
      */
-	public <E extends DataPointImpl> DataSeriesImpl<E> getOutputTimeSeries(String outputKey, SeriesSubscription subscription) {
-	    @SuppressWarnings("unchecked")
-        DataSeriesImpl<E> dataSeries = (DataSeriesImpl<E>)this.analytic.getOutputTimeSeries(outputKey);
+	public <E extends DataPoint> DataSeries<E> getOutputTimeSeries(String outputKey, SeriesSubscription subscription) {
+	    DataSeries<E> dataSeries = this.analytic.getOutputTimeSeries(outputKey);
 	    if(dataSeries == null) {
 	        dataSeries = new DataSeriesImpl<E>(subscription.getTimeFrame(0).getPeriod());
 	        this.analytic.addOutputTimeSeries(outputKey, dataSeries);
@@ -186,8 +242,8 @@ public class AnalyticNode extends Node<SeriesSubscription> {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public <E extends DataPointImpl> DataSeriesImpl<E> getOutputTimeSeries(String outputKey) {
-		return (DataSeriesImpl<E>)this.analytic.getOutputTimeSeries(outputKey);
+	public <E extends DataPoint> DataSeries<E> getOutputTimeSeries(String outputKey) {
+		return (DataSeries<E>)this.analytic.getOutputTimeSeries(outputKey);
 	}
 	
 	/**
@@ -196,7 +252,7 @@ public class AnalyticNode extends Node<SeriesSubscription> {
 	 * @param subscription		the Subscription acting as key for the corresponding {@link DataSeries}
 	 * @param	the input {@link DataSeries}
 	 */
-	public <E extends DataPointImpl> void addInputTimeSeries(SeriesSubscription subscription, DataSeriesImpl<E> timeSeries) {
+	public <E extends DataPoint> void addInputTimeSeries(SeriesSubscription subscription, DataSeries<E> timeSeries) {
 		this.analytic.addInputTimeSeries(inputKeyMap.get(subscription), timeSeries);
 	}
 	
@@ -207,8 +263,8 @@ public class AnalyticNode extends Node<SeriesSubscription> {
 	 * @return	the input {@link DataSeries}
 	 */
 	@SuppressWarnings("unchecked")
-    public <E extends DataPointImpl> DataSeriesImpl<E> getInputTimeSeries(String key) {
-		return (DataSeriesImpl<E>) this.analytic.getInputTimeSeries(key);
+    public <E extends DataPoint> DataSeries<E> getInputTimeSeries(String key) {
+		return (DataSeries<E>) this.analytic.getInputTimeSeries(key);
 	}
 	
 	/**

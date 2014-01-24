@@ -8,12 +8,12 @@ import static org.junit.Assert.fail;
 import java.util.List;
 
 import org.joda.time.DateTime;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.api.series.Period;
 import com.barchart.feed.api.series.PeriodType;
-import com.barchart.feed.api.series.Span;
 import com.barchart.feed.api.series.network.Assembler;
 import com.barchart.feed.api.series.network.NetworkNotification;
 import com.barchart.feed.api.series.network.NetworkObservable;
@@ -29,7 +29,7 @@ import com.barchart.util.test.concurrent.TestObserver;
 
 public class BarchartSeriesProviderTest {
 
-	@Test
+	@Ignore
 	public void testFetch() {
 		
 		FauxMarketService marketService = new FauxMarketService("test", "test");
@@ -187,7 +187,7 @@ public class BarchartSeriesProviderTest {
         assertEquals(1, p.size());
         assertEquals(PeriodType.MINUTE, p.getPeriodType());
         
-        assertTrue(derivable == derivableMatch);
+        assertTrue(derivable == derivableMatch);//Test that derivableMatch is THE same node == "found" is linked in
         assertTrue(provider.hasAssemblerParent(derivableMatch));
 	}
 	

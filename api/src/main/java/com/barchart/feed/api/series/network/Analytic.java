@@ -10,6 +10,17 @@ import com.barchart.feed.api.series.DataSeries;
 
 public interface Analytic {
     /**
+     * Sets this analytic's node name.
+     * @param name
+     */
+    public void setName(String name);
+    
+    /**
+     * Returns this analytic's node name
+     * @return  the name of this analytic's node
+     */
+    public String getName();
+    /**
      * Sets the input {@link DataSeries} corresponding to with the specified key
      * 
      * @param key      the String acting as key for the corresponding {@link DataSeries}
@@ -53,9 +64,10 @@ public interface Analytic {
 	 * Called to update the current calculation with a formal series model object.
 	 * 
 	 * @param time		the time of the result.
+	 * @param key       the key indentifying the {@link DataSeries} to update.
 	 * @param e			a result of the type {@link E}
 	 */
-	public <E extends DataPoint> void setValue(DateTime time, E e);
+	public <E extends DataPoint> void setValue(DateTime time, String key, E e);
 	/**
 	 * Called to update the current calculation for the specified key.
 	 * 

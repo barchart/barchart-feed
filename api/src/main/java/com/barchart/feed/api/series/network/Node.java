@@ -198,6 +198,11 @@ public abstract class Node<S extends Subscription> implements Runnable {
 	//    ABSTRACT METHODS TO BE IMPLEMENTED BELOW   //
 	///////////////////////////////////////////////////
 	/**
+	 * Returns this {@code Node}'s name.
+	 * @return this Node's name.
+	 */
+	public abstract String getName();
+	/**
 	 * Returns a flag indicating whether this {@link Node} has an output which the specified
 	 * {@link Subscription} information can be derived from.
 	 * 

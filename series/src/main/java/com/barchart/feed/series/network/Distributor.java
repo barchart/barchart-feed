@@ -9,15 +9,15 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import com.barchart.feed.api.model.data.Market;
+import com.barchart.feed.api.series.DataPoint;
+import com.barchart.feed.api.series.DataSeries;
 import com.barchart.feed.api.series.Period;
 import com.barchart.feed.api.series.Span;
-import com.barchart.feed.api.series.DataSeries;
 import com.barchart.feed.api.series.network.Assembler;
 import com.barchart.feed.api.series.network.Node;
 import com.barchart.feed.api.series.network.Subscription;
 import com.barchart.feed.api.series.service.HistoricalResult;
 import com.barchart.feed.series.BarImpl;
-import com.barchart.feed.series.DataPointImpl;
 import com.barchart.feed.series.DataSeriesImpl;
 import com.barchart.feed.series.SpanImpl;
 import com.barchart.util.value.ValueFactoryImpl;
@@ -47,7 +47,7 @@ public class Distributor extends Node<SeriesSubscription> implements Assembler {
 	/** Holds the {@link Period} of this {@code Distributor}'s output {@link Subscription} */
 	private Period period;
 	/** The {@link DataSeries} object containing this node's output */
-	private DataSeriesImpl<?> outputTimeSeries;
+	private DataSeries<?> outputTimeSeries;
 	/** List containing this {@code Distributor}'s one output {@link Subscription} */
 	private List<SeriesSubscription> outputSubscriptions;
 	/** The last date processed */
@@ -73,6 +73,15 @@ public class Distributor extends Node<SeriesSubscription> implements Assembler {
 		this.outputSubscriptions = new ArrayList<SeriesSubscription>();
 		this.outputSubscriptions.add(subscription);
 		this.dataQueue = new ConcurrentLinkedQueue<Span>();
+	}
+	
+	/**
+	 * Returns this Node's name
+	 * @return     this Node's name.
+	 */
+	@Override
+	public String getName() {
+	    return subscription.toString();
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -194,11 +203,11 @@ public class Distributor extends Node<SeriesSubscription> implements Assembler {
 	 * Returns the output {@link DataSeries}
 	 */
 	@SuppressWarnings("unchecked")
-	public <E extends DataPointImpl> DataSeriesImpl<E> getOutputTimeSeries(Subscription subscription) {
+	public <E extends DataPoint> DataSeries<E> getOutputTimeSeries(Subscription subscription) {
 		if(outputTimeSeries == null) {
 			this.outputTimeSeries = new DataSeriesImpl<BarImpl>(subscription.getTimeFrames()[0].getPeriod());
 		}
-		return (DataSeriesImpl<E>)this.outputTimeSeries;
+		return (DataSeries<E>)this.outputTimeSeries;
 	}
 
 	@Override

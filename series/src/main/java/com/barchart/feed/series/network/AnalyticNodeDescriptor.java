@@ -188,7 +188,9 @@ public class AnalyticNodeDescriptor implements AnalyticDescriptor {
                     parameters[i] = new Integer(this.constructorArgs[i]);
                 }
                 try {
-                    return (Analytic)constructor.newInstance(parameters);
+                    Analytic a = (Analytic)constructor.newInstance(parameters);
+                    a.setName(nodeName);
+                    return a;
                 }catch(Exception e) { }
             }
         }
