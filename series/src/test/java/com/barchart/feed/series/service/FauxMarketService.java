@@ -590,12 +590,13 @@ public class FauxMarketService implements MarketService {
                 return false;
             }
 
-            @Override
-            public Size abs() {
-                // TODO Auto-generated method stub
-                return null;
-            }
-       };
+			@Override
+			public Size abs() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+            
+        };
     }
     
     private Price makePrice(String dblStr) {
@@ -726,11 +727,11 @@ public class FauxMarketService implements MarketService {
                 return false;
             }
 
-            @Override
-            public Price abs() {
-                // TODO Auto-generated method stub
-                return null;
-            }
+			@Override
+			public Price abs() {
+				// TODO Auto-generated method stub
+				return null;
+			}
         };
         
         return p;

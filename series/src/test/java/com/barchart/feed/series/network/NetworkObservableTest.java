@@ -92,7 +92,7 @@ public class NetworkObservableTest {
         NetworkObservable no = new NetworkObservableImpl(ss, map);
         no.subscribeAll(obs);
         
-        node.get
+//        node.get
     }
 	
 	private Observer<NetworkNotification> getTestObserver() {
