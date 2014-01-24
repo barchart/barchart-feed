@@ -37,26 +37,26 @@ public final class MarketBarField<V extends Value<V>> extends
 	public static final MarketBarField<PriceValue> LOW = NEW(NULL_PRICE);  // 2
 	public static final MarketBarField<PriceValue> CLOSE = NEW(NULL_PRICE); // 3
 	public static final MarketBarField<PriceValue> SETTLE = NEW(NULL_PRICE); // 4
-	
 	public static final MarketBarField<BooleanValue> IS_SETTLED = NEW(NULL_BOOLEAN); // 5
-	public static final MarketBarField<PriceValue> SETTLE_PREVIOUS = NEW(NULL_PRICE); // 5
+
+	public static final MarketBarField<PriceValue> CLOSE_PREVIOUS = NEW(NULL_PRICE); // 6
 
 	// sizes
 
-	public static final MarketBarField<SizeValue> VOLUME = NEW(NULL_SIZE); // 6
-	public static final MarketBarField<SizeValue> INTEREST = NEW(NULL_SIZE); // 7
+	public static final MarketBarField<SizeValue> VOLUME = NEW(NULL_SIZE); // 7
+	public static final MarketBarField<SizeValue> INTEREST = NEW(NULL_SIZE); // 8
 
 	/** last time of any bar field change */
-	public static final MarketBarField<TimeValue> BAR_TIME = NEW(NULL_TIME); // 8
+	public static final MarketBarField<TimeValue> BAR_TIME = NEW(NULL_TIME); // 9
 
 	/**
 	 * latest known market trading date represented by this bar
-	 * 
+	 *
 	 * expressed as UTC zone
-	 * 
+	 *
 	 * year, month, day should be treated as local market trade date
 	 */
-	public static final MarketBarField<TimeValue> TRADE_DATE = NEW(NULL_TIME); // 9
+	public static final MarketBarField<TimeValue> TRADE_DATE = NEW(NULL_TIME); // 10
 
 	// ##################################
 

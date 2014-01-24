@@ -79,7 +79,7 @@ public final class VarBar extends DefBar implements MarketDoBar {
 		set(MarketBarField.LOW, source.get(MarketBarField.LOW));
 		set(MarketBarField.CLOSE, source.get(MarketBarField.CLOSE));
 		set(MarketBarField.SETTLE, source.get(MarketBarField.SETTLE));
-		set(MarketBarField.SETTLE_PREVIOUS, source.get(MarketBarField.SETTLE_PREVIOUS));
+		set(MarketBarField.CLOSE_PREVIOUS, source.get(MarketBarField.CLOSE_PREVIOUS));
 		set(MarketBarField.VOLUME, source.get(MarketBarField.VOLUME));
 		set(MarketBarField.INTEREST, source.get(MarketBarField.INTEREST));
 		set(MarketBarField.IS_SETTLED, source.get(MarketBarField.IS_SETTLED));

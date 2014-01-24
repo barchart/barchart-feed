@@ -300,7 +300,7 @@ public class MockMarket extends VarMarket {
 		if (settle != null)
 			bar.set(MarketBarField.SETTLE, settle);
 		if (previousSettle != null)
-			bar.set(MarketBarField.SETTLE_PREVIOUS, previousSettle);
+			bar.set(MarketBarField.CLOSE_PREVIOUS, previousSettle);
 		if (volume != null)
 			bar.set(MarketBarField.VOLUME, volume);
 		if (interest != null)

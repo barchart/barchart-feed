@@ -6,26 +6,26 @@ import com.barchart.util.value.api.Size;
 import com.barchart.util.value.api.Time;
 
 public interface SessionData {
-	
+
 	// TODO Review for later
 	interface Settle extends Comparable<Settle> {
-		
+
 		enum SettleType {
 			NULL, PRELIM, FINAL, THEO
 		}
-		
+
 		SettleType type();
 		Price settle();
 		Time time();
-		
+
 		/**
 		 * Compares time of settle
 		 */
 		@Override
 		int compareTo(Settle that);
-		
+
 	}
-	
+
 	Price open();
 
 	Price high();
@@ -34,11 +34,13 @@ public interface SessionData {
 
 	Price close();
 
+	Price previousClose();
+
 	/**
 	 * @return The last settle recieved in this session
 	 */
 	Price settle();
-	
+
 	/**
 	 * True if the final settlement price has been received (for applicable
 	 * markets.)
@@ -58,11 +60,11 @@ public interface SessionData {
 	Time timeOpened();
 
 	Time timeClosed();
-	
+
 	Time updated();
 
 	public static final SessionData NULL = new SessionData() {
-		
+
 		@Override
 		public Price open() {
 			return Price.NULL;
@@ -80,6 +82,11 @@ public interface SessionData {
 
 		@Override
 		public Price close() {
+			return Price.NULL;
+		}
+
+		@Override
+		public Price previousClose() {
 			return Price.NULL;
 		}
 
@@ -112,12 +119,12 @@ public interface SessionData {
 		public Time timeClosed() {
 			return Time.NULL;
 		}
-		
+
 		@Override
 		public Time updated() {
 			return Time.NULL;
 		}
 
 	};
-	
+
 }
