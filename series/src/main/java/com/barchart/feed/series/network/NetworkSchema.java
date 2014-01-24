@@ -18,6 +18,12 @@ public class NetworkSchema implements NetworkDescriptor {
     /** the default filename of the file storing the local schema definitions */
     private static final String DEFAULT_SCHEMA_FILENAME = "networks.txt";
     
+//    private static final String IDX_NETWORK_NAME = 0;
+//    private static final String IDX_NODE_NAME = 0;
+//    private static final String IDX_NETWORK_NAME = 0;
+//    private static final String IDX_NETWORK_NAME = 0;
+//    private static final String IDX_NETWORK_NAME = 0;
+    
     /** Class-Wide storage of all unreified networks */
     private static Map<String,List<String[]>> networkDefinitions = new HashMap<String, List<String[]>>();
     /** Flat map of all descriptors */
