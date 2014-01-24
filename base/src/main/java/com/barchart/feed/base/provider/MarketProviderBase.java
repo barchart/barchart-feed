@@ -295,6 +295,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 					
 				new Func1<Result<Instrument>, Observable<Result<Instrument>>>() {
 					
+					@Override
 					public Observable<Result<Instrument>> call(final Result<Instrument> result) {
 						
 						final Map<String, List<Instrument>> instMap = result.results();
@@ -356,6 +357,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 					
 				new Func1<Result<Instrument>, Observable<Result<Instrument>>>() {
 					
+					@Override
 					public Observable<Result<Instrument>> call(final Result<Instrument> result) {
 						
 						final Map<String, List<Instrument>> instMap = result.results();
@@ -457,7 +459,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 					continue;
 				case EXCHANGE:
 					incExchanges.add((Exchange)m);
-					exExchanges.remove((Exchange)m);
+					exExchanges.remove(m);
 					newInterests.add(((Exchange)m).id().toString());
 				}
 			
@@ -509,7 +511,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 					continue;
 				case EXCHANGE:
 					exExchanges.add((Exchange)m);
-					incExchanges.remove((Exchange)m);
+					incExchanges.remove(m);
 					oldInterests.add(((Exchange)m).id().toString());
 				}
 				
@@ -954,6 +956,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		public Void runSafe(final MarketDo market, final Message message) {
 			make(message, market);
 			market.fireEvents();
+					market.fireCallbacks();
 			return null;
 		}
 	};

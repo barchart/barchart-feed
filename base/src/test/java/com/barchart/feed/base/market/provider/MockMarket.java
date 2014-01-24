@@ -269,4 +269,10 @@ public class MockMarket extends VarMarket {
 		changeSet.clear();
 	}
 
+	@Override
+	public void fireCallbacks() {
+		// TODO Auto-generated method stub
+
+	}
+
 }

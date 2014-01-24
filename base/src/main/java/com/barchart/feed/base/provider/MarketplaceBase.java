@@ -389,12 +389,12 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 					continue;
 				case INSTRUMENT:
 					incInsts.add((Instrument)m);
-					exInsts.remove((Instrument)m);
+					exInsts.remove(m);
 					newInterests.add(formatForJERQ(((Instrument)m).symbol()));
 					continue;
 				case EXCHANGE:
 					incExchanges.add((Exchange)m);
-					exExchanges.remove((Exchange)m);
+					exExchanges.remove(m);
 					newInterests.add(((Exchange)m).id().toString());
 				}
 			
@@ -428,12 +428,12 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 					continue;
 				case INSTRUMENT:
 					exInsts.add((Instrument)m);
-					incInsts.remove((Instrument)m);
+					incInsts.remove(m);
 					oldInterests.add(formatForJERQ(((Instrument)m).symbol()));
 					continue;
 				case EXCHANGE:
 					exExchanges.add((Exchange)m);
-					incExchanges.remove((Exchange)m);
+					incExchanges.remove(m);
 					oldInterests.add(((Exchange)m).id().toString());
 				}
 				
@@ -782,6 +782,7 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 		public Void runSafe(final MarketDo market, final Message message) {
 			make(message, market);
 			market.fireEvents();
+			market.fireCallbacks();
 			return null;
 		}
 	};
