@@ -9,6 +9,7 @@ package com.barchart.feed.base.trade.enums;
 
 import static com.barchart.feed.base.trade.enums.MarketTradeSequencing.NORMAL;
 import static com.barchart.feed.base.trade.enums.MarketTradeSequencing.UNSEQUENCED;
+import static com.barchart.feed.base.trade.enums.MarketTradeSequencing.UNSEQUENCED_VOLUME;
 import static com.barchart.feed.base.trade.enums.MarketTradeSession.COMBINED;
 import static com.barchart.feed.base.trade.enums.MarketTradeSession.DEFAULT;
 import static com.barchart.feed.base.trade.enums.MarketTradeSession.EXTENDED;
@@ -64,6 +65,9 @@ public enum MarketTradeType implements Value<MarketTradeType> {
 	STOPPED_STOCK_OOO(DEFAULT, UNSEQUENCED),
 	STOPPED_STOCK_SOLD_LAST(DEFAULT, UNSEQUENCED),
 
+	// Volume-only out-of-sequence trade types
+	ODD_LOT(DEFAULT, UNSEQUENCED_VOLUME),
+
 	// Form-T (pre/post-market) trades
 	FORM_T(EXTENDED, NORMAL),
 	FORM_T_OOO(EXTENDED, UNSEQUENCED),
@@ -104,9 +108,9 @@ public enum MarketTradeType implements Value<MarketTradeType> {
 	}
 
 	public Trade.TradeType asType() {
-		
+
 		switch(this) {
-		
+
 		default:
 			return Trade.TradeType.NULL_TRADE_TYPE;
 		case UNKNOWN:
@@ -167,10 +171,10 @@ public enum MarketTradeType implements Value<MarketTradeType> {
 			return Trade.TradeType.STOPPED_STOCK_SOLD_LAST;
 		case FORM_T:
 			return Trade.TradeType.FORM_T;
-		case FORM_T_OOO:	
+		case FORM_T_OOO:
 			return Trade.TradeType.FORM_T_OOO;
 		}
-		
+
 	}
-	
+
 }

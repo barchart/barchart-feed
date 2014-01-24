@@ -21,6 +21,9 @@ public enum MarketTradeSequencing implements Value<MarketTradeSequencing> {
 	// Out-of-sequence trade, may update current high/low but not last
 	UNSEQUENCED,
 
+	// Out-of-sequence trade, may only update volume
+	UNSEQUENCED_VOLUME,
+
 	;
 
 	@Override
@@ -39,7 +42,7 @@ public enum MarketTradeSequencing implements Value<MarketTradeSequencing> {
 	}
 
 	public Trade.Sequence asSequence() {
-		
+
 		switch(this) {
 		default:
 			return Trade.Sequence.NULL;
@@ -48,7 +51,7 @@ public enum MarketTradeSequencing implements Value<MarketTradeSequencing> {
 		case UNSEQUENCED:
 			return Trade.Sequence.UNSEQUENCED;
 		}
-		
+
 	}
-	
+
 }
