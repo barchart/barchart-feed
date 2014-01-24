@@ -44,6 +44,7 @@ public class BarBuilder extends AnalyticBase {
 	 */
 	BarBuilder(SeriesSubscription s) {
 	    this.subscription = s;
+	    setName(s.toString());
 	}
 	
 	/**

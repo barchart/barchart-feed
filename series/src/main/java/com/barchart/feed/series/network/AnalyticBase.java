@@ -18,8 +18,24 @@ public abstract class AnalyticBase implements Analytic {
     private Map<String, DataSeries<?>> inputTimeSeries = new ConcurrentHashMap<String, DataSeries<?>>();
     /** Maps a given {@link DataSeries} to a {@link Subscription} */
     private Map<String, DataSeries<?>> outputTimeSeries = new ConcurrentHashMap<String, DataSeries<?>>();
-
+    /** Node name */
+    private String name;
     
+    /**
+     * Sets this analytic's node name.
+     * @param name
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+    
+    /**
+     * Returns this analytic's node name
+     * @return  the name of this analytic's node
+     */
+    public String getName() {
+        return name;
+    }
     
     /**
      * Returns an array of this {@code Analytic}'s input keys.
@@ -94,9 +110,10 @@ public abstract class AnalyticBase implements Analytic {
      * Called to update the current calculation with a formal series model object.
      * 
      * @param time      the time of the result.
+     * @param key       the key to the series having the value set.
      * @param e         a result of the type {@link E}
      */
-    public <E extends DataPoint> void setValue(DateTime time, E e) {
+    public <E extends DataPoint> void setValue(DateTime time, String key, E e) {
         
     }
     

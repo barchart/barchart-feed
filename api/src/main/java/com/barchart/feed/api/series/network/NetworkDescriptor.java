@@ -29,7 +29,7 @@ public interface NetworkDescriptor extends NodeDescriptor {
      * 
      * @return      a list of {@link NodeDescriptor}s in this network
      */
-    public <T extends NodeDescriptor> List<T> getNetworkNodes();
+    public <T extends NodeDescriptor> List<T> getNodeDescriptors();
 
     /**
      * Sets the list of {@link NodeDescriptor}s representing
@@ -37,7 +37,7 @@ public interface NetworkDescriptor extends NodeDescriptor {
      * 
      * @param         a list of {@link NodeDescriptor}s in this network
      */
-    public <T extends NodeDescriptor> void setNetworkNodes(List<T> nodes);
+    public <T extends NodeDescriptor> void setNodeDescriptors(List<T> nodes);
 
     /**
      * Returns a list of {@link AnalyticNodeDescriptor}s which are not themselves

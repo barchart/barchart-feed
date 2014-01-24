@@ -18,6 +18,12 @@ public class NetworkSchema implements NetworkDescriptor {
     /** the default filename of the file storing the local schema definitions */
     private static final String DEFAULT_SCHEMA_FILENAME = "networks.txt";
     
+//    private static final String IDX_NETWORK_NAME = 0;
+//    private static final String IDX_NODE_NAME = 0;
+//    private static final String IDX_NETWORK_NAME = 0;
+//    private static final String IDX_NETWORK_NAME = 0;
+//    private static final String IDX_NETWORK_NAME = 0;
+    
     /** Class-Wide storage of all unreified networks */
     private static Map<String,List<String[]>> networkDefinitions = new HashMap<String, List<String[]>>();
     /** Flat map of all descriptors */
@@ -65,13 +71,13 @@ public class NetworkSchema implements NetworkDescriptor {
     
     @SuppressWarnings("unchecked")
     @Override
-    public List<AnalyticNodeDescriptor> getNetworkNodes() {
+    public List<AnalyticNodeDescriptor> getNodeDescriptors() {
         return nodes;
     }
     
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends NodeDescriptor> void setNetworkNodes(List<T> nodes) {
+    public <T extends NodeDescriptor> void setNodeDescriptors(List<T> nodes) {
         this.nodes = (List<AnalyticNodeDescriptor>)nodes;
     }
     
@@ -135,7 +141,9 @@ public class NetworkSchema implements NetworkDescriptor {
     }
     
     /**
-     * Retrieves the specified {@link NodeDescriptor} if it has been loaded.
+     * Returns the {@link AnalyticNodeDescriptor} which is the schema for the
+     * {@link Node} which will eventually produce the data described by the
+     * specified {@link SeriesSubscription}.
      * 
      * @param name
      * @param timeFrames
@@ -145,6 +153,19 @@ public class NetworkSchema implements NetworkDescriptor {
         if (name.equals("IO")) return null;
         String key = timeFrames > 1 ? name + "-" + timeFrames : name;
         return allDescriptors.get(key);
+    }
+    
+    /**
+     * Returns the {@link AnalyticNodeDescriptor} which is the schema for the
+     * {@link Node} which will eventually produce the data described by the
+     * specified {@link SeriesSubscription}.
+     * 
+     * @param subscription      the output description of the Node who's descriptor 
+     *                          will be returned.
+     * @return                  the specified {@link AnalyticNodeDescriptor}.
+     */
+    public static AnalyticNodeDescriptor lookup(SeriesSubscription subscription) {
+        return lookup(subscription.getAnalyticSpecifier(), subscription.getTimeFrames().length);
     }
     
     /**

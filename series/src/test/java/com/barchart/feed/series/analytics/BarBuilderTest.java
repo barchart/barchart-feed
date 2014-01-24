@@ -7,12 +7,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.joda.time.DateTime;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.api.series.Period;
 import com.barchart.feed.api.series.PeriodType;
+import com.barchart.feed.api.series.Span;
 import com.barchart.feed.series.BarImpl;
 import com.barchart.feed.series.DataSeriesImpl;
 import com.barchart.feed.series.SpanImpl;
@@ -154,9 +154,11 @@ public class BarBuilderTest {
         System.out.println("added " + list.size() + " bars to inputSeries");
         
         span.setNextDate(inputSeries.get(inputSeries.size() - 1).getDate());
-        
+        System.out.println("setNextDate to: " + inputSeries.get(inputSeries.size() - 1 ).getDate() + " --> " + span);
         System.out.println("calling process...");
-        barBuilder.process(span);
+        Span resultSpan = barBuilder.process(span);
+        System.out.println("resultSpan = " + resultSpan);
+        System.out.println("outputSeries size = " + outputSeries.size());
         System.out.println("process finished...");
         
         assertEquals(2, outputSeries.size());

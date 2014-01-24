@@ -589,6 +589,12 @@ public class FauxMarketService implements MarketService {
                 // TODO Auto-generated method stub
                 return false;
             }
+
+			@Override
+			public Size abs() {
+				// TODO Auto-generated method stub
+				return null;
+			}
             
         };
     }
@@ -720,7 +726,12 @@ public class FauxMarketService implements MarketService {
             public boolean isNull() {
                 return false;
             }
-            
+
+			@Override
+			public Price abs() {
+				// TODO Auto-generated method stub
+				return null;
+			}
         };
         
         return p;
@@ -870,7 +881,12 @@ public class FauxMarketService implements MarketService {
 				// TODO Auto-generated method stub
 				return null;
 			}
-            
+
+			@Override
+			public Price transactionPriceConversionFactor() {
+				// TODO Auto-generated method stub
+				return null;
+			}
         };
     }
 

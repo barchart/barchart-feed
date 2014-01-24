@@ -18,7 +18,7 @@ import com.barchart.feed.api.series.DataPoint;
 import com.barchart.feed.api.series.DataSeries;
 import com.barchart.util.value.api.Time;
 
-public class DataSeriesImpl<E extends DataPointImpl> implements DataSeries<E> {
+public class DataSeriesImpl<E extends DataPoint> implements DataSeries<E> {
 	/** All {@link DataPoints} are aggregated according to this Period */
 	private Period period;
 	/** The backing data */

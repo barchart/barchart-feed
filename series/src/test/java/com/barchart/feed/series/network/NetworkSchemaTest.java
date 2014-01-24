@@ -19,7 +19,7 @@ public class NetworkSchemaTest {
         
         assertEquals("PivotPointOverlay", schema.getNetworkName());
         
-        List<AnalyticNodeDescriptor> descList = schema.getNetworkNodes();
+        List<AnalyticNodeDescriptor> descList = schema.getNodeDescriptors();
         assertNotNull(descList);
         assertEquals(7, descList.size());
         assertEquals("PP_R3L", descList.get(0).getSpecifier());
@@ -44,7 +44,7 @@ public class NetworkSchemaTest {
     	assertNotNull(schema);
     	
     	assertEquals("PivotPoint", schema.getNetworkName());
-    	assertEquals(8, schema.getNetworkNodes().size());
+    	assertEquals(8, schema.getNodeDescriptors().size());
     	
     	List<AnalyticNodeDescriptor> publishers = schema.getMainPublishers();
     	assertTrue(!publishers.isEmpty());
