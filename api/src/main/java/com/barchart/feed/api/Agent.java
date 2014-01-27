@@ -68,7 +68,7 @@ public interface Agent extends AgentLifecycle, FilterUpdatable, Filter {
 	 */
 	@Override
 	boolean hasMatch(Instrument instrument);
-
+	
 	/**
 	 * Resolved filter in the LDAP format http://www.ietf.org/rfc/rfc1960.txt.
 	 */
