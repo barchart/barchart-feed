@@ -193,7 +193,13 @@ public final class Symbology {
 	
 	public static String formatSymbol(String symbol) {
 		
+		if (symbol == null) {
+			throw new IllegalStateException("Symbol cannot be null");
+		}
+
 		try {
+
+			symbol = symbol.toUpperCase();
 		
 			if(symbol == null) {
 				return "";
@@ -294,34 +300,4 @@ public final class Symbology {
 		
 	}
 
-	public static String formatHistoricalSymbol(String symbol) {
-		
-		if(symbol == null) {
-			return "";
-		}
-		
-		if(symbol.length() < 3) {
-			return symbol;
-		}
-		
-		/* e.g. GOOG */
-		if(!Character.isDigit(symbol.charAt(symbol.length() - 1))) {
-			return symbol;
-		}
-		
-		/* e.g. ESH3 */
-		if(!Character.isDigit(symbol.charAt(symbol.length() - 2))) {
-			return new StringBuilder(symbol).insert(symbol.length() - 1, O).toString();
-		}
-		
-		/* e.g. ESH2013 */
-		if(Character.isDigit(symbol.charAt(symbol.length() - 3))) {
-			return new StringBuilder(symbol).delete(symbol.length() - 4, 
-					symbol.length() - 2).toString();
-		}
-		
-		
-		return symbol;
-	}
-	
 }
