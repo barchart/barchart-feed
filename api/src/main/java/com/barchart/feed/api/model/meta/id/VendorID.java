@@ -19,4 +19,6 @@ public class VendorID extends Identifier<String, VendorID> {
 	
 	public static final VendorID BARCHART = new VendorID("BARCHART");
 	
+	public static final VendorID BARCHART_HISTORICAL = new VendorID("BARCHART_HISTORICAL");
+
 }
