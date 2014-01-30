@@ -73,7 +73,7 @@ public class NulBar extends ValueFreezer<MarketBar> implements MarketBar {
 	public Price low() {
 		return ValueConverter.price(get(MarketBarField.LOW));
 	}
-	
+
 	@Override
 	public Price close() {
 		return ValueConverter.price(get(MarketBarField.CLOSE));
@@ -88,7 +88,7 @@ public class NulBar extends ValueFreezer<MarketBar> implements MarketBar {
 	public Price previousClose() {
 		return ValueConverter.price(get(MarketBarField.CLOSE_PREVIOUS));
 	}
-	
+
 	@Override
 	public Size volume() {
 		return ValueConverter.size(get(MarketBarField.VOLUME));
@@ -101,11 +101,7 @@ public class NulBar extends ValueFreezer<MarketBar> implements MarketBar {
 
 	@Override
 	public Time timeOpened() {
-		throw new UnsupportedOperationException();
-	}
-
-	public Time timeUpdated() {
-		throw new UnsupportedOperationException();
+		return ValueConverter.time(get(MarketBarField.TRADE_DATE));
 	}
 
 	@Override

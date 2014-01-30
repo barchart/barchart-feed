@@ -75,9 +75,7 @@ public interface Session extends MarketData<Session>, SessionData,
 
 	}
 
-	/**
-	 * @return the close of the previous trading day.
-	 */
+	@Override
 	Price previousClose();
 	
 	@Override

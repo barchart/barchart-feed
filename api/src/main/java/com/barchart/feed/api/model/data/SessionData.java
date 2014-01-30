@@ -37,7 +37,7 @@ public interface SessionData {
 	Price previousClose();
 
 	/**
-	 * @return The last settle recieved in this session
+	 * @return The last settle received in this session
 	 */
 	Price settle();
 
@@ -57,8 +57,16 @@ public interface SessionData {
 
 	Size interest();
 
+	/**
+	 * The time that this session opened. Currently, this only represents the
+	 * day that the session happened, as midnight UTC time.
+	 */
 	Time timeOpened();
 
+	/**
+	 * The time that this session opened. Currently, this only represents the
+	 * day that the session happened, as midnight UTC time.
+	 */
 	Time timeClosed();
 
 	Time updated();
