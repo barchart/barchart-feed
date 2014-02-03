@@ -30,14 +30,14 @@ import com.barchart.feed.series.network.SeriesSubscription;
  *
  */
 public class FauxHistoricalService extends HistoricalService<HistoricalResult>{
-	/** Test Query for minutes - can be used as convient means of constructing {@link Query} or {@link Subscription}*/
+	/** Test Query for minutes - can be used as convenient means of constructing {@link Query} or {@link Subscription}*/
 	public static final Query DEFAULT_MINUTE_QUERY = QueryBuilderImpl.create().
 		symbol("ESZ13").
 		start(new DateTime(2013, 12, 10, 9, 0)).
 		end(new DateTime(2013, 12, 10, 12, 0)).
 		period(Period.ONE_MINUTE).
 		build();
-	/** Test Query for ticks - can be used as convient means of constructing {@link Query} or {@link Subscription} */
+	/** Test Query for ticks - can be used as convenient means of constructing {@link Query} or {@link Subscription} */
 	public static final Query DEFAULT_TICK_QUERY = QueryBuilderImpl.create().
 		symbol("ESZ13"). 
 		start(new DateTime(2013, 12, 10, 9, 0)).

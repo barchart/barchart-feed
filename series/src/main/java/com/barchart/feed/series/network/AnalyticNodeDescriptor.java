@@ -76,6 +76,14 @@ public class AnalyticNodeDescriptor implements AnalyticDescriptor {
     }
     
     /**
+     * Sets the network name of this descriptor.
+     * @param  the network name of this descriptor.
+     */
+    public void setNetworkName(String name) {
+        this.networkName = name;
+    }
+    
+    /**
      * Returns the String array containing the time frame
      * names.
      * 

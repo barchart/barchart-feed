@@ -1,10 +1,14 @@
 package com.barchart.feed.api.series.network;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import rx.Observer;
 import rx.subscriptions.Subscriptions;
 
 import com.barchart.feed.api.series.Span;
@@ -18,6 +22,9 @@ import com.barchart.feed.api.series.DataSeries;
  * @author David Ray
  */
 public abstract class Node<S extends Subscription> implements Runnable {
+    /** Set of Observers to be notified upon finished processing */
+    protected Set<Observer<NetworkNotification>> observers = Collections.synchronizedSet(new HashSet<Observer<NetworkNotification>>());
+    
 	/** List of {@code Node}s which are updated when this {@code Node} has finished processing. */
 	protected ConcurrentLinkedQueue<Node<S>> childNodes;
 	
@@ -69,6 +76,16 @@ public abstract class Node<S extends Subscription> implements Runnable {
         }catch(Exception e) { 
             e.printStackTrace();
         }
+	}
+	
+	/**
+	 * Returns a flag indicating whether this {@code Node} 
+	 * is currently running or not.
+	 * 
+	 * @return     true if so, false if not.
+	 */
+	public boolean isRunning() {
+	    return isRunning;
 	}
 	
 	/**
@@ -191,8 +208,60 @@ public abstract class Node<S extends Subscription> implements Runnable {
 	 */
 	protected Object getLock() {
 		return waitLock;
-	}   
+	}
 	
+	/**
+     * Adds an {@link Observer} to be notified of ongoing updates.
+     * @param obs      the observer to be notified.
+     */
+    public void addObserver(Observer<NetworkNotification> obs) {
+        if(obs == null) {
+            throw new IllegalArgumentException("Attempt to add a null observer.");
+        }
+        observers.add(obs);
+        
+        for(Node<S> n : parentNodes) {
+            n.addObserver(obs);
+        }
+    }
+    
+    /**
+     * Removes the specified Observer from notifications.
+     * @param obs
+     */
+    public void removeObserver(Observer<NetworkNotification> obs) {
+        if(obs == null) {
+            throw new IllegalArgumentException("Attempt to add a null observer.");
+        }
+        observers.remove(obs);
+        
+        for(Node<S> n : parentNodes) {
+            n.removeObserver(obs);
+        }
+        
+        if(observers.isEmpty()) {
+            shutDown();
+        }
+    }
+    
+    /**
+     * Clears out all Observer references.
+     */
+    public void removeAllObservers() {
+        observers.clear();
+    }
+    
+    /**
+     * Returns a flag indicating whether the specified {@link Observer} is
+     * registered to receive notifications from this {@code AnalyticNode}
+     * 
+     * @param obs      the {@link Observer} who's registration is being tested.
+     * @return         true if so, false if not.
+     */
+    public boolean hasObserver(Observer<NetworkNotification> obs) {
+        return observers.contains(obs);
+    }
+    
 	
 	///////////////////////////////////////////////////
 	//    ABSTRACT METHODS TO BE IMPLEMENTED BELOW   //
@@ -296,6 +365,8 @@ public abstract class Node<S extends Subscription> implements Runnable {
 				}
 			}
 		}
+		
+		System.out.println(this + " shutting down...");
 	}
 
 }

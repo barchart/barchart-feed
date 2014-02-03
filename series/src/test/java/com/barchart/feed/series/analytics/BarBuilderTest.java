@@ -23,7 +23,8 @@ import com.barchart.feed.series.network.TestHarness;
 import com.barchart.util.value.ValueFactoryImpl;
 
 public class BarBuilderTest {
-
+    private static final ValueFactoryImpl FACTORY = new ValueFactoryImpl();
+    
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Test
 	public void testMinuteTo5Minute() {
@@ -46,8 +47,8 @@ public class BarBuilderTest {
 		
 		List<BarImpl> list = getBars();
         SpanImpl span = new SpanImpl(new Period(PeriodType.MINUTE, 5),
-        	ValueFactoryImpl.factory.newTime(new DateTime(2013, 12, 10, 12, 0, 0).getMillis()),
-        		ValueFactoryImpl.factory.newTime(new DateTime(2013, 12, 10, 12, 30, 0).getMillis()));
+        	FACTORY.newTime(new DateTime(2013, 12, 10, 12, 0, 0).getMillis()),
+        		FACTORY.newTime(new DateTime(2013, 12, 10, 12, 30, 0).getMillis()));
         
         for(int i = 0;i < list.size();i++) {
         	inputSeries.add(list.get(i));
@@ -96,8 +97,8 @@ public class BarBuilderTest {
 		
 		List<BarImpl> list = getBars3();
         SpanImpl span = new SpanImpl(new Period(PeriodType.SECOND, 1),
-        	ValueFactoryImpl.factory.newTime(new DateTime(2013, 12, 10, 12, 0, 0).getMillis()),
-        		ValueFactoryImpl.factory.newTime(new DateTime(2013, 12, 10, 12, 0, 0).getMillis()));
+        	FACTORY.newTime(new DateTime(2013, 12, 10, 12, 0, 0).getMillis()),
+        		FACTORY.newTime(new DateTime(2013, 12, 10, 12, 0, 0).getMillis()));
         
         for(int i = 0;i < list.size();i++) {
         	inputSeries.add(list.get(i));
@@ -144,8 +145,8 @@ public class BarBuilderTest {
 		List<BarImpl> list = getBars5();
 		System.out.println("got " + list.size() + " bars");
         SpanImpl span = new SpanImpl(new Period(PeriodType.SECOND, 1),
-        	ValueFactoryImpl.factory.newTime(new DateTime(2013, 12, 10, 0, 0, 0).getMillis()),
-        		ValueFactoryImpl.factory.newTime(new DateTime(2013, 12, 10, 0, 0, 0).getMillis()));
+        	FACTORY.newTime(new DateTime(2013, 12, 10, 0, 0, 0).getMillis()),
+        		FACTORY.newTime(new DateTime(2013, 12, 10, 0, 0, 0).getMillis()));
         
         for(int i = 0;i < list.size();i++) {
         	inputSeries.add(list.get(i));
@@ -183,12 +184,12 @@ public class BarBuilderTest {
 		List<BarImpl> l = new ArrayList<BarImpl>();
 		for(int i = 0;i < 30;i++, min++) {
 			BarImpl db = new BarImpl(new DateTime(2013, 12, 10, 12, min, 0), Period.ONE_MINUTE, 
-				ValueFactoryImpl.factory.newPrice(5),
-				ValueFactoryImpl.factory.newPrice(5 + min),
-				ValueFactoryImpl.factory.newPrice(5),
-				ValueFactoryImpl.factory.newPrice(5),
-				ValueFactoryImpl.factory.newSize(5, 0),
-				ValueFactoryImpl.factory.newSize(5, 0));
+				FACTORY.newPrice(5),
+				FACTORY.newPrice(5 + min),
+				FACTORY.newPrice(5),
+				FACTORY.newPrice(5),
+				FACTORY.newSize(5, 0),
+				FACTORY.newSize(5, 0));
 			l.add(db);
 		}
 		return l;
@@ -200,12 +201,12 @@ public class BarBuilderTest {
 		List<BarImpl> l = new ArrayList<BarImpl>();
 		for(int i = 0;i < 30;i++, min++) {
 			BarImpl db = new BarImpl(time = time.plusMinutes(1), Period.ONE_MINUTE, 
-				ValueFactoryImpl.factory.newPrice(5),
-				ValueFactoryImpl.factory.newPrice(5 + min + i),
-				ValueFactoryImpl.factory.newPrice(5),
-				ValueFactoryImpl.factory.newPrice(5),
-				ValueFactoryImpl.factory.newSize(5, 0),
-				ValueFactoryImpl.factory.newSize(5, 0));
+				FACTORY.newPrice(5),
+				FACTORY.newPrice(5 + min + i),
+				FACTORY.newPrice(5),
+				FACTORY.newPrice(5),
+				FACTORY.newSize(5, 0),
+				FACTORY.newSize(5, 0));
 			l.add(db);
 		}
 		return l;
@@ -216,12 +217,12 @@ public class BarBuilderTest {
 		List<BarImpl> l = new ArrayList<BarImpl>();
 		for(int i = 0;i < 360;i++) {
 			BarImpl db = new BarImpl(time = time.plusSeconds(1), new Period(PeriodType.SECOND, 1), 
-				ValueFactoryImpl.factory.newPrice(5),
-				ValueFactoryImpl.factory.newPrice(5 + i),
-				ValueFactoryImpl.factory.newPrice(5),
-				ValueFactoryImpl.factory.newPrice(5),
-				ValueFactoryImpl.factory.newSize(5, 0),
-				ValueFactoryImpl.factory.newSize(5, 0));
+				FACTORY.newPrice(5),
+				FACTORY.newPrice(5 + i),
+				FACTORY.newPrice(5),
+				FACTORY.newPrice(5),
+				FACTORY.newSize(5, 0),
+				FACTORY.newSize(5, 0));
 			l.add(db);
 		}
 		return l;
@@ -232,12 +233,12 @@ public class BarBuilderTest {
 		List<BarImpl> l = new ArrayList<BarImpl>();
 		for(int i = 0;i < 360;i++) {
 			BarImpl db = new BarImpl(time = time.plusSeconds(1), new Period(PeriodType.SECOND, 1), 
-				ValueFactoryImpl.factory.newPrice(5),
-				ValueFactoryImpl.factory.newPrice(5 + i),
-				ValueFactoryImpl.factory.newPrice(5),
-				ValueFactoryImpl.factory.newPrice(5),
-				ValueFactoryImpl.factory.newSize(5, 0),
-				ValueFactoryImpl.factory.newSize(5, 0));
+				FACTORY.newPrice(5),
+				FACTORY.newPrice(5 + i),
+				FACTORY.newPrice(5),
+				FACTORY.newPrice(5),
+				FACTORY.newSize(5, 0),
+				FACTORY.newSize(5, 0));
 			l.add(db);
 		}
 		return l;
@@ -250,12 +251,12 @@ public class BarBuilderTest {
 		List<BarImpl> l = new ArrayList<BarImpl>();
 		for(int i = 0;i < 32400;i++) {
 			BarImpl db = new BarImpl(time = time.plusSeconds(1), new Period(PeriodType.SECOND, 1), 
-				ValueFactoryImpl.factory.newPrice(5),
-				ValueFactoryImpl.factory.newPrice(5 + i),
-				ValueFactoryImpl.factory.newPrice(5),
-				ValueFactoryImpl.factory.newPrice(5),
-				ValueFactoryImpl.factory.newSize(5, 0),
-				ValueFactoryImpl.factory.newSize(5, 0));
+				FACTORY.newPrice(5),
+				FACTORY.newPrice(5 + i),
+				FACTORY.newPrice(5),
+				FACTORY.newPrice(5),
+				FACTORY.newSize(5, 0),
+				FACTORY.newSize(5, 0));
 			l.add(db);
 		}
 		return l;
@@ -266,12 +267,12 @@ public class BarBuilderTest {
 		List<BarImpl> l = new ArrayList<BarImpl>();
 		for(int i = 0;i < 32400;i++) {
 			BarImpl db = new BarImpl(time = time.plusSeconds(1), new Period(PeriodType.SECOND, 1), 
-				ValueFactoryImpl.factory.newPrice(5),
-				ValueFactoryImpl.factory.newPrice(5 + i),
-				ValueFactoryImpl.factory.newPrice(5),
-				ValueFactoryImpl.factory.newPrice(5),
-				ValueFactoryImpl.factory.newSize(5, 0),
-				ValueFactoryImpl.factory.newSize(5, 0));
+				FACTORY.newPrice(5),
+				FACTORY.newPrice(5 + i),
+				FACTORY.newPrice(5),
+				FACTORY.newPrice(5),
+				FACTORY.newSize(5, 0),
+				FACTORY.newSize(5, 0));
 			l.add(db);
 		}
 		return l;

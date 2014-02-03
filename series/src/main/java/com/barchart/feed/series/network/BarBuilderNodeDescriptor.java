@@ -40,6 +40,24 @@ public class BarBuilderNodeDescriptor implements BarBuilderDescriptor {
      */
     public BarBuilderNodeDescriptor() {}
     
+    /**
+     * Returns the network name of this descriptor.
+     * @return  the network name of this descriptor.
+     */
+    public String getNetworkName() {
+        throw new UnsupportedOperationException(
+            "Get/Set network name not supported by BarBuilderNodeDescriptor");
+    }
+    
+    /**
+     * Sets the network name of this descriptor.
+     * @param  the network name of this descriptor.
+     */
+    public void setNetworkName(String name) {
+        throw new UnsupportedOperationException(
+            "Get/Set network name not supported by BarBuilderNodeDescriptor");
+    }
+    
     private static void loadFromFile(String path) {
         loadFromStream(BarBuilderNodeDescriptor.class.getResourceAsStream(path));
     }

@@ -12,18 +12,6 @@ import java.util.List;
 public interface NetworkDescriptor extends NodeDescriptor {
 
     /**
-     * Returns the network name of this descriptor.
-     * @return  the network name of this descriptor.
-     */
-    public String getNetworkName();
-
-    /**
-     * Sets the network name of this descriptor.
-     * @param  the network name of this descriptor.
-     */
-    public void setNetworkName(String name);
-
-    /**
      * Returns a list of {@link NodeDescriptor}s representing
      * nodes in the network this {@code NetworkDescriptor} describes.
      * 
@@ -44,11 +32,11 @@ public interface NetworkDescriptor extends NodeDescriptor {
      * listed as input for subsequent nodes *<em>WITHIN THEIR NETWORK</em>*, 
      * (i.e. they are at the bottom of their respective network), and therefore 
      * represent the major nodes one would subscribe to in order to fully 
-     * instantiate this entire network.
+     * instantiate this entire network, and receive all output data available.
      * 
      * @return	a list of nodes required to instantiate the whole network if subscribed to.
      * @throws	IllegalStateException	if this network has no configured or loaded nodes.
      */
-    public <T extends NodeDescriptor> List<T> getMainPublishers();
+    public <T extends NodeDescriptor> List<T> getPublishers();
 
 }

@@ -24,6 +24,7 @@ import com.barchart.util.value.ValueFactoryImpl;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Size;
 import com.barchart.util.value.api.Time;
+import com.barchart.util.value.api.ValueFactory;
 
 
 /**
@@ -56,7 +57,8 @@ public class Distributor extends Node<SeriesSubscription> implements Assembler {
 	private Object lock = new Object();
 	/** Queue to synchronize updated time {@link Span}s. */
 	private ConcurrentLinkedQueue<Span> dataQueue;
-	
+	/** Factory for creating value-api objects */
+	private ValueFactory valueFactory;
 	
 	/**
 	 * Constructs a new {@code Distributor}
@@ -73,6 +75,7 @@ public class Distributor extends Node<SeriesSubscription> implements Assembler {
 		this.outputSubscriptions = new ArrayList<SeriesSubscription>();
 		this.outputSubscriptions.add(subscription);
 		this.dataQueue = new ConcurrentLinkedQueue<Span>();
+		this.valueFactory = new ValueFactoryImpl();
 	}
 	
 	/**
@@ -87,15 +90,15 @@ public class Distributor extends Node<SeriesSubscription> implements Assembler {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public void onNextMarket(Market m) {
-		System.out.println("onNextMarket: " + m.instrument().symbol() + ", " + m.trade().instrument().symbol() + ", " + m.trade().price().asDouble());
-		BarImpl bar = null;
-		synchronized(lock) {
-		    DataSeriesImpl<BarImpl> series = (DataSeriesImpl)getOutputTimeSeries(subscription);
-		    bar = new BarImpl(m.trade().time(), period, null, null, null, m.trade().price(), m.trade().size(), null);
-		    series.insertData(bar);
-		    
-		    setModifiedSpan(new SpanImpl(period, bar.getTime(), bar.getTime()), outputSubscriptions);
-		}
+//		System.out.println("onNextMarket: " + m.instrument().symbol() + ", " + m.trade().instrument().symbol() + ", " + m.trade().price().asDouble());
+//		BarImpl bar = null;
+//		synchronized(lock) {
+//		    DataSeriesImpl<BarImpl> series = (DataSeriesImpl)getOutputTimeSeries(subscription);
+//		    bar = new BarImpl(m.trade().time(), period, m.trade().price(), m.trade().price(), m.trade().price(), m.trade().price(), m.trade().size(), null);
+//		    series.add(bar);
+//		    
+//		    setModifiedSpan(new SpanImpl(period, bar.getTime(), bar.getTime()), outputSubscriptions);
+//		}
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -138,13 +141,13 @@ public class Distributor extends Node<SeriesSubscription> implements Assembler {
 			while(last.getMillis() >= date.getMillis())
 				date = date.plusMillis(1);
 		}
-		Time time = ValueFactoryImpl.factory.newTime(date.getMillis());
+		Time time = valueFactory.newTime(date.getMillis());
 		last = new DateTime(date.getMillis());
 		
-		Price value = ValueFactoryImpl.factory.newPrice(Double.parseDouble(array[3]));
-		Size volume = ValueFactoryImpl.factory.newSize(Integer.parseInt(array[4]), 0);
+		Price value = valueFactory.newPrice(Double.parseDouble(array[3]));
+		Size volume = valueFactory.newSize(Integer.parseInt(array[4]), 0);
 		
-		retVal = new BarImpl(time, this.period, null, null, null, value, volume, null);
+		retVal = new BarImpl(time, this.period, value, value, value, value, volume, null);
 		
 		return retVal;
 	}
@@ -159,12 +162,12 @@ public class Distributor extends Node<SeriesSubscription> implements Assembler {
 		}
 		last = new DateTime(date.getMillis());
 		
-		Time time = ValueFactoryImpl.factory.newTime(date.getMillis());
-		Price open = ValueFactoryImpl.factory.newPrice(Double.parseDouble(array[2]));
-		Price high = ValueFactoryImpl.factory.newPrice(Double.parseDouble(array[3]));
-		Price low = ValueFactoryImpl.factory.newPrice(Double.parseDouble(array[4]));	
-		Price close = ValueFactoryImpl.factory.newPrice(Double.parseDouble(array[5]));
-		Size volume = ValueFactoryImpl.factory.newSize(Integer.parseInt(array[6]), 0);
+		Time time = valueFactory.newTime(date.getMillis());
+		Price open = valueFactory.newPrice(Double.parseDouble(array[2]));
+		Price high = valueFactory.newPrice(Double.parseDouble(array[3]));
+		Price low = valueFactory.newPrice(Double.parseDouble(array[4]));	
+		Price close = valueFactory.newPrice(Double.parseDouble(array[5]));
+		Size volume = valueFactory.newSize(Integer.parseInt(array[6]), 0);
 		
 		retVal = new BarImpl(time, this.period, open, high, low, close, volume, null);
 		

@@ -36,7 +36,7 @@ public class NetworkSchemaTest {
     }
     
     @Test
-    public void testGetMainPublishers() {
+    public void testGetPublishers() {
     	NetworkSchema.setSchemaFilePath("testNetworks.txt");
     	NetworkSchema.reloadDefinitions();
     	
@@ -46,7 +46,7 @@ public class NetworkSchemaTest {
     	assertEquals("PivotPoint", schema.getNetworkName());
     	assertEquals(8, schema.getNodeDescriptors().size());
     	
-    	List<AnalyticNodeDescriptor> publishers = schema.getMainPublishers();
+    	List<AnalyticNodeDescriptor> publishers = schema.getPublishers();
     	assertTrue(!publishers.isEmpty());
     	assertEquals(7, publishers.size());
     	for(AnalyticNodeDescriptor and : publishers) {

@@ -3,21 +3,22 @@ package com.barchart.feed.series;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 
+import com.barchart.feed.api.series.DataPoint;
 import com.barchart.feed.api.series.Period;
 import com.barchart.feed.api.series.Span;
-import com.barchart.feed.api.series.DataPoint;
 import com.barchart.util.value.ValueFactoryImpl;
 import com.barchart.util.value.api.Time;
+import com.barchart.util.value.api.ValueFactory;
 
 public class SpanImpl extends DataPointImpl implements Span {
 	private Time nextTime;
 	private DateTime nextDate;
-	
+	private static ValueFactory valueFactory = new ValueFactoryImpl();
 	public static final SpanImpl INITIAL = new SpanImpl(
             new SpanImpl(
                     Period.DAY, 
-                    ValueFactoryImpl.factory.newTime(new DateTime(1980, 1, 1, 0, 0, 0).getMillis()),
-                    ValueFactoryImpl.factory.newTime(new DateTime(1980, 1, 1, 0, 0, 0).getMillis())));
+                    valueFactory.newTime(new DateTime(1980, 1, 1, 0, 0, 0).getMillis()),
+                    valueFactory.newTime(new DateTime(1980, 1, 1, 0, 0, 0).getMillis())));
 	
 	public SpanImpl(Period period, Time t, Time next) {
 		super(period, t);
@@ -26,16 +27,16 @@ public class SpanImpl extends DataPointImpl implements Span {
 	}
 	
 	public SpanImpl(SpanImpl other) {
-		super(new Period(other.period.getPeriodType(), other.period.size()), ValueFactoryImpl.factory.newTime(other.date.getMillis()));
+		super(new Period(other.period.getPeriodType(), other.period.size()), valueFactory.newTime(other.date.getMillis()));
 		this.nextDate = new DateTime(other.nextDate.getMillis());
-		this.nextTime = ValueFactoryImpl.factory.newTime(nextDate.getMillis());
+		this.nextTime = valueFactory.newTime(nextDate.getMillis());
 	}
 	
 	public void setSpan(SpanImpl other) {
 	    this.period = new Period(other.period.getPeriodType(), other.period.size());
-	    this.time = ValueFactoryImpl.factory.newTime(other.time.millisecond());
+	    this.time = valueFactory.newTime(other.time.millisecond());
 	    this.date = new DateTime(time.millisecond());
-	    this.nextTime = ValueFactoryImpl.factory.newTime(other.nextTime.millisecond());
+	    this.nextTime = valueFactory.newTime(other.nextTime.millisecond());
 	    this.nextDate = new DateTime(other.nextDate.getMillis());
 	}
 
@@ -47,7 +48,7 @@ public class SpanImpl extends DataPointImpl implements Span {
 	
 	public void setTime(Time t) {
 		this.time = t;
-		this.date = new DateTime(time.millisecond(), DateTimeZone.forID(time.zone()));
+		this.date = new DateTime(time.millisecond(), DateTimeZone.forID(time.zone().toString()));
 	}
 	
 	@Override
@@ -57,12 +58,12 @@ public class SpanImpl extends DataPointImpl implements Span {
 	
 	public void setNextTime(Time t) {
 		this.nextTime = t;
-		this.nextDate = new DateTime(nextTime.millisecond(), DateTimeZone.forID(nextTime.zone()));
+		this.nextDate = new DateTime(nextTime.millisecond(), DateTimeZone.forID(nextTime.zone().toString()));
 	}
 	
 	public void setNextDate(DateTime dt) {
 		this.nextDate = dt;
-		this.nextTime = ValueFactoryImpl.factory.newTime(dt.getMillis(), dt.getZone().getID());
+		this.nextTime = valueFactory.newTime(dt.getMillis(), dt.getZone().getID());
 	}
 
 	@Override

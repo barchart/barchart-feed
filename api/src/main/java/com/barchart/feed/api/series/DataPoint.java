@@ -3,8 +3,7 @@ package com.barchart.feed.api.series;
 import com.barchart.util.value.api.Time;
 
 public interface DataPoint {
-
-	/**
+    /**
 	 * Returns the time index of this {@code DataPoint}
 	 * @return	the time index of this {@code DataPoint}
 	 */

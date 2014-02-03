@@ -112,8 +112,8 @@ public class BarchartFeedService implements SeriesFeedService {
 		SeriesSubscription subscription = (SeriesSubscription)assembler.getSubscription();
 		symbolObservers.remove(subscription.getInstrument().id());
 		//Excluding as in: consumerAgent.exclude(assember.getSubscription()) has to be carefully considered 
-		//				   due to node sharing (we don't want to turn off the faucett if there are other down
-		//				   stream nodes needing an instrument's raw data. TO BE DONE! Maybe maintain a CountDownLatch ?
+		//				   due to node sharing (we don't want to turn off the faucet if there are other down-stream 
+		//                 nodes needing an instrument's raw data. TO BE DONE! Maybe maintain a CountDownLatch ?
 	}
 	
 	private void startAndMonitorConnection() {

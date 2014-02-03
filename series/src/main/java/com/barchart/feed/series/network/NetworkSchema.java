@@ -18,11 +18,12 @@ public class NetworkSchema implements NetworkDescriptor {
     /** the default filename of the file storing the local schema definitions */
     private static final String DEFAULT_SCHEMA_FILENAME = "networks.txt";
     
-//    private static final String IDX_NETWORK_NAME = 0;
-//    private static final String IDX_NODE_NAME = 0;
-//    private static final String IDX_NETWORK_NAME = 0;
-//    private static final String IDX_NETWORK_NAME = 0;
-//    private static final String IDX_NETWORK_NAME = 0;
+    private static final int IDX_NETWORK_NAME = 0;
+    private static final int IDX_NODE_NAME = 1;
+    private static final int IDX_ANALYTIC_CLASS = 2;
+    private static final int IDX_CONSTRUCTOR_ARGS = 3;
+    private static final int IDX_OUTPUT_KEY = 4;
+    private static final int IDX_INPUT_CONFIG = 5;
     
     /** Class-Wide storage of all unreified networks */
     private static Map<String,List<String[]>> networkDefinitions = new HashMap<String, List<String[]>>();
@@ -93,7 +94,7 @@ public class NetworkSchema implements NetworkDescriptor {
      */
     @SuppressWarnings("unchecked")
     @Override
-    public List<AnalyticNodeDescriptor> getMainPublishers() {
+    public List<AnalyticNodeDescriptor> getPublishers() {
     	if(nodes == null || nodes.size() < 1) {
     		throw new IllegalStateException("Network: " + name + " was initialized with no nodes!");
     	}
@@ -200,8 +201,8 @@ public class NetworkSchema implements NetworkDescriptor {
     
     @SuppressWarnings("unchecked")
     public static AnalyticNodeDescriptor loadDescriptor(String[] entry) {
-        String[] argParts = entry[1].split(",");
-        AnalyticNodeDescriptor nodeDescriptor = new AnalyticNodeDescriptor(entry[0], argParts[0]);
+        String[] argParts = entry[IDX_NODE_NAME].split(",");
+        AnalyticNodeDescriptor nodeDescriptor = new AnalyticNodeDescriptor(entry[IDX_NETWORK_NAME], argParts[0]);
         if(argParts.length > 1) {
             nodeDescriptor.setTimeFrames(new String[argParts.length - 1]);
             String[] timeFrames = nodeDescriptor.getTimeFrames();
@@ -209,21 +210,25 @@ public class NetworkSchema implements NetworkDescriptor {
                 timeFrames[i - 1] = argParts[i];
             }
         }
+        
         try {
-            nodeDescriptor.setAnalyticClass((Class<? extends Analytic>)Class.forName(entry[2]));
+            nodeDescriptor.setAnalyticClass((Class<? extends Analytic>)Class.forName(entry[IDX_ANALYTIC_CLASS]));
         } catch(ClassNotFoundException e) { 
             e.printStackTrace(); 
         }
-        if(entry[3].length() > 0) {
-            argParts = entry[3].split(",");
+        
+        if(entry[IDX_CONSTRUCTOR_ARGS].length() > 0) {
+            argParts = entry[IDX_CONSTRUCTOR_ARGS].split(",");
             int[] constructorArgs = new int[argParts.length];
             for(int i = 0;i < argParts.length;i++) {
                 constructorArgs[i] = Integer.parseInt(argParts[i]);
             }
             nodeDescriptor.setConstructorArgs(constructorArgs);
         }
-        nodeDescriptor.setOutputKey(entry[4]);
-        for (int i = 5;i < entry.length;i++) {
+        
+        nodeDescriptor.setOutputKey(entry[IDX_OUTPUT_KEY]);
+        
+        for (int i = IDX_INPUT_CONFIG;i < entry.length;i++) {
             argParts = entry[i].split(",");
             nodeDescriptor.mapInputDescriptor(argParts[0], NetworkSchema.lookup(argParts[1], argParts.length - 2));
             if (argParts.length > 2) {
@@ -242,10 +247,10 @@ public class NetworkSchema implements NetworkDescriptor {
         for(String networkName : networkDefinitions.keySet()) {
             for(String[] entry : networkDefinitions.get(networkName)) {
                 List<AnalyticNodeDescriptor> networkDescriptors = null;
-                if((networkDescriptors = descriptorsByNetwork.get(entry[0])) == null) {
-                    descriptorsByNetwork.put(entry[0], networkDescriptors = new ArrayList<AnalyticNodeDescriptor>());
+                if((networkDescriptors = descriptorsByNetwork.get(entry[IDX_NETWORK_NAME])) == null) {
+                    descriptorsByNetwork.put(entry[IDX_NETWORK_NAME], networkDescriptors = new ArrayList<AnalyticNodeDescriptor>());
                 }
-                String[] argParts = entry[1].split(",");
+                String[] argParts = entry[IDX_NODE_NAME].split(",");
                 AnalyticNodeDescriptor nodeDescriptor = loadDescriptor(entry);
                 networkDescriptors.add(nodeDescriptor);
                 String key = nodeDescriptor.getSpecifier();
@@ -289,9 +294,9 @@ public class NetworkSchema implements NetworkDescriptor {
                 for(int i = 1;i < lineParts.length;i++) {
                     argParts[i - 1] = lineParts[i];
                 }
-                if(!lineParts[0].equals(lastNetworkName)) {
-                    networkDefinitions.put(lineParts[0], new ArrayList<String[]>());
-                    lastNetworkName = lineParts[0];
+                if(!lineParts[IDX_NETWORK_NAME].equals(lastNetworkName)) {
+                    networkDefinitions.put(lineParts[IDX_NETWORK_NAME], new ArrayList<String[]>());
+                    lastNetworkName = lineParts[IDX_NETWORK_NAME];
                 }
                 networkDefinitions.get(lastNetworkName).add(lineParts);
             }
