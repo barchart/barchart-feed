@@ -1,5 +1,6 @@
 package com.barchart.feed.series.network;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -9,10 +10,12 @@ import com.barchart.feed.api.model.meta.Exchange;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.api.model.meta.id.InstrumentID;
 import com.barchart.feed.api.model.meta.id.VendorID;
-import com.barchart.feed.api.series.Span;
 import com.barchart.feed.api.series.DataPoint;
 import com.barchart.feed.api.series.DataSeries;
+import com.barchart.feed.api.series.Span;
 import com.barchart.feed.api.series.network.Analytic;
+import com.barchart.feed.api.series.network.Assembler;
+import com.barchart.feed.api.series.service.SeriesFeedService;
 import com.barchart.util.value.api.Fraction;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Schedule;
@@ -253,5 +256,36 @@ public class TestHarness {
                 return null;
             }
 		};
+    }
+    
+    public static BarchartSeriesProvider getTestSeriesProvider(SeriesSubscription ss) {
+        BarchartSeriesProvider bsp = new BarchartSeriesProvider(getUnitTestFeedService());
+        bsp.getAssemblerMapForTesting().put(ss, new ArrayList<Distributor>());
+        bsp.getAssemblerMapForTesting().get(ss).add(new Distributor(ss));
+        return bsp;
+    }
+    
+    public static SeriesFeedService getUnitTestFeedService() {
+        return new SeriesFeedService() {
+
+            @Override
+            public void registerAssembler(Assembler assembler) {
+                // TODO Auto-generated method stub
+                
+            }
+
+            @Override
+            public void unregisterAssembler(Assembler assembler) {
+                // TODO Auto-generated method stub
+                
+            }
+
+            @Override
+            public Instrument lookupInstrument(String symbol) {
+                // TODO Auto-generated method stub
+                return null;
+            }
+            
+        };
     }
 }

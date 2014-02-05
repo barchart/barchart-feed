@@ -19,6 +19,8 @@ import com.barchart.util.value.ValueFactoryImpl;
 import com.barchart.util.value.api.Time;
 
 public class AnalyticNodeTest {
+    private static final ValueFactoryImpl FACTORY = new ValueFactoryImpl();
+    
     HashMap<String, SpanImpl> m = new HashMap<String, SpanImpl>();
     
     @Test
@@ -42,8 +44,8 @@ public class AnalyticNodeTest {
         testNode.addInputKeyMapping("key2", sub2);
         assertFalse(testNode.hasAllAncestorUpdates());  //No updates yet 
         
-        Time t = ValueFactoryImpl.factory.newTime(new DateTime(2013, 12, 11, 12, 0, 0).getMillis());
-        Time t2 = ValueFactoryImpl.factory.newTime(new DateTime(2013, 12, 11, 13, 0, 0).getMillis());
+        Time t = FACTORY.newTime(new DateTime(2013, 12, 11, 12, 0, 0).getMillis());
+        Time t2 = FACTORY.newTime(new DateTime(2013, 12, 11, 13, 0, 0).getMillis());
         SpanImpl newSpan = new SpanImpl(Period.ONE_HOUR, t, t2);
         testNode.updateModifiedSpan(newSpan, sub1);
         assertFalse(testNode.hasAllAncestorUpdates());  //Only one has been updated... 
@@ -55,7 +57,7 @@ public class AnalyticNodeTest {
         
         assertFalse(testNode.hasAllAncestorUpdates());  //No new updates since above reset
         
-        newSpan.setNextTime(ValueFactoryImpl.factory.newTime(new DateTime(2013, 12, 11, 22, 0, 0).getMillis()));
+        newSpan.setNextTime(FACTORY.newTime(new DateTime(2013, 12, 11, 22, 0, 0).getMillis()));
         testNode.updateModifiedSpan(newSpan, sub1);
         testNode.updateModifiedSpan(newSpan, sub2);
         assertTrue(testNode.hasAllAncestorUpdates());   //New date extends processing time of last

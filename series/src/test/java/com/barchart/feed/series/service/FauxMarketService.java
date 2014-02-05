@@ -2,13 +2,16 @@ package com.barchart.feed.series.service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
+import java.util.TimeZone;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -141,7 +144,7 @@ public class FauxMarketService implements MarketService {
                             
                             callback.onNext(m);
                             
-                            Thread.sleep(2000);
+                            Thread.sleep(20);
                         }
                     }
                 }catch(Exception e) {
@@ -332,7 +335,7 @@ public class FauxMarketService implements MarketService {
                 return new Time() {
 
                     @Override
-                    public String zone() {
+                    public TimeZone zone() {
                         // TODO Auto-generated method stub
                         return null;
                     }
@@ -352,6 +355,18 @@ public class FauxMarketService implements MarketService {
                     public boolean isNull() {
                         // TODO Auto-generated method stub
                         return false;
+                    }
+
+                    @Override
+                    public Date asDate() {
+                        // TODO Auto-generated method stub
+                        return null;
+                    }
+
+                    @Override
+                    public String format(DateFormat arg0) {
+                        // TODO Auto-generated method stub
+                        return null;
                     }
                 };
             }
@@ -394,8 +409,7 @@ public class FauxMarketService implements MarketService {
 
                     @Override
                     public Session session() {
-                        // TODO Auto-generated method stub
-                        return null;
+                       return null;
                     }
 
                     @Override

@@ -1,5 +1,6 @@
 package com.barchart.feed.series.network;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -61,9 +62,26 @@ public class BarchartSeriesProvider {
 	}
 	
 	/**
-	 *
-	 * @param query
-	 * @return
+	 * For testing only. Returns the subscription to distributor mapping.
+	 * 
+	 * @return For testing only. Returns the subscription to distributor mapping.
+	 */
+	Map<Subscription, List<Distributor>> getAssemblerMapForTesting() {
+	    return subscriberAssemblers;
+	}
+	
+	/**
+	 * Returns a {@link NetworkObservable} capable of delivering one or more
+	 * {@link DataSeries} objects containing the data required by the specified
+	 * {@link Query}. 
+	 * 
+	 * Calling {@link NetworkObservable#subscribe(Observer, String)} or {@link 
+	 * NetworkObservable#subscribeAll(Observer)} will start the processing and
+	 * production of data which clients will receive notification of via the 
+	 * submitted {@link Observer}'s {@link Observer#onNext(Object)} method.
+	 * 
+	 * @param      query       Query created using a {@link QueryBuilder}
+	 * @return     a suitable NetworkObserver
 	 */
 	public NetworkObservable fetch(final Query query) {
 		List<Instrument> instList = new ArrayList<Instrument>();
@@ -71,54 +89,56 @@ public class BarchartSeriesProvider {
 			instList.add(feedService.lookupInstrument(symbol));//Supports multiple symbols for spreads/expressions
 		}
 		
-//		SeriesSubscription subscription = (SeriesSubscription)query.toSubscription(inst);
-//		System.out.println("inst = " + inst.symbol());
-//		AnalyticNode node = lookupNode(subscription, subscription);
-//		DataSeries<?> series = node.getOutputTimeSeries(subscription);
-//		
-//		return (new NetworkObservable(new SeriesSubscriber(subscription, node), series) {
-//		    @SuppressWarnings("unchecked")
-//            public TimeSeries<?> getTimeSeries() { return (TimeSeries<TimePoint>)this.series; }
-//		});
-		
 		NodeDescriptor descriptor = lookupDescriptor(query);
 		Observable<?> observable = getObservable(instList, query, descriptor);
 		return (NetworkObservable)observable;
 	}
 	
-	public NetworkObservable getObservable(List<Instrument> instList, Query query, NodeDescriptor descriptor) {
+	/**
+	 * Returns a {@link NetworkObservable} capable of delivering one or more
+     * {@link DataSeries} objects containing the data required by the specified
+     * {@link Query}.
+     *  
+	 * @param instList     One or more {@link Instrument} objects. If more than one, it
+	 *                     is understood that the node type is a spread or expression, though
+	 *                     this functionality is unimplemented at this time.
+	 * @param query        the Query generated using the {@link QueryBuilder}
+	 * @param descriptor   the descriptor identifying the node.
+	 * @return     a suitable NetworkObserver
+	 */
+	NetworkObservable getObservable(List<Instrument> instList, Query query, NodeDescriptor descriptor) {
 	    NetworkObservable retVal = null;
 	    
 		SeriesSubscription subscription = (SeriesSubscription)query.toSubscription(instList.get(0));
-		List<Node<SeriesSubscription>> subscriptionNodes = new ArrayList<Node<SeriesSubscription>>();
+		List<Node<SeriesSubscription>> availableNodes = new ArrayList<Node<SeriesSubscription>>();
 		Map<String, DataSeries<? extends DataPoint>> map = new HashMap<String, DataSeries<? extends DataPoint>>();
 		
         switch(descriptor.getType()) {
             case IO: {
                 Node<SeriesSubscription> node = getOrCreateIONode(subscription, subscription);
-                subscriptionNodes.add(node);
-                map.put(subscription.toString(), ((AnalyticNode)node).getOutputTimeSeries(BarBuilder.OUTPUT_KEY));
-                retVal = new NetworkObservableImpl(new SeriesSubscribeFunc(subscription, subscriptionNodes), map);
+                availableNodes.add(node);
+                map.put(subscription.toString(), ((AnalyticNode)node).getOutputTimeSeries(subscription));
+                retVal = new NetworkObservableImpl(new SeriesSubscribeFunc(subscription, availableNodes), map);
                 break;
             }
             case ANALYTIC: {
                 AnalyticNode node = getOrCreateNode(subscription, subscription, (AnalyticNodeDescriptor)descriptor);
-                subscriptionNodes.add(node);
+                availableNodes.add(node);
                 map.put(query.getAnalyticSpecifier(), ((AnalyticNode)node).getOutputTimeSeries(subscription));
-                retVal = new NetworkObservableImpl(new SeriesSubscribeFunc(subscription, subscriptionNodes), map);
+                retVal = new NetworkObservableImpl(new SeriesSubscribeFunc(subscription, availableNodes), map);
                 break;
             }
             case NETWORK: {
                 NetworkDescriptor schema = (NetworkDescriptor)descriptor;
                 SeriesSubscription originalSubscription = subscription;
-                for(NodeDescriptor desc : schema.getMainPublishers()) {
+                for(NodeDescriptor desc : schema.getPublishers()) {
                 	subscription = new SeriesSubscription(subscription);
                 	subscription.setAnalyticSpecifier(desc.getSpecifier());
                 	Node<SeriesSubscription> newNode = getOrCreateNode(subscription, originalSubscription, (AnalyticNodeDescriptor)desc);
-                    subscriptionNodes.add(newNode);
+                    availableNodes.add(newNode);
                     map.put(desc.getSpecifier(), ((AnalyticNode)newNode).getOutputTimeSeries(subscription));
                 }
-                retVal = new NetworkObservableImpl(new SeriesSubscribeFunc(subscription, subscriptionNodes), map);
+                retVal = new NetworkObservableImpl(new SeriesSubscribeFunc(subscription, availableNodes), map);
                 break;
             }
             default: {
@@ -309,7 +329,7 @@ public class BarchartSeriesProvider {
 	 * @param a		the {@link Assembler} to add.
 	 */
 	@SuppressWarnings("unchecked")
-	private void addAssembler(SeriesSubscription s, Assembler a) {
+	void addAssembler(SeriesSubscription s, Assembler a) {
 		if(s == null) {
 			throw new IllegalArgumentException("Attempt to use a null subscription as key for Assembler storage.");
 		}else if(a == null) {
@@ -670,24 +690,36 @@ public class BarchartSeriesProvider {
 	 */
 	public class SeriesSubscribeFunc implements Observable.OnSubscribeFunc<NetworkNotification> {
 	    private SeriesSubscription subscription;
-	    private List<Node<SeriesSubscription>> subscribedNodes;
+	    private List<Node<SeriesSubscription>> availableNodes;
+	    private List<Node<SeriesSubscription>> subscribedNodes = new ArrayList<Node<SeriesSubscription>>();
 	    private NetworkObservable observable;
 	    
 	    public SeriesSubscribeFunc(SeriesSubscription subscription, List<Node<SeriesSubscription>> publishers) {
 	    	this.subscription = subscription;
-	    	this.subscribedNodes = publishers;
+	    	this.availableNodes = publishers;
 	    }
 	    
-	    @SuppressWarnings("unchecked")
-        @Override
-        public rx.Subscription onSubscribe(Observer<? super NetworkNotification> t1) {
-	    	subscribers.put(this.subscription, (Observer<NetworkNotification>)t1);
-	    	for(Node<SeriesSubscription> n : subscribedNodes) {
-	    	    for(Observer<NetworkNotification> o : observable.getObservers(((AnalyticNode)n).getName())) {
-	    	        ((AnalyticNode)n).addObserver(o);
+	    @Override
+        public rx.Subscription onSubscribe(Observer<? super NetworkNotification> t1) throws IllegalStateException {
+	        final Observer<NetworkNotification> actualObserver = getActualObserver(t1);
+	        
+	    	subscribers.put(this.subscription, actualObserver);
+	    	boolean foundSubscribableNode = false;
+	    	for(String specifier : observable.getSubscribedNodeNames(actualObserver)) {
+	    	    for(Node<SeriesSubscription> node : availableNodes) {
+	    	        if(node.getName().equals(specifier)) {
+	    	            node.addObserver(actualObserver);
+	    	            if(!subscribedNodes.contains(node)) {
+	    	                subscribedNodes.add(node);
+	    	            }
+	    	            node.startUp();
+	    	            foundSubscribableNode = true;
+	    	        }
 	    	    }
-	    	    
-	    		n.startUp();
+	    	}
+	    	
+	    	if(!foundSubscribableNode) {
+	    	    throw new IllegalStateException("Could not find matching nodes to subscribe to for any of the following specifiers: " + observable.getSubscribedNodeNames(actualObserver));
 	    	}
 	    	
 	    	List<Distributor> assemblers = subscriberAssemblers.get(subscription);
@@ -700,21 +732,36 @@ public class BarchartSeriesProvider {
 	            feedService.registerAssembler(d);
 	        }
 	       
-	        return new rx.subscriptions.CompositeSubscription() {
+	        return new rx.Subscription() {
 	        	@Override
 				public void unsubscribe() {
-					
+					for(Node<SeriesSubscription> node : subscribedNodes) {
+					    node.removeObserver(actualObserver);
+					}
 				}
-	        	
 	        };
         }
+	    
+	    @SuppressWarnings("unchecked")
+        private Observer<NetworkNotification> getActualObserver(Observer<? super NetworkNotification> obs) {
+	        Observer<NetworkNotification> actualObserver = null;
+	        try {
+	            Field f = obs.getClass().getDeclaredField("actual");
+	            f.setAccessible(true);
+	            actualObserver = (Observer<NetworkNotification>)f.get(obs);
+	            System.out.println("actual = " + actualObserver);
+	        }catch(Exception e) {
+	            
+	        }
+	        return actualObserver;
+	    }
 	    
 	    /**
 	     * Returns this {@code SeriesSubscriber}'s list of publisher nodes.
 	     * @return	this {@code SeriesSubscriber}'s list of publisher nodes.
 	     */
 	    List<Node<SeriesSubscription>> getNodes() {
-	    	return subscribedNodes;
+	    	return availableNodes;
 	    }
 	    
 	    /**

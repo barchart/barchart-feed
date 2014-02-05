@@ -3,10 +3,8 @@ package com.barchart.feed.series.network;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -37,9 +35,6 @@ public class AnalyticNode extends Node<SeriesSubscription> {
 		
 	/** Contains all currently input {@link SeriesSubscriptions}, to be tested on each process cycle to see if all required inputs have been received */
 	private Map<SeriesSubscription, SpanImpl> currentUpdates = Collections.synchronizedMap(new HashMap<SeriesSubscription, SpanImpl>());
-	
-	/** Set of Observers to be notified upon finished processing */
-	private Set<Observer<NetworkNotification>> observers = Collections.synchronizedSet(new HashSet<Observer<NetworkNotification>>());
 	
 	/** The currently updated {@link Span} for the current process cycle */
 	private volatile AtomicReference<SpanImpl> currentUpdateSpan = new AtomicReference<SpanImpl>();
@@ -84,7 +79,7 @@ public class AnalyticNode extends Node<SeriesSubscription> {
 		
 		synchronized(currentUpdates) {
 		    boolean wasNewForScript = false;
-		    if(wasNewForScript = currentUpdates.get(subscription) == null) {
+		    if(wasNewForScript = (currentUpdates.get(subscription) == null)) {
 		        currentUpdates.put(subscription, span);
 	        }
 		    
@@ -120,49 +115,10 @@ public class AnalyticNode extends Node<SeriesSubscription> {
 		Span span = analytic.process(currentProcessSpan);
 		NetworkNotificationImpl note = new NetworkNotificationImpl(analytic.getName(), span);
 		for(Observer<NetworkNotification> obs : observers) {
+		    System.out.println("ON NEXT CALLED");
 		    obs.onNext(note);
 		}
 		return span;
-	}
-	
-	/**
-	 * Adds an {@link Observer} to be notified of ongoing updates.
-	 * @param obs      the observer to be notified.
-	 */
-	public void addObserver(Observer<NetworkNotification> obs) {
-	    if(obs == null) {
-	        throw new IllegalArgumentException("Attempt to add a null observer.");
-	    }
-	    observers.add(obs);
-	}
-	
-	/**
-	 * Removes the specified Observer from notifications.
-	 * @param obs
-	 */
-	public void removeObserver(Observer<NetworkNotification> obs) {
-	    if(obs == null) {
-            throw new IllegalArgumentException("Attempt to add a null observer.");
-        }
-        observers.add(obs);
-	}
-	
-	/**
-	 * Clears out all Observer references.
-	 */
-	public void removeAllObservers() {
-	    observers.clear();
-	}
-	
-	/**
-	 * Returns a flag indicating whether the specified {@link Observer} is
-	 * registered to receive notifications from this {@code AnalyticNode}
-	 * 
-	 * @param obs      the {@link Observer} who's registration is being tested.
-	 * @return         true if so, false if not.
-	 */
-	public boolean hasObserver(Observer<NetworkNotification> obs) {
-	    return observers.contains(obs);
 	}
 	
 	/**

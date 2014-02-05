@@ -2,8 +2,8 @@ package com.barchart.feed.series;
 
 import org.joda.time.DateTime;
 
-import com.barchart.feed.api.series.Period;
 import com.barchart.feed.api.series.DataPoint;
+import com.barchart.feed.api.series.Period;
 import com.barchart.util.value.ValueFactoryImpl;
 import com.barchart.util.value.api.Time;
 
@@ -60,7 +60,7 @@ public abstract class DataPointImpl implements DataPoint {
 	 */
 	public void setDate(DateTime dt) {
 		this.date = dt;
-		this.time = ValueFactoryImpl.factory.newTime(date.getMillis());
+		this.time = new ValueFactoryImpl().newTime(date.getMillis());
 	}
 	
 	/**

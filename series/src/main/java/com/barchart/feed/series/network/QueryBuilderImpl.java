@@ -75,7 +75,7 @@ public class QueryBuilderImpl implements QueryBuilder {
 		    query.periods.add(Period.DAY);
 		}
 		
-		if(analyticSpecifier == null && nodeType == null) {
+		if(analyticSpecifier == null || nodeType == null) {
 		    nodeType = NodeType.IO;
 		    analyticSpecifier = query.analyticSpecifier = NodeType.IO.toString();
 		}else if(analyticSpecifier != null && nodeType == null) {

@@ -95,8 +95,8 @@ public class BarBuilder extends AnalyticBase {
 				workingTargetDate = subscription.getTradingWeek().getNextSessionDate(currentMergeBar.getDate(), outputPeriod);
 				currentMergeBar.setDate(workingTargetDate);
 				workingSpan = new SpanImpl(subscription.getTimeFrame(0).getPeriod(), inputSpan.getTime(), inputSpan.getNextTime());
-				this.workingSpan.setDate(currentMergeBar.getDate());
-				this.workingSpan.setNextDate(currentMergeBar.getDate());
+//				this.workingSpan.setDate(currentMergeBar.getDate());
+//				this.workingSpan.setNextDate(currentMergeBar.getDate());
 				
 				outputSeries.add(currentMergeBar);
 			}else{
@@ -111,7 +111,7 @@ public class BarBuilder extends AnalyticBase {
 					currentMergeBar = new BarImpl(currentIdxBar);
 					currentMergeBar.setDate(workingTargetDate);
 					this.workingSpan.setNextDate(currentMergeBar.getDate());
-					
+					System.out.println("IS AFTER: ADDING NEW BAR " + currentMergeBar + "   " + outputSeries.getPeriod());
 					outputSeries.add(currentMergeBar);
 				}else{
 					currentMergeBar.merge(currentIdxBar, false);

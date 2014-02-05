@@ -50,7 +50,7 @@ public abstract class NetworkObservable extends rx.Observable<NetworkNotificatio
 	 * @param o           the {@link Observer} being registered  
 	 * @param specifier   one of the keys/outputs the specified observer is interested in observing.
 	 */
-	public abstract void registerTo(Observer<NetworkNotification> o, String specifier);
+	public abstract void register(Observer<NetworkNotification> o, String specifier);
 	/**
 	 * Returns a flag indicating whether the {@link Observer} specified has been registered for
 	 * specific outputs.
@@ -62,8 +62,8 @@ public abstract class NetworkObservable extends rx.Observable<NetworkNotificatio
     /**
      * Subscribes to update notifications for the {@link DataSeries} 
      * specified by specifier. Using this method, a client may choose
-     * to subscribe to any {@link Node} in a given network regardless
-     * of whether that particular Node is one of the main outputs.
+     * to subscribe to any {@link Node} in a given network that is one
+     * of the configured publisher nodes of that network.
      * 
      * @param obs			the NetworkObserver receiving notifications.
      * @param specifier		the identifier for the Node whose DataSeries 
@@ -72,6 +72,19 @@ public abstract class NetworkObservable extends rx.Observable<NetworkNotificatio
      * 				from notifications.
      */
     public abstract Subscription subscribe(Observer<NetworkNotification> obs, String specifier);
+    /**
+     * Subscribes to update notifications for the {@link DataSeries} 
+     * specified by the set of specifiers specified. Using this method, a client may choose
+     * to subscribe to one or more {@link Node} in a given network that is one
+     * of the configured publisher nodes of that network.
+     * 
+     * @param obs           the NetworkObserver receiving notifications.
+     * @param specifiers    the set of unique identifiers for the Nodes whose DataSeries 
+     *                      have been updated, causing an event notification.
+     * @return      a {@link rx.Subscription} which can be used to unsubscribe
+     *              from notifications.
+     */
+    public abstract Subscription subscribe(Observer<NetworkNotification> obs, Set<String> specifiers);
     /**
      * Subscribes to update notifications for all {@link DataSeries} 
      * which are the known outputs of a given network or analytic.
@@ -90,7 +103,7 @@ public abstract class NetworkObservable extends rx.Observable<NetworkNotificatio
      * 
      * @return	
      */
-    public abstract CompositeSubscription subscribeAll(Observer<NetworkNotification> obs);
+    public abstract Subscription subscribeAll(Observer<NetworkNotification> obs);
     /**
      * Returns a boolean indicating whether this {@link Observable} is in a state
      * where it can allow "re-subscribing" or not. If this method returns true, 
@@ -112,7 +125,7 @@ public abstract class NetworkObservable extends rx.Observable<NetworkNotificatio
      * network or {@link Analytic}
      * @return	list of the output keys
      */
-    public abstract List<String> getMainPublisherSpecifiers();
+    public abstract List<String> getPublisherSpecifiers();
     /**
      * Returns the {@link DataSeries} associated with the specified key.
      * 
@@ -133,6 +146,6 @@ public abstract class NetworkObservable extends rx.Observable<NetworkNotificatio
      * 
      * @return	a list of main publisher DataSeries.
      */
-    public abstract <E extends DataPoint> Map<String, DataSeries<E>> getMainPublisherSeries();
+    public abstract <E extends DataPoint> Map<String, DataSeries<E>> getPublisherSeries();
 
 }

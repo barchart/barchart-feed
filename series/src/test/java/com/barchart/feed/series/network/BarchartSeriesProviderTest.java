@@ -37,28 +37,20 @@ public class BarchartSeriesProviderTest {
 		BarchartFeedService feed = new BarchartFeedService(marketService, new FauxHistoricalService(null));
 		BarchartSeriesProvider provider = new BarchartSeriesProvider(feed);
 		
-		//Observable Should be null here until I finish the node lookup and graph construction I'm currently working on.
-		//Fails due to this is where I'm working (Test Driven Baby!)
-		//Finished first part which is determining equality and "derivability" of Subscriptions (now writing tests for them)
-//		NetworkObservable observable = provider.fetch(FauxHistoricalService.DEFAULT_MINUTE_QUERY);
-//		DataSeries<DataPoint> series = observable.getTimeSeries();
-//		assertNotNull(series);
-		
-		
 		NetworkSchema.setSchemaFilePath("networks.txt");
 		Query query = QueryBuilderImpl.create().
 				symbol("ESZ13").
-				specifier("PivotPoint").
+				//specifier("PivotPoint").
 				start(new DateTime(2013, 12, 10, 12, 0)).
-				period(Period.ONE_MINUTE).
+				//period(Period.ONE_MINUTE).
 				period(new Period(PeriodType.MINUTE, 5)).build();
 		
 		NetworkObservable observable = provider.fetch(query);
 		
 		TestObserver<NetworkNotification> testObserver = new TestObserver<NetworkNotification>();
-		observable.subscribe(testObserver, "test");
+		observable.subscribe(testObserver, observable.getPublisherSpecifiers().get(0));
 		try {
-			NetworkNotification span = testObserver.sync(10000).results.get(0);
+			NetworkNotification span = testObserver.sync(1000000000).results.get(0);
 			assertNotNull(span); 
 		} catch (Exception e) {
 			e.printStackTrace();

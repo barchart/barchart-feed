@@ -9,6 +9,7 @@ import com.barchart.util.value.ValueFactoryImpl;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Size;
 import com.barchart.util.value.api.Time;
+import com.barchart.util.value.api.ValueFactory;
 
 
 /**
@@ -64,7 +65,7 @@ public class BarImpl extends DataPointImpl implements Bar {
 	public BarImpl(DateTime date, Period period, Price open, Price high, 
 		Price low, Price close, Size volume, Size openInterest) {
 		
-		super(period, ValueFactoryImpl.factory.newTime(date.getMillis(), date.getZone().getID()));
+		super(period, new ValueFactoryImpl().newTime(date.getMillis(), date.getZone().getID()));
 		
 		this.open = open;
 		this.high = high;
@@ -80,16 +81,19 @@ public class BarImpl extends DataPointImpl implements Bar {
 	 */
 	public BarImpl(BarImpl other) {
 		super(new Period(other.period.getPeriodType(), other.period.size()), 
-			ValueFactoryImpl.factory.newTime(other.date.getMillis(), other.date.getZone().getID()));
+		    new ValueFactoryImpl().newTime(other.date.getMillis(), other.date.getZone().getID()));
 		
-		this.open = ValueFactoryImpl.factory.newPrice(other.getOpen().asDouble());
-		this.high = ValueFactoryImpl.factory.newPrice(other.getHigh().asDouble());
-		this.low = ValueFactoryImpl.factory.newPrice(other.getLow().asDouble());
-		this.close = ValueFactoryImpl.factory.newPrice(other.getClose().asDouble());
-		this.volume = ValueFactoryImpl.factory.newSize(other.getVolume().mantissa(),
+		ValueFactory valueFactory = new ValueFactoryImpl();
+		this.open = valueFactory.newPrice(other.getOpen().asDouble());
+		this.high = valueFactory.newPrice(other.getHigh().asDouble());
+		this.low = valueFactory.newPrice(other.getLow().asDouble());
+		this.close = valueFactory.newPrice(other.getClose().asDouble());
+		this.volume = valueFactory.newSize(other.getVolume().mantissa(),
 			other.getVolume().exponent());
-		this.openInterest = ValueFactoryImpl.factory.newSize(
-			other.getOpenInterest().mantissa(), other.getOpenInterest().exponent());
+		if(other.getOpenInterest() != null) {
+		    this.openInterest = valueFactory.newSize(
+		        other.getOpenInterest().mantissa(), other.getOpenInterest().exponent());
+		}
 	}
 	
 	/**
@@ -247,10 +251,10 @@ public class BarImpl extends DataPointImpl implements Bar {
 	 */
 	@Override
 	public <E extends Bar> void merge(E other, boolean advanceTime) {
-		if(other.getHigh().greaterThan(high)) {
+		if(high == null || other.getHigh().greaterThan(high)) {
 			high = other.getHigh();
 		}
-		if(other.getLow().lessThan(low)) {
+		if(low == null || other.getLow().lessThan(low)) {
 			low = other.getLow();
 		}
 		close = other.getClose();
