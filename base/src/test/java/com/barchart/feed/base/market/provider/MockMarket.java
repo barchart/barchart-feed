@@ -41,7 +41,6 @@ import com.barchart.feed.base.book.enums.UniBookResult;
 import com.barchart.feed.base.cuvol.api.MarketDoCuvol;
 import com.barchart.feed.base.cuvol.api.MarketDoCuvolEntry;
 import com.barchart.feed.base.provider.VarMarket;
-import com.barchart.feed.base.state.api.MarketState;
 import com.barchart.feed.base.state.enums.MarketStateEntry;
 import com.barchart.feed.base.trade.api.MarketDoTrade;
 import com.barchart.feed.base.trade.enums.MarketTradeField;
@@ -251,7 +250,7 @@ public class MockMarket extends VarMarket {
 
 		assert entry != null;
 
-		final MarketState state = loadState();
+		final com.barchart.feed.base.state.api.MarketState state = loadState();
 
 		if (isOn) {
 			state.add(entry);
@@ -276,6 +275,7 @@ public class MockMarket extends VarMarket {
 		// TODO Auto-generated method stub
 	}
 
+	@Override
 	public void setSnapshot(final TimeValue tradeDate, final PriceValue open, final PriceValue high,
 			final PriceValue low, final PriceValue close,
 			final PriceValue settle, final PriceValue previousSettle, final SizeValue volume, final SizeValue interest,

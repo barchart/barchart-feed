@@ -61,12 +61,17 @@ public interface Market extends MarketData<Market> {
 	 */
 	Set<Component> change();
 	
-	// TODO
-	/*enum MarketState {
-		NULL, PRE_OPEN, OPEN, SUSPENDED, CLOSED
-	}
-	
-	MarketState marketState();*/
+//	/**
+//	 * The possible states a market can be in
+//	 */
+//	enum MarketState {
+//		NULL, PRE_OPEN, OPEN, SUSPENDED, CLOSED
+//	}
+//	
+//	/**
+//	 * @return the current state of this market
+//	 */
+//	MarketState marketState();
 	
 	interface LastPrice {
 		

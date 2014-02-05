@@ -81,7 +81,7 @@ public final class MarketField<V extends Value<V>> extends
 	
 	// MarketState
 	public static final MarketField<MarketState> STATE = NEW(NULL_STATE);
-
+	
 	//
 
 	/** market container with all market fields (self reference) */

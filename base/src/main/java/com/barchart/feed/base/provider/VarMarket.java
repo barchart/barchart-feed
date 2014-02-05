@@ -47,7 +47,6 @@ import com.barchart.feed.base.market.api.MarketSafeRunner;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.feed.base.participant.FrameworkAgent;
-import com.barchart.feed.base.state.api.MarketState;
 import com.barchart.feed.base.trade.api.MarketDoTrade;
 import com.barchart.feed.base.trade.api.MarketTrade;
 import com.barchart.feed.base.values.api.PriceValue;
@@ -293,9 +292,9 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 
 	}
 
-	protected final MarketState loadState() {
+	protected final com.barchart.feed.base.state.api.MarketState loadState() {
 
-		MarketState state = get(STATE);
+		com.barchart.feed.base.state.api.MarketState state = get(STATE);
 
 		if (state.isFrozen()) {
 			state = new VarState();
