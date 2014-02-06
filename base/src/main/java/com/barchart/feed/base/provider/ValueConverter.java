@@ -25,7 +25,7 @@ public final class ValueConverter {
 	}
 	
 	public static Time time(final TimeValue value) {
-		return factory.newTime(value.asMillisUTC(), "");
+		return factory.newTime(value.asMillisUTC());
 	}
 	
 	public static Fraction fraction(final com.barchart.feed.base.values.api.Fraction frac) {
