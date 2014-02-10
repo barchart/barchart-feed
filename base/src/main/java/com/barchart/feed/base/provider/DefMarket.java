@@ -32,6 +32,7 @@ import com.barchart.util.value.api.Time;
 @NotMutable
 public class DefMarket extends NulMarket {
 	
+	@SuppressWarnings("unused")
 	private static final Logger log = LoggerFactory
 			.getLogger(DefMarket.class);
 
@@ -108,7 +109,6 @@ public class DefMarket extends NulMarket {
 	
 	@Override
 	public Set<Component> change() {
-		log.debug("Change set had {} elements", changeSet.size());
 		return EnumSet.copyOf(changeSet);
 	}
 	
