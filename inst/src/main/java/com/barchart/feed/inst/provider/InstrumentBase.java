@@ -85,6 +85,10 @@ public abstract class InstrumentBase implements Instrument {
 			return vals.newPrice(1, -2);
 		}
 		
+		if(CFICode().startsWith("F") && symbol().startsWith("J6")) {
+			return vals.newPrice(1, 2);
+		}
+		
 		return Price.ONE;
 	}
 	

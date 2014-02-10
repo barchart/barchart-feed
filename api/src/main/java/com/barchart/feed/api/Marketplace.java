@@ -33,6 +33,8 @@ public interface Marketplace extends ConnectionLifecycle<Marketplace> {
 		
 	}
 	
+	// Consider delay meta
+	
 	/* ***** ***** Snapshot Provider ***** ***** */
 	
 	Market snapshot(Instrument instrument);
