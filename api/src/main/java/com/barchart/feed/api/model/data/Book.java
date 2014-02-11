@@ -55,7 +55,7 @@ public interface Book extends MarketData<Book>, ChangeSet<Book.Component> {
 			
 			@Override
 			public String toString() {
-				return "NULL BOOK TOP";
+				return "NULL_BOOK_TOP";
 			}
 
 		};
@@ -69,6 +69,12 @@ public interface Book extends MarketData<Book>, ChangeSet<Book.Component> {
 
 		@Override
 		Size size();
+		
+		/**
+		 * Compare is made on Price
+		 */
+		@Override
+		int compareTo(Entry entry);
 
 		Book.Side side();
 
@@ -144,6 +150,10 @@ public interface Book extends MarketData<Book>, ChangeSet<Book.Component> {
 
 		public static final Side fromOrd(final byte ord) {
 			return ENUM_VALUES[ord];
+		}
+		
+		public final Side opp() {
+			return this == NULL ? NULL : this == BID ? ASK : BID;
 		}
 		
 	}
