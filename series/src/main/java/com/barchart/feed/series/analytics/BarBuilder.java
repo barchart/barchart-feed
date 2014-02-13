@@ -83,7 +83,7 @@ public class BarBuilder extends AnalyticBase {
 		        outputSeries.insertData(inputSeries.get(i));
 		    }
 		    return new SpanImpl(inputSpan);
-		}else{ //if(inputPeriod.getPeriodType() == outputPeriod.getPeriodType()){ //Types are equal but output interval is > 1
+		}else{ 
 			if(inputPeriod.size() > 1) {
 				throw new IllegalStateException(
 					"Can't build bars from Type with an Interval that's not 1. Input=" + 
@@ -96,10 +96,9 @@ public class BarBuilder extends AnalyticBase {
 			
 			if(currentMergeBar == null) {
 				currentMergeBar = new BarImpl((BarImpl)inputSeries.get(inputStartIdx)); 
-				workingTargetDate = subscription.getTradingWeek().getNextSessionDate(currentMergeBar.getDate(), outputPeriod);
+				workingTargetDate = subscription.getTradingWeek().getNextSessionDate(inputSpan.getDate(), outputPeriod);
 				currentMergeBar.setDate(workingTargetDate);
 				workingSpan = new SpanImpl(subscription.getTimeFrame(0).getPeriod(), inputSpan.getTime(), inputSpan.getNextTime());
-				this.workingSpan.setDate(new DateTime(inputSpan.getTime().millisecond()));
 				this.workingSpan.setNextDate(workingTargetDate);
 				System.out.println("IS INIT: ADDING NEW BAR " + currentMergeBar + "   " + outputSeries.getPeriod() + "  :  span = " + this.workingSpan);
 				outputSeries.add(currentMergeBar);
