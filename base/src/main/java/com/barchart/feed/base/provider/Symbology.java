@@ -177,19 +177,23 @@ public final class Symbology {
 	
 	private static final int YEAR;
 	private static final char MONTH;
+	private static final int PREV_DECADE;
+	private static final int NEXT_DECADE;
 	
 	static {
 		final DateTime now = new DateTime();
 		YEAR = now.year().get();
+		PREV_DECADE = YEAR / 10 * 10;
+		NEXT_DECADE = ((YEAR / 10) + 1) * 10;
 		MONTH = ExpireMonth.fromDateTime(now).code;
+		
 	}
 	
 	/* ***** ***** Symbol Formatting ***** ***** */
 	
-	private static final char[] T_Z_O = new char[] {'2', '0', '1'};
-	private static final char[] T_Z_T = new char[] {'2', '0', '2'};
+	private static final char[] PREV = String.valueOf(PREV_DECADE).substring(0, 3).toCharArray();
+	private static final char[] NEXT = String.valueOf(NEXT_DECADE).substring(0, 3).toCharArray();
 	private static final char[] T_Z = new char[] {'2', '0'};
-	private static final char[] O = new char[] {'1'};
 	
 	public static String formatSymbol(String symbol) {
 		
@@ -272,15 +276,15 @@ public final class Symbology {
 				
 				final StringBuilder sb = new StringBuilder(symbol);
 				int last = Character.getNumericValue(symbol.charAt(len - 1));
-				if(YEAR % 2010 < last) {
-					return sb.insert(len - 1, T_Z_O).toString();
-				} else if(YEAR % 2010 > last) {
-					return sb.insert(len - 1, T_Z_T).toString();
+				if(YEAR % PREV_DECADE < last) {
+					return sb.insert(len - 1, PREV).toString();
+				} else if(YEAR % PREV_DECADE > last) {
+					return sb.insert(len - 1, NEXT).toString();
 				} else {
 					if(symbol.charAt(len - 2) >= MONTH) {
-						return sb.insert(len - 1, T_Z_O).toString();
+						return sb.insert(len - 1, PREV).toString();
 					} else {
-						return sb.insert(len - 1, T_Z_T).toString();
+						return sb.insert(len - 1, NEXT).toString();
 					}
 				}
 				
@@ -300,4 +304,8 @@ public final class Symbology {
 		
 	}
 
+	public static void main(final String[] args) {
+		
+	}
+	
 }
