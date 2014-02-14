@@ -48,7 +48,7 @@ public class SpanImpl extends DataPointImpl implements Span {
 	
 	public void setTime(Time t) {
 		this.time = t;
-		this.date = new DateTime(time.millisecond(), DateTimeZone.forID(time.zone().toString()));
+		this.date = new DateTime(time.millisecond(), DateTimeZone.forID(time.zone().getID()));
 	}
 	
 	@Override
@@ -58,7 +58,7 @@ public class SpanImpl extends DataPointImpl implements Span {
 	
 	public void setNextTime(Time t) {
 		this.nextTime = t;
-		this.nextDate = new DateTime(nextTime.millisecond(), DateTimeZone.forID(nextTime.zone().toString()));
+		this.nextDate = new DateTime(nextTime.millisecond(), DateTimeZone.forID(nextTime.zone().getID()));
 	}
 	
 	public void setNextDate(DateTime dt) {

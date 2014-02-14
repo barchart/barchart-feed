@@ -83,21 +83,24 @@ public class BarBuilder extends AnalyticBase {
 		        outputSeries.insertData(inputSeries.get(i));
 		    }
 		    return new SpanImpl(inputSpan);
-		}else{ //if(inputPeriod.getPeriodType() == outputPeriod.getPeriodType()){ //Types are equal but output interval is > 1
+		}else{ 
 			if(inputPeriod.size() > 1) {
 				throw new IllegalStateException(
 					"Can't build bars from Type with an Interval that's not 1. Input=" + 
 						inputPeriod + ", output=" + outputPeriod);
 			}
 			
+			if(subscription.getTimeFrame(0).getPeriod().equals(Period.FIVE_MINUTE)) {
+				System.out.println("here");
+			}
+			
 			if(currentMergeBar == null) {
-				currentMergeBar = (BarImpl)inputSeries.get(inputStartIdx); 
-				workingTargetDate = subscription.getTradingWeek().getNextSessionDate(currentMergeBar.getDate(), outputPeriod);
+				currentMergeBar = new BarImpl((BarImpl)inputSeries.get(inputStartIdx)); 
+				workingTargetDate = subscription.getTradingWeek().getNextSessionDate(inputSpan.getDate(), outputPeriod);
 				currentMergeBar.setDate(workingTargetDate);
 				workingSpan = new SpanImpl(subscription.getTimeFrame(0).getPeriod(), inputSpan.getTime(), inputSpan.getNextTime());
-//				this.workingSpan.setDate(currentMergeBar.getDate());
-//				this.workingSpan.setNextDate(currentMergeBar.getDate());
-				
+				this.workingSpan.setNextDate(workingTargetDate);
+				System.out.println("IS INIT: ADDING NEW BAR " + currentMergeBar + "   " + outputSeries.getPeriod() + "  :  span = " + this.workingSpan);
 				outputSeries.add(currentMergeBar);
 			}else{
 				workingSpan.setDate(workingTargetDate);
@@ -110,8 +113,8 @@ public class BarBuilder extends AnalyticBase {
 						getTradingWeek().getNextSessionDate(workingTargetDate, outputPeriod);
 					currentMergeBar = new BarImpl(currentIdxBar);
 					currentMergeBar.setDate(workingTargetDate);
-					this.workingSpan.setNextDate(currentMergeBar.getDate());
-					System.out.println("IS AFTER: ADDING NEW BAR " + currentMergeBar + "   " + outputSeries.getPeriod());
+					this.workingSpan.setNextDate(workingTargetDate);
+					System.out.println("IS AFTER: ADDING NEW BAR " + currentMergeBar + "   " + outputSeries.getPeriod() + "  :  span = " + this.workingSpan);
 					outputSeries.add(currentMergeBar);
 				}else{
 					currentMergeBar.merge(currentIdxBar, false);

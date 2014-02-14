@@ -29,7 +29,7 @@ import com.barchart.util.test.concurrent.TestObserver;
 
 public class BarchartSeriesProviderTest {
 
-	@Ignore
+	@Test
 	public void testFetch() {
 		
 		FauxMarketService marketService = new FauxMarketService("test", "test");

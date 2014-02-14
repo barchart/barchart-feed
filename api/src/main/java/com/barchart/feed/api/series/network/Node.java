@@ -25,6 +25,12 @@ public abstract class Node<S extends Subscription> implements Runnable {
     /** Set of Observers to be notified upon finished processing */
     protected Set<Observer<NetworkNotification>> observers = Collections.synchronizedSet(new HashSet<Observer<NetworkNotification>>());
     
+    /** 
+     * Set of dependent {@link Observer}s registered to child nodes of this node. This is used for unsubscribe functionality to track 
+     * when there are no more listeners subscribed to dependent nodes so that we can reclaim/expire resources.
+     */
+    protected Set<Observer<NetworkNotification>> dependents = Collections.synchronizedSet(new HashSet<Observer<NetworkNotification>>());
+    
 	/** List of {@code Node}s which are updated when this {@code Node} has finished processing. */
 	protected ConcurrentLinkedQueue<Node<S>> childNodes;
 	
@@ -214,14 +220,14 @@ public abstract class Node<S extends Subscription> implements Runnable {
      * Adds an {@link Observer} to be notified of ongoing updates.
      * @param obs      the observer to be notified.
      */
-    public void addObserver(Observer<NetworkNotification> obs) {
+	public void addObserver(Observer<NetworkNotification> obs) {
         if(obs == null) {
             throw new IllegalArgumentException("Attempt to add a null observer.");
         }
         observers.add(obs);
         
         for(Node<S> n : parentNodes) {
-            n.addObserver(obs);
+            n.addDependent(obs);
         }
     }
     
@@ -236,7 +242,7 @@ public abstract class Node<S extends Subscription> implements Runnable {
         observers.remove(obs);
         
         for(Node<S> n : parentNodes) {
-            n.removeObserver(obs);
+            n.removeDependent(obs);
         }
         
         if(observers.isEmpty()) {
@@ -248,6 +254,12 @@ public abstract class Node<S extends Subscription> implements Runnable {
      * Clears out all Observer references.
      */
     public void removeAllObservers() {
+    	for(Observer<NetworkNotification> o : observers) {
+    		for(Node<S> n : parentNodes) {
+    			n.removeDependent(o);
+    		}
+    	}
+    	
         observers.clear();
     }
     
@@ -258,8 +270,90 @@ public abstract class Node<S extends Subscription> implements Runnable {
      * @param obs      the {@link Observer} who's registration is being tested.
      * @return         true if so, false if not.
      */
-    public boolean hasObserver(Observer<NetworkNotification> obs) {
+    public boolean isObserver(Observer<NetworkNotification> obs) {
         return observers.contains(obs);
+    }
+    
+    /**
+     * Returns a flag indicating whether this {@code Node} has any registered
+     * {@link Observer}s
+     * 
+     * @return         true if so, false if not.
+     */
+    public boolean hasObservers() {
+        return !observers.isEmpty();
+    }
+    
+    /**
+     * Adds a dependent {@link Observer} which is not directly registered for 
+     * notifications to this {@link Node}, but is registered to subsequent
+     * child node(s), but whos processing depends on this node to supply it
+     * with data.
+     * 
+     * @param obs      the observer to be notified.
+     */
+	public void addDependent(Observer<NetworkNotification> obs) {
+        if(obs == null) {
+            throw new IllegalArgumentException("Attempt to add a null dependent.");
+        }
+        dependents.add(obs);
+        
+        for(Node<S> n : parentNodes) {
+            n.addDependent(obs);
+        }
+    }
+    
+    /**
+     * Removes the specified dependent Observer from this node's tracking.
+     * @param obs
+     */
+    public void removeDependent(Observer<NetworkNotification> obs) {
+        if(obs == null) {
+            throw new IllegalArgumentException("Attempt to add a null observer.");
+        }
+        dependents.remove(obs);
+        
+        for(Node<S> n : parentNodes) {
+            n.removeDependent(obs);
+        }
+        
+        if(dependents.isEmpty()) {
+            shutDown();
+        }
+    }
+    
+    /**
+     * Clears out all references to this node's child node dependents.
+     */
+    public void removeAllDependents() {
+    	for(Observer<NetworkNotification> o : dependents) {
+    		for(Node<S> n : parentNodes) {
+    			n.removeDependent(o);
+    		}
+    	}
+        dependents.clear();
+        shutDown();
+    }
+    
+    /**
+     * Returns a flag indicating whether the specified {@link Observer} is
+     * registered to a dependent child {@link Node} of this Node. 
+     * 
+     * @param obs      the {@link Observer} who's dependence is being tested.
+     * @return         true if so, false if not.
+     */
+    public boolean isDependent(Observer<NetworkNotification> obs) {
+        return dependents.contains(obs);
+    }
+    
+    /**
+     * Returns a flag indicating whether this {@link Node} has child nodes
+     * which have registered observers.
+     * 
+     * @return         true if so, false if not.
+     */
+    public boolean hasDependents() {
+        return !dependents.isEmpty();
     }
     
 	
