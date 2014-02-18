@@ -1,6 +1,7 @@
 package com.barchart.feed.series;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -8,14 +9,12 @@ import java.util.ListIterator;
 import java.util.NoSuchElementException;
 
 import org.joda.time.DateTime;
+import org.junit.experimental.theories.DataPoints;
 
-import rx.Observer;
-import rx.Subscription;
-
-import com.barchart.feed.api.series.Period;
-import com.barchart.feed.api.series.PeriodType;
 import com.barchart.feed.api.series.DataPoint;
 import com.barchart.feed.api.series.DataSeries;
+import com.barchart.feed.api.series.Period;
+import com.barchart.feed.api.series.PeriodType;
 import com.barchart.util.value.api.Time;
 
 public class DataSeriesImpl<E extends DataPoint> implements DataSeries<E> {
@@ -24,7 +23,7 @@ public class DataSeriesImpl<E extends DataPoint> implements DataSeries<E> {
 	/** The backing data */
 	private List<DataPointImpl> data = Collections.synchronizedList(new ArrayList<DataPointImpl>());
 	
-	private Object INSERT_LOCK = new Object();
+	
 	
 	/**
 	 * Constructs a new {@link DataSeriesImpl} whose {@link DataPoints} adhere to
@@ -291,7 +290,7 @@ public class DataSeriesImpl<E extends DataPoint> implements DataSeries<E> {
         while (low <= high) {
             mid = (high + low) / 2;
             if(mid >= size) return exactOnly ? -1 : mid;
-            int comparison = date.compareTo(data.get(mid).date);//period.getPeriodType().compareAtResolution(date, data.get(mid).date);
+            int comparison = date.compareTo(data.get(mid).date);
             if(comparison == 0) break;
             if(low == mid && high == mid) return exactOnly ? -1 : mid;
             
@@ -395,9 +394,7 @@ public class DataSeriesImpl<E extends DataPoint> implements DataSeries<E> {
      * @param e		the subclass of {@link DataPointImpl} to insert.
      */
     public void insertData(E e) {
-        synchronized(INSERT_LOCK) {
-            data.add(indexOf(e.getTime(), false), (DataPointImpl) e);
-        }
+        data.add(indexOf(e.getTime(), false), (DataPointImpl) e);
     }
     
 	/**
@@ -425,10 +422,9 @@ public class DataSeriesImpl<E extends DataPoint> implements DataSeries<E> {
      * @param   index   the index to insert the specified object.
      * @param   e   the Object to be set.
      */
-    public E add(int index, E e) {
+    public void add(int index, E e) {
     	data.add(index, (DataPointImpl) e);
-		return e;
-    }
+	}
     
     /**
      * Sets the specified Object to be the Object residing at the
@@ -461,14 +457,135 @@ public class DataSeriesImpl<E extends DataPoint> implements DataSeries<E> {
     }
     
     /**
-	 * Returns an {@link Observable<E>} that will notify its {@link Observer} upon update 
-	 * of this {@code TimeSeries}
+	 * Returns a flag indicating whether content exists in this 
+	 * container.
 	 * 
-	 * @param 		query	The {@link Observer} subclass used to register interest in updates
-	 * 						to this series.
-	 * @return				
+	 * @return true if this {@code DataSeriesImpl} is empty, false if not.
 	 */
-	public Subscription subscribe(Observer<E> observer) {
-		return null;
-	}
+    @Override
+    public boolean isEmpty() {
+        return data.isEmpty();
+    }
+
+    /**
+     * Returns a flag indicating whether the specified object is contained in 
+     * this {@code DataSeriesImpl} or not.
+     * 
+     * @return  true if the specified object was found, false if not.
+     */
+    @Override
+    public boolean contains(Object o) {
+        return data.contains(o);
+    }
+
+    /**
+     * Returns a <T> array containing the data within this {@code DataSeriesImpl}.
+     * 
+     * @return  <T> array
+     */
+    @Override
+    public <T> T[] toArray(T[] a) {
+        return data.toArray(a);
+    }
+
+    /**
+     * Removes the specified object from this {@code DataSeriesImpl}.
+     * 
+     * @return  flag indicating whether the specific object was contained
+     *          in this {@code DataSeriesImpl}
+     */
+    @Override
+    public boolean remove(Object o) {
+        return data.remove(o);
+    }
+
+    @Override
+    public boolean containsAll(Collection<?> c) {
+        return false;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @SuppressWarnings("unchecked")
+    @Override
+    public boolean addAll(Collection<? extends E> c) {
+        return data.addAll((Collection<? extends DataPointImpl>)c);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @SuppressWarnings("unchecked")
+    @Override
+    public boolean addAll(int index, Collection<? extends E> c) {
+        return data.addAll(index, (Collection<? extends DataPointImpl>)c);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean removeAll(Collection<?> c) {
+        return data.removeAll(c);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean retainAll(Collection<?> c) {
+        return data.retainAll(c);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void clear() {
+        data.clear();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int indexOf(Object o) {
+        return data.indexOf(o);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int lastIndexOf(Object o) {
+        return data.lastIndexOf(o);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @SuppressWarnings("unchecked")
+    @Override
+    public ListIterator<E> listIterator() {
+        return (ListIterator<E>)data.listIterator();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @SuppressWarnings("unchecked")
+    @Override
+    public ListIterator<E> listIterator(int index) {
+        return (ListIterator<E>)data.listIterator(index);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<E> subList(int fromIndex, int toIndex) {
+        return (List<E>)data.subList(fromIndex, toIndex);
+    }
 }

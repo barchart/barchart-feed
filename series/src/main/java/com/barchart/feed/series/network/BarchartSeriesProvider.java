@@ -701,22 +701,23 @@ public class BarchartSeriesProvider {
 	    
 	    @Override
         public rx.Subscription onSubscribe(Observer<? super NetworkNotification> t1) throws IllegalStateException {
-	        final Observer<NetworkNotification> actualObserver = getActualObserver(t1);
+	        @SuppressWarnings("unchecked")
+            final Observer<NetworkNotification> actualObserver = (Observer<NetworkNotification>)t1;//getActualObserver(t1);
 	        
 	    	subscribers.put(this.subscription, actualObserver);
 	    	boolean foundSubscribableNode = false;
-	    	for(String specifier : observable.getSubscribedNodeNames(actualObserver)) {
+//	    	for(String specifier : observable.getSubscribedNodeNames(actualObserver)) {
 	    	    for(Node<SeriesSubscription> node : availableNodes) {
-	    	        if(node.getName().equals(specifier)) {
+//	    	        if(node.getName().equals(specifier)) {
 	    	            node.addObserver(actualObserver);
-	    	            if(!subscribedNodes.contains(node)) {
+//	    	            if(!subscribedNodes.contains(node)) {
 	    	                subscribedNodes.add(node);
-	    	            }
+//	    	            }
 	    	            node.startUp();
 	    	            foundSubscribableNode = true;
-	    	        }
+//	    	        }
 	    	    }
-	    	}
+//	    	}
 	    	
 	    	if(!foundSubscribableNode) {
 	    	    throw new IllegalStateException("Could not find matching nodes to subscribe to for any of the following specifiers: " + observable.getSubscribedNodeNames(actualObserver));

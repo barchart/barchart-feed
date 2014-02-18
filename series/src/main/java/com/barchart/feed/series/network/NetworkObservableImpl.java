@@ -79,10 +79,10 @@ public class NetworkObservableImpl extends NetworkObservable {
 	    if(obs == null) {
 	        throw new IllegalArgumentException("Cannot subscribe a null Observer");
 	    }
-	    if(!specifierMap.containsKey(obs) || specifierMap.get(obs).isEmpty()) {
-	        throw new IllegalStateException("The registerTo() method must be called prior to subscribe() -OR PREFERRABLY-" +
-	            " the subscribe(Observer, String) / subscribeAll() methods should be called instead.");
-	    }
+//	    if(!specifierMap.containsKey(obs) || specifierMap.get(obs).isEmpty()) {
+//	        throw new IllegalStateException("The registerTo() method must be called prior to subscribe() -OR PREFERRABLY-" +
+//	            " the subscribe(Observer, String) / subscribeAll() methods should be called instead.");
+//	    }
 	    
 	    return super.subscribe(obs);
 	}

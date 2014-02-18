@@ -115,14 +115,60 @@ public class TimeFrameImplTest {
         
         assertTrue(tf2.isDerivableFrom(tf1));
         
-        //10Min !Derivable from 5Min
+        //10Min Derivable from 5Min *IF* 2 % 1 == 0 and startDates are same and endDate1 == null or endDates are equal
         dt1 = new DateTime(2013, 12, 10, 12, 0, 0);
         tf1 = new TimeFrameImpl(new Period(PeriodType.MINUTE, 5), dt1, null);
         
         dt2 = new DateTime(2013, 12, 10, 12, 0, 0);
         tf2 = new TimeFrameImpl(new Period(PeriodType.MINUTE, 10), dt2, null);
         
+        assertTrue(tf2.isDerivableFrom(tf1));
+        
+        //10Min Derivable from 5Min *IF* 2 % 1 == 0 and startDates are same and endDate1 == null or endDates are equal == (not due to 10 % 6)
+        dt1 = new DateTime(2013, 12, 10, 12, 0, 0);
+        tf1 = new TimeFrameImpl(new Period(PeriodType.MINUTE, 6), dt1, null);
+        
+        dt2 = new DateTime(2013, 12, 10, 12, 0, 0);
+        tf2 = new TimeFrameImpl(new Period(PeriodType.MINUTE, 10), dt2, null);
+        
         assertFalse(tf2.isDerivableFrom(tf1));
+        
+        //10Min Derivable from 5Min *IF* 2 % 1 == 0 and startDates are same and endDate1 == null or endDates are equal == (not due to startDates !=)
+        dt1 = new DateTime(2013, 12, 10, 11, 0, 0);
+        tf1 = new TimeFrameImpl(new Period(PeriodType.MINUTE, 5), dt1, null);
+        
+        dt2 = new DateTime(2013, 12, 10, 12, 0, 0);
+        tf2 = new TimeFrameImpl(new Period(PeriodType.MINUTE, 10), dt2, null);
+        
+        assertFalse(tf2.isDerivableFrom(tf1));
+        
+        /////////////////// Test end date conditions ////////////////////
+        //Derive source end date is not null and derive from is --> false
+        dt1 = new DateTime(2013, 12, 10, 12, 0, 0);
+        tf1 = new TimeFrameImpl(new Period(PeriodType.MINUTE, 5), dt1, new DateTime(2013, 12, 20, 12, 0, 0));
+        
+        dt2 = new DateTime(2013, 12, 10, 12, 0, 0);
+        tf2 = new TimeFrameImpl(new Period(PeriodType.MINUTE, 10), dt2, null);
+        
+        assertFalse(tf2.isDerivableFrom(tf1));
+        
+        //Derive source end date is null and derive from is not --> true
+        dt1 = new DateTime(2013, 12, 10, 12, 0, 0);
+        tf1 = new TimeFrameImpl(new Period(PeriodType.MINUTE, 5), dt1, null);
+        
+        dt2 = new DateTime(2013, 12, 10, 12, 0, 0);
+        tf2 = new TimeFrameImpl(new Period(PeriodType.MINUTE, 10), dt2, new DateTime(2013, 12, 20, 12, 0, 0));
+        
+        assertTrue(tf2.isDerivableFrom(tf1));
+        
+        //End dates are equal --> true
+        dt1 = new DateTime(2013, 12, 10, 12, 0, 0);
+        tf1 = new TimeFrameImpl(new Period(PeriodType.MINUTE, 5), dt1, new DateTime(2013, 12, 20, 12, 0, 0));
+        
+        dt2 = new DateTime(2013, 12, 10, 12, 0, 0);
+        tf2 = new TimeFrameImpl(new Period(PeriodType.MINUTE, 10), dt2, new DateTime(2013, 12, 20, 12, 0, 0));
+        
+        assertTrue(tf2.isDerivableFrom(tf1));
         
         
         //////////////////////////////////////////////////////////

@@ -1,6 +1,5 @@
 package com.barchart.feed.series.network;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -36,7 +35,7 @@ public class NetworkObservableTest {
     private static final ValueFactoryImpl FACTORY = new ValueFactoryImpl();
 
 	@Test
-	public void test() {
+	public void testSubscribe() {
 		String symbol2 = "ESZ13";
         Instrument instr2 = TestHarness.makeInstrument(symbol2);
         DateTime dt2 = new DateTime(2013, 12, 10, 12, 0, 0);
@@ -57,59 +56,9 @@ public class NetworkObservableTest {
 		
 		assertNotNull(subscription);
 		assertTrue(nodes.get(0).isRunning());
-		subscription.unsubscribe();
+		subscription.unsubscribe(); //Test that we unsubscribe from the node, and that it results in its shutdown
 		assertTrue(!nodes.get(0).isRunning());
 	}
-	
-	/**
-	 * There are two special subscribe methods specific to this series framework which either
-	 * should be used instead of the {@link rx.Observable#subscribe(Observer)} methods -OR-
-	 * the {@link NetworkObservable#register(Observer, String)} method should be called before
-	 * calling any of the pure rx.Observable methods which result in subscribe calls. This method
-	 * tests that the required registration has taken place.
-	 */
-	@Test
-    public void testRegisterTo_before_subscribing() {
-        String symbol2 = "ESZ13";
-        Instrument instr2 = TestHarness.makeInstrument(symbol2);
-        DateTime dt2 = new DateTime(2013, 12, 10, 12, 0, 0);
-        TimeFrameImpl tf2 = new TimeFrameImpl(new Period(PeriodType.HOUR, 12), dt2, null);
-        SeriesSubscription sub = new SeriesSubscription("ESZ13", instr2, "IO", new TimeFrameImpl[] { tf2 }, TradingWeekImpl.DEFAULT);
-        
-        BarchartSeriesProvider provider = TestHarness.getTestSeriesProvider(sub);
-        
-        List<Node<SeriesSubscription>> nodes = new ArrayList<Node<SeriesSubscription>>();
-        nodes.add(getTestNode(sub.toString()));
-        SeriesSubscribeFunc ss = provider.new SeriesSubscribeFunc(sub, nodes);
-        Map<String, DataSeries<? extends DataPoint>> map = new HashMap<String, DataSeries<? extends DataPoint>>();
-        map.put(sub.toString(), new DataSeriesImpl<DataPoint>(new Period(PeriodType.HOUR, 12)));
-        
-        Observer<NetworkNotification> obs = getTestObserver();
-        NetworkObservable no = new NetworkObservableImpl(ss, map);
-        //no.register(obs, sub.toString());  NOT DOING THIS CAUSES EXPECTED FAILURE
-        rx.Subscription subscription = null;
-        try {
-            subscription = no.subscribe(obs);
-            fail();
-        }catch(Exception e) {
-            assertEquals("The registerTo() method must be called prior to subscribe() -OR PREFERRABLY-" +
-                " the subscribe(Observer, String) / subscribeAll() methods should be called instead.", e.getMessage());
-            assertEquals(IllegalStateException.class, e.getClass());
-        }
-        
-        //Now do the required registration before calling vanilla register method
-        no.register(obs, sub.toString());
-        try {
-            subscription = no.subscribe(obs);
-        }catch(Exception e) {
-            fail();
-        }
-        
-        assertNotNull(subscription);
-        assertTrue(nodes.get(0).isRunning());
-        subscription.unsubscribe();
-        assertTrue(!nodes.get(0).isRunning());
-    }
 	
 	@Test
     public void testSubscribeAll() {
@@ -139,7 +88,7 @@ public class NetworkObservableTest {
         assertNotNull(subscription);
         assertTrue(nodes.get(0).isRunning());
         assertTrue(nodes.get(1).isRunning());
-        subscription.unsubscribe();//Test that we unsubscribe from multiple nodes
+        subscription.unsubscribe();//Test that we unsubscribe from multiple nodes, and that it results in their shutdown
         assertTrue(!nodes.get(0).isRunning());
         assertTrue(!nodes.get(1).isRunning());
     }
