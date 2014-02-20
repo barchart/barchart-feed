@@ -566,8 +566,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		return agg;
 	}
 
-	private Sub subscribe(final FrameworkAgent<?> agent,
-			final String interest) {
+	private synchronized Sub subscribe(final FrameworkAgent<?> agent, final String interest) {
 
 		if (!agentMap.containsKey(agent)) {
 			agentMap.put(agent, SubscriptionType.mapMarketEvent(agent.type()));
@@ -592,7 +591,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 
 	}
 
-	private Set<Sub> subscribe(final FrameworkAgent<?> agent,
+	private synchronized Set<Sub> subscribe(final FrameworkAgent<?> agent,
 			final Set<String> interests) {
 
 		final Set<Sub> newSubs = new HashSet<Sub>();
@@ -608,7 +607,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 
 	}
 
-	private Sub unsubscribe(final FrameworkAgent<?> agent,
+	private synchronized Sub unsubscribe(final FrameworkAgent<?> agent,
 			final String interest) {
 
 		if (!agentMap.containsKey(agent)) {
@@ -635,7 +634,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 
 	}
 
-	private Set<Sub> unsubscribe(final FrameworkAgent<?> agent,
+	private synchronized Set<Sub> unsubscribe(final FrameworkAgent<?> agent,
 			final Set<String> interests) {
 
 		final Set<Sub> newSubs = new HashSet<Sub>();

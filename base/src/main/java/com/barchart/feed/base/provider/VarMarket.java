@@ -16,7 +16,6 @@ import static com.barchart.feed.base.market.enums.MarketField.MARKET;
 import static com.barchart.feed.base.market.enums.MarketField.STATE;
 import static com.barchart.feed.base.market.enums.MarketField.TRADE;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -65,7 +64,7 @@ import com.barchart.util.common.anno.ThreadSafe;
 public abstract class VarMarket extends DefMarket implements MarketDo {
 
 	protected final Map<Class<? extends MarketData<?>>, Set<FrameworkAgent<?>>> agentMap =
-		new HashMap<Class<? extends MarketData<?>>, Set<FrameworkAgent<?>>>();
+		new ConcurrentHashMap<Class<? extends MarketData<?>>, Set<FrameworkAgent<?>>>();
 
 	private final ConcurrentMap<FrameworkAgent<?>, Boolean> agentSet =
 			new ConcurrentHashMap<FrameworkAgent<?>, Boolean>();
@@ -82,8 +81,7 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 		/** set self reference */
 		set(MARKET, this);
 
-		agentMap.put(com.barchart.feed.api.model.data.Market.class,
-				new HashSet<FrameworkAgent<?>>());
+		agentMap.put(com.barchart.feed.api.model.data.Market.class, new HashSet<FrameworkAgent<?>>());
 		agentMap.put(Trade.class, new HashSet<FrameworkAgent<?>>());
 		agentMap.put(Book.class, new HashSet<FrameworkAgent<?>>());
 		agentMap.put(Cuvol.class, new HashSet<FrameworkAgent<?>>());
@@ -263,14 +261,10 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 	}
 
 	@Override
-	public final <Result, Param> Result runSafe(
+	public synchronized final <Result, Param> Result runSafe(
 			final MarketSafeRunner<Result, Param> task, final Param param) {
 
-		synchronized (this) {
-
-			return task.runSafe(this, param);
-
-		}
+		return task.runSafe(this, param);
 
 	}
 

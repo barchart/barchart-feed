@@ -95,7 +95,7 @@ public abstract class Node<S extends Subscription> implements Runnable {
 	}
 	
 	/**
-	 * Called by ancestors of this {@code Node} in the tree to set
+	 * Called by ancestors of this {@code Node} in the graph to set
 	 * the {@link Span} of time modified by that {@code Node}'s 
 	 * internal processing class.
 	 * 
@@ -104,9 +104,10 @@ public abstract class Node<S extends Subscription> implements Runnable {
 	 * @return	
 	 */
 	public boolean setModifiedSpan(Span span, List<S>  ancestorOutputSubscriptions) {
+	    List<S> inputSubscriptions = getInputSubscriptions();
 		for(S s : ancestorOutputSubscriptions) {
-		    if(getInputSubscriptions().contains(s)) {
-		        updateModifiedSpan(span, s);
+		    if(inputSubscriptions.contains(s)) {
+		        updateModifiedSpan(span, s); break;
 		    }
 		}
 		

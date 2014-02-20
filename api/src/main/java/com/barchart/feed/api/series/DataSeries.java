@@ -1,9 +1,7 @@
 package com.barchart.feed.api.series;
 
 import java.util.Iterator;
-
-import rx.Observer;
-import rx.Subscription;
+import java.util.List;
 
 import com.barchart.util.value.api.Time;
 
@@ -12,7 +10,7 @@ import com.barchart.util.value.api.Time;
  * Provides specialized methods to search and retrieve data 
  * within this series in an optimized manner.
  */
-public interface DataSeries<E extends DataPoint> {
+public interface DataSeries<E extends DataPoint> extends List<E> {
 
 	/**
 	 * Returns the {@link Period} which defines the aggregation of
@@ -163,14 +161,4 @@ public interface DataSeries<E extends DataPoint> {
      */
     public E[] toArray();
     
-    /**
-	 * Returns an {@link Observable<E>} that will notify its {@link Observer} upon update 
-	 * of this {@code TimeSeries}
-	 * 
-	 * @param 		query	The {@link Observer} subclass used to register interest in updates
-	 * 						to this series.
-	 * @return				
-	 */
-	public Subscription subscribe(Observer<E> observer);
-
 }

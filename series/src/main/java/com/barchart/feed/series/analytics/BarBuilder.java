@@ -67,7 +67,7 @@ public class BarBuilder extends AnalyticBase {
 	@SuppressWarnings(value = { "unchecked", "rawtypes" })
 	@Override
 	public Span process(Span span) {
-		//System.out.println(this + " processing span: " + span);
+	    //System.out.println(this + " processing span: " + span);
 		this.inputSpan = (SpanImpl)span;
 		
 		DataSeriesImpl<DataPointImpl> outputSeries = (DataSeriesImpl)getOutputTimeSeries(BarBuilder.OUTPUT_KEY);
@@ -109,8 +109,7 @@ public class BarBuilder extends AnalyticBase {
 			for(int i = inputStartIdx;i <= inputLastIdx;i++) {
 				BarImpl currentIdxBar = (BarImpl)inputSeries.get(i);
 				if(currentIdxBar.getDate().isAfter(workingTargetDate)) {
-					workingTargetDate = subscription.
-						getTradingWeek().getNextSessionDate(workingTargetDate, outputPeriod);
+					workingTargetDate = subscription.getTradingWeek().getNextSessionDate(workingTargetDate, outputPeriod);
 					currentMergeBar = new BarImpl(currentIdxBar);
 					currentMergeBar.setDate(workingTargetDate);
 					this.workingSpan.setNextDate(workingTargetDate);

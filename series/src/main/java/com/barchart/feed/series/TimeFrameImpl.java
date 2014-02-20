@@ -77,18 +77,21 @@ public class TimeFrameImpl implements TimeFrame {
 		boolean retVal = false;
 		
 		PeriodType otherType = other.getPeriod().getPeriodType();
+		PeriodType thisType = period.getPeriodType();
         int otherDuration = other.getPeriod().size();
+        int thisDuration = getPeriod().size();
         
 		if(equals(other)) {
 			retVal = true;
 		}else{
-		    if((otherType == period.getPeriodType() || otherType.isLowerThan(period.getPeriodType())) && (otherType != PeriodType.WEEK) && (otherDuration == 1)) {
+		    if(((otherType == thisType && otherType != PeriodType.WEEK && (otherDuration == thisDuration || (thisDuration % otherDuration == 0 && other.startDate.isEqual(startDate) && areEqualOrNull(other.endDate, endDate)))) || 
+		        (otherType.isLowerThan(thisType) && otherType != PeriodType.WEEK  && otherDuration == 1))) {
 		        retVal = true;
             }
     		
 		    //Use the highest resolution type to create comparison resolution instances.
 		    //(i.e. July being > May is more significant than 4:30 > 2:00)
-		    PeriodType resolutionDeterminer = otherType.isLowerThan(period.getPeriodType()) ? period.getPeriodType() : otherType == period.getPeriodType() ? otherType : otherType;
+		    PeriodType resolutionDeterminer = otherType.isLowerThan(thisType) ? thisType : otherType;
     		if(resolutionDeterminer.resolutionInstant(other.startDate).isAfter(resolutionDeterminer.resolutionInstant(startDate))) {
     			retVal = false;
     		}
@@ -100,6 +103,10 @@ public class TimeFrameImpl implements TimeFrame {
 		}
 		
 		return retVal;
+	}
+	
+	private boolean areEqualOrNull(DateTime otherDate, DateTime endDate2) {
+	    return (otherDate == null) || (endDate2 != null && otherDate.isEqual(endDate2));
 	}
 
 	/**
