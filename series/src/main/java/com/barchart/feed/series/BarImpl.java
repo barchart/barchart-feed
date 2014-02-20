@@ -14,8 +14,6 @@ import com.barchart.util.value.api.ValueFactory;
 
 /**
  * Contains the bar data.
- * 
- * @param <T>   core value-util type
  */
 public class BarImpl extends DataPointImpl implements Bar {
 	private Price open;
@@ -23,13 +21,16 @@ public class BarImpl extends DataPointImpl implements Bar {
 	private Price low;
 	private Price close;
 	private Size volume;
+	private Size volumeUp;
+	private Size volumeDown;
+	private Size tickCount;
 	private Size openInterest;
 	
 	/**
 	 * Instantiates a new {@code DataBar}
 	 * 
 	 * @param date				the {@link Time} of this bar.
-	 * @param period			the Period interval and type of this bar.
+	 * @param period			the {@link Period} interval and type of this bar.
 	 * @param open				the Open {@link Price} of this bar.
 	 * @param high				the High {@link Price} of this bar.
 	 * @param low				the Low {@link Price} of this bar.
@@ -40,15 +41,39 @@ public class BarImpl extends DataPointImpl implements Bar {
 	public BarImpl(Time date, Period period, Price open, Price high, 
 		Price low, Price close, Size volume, Size openInterest) {
 		
-		super(period, date);
-		
-		this.open = open;
-		this.high = high;
-		this.low = low;
-		this.close = close;
-		this.volume = volume;
-		this.openInterest = openInterest;
+		this(date, period, open, high, low, close, volume, null, null, null, openInterest);
 	}
+	
+	/**
+     * Instantiates a new {@code DataBar}
+     * 
+     * @param date              the {@link Time} of this bar.
+     * @param period            the {@link Period} interval and type of this bar.
+     * @param open              the Open {@link Price} of this bar.
+     * @param high              the High {@link Price} of this bar.
+     * @param low               the Low {@link Price} of this bar.
+     * @param close             the Close {@link Price} of this bar.
+     * @param volume            the Volume {@link Size} of this bar.
+     * @param volumeUp          the Volume traded up {@link Size} of this bar.
+     * @param volumeDown        the Volume traded down {@link Size} of this bar.
+     * @param tickCount         the number of ticks contributing to this bar.
+     * @param openInterest      the Open Interest {@link Size} of this bar.
+     */
+    public BarImpl(Time date, Period period, Price open, Price high, 
+        Price low, Price close, Size volume, Size volumeUp, Size volumeDown, Size tickCount, Size openInterest) {
+        
+        super(period, date);
+        
+        this.open = open;
+        this.high = high;
+        this.low = low;
+        this.close = close;
+        this.volume = volume;
+        this.volumeUp = volumeUp;
+        this.volumeDown = volumeDown;
+        this.tickCount = tickCount;
+        this.openInterest = openInterest;
+    }
 	
 	/**
 	 * Instantiates a new {@code DataBar}
@@ -65,14 +90,38 @@ public class BarImpl extends DataPointImpl implements Bar {
 	public BarImpl(DateTime date, Period period, Price open, Price high, 
 		Price low, Price close, Size volume, Size openInterest) {
 		
-		super(period, new ValueFactoryImpl().newTime(date.getMillis(), date.getZone().getID()));
-		
-		this.open = open;
-		this.high = high;
-		this.low = low;
-		this.close = close;
-		this.volume = volume;
-		this.openInterest = openInterest;
+		this(date, period, open, high, low, close, volume, null, null, null, openInterest);
+	}
+	
+	/**
+     * Instantiates a new {@code DataBar}
+     * 
+     * @param date              the {@link DateTime} of this bar.
+     * @param period            the Period interval and type of this bar.
+     * @param open              the Open {@link Price} of this bar.
+     * @param high              the High {@link Price} of this bar.
+     * @param low               the Low {@link Price} of this bar.
+     * @param close             the Close {@link Price} of this bar.
+     * @param volume            the Volume {@link Size} of this bar.
+     * @param volumeUp          the Volume traded up {@link Size} of this bar.
+     * @param volumeDown        the Volume traded down {@link Size} of this bar.
+     * @param tickCount         the number of ticks contributing to this bar.
+     * @param openInterest      the Open Interest {@link Size} of this bar.
+     */
+	public BarImpl(DateTime date, Period period, Price open, Price high, 
+	    Price low, Price close, Size volume, Size volumeUp, Size volumeDown, Size tickCount, Size openInterest) {
+	    
+	    super(period, new ValueFactoryImpl().newTime(date.getMillis(), date.getZone().getID()));
+	    
+	    this.open = open;
+        this.high = high;
+        this.low = low;
+        this.close = close;
+        this.volume = volume;
+        this.volumeUp = volumeUp;
+        this.volumeDown = volumeDown;
+        this.tickCount = tickCount;
+        this.openInterest = openInterest;
 	}
 	
 	/**
@@ -90,10 +139,22 @@ public class BarImpl extends DataPointImpl implements Bar {
 		this.close = valueFactory.newPrice(other.getClose().asDouble());
 		this.volume = valueFactory.newSize(other.getVolume().mantissa(),
 			other.getVolume().exponent());
-		if(other.getOpenInterest() != null) {
-		    this.openInterest = valueFactory.newSize(
-		        other.getOpenInterest().mantissa(), other.getOpenInterest().exponent());
-		}
+		this.volumeUp = other.getVolumeUp() == null ? 
+		    valueFactory.newSize(0) :
+		        valueFactory.newSize(other.getVolumeUp().mantissa(),
+		            other.getVolumeUp().exponent());
+		this.volumeDown = other.getVolumeDown() == null ? 
+		    valueFactory.newSize(0) :
+		        valueFactory.newSize(other.getVolumeDown().mantissa(),
+		            other.getVolumeDown().exponent());
+		this.tickCount = other.getTickCount() == null ? 
+		    valueFactory.newSize(0) :
+                valueFactory.newSize(other.getTickCount().mantissa(),
+                    other.getTickCount().exponent());
+		this.openInterest = other.getOpenInterest() == null ? 
+		    valueFactory.newSize(0) :
+		        valueFactory.newSize(other.getOpenInterest().mantissa(), 
+		            other.getOpenInterest().exponent());
 	}
 	
 	/**
@@ -202,6 +263,63 @@ public class BarImpl extends DataPointImpl implements Bar {
 	public void setVolume(Size volume) {
 		this.volume = volume;
 	}
+	
+	/**
+     * Returns the volume traded up.
+     * 
+     * @return the volume traded up.
+     */
+    public Size getVolumeUp() {
+        return volumeUp;
+    }
+    
+    /**
+     * Sets the volume traded up.
+     * 
+     * @param the volume traded up.
+     */
+    public void setVolumeUp(Size size) {
+        this.volumeUp = size;
+    }
+    
+    /**
+     * Returns the volume traded down.
+     * 
+     * @return the volume traded down.
+     */
+    public Size getVolumeDown() {
+        return volumeDown;
+    }
+    
+    /**
+     * Sets the volume traded down.
+     * 
+     * @param the volume traded down.
+     */
+    public void setVolumeDown(Size size) {
+        this.volumeDown = size;
+    }
+    
+    /**
+     * Returns the total number of ticks contributing
+     * to this {@code Bar}
+     * 
+     * @return the number of the ticks in this bar.
+     * @see #merge(Bar, boolean)
+     */
+    public Size getTickCount() {
+        return tickCount;
+    }
+    
+    /**
+     * Sets the total tick count contributing to values
+     * in this bar.
+     * 
+     * @param the tick count.
+     */
+    public void setTickCount(Size size) {
+        this.tickCount = size;
+    }
 
 	/**
 	 * Returns the open interest (futures only)
@@ -259,6 +377,7 @@ public class BarImpl extends DataPointImpl implements Bar {
 		}
 		close = other.getClose();
 		volume = volume.add(other.getVolume());
+		tickCount.add(1);
 		
 		if(advanceTime) {
 			time = other.getTime();
@@ -277,6 +396,9 @@ public class BarImpl extends DataPointImpl implements Bar {
 		.append(" l=").append(low.asDouble())
 		.append(" c=").append(close.asDouble())
 		.append(" v=").append((int)volume.asDouble())
+		.append(" vup=").append((int)volumeUp.asDouble())
+		.append(" vdwn=").append((int)volumeDown.asDouble())
+		.append(" oi=").append((int)openInterest.asDouble())
 		.append("]");
 		return sb.toString();
 	}
@@ -292,6 +414,9 @@ public class BarImpl extends DataPointImpl implements Bar {
 		result = prime * result + ((high == null) ? 0 : high.hashCode());
 		result = prime * result + ((low == null) ? 0 : low.hashCode());
 		result = prime * result + ((open == null) ? 0 : open.hashCode());
+		result = prime * result + ((volumeUp == null) ? 0 : volumeUp.hashCode());
+		result = prime * result + ((volumeDown == null) ? 0 : volumeDown.hashCode());
+		result = prime * result + ((tickCount == null) ? 0 : tickCount.hashCode());
 		result = prime * result
 				+ ((openInterest == null) ? 0 : openInterest.hashCode());
 		result = prime * result + ((period == null) ? 0 : period.hashCode());
@@ -327,6 +452,21 @@ public class BarImpl extends DataPointImpl implements Bar {
 				return false;
 		} else if (!low.equals(other.low))
 			return false;
+		if (volumeUp == null) {
+            if (other.volumeUp != null)
+                return false;
+        } else if (!volumeUp.equals(other.volumeUp))
+            return false;
+		if (volumeDown == null) {
+            if (other.volumeDown != null)
+                return false;
+        } else if (!volumeDown.equals(other.volumeDown))
+            return false;
+		if (tickCount == null) {
+            if (other.tickCount != null)
+                return false;
+        } else if (!tickCount.equals(other.tickCount))
+            return false;
 		if (open == null) {
 			if (other.open != null)
 				return false;

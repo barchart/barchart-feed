@@ -181,7 +181,7 @@ public class TestHarness {
         	@Override
             public Span process(Span span) {
                 // TODO Auto-generated method stub
-                return null;
+                return span;
             }
 
 			@Override

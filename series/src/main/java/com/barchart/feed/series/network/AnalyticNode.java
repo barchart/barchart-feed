@@ -62,32 +62,86 @@ public class AnalyticNode extends Node<SeriesSubscription> {
 	}
 	
 	/**
+	 * Done only once for first input span for each input subscription
+	 * @param sub      the subscription with the first update
+	 * @param span     the first span update
+	 */
+	private void mapFirstAncestorUpdate(SeriesSubscription sub, SpanImpl span) {
+	    AtomicReference<SpanImpl> ar = new AtomicReference<SpanImpl>();
+        ar.set(new SpanImpl(span));
+        inputSpans.put(sub, ar);
+	}
+	
+	/**
+     * Done only once for first input span for each input subscription
+     * @param sub      the subscription with the first update
+     * @param span     the first span update
+     */
+    private void mapPreviousAncestorUpdate(SeriesSubscription sub, SpanImpl span) {
+        AtomicReference<SpanImpl> ar = new AtomicReference<SpanImpl>();
+        ar.set(new SpanImpl(span));
+        lastInputSpans.put(sub, ar);
+    }
+    
+    /**
+     * Save all keyed input spans to the previous map.
+     */
+    private void savePreviousAncestorUpdates() {
+        for(SeriesSubscription sub : inputSpans.keySet()) {
+            AtomicReference<SpanImpl> ar = null;
+            if((ar = lastInputSpans.get(sub)) == null) {
+                lastInputSpans.put(sub, ar = new AtomicReference<SpanImpl>());
+                ar.set(new SpanImpl(inputSpans.get(sub).get()));
+            }
+            ar.get().setSpan(inputSpans.get(sub).get());
+        }
+    }
+	
+	/**
 	 * Called by ancestors of this {@code Node} in the tree to set
 	 * the {@link Span} of time modified by that ancestor's 
 	 * internal processing class.
 	 * 
 	 * @param span				the {@link Span} of time processed.
 	 * @param SeriesSubscriptions 	the List of {@link SeriesSubscription}s the ancestor node has processed.
-	 * @return	
 	 */
+//	@Override
+//	public <T extends Span> void updateModifiedSpan(T s, SeriesSubscription subscription) {
+//	    SpanImpl span = (SpanImpl)s;
+//	    
+//	    currentUpdateSpan.compareAndSet(null, span);
+//		
+//	    synchronized(currentUpdates) {
+//		    boolean wasNewForScript = false;
+//		    if(wasNewForScript = (currentUpdates.get(subscription) == null)) {
+//		        currentUpdates.put(subscription, span);
+//	        }
+//		    
+//	        setUpdated(isUpdated() || wasNewForScript || span.extendsSpan(currentUpdates.get(subscription)));
+//	        if(isUpdated()) {
+//	        	currentUpdateSpan.getAndSet(currentUpdateSpan.get().union(span));
+//	        }
+//		}
+//	}
+	
+	Map<SeriesSubscription, AtomicReference<SpanImpl>> inputSpans = new HashMap<SeriesSubscription, AtomicReference<SpanImpl>>();
+	Map<SeriesSubscription, AtomicReference<SpanImpl>> lastInputSpans = new HashMap<SeriesSubscription, AtomicReference<SpanImpl>>();
 	@Override
-	public <T extends Span> void updateModifiedSpan(T s, SeriesSubscription subscription) {
-	    SpanImpl span = (SpanImpl)s;
-		if(currentUpdateSpan.get() == null) {
-			currentUpdateSpan.set(span);
-		}
-		
-		synchronized(currentUpdates) {
-		    boolean wasNewForScript = false;
-		    if(wasNewForScript = (currentUpdates.get(subscription) == null)) {
-		        currentUpdates.put(subscription, span);
-	        }
-		    
-	        setUpdated(isUpdated() || wasNewForScript || span.extendsSpan(currentUpdates.get(subscription)));
-	        if(isUpdated()) {
-	        	currentUpdateSpan.getAndSet(currentUpdateSpan.get().union(span));
-	        }
-		}
+    public <T extends Span> void updateModifiedSpan(T s, SeriesSubscription subscription) {
+        SpanImpl span = (SpanImpl)s;
+        System.out.println("updateModifiedSpan:  " + span);
+        synchronized(inputSpans) {
+            boolean wasNewForScript = false;
+            if(wasNewForScript = (inputSpans.get(subscription) == null)) {
+                mapFirstAncestorUpdate(subscription, span);
+            }
+            setUpdated(wasNewForScript || span.extendsSpan(inputSpans.get(subscription).get()));
+            if(isUpdated()) {
+                inputSpans.get(subscription).get().setSpan(span);
+                currentProcessSpan.setSpan(currentProcessSpan.equals(SpanImpl.INITIAL) ? span : currentProcessSpan.union(span));
+                System.out.println("currentProcessSpan = " + currentProcessSpan);
+            }
+        }
 	}
 
 	/**
@@ -95,24 +149,36 @@ public class AnalyticNode extends Node<SeriesSubscription> {
 	 * 
 	 * @return	a flag indicating whether the implementing class has all of its expected input.
 	 */
+//	@Override
+//	public boolean hasAllAncestorUpdates() {
+//	    boolean hasAllUpdates = currentUpdates.values().size() == getInputSubscriptions().size();
+//	    synchronized(currentUpdates) {
+//	        for(SpanImpl s : currentUpdates.values()) {
+//	            hasAllUpdates &= s.extendsSpan(currentProcessSpan);
+//	        }
+//	    }
+//		return hasAllUpdates;
+//	}
+	
 	@Override
-	public boolean hasAllAncestorUpdates() {
-	    boolean hasAllUpdates = currentUpdates.values().size() == getInputSubscriptions().size();
-	    synchronized(currentUpdates) {
-	        for(SpanImpl s : currentUpdates.values()) {
-	            hasAllUpdates &= s.extendsSpan(currentProcessSpan);
-	        }
-	    }
-		return hasAllUpdates;
-	}
+    public boolean hasAllAncestorUpdates() {
+        boolean hasAllUpdates = inputSpans.values().size() == getInputSubscriptions().size();
+        synchronized(inputSpans) {
+            for(SeriesSubscription sub : inputSpans.keySet()) {
+                AtomicReference<SpanImpl> prevRef = lastInputSpans.get(sub);
+                hasAllUpdates &= (prevRef == null || inputSpans.get(sub).get().extendsSpan(prevRef.get()));
+            }
+        }
+        return hasAllUpdates;
+    }
 	
 	@Override
 	public Span process() {
-		synchronized(currentUpdates) {
-			currentProcessSpan.setSpan(currentUpdateSpan.get());
-		}
+	    //currentProcessSpan.setSpan(currentUpdateSpan.get());
 		
 		Span span = analytic.process(currentProcessSpan);
+		savePreviousAncestorUpdates();
+		currentProcessSpan.setTime(currentProcessSpan.getNextTime());
 		NetworkNotificationImpl note = new NetworkNotificationImpl(analytic.getName(), span);
 		for(Observer<NetworkNotification> obs : observers) {
 		    System.out.println("ON NEXT CALLED");

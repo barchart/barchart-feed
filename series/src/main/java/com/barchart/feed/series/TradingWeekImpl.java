@@ -490,11 +490,24 @@ public class TradingWeekImpl extends JodaWorkingWeek implements TradingWeek {
                         dt = dt.withSecondOfMinute(0);
                     }
                 }
+                
+                // Guarantee new date is aligned to a business date.
+                calculator.setStartDate(dt.toLocalDate());
+                LocalDate ldt = calculator.getCurrentBusinessDate();
+                if(!ldt.isEqual(dt.toLocalDate())) {
+                    tradingSession = getTradingSessionOnOrAfter(ldt.toDateTime(dt.toLocalTime()));
+                    if(tradingSession.day() < dt.getDayOfWeek()) {
+                        dt = dt.plusDays((DateTimeConstants.SUNDAY - dt.getDayOfWeek()) + 1);
+                    }
+                    dt = dt.withDayOfWeek(tradingSession.day());
+                    LocalTime lt = tradingSession.start();
+                    dt = dt.withHourOfDay(lt.getHourOfDay()).withMinuteOfHour(lt.getMinuteOfHour()).withSecondOfMinute(0);
+                }
                 break;
             }
             case TICK: {
-            	tradingSession = getTradingSessionOnOrAfter(dt);
-                if(!tradingSession.contains(dt)) {
+            	if(!tradingSession.contains(dt)) {
+            	    tradingSession = getTradingSessionOnOrAfter(dt);
                     if(tradingSession.day() < dt.getDayOfWeek()) {
                         dt = dt.plusDays((DateTimeConstants.SUNDAY - dt.getDayOfWeek()) + 1);
                     }
@@ -505,18 +518,7 @@ public class TradingWeekImpl extends JodaWorkingWeek implements TradingWeek {
                 }
             }
             
-            // Guarantee new date is aligned to a business date.
-            calculator.setStartDate(dt.toLocalDate());
-            LocalDate ldt = calculator.getCurrentBusinessDate();
-            if(!ldt.isEqual(dt.toLocalDate())) {
-                tradingSession = getTradingSessionOnOrAfter(ldt.toDateTime(dt.toLocalTime()));
-                if(tradingSession.day() < dt.getDayOfWeek()) {
-                    dt = dt.plusDays((DateTimeConstants.SUNDAY - dt.getDayOfWeek()) + 1);
-                }
-                dt = dt.withDayOfWeek(tradingSession.day());
-                LocalTime lt = tradingSession.start();
-                dt = dt.withHourOfDay(lt.getHourOfDay()).withMinuteOfHour(lt.getMinuteOfHour()).withSecondOfMinute(0);
-            }
+            
         }
         return dt;
     }
