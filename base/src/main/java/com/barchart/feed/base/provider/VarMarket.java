@@ -81,8 +81,7 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 		/** set self reference */
 		set(MARKET, this);
 
-		agentMap.put(com.barchart.feed.api.model.data.Market.class,
-				new HashSet<FrameworkAgent<?>>());
+		agentMap.put(com.barchart.feed.api.model.data.Market.class, new HashSet<FrameworkAgent<?>>());
 		agentMap.put(Trade.class, new HashSet<FrameworkAgent<?>>());
 		agentMap.put(Book.class, new HashSet<FrameworkAgent<?>>());
 		agentMap.put(Cuvol.class, new HashSet<FrameworkAgent<?>>());
