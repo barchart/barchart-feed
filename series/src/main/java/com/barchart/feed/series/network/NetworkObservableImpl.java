@@ -231,7 +231,9 @@ public class NetworkObservableImpl extends NetworkObservable {
     @Override
 	public <E extends DataPoint> Map<String, DataSeries<E>> getPublisherSeries() {
 		Map<String, DataSeries<E>> map = new HashMap<String, DataSeries<E>>();
-		map.putAll((Map<? extends String, ? extends DataSeries<E>>)availablePublisherMap);
+		for(String key : availablePublisherMap.keySet()) {
+			map.put(key, (DataSeries<E>)availablePublisherMap.get(key));
+		}
 		return map;
 	}
 	

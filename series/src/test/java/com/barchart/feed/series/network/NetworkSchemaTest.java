@@ -14,6 +14,7 @@ public class NetworkSchemaTest {
 
     @Test
     public void testGetNetwork() {
+    	NetworkSchema.setSchemaFilePath("networks.txt");
         NetworkDescriptor schema = NetworkSchema.getNetwork("PivotPointOverlay");
         assertNotNull(schema);
         

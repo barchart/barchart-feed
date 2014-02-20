@@ -22,9 +22,17 @@
     </scm>
     
     <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+        </resources>
         <testResources>
           <testResource>
             <directory>src/test/resources</directory>
+          </testResource>
+          <testResource>
+            <directory>src/main/resources</directory>
           </testResource>
         </testResources>
     </build>
@@ -70,6 +78,12 @@
           <groupId>net.objectlab.kit</groupId>
           <artifactId>datecalc-joda</artifactId>
           <version>1.2.0</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>

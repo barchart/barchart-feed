@@ -139,6 +139,8 @@ public class NetworkSchema implements NetworkDescriptor {
     public static void setSchemaFilePath(String filePath) {
     	System.out.println("schemaFilePath being set to: " + filePath);
         schemaFileName = filePath;
+        allDescriptors.clear();
+        descriptorsByNetwork.clear();
     }
     
     /**
@@ -289,6 +291,7 @@ public class NetworkSchema implements NetworkDescriptor {
             String line = null;
             String lastNetworkName = null;
             while((line = buf.readLine()) != null) {
+            	System.out.println(schemaFileName + " - line: " + line);
                 String[] lineParts = line.split(";");
                 String[] argParts = new String[lineParts.length - 1];
                 for(int i = 1;i < lineParts.length;i++) {
