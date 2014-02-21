@@ -25,8 +25,7 @@ public interface MarketService extends ConnectionLifecycle<MarketService>,
 	 * @param clazz
 	 * @return
 	 */
-	<V extends MarketData<V>> ConsumerAgent register(MarketObserver<V> callback,
-			Class<V> clazz);
+	<V extends MarketData<V>> ConsumerAgent register(MarketObserver<V> callback, Class<V> clazz);
 
 	/**
 	 * 

@@ -350,8 +350,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		}
 		
 		@Override
-		public synchronized Observable<Result<Instrument>> exclude(
-				final String... symbols) {
+		public synchronized Observable<Result<Instrument>> exclude(final String... symbols) {
 			
 			return metaService.instrument(symbols).mapMany(
 					
@@ -430,7 +429,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		
 			for(Metadata m : meta) {
 				
-				if(m.isNull()) {
+				if(m == null || m.isNull()) {
 					continue;
 				}
 				
@@ -482,7 +481,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		
 			for(Metadata m : meta) {
 				
-				if(m.isNull()) {
+				if(m == null || m.isNull()) {
 					continue;
 				}
 				

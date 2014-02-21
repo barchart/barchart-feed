@@ -45,8 +45,7 @@ public interface Marketplace extends ConnectionLifecycle<Marketplace> {
 	
 	/* ***** ***** Helper subscribe methods ***** ***** */
 	
-	<V extends MarketData<V>> Agent newAgent(Class<V> clazz,
-			MarketObserver<V> callback);
+	<V extends MarketData<V>> Agent newAgent(Class<V> clazz, MarketObserver<V> callback);
 
 	/** FIXME document */
 	<V extends MarketData<V>> Agent subscribe(Class<V> clazz,
