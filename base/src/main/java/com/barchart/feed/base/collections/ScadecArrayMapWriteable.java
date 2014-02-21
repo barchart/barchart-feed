@@ -78,12 +78,12 @@ public abstract class ScadecArrayMapWriteable<T extends ScaledDecimal<T, ?>, V>
 
 		if (isBelowHead(price)) {
 			count = keyCount(price, keyHead());
-			assert count < 0;
+//			assert count < 0;
 		}
 
 		if (isAboveTail(price)) {
 			count = keyCount(price, keyTail());
-			assert count > 0;
+//			assert count > 0;
 		}
 
 		if (count == 0) {
