@@ -16,6 +16,7 @@ import static com.barchart.feed.base.market.enums.MarketField.MARKET;
 import static com.barchart.feed.base.market.enums.MarketField.STATE;
 import static com.barchart.feed.base.market.enums.MarketField.TRADE;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -81,11 +82,12 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 		/** set self reference */
 		set(MARKET, this);
 
-		agentMap.put(com.barchart.feed.api.model.data.Market.class, new HashSet<FrameworkAgent<?>>());
-		agentMap.put(Trade.class, new HashSet<FrameworkAgent<?>>());
-		agentMap.put(Book.class, new HashSet<FrameworkAgent<?>>());
-		agentMap.put(Cuvol.class, new HashSet<FrameworkAgent<?>>());
-		agentMap.put(Session.class, new HashSet<FrameworkAgent<?>>());
+		agentMap.put(com.barchart.feed.api.model.data.Market.class, 
+				Collections.<FrameworkAgent<?>> synchronizedSet(new HashSet<FrameworkAgent<?>>()));
+		agentMap.put(Trade.class, Collections.<FrameworkAgent<?>> synchronizedSet(new HashSet<FrameworkAgent<?>>()));
+		agentMap.put(Book.class, Collections.<FrameworkAgent<?>> synchronizedSet(new HashSet<FrameworkAgent<?>>()));
+		agentMap.put(Cuvol.class, Collections.<FrameworkAgent<?>> synchronizedSet(new HashSet<FrameworkAgent<?>>()));
+		agentMap.put(Session.class, Collections.<FrameworkAgent<?>> synchronizedSet(new HashSet<FrameworkAgent<?>>()));
 
 	}
 
@@ -94,31 +96,39 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 	@Override
 	public void attachAgent(final FrameworkAgent<?> agent) {
 
-		if(agentSet.containsKey(agent)) {
-			updateAgent(agent);
-			return;
+		synchronized(agentMap) {
+		
+			if(agentSet.containsKey(agent)) {
+				updateAgent(agent);
+				return;
+			}
+	
+			if(!agent.hasMatch(instrument())) {
+				return;
+			}
+	
+			agentSet.put(agent, new Boolean(false));
+	
+			agentMap.get(agent.type()).add(agent);
+		
 		}
-
-		if(!agent.hasMatch(instrument())) {
-			return;
-		}
-
-		agentSet.put(agent, new Boolean(false));
-
-		agentMap.get(agent.type()).add(agent);
 
 	}
 
 	@Override
 	public void updateAgent(final FrameworkAgent<?> agent) {
 
-		if(!agentSet.containsKey(agent)) {
-			attachAgent(agent);
-			return;
-		}
-
-		if(!agent.hasMatch(instrument())) {
-			detachAgent(agent);
+		synchronized(agentMap) {
+		
+			if(!agentSet.containsKey(agent)) {
+				attachAgent(agent);
+				return;
+			}
+	
+			if(!agent.hasMatch(instrument())) {
+				detachAgent(agent);
+			}
+		
 		}
 
 	}
@@ -126,13 +136,17 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 	@Override
 	public void detachAgent(final FrameworkAgent<?> agent) {
 
-		if(!agentSet.containsKey(agent)) {
-			return;
+		synchronized(agentMap) {
+		
+			if(!agentSet.containsKey(agent)) {
+				return;
+			}
+	
+			agentSet.remove(agent);
+	
+			agentMap.get(agent.type()).remove(agent);
+		
 		}
-
-		agentSet.remove(agent);
-
-		agentMap.get(agent.type()).remove(agent);
 
 	}
 
