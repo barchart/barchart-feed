@@ -92,7 +92,7 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 	/* ***** ***** Agent Lifecycle ***** ***** */
 
 	@Override
-	public synchronized void attachAgent(final FrameworkAgent<?> agent) {
+	public void attachAgent(final FrameworkAgent<?> agent) {
 
 		if(agentSet.containsKey(agent)) {
 			updateAgent(agent);
@@ -110,7 +110,7 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 	}
 
 	@Override
-	public synchronized void updateAgent(final FrameworkAgent<?> agent) {
+	public void updateAgent(final FrameworkAgent<?> agent) {
 
 		if(!agentSet.containsKey(agent)) {
 			attachAgent(agent);
@@ -124,7 +124,7 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 	}
 
 	@Override
-	public synchronized void detachAgent(final FrameworkAgent<?> agent) {
+	public void detachAgent(final FrameworkAgent<?> agent) {
 
 		if(!agentSet.containsKey(agent)) {
 			return;

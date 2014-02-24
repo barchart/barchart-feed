@@ -692,7 +692,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 	
 	/* ***** ***** Agent Lifecycle Methods ***** ***** */
 	@Override
-	public synchronized void attachAgent(final FrameworkAgent<?> agent) {
+	public void attachAgent(final FrameworkAgent<?> agent) {
 
 		if (agents.containsKey(agent)) {
 
@@ -710,7 +710,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 	}
 	
 	@Override
-	public synchronized void updateAgent(final FrameworkAgent<?> agent) {
+	public void updateAgent(final FrameworkAgent<?> agent) {
 
 		if (!agents.containsKey(agent)) {
 
@@ -727,7 +727,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 	}
 	
 	@Override
-	public synchronized void detachAgent(final FrameworkAgent<?> agent) {
+	public void detachAgent(final FrameworkAgent<?> agent) {
 
 		if (!agents.containsKey(agent)) {
 			return;
