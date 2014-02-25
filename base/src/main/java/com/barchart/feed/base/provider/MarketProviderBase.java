@@ -629,16 +629,16 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 	private Sub unsubscribe(final FrameworkAgent<?> agent, final String interest) {
 
 		if (!agentMap.containsKey(agent)) {
-			return Sub.NULL; // PROBLEM HERE why isn't agent in map for AAPL or GOOG
+			return Sub.NULL; 
 		}
 
 		final Set<SubscriptionType> oldSubs = agentMap.get(agent);
 
 		subs.get(interest).remove(oldSubs);
 
-		if (subs.get(interest).isEmpty()) {
-			subs.remove(interest);
-		}
+//		if (subs.get(interest).isEmpty()) {
+//			subs.remove(interest);
+//		}
 
 		final Set<SubscriptionType> stuffToRemove = EnumSet.copyOf(oldSubs);
 		stuffToRemove.removeAll(aggregate(interest));

@@ -185,6 +185,7 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 
 	}
 
+	@SuppressWarnings({"unchecked"})
 	@Override
 	public void detachAgent(final FrameworkAgent<?> agent) {
 
