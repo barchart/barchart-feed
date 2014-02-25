@@ -26,8 +26,12 @@ import com.barchart.feed.api.consumer.ConsumerAgent;
 import com.barchart.feed.api.consumer.MarketService;
 import com.barchart.feed.api.consumer.MetadataService;
 import com.barchart.feed.api.filter.Filter;
+import com.barchart.feed.api.model.data.Book;
+import com.barchart.feed.api.model.data.Cuvol;
 import com.barchart.feed.api.model.data.Market;
 import com.barchart.feed.api.model.data.MarketData;
+import com.barchart.feed.api.model.data.Session;
+import com.barchart.feed.api.model.data.Trade;
 import com.barchart.feed.api.model.meta.Exchange;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.api.model.meta.Metadata;
@@ -142,6 +146,26 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 			this.getter = getter;
 			this.callback = callback;
 		
+		}
+		
+		@Override
+		public AgentType agentType() {
+			if(clazz == Market.class) {
+				return AgentType.MARKET;
+			}
+			if(clazz == Trade.class) {
+				return AgentType.TRADE;
+			}
+			if(clazz == Book.class) {
+				return AgentType.BOOK;
+			}
+			if(clazz == Session.class) {
+				return AgentType.SESSION;
+			}
+			if(clazz == Cuvol.class) {
+				return AgentType.CUVOL;
+			}
+			throw new IllegalStateException("Unknown Agent Type");
 		}
 		
 		@Override
@@ -445,9 +469,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 					incInsts.add(i);
 					exInsts.remove(i);
 					
-					/* We have to use an alternate symbol for options
-					 * ...rolls eyes...
-					 */
+					/* We have to use an alternate symbol for options */
 					final String symbol = i.symbol();
 					if(symbol.contains("|")) {
 						newInterests.add(i.vendorSymbols().get(VendorID.BARCHART));
@@ -497,9 +519,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 					exInsts.add(i);
 					incInsts.remove(i);
 					
-					/* We have to use an alternate symbol for options
-					 * ...rolls eyes...
-					 */
+					/* We have to use an alternate symbol for options */
 					final String symbol = i.symbol();
 					if(symbol.contains("|")) {
 						oldInterests.add(i.vendorSymbols().get(VendorID.BARCHART));
@@ -565,7 +585,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		return agg;
 	}
 
-	private synchronized Sub subscribe(final FrameworkAgent<?> agent, final String interest) {
+	private Sub subscribe(final FrameworkAgent<?> agent, final String interest) {
 
 		if (!agentMap.containsKey(agent)) {
 			agentMap.put(agent, SubscriptionType.mapMarketEvent(agent.type()));
@@ -606,14 +626,13 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 
 	}
 
-	private synchronized Sub unsubscribe(final FrameworkAgent<?> agent,
-			final String interest) {
+	private Sub unsubscribe(final FrameworkAgent<?> agent, final String interest) {
 
 		if (!agentMap.containsKey(agent)) {
-			return Sub.NULL;
+			return Sub.NULL; // PROBLEM HERE why isn't agent in map for AAPL or GOOG
 		}
 
-		final Set<SubscriptionType> oldSubs = agentMap.remove(agent);
+		final Set<SubscriptionType> oldSubs = agentMap.get(agent);
 
 		subs.get(interest).remove(oldSubs);
 
@@ -625,15 +644,14 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		stuffToRemove.removeAll(aggregate(interest));
 
 		if (!stuffToRemove.isEmpty()) {
-			return new SubBase(interest, Sub.Type.INSTRUMENT, 
-					stuffToRemove);
+			return new SubBase(interest, Sub.Type.INSTRUMENT, stuffToRemove);
 		} else {
 			return Sub.NULL;
 		}
 
 	}
 
-	private synchronized Set<Sub> unsubscribe(final FrameworkAgent<?> agent,
+	private synchronized Set<Sub> unsubscribe(final FrameworkAgent<?> agent, 
 			final Set<String> interests) {
 
 		final Set<Sub> newSubs = new HashSet<Sub>();
@@ -665,8 +683,6 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 	}
 	
 	private static String formatForJERQ(final String symbol) {
-
-		log.debug("Formatting {} for JERQ", symbol);
 
 		if (symbol == null) {
 			return "";

@@ -13,6 +13,12 @@ import com.barchart.feed.api.model.data.MarketData;
 
 public interface FrameworkAgent<V extends MarketData<V>> extends AgentLifecycle, FilterUpdatable, Filter  {
 
+	enum AgentType {
+		MARKET, BOOK, TRADE, CUVOL, SESSION
+	}
+	
+	AgentType agentType();
+	
 	Agent userAgent();
 	
 	ConsumerAgent consumerAgent();

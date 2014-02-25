@@ -16,20 +16,18 @@ import static com.barchart.feed.base.market.enums.MarketField.MARKET;
 import static com.barchart.feed.base.market.enums.MarketField.STATE;
 import static com.barchart.feed.base.market.enums.MarketField.TRADE;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.api.model.data.Book;
 import com.barchart.feed.api.model.data.Cuvol;
-import com.barchart.feed.api.model.data.MarketData;
 import com.barchart.feed.api.model.data.Session;
 import com.barchart.feed.api.model.data.Trade;
 import com.barchart.feed.api.model.meta.Instrument;
@@ -64,11 +62,34 @@ import com.barchart.util.common.anno.ThreadSafe;
 @ThreadSafe(rule = "must use runSafe()")
 public abstract class VarMarket extends DefMarket implements MarketDo {
 
-	protected final Map<Class<? extends MarketData<?>>, Set<FrameworkAgent<?>>> agentMap =
-		new ConcurrentHashMap<Class<? extends MarketData<?>>, Set<FrameworkAgent<?>>>();
-
 	private final ConcurrentMap<FrameworkAgent<?>, Boolean> agentSet =
 			new ConcurrentHashMap<FrameworkAgent<?>, Boolean>();
+	
+//	protected final Map<Class<? extends MarketData<?>>, Set<FrameworkAgent<?>>> agentMap =
+//		new ConcurrentHashMap<Class<? extends MarketData<?>>, Set<FrameworkAgent<?>>>();
+
+	// NEW
+	protected final Set<FrameworkAgent<com.barchart.feed.api.model.data.Market>> marketAgents = 
+			new HashSet<FrameworkAgent<com.barchart.feed.api.model.data.Market>>();
+	protected final Set<FrameworkAgent<Trade>> tradeAgents = new HashSet<FrameworkAgent<Trade>>();
+	protected final Set<FrameworkAgent<Book>> bookAgents = new HashSet<FrameworkAgent<Book>>();
+	protected final Set<FrameworkAgent<Cuvol>> cuvolAgents = new HashSet<FrameworkAgent<Cuvol>>();
+	protected final Set<FrameworkAgent<Session>> sessionAgents = new HashSet<FrameworkAgent<Session>>();
+	
+	// Probably can get away with HashMaps here, keeping concurrent for now
+	protected final List<FrameworkAgent<com.barchart.feed.api.model.data.Market>> marketAgentsToAdd =
+			new CopyOnWriteArrayList<FrameworkAgent<com.barchart.feed.api.model.data.Market>>();
+	protected final List<FrameworkAgent<Trade>> tradeAgentsToAdd = new CopyOnWriteArrayList<FrameworkAgent<Trade>>();
+	protected final List<FrameworkAgent<Book>> bookAgentsToAdd = new CopyOnWriteArrayList<FrameworkAgent<Book>>();
+	protected final List<FrameworkAgent<Cuvol>> cuvolAgentsToAdd = new CopyOnWriteArrayList<FrameworkAgent<Cuvol>>();
+	protected final List<FrameworkAgent<Session>> sessionAgentsToAdd = new CopyOnWriteArrayList<FrameworkAgent<Session>>();
+
+	protected final List<FrameworkAgent<com.barchart.feed.api.model.data.Market>> marketAgentsToRemove =
+			new CopyOnWriteArrayList<FrameworkAgent<com.barchart.feed.api.model.data.Market>>();
+	protected final List<FrameworkAgent<Trade>> tradeAgentsToRemove = new CopyOnWriteArrayList<FrameworkAgent<Trade>>();
+	protected final List<FrameworkAgent<Book>> bookAgentsToRemove = new CopyOnWriteArrayList<FrameworkAgent<Book>>();
+	protected final List<FrameworkAgent<Cuvol>> cuvolAgentsToRemove = new CopyOnWriteArrayList<FrameworkAgent<Cuvol>>();
+	protected final List<FrameworkAgent<Session>> sessionAgentsToRemove = new CopyOnWriteArrayList<FrameworkAgent<Session>>();
 
 	// @SuppressWarnings("unused")
 	private static final Logger log = LoggerFactory.getLogger(VarMarket.class);
@@ -82,53 +103,84 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 		/** set self reference */
 		set(MARKET, this);
 
-		agentMap.put(com.barchart.feed.api.model.data.Market.class, 
-				Collections.<FrameworkAgent<?>> synchronizedSet(new HashSet<FrameworkAgent<?>>()));
-		agentMap.put(Trade.class, Collections.<FrameworkAgent<?>> synchronizedSet(new HashSet<FrameworkAgent<?>>()));
-		agentMap.put(Book.class, Collections.<FrameworkAgent<?>> synchronizedSet(new HashSet<FrameworkAgent<?>>()));
-		agentMap.put(Cuvol.class, Collections.<FrameworkAgent<?>> synchronizedSet(new HashSet<FrameworkAgent<?>>()));
-		agentMap.put(Session.class, Collections.<FrameworkAgent<?>> synchronizedSet(new HashSet<FrameworkAgent<?>>()));
+//		agentMap.put(com.barchart.feed.api.model.data.Market.class, 
+//				Collections.<FrameworkAgent<?>> synchronizedSet(new HashSet<FrameworkAgent<?>>()));
+//		agentMap.put(Trade.class, Collections.<FrameworkAgent<?>> synchronizedSet(new HashSet<FrameworkAgent<?>>()));
+//		agentMap.put(Book.class, Collections.<FrameworkAgent<?>> synchronizedSet(new HashSet<FrameworkAgent<?>>()));
+//		agentMap.put(Cuvol.class, Collections.<FrameworkAgent<?>> synchronizedSet(new HashSet<FrameworkAgent<?>>()));
+//		agentMap.put(Session.class, Collections.<FrameworkAgent<?>> synchronizedSet(new HashSet<FrameworkAgent<?>>()));
 
 	}
 
 	/* ***** ***** Agent Lifecycle ***** ***** */
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void attachAgent(final FrameworkAgent<?> agent) {
-
-		synchronized(agentMap) {
 		
-			if(agentSet.containsKey(agent)) {
-				updateAgent(agent);
-				return;
-			}
-	
-			if(!agent.hasMatch(instrument())) {
-				return;
-			}
-	
-			agentSet.put(agent, new Boolean(false));
-	
-			agentMap.get(agent.type()).add(agent);
+//		if(agentSet.containsKey(agent)) {
+//			updateAgent(agent);
+//			return;
+//		}
+//		
+//		if(agents.contains(agent)) {
+//			updateAgent(agent);
+//			return;
+//		}
 		
+		if(!agent.hasMatch(instrument())) {
+			return;
 		}
+		
+		agentSet.put(agent, new Boolean(false));
+		
+		switch(agent.agentType()) {
+			case MARKET:
+				marketAgentsToAdd.add((FrameworkAgent<com.barchart.feed.api.model.data.Market>) agent);
+				break;
+			case BOOK:
+				bookAgentsToAdd.add((FrameworkAgent<Book>) agent);
+				break;
+			case TRADE:
+				tradeAgentsToAdd.add((FrameworkAgent<Trade>) agent);
+				break;
+			case CUVOL:
+				cuvolAgentsToAdd.add((FrameworkAgent<Cuvol>) agent);
+				break;
+			case SESSION:
+				sessionAgentsToAdd.add((FrameworkAgent<Session>) agent);
+				break;
+		}
+
+//		synchronized(agentMap) {
+//		
+//			if(agentSet.containsKey(agent)) {
+//				updateAgent(agent);
+//				return;
+//			}
+//	
+//			if(!agent.hasMatch(instrument())) {
+//				return;
+//			}
+//	
+//			agentSet.put(agent, new Boolean(false));
+//	
+//			agentMap.get(agent.type()).add(agent);
+//		
+//		}
 
 	}
 
 	@Override
 	public void updateAgent(final FrameworkAgent<?> agent) {
-
-		synchronized(agentMap) {
 		
-			if(!agentSet.containsKey(agent)) {
-				attachAgent(agent);
-				return;
-			}
-	
-			if(!agent.hasMatch(instrument())) {
-				detachAgent(agent);
-			}
+		if(!agentSet.containsKey(agent)) {
+			attachAgent(agent);
+			return;
+		}
 		
+		if(!agent.hasMatch(instrument())) {
+			detachAgent(agent);
 		}
 
 	}
@@ -136,17 +188,41 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 	@Override
 	public void detachAgent(final FrameworkAgent<?> agent) {
 
-		synchronized(agentMap) {
-		
-			if(!agentSet.containsKey(agent)) {
-				return;
-			}
-	
-			agentSet.remove(agent);
-	
-			agentMap.get(agent.type()).remove(agent);
-		
+		if(!agentSet.containsKey(agent)) {
+			return;
 		}
+		
+		agentSet.remove(agent);
+		
+		switch(agent.agentType()) {
+			case MARKET:
+				marketAgentsToRemove.add((FrameworkAgent<com.barchart.feed.api.model.data.Market>) agent);
+				break;
+			case BOOK:
+				bookAgentsToRemove.add((FrameworkAgent<Book>) agent);
+				break;
+			case TRADE:
+				tradeAgentsToRemove.add((FrameworkAgent<Trade>) agent);
+				break;
+			case CUVOL:
+				cuvolAgentsToRemove.add((FrameworkAgent<Cuvol>) agent);
+				break;
+			case SESSION:
+				sessionAgentsToRemove.add((FrameworkAgent<Session>) agent);
+				break;
+		}
+		
+//		synchronized(agentMap) {
+//		
+//			if(!agentSet.containsKey(agent)) {
+//				return;
+//			}
+//	
+//			agentSet.remove(agent);
+//	
+//			agentMap.get(agent.type()).remove(agent);
+//		
+//		}
 
 	}
 

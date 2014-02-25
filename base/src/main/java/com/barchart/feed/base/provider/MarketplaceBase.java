@@ -21,8 +21,12 @@ import com.barchart.feed.api.MarketObserver;
 import com.barchart.feed.api.SnapshotService;
 import com.barchart.feed.api.consumer.ConsumerAgent;
 import com.barchart.feed.api.filter.Filter;
+import com.barchart.feed.api.model.data.Book;
+import com.barchart.feed.api.model.data.Cuvol;
 import com.barchart.feed.api.model.data.Market;
 import com.barchart.feed.api.model.data.MarketData;
+import com.barchart.feed.api.model.data.Session;
+import com.barchart.feed.api.model.data.Trade;
 import com.barchart.feed.api.model.meta.Exchange;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.api.model.meta.Metadata;
@@ -126,6 +130,26 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 			this.getter = getter;
 			this.callback = callback;
 
+		}
+		
+		@Override
+		public AgentType agentType() {
+			if(clazz == Market.class) {
+				return AgentType.MARKET;
+			}
+			if(clazz == Trade.class) {
+				return AgentType.TRADE;
+			}
+			if(clazz == Book.class) {
+				return AgentType.BOOK;
+			}
+			if(clazz == Session.class) {
+				return AgentType.SESSION;
+			}
+			if(clazz == Cuvol.class) {
+				return AgentType.CUVOL;
+			}
+			throw new IllegalStateException("Unknown Agent Type");
 		}
 
 		@Override
@@ -536,7 +560,7 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 			return Sub.NULL;
 		}
 
-		final Set<SubscriptionType> oldSubs = agentMap.remove(agent);
+		final Set<SubscriptionType> oldSubs = agentMap.get(agent);
 
 		subs.get(interest).remove(oldSubs);
 
