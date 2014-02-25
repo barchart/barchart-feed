@@ -564,9 +564,9 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 
 		subs.get(interest).remove(oldSubs);
 
-		if (subs.get(interest).isEmpty()) {
-			subs.remove(interest);
-		}
+//		if (subs.get(interest).isEmpty()) {
+//			subs.remove(interest);
+//		}
 
 		final Set<SubscriptionType> stuffToRemove = EnumSet.copyOf(oldSubs);
 		stuffToRemove.removeAll(aggregate(interest));
