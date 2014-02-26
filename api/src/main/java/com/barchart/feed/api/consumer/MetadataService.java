@@ -50,7 +50,7 @@ public interface MetadataService {
 	 * @param ids
 	 * @return
 	 */
-	Observable<Instrument> instrument(InstrumentID... ids);
+	Observable<Map<InstrumentID,Instrument>> instrument(InstrumentID... ids);
 	
 	/**
 	 * 

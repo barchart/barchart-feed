@@ -20,12 +20,12 @@ import com.barchart.feed.api.model.meta.id.InstrumentID;
 import com.barchart.feed.api.model.meta.id.VendorID;
 import com.barchart.feed.inst.participant.InstrumentState.State;
 import com.barchart.util.value.ValueFactoryImpl;
-import com.barchart.util.value.api.ValueFactory;
 import com.barchart.util.value.api.Fraction;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Schedule;
 import com.barchart.util.value.api.Size;
 import com.barchart.util.value.api.TimeInterval;
+import com.barchart.util.value.api.ValueFactory;
 
 public class InstrumentImpl extends InstrumentBase implements Instrument {
 	
@@ -50,7 +50,7 @@ public class InstrumentImpl extends InstrumentBase implements Instrument {
 		/* Symbol is currently GUID */
 		return def.getSymbol();
 	}
-
+	
 	@Override
 	public SecurityType securityType() {
 		
@@ -314,7 +314,7 @@ public class InstrumentImpl extends InstrumentBase implements Instrument {
 		
 		final List<InstrumentID> legs = new ArrayList<InstrumentID>();
 		for(final Long l : def.getComponentIdList()) {
-			legs.add(new InstrumentID(String.valueOf(l)));
+			//legs.add(new InstrumentID(l));
 		}
 		
 		return legs;

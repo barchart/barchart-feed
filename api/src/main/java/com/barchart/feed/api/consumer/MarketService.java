@@ -70,7 +70,7 @@ public interface MarketService extends ConnectionLifecycle<MarketService>,
 	 * @return
 	 */
 	@Override
-	Observable<Instrument> instrument(InstrumentID... ids);
+	Observable<Map<InstrumentID, Instrument>> instrument(InstrumentID... ids);
 	
 	/**
 	 * 

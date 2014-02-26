@@ -165,7 +165,7 @@ public abstract class InstrumentBase implements Instrument {
 
 	@Override
 	public String toString() {
-		return id().toString();
+		return symbol();
 	}
 	
 }

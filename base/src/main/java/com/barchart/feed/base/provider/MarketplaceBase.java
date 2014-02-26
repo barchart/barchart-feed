@@ -92,8 +92,7 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 					+ clazz.getName());
 		}
 
-		final FrameworkAgent<V> agent = new BaseAgent<V>(this, clazz, getter,
-				callback);
+		final FrameworkAgent<V> agent = new BaseAgent<V>(this, clazz, getter, callback);
 
 		attachAgent(agent);
 
