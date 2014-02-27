@@ -1,7 +1,6 @@
 package com.barchart.feed.series.network;
 
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -52,7 +51,7 @@ public class NetworkObservableTest {
 		
 		Observer<NetworkNotification> obs = getTestObserver();
 		NetworkObservable no = new NetworkObservableImpl(ss, map);
-		rx.Subscription subscription = no.subscribe(obs, sub.toString());
+		rx.Subscription subscription = no.subscribe(obs);
 		
 		assertNotNull(subscription);
 		assertTrue(nodes.get(0).isRunning());
@@ -81,9 +80,7 @@ public class NetworkObservableTest {
         
         Observer<NetworkNotification> obs = getTestObserver();
         NetworkObservable no = new NetworkObservableImpl(ss, map);
-        assertNull(no.getSubscribedNodeNames(obs));
-        rx.Subscription subscription = no.subscribeAll(obs);
-        assertTrue(no.getSubscribedNodeNames(obs).size() == 2);
+        rx.Subscription subscription = no.subscribe(obs);
         
         assertNotNull(subscription);
         assertTrue(nodes.get(0).isRunning());

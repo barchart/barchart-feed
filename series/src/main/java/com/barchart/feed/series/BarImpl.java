@@ -369,11 +369,18 @@ public class BarImpl extends DataPointImpl implements Bar {
 	 */
 	@Override
 	public <E extends Bar> void merge(E other, boolean advanceTime) {
-		if(high == null || other.getHigh().greaterThan(high)) {
-			high = other.getHigh();
-		}
-		if(low == null || other.getLow().lessThan(low)) {
-			low = other.getLow();
+		
+		try {
+		    if(high == null || other.getHigh().greaterThan(high)) {
+	            high = other.getHigh();
+	        }
+    		if(low == null || other.getLow().lessThan(low)) {
+    			low = other.getLow();
+    		}
+		}catch(ArithmeticException ae) {
+		    System.out.println("other = " + other.getLow());
+		    System.out.println("low = " + low.asDouble());
+		    System.exit(1);
 		}
 		close = other.getClose();
 		volume = volume.add(other.getVolume());
