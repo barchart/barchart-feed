@@ -1,8 +1,10 @@
 package com.barchart.feed.api.model.meta.id;
 
-import com.barchart.util.common.identifier.Identifier;
+import com.barchart.feed.api.model.meta.Metadata;
+import com.barchart.feed.api.model.meta.Metadata.MetaType;
 
-public class InstrumentID extends Identifier<String, InstrumentID> {
+
+public class InstrumentID extends MetadataID<InstrumentID> {
 
 	public InstrumentID(final String id) {
 		super(id, InstrumentID.class);
@@ -16,5 +18,10 @@ public class InstrumentID extends Identifier<String, InstrumentID> {
 		}
 		
 	};
+	
+	@Override
+	public Metadata.MetaType metaType() {
+		return MetaType.INSTRUMENT;
+	}
 
 }

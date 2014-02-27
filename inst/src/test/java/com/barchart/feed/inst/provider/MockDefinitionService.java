@@ -20,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.api.model.meta.Instrument;
+import com.barchart.feed.api.model.meta.id.InstrumentID;
 import com.barchart.feed.inst.InstrumentService;
 import com.barchart.util.value.ValueFactoryImpl;
 import com.barchart.util.value.api.ValueFactory;
@@ -108,6 +109,12 @@ public class MockDefinitionService implements InstrumentService<CharSequence> {
 		}
 		
 		return insts;
+	}
+
+	@Override
+	public Instrument lookup(InstrumentID id) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

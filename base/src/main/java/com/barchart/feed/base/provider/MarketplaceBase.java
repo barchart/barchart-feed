@@ -30,7 +30,9 @@ import com.barchart.feed.api.model.data.Trade;
 import com.barchart.feed.api.model.meta.Exchange;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.api.model.meta.Metadata;
+import com.barchart.feed.api.model.meta.Metadata.MetaType;
 import com.barchart.feed.api.model.meta.id.InstrumentID;
+import com.barchart.feed.api.model.meta.id.MetadataID;
 import com.barchart.feed.base.market.api.MarketDo;
 import com.barchart.feed.base.market.api.MarketFactory;
 import com.barchart.feed.base.market.api.MarketMakerProvider;
@@ -395,6 +397,7 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 		}
 
 		@Override
+		@Deprecated
 		public synchronized void include(final Metadata... meta) {
 
 			final Set<String> newInterests = new HashSet<String>();
@@ -432,8 +435,35 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 			}
 
 		}
+		
+		@Override
+		public void include(final MetadataID<?>... metaID) {
+			
+			final List<InstrumentID> ids = new ArrayList<InstrumentID>();
+			
+			for(final MetadataID<?> m : metaID) {
+				
+				if(m.metaType() == MetaType.INSTRUMENT) {
+					ids.add((InstrumentID) m);
+				}
+				
+			}
+			
+			final List<Instrument> insts = new ArrayList<Instrument>();
+			
+			for(final InstrumentID id : ids) {
+				final Instrument i = instLookup.lookup(id);
+				if(!i.isNull()) {
+					insts.add(i);
+				}
+			}
+			
+			include(insts.toArray(new Instrument[0]));
+			
+		}
 
 		@Override
+		@Deprecated
 		public synchronized void exclude(final Metadata... meta) {
 
 			final Set<String> oldInterests = new HashSet<String>();
@@ -470,6 +500,32 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 				subHandler.unsubscribe(oldSubs);
 			}
 
+		}
+		
+		@Override
+		public void exclude(final MetadataID<?>... metaID) {
+			
+			final List<InstrumentID> ids = new ArrayList<InstrumentID>();
+			
+			for(final MetadataID<?> m : metaID) {
+				
+				if(m.metaType() == MetaType.INSTRUMENT) {
+					ids.add((InstrumentID) m);
+				}
+				
+			}
+			
+			final List<Instrument> insts = new ArrayList<Instrument>();
+			
+			for(final InstrumentID id : ids) {
+				final Instrument i = instLookup.lookup(id);
+				if(!i.isNull()) {
+					insts.add(i);
+				}
+			}
+			
+			exclude(insts.toArray(new Instrument[0]));
+			
 		}
 
 		@Override

@@ -35,8 +35,10 @@ import com.barchart.feed.api.model.data.Trade;
 import com.barchart.feed.api.model.meta.Exchange;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.api.model.meta.Metadata;
+import com.barchart.feed.api.model.meta.Metadata.MetaType;
 import com.barchart.feed.api.model.meta.id.ExchangeID;
 import com.barchart.feed.api.model.meta.id.InstrumentID;
+import com.barchart.feed.api.model.meta.id.MetadataID;
 import com.barchart.feed.api.model.meta.id.VendorID;
 import com.barchart.feed.base.market.api.MarketDo;
 import com.barchart.feed.base.market.api.MarketFactory;
@@ -87,8 +89,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 	private final ConcurrentMap<ExchangeID, Subscription<Exchange>> exchSubs =
 			new ConcurrentHashMap<ExchangeID, Subscription<Exchange>>();
 	
-	protected MarketProviderBase(final MarketFactory factory,
-			final MetadataService metaService,
+	protected MarketProviderBase(final MarketFactory factory, final MetadataService metaService,
 			final SubscriptionHandler handler) {
 		this.factory = factory;
 		this.metaService = metaService;
@@ -335,9 +336,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 								exInsts.remove(i);
 								incInsts.add(i);
 								
-								/* We have to use an alternate symbol for options
-								 * ...rolls eyes...
-								 */
+								/* We have to use an alternate symbol for options */
 								final String symbol = i.symbol();
 								if(symbol.contains("|")) {
 									newInterests.add(i.vendorSymbols().get(VendorID.BARCHART));
@@ -346,10 +345,8 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 								}
 								
 							} else {
-								/*
-								 * For all failed lookups, store symbol and attempt to match 
-								 * in the hasMatch method.
-								 */
+								/* For all failed lookups, store symbol and attempt to match 
+								 * in the hasMatch method. */
 								incUnknown.add(e.getKey().toString());
 								exUnknown.remove(e.getKey().toString());
 							}
@@ -447,6 +444,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		}
 		
 		@Override
+		@Deprecated
 		public synchronized void include(final Metadata... meta) {
 		
 			final Set<String> newInterests = new HashSet<String>();
@@ -497,6 +495,34 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		}
 		
 		@Override
+		public void include(final MetadataID<?>... metaID) {
+			
+			final List<InstrumentID> ids = new ArrayList<InstrumentID>();
+			
+			for(final MetadataID<?> m : metaID) {
+				
+				if(m.metaType() == MetaType.INSTRUMENT) {
+					ids.add((InstrumentID) m);
+				}
+				
+			}
+			
+			final Map<InstrumentID, Instrument> iMap = metaService.instrument(
+					ids.toArray(new InstrumentID[0])).toBlockingObservable().single(); 
+
+			final List<Instrument> insts = new ArrayList<Instrument>();
+			
+			for(final Entry<InstrumentID, Instrument> e : iMap.entrySet()) {
+				if(!e.getValue().isNull()) {
+					insts.add(e.getValue());
+				}
+			}
+			
+			include(insts.toArray(new Instrument[0]));
+		}
+		
+		@Override
+		@Deprecated
 		public synchronized void exclude(final Metadata... meta) {
 		
 			final Set<String> oldInterests = new HashSet<String>();
@@ -544,6 +570,34 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 				subHandler.unsubscribe(oldSubs);
 			}
 		
+		}
+		
+		@Override
+		public void exclude(final MetadataID<?>... metaID) {
+			
+			final List<InstrumentID> ids = new ArrayList<InstrumentID>();
+			
+			for(final MetadataID<?> m : metaID) {
+				
+				if(m.metaType() == MetaType.INSTRUMENT) {
+					ids.add((InstrumentID) m);
+				}
+				
+			}
+			
+			final Map<InstrumentID, Instrument> iMap = metaService.instrument(
+					ids.toArray(new InstrumentID[0])).toBlockingObservable().single(); 
+
+			final List<Instrument> insts = new ArrayList<Instrument>();
+			
+			for(final Entry<InstrumentID, Instrument> e : iMap.entrySet()) {
+				if(!e.getValue().isNull()) {
+					insts.add(e.getValue());
+				}
+			}
+			
+			exclude(insts.toArray(new Instrument[0]));
+			
 		}
 		
 		@Override

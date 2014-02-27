@@ -61,44 +61,5 @@ public interface Filterable {
 		EXCLUDE, //
 
 	}
-
-	/**
-	 * Type of the market entity.
-	 * <p>
-	 * Represents a meta term: (key=value)
-	 */
-	enum MetaType {
-
-		/**
-		 * @see AvailableAny
-		 */
-		AVAILABLE, //
-
-		/**
-		 * @see ExchangeAny
-		 */
-		EXCHANGE, //
-
-		/**
-		 * @see ChannelAny
-		 */
-		CHANNEL, //
-
-		/**
-		 * @see GroupAny
-		 */
-		GROUP, //
-
-		/**
-		 * @see InstrumentAny
-		 */
-		INSTRUMENT, //
-
-	}
-
-	/**
-	 * Type of the meta info.
-	 */
-	MetaType type();
-
+	
 }

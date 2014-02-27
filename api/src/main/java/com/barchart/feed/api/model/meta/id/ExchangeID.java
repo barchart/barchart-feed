@@ -1,8 +1,9 @@
 package com.barchart.feed.api.model.meta.id;
 
-import com.barchart.util.common.identifier.Identifier;
+import com.barchart.feed.api.model.meta.Metadata;
+import com.barchart.feed.api.model.meta.Metadata.MetaType;
 
-public class ExchangeID extends Identifier<String, ExchangeID> {
+public class ExchangeID extends MetadataID<ExchangeID> {
 	
 	public ExchangeID(final String id) {
 		super(id, ExchangeID.class);
@@ -17,4 +18,9 @@ public class ExchangeID extends Identifier<String, ExchangeID> {
 		
 	};
 
+	@Override
+	public Metadata.MetaType metaType() {
+		return MetaType.EXCHANGE;
+	}
+	
 }
