@@ -78,6 +78,8 @@ public class BarBuilder extends AnalyticBase {
 		Period inputPeriod = inputSeries.getPeriod();
         Period outputPeriod = outputSeries.getPeriod();
         
+        boolean barCompleted = false;
+        
         if(inputPeriod.equals(outputPeriod)) {
 		    for(int i = inputStartIdx;i <= inputLastIdx;i++) {
 		        outputSeries.insertData(inputSeries.get(i));
@@ -88,10 +90,6 @@ public class BarBuilder extends AnalyticBase {
 				throw new IllegalStateException(
 					"Can't build bars from Type with an Interval that's not 1. Input=" + 
 						inputPeriod + ", output=" + outputPeriod);
-			}
-			
-			if(subscription.getTimeFrame(0).getPeriod().equals(Period.FIVE_MINUTE)) {
-				System.out.println("here");
 			}
 			
 			if(currentMergeBar == null) {
@@ -115,8 +113,12 @@ public class BarBuilder extends AnalyticBase {
 					this.workingSpan.setNextDate(workingTargetDate);
 					System.out.println("IS AFTER: ADDING NEW BAR " + currentMergeBar + "   " + outputSeries.getPeriod() + "  :  span = " + this.workingSpan);
 					outputSeries.add(currentMergeBar);
+					barCompleted = true;
 				}else{
-					currentMergeBar.merge(currentIdxBar, false);
+				    currentMergeBar.merge(currentIdxBar, false);
+				    if(workingSpan.getPeriod() == Period.ONE_MINUTE) {
+				        System.out.println("NOT IS AFTER: MERGING NEW BAR " + currentMergeBar + "   " + outputSeries.getPeriod() + "  :  span = " + this.workingSpan);
+				    }
 				}
 			}
 			
@@ -124,7 +126,7 @@ public class BarBuilder extends AnalyticBase {
 			valueUpdated();
 		}
         
-		return workingSpan;
+		return barCompleted ? workingSpan : null;
 	}
 	
 	/**

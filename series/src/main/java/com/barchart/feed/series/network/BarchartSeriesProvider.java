@@ -44,9 +44,7 @@ public class BarchartSeriesProvider {
 	private List<Node<SeriesSubscription>> ioNodes = Collections.synchronizedList(new ArrayList<Node<SeriesSubscription>>());
 	/** Contains output-level/Subscribable {@link Analytic} nodes */
     private List<Node<SeriesSubscription>> assemblers = Collections.synchronizedList(new ArrayList<Node<SeriesSubscription>>());
-	/** Subscribers for a particular {@link Subscription} */
-    private Map<Subscription, Observer<NetworkNotification>> subscribers = new HashMap<Subscription, Observer<NetworkNotification>>();
-    private Map<Subscription, List<Distributor>> subscriberAssemblers = new HashMap<Subscription, List<Distributor>>();
+	private Map<Subscription, List<Distributor>> subscriberAssemblers = new HashMap<Subscription, List<Distributor>>();
     /** Contains all instantiated Nodes mapped to {@link SearchDescriptor}s */
     private Map<SearchDescriptor,AnalyticNode> searchMap = Collections.synchronizedMap(new HashMap<SearchDescriptor,AnalyticNode>());
     /** Monitor for the {@link #searchMap} */
@@ -692,7 +690,6 @@ public class BarchartSeriesProvider {
 	    private SeriesSubscription subscription;
 	    private List<Node<SeriesSubscription>> availableNodes;
 	    private List<Node<SeriesSubscription>> subscribedNodes = new ArrayList<Node<SeriesSubscription>>();
-	    private NetworkObservable observable;
 	    
 	    public SeriesSubscribeFunc(SeriesSubscription subscription, List<Node<SeriesSubscription>> publishers) {
 	    	this.subscription = subscription;
@@ -700,28 +697,15 @@ public class BarchartSeriesProvider {
 	    }
 	    
 	    @Override
-        public rx.Subscription onSubscribe(Observer<? super NetworkNotification> t1) throws IllegalStateException {
+        public rx.Subscription onSubscribe(final Observer<? super NetworkNotification> observer) throws IllegalStateException {
 	        @SuppressWarnings("unchecked")
-            final Observer<NetworkNotification> actualObserver = (Observer<NetworkNotification>)t1;//getActualObserver(t1);
+            final Observer<NetworkNotification> actualObserver = (Observer<NetworkNotification>)observer;
 	        
-	    	subscribers.put(this.subscription, actualObserver);
-	    	boolean foundSubscribableNode = false;
-//	    	for(String specifier : observable.getSubscribedNodeNames(actualObserver)) {
-	    	    for(Node<SeriesSubscription> node : availableNodes) {
-//	    	        if(node.getName().equals(specifier)) {
-	    	            node.addObserver(actualObserver);
-//	    	            if(!subscribedNodes.contains(node)) {
-	    	                subscribedNodes.add(node);
-//	    	            }
-	    	            node.startUp();
-	    	            foundSubscribableNode = true;
-//	    	        }
-	    	    }
-//	    	}
-	    	
-	    	if(!foundSubscribableNode) {
-	    	    throw new IllegalStateException("Could not find matching nodes to subscribe to for any of the following specifiers: " + observable.getSubscribedNodeNames(actualObserver));
-	    	}
+	    	for(Node<SeriesSubscription> node : availableNodes) {
+	    	    node.addObserver(actualObserver);
+	    	    subscribedNodes.add(node);
+                node.startUp();
+            }
 	    	
 	    	List<Distributor> assemblers = subscriberAssemblers.get(subscription);
 	    	if(assemblers == null || assemblers.size() < 1) {
@@ -743,20 +727,6 @@ public class BarchartSeriesProvider {
 	        };
         }
 	    
-	    @SuppressWarnings("unchecked")
-        private Observer<NetworkNotification> getActualObserver(Observer<? super NetworkNotification> obs) {
-	        Observer<NetworkNotification> actualObserver = null;
-	        try {
-	            Field f = obs.getClass().getDeclaredField("actual");
-	            f.setAccessible(true);
-	            actualObserver = (Observer<NetworkNotification>)f.get(obs);
-	            System.out.println("actual = " + actualObserver);
-	        }catch(Exception e) {
-	            
-	        }
-	        return actualObserver;
-	    }
-	    
 	    /**
 	     * Returns this {@code SeriesSubscriber}'s list of publisher nodes.
 	     * @return	this {@code SeriesSubscriber}'s list of publisher nodes.
@@ -770,7 +740,7 @@ public class BarchartSeriesProvider {
 	     * @param observable
 	     */
 	    void setObservable(NetworkObservable observable) {
-	        this.observable = observable;
+	        //this.observable = observable;
 	    }
 	}
 }

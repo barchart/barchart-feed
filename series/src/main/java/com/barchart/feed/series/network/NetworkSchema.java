@@ -291,8 +291,7 @@ public class NetworkSchema implements NetworkDescriptor {
             String line = null;
             String lastNetworkName = null;
             while((line = buf.readLine()) != null) {
-            	System.out.println(schemaFileName + " - line: " + line);
-                String[] lineParts = line.split(";");
+            	String[] lineParts = line.split(";");
                 String[] argParts = new String[lineParts.length - 1];
                 for(int i = 1;i < lineParts.length;i++) {
                     argParts[i - 1] = lineParts[i];

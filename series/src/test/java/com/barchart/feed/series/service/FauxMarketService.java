@@ -44,6 +44,7 @@ import com.barchart.feed.api.series.network.Query;
 import com.barchart.feed.api.series.service.HistoricalObserver;
 import com.barchart.feed.api.series.service.HistoricalResult;
 import com.barchart.feed.series.network.SeriesSubscription;
+import com.barchart.util.value.ValueFactoryImpl;
 import com.barchart.util.value.api.Fraction;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Scaled;
@@ -51,6 +52,7 @@ import com.barchart.util.value.api.Schedule;
 import com.barchart.util.value.api.Size;
 import com.barchart.util.value.api.Time;
 import com.barchart.util.value.api.TimeInterval;
+import com.barchart.util.value.api.ValueFactory;
 
 public class FauxMarketService implements MarketService {
     private MarketObserver<Market> callback;
@@ -60,6 +62,8 @@ public class FauxMarketService implements MarketService {
     private FauxHistoricalService histService;
     
     private Map<Instrument, SymbolTick> lastTicks = new HashMap<Instrument, SymbolTick>();
+    
+    private ValueFactory factory = new ValueFactoryImpl();
     
     private Query lastQuery;
     
@@ -134,9 +138,8 @@ public class FauxMarketService implements MarketService {
                             
                             SymbolTick lastTick = lastTicks.get(i);
                             double newPrice = lastTick.lastPrice.asDouble() + added;
-//                            System.out.println("newPrice for Instrument: " + i.symbol() + " = " + newPrice);
                             lastTick.lastPrice = makePrice("" + newPrice);
-                            lastTick.lastTime = new DateTime(lastTick.lastTime.plusMillis((int)(500 * random.nextDouble())));//week.getNextSessionDate(lastTick.lastTime, lastTick.desc.getTimeFrames()[0].getPeriod());
+                            lastTick.lastTime = new DateTime(lastTick.lastTime.plusMillis((int)(500 * random.nextDouble())));
                             lastTick.lastSize = makeSize("" + random.nextInt(10));
                             
                             Market m = makeMarket(lastTick.lastTime, lastTick.desc.getInstrument(), 
@@ -332,43 +335,7 @@ public class FauxMarketService implements MarketService {
             }
             
             private Time getTime() {
-                return new Time() {
-
-                    @Override
-                    public TimeZone zone() {
-                        // TODO Auto-generated method stub
-                        return null;
-                    }
-
-                    @Override
-                    public long millisecond() {
-                        return time.getMillis();
-                    }
-
-                    @Override
-                    public int compareTo(Time thatTime) {
-                        // TODO Auto-generated method stub
-                        return 0;
-                    }
-
-                    @Override
-                    public boolean isNull() {
-                        // TODO Auto-generated method stub
-                        return false;
-                    }
-
-                    @Override
-                    public Date asDate() {
-                        // TODO Auto-generated method stub
-                        return null;
-                    }
-
-                    @Override
-                    public String format(DateFormat arg0) {
-                        // TODO Auto-generated method stub
-                        return null;
-                    }
-                };
+                return factory.newTime(time.getMillis());
             }
 
             @Override
@@ -476,277 +443,12 @@ public class FauxMarketService implements MarketService {
     }
     
     private Size makeSize(final String sz) {
-        return new Size() {
-            int size = Integer.parseInt(sz);
-            
-            @Override
-            public boolean equalsScale(Size that) {
-                // TODO Auto-generated method stub
-                return false;
-            }
-
-            @Override
-            public double asDouble() {
-                // TODO Auto-generated method stub
-                return 0;
-            }
-
-            @Override
-            public long mantissa() {
-                return size;
-            }
-
-            @Override
-            public int exponent() {
-                // TODO Auto-generated method stub
-                return 0;
-            }
-
-            @Override
-            public boolean isZero() {
-                // TODO Auto-generated method stub
-                return false;
-            }
-
-            @Override
-            public Size scale(int exponent) throws ArithmeticException {
-                // TODO Auto-generated method stub
-                return null;
-            }
-
-            @Override
-            public Size norm() {
-                // TODO Auto-generated method stub
-                return null;
-            }
-
-            @Override
-            public Size neg() {
-                // TODO Auto-generated method stub
-                return null;
-            }
-
-            @Override
-            public Size add(Size that) throws ArithmeticException {
-                // TODO Auto-generated method stub
-                return null;
-            }
-
-            @Override
-            public Size add(long increment) {
-                // TODO Auto-generated method stub
-                return null;
-            }
-
-            @Override
-            public Size sub(Size that) throws ArithmeticException {
-                // TODO Auto-generated method stub
-                return null;
-            }
-
-            @Override
-            public Size sub(long decrement) {
-                // TODO Auto-generated method stub
-                return null;
-            }
-
-            @Override
-            public Size mult(Scaled<?> factor) throws ArithmeticException {
-                // TODO Auto-generated method stub
-                return null;
-            }
-
-            @Override
-            public Size mult(long factor) throws ArithmeticException {
-                // TODO Auto-generated method stub
-                return null;
-            }
-
-            @Override
-            public Size div(Scaled<?> factor) throws ArithmeticException {
-                // TODO Auto-generated method stub
-                return null;
-            }
-
-            @Override
-            public Size div(long factor) throws ArithmeticException {
-                // TODO Auto-generated method stub
-                return null;
-            }
-
-            @Override
-            public long count(Size that) throws ArithmeticException {
-                // TODO Auto-generated method stub
-                return 0;
-            }
-
-            @Override
-            public boolean greaterThan(Size that) {
-                // TODO Auto-generated method stub
-                return false;
-            }
-
-            @Override
-            public boolean lessThan(Size that) {
-                // TODO Auto-generated method stub
-                return false;
-            }
-
-            @Override
-            public int compareTo(Size that) {
-                // TODO Auto-generated method stub
-                return 0;
-            }
-
-            @Override
-            public boolean isNull() {
-                // TODO Auto-generated method stub
-                return false;
-            }
-
-			@Override
-			public Size abs() {
-				// TODO Auto-generated method stub
-				return null;
-			}
-            
-        };
+        return factory.newSize(Integer.parseInt(sz));
     }
     
     private Price makePrice(String dblStr) {
         final double db = new BigDecimal(dblStr).setScale(2, RoundingMode.HALF_UP).doubleValue();
-        
-        final int exponent = (int)DoubleUtil.fracPart(db);
-        final long mantissa = DoubleUtil.intPart(db);
-        Price p = new Price() {
-            private int expon = exponent;
-            private long mant = mantissa;
-            private double doub = db;
-            
-            @Override
-            public boolean equalsScale(Price that) {
-                // TODO Auto-generated method stub
-                return false;
-            }
-
-            @Override
-            public double asDouble() {
-                return doub;
-            }
-
-            @Override
-            public long mantissa() {
-                return mant;
-            }
-
-            @Override
-            public int exponent() {
-                // TODO Auto-generated method stub
-                return expon;
-            }
-
-            @Override
-            public boolean isZero() {
-                return false;
-            }
-
-            @Override
-            public Price scale(int exponent) throws ArithmeticException {
-                return null;
-            }
-
-            @Override
-            public Price norm() {
-                // TODO Auto-generated method stub
-                return null;
-            }
-
-            @Override
-            public Price neg() {
-                // TODO Auto-generated method stub
-                return null;
-            }
-
-            @Override
-            public Price add(Price that) throws ArithmeticException {
-                // TODO Auto-generated method stub
-                return null;
-            }
-
-            @Override
-            public Price add(long increment) {
-                // TODO Auto-generated method stub
-                return null;
-            }
-
-            @Override
-            public Price sub(Price that) throws ArithmeticException {
-                // TODO Auto-generated method stub
-                return null;
-            }
-
-            @Override
-            public Price sub(long decrement) {
-                // TODO Auto-generated method stub
-                return null;
-            }
-
-            @Override
-            public Price mult(Scaled<?> factor) throws ArithmeticException {
-                // TODO Auto-generated method stub
-                return null;
-            }
-
-            @Override
-            public Price mult(long factor) throws ArithmeticException {
-                // TODO Auto-generated method stub
-                return null;
-            }
-
-            @Override
-            public Price div(Scaled<?> factor) throws ArithmeticException {
-                // TODO Auto-generated method stub
-                return null;
-            }
-
-            @Override
-            public Price div(long factor) throws ArithmeticException {
-                // TODO Auto-generated method stub
-                return null;
-            }
-
-            @Override
-            public long count(Price that) throws ArithmeticException {
-                // TODO Auto-generated method stub
-                return 0;
-            }
-
-            @Override
-            public boolean greaterThan(Price that) {
-                return doub > that.asDouble();
-            }
-
-            @Override
-            public boolean lessThan(Price that) {
-                return doub < that.asDouble();
-            }
-
-            @Override
-            public int compareTo(Price that) {
-                 return Double.compare(doub, that.asDouble());
-            }
-
-            @Override
-            public boolean isNull() {
-                return false;
-            }
-
-			@Override
-			public Price abs() {
-				// TODO Auto-generated method stub
-				return null;
-			}
-        };
+        Price p = factory.newPrice(db);
         
         return p;
     }
@@ -943,7 +645,7 @@ public class FauxMarketService implements MarketService {
     }
 
 	@Override
-	public Observable<Instrument> instrument(InstrumentID... ids) {
+	public Observable<Map<InstrumentID, Instrument>> instrument(InstrumentID... ids) {
 		// TODO Auto-generated method stub
 		return null;
 	}

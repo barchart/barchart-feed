@@ -94,9 +94,11 @@ public class BarchartFeedService implements SeriesFeedService {
 		}
 		
 		SeriesSubscription subscription = (SeriesSubscription)assembler.getSubscription();
-		symbolObservers.put(subscription.getInstrument().id(), (Distributor)assembler);
-		consumerAgent.include(subscription.getInstrument());
-		historicalService.subscribe(historical, subscription);
+		if(symbolObservers.get(subscription.getInstrument().id()) != assembler) {
+    		symbolObservers.put(subscription.getInstrument().id(), (Distributor)assembler);
+    		consumerAgent.include(subscription.getInstrument());
+    		historicalService.subscribe(historical, subscription);
+		}
 	}
 	
 	/**

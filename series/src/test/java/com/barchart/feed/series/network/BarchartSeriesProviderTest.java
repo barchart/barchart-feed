@@ -8,8 +8,11 @@ import static org.junit.Assert.fail;
 import java.util.List;
 
 import org.joda.time.DateTime;
-import org.junit.Ignore;
+import org.joda.time.LocalTime;
 import org.junit.Test;
+
+import rx.observables.BlockingObservable;
+import rx.util.functions.Action1;
 
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.api.series.Period;
@@ -20,12 +23,12 @@ import com.barchart.feed.api.series.network.NetworkObservable;
 import com.barchart.feed.api.series.network.Node;
 import com.barchart.feed.api.series.network.NodeDescriptor;
 import com.barchart.feed.api.series.network.Query;
+import com.barchart.feed.series.BarImpl;
 import com.barchart.feed.series.TimeFrameImpl;
 import com.barchart.feed.series.TradingWeekImpl;
 import com.barchart.feed.series.service.BarchartFeedService;
 import com.barchart.feed.series.service.FauxHistoricalService;
 import com.barchart.feed.series.service.FauxMarketService;
-import com.barchart.util.test.concurrent.TestObserver;
 
 public class BarchartSeriesProviderTest {
 
@@ -45,10 +48,25 @@ public class BarchartSeriesProviderTest {
 				//period(Period.ONE_MINUTE).
 				period(new Period(PeriodType.MINUTE, 5)).build();
 		
-		NetworkObservable observable = provider.fetch(query);
-		observable.register(new TestObserver<NetworkNotification>(), observable.getPublisherSpecifiers().get(0));
-		NetworkNotification span = observable.toBlockingObservable().next().iterator().next();
-		System.out.println("span = " + span.getSpan() + ",  " + span.getSpecifier() + ",  " + observable.getDataSeries(span.getSpecifier()).size());
+		final NetworkObservable observable = provider.fetch(query);
+		BlockingObservable<NetworkNotification> obs = observable.toBlockingObservable();
+		obs.forEach(new Action1<NetworkNotification>() {
+		    @Override
+            public void call(NetworkNotification t1) {
+                System.out.println("WATUP: " + observable.getDataSeries(t1.getSpecifier()).getLast());
+                BarImpl bar = (BarImpl)observable.getDataSeries(t1.getSpecifier()).getLast();
+                LocalTime t = bar.getDate().toLocalTime();
+                if(t.getHourOfDay() == 12 && t.getMinuteOfHour() == 15) {
+                    System.out.println("UNSUBSCRIBING!!!");
+                    //obs.
+                }
+            }
+		});
+//		while(true) {
+//		    NetworkNotification span = obs.next().iterator().next();
+//		    System.out.println("span = " + span.getSpan() + ",  " + span.getSpecifier() + ",  " + observable.getDataSeries(span.getSpecifier()).size());
+//		    try { Thread.sleep(1000);}catch(Exception e) { e.printStackTrace(); }
+//		}
 		
 //		TestObserver<NetworkNotification> testObserver = new TestObserver<NetworkNotification>();
 //		observable.subscribe(testObserver, observable.getPublisherSpecifiers().get(0));
