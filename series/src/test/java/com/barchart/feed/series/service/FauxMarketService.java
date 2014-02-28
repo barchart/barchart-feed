@@ -38,6 +38,7 @@ import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.api.model.meta.Metadata;
 import com.barchart.feed.api.model.meta.id.ExchangeID;
 import com.barchart.feed.api.model.meta.id.InstrumentID;
+import com.barchart.feed.api.model.meta.id.MetadataID;
 import com.barchart.feed.api.model.meta.id.VendorID;
 import com.barchart.feed.api.series.PeriodType;
 import com.barchart.feed.api.series.network.Query;
@@ -258,6 +259,18 @@ public class FauxMarketService implements MarketService {
                 // TODO Auto-generated method stub
                 
             }
+
+			@Override
+			public void include(MetadataID<?>... metaID) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void exclude(MetadataID<?>... metaID) {
+				// TODO Auto-generated method stub
+				
+			}
             
         };
     }
