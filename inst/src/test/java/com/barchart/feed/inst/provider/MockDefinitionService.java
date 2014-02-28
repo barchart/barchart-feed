@@ -14,8 +14,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import org.openfeed.proto.inst.Decimal;
-import org.openfeed.proto.inst.InstrumentDefinition;
+import org.openfeed.InstrumentDefinition;
+import org.openfeed.InstrumentDefinition.Decimal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

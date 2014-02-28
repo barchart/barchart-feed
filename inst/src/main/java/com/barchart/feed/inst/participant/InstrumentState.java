@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.openfeed.proto.inst.InstrumentDefinition;
+import org.openfeed.InstrumentDefinition;
 
 import com.barchart.feed.api.model.meta.Exchange;
 import com.barchart.feed.api.model.meta.Instrument;
@@ -15,6 +15,7 @@ import com.barchart.util.value.api.Fraction;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Schedule;
 import com.barchart.util.value.api.Size;
+import com.barchart.util.value.api.Time;
 import com.barchart.util.value.api.TimeInterval;
 
 public interface InstrumentState extends Instrument, Resettable, Instrumentable {
@@ -134,6 +135,11 @@ public interface InstrumentState extends Instrument, Resettable, Instrumentable 
 		}
 
 		@Override
+		public Month contractMonth() {
+			return Month.NULL_MONTH;
+		}
+		
+		@Override
 		public long timeZoneOffset() {
 			return 0;
 		}
@@ -186,6 +192,11 @@ public interface InstrumentState extends Instrument, Resettable, Instrumentable 
 		@Override
 		public void reset() {
 			
+		}
+
+		@Override
+		public Time contractExpire() {
+			return Time.NULL;
 		}
 
 	};

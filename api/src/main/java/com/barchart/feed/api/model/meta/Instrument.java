@@ -10,6 +10,7 @@ import com.barchart.util.value.api.Fraction;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Schedule;
 import com.barchart.util.value.api.Size;
+import com.barchart.util.value.api.Time;
 import com.barchart.util.value.api.TimeInterval;
 
 public interface Instrument extends Comparable<Instrument>, Metadata {
@@ -108,6 +109,11 @@ public interface Instrument extends Comparable<Instrument>, Metadata {
 		
 	}
 	
+	enum Month {
+		NULL_MONTH, JANUARY, FEBRUARY, MARCH, APRIL, MAY, 
+		JUNE, JULY, AUGUST, SEPTEMBER, OCTOBER, NOVEMEBR, DECEMBER
+	}
+	
 	InstrumentID id();
 
 	String marketGUID();
@@ -151,10 +157,15 @@ public interface Instrument extends Comparable<Instrument>, Metadata {
 	Price transactionPriceConversionFactor();
 
 	Fraction displayFraction();
-
+ 
+	@Deprecated
 	TimeInterval lifetime();
-
+	
 	Schedule marketHours();
+
+	Time contractExpire();
+	
+	Month contractMonth();
 
 	long timeZoneOffset();
 
@@ -271,6 +282,11 @@ public interface Instrument extends Comparable<Instrument>, Metadata {
 		public Schedule marketHours() {
 			return Schedule.NULL;
 		}
+		
+		@Override
+		public Month contractMonth() {
+			return Month.NULL_MONTH;
+		}
 
 		@Override
 		public long timeZoneOffset() {
@@ -294,7 +310,12 @@ public interface Instrument extends Comparable<Instrument>, Metadata {
 		
 		@Override
 		public String toString() {
-			return "NULL INSTRUMENT";
+			return "NULL_INSTRUMENT";
+		}
+
+		@Override
+		public Time contractExpire() {
+			return Time.NULL;
 		}
 
 	};

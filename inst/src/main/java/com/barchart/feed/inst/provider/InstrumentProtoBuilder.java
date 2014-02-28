@@ -7,24 +7,24 @@
  */
 package com.barchart.feed.inst.provider;
 
-import org.openfeed.proto.inst.BookLiquidity;
-import org.openfeed.proto.inst.BookStructure;
-import org.openfeed.proto.inst.Calendar;
-import org.openfeed.proto.inst.Decimal;
-import org.openfeed.proto.inst.InstrumentDefinition;
-import org.openfeed.proto.inst.InstrumentType;
-import org.openfeed.proto.inst.Interval;
+import org.openfeed.InstrumentDefinition;
+import org.openfeed.InstrumentDefinition.BookLiquidity;
+import org.openfeed.InstrumentDefinition.BookStructure;
+import org.openfeed.InstrumentDefinition.Calendar;
+import org.openfeed.InstrumentDefinition.Decimal;
+import org.openfeed.InstrumentDefinition.InstrumentType;
+import org.openfeed.InstrumentDefinition.Interval;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.util.value.ValueFactoryImpl;
-import com.barchart.util.value.api.ValueFactory;
 import com.barchart.util.value.api.Fraction;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Schedule;
 import com.barchart.util.value.api.Size;
 import com.barchart.util.value.api.TimeInterval;
+import com.barchart.util.value.api.ValueFactory;
 
 public final class InstrumentProtoBuilder {
 	
@@ -133,9 +133,6 @@ public final class InstrumentProtoBuilder {
 			final Interval.Builder intBuilder = Interval.newBuilder();
 			intBuilder.setTimeStart(inst.lifetime().start().millisecond());
 			intBuilder.setTimeFinish(inst.lifetime().stop().millisecond());
-
-			/* lifetime of instrument */
-			calBuilder.setLifeTime(intBuilder.build());
 
 			intBuilder.clear();
 			for (final TimeInterval ti : inst.marketHours()) {
