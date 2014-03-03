@@ -135,7 +135,7 @@ public interface InstrumentState extends Instrument, Resettable, Instrumentable 
 		}
 
 		@Override
-		public Month contractMonth() {
+		public Month contractDeliveryMonth() {
 			return Month.NULL_MONTH;
 		}
 		

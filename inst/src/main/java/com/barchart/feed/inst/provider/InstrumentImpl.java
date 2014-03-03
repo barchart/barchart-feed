@@ -280,7 +280,7 @@ public class InstrumentImpl extends InstrumentBase implements Instrument {
 	}
 	
 	@Override
-	public Month contractMonth() {
+	public Month contractDeliveryMonth() {
 		
 		switch(def.getContractMonth()) {
 			case JANUARY:

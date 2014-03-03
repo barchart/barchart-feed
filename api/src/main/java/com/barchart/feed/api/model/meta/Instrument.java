@@ -165,7 +165,7 @@ public interface Instrument extends Comparable<Instrument>, Metadata {
 
 	Time contractExpire();
 	
-	Month contractMonth();
+	Month contractDeliveryMonth();
 
 	long timeZoneOffset();
 
@@ -284,7 +284,7 @@ public interface Instrument extends Comparable<Instrument>, Metadata {
 		}
 		
 		@Override
-		public Month contractMonth() {
+		public Month contractDeliveryMonth() {
 			return Month.NULL_MONTH;
 		}
 

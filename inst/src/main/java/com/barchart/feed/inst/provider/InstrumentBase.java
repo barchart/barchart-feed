@@ -114,7 +114,7 @@ public abstract class InstrumentBase implements Instrument {
 	}
 	
 	@Override
-	public Month contractMonth() {
+	public Month contractDeliveryMonth() {
 		return Month.NULL_MONTH;
 	}
 	
