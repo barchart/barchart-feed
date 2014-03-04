@@ -20,6 +20,7 @@ import com.barchart.util.value.api.Fraction;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Schedule;
 import com.barchart.util.value.api.Size;
+import com.barchart.util.value.api.Time;
 import com.barchart.util.value.api.TimeInterval;
 
 public class TestHarness {
@@ -170,6 +171,18 @@ public class TestHarness {
 
 			@Override
 			public Price transactionPriceConversionFactor() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public Time contractExpire() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public Month contractDeliveryMonth() {
 				// TODO Auto-generated method stub
 				return null;
 			}
