@@ -688,7 +688,9 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 
 		final Set<SubscriptionType> oldSubs = agentMap.get(agent);
 
-		subs.get(interest).remove(oldSubs);
+		if(subs.containsKey(interest)){
+			subs.get(interest).remove(oldSubs);
+		}
 
 //		if (subs.get(interest).isEmpty()) {
 //			subs.remove(interest);
