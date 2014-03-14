@@ -309,8 +309,13 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		
 		@Override
 		public synchronized void terminate() {
+			
+			/* Unsubscribe to all */
+			subHandler.unsubscribe(unsubscribeAll(this));
+			
 			state = State.TERMINATED;
 			agentHandler.detachAgent(this);
+			
 		}
 		
 		@Override
@@ -602,6 +607,9 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		
 		@Override
 		public synchronized void clear() {
+			
+			/* Unsubscribe to all */
+			subHandler.unsubscribe(unsubscribeAll(this));
 		
 			incInsts.clear();
 			exInsts.clear();
@@ -679,6 +687,20 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		return newSubs;
 
 	}
+	
+	private Set<Sub> unsubscribeAll(final FrameworkAgent<?> agent) {
+		
+		final Set<Sub> oldSubs = new HashSet<Sub>();
+		
+		final Set<SubscriptionType> subTypes = agentMap.get(agent);
+		for(final Entry<String, List<Set<SubscriptionType>>> e : subs.entrySet()) {
+			if(e.getValue().contains(subTypes)) {
+				oldSubs.add(unsubscribe(agent, e.getKey()));
+			}
+		}
+		
+		return oldSubs;
+	}
 
 	private Sub unsubscribe(final FrameworkAgent<?> agent, final String interest) {
 
@@ -691,10 +713,6 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		if(subs.containsKey(interest)){
 			subs.get(interest).remove(oldSubs);
 		}
-
-//		if (subs.get(interest).isEmpty()) {
-//			subs.remove(interest);
-//		}
 
 		final Set<SubscriptionType> stuffToRemove = EnumSet.copyOf(oldSubs);
 		stuffToRemove.removeAll(aggregate(interest));
