@@ -6,24 +6,34 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.barchart.feed.api.model.data.Book;
 import com.barchart.feed.api.model.data.Cuvol;
 import com.barchart.feed.api.model.data.Market;
-import com.barchart.feed.api.model.data.Book;
 import com.barchart.feed.api.model.data.MarketData;
 import com.barchart.feed.api.model.data.Session;
 import com.barchart.feed.api.model.data.Trade;
 
 public enum SubscriptionType {
 	
-	UNKNOWN,
+	UNKNOWN("???"),
 	
-	BOOK_SNAPSHOT,
-	BOOK_UPDATE,
+	BOOK_SNAPSHOT("b"),
+	BOOK_UPDATE("B"),
 	
-	CUVOL_SNAPSHOT,
+	CUVOL_SNAPSHOT("c"),
 	
-	QUOTE_SNAPSHOT, 
-	QUOTE_UPDATE;
+	QUOTE_SNAPSHOT("s"), 
+	QUOTE_UPDATE("S");
+	
+	private String code;
+	
+	private SubscriptionType(String code) {
+		this.code = code;
+	}
+	
+	public String code() {
+		return code;
+	}
 
 	private static final Logger log = LoggerFactory.getLogger(SubscriptionType.class);
 	
