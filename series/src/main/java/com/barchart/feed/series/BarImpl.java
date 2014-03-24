@@ -378,9 +378,7 @@ public class BarImpl extends DataPointImpl implements Bar {
     			low = other.getLow();
     		}
 		}catch(ArithmeticException ae) {
-		    System.out.println("other = " + other.getLow());
-		    System.out.println("low = " + low.asDouble());
-		    System.exit(1);
+		    ae.printStackTrace();
 		}
 		close = other.getClose();
 		volume = volume.add(other.getVolume());

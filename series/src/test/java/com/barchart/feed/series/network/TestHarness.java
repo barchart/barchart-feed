@@ -1,11 +1,22 @@
 package com.barchart.feed.series.network;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.joda.time.DateTime;
 
+import com.barchart.feed.api.model.data.Book;
+import com.barchart.feed.api.model.data.BookSet;
+import com.barchart.feed.api.model.data.Cuvol;
+import com.barchart.feed.api.model.data.Market;
+import com.barchart.feed.api.model.data.Session;
+import com.barchart.feed.api.model.data.SessionSet;
+import com.barchart.feed.api.model.data.Trade;
 import com.barchart.feed.api.model.meta.Exchange;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.api.model.meta.id.InstrumentID;
@@ -16,13 +27,152 @@ import com.barchart.feed.api.series.Span;
 import com.barchart.feed.api.series.network.Analytic;
 import com.barchart.feed.api.series.network.Assembler;
 import com.barchart.feed.api.series.service.SeriesFeedService;
+import com.barchart.util.value.ValueFactoryImpl;
 import com.barchart.util.value.api.Fraction;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Schedule;
 import com.barchart.util.value.api.Size;
+import com.barchart.util.value.api.Time;
 import com.barchart.util.value.api.TimeInterval;
+import com.barchart.util.value.api.ValueFactory;
 
 public class TestHarness {
+    private static HashSet<Market.Component> staticSet = new HashSet<Market.Component>();
+    private static ValueFactory factory = new ValueFactoryImpl();
+    
+    public static Size makeSize(final String sz) {
+        return factory.newSize(Integer.parseInt(sz));
+    }
+    
+    public static Price makePrice(String dblStr) {
+        final double db = new BigDecimal(dblStr).setScale(2, RoundingMode.HALF_UP).doubleValue();
+        Price p = factory.newPrice(db);
+        
+        return p;
+    }
+    
+    public static Market makeMarket(final DateTime t, final Instrument i, final String price, final String sz) {
+        return new Market() {
+            private Instrument inst = i;
+            private DateTime time = t;
+            private Price p = makePrice(price);
+            private Set<Market.Component> thisSet = staticSet;
+            private Size size = makeSize(sz);
+           
+            
+            @Override
+            public Instrument instrument() {
+                return inst;
+            }
+            
+            private Time getTime() {
+                return factory.newTime(time.getMillis());
+            }
+
+            @Override
+            public Time updated() {
+                return getTime();
+            }
+
+            @Override
+            public boolean isNull() {
+                // TODO Auto-generated method stub
+                return false;
+            }
+
+            @Override
+            public Set<Component> change() {
+                return thisSet;
+            }
+
+            @Override
+            public Trade trade() {
+                return new Trade() {
+
+                    @Override
+                    public Instrument instrument() {
+                        return inst;
+                    }
+
+                    @Override
+                    public Time updated() {
+                        return getTime();
+                    }
+
+                    @Override
+                    public boolean isNull() {
+                        // TODO Auto-generated method stub
+                        return false;
+                    }
+
+                    @Override
+                    public Session session() {
+                       return null;
+                    }
+
+                    @Override
+                    public Set<TradeType> types() {
+                        // TODO Auto-generated method stub
+                        return null;
+                    }
+
+                    @Override
+                    public Price price() {
+                        return p;
+                    }
+
+                    @Override
+                    public Size size() {
+                        return size;
+                    }
+
+                    @Override
+                    public Time time() {
+                        return getTime();
+                    }
+                    
+                };
+            }
+
+            @Override
+            public Book book() {
+                // TODO Auto-generated method stub
+                return null;
+            }
+
+            @Override
+            public BookSet bookSet() {
+                // TODO Auto-generated method stub
+                return null;
+            }
+
+            @Override
+            public Cuvol cuvol() {
+                // TODO Auto-generated method stub
+                return null;
+            }
+
+            @Override
+            public Session session() {
+                // TODO Auto-generated method stub
+                return null;
+            }
+
+            @Override
+            public SessionSet sessionSet() {
+                // TODO Auto-generated method stub
+                return null;
+            }
+
+            @Override
+            public LastPrice lastPrice() {
+                // TODO Auto-generated method stub
+                return null;
+            }
+            
+        };
+    }
+    
     public static Instrument makeInstrument(final String symbol) {
         return new Instrument() {
 
@@ -258,6 +408,11 @@ public class TestHarness {
 		};
     }
     
+    public static BarchartSeriesProvider getTestSeriesProviderWithNoDistributor(SeriesSubscription ss) {
+        BarchartSeriesProvider bsp = new BarchartSeriesProvider(getUnitTestFeedService());
+        return bsp;
+    }
+    
     public static BarchartSeriesProvider getTestSeriesProvider(SeriesSubscription ss) {
         BarchartSeriesProvider bsp = new BarchartSeriesProvider(getUnitTestFeedService());
         bsp.getAssemblerMapForTesting().put(ss, new ArrayList<Distributor>());
@@ -267,7 +422,7 @@ public class TestHarness {
     
     public static SeriesFeedService getUnitTestFeedService() {
         return new SeriesFeedService() {
-
+            Instrument in = null;
             @Override
             public void registerAssembler(Assembler assembler) {
                 // TODO Auto-generated method stub
@@ -282,8 +437,7 @@ public class TestHarness {
 
             @Override
             public Instrument lookupInstrument(String symbol) {
-                // TODO Auto-generated method stub
-                return null;
+                return in = in == null ? makeInstrument(symbol) : in;
             }
             
         };

@@ -99,8 +99,9 @@ public class Distributor extends Node<SeriesSubscription> implements Assembler {
 	    //if(true) return;
 		BarImpl bar = new BarImpl(m.trade().time(), period, m.trade().price(), m.trade().price(), m.trade().price(), m.trade().price(), m.trade().size(), null);
 		dataQueue.offer(bar);
-		System.out.println("onNextMarket: " + m.instrument().symbol() + ", " + m.trade().price().asDouble() + ",  " + new SpanImpl(period, bar.getTime(), bar.getTime()));
+//		System.out.println("onNextMarket: " + m.instrument().symbol() + ", " + m.trade().price().asDouble() + ",  " + new SpanImpl(period, bar.getTime(), bar.getTime()));
         if(historicalDataAdded) {
+            System.out.println("HISTORICAL DATA ADDED");
 		    setModifiedSpan(new SpanImpl(period, bar.getTime(), bar.getTime()), outputSubscriptions);
 		}
 	}
@@ -108,7 +109,7 @@ public class Distributor extends Node<SeriesSubscription> implements Assembler {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public <T extends HistoricalResult> void onNextHistorical(T result) {
-		System.out.println("onNextHistorical: ");
+//		System.out.println("onNextHistorical: ");
 		
 		BarImpl bar = null;
         boolean executedOnce = false;
@@ -135,7 +136,7 @@ public class Distributor extends Node<SeriesSubscription> implements Assembler {
         
         setModifiedSpan(span, outputSubscriptions);
         
-        historicalDataAdded = true;
+        //historicalDataAdded = true;
 	}
 	
 	private BarImpl createBarFromTickCSV(String[] array) {
@@ -255,7 +256,7 @@ public class Distributor extends Node<SeriesSubscription> implements Assembler {
 	}
     
     public String toString() {
-        StringBuilder sb = new StringBuilder("ASSEMBLER").append(": ").append(" ---> ").append(subscription);
+        StringBuilder sb = new StringBuilder("Assembler: ").append(" Distributor ").append(subscription);
         return sb.toString();
     }
 

@@ -114,9 +114,6 @@ public class PeriodTypeTest {
 		assertFalse(PeriodType.MONTH.equalsAtResolution(dt1, dt2));
 		assertTrue(PeriodType.QUARTER.equalsAtResolution(dt1, dt2));
 		
-		assertFalse(PeriodType.MONTH.equalsAtResolution(dt1, dt2));
-		assertTrue(PeriodType.QUARTER.equalsAtResolution(dt1, dt2));
-		
 		dt1 = new DateTime(2013, 11, 20, 14, 30, 30, 0); //vary the day
 		dt2 = new DateTime(2013, 11, 21, 14, 30, 30, 0);
 		assertFalse(PeriodType.DAY.equalsAtResolution(dt1, dt2));

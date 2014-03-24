@@ -3,6 +3,7 @@ package com.barchart.feed.series.analytics;
 import org.joda.time.DateTime;
 
 import com.barchart.feed.api.series.Period;
+import com.barchart.feed.api.series.PeriodType;
 import com.barchart.feed.api.series.Span;
 import com.barchart.feed.api.series.network.Analytic;
 import com.barchart.feed.api.series.network.Subscription;
@@ -14,6 +15,7 @@ import com.barchart.feed.series.network.AnalyticBase;
 import com.barchart.feed.series.network.SeriesSubscription;
 
 public class BarBuilder extends AnalyticBase {
+    public static final String NAME = "BarBuilder";
 	public static final String INPUT_KEY = "Input";
     public static final String OUTPUT_KEY = "Output";
     
@@ -92,7 +94,13 @@ public class BarBuilder extends AnalyticBase {
 						inputPeriod + ", output=" + outputPeriod);
 			}
 			
+			if(subscription.getTimeFrame(0).getPeriod().equals(new Period(PeriodType.SECOND, 1))) {
+			    System.out.println("debug");
+			}
+			
+			boolean wasAddedDuringInit = false;
 			if(currentMergeBar == null) {
+			    wasAddedDuringInit = true;
 				currentMergeBar = new BarImpl((BarImpl)inputSeries.get(inputStartIdx)); 
 				workingTargetDate = subscription.getTradingWeek().getNextSessionDate(inputSpan.getDate(), outputPeriod);
 				currentMergeBar.setDate(workingTargetDate);
@@ -104,7 +112,7 @@ public class BarBuilder extends AnalyticBase {
 				workingSpan.setDate(workingTargetDate);
 			}
 			
-			for(int i = inputStartIdx;i <= inputLastIdx;i++) {
+			for(int i = wasAddedDuringInit ? inputStartIdx + 1 : inputStartIdx;i <= inputLastIdx;i++) {
 				BarImpl currentIdxBar = (BarImpl)inputSeries.get(i);
 				if(currentIdxBar.getDate().isAfter(workingTargetDate)) {
 					workingTargetDate = subscription.getTradingWeek().getNextSessionDate(workingTargetDate, outputPeriod);
@@ -116,8 +124,8 @@ public class BarBuilder extends AnalyticBase {
 					barCompleted = true;
 				}else{
 				    currentMergeBar.merge(currentIdxBar, false);
-				    if(workingSpan.getPeriod() == Period.ONE_MINUTE) {
-				        System.out.println("NOT IS AFTER: MERGING NEW BAR " + currentMergeBar + "   " + outputSeries.getPeriod() + "  :  span = " + this.workingSpan);
+				    if(workingSpan.getPeriod().equals(new Period(PeriodType.SECOND, 1))) {
+				        System.out.println("\tNOT IS AFTER: MERGING NEW BAR " + currentMergeBar + "   " + outputSeries.getPeriod() + "  :  span = " + this.workingSpan);
 				    }
 				}
 			}

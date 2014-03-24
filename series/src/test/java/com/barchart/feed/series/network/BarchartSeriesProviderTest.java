@@ -5,15 +5,19 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalTime;
 import org.junit.Test;
 
+import rx.Subscription;
 import rx.observables.BlockingObservable;
 import rx.util.functions.Action1;
 
+import com.barchart.feed.api.model.data.Market;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.api.series.Period;
 import com.barchart.feed.api.series.PeriodType;
@@ -23,6 +27,7 @@ import com.barchart.feed.api.series.network.NetworkObservable;
 import com.barchart.feed.api.series.network.Node;
 import com.barchart.feed.api.series.network.NodeDescriptor;
 import com.barchart.feed.api.series.network.Query;
+import com.barchart.feed.api.series.service.HistoricalResult;
 import com.barchart.feed.series.BarImpl;
 import com.barchart.feed.series.TimeFrameImpl;
 import com.barchart.feed.series.TradingWeekImpl;
@@ -31,7 +36,51 @@ import com.barchart.feed.series.service.FauxHistoricalService;
 import com.barchart.feed.series.service.FauxMarketService;
 
 public class BarchartSeriesProviderTest {
+    
+    public static void main(String[] args) {
+        BarchartSeriesProviderTest bspt = new BarchartSeriesProviderTest();
+        //bspt.testFetch();
+        bspt.testFetchManual();
+    }
+    
+    public void testFetchManual() {
+        String symbol = "ESZ13";
+        Instrument instr = TestHarness.makeInstrument(symbol);
+        DateTime dt1 = new DateTime(2013, 12, 10, 12, 0, 0);
+        TimeFrameImpl tf1 = new TimeFrameImpl(new Period(PeriodType.MINUTE, 5), dt1, null);
+        SeriesSubscription sub1 = new SeriesSubscription("ESZ13", instr, "IO", new TimeFrameImpl[] { tf1 }, TradingWeekImpl.DEFAULT);
+        BarchartSeriesProvider provider = TestHarness.getTestSeriesProviderWithNoDistributor(sub1);
+        
+        NetworkSchema.setSchemaFilePath("networks.txt");
+        Query query = QueryBuilderImpl.create().
+                symbol("ESZ13").
+                //specifier("PivotPoint").
+                start(new DateTime(2013, 12, 10, 12, 0)).
+                //period(Period.ONE_MINUTE).
+                period(new Period(PeriodType.MINUTE, 5)).build();
+        
+        final NetworkObservable observable = provider.fetch(query);
+        observable.subscribe(new Action1<NetworkNotification>() { @Override public void call(NetworkNotification t1){} });
+        
+        Map<SeriesSubscription, List<Distributor>> distributors = provider.getAssemblerMapForTesting();
+        Distributor dist = distributors.get(sub1).get(0);
+        
+        DateTime t = new DateTime(2013, 12, 10, 12, 0, 0, 0);
+        Instrument i = TestHarness.makeInstrument(symbol);
+        Market m = TestHarness.makeMarket(t, i, "50.00", "10");
+        
+        List<String> l = new ArrayList<String>();
+        l.add("2013-12-10 11:59:58.000,10,G,1804.75,1");
+        dist.onNextHistorical(makeResult(null, l));
+        
+        l.clear();
+        l.add("2013-12-10 11:59:59.000,10,G,1804.5,4");
+        dist.onNextHistorical(makeResult(null, l));
+        //2013-12-10 11:59:58.000,10,G,1804.75,1
+        //2013-12-10 11:59:58.000,10,G,1804.5,1
+    }
 
+    Subscription s;
 	@Test
 	public void testFetch() {
 		
@@ -49,19 +98,31 @@ public class BarchartSeriesProviderTest {
 				period(new Period(PeriodType.MINUTE, 5)).build();
 		
 		final NetworkObservable observable = provider.fetch(query);
-		BlockingObservable<NetworkNotification> obs = observable.toBlockingObservable();
-		obs.forEach(new Action1<NetworkNotification>() {
+		final BlockingObservable<NetworkNotification> obs = observable.toBlockingObservable();
+		s = observable.doOnEach(new Action1<NetworkNotification>() {
 		    @Override
             public void call(NetworkNotification t1) {
                 System.out.println("WATUP: " + observable.getDataSeries(t1.getSpecifier()).getLast());
                 BarImpl bar = (BarImpl)observable.getDataSeries(t1.getSpecifier()).getLast();
                 LocalTime t = bar.getDate().toLocalTime();
-                if(t.getHourOfDay() == 12 && t.getMinuteOfHour() == 15) {
-                    System.out.println("UNSUBSCRIBING!!!");
-                    //obs.
+                if(t.getHourOfDay() == 12) { // && t.getMinuteOfHour() == 15) {
+                    s.unsubscribe();
                 }
             }
-		});
+		}).subscribe(new Action1<NetworkNotification>() {
+            @Override
+            public void call(NetworkNotification t1) {
+//                System.out.println("WATUP: " + observable.getDataSeries(t1.getSpecifier()).getLast());
+//                BarImpl bar = (BarImpl)observable.getDataSeries(t1.getSpecifier()).getLast();
+//                LocalTime t = bar.getDate().toLocalTime();
+//                if(t.getHourOfDay() == 12 && t.getMinuteOfHour() == 15) {
+//                    System.out.println("UNSUBSCRIBING!!!");
+//                    //obs.
+//                }
+            }
+        });
+		
+		
 //		while(true) {
 //		    NetworkNotification span = obs.next().iterator().next();
 //		    System.out.println("span = " + span.getSpan() + ",  " + span.getSpecifier() + ",  " + observable.getDataSeries(span.getSpecifier()).size());
@@ -327,8 +388,19 @@ public class BarchartSeriesProviderTest {
 	    
 	}
 	
-	public static void main(String[] args) {
-		new BarchartSeriesProviderTest().testFetch();
-	}
+	private <S extends com.barchart.feed.api.series.network.Subscription> HistoricalResult makeResult(final S s, final List<String> data) {
+	    HistoricalResult result = new HistoricalResult() {
+            @Override
+            public S getSubscription() {
+                return s;
+            }
 
+            @Override
+            public List<String> getResult() {
+                return data;
+            }
+        };
+        return result;
+	}
+	
 }

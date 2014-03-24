@@ -452,7 +452,9 @@ public abstract class Node<S extends Subscription> implements Runnable {
 				try {
 					synchronized(waitLock) {
 						System.out.println(this + " waiting..." + getOutputSubscriptions().get(0));
-						waitLock.wait();
+						if(isRunning) {
+						    waitLock.wait();
+						}
 						System.out.println(this + " waking up " + getOutputSubscriptions().get(0));
 					}
 				}catch(Exception e) { 

@@ -1,6 +1,5 @@
 package com.barchart.feed.series.network;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -26,6 +25,7 @@ import com.barchart.feed.api.series.network.Node;
 import com.barchart.feed.api.series.network.NodeDescriptor;
 import com.barchart.feed.api.series.network.NodeType;
 import com.barchart.feed.api.series.network.Query;
+import com.barchart.feed.api.series.network.QueryBuilder;
 import com.barchart.feed.api.series.network.Subscription;
 import com.barchart.feed.api.series.service.SeriesFeedService;
 import com.barchart.feed.series.DataSeriesImpl;
@@ -44,7 +44,7 @@ public class BarchartSeriesProvider {
 	private List<Node<SeriesSubscription>> ioNodes = Collections.synchronizedList(new ArrayList<Node<SeriesSubscription>>());
 	/** Contains output-level/Subscribable {@link Analytic} nodes */
     private List<Node<SeriesSubscription>> assemblers = Collections.synchronizedList(new ArrayList<Node<SeriesSubscription>>());
-	private Map<Subscription, List<Distributor>> subscriberAssemblers = new HashMap<Subscription, List<Distributor>>();
+	private Map<SeriesSubscription, List<Distributor>> subscriberAssemblers = new HashMap<SeriesSubscription, List<Distributor>>();
     /** Contains all instantiated Nodes mapped to {@link SearchDescriptor}s */
     private Map<SearchDescriptor,AnalyticNode> searchMap = Collections.synchronizedMap(new HashMap<SearchDescriptor,AnalyticNode>());
     /** Monitor for the {@link #searchMap} */
@@ -64,7 +64,7 @@ public class BarchartSeriesProvider {
 	 * 
 	 * @return For testing only. Returns the subscription to distributor mapping.
 	 */
-	Map<Subscription, List<Distributor>> getAssemblerMapForTesting() {
+	Map<SeriesSubscription, List<Distributor>> getAssemblerMapForTesting() {
 	    return subscriberAssemblers;
 	}
 	
@@ -720,7 +720,9 @@ public class BarchartSeriesProvider {
 	        return new rx.Subscription() {
 	        	@Override
 				public void unsubscribe() {
+	        	    System.out.println("UNSUBSCRIBING!!!");
 					for(Node<SeriesSubscription> node : subscribedNodes) {
+					    System.out.println("Size: " + subscribedNodes.size() + ",  " + node);
 					    node.removeObserver(actualObserver);
 					}
 				}
