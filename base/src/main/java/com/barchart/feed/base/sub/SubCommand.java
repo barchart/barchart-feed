@@ -4,16 +4,8 @@ import java.util.Set;
 
 /**
  * Subscription are for either instruments or exchanges
- * 
- *  All?
- *  
- *  This is pretty ad-hoc atm, needs to be looked at again
- *  should use MetaData interface now
- * 
- * @author Gavin M Litchfield
- *
  */
-public interface Sub {
+public interface SubCommand {
 	
 	enum Type {
 		NULL, INSTRUMENT, EXCHANGE
@@ -30,7 +22,7 @@ public interface Sub {
 	String interest();
 	String encode();
 	
-	public static Sub NULL = new Sub() {
+	public static SubCommand NULL = new SubCommand() {
 
 		@Override
 		public Type type() {

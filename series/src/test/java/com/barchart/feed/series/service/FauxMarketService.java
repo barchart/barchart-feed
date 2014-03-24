@@ -2,16 +2,13 @@ package com.barchart.feed.series.service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.text.DateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
-import java.util.TimeZone;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -38,6 +35,7 @@ import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.api.model.meta.Metadata;
 import com.barchart.feed.api.model.meta.id.ExchangeID;
 import com.barchart.feed.api.model.meta.id.InstrumentID;
+import com.barchart.feed.api.model.meta.id.MetadataID;
 import com.barchart.feed.api.model.meta.id.VendorID;
 import com.barchart.feed.api.series.PeriodType;
 import com.barchart.feed.api.series.network.Query;
@@ -47,7 +45,6 @@ import com.barchart.feed.series.network.SeriesSubscription;
 import com.barchart.util.value.ValueFactoryImpl;
 import com.barchart.util.value.api.Fraction;
 import com.barchart.util.value.api.Price;
-import com.barchart.util.value.api.Scaled;
 import com.barchart.util.value.api.Schedule;
 import com.barchart.util.value.api.Size;
 import com.barchart.util.value.api.Time;
@@ -258,6 +255,18 @@ public class FauxMarketService implements MarketService {
                 // TODO Auto-generated method stub
                 
             }
+
+			@Override
+			public void include(MetadataID<?>... metaID) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void exclude(MetadataID<?>... metaID) {
+				// TODO Auto-generated method stub
+				
+			}
             
         };
     }
@@ -600,6 +609,18 @@ public class FauxMarketService implements MarketService {
 
 			@Override
 			public Price transactionPriceConversionFactor() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public Time contractExpire() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public Month contractDeliveryMonth() {
 				// TODO Auto-generated method stub
 				return null;
 			}

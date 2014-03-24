@@ -2,7 +2,6 @@ package com.barchart.feed.base.provider;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -35,8 +34,10 @@ import com.barchart.feed.api.model.data.Trade;
 import com.barchart.feed.api.model.meta.Exchange;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.api.model.meta.Metadata;
+import com.barchart.feed.api.model.meta.Metadata.MetaType;
 import com.barchart.feed.api.model.meta.id.ExchangeID;
 import com.barchart.feed.api.model.meta.id.InstrumentID;
+import com.barchart.feed.api.model.meta.id.MetadataID;
 import com.barchart.feed.api.model.meta.id.VendorID;
 import com.barchart.feed.base.market.api.MarketDo;
 import com.barchart.feed.base.market.api.MarketFactory;
@@ -50,7 +51,7 @@ import com.barchart.feed.base.participant.FrameworkAgent;
 import com.barchart.feed.base.participant.FrameworkAgentLifecycleHandler;
 import com.barchart.feed.base.provider.MarketDataGetters.MDGetter;
 import com.barchart.feed.base.state.enums.MarketStateEntry;
-import com.barchart.feed.base.sub.Sub;
+import com.barchart.feed.base.sub.SubCommand;
 import com.barchart.feed.base.sub.SubscriptionHandler;
 import com.barchart.feed.base.sub.SubscriptionType;
 import com.barchart.feed.base.values.api.Value;
@@ -87,8 +88,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 	private final ConcurrentMap<ExchangeID, Subscription<Exchange>> exchSubs =
 			new ConcurrentHashMap<ExchangeID, Subscription<Exchange>>();
 	
-	protected MarketProviderBase(final MarketFactory factory,
-			final MetadataService metaService,
+	protected MarketProviderBase(final MarketFactory factory, final MetadataService metaService,
 			final SubscriptionHandler handler) {
 		this.factory = factory;
 		this.metaService = metaService;
@@ -104,12 +104,10 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		final MDGetter<V> getter = MarketDataGetters.get(clazz);
 
 		if (getter == null) {
-			throw new IllegalArgumentException("Illegal class type "
-					+ clazz.getName());
+			throw new IllegalArgumentException("Illegal class type " + clazz.getName());
 		}
 		
-		final FrameworkAgent<V> agent = new BaseAgent<V>(this, clazz, getter,
-				callback);
+		final FrameworkAgent<V> agent = new BaseAgent<V>(this, clazz, getter, callback);
 		
 		attachAgent(agent);
 		
@@ -308,8 +306,13 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		
 		@Override
 		public synchronized void terminate() {
+			
+			/* Unsubscribe to all */
+			subHandler.unsubscribe(unsubscribeAll(this));
+			
 			state = State.TERMINATED;
 			agentHandler.detachAgent(this);
+			
 		}
 		
 		@Override
@@ -335,9 +338,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 								exInsts.remove(i);
 								incInsts.add(i);
 								
-								/* We have to use an alternate symbol for options
-								 * ...rolls eyes...
-								 */
+								/* We have to use an alternate symbol for options */
 								final String symbol = i.symbol();
 								if(symbol.contains("|")) {
 									newInterests.add(i.vendorSymbols().get(VendorID.BARCHART));
@@ -346,10 +347,8 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 								}
 								
 							} else {
-								/*
-								 * For all failed lookups, store symbol and attempt to match 
-								 * in the hasMatch method.
-								 */
+								/* For all failed lookups, store symbol and attempt to match 
+								 * in the hasMatch method. */
 								incUnknown.add(e.getKey().toString());
 								exUnknown.remove(e.getKey().toString());
 							}
@@ -358,7 +357,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 						
 						agentHandler.updateAgent(BaseAgent.this);
 						
-						final Set<Sub> newSubs = subscribe(BaseAgent.this, newInterests);
+						final Set<SubCommand> newSubs = subscribe(BaseAgent.this, newInterests);
 						if (!newSubs.isEmpty()) {
 							log.debug("Sending new subs to sub handler");
 							subHandler.subscribe(newSubs);
@@ -419,7 +418,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 						
 						agentHandler.updateAgent(BaseAgent.this);
 						
-						final Set<Sub> oldSubs = unsubscribe(BaseAgent.this, oldInterests);
+						final Set<SubCommand> oldSubs = unsubscribe(BaseAgent.this, oldInterests);
 						if (!oldSubs.isEmpty()) {
 							log.debug("Sending new unsubs to sub handler");
 							subHandler.unsubscribe(oldSubs);
@@ -447,6 +446,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		}
 		
 		@Override
+		@Deprecated
 		public synchronized void include(final Metadata... meta) {
 		
 			final Set<String> newInterests = new HashSet<String>();
@@ -488,7 +488,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		
 			agentHandler.updateAgent(this);
 		
-			final Set<Sub> newSubs = subscribe(this, newInterests);
+			final Set<SubCommand> newSubs = subscribe(this, newInterests);
 			if (!newSubs.isEmpty()) {
 				log.debug("Sending new subs to sub handler");
 				subHandler.subscribe(newSubs);
@@ -497,6 +497,34 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		}
 		
 		@Override
+		public void include(final MetadataID<?>... metaID) {
+			
+			final List<InstrumentID> ids = new ArrayList<InstrumentID>();
+			
+			for(final MetadataID<?> m : metaID) {
+				
+				if(m.metaType() == MetaType.INSTRUMENT) {
+					ids.add((InstrumentID) m);
+				}
+				
+			}
+			
+			final Map<InstrumentID, Instrument> iMap = metaService.instrument(
+					ids.toArray(new InstrumentID[0])).toBlockingObservable().single(); 
+
+			final List<Instrument> insts = new ArrayList<Instrument>();
+			
+			for(final Entry<InstrumentID, Instrument> e : iMap.entrySet()) {
+				if(!e.getValue().isNull()) {
+					insts.add(e.getValue());
+				}
+			}
+			
+			include(insts.toArray(new Instrument[0]));
+		}
+		
+		@Override
+		@Deprecated
 		public synchronized void exclude(final Metadata... meta) {
 		
 			final Set<String> oldInterests = new HashSet<String>();
@@ -538,7 +566,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		
 			agentHandler.updateAgent(this);
 		
-			final Set<Sub> oldSubs = unsubscribe(this, oldInterests);
+			final Set<SubCommand> oldSubs = unsubscribe(this, oldInterests);
 			if (!oldSubs.isEmpty()) {
 				log.debug("Sending new unsubs to sub handler");
 				subHandler.unsubscribe(oldSubs);
@@ -547,7 +575,45 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		}
 		
 		@Override
+		public void exclude(final MetadataID<?>... metaID) {
+			
+			final List<InstrumentID> ids = new ArrayList<InstrumentID>();
+			
+			for(final MetadataID<?> m : metaID) {
+				
+				if(m.metaType() == MetaType.INSTRUMENT) {
+					ids.add((InstrumentID) m);
+				}
+				
+			}
+			
+			final Map<InstrumentID, Instrument> iMap = metaService.instrument(
+					ids.toArray(new InstrumentID[0])).toBlockingObservable().single(); 
+
+			final List<Instrument> insts = new ArrayList<Instrument>();
+			
+			for(final Entry<InstrumentID, Instrument> e : iMap.entrySet()) {
+				if(!e.getValue().isNull()) {
+					insts.add(e.getValue());
+				}
+			}
+			
+			exclude(insts.toArray(new Instrument[0]));
+			
+		}
+		
+		@Override
 		public synchronized void clear() {
+			
+			/* Unsubscribe to all */
+			final Set<SubCommand> subsToUnsub = unsubscribeAll(this);
+			final StringBuilder sb = new StringBuilder().append("UNSUB ******** ");
+			for(final SubCommand s : subsToUnsub) {
+				sb.append(s.interest()).append(" ");
+			}
+			log.debug("{}", sb.toString());
+			
+			subHandler.unsubscribe(unsubscribeAll(this));
 		
 			incInsts.clear();
 			exInsts.clear();
@@ -563,108 +629,103 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 	
 	/* ***** ***** Subscription Aggregation Methods ***** ***** */
 	
-	private final Map<String, List<Set<SubscriptionType>>> subs = 
-			new HashMap<String, List<Set<SubscriptionType>>>();
-
-	private final Map<FrameworkAgent<?>, Set<SubscriptionType>> agentMap = 
-			new HashMap<FrameworkAgent<?>, Set<SubscriptionType>>();
+	private final Map<String, List<FrameworkAgent<?>>> instToAgentsMap = 
+			new ConcurrentHashMap<String, List<FrameworkAgent<?>>>();
 
 	private Set<SubscriptionType> aggregate(final String interest) {
 
-		final Set<SubscriptionType> agg = EnumSet
-				.noneOf(SubscriptionType.class);
+		final Set<SubscriptionType> agg = EnumSet.noneOf(SubscriptionType.class);
 
-		if (!subs.containsKey(interest)) {
+		if (!instToAgentsMap.containsKey(interest)) {
 			return agg;
 		}
 
-		for (final Set<SubscriptionType> set : subs.get(interest)) {
-			agg.addAll(set);
+		for (final FrameworkAgent<?> agent : instToAgentsMap.get(interest)) {
+			agg.addAll(SubscriptionType.mapMarketEvent(agent.type()));
 		}
 
 		return agg;
 	}
 
-	private Sub subscribe(final FrameworkAgent<?> agent, final String interest) {
+	private SubCommand subscribe(final FrameworkAgent<?> agent, final String symbol) {
 
-		if (!agentMap.containsKey(agent)) {
-			agentMap.put(agent, SubscriptionType.mapMarketEvent(agent.type()));
-		}
-
-		final Set<SubscriptionType> newSubs = agentMap.get(agent);
-
-		if (!subs.containsKey(interest) && !newSubs.isEmpty()) {
-			subs.put(interest, new RefEqualsList<Set<SubscriptionType>>());
-		} 
+		synchronized(instToAgentsMap) {
 		
-		final Set<SubscriptionType> stuffToAdd = EnumSet.copyOf(newSubs);
-		stuffToAdd.removeAll(aggregate(interest));
-		
-		subs.get(interest).add(newSubs);
-
-		if (!stuffToAdd.isEmpty()) {
-			return new SubBase(interest, Sub.Type.INSTRUMENT, stuffToAdd);
-		} else {
-			return Sub.NULL;
+			final Set<SubscriptionType> newSubs = SubscriptionType.mapMarketEvent(agent.type());
+	
+			if (!instToAgentsMap.containsKey(symbol) && !newSubs.isEmpty()) {
+				instToAgentsMap.put(symbol, new ArrayList<FrameworkAgent<?>>());
+			} 
+			
+			final Set<SubscriptionType> stuffToAdd = EnumSet.copyOf(newSubs);
+			stuffToAdd.removeAll(aggregate(symbol));
+			
+			instToAgentsMap.get(symbol).add(agent);
+	
+			if (!stuffToAdd.isEmpty()) {
+				return new SubBase(symbol, SubCommand.Type.INSTRUMENT, stuffToAdd);
+			} else {
+				return SubCommand.NULL;
+			}
+			
 		}
-
 	}
 
-	private synchronized Set<Sub> subscribe(final FrameworkAgent<?> agent,
-			final Set<String> interests) {
+	private Set<SubCommand> subscribe(final FrameworkAgent<?> agent, final Set<String> symbols) {
 
-		final Set<Sub> newSubs = new HashSet<Sub>();
+		final Set<SubCommand> newSubs = new HashSet<SubCommand>();
 
-		for (final String interest : interests) {
-			final Sub sub = subscribe(agent, interest);
+		for (final String symbol : symbols) {
+			final SubCommand sub = subscribe(agent, symbol);
+			if (!sub.isNull()) {
+				newSubs.add(sub);
+			}
+		}
+		
+		return newSubs;
+	}
+
+	private SubCommand unsubscribe(final FrameworkAgent<?> agent, final String symbol) {
+
+		synchronized(instToAgentsMap) {
+		
+			final Set<SubscriptionType> oldSubs = SubscriptionType.mapMarketEvent(agent.type());
+	
+			if(instToAgentsMap.containsKey(symbol)){
+				instToAgentsMap.get(symbol).remove(agent);
+				if(instToAgentsMap.get(symbol).isEmpty()) {
+					instToAgentsMap.remove(symbol);
+				}
+			}
+			
+			final Set<SubscriptionType> stuffToRemove = EnumSet.copyOf(oldSubs);
+			stuffToRemove.removeAll(aggregate(symbol));
+	
+			if (!stuffToRemove.isEmpty()) {
+				return new SubBase(symbol, SubCommand.Type.INSTRUMENT, stuffToRemove);
+			} else {
+				return SubCommand.NULL;
+			}
+		}
+	}
+
+	private synchronized Set<SubCommand> unsubscribe(final FrameworkAgent<?> agent, 
+			final Set<String> symbols) {
+
+		final Set<SubCommand> newSubs = new HashSet<SubCommand>();
+
+		for (final String interest : symbols) {
+			final SubCommand sub = unsubscribe(agent, interest);
 			if (!sub.isNull()) {
 				newSubs.add(sub);
 			}
 		}
 
 		return newSubs;
-
 	}
-
-	private Sub unsubscribe(final FrameworkAgent<?> agent, final String interest) {
-
-		if (!agentMap.containsKey(agent)) {
-			return Sub.NULL; 
-		}
-
-		final Set<SubscriptionType> oldSubs = agentMap.get(agent);
-
-		subs.get(interest).remove(oldSubs);
-
-//		if (subs.get(interest).isEmpty()) {
-//			subs.remove(interest);
-//		}
-
-		final Set<SubscriptionType> stuffToRemove = EnumSet.copyOf(oldSubs);
-		stuffToRemove.removeAll(aggregate(interest));
-
-		if (!stuffToRemove.isEmpty()) {
-			return new SubBase(interest, Sub.Type.INSTRUMENT, stuffToRemove);
-		} else {
-			return Sub.NULL;
-		}
-
-	}
-
-	private synchronized Set<Sub> unsubscribe(final FrameworkAgent<?> agent, 
-			final Set<String> interests) {
-
-		final Set<Sub> newSubs = new HashSet<Sub>();
-
-		for (final String interest : interests) {
-			final Sub sub = unsubscribe(agent, interest);
-			if (!sub.isNull()) {
-				newSubs.add(sub);
-			}
-		}
-
-		return newSubs;
-
+	
+	private Set<SubCommand> unsubscribeAll(final FrameworkAgent<?> agent) {
+		return unsubscribe(agent, agent.interests());
 	}
 	
 	class RefEqualsList<T> extends ArrayList<T> {
@@ -679,7 +740,6 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 				return false;
 			}
 		}
-		
 	}
 	
 	private static String formatForJERQ(final String symbol) {

@@ -14,6 +14,7 @@ import com.barchart.util.value.api.Fraction;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Schedule;
 import com.barchart.util.value.api.Size;
+import com.barchart.util.value.api.Time;
 import com.barchart.util.value.api.TimeInterval;
 import com.barchart.util.value.api.ValueFactory;
 
@@ -105,6 +106,16 @@ public abstract class InstrumentBase implements Instrument {
 	@Override
 	public Schedule marketHours() {
 		return Schedule.NULL;
+	}
+	
+	@Override
+	public Time contractExpire() {
+		return Time.NULL;
+	}
+	
+	@Override
+	public Month contractDeliveryMonth() {
+		return Month.NULL_MONTH;
 	}
 	
 	@Override

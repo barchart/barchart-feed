@@ -3,17 +3,16 @@ package com.barchart.feed.base.provider;
 import java.util.EnumSet;
 import java.util.Set;
 
-import com.barchart.feed.base.sub.Sub;
+import com.barchart.feed.base.sub.SubCommand;
 import com.barchart.feed.base.sub.SubscriptionType;
 
-public class SubBase implements Sub {
+public class SubBase implements SubCommand {
 	
 	private final Set<SubscriptionType> subTypes;
 	private final String interest;
-	private final Sub.Type type;
+	private final SubCommand.Type type;
 	
-	SubBase(final String interest, Sub.Type type, 
-			final Set<SubscriptionType> types) {
+	SubBase(final String interest, SubCommand.Type type, final Set<SubscriptionType> types) {
 		
 		if(interest == null || types == null || types.isEmpty()) {
 			throw new IllegalArgumentException();
@@ -46,7 +45,11 @@ public class SubBase implements Sub {
 
 	@Override
 	public String encode() {
-		return interest;
+		final StringBuffer sb = new StringBuffer().append(interest).append("=");
+		for(SubscriptionType t : subTypes) {
+			sb.append(t.code());
+		}
+		return sb.toString();
 	}
 	
 	@Override

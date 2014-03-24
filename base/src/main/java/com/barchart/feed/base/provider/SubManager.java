@@ -7,8 +7,8 @@ import java.util.Map;
 import java.util.Set;
 
 import com.barchart.feed.base.participant.FrameworkAgent;
-import com.barchart.feed.base.sub.Sub;
-import com.barchart.feed.base.sub.Sub.Type;
+import com.barchart.feed.base.sub.SubCommand;
+import com.barchart.feed.base.sub.SubCommand.Type;
 import com.barchart.feed.base.sub.SubscriptionType;
 
 /*
@@ -33,7 +33,7 @@ public class SubManager {
 		return agg;
 	}
 	
-	public Sub subscribe(final FrameworkAgent<?> agent, final String interest) {
+	public SubCommand subscribe(final FrameworkAgent<?> agent, final String interest) {
 		
 		if(!agentMap.containsKey(agent)) {
 			agentMap.put(agent, SubscriptionType.mapMarketEvent(agent.type()));
@@ -52,18 +52,18 @@ public class SubManager {
 		if(!stuffToAdd.isEmpty()) {
 			return new SubBase(interest, Type.INSTRUMENT, stuffToAdd);
 		} else {
-			return Sub.NULL;
+			return SubCommand.NULL;
 		}
 		
 	}
 
-	public Set<Sub> subscribe(final FrameworkAgent<?> agent, 
+	public Set<SubCommand> subscribe(final FrameworkAgent<?> agent, 
 			final Set<String> interests) {
 		
-		final Set<Sub> newSubs = new HashSet<Sub>();
+		final Set<SubCommand> newSubs = new HashSet<SubCommand>();
 		
 		for(final String interest : interests) {
-			final Sub sub = subscribe(agent, interest);
+			final SubCommand sub = subscribe(agent, interest);
 			if(!sub.isNull()) {
 				newSubs.add(sub);
 			}
@@ -73,11 +73,11 @@ public class SubManager {
 		
 	}
 
-	public Sub unsubscribe(final FrameworkAgent<?> agent, 
+	public SubCommand unsubscribe(final FrameworkAgent<?> agent, 
 			final String interest) {
 		
 		if(!agentMap.containsKey(agent)) {
-			return Sub.NULL;
+			return SubCommand.NULL;
 		}
 		
 		final Set<SubscriptionType> oldSubs = agentMap.remove(agent);
@@ -94,18 +94,18 @@ public class SubManager {
 		if(!stuffToRemove.isEmpty()) {
 			return new SubBase(interest, Type.INSTRUMENT, stuffToRemove);
 		} else {
-			return Sub.NULL;
+			return SubCommand.NULL;
 		}
 		
 	}
 
-	public Set<Sub> unsubscribe(final FrameworkAgent<?> agent, 
+	public Set<SubCommand> unsubscribe(final FrameworkAgent<?> agent, 
 			final Set<String> interests) {
 		
-		final Set<Sub> newSubs = new HashSet<Sub>();
+		final Set<SubCommand> newSubs = new HashSet<SubCommand>();
 		
 		for(final String interest : interests) {
-			final Sub sub = unsubscribe(agent, interest);
+			final SubCommand sub = unsubscribe(agent, interest);
 			if(!sub.isNull()) {
 				newSubs.add(sub);
 			}

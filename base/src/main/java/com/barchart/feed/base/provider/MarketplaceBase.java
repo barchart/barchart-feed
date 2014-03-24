@@ -30,7 +30,9 @@ import com.barchart.feed.api.model.data.Trade;
 import com.barchart.feed.api.model.meta.Exchange;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.api.model.meta.Metadata;
+import com.barchart.feed.api.model.meta.Metadata.MetaType;
 import com.barchart.feed.api.model.meta.id.InstrumentID;
+import com.barchart.feed.api.model.meta.id.MetadataID;
 import com.barchart.feed.base.market.api.MarketDo;
 import com.barchart.feed.base.market.api.MarketFactory;
 import com.barchart.feed.base.market.api.MarketMakerProvider;
@@ -42,7 +44,7 @@ import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.feed.base.participant.FrameworkAgent;
 import com.barchart.feed.base.participant.FrameworkAgentLifecycleHandler;
 import com.barchart.feed.base.provider.MarketDataGetters.MDGetter;
-import com.barchart.feed.base.sub.Sub;
+import com.barchart.feed.base.sub.SubCommand;
 import com.barchart.feed.base.sub.SubscriptionHandler;
 import com.barchart.feed.base.sub.SubscriptionType;
 import com.barchart.feed.base.values.api.Value;
@@ -330,7 +332,7 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 
 			agentHandler.updateAgent(this);
 
-			final Set<Sub> newSubs = subscribe(this, newInterests);
+			final Set<SubCommand> newSubs = subscribe(this, newInterests);
 			if (!newSubs.isEmpty()) {
 				log.debug("Sending new subs to sub handler");
 				subHandler.subscribe(newSubs);
@@ -374,7 +376,7 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 
 			agentHandler.updateAgent(this);
 
-			final Set<Sub> oldSubs = unsubscribe(this, oldInterests);
+			final Set<SubCommand> oldSubs = unsubscribe(this, oldInterests);
 			if (!oldSubs.isEmpty()) {
 				log.debug("Sending new unsubs to sub handler");
 				subHandler.unsubscribe(oldSubs);
@@ -395,6 +397,7 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 		}
 
 		@Override
+		@Deprecated
 		public synchronized void include(final Metadata... meta) {
 
 			final Set<String> newInterests = new HashSet<String>();
@@ -425,15 +428,42 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 
 			agentHandler.updateAgent(this);
 
-			final Set<Sub> newSubs = subscribe(this, newInterests);
+			final Set<SubCommand> newSubs = subscribe(this, newInterests);
 			if (!newSubs.isEmpty()) {
 				log.debug("Sending new subs to sub handler");
 				subHandler.subscribe(newSubs);
 			}
 
 		}
+		
+		@Override
+		public void include(final MetadataID<?>... metaID) {
+			
+			final List<InstrumentID> ids = new ArrayList<InstrumentID>();
+			
+			for(final MetadataID<?> m : metaID) {
+				
+				if(m.metaType() == MetaType.INSTRUMENT) {
+					ids.add((InstrumentID) m);
+				}
+				
+			}
+			
+			final List<Instrument> insts = new ArrayList<Instrument>();
+			
+			for(final InstrumentID id : ids) {
+				final Instrument i = instLookup.lookup(id);
+				if(!i.isNull()) {
+					insts.add(i);
+				}
+			}
+			
+			include(insts.toArray(new Instrument[0]));
+			
+		}
 
 		@Override
+		@Deprecated
 		public synchronized void exclude(final Metadata... meta) {
 
 			final Set<String> oldInterests = new HashSet<String>();
@@ -464,12 +494,38 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 
 			agentHandler.updateAgent(this);
 
-			final Set<Sub> oldSubs = unsubscribe(this, oldInterests);
+			final Set<SubCommand> oldSubs = unsubscribe(this, oldInterests);
 			if (!oldSubs.isEmpty()) {
 				log.debug("Sending new unsubs to sub handler");
 				subHandler.unsubscribe(oldSubs);
 			}
 
+		}
+		
+		@Override
+		public void exclude(final MetadataID<?>... metaID) {
+			
+			final List<InstrumentID> ids = new ArrayList<InstrumentID>();
+			
+			for(final MetadataID<?> m : metaID) {
+				
+				if(m.metaType() == MetaType.INSTRUMENT) {
+					ids.add((InstrumentID) m);
+				}
+				
+			}
+			
+			final List<Instrument> insts = new ArrayList<Instrument>();
+			
+			for(final InstrumentID id : ids) {
+				final Instrument i = instLookup.lookup(id);
+				if(!i.isNull()) {
+					insts.add(i);
+				}
+			}
+			
+			exclude(insts.toArray(new Instrument[0]));
+			
 		}
 
 		@Override
@@ -510,7 +566,7 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 		return agg;
 	}
 
-	protected Sub subscribe(final FrameworkAgent<?> agent,
+	protected SubCommand subscribe(final FrameworkAgent<?> agent,
 			final String interest) {
 
 		if (!agentMap.containsKey(agent)) {
@@ -529,20 +585,20 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 		subs.get(interest).add(newSubs);
 
 		if (!stuffToAdd.isEmpty()) {
-			return new SubBase(interest, Sub.Type.INSTRUMENT, stuffToAdd);
+			return new SubBase(interest, SubCommand.Type.INSTRUMENT, stuffToAdd);
 		} else {
-			return Sub.NULL;
+			return SubCommand.NULL;
 		}
 
 	}
 
-	protected Set<Sub> subscribe(final FrameworkAgent<?> agent,
+	protected Set<SubCommand> subscribe(final FrameworkAgent<?> agent,
 			final Set<String> interests) {
 
-		final Set<Sub> newSubs = new HashSet<Sub>();
+		final Set<SubCommand> newSubs = new HashSet<SubCommand>();
 
 		for (final String interest : interests) {
-			final Sub sub = subscribe(agent, interest);
+			final SubCommand sub = subscribe(agent, interest);
 			if (!sub.isNull()) {
 				newSubs.add(sub);
 			}
@@ -552,11 +608,11 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 
 	}
 
-	protected Sub unsubscribe(final FrameworkAgent<?> agent,
+	protected SubCommand unsubscribe(final FrameworkAgent<?> agent,
 			final String interest) {
 
 		if (!agentMap.containsKey(agent)) {
-			return Sub.NULL;
+			return SubCommand.NULL;
 		}
 
 		final Set<SubscriptionType> oldSubs = agentMap.get(agent);
@@ -571,20 +627,20 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 		stuffToRemove.removeAll(aggregate(interest));
 
 		if (!stuffToRemove.isEmpty()) {
-			return new SubBase(interest, Sub.Type.INSTRUMENT, stuffToRemove);
+			return new SubBase(interest, SubCommand.Type.INSTRUMENT, stuffToRemove);
 		} else {
-			return Sub.NULL;
+			return SubCommand.NULL;
 		}
 
 	}
 
-	protected Set<Sub> unsubscribe(final FrameworkAgent<?> agent,
+	protected Set<SubCommand> unsubscribe(final FrameworkAgent<?> agent,
 			final Set<String> interests) {
 
-		final Set<Sub> newSubs = new HashSet<Sub>();
+		final Set<SubCommand> newSubs = new HashSet<SubCommand>();
 
 		for (final String interest : interests) {
-			final Sub sub = unsubscribe(agent, interest);
+			final SubCommand sub = unsubscribe(agent, interest);
 			if (!sub.isNull()) {
 				newSubs.add(sub);
 			}

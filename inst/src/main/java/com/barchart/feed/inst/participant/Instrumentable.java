@@ -1,6 +1,6 @@
 package com.barchart.feed.inst.participant;
 
-import org.openfeed.proto.inst.InstrumentDefinition;
+import org.openfeed.InstrumentDefinition;
 
 /**
  * Market component which can handle instrument definition.

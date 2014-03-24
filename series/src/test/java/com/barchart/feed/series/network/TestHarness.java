@@ -323,6 +323,18 @@ public class TestHarness {
 				// TODO Auto-generated method stub
 				return null;
 			}
+
+			@Override
+			public Time contractExpire() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public Month contractDeliveryMonth() {
+				// TODO Auto-generated method stub
+				return null;
+			}
         };
     }
     

@@ -6,6 +6,7 @@ import com.barchart.feed.api.filter.Filter;
 import com.barchart.feed.api.filter.FilterUpdatable;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.api.model.meta.Metadata;
+import com.barchart.feed.api.model.meta.id.MetadataID;
 
 
 public interface ConsumerAgent extends FilterUpdatable, Filter, AgentLifecycle {
@@ -95,7 +96,11 @@ public interface ConsumerAgent extends FilterUpdatable, Filter, AgentLifecycle {
 	 * @param instruments
 	 */
 	@Override
+	@Deprecated
 	void include(Metadata... meta);
+	
+	@Override
+	void include(MetadataID<?>... metaID);
 
 	/**
 	 * Unsubscribes and detaches agent from provided instruments
@@ -103,7 +108,11 @@ public interface ConsumerAgent extends FilterUpdatable, Filter, AgentLifecycle {
 	 * @param instruments
 	 */
 	@Override
+	@Deprecated
 	void exclude(Metadata... meta);
+	
+	@Override
+	void exclude(MetadataID<?>... metaID);
 
 	/**
 	 * Unsubscribes agent from all instruments

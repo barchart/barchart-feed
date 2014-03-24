@@ -7,12 +7,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 
-import org.openfeed.proto.inst.Calendar;
-import org.openfeed.proto.inst.Decimal;
-import org.openfeed.proto.inst.InstrumentDefinition;
-import org.openfeed.proto.inst.InstrumentType;
-import org.openfeed.proto.inst.Interval;
-import org.openfeed.proto.inst.Symbol;
+import org.openfeed.InstrumentDefinition;
+import org.openfeed.InstrumentDefinition.Calendar;
+import org.openfeed.InstrumentDefinition.Decimal;
+import org.openfeed.InstrumentDefinition.InstrumentType;
+import org.openfeed.InstrumentDefinition.Interval;
+import org.openfeed.InstrumentDefinition.Symbol;
 
 import com.barchart.feed.api.model.meta.Exchange;
 import com.barchart.feed.api.model.meta.Instrument;
@@ -24,6 +24,7 @@ import com.barchart.util.value.api.Fraction;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Schedule;
 import com.barchart.util.value.api.Size;
+import com.barchart.util.value.api.Time;
 import com.barchart.util.value.api.TimeInterval;
 import com.barchart.util.value.api.ValueFactory;
 
@@ -229,22 +230,23 @@ public class InstrumentImpl extends InstrumentBase implements Instrument {
 
 	@Override
 	public TimeInterval lifetime() {
-		
-		if(!def.hasCalendar()) {
-			return TimeInterval.NULL;
-		}
-		
-		if(!def.getCalendar().hasLifeTime()) {
-			return TimeInterval.NULL;
-		}
-		
-		final Interval i = def.getCalendar().getLifeTime();
-		
-		if(i.getTimeFinish() == 0) {
-			return TimeInterval.NULL;
-		}
-		
-		return factory.newTimeInterval(i.getTimeStart(), i.getTimeFinish());
+//		
+//		if(!def.hasCalendar()) {
+//			return TimeInterval.NULL;
+//		}
+//		
+//		if(!def.getCalendar().hasLifeTime()) {
+//			return TimeInterval.NULL;
+//		}
+//		
+//		final Interval i = def.getCalendar().getLifeTime();
+//		
+//		if(i.getTimeFinish() == 0) {
+//			return TimeInterval.NULL;
+//		}
+//		
+//		return factory.newTimeInterval(i.getTimeStart(), i.getTimeFinish());
+		return TimeInterval.NULL;
 	}
 
 	@Override
@@ -270,6 +272,45 @@ public class InstrumentImpl extends InstrumentBase implements Instrument {
 		factory.newSchedule(ti);
 		
 		return null;
+	}
+	
+	@Override
+	public Time contractExpire() {
+		return vals.newTime(def.getContractExpire());
+	}
+	
+	@Override
+	public Month contractDeliveryMonth() {
+		
+		switch(def.getContractMonth()) {
+			case JANUARY:
+				return Month.JANUARY;
+			case FEBRUARY:
+				return Month.FEBRUARY;
+			case MARCH:
+				return Month.MARCH;
+			case APRIL:
+				return Month.APRIL;
+			case MAY:
+				return Month.MAY;
+			case JUNE:
+				return Month.JUNE;
+			case JULY:
+				return Month.JULY;
+			case AUGUST:
+				return Month.AUGUST;
+			case SEPTEMBER:
+				return Month.SEPTEMBER;
+			case OCTOBER:
+				return Month.OCTOBER;
+			case NOVEMBER:
+				return Month.NOVEMEBR;
+			case DECEMBER:
+				return Month.DECEMBER;
+		}
+		
+		return Month.NULL_MONTH;
+		
 	}
 
 	@Override
@@ -313,9 +354,9 @@ public class InstrumentImpl extends InstrumentBase implements Instrument {
 		}
 		
 		final List<InstrumentID> legs = new ArrayList<InstrumentID>();
-		for(final Long l : def.getComponentIdList()) {
-			//legs.add(new InstrumentID(l));
-		}
+//		for(final Long l : def.getComponentIdList()) {
+//			//legs.add(new InstrumentID(l));
+//		}
 		
 		return legs;
 	}

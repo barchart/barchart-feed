@@ -1,6 +1,6 @@
 package com.barchart.feed.inst.provider;
 
-import org.openfeed.proto.inst.InstrumentDefinition;
+import org.openfeed.InstrumentDefinition;
 
 import com.barchart.feed.inst.participant.InstrumentState;
 

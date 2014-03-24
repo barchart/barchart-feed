@@ -18,16 +18,18 @@ import static com.barchart.feed.base.market.enums.MarketField.TRADE;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.api.model.data.Book;
 import com.barchart.feed.api.model.data.Cuvol;
+import com.barchart.feed.api.model.data.MarketData;
 import com.barchart.feed.api.model.data.Session;
 import com.barchart.feed.api.model.data.Trade;
 import com.barchart.feed.api.model.meta.Instrument;
@@ -45,6 +47,7 @@ import com.barchart.feed.base.market.api.MarketSafeRunner;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.feed.base.participant.FrameworkAgent;
+import com.barchart.feed.base.provider.VarMarket.Command.CType;
 import com.barchart.feed.base.trade.api.MarketDoTrade;
 import com.barchart.feed.base.trade.api.MarketTrade;
 import com.barchart.feed.base.values.api.PriceValue;
@@ -73,21 +76,36 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 	protected final Set<FrameworkAgent<Cuvol>> cuvolAgents = new HashSet<FrameworkAgent<Cuvol>>();
 	protected final Set<FrameworkAgent<Session>> sessionAgents = new HashSet<FrameworkAgent<Session>>();
 	
-	// Probably can get away with HashMaps here, keeping concurrent for now
-	protected final List<FrameworkAgent<com.barchart.feed.api.model.data.Market>> marketAgentsToAdd =
-			new CopyOnWriteArrayList<FrameworkAgent<com.barchart.feed.api.model.data.Market>>();
-	protected final List<FrameworkAgent<Trade>> tradeAgentsToAdd = new CopyOnWriteArrayList<FrameworkAgent<Trade>>();
-	protected final List<FrameworkAgent<Book>> bookAgentsToAdd = new CopyOnWriteArrayList<FrameworkAgent<Book>>();
-	protected final List<FrameworkAgent<Cuvol>> cuvolAgentsToAdd = new CopyOnWriteArrayList<FrameworkAgent<Cuvol>>();
-	protected final List<FrameworkAgent<Session>> sessionAgentsToAdd = new CopyOnWriteArrayList<FrameworkAgent<Session>>();
-
-	protected final List<FrameworkAgent<com.barchart.feed.api.model.data.Market>> marketAgentsToRemove =
-			new CopyOnWriteArrayList<FrameworkAgent<com.barchart.feed.api.model.data.Market>>();
-	protected final List<FrameworkAgent<Trade>> tradeAgentsToRemove = new CopyOnWriteArrayList<FrameworkAgent<Trade>>();
-	protected final List<FrameworkAgent<Book>> bookAgentsToRemove = new CopyOnWriteArrayList<FrameworkAgent<Book>>();
-	protected final List<FrameworkAgent<Cuvol>> cuvolAgentsToRemove = new CopyOnWriteArrayList<FrameworkAgent<Cuvol>>();
-	protected final List<FrameworkAgent<Session>> sessionAgentsToRemove = new CopyOnWriteArrayList<FrameworkAgent<Session>>();
-
+	public static class Command<T extends MarketData<T>> {
+		
+		public enum CType {
+			ADD, REMOVE
+		}
+		
+		private final CType t;
+		private final FrameworkAgent<T> agent;
+		
+		public Command(final CType t, final FrameworkAgent<T> agent) {
+			this.t = t;
+			this.agent = agent;
+		}
+		
+		public CType type() {
+			return t;
+		}
+		
+		public FrameworkAgent<T> agent() {
+			return agent;
+		}
+	}
+	
+	protected final Queue<Command<com.barchart.feed.api.model.data.Market>> marketCmds =
+			new ConcurrentLinkedQueue<Command<com.barchart.feed.api.model.data.Market>>();
+	protected final Queue<Command<Trade>> tradeCmds = new ConcurrentLinkedQueue<Command<Trade>>();
+	protected final Queue<Command<Book>> bookCmds = new ConcurrentLinkedQueue<Command<Book>>();
+	protected final Queue<Command<Cuvol>> cuvolCmds = new ConcurrentLinkedQueue<Command<Cuvol>>();
+	protected final Queue<Command<Session>> sessionCmds = new ConcurrentLinkedQueue<Command<Session>>();
+	
 	// @SuppressWarnings("unused")
 	private static final Logger log = LoggerFactory.getLogger(VarMarket.class);
 
@@ -116,19 +134,20 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 		
 		switch(agent.agentType()) {
 			case MARKET:
-				marketAgentsToAdd.add((FrameworkAgent<com.barchart.feed.api.model.data.Market>) agent);
+				marketCmds.add(new Command<com.barchart.feed.api.model.data.Market>(CType.ADD, 
+						(FrameworkAgent<com.barchart.feed.api.model.data.Market>) agent));
 				break;
 			case BOOK:
-				bookAgentsToAdd.add((FrameworkAgent<Book>) agent);
+				bookCmds.add(new Command<Book>(CType.ADD, (FrameworkAgent<Book>) agent));
 				break;
 			case TRADE:
-				tradeAgentsToAdd.add((FrameworkAgent<Trade>) agent);
+				tradeCmds.add(new Command<Trade>(CType.ADD, (FrameworkAgent<Trade>) agent));
 				break;
 			case CUVOL:
-				cuvolAgentsToAdd.add((FrameworkAgent<Cuvol>) agent);
+				cuvolCmds.add(new Command<Cuvol>(CType.ADD, (FrameworkAgent<Cuvol>) agent));
 				break;
 			case SESSION:
-				sessionAgentsToAdd.add((FrameworkAgent<Session>) agent);
+				sessionCmds.add(new Command<Session>(CType.ADD, (FrameworkAgent<Session>) agent));
 				break;
 		}
 
@@ -160,19 +179,20 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 		
 		switch(agent.agentType()) {
 			case MARKET:
-				marketAgentsToRemove.add((FrameworkAgent<com.barchart.feed.api.model.data.Market>) agent);
+				marketCmds.add(new Command<com.barchart.feed.api.model.data.Market>(CType.REMOVE, 
+						(FrameworkAgent<com.barchart.feed.api.model.data.Market>) agent));
 				break;
 			case BOOK:
-				bookAgentsToRemove.add((FrameworkAgent<Book>) agent);
+				bookCmds.add(new Command<Book>(CType.REMOVE, (FrameworkAgent<Book>) agent));
 				break;
 			case TRADE:
-				tradeAgentsToRemove.add((FrameworkAgent<Trade>) agent);
+				tradeCmds.add(new Command<Trade>(CType.REMOVE, (FrameworkAgent<Trade>) agent));
 				break;
 			case CUVOL:
-				cuvolAgentsToRemove.add((FrameworkAgent<Cuvol>) agent);
+				cuvolCmds.add(new Command<Cuvol>(CType.REMOVE, (FrameworkAgent<Cuvol>) agent));
 				break;
 			case SESSION:
-				sessionAgentsToRemove.add((FrameworkAgent<Session>) agent);
+				sessionCmds.add(new Command<Session>(CType.REMOVE, (FrameworkAgent<Session>) agent));
 				break;
 		}
 		

@@ -1,6 +1,7 @@
 package com.barchart.feed.api.filter;
 
 import com.barchart.feed.api.model.meta.Metadata;
+import com.barchart.feed.api.model.meta.id.MetadataID;
 import com.barchart.util.common.anno.aQute.bnd.annotation.ProviderType;
 
 /**
@@ -27,11 +28,17 @@ public interface FilterUpdatable {
 	/**
 	 * Include any previously resolved market entity into the current filter.
 	 */
+	@Deprecated
 	void include(Metadata... meta);
+	
+	void include(MetadataID<?>... metaID);
 	
 	/**
 	 * Exclude any previously resolved market entity from the current filter.
 	 */
+	@Deprecated
 	void exclude(Metadata... meta);
+	
+	void exclude(MetadataID<?>... metaID);
 	
 }

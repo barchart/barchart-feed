@@ -14,12 +14,13 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import org.openfeed.proto.inst.Decimal;
-import org.openfeed.proto.inst.InstrumentDefinition;
+import org.openfeed.InstrumentDefinition;
+import org.openfeed.InstrumentDefinition.Decimal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.api.model.meta.Instrument;
+import com.barchart.feed.api.model.meta.id.InstrumentID;
 import com.barchart.feed.inst.InstrumentService;
 import com.barchart.feed.inst.provider.InstrumentFactory;
 import com.barchart.util.value.ValueFactoryImpl;
@@ -109,6 +110,12 @@ public class MockDefinitionService implements InstrumentService<CharSequence> {
 		}
 		
 		return insts;
+	}
+
+	@Override
+	public Instrument lookup(InstrumentID id) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

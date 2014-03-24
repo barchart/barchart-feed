@@ -8,12 +8,18 @@ import com.barchart.util.value.api.Existential;
  */
 public interface Metadata extends Existential, Filterable {
 
+	enum MetaType {
+		AVAILABLE, EXCHANGE, CHANNEL, GROUP, INSTRUMENT, 
+	}
 	
 	String description();
+	
+	/**
+	 * Type of the meta info.
+	 */
+	MetaType type();
 	
 	@Override
 	boolean isNull();
 
-	@Override
-	MetaType type();
 }
