@@ -96,7 +96,7 @@ public class BarchartFeedService implements SeriesFeedService {
 		SeriesSubscription subscription = (SeriesSubscription)assembler.getSubscription();
 		if(symbolObservers.get(subscription.getInstrument().id()) != assembler) {
     		symbolObservers.put(subscription.getInstrument().id(), (Distributor)assembler);
-    		consumerAgent.include(subscription.getInstrument());
+    		consumerAgent.include(subscription.getInstrument().id());
     		historicalService.subscribe(historical, subscription);
 		}
 	}
@@ -113,9 +113,6 @@ public class BarchartFeedService implements SeriesFeedService {
 	public void unregisterAssembler(Assembler assembler) {
 		SeriesSubscription subscription = (SeriesSubscription)assembler.getSubscription();
 		symbolObservers.remove(subscription.getInstrument().id());
-		//Excluding as in: consumerAgent.exclude(assember.getSubscription()) has to be carefully considered 
-		//				   due to node sharing (we don't want to turn off the faucet if there are other down-stream 
-		//                 nodes needing an instrument's raw data. TO BE DONE! Maybe maintain a CountDownLatch ?
 	}
 	
 	private void startAndMonitorConnection() {

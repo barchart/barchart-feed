@@ -23,14 +23,14 @@ import com.barchart.feed.series.TradingSessionImpl;
 import com.barchart.feed.series.TradingWeekImpl;
 
 /**
- * Builder for creating {@link IQuery} objects. {@link IQuery} objects are used as
+ * Builder for creating {@link Query} objects. {@link Query} objects are used as
  * arguments which enable fetching of {@link DataSeries} objects from the {@link BarchartSeriesProvider}.
  * In addition to raw {@link DataSeries} objects, querys are also used to obtain {@link Analytic}s,
  * {@link Spread}s, and {@link Expression}s that result in collections of series data.
  * <p>
- * Instances of this builder, retain the settings of the last {@link IQuery} built 
+ * Instances of this builder, retain the settings of the last {@link Query} built 
  * and returned, such that if {@link #build()} were to be called on it a second time,
- * a new instance identical to the previous {@link IQuery} instance built, would be
+ * a new instance identical to the previous {@link Query} instance built, would be
  * returned. 
  * 
  * The methods of this builder return the builder itself so that query objects may be
@@ -62,7 +62,7 @@ public class QueryBuilderImpl implements QueryBuilder {
 	}
 	
 	/**
-	 * Returns a new implementation of {@link IQuery}.
+	 * Returns a new implementation of {@link Query}.
 	 */
 	@Override
 	public DataQuery build() {
@@ -105,7 +105,7 @@ public class QueryBuilderImpl implements QueryBuilder {
 	 * 
 	 * NOTE: This feature is not heavily tested as of this writing.
 	 * @param	queryStr	a DDF url string 
-	 * @return this {@code IQueryBuilder}
+	 * @return this {@code QueryBuilder}
 	 */
 	@Override
 	public QueryBuilder customQuery(String queryStr) {
@@ -123,7 +123,7 @@ public class QueryBuilderImpl implements QueryBuilder {
 	 * expected data.
 	 * 
 	 * @param	type  the NodeType
-	 * @return this {@code IQueryBuilder}
+	 * @return this {@code QueryBuilder}
 	 */
 	@Override
 	public QueryBuilder nodeType(NodeType type) {
@@ -141,7 +141,7 @@ public class QueryBuilderImpl implements QueryBuilder {
 	 * data specified.
 	 * 
 	 * @param	specifier	analytic, network or other name.
-	 * @return this {@code IQueryBuilder}
+	 * @return this {@code QueryBuilder}
 	 */
 	@Override
 	public QueryBuilder specifier(String specifier) {
@@ -156,7 +156,7 @@ public class QueryBuilderImpl implements QueryBuilder {
 	 * Specifies the string form of the {@link Instrument} to be used.
 	 * 
 	 * @param	symbol	the string form of the {@link Instrument}.
-	 * @return this {@code IQueryBuilder}	
+	 * @return this {@code QueryBuilder}	
 	 */
 	@Override
 	public QueryBuilder symbol(String symbol) {
@@ -175,7 +175,7 @@ public class QueryBuilderImpl implements QueryBuilder {
 	 * where mulitple TimeFrames may be desired.
 	 * 
 	 * @param	period 		the Period to add.
-	 * @return this {@code IQueryBuilder}	
+	 * @return this {@code QueryBuilder}	
 	 */
 	@Override
 	public QueryBuilder period(Period period) {
@@ -191,7 +191,7 @@ public class QueryBuilderImpl implements QueryBuilder {
 	 * The start time.
 	 * 
 	 * @param	the start time.
-	 * @return this {@code IQueryBuilder} 
+	 * @return this {@code QueryBuilder} 
 	 */
 	@Override
 	public QueryBuilder start(DateTime date) {
@@ -206,7 +206,7 @@ public class QueryBuilderImpl implements QueryBuilder {
 	 * The end time. May be null.
 	 * 
 	 * @param	the end time.
-	 * @return this {@code IQueryBuilder} 
+	 * @return this {@code QueryBuilder} 
 	 */
 	@Override
 	public QueryBuilder end(DateTime date) {
@@ -226,7 +226,7 @@ public class QueryBuilderImpl implements QueryBuilder {
      * technical studies on fixed time range charts.
      * 
      * @param	numBars		
-     * @return this {@code IQueryBuilder} 
+     * @return this {@code QueryBuilder} 
      */
 	@Override
 	public QueryBuilder padding(int numBars) {
@@ -241,7 +241,7 @@ public class QueryBuilderImpl implements QueryBuilder {
      * Sets the {@link ContinuationPolicy} for futures charts
      * 
      * @param  the {@link ContinuationPolicy}
-     * @return this {@code IQueryBuilder}
+     * @return this {@code QueryBuilder}
      */
 	@Override
 	public QueryBuilder continuationPolicy(ContinuationPolicy policy) {
@@ -257,7 +257,7 @@ public class QueryBuilderImpl implements QueryBuilder {
      * requests (defaults to 1, the front month)
      *
      * @param  the nearest offset for the {@link ContinuationPolicy}
-     * @return this {@code IQueryBuilder}
+     * @return this {@code QueryBuilder}
      */
 	@Override
 	public QueryBuilder nearestOffset(int offset) {
@@ -273,7 +273,7 @@ public class QueryBuilderImpl implements QueryBuilder {
      * total of all contracts for a root)
      * 
      * @param  the {@link VolumeType}
-     * @return this {@code IQueryBuilder}
+     * @return this {@code QueryBuilder}
      */
 	@Override
 	public QueryBuilder volumeType(VolumeType type) {
@@ -291,7 +291,7 @@ public class QueryBuilderImpl implements QueryBuilder {
      * be added (obviously).
      * 
      * @param  the {@link TradingWeek}
-     * @return this {@code IQueryBuilder}
+     * @return this {@code QueryBuilder}
      */
 	@Override
 	public QueryBuilder tradingWeek(TradingWeek week) {
@@ -426,6 +426,17 @@ public class QueryBuilderImpl implements QueryBuilder {
 	    public int getPadding() {
 	        return padding;
 	    }
+	    
+	    /**
+	     * Returns the {@link TradingWeek} which is a collection of {@link TradingSession}s comprising an average 
+	     * week of trading.
+	     * 
+	     * @return  the {@link TradingWeek}
+	     */
+	    @Override
+	    public TradingWeek getTradingWeek() {
+	        return tradingWeek;
+	    }
 
 	    // FUTURES ONLY
 
@@ -457,17 +468,5 @@ public class QueryBuilderImpl implements QueryBuilder {
 	    public VolumeType getVolumeType() {
 	        return volumeType;
 	    }
-	    
-	    /**
-	     * Returns the {@link TradingWeek} which is a collection of {@link TradingSession}s comprising an average 
-	     * week of trading.
-	     * 
-	     * @return  the {@link TradingWeek}
-	     */
-	    @Override
-	    public TradingWeek getTradingWeek() {
-	        return tradingWeek;
-	    }
-
 	}
 }
