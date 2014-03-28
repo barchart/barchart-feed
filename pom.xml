@@ -28,6 +28,7 @@
 		<module>inst</module>
 		<module>base</module>
 		<module>series</module>
+		<module>proto</module>
 	</modules>
 
 	<url>https://github.com/barchart/barchart-feed</url>
