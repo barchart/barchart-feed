@@ -28,23 +28,23 @@ import com.barchart.util.value.api.ValueFactory;
 
 
 /**
- * Implementation of {@link Assembler} which receives event based raw data 
+ * Implementation of {@link Assembler} which receives event based raw data
  * from two different sources (historical batched, and market tick data), and
  * output that data to a single {@link DataSeries} that is then consumed by child
- * nodes which are linked up to this node's output. 
- * 
+ * nodes which are linked up to this node's output.
+ *
  * @author David Ray
  *
  */
 public class Distributor extends Node<SeriesSubscription> implements Assembler {
     /** Size parameter used to distinguish a line of tick data from minute data*/
     private static final int TICK_FORMAT_LENGTH = 5;
-    
+
     /** Formatter to operate on dates as they appear in batched tick query results */
-	private DateTimeFormatter tickFormat = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss.SSS");
+	private final DateTimeFormatter tickFormat = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss.SSS");
 	/** Formatter to operate on dates as they appear in batched minute query results */
-	private DateTimeFormatter minuteFormat = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm");
-	
+	private final DateTimeFormatter minuteFormat = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm");
+
 	/** {@link Subscription} describing this distributor's output */
 	private SeriesSubscription subscription;
 	/** Holds the {@link Period} of this {@code Distributor}'s output {@link Subscription} */
@@ -56,25 +56,25 @@ public class Distributor extends Node<SeriesSubscription> implements Assembler {
 	/** The last date processed */
 	private DateTime last = null;
 	/** Monitor to synchronize historical and live updates during original load */
-	private boolean historicalDataAdded = false;
+	private final boolean historicalDataAdded = false;
 	/** Records the span of historical data received. */
-	private SpanImpl historicalSpan = SpanImpl.INITIAL;
+	private final SpanImpl historicalSpan = SpanImpl.INITIAL;
 	/** Queue to synchronize updated time {@link Span}s. */
 	private ConcurrentLinkedQueue<BarImpl> dataQueue;
 	private ConcurrentLinkedQueue<BarImpl> historicalQueue;
 	/** Factory for creating value-api objects */
 	private ValueFactory valueFactory;
-	
+
 	/**
 	 * Constructs a new {@code Distributor}
 	 */
 	public Distributor() {}
-	
+
 	/**
-	 * Constructs a new functional {@code Distributor} 
+	 * Constructs a new functional {@code Distributor}
 	 * @param subscription     the {@link SeriesSubscription} supplying needed init params.
 	 */
-	public Distributor(SeriesSubscription subscription) {
+	public Distributor(final SeriesSubscription subscription) {
 		this.subscription = subscription;
 		this.period = subscription.getTimeFrames()[0].getPeriod();
 		this.outputSubscriptions = new ArrayList<SeriesSubscription>(1);
@@ -83,7 +83,7 @@ public class Distributor extends Node<SeriesSubscription> implements Assembler {
 		this.historicalQueue = new ConcurrentLinkedQueue<BarImpl>();
 		this.valueFactory = new ValueFactoryImpl();
 	}
-	
+
 	/**
 	 * Returns this Node's name
 	 * @return     this Node's name.
@@ -92,12 +92,13 @@ public class Distributor extends Node<SeriesSubscription> implements Assembler {
 	public String getName() {
 	    return subscription.toString();
 	}
-	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+
 	@Override
-	public void onNextMarket(Market m) {
+	public void onNextMarket(final Market m) {
 	    //if(true) return;
-		BarImpl bar = new BarImpl(m.trade().time(), period, m.trade().price(), m.trade().price(), m.trade().price(), m.trade().price(), m.trade().size(), null);
+		final BarImpl bar =
+				new BarImpl(m.instrument().id(), m.trade().time(), period, m.trade().price(), m.trade().price(), m
+						.trade().price(), m.trade().price(), m.trade().size(), null);
 		dataQueue.offer(bar);
 //		System.out.println("onNextMarket: " + m.instrument().symbol() + ", " + m.trade().price().asDouble() + ",  " + new SpanImpl(period, bar.getTime(), bar.getTime()));
         if(historicalDataAdded) {
@@ -105,83 +106,83 @@ public class Distributor extends Node<SeriesSubscription> implements Assembler {
 		    setModifiedSpan(new SpanImpl(period, bar.getTime(), bar.getTime()), outputSubscriptions);
 		}
 	}
-	
+
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public <T extends HistoricalResult> void onNextHistorical(T result) {
+	public <T extends HistoricalResult> void onNextHistorical(final T result) {
 //		System.out.println("onNextHistorical: ");
-		
+
 		BarImpl bar = null;
         boolean executedOnce = false;
         SpanImpl span = null;
-        DataSeriesImpl<BarImpl> series = (DataSeriesImpl)getOutputTimeSeries(subscription);
-        List<String> results = result.getResult();
-        
-        for(String s : results) {   
-            String[] resultArray = s.split("[\\,]+");
-            
-            bar = resultArray.length > TICK_FORMAT_LENGTH ? 
-                createBarFromMinuteCSV(resultArray) : 
+        final DataSeriesImpl<BarImpl> series = (DataSeriesImpl)getOutputTimeSeries(subscription);
+        final List<String> results = result.getResult();
+
+        for(final String s : results) {
+            final String[] resultArray = s.split("[\\,]+");
+
+            bar = resultArray.length > TICK_FORMAT_LENGTH ?
+                createBarFromMinuteCSV(resultArray) :
                     createBarFromTickCSV(resultArray);
-            
+
             if(!executedOnce) {
                 executedOnce = true;
                 span = new SpanImpl(period, bar.getTime(), bar.getTime());
             }else{
                 span.setNextTime(bar.getTime());
             }
-            
+
             historicalQueue.add(bar);
         }
-        
+
         setModifiedSpan(span, outputSubscriptions);
-        
+
         //historicalDataAdded = true;
 	}
-	
-	private BarImpl createBarFromTickCSV(String[] array) {
+
+	private BarImpl createBarFromTickCSV(final String[] array) {
 		BarImpl retVal = null;
-		
+
 		DateTime date = tickFormat.parseDateTime(array[0]);
 		if(last != null && last.getMillis() >= date.getMillis()) {
 			while(last.getMillis() >= date.getMillis())
 				date = date.plusMillis(1);
 		}
-		Time time = valueFactory.newTime(date.getMillis());
+		final Time time = valueFactory.newTime(date.getMillis());
 		last = new DateTime(date.getMillis());
-		
-		Price value = valueFactory.newPrice(Double.parseDouble(array[3]));
-		Size volume = valueFactory.newSize(Integer.parseInt(array[4]), 0);
-		
-		retVal = new BarImpl(time, this.period, value, value, value, value, volume, null);
-		
+
+		final Price value = valueFactory.newPrice(Double.parseDouble(array[3]));
+		final Size volume = valueFactory.newSize(Integer.parseInt(array[4]), 0);
+
+		retVal = new BarImpl(null, time, this.period, value, value, value, value, volume, null);
+
 		return retVal;
 	}
-	
-	private BarImpl createBarFromMinuteCSV(String[] array) {
+
+	private BarImpl createBarFromMinuteCSV(final String[] array) {
 		BarImpl retVal = null;
-		
+
 		DateTime date = minuteFormat.parseDateTime(array[0]);
 		if(last != null && last.getMillis() >= date.getMillis()) {
 			while(last.getMillis() >= date.getMillis())
 				date = date.plusMillis(1);
 		}
 		last = new DateTime(date.getMillis());
-		
-		Time time = valueFactory.newTime(date.getMillis());
-		Price open = valueFactory.newPrice(Double.parseDouble(array[2]));
-		Price high = valueFactory.newPrice(Double.parseDouble(array[3]));
-		Price low = valueFactory.newPrice(Double.parseDouble(array[4]));	
-		Price close = valueFactory.newPrice(Double.parseDouble(array[5]));
-		Size volume = valueFactory.newSize(Integer.parseInt(array[6]), 0);
-		
-		retVal = new BarImpl(time, this.period, open, high, low, close, volume, null);
-		
+
+		final Time time = valueFactory.newTime(date.getMillis());
+		final Price open = valueFactory.newPrice(Double.parseDouble(array[2]));
+		final Price high = valueFactory.newPrice(Double.parseDouble(array[3]));
+		final Price low = valueFactory.newPrice(Double.parseDouble(array[4]));
+		final Price close = valueFactory.newPrice(Double.parseDouble(array[5]));
+		final Size volume = valueFactory.newSize(Integer.parseInt(array[6]), 0);
+
+		retVal = new BarImpl(null, time, this.period, open, high, low, close, volume, null);
+
 		return retVal;
 	}
 
 	@Override
-	protected <S extends Span> void updateModifiedSpan(S span, SeriesSubscription subscription) {
+	protected <S extends Span> void updateModifiedSpan(final S span, final SeriesSubscription subscription) {
 		setUpdated(true);
 	}
 
@@ -196,7 +197,7 @@ public class Distributor extends Node<SeriesSubscription> implements Assembler {
 	    SpanImpl span = null;
 	    if(!historicalQueue.isEmpty()) {
 	        BarImpl next = null;
-            DataSeriesImpl<BarImpl> series = (DataSeriesImpl)getOutputTimeSeries(subscription);
+            final DataSeriesImpl<BarImpl> series = (DataSeriesImpl)getOutputTimeSeries(subscription);
             while((next = historicalQueue.poll()) != null) {
                 if(span == null) {
                     span = new SpanImpl(subscription.getTimeFrame(0).getPeriod(), next.getTime(), next.getTime());
@@ -206,7 +207,7 @@ public class Distributor extends Node<SeriesSubscription> implements Assembler {
             }
 	    }else if(!dataQueue.isEmpty()) {
 	        BarImpl next = null;
-	        DataSeriesImpl<BarImpl> series = (DataSeriesImpl)getOutputTimeSeries(subscription);
+	        final DataSeriesImpl<BarImpl> series = (DataSeriesImpl)getOutputTimeSeries(subscription);
 	        while((next = dataQueue.poll()) != null) {
 	            if(span == null) {
 	                span = new SpanImpl(subscription.getTimeFrame(0).getPeriod(), next.getTime(), next.getTime());
@@ -215,7 +216,7 @@ public class Distributor extends Node<SeriesSubscription> implements Assembler {
 	            series.add(next);
             }
 	    }
-		
+
 		return span;
 	}
 
@@ -233,7 +234,7 @@ public class Distributor extends Node<SeriesSubscription> implements Assembler {
 	 * Returns the output {@link DataSeries}
 	 */
 	@SuppressWarnings("unchecked")
-	public <E extends DataPoint> DataSeries<E> getOutputTimeSeries(Subscription subscription) {
+	public <E extends DataPoint> DataSeries<E> getOutputTimeSeries(final Subscription subscription) {
 		if(outputTimeSeries == null) {
 			this.outputTimeSeries = new DataSeriesImpl<BarImpl>(subscription.getTimeFrames()[0].getPeriod());
 		}
@@ -241,12 +242,12 @@ public class Distributor extends Node<SeriesSubscription> implements Assembler {
 	}
 
 	@Override
-	public boolean isDerivableSource(SeriesSubscription subscription) {
+	public boolean isDerivableSource(final SeriesSubscription subscription) {
 		return false;
 	}
 
     @Override
-    public SeriesSubscription getDerivableOutputSubscription(SeriesSubscription subscription) {
+    public SeriesSubscription getDerivableOutputSubscription(final SeriesSubscription subscription) {
         throw new UnsupportedOperationException("Assemblers do not support derivation");
     }
 
@@ -254,9 +255,10 @@ public class Distributor extends Node<SeriesSubscription> implements Assembler {
 	public Subscription getSubscription() {
 		return this.subscription;
 	}
-    
-    public String toString() {
-        StringBuilder sb = new StringBuilder("Assembler: ").append(" Distributor ").append(subscription);
+
+    @Override
+	public String toString() {
+        final StringBuilder sb = new StringBuilder("Assembler: ").append(" Distributor ").append(subscription);
         return sb.toString();
     }
 
