@@ -7,6 +7,7 @@ import org.joda.time.DateTime;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.api.model.meta.id.InstrumentID;
 import com.barchart.feed.api.series.ContinuationPolicy;
+import com.barchart.feed.api.series.CorporateActionType;
 import com.barchart.feed.api.series.DataPoint;
 import com.barchart.feed.api.series.Period;
 import com.barchart.feed.api.series.TradingSession;
@@ -122,6 +123,14 @@ public interface Query {
 	 * @return the {@link TradingWeek}
 	 */
 	public TradingWeek getTradingWeek();
+
+	// EQUITIES ONLY
+
+	/**
+	 * Returns a list of corporate actions that prices should be adjusted by
+	 * (splits, dividends, etc). Only applies to equities.
+	 */
+	public List<CorporateActionType> getCorporateActions();
 
 	// FUTURES ONLY
 

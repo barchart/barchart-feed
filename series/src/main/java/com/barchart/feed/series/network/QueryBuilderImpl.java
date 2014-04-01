@@ -2,6 +2,7 @@ package com.barchart.feed.series.network;
 
 import java.beans.Expression;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.joda.time.DateTime;
@@ -9,6 +10,7 @@ import org.joda.time.DateTime;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.api.model.meta.id.InstrumentID;
 import com.barchart.feed.api.series.ContinuationPolicy;
+import com.barchart.feed.api.series.CorporateActionType;
 import com.barchart.feed.api.series.DataSeries;
 import com.barchart.feed.api.series.Period;
 import com.barchart.feed.api.series.PeriodType;
@@ -52,6 +54,7 @@ public class QueryBuilderImpl implements QueryBuilder {
     private DateTime end;
 	private final DataQuery query;
 	private final List<Period> periods = new ArrayList<Period>();
+	private List<CorporateActionType> actions;
 	private ContinuationPolicy policy;
 	private VolumeType volumeType;
 	private TradingWeek tradingWeek = TradingWeekImpl.DEFAULT;
@@ -202,6 +205,16 @@ public class QueryBuilderImpl implements QueryBuilder {
 	}
 
 	@Override
+	public QueryBuilder corporateActions(final CorporateActionType... types) {
+		if (types == null || types.length == 0) {
+			throw new IllegalArgumentException("Must specify at least one action type");
+		}
+
+		this.actions = query.actions = Arrays.asList(types);
+		return this;
+	}
+
+	@Override
 	public QueryBuilder continuationPolicy(final ContinuationPolicy policy) {
 		if(policy == null) {
 			throw new IllegalArgumentException("If specified, policy must be non null");
@@ -255,6 +268,7 @@ public class QueryBuilderImpl implements QueryBuilder {
 		private InstrumentID instrument;
         private DateTime start = PeriodType.DAY.resolutionInstant(new DateTime().minusDays(90));
         private DateTime end;
+		private List<CorporateActionType> actions;
 	    private ContinuationPolicy policy;
 	    private VolumeType volumeType;
 	    private TradingWeek tradingWeek = TradingWeekImpl.DEFAULT;
@@ -339,6 +353,13 @@ public class QueryBuilderImpl implements QueryBuilder {
 	    public TradingWeek getTradingWeek() {
 	        return tradingWeek;
 	    }
+
+		// EQUITIES ONLY
+
+		@Override
+		public List<CorporateActionType> getCorporateActions() {
+			return actions;
+		}
 
 	    // FUTURES ONLY
 

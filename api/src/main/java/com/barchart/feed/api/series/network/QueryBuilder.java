@@ -7,6 +7,7 @@ import org.joda.time.DateTime;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.api.model.meta.id.InstrumentID;
 import com.barchart.feed.api.series.ContinuationPolicy;
+import com.barchart.feed.api.series.CorporateActionType;
 import com.barchart.feed.api.series.DataSeries;
 import com.barchart.feed.api.series.Period;
 import com.barchart.feed.api.series.TimeFrame;
@@ -132,8 +133,14 @@ public interface QueryBuilder {
 	public QueryBuilder padding(int numBars);
 
 	/**
+	 * Sets the {@link CorporateActionType} to use for adjusting bar prices
+	 * (equities only).
+	 */
+	public QueryBuilder corporateActions(CorporateActionType... types);
+
+	/**
 	 * Sets the {@link ContinuationPolicy} for futures charts
-	 *
+	 * 
 	 * @param the {@link ContinuationPolicy}
 	 * @return this {@code IQueryBuilder}
 	 */

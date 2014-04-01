@@ -5,40 +5,62 @@
  *
  * http://www.opensource.org/licenses/bsd-license.php
  */
-
-// News name space.
 package com.barchart.feed.proto.buf;
 
-// Builder options.
 option java_multiple_files = true;
 option java_generate_equals_and_hash = true;
 option optimize_for = SPEED;
 
-message EndOfDayRecord {
-	optional sint64 instrument = 1;
-	optional sint64 timestamp = 2;
-	optional double open = 3;
-	optional double high = 4;
-	optional double low = 5;
-	optional double last = 6;
-	optional double midpoint = 7;
-	optional double ask = 8;
-	optional sint32 askSize = 9;
-	optional double bid = 10;
-	optional sint32 bidSize = 11;
-	optional sint64 volume = 12;
-	optional sint64 volumeUp = 13;
-	optional sint64 volumeDown = 14;
-	optional double tradedValue = 15;
-	optional double tradedValueUp = 16;
-	optional double tradedValueDown = 17;
-	optional sint32 tickCount = 18;
-	optional sint64 openInterest = 19;
-}
+message TimeSeriesRecord {
 
-message TickRecord {
+	enum Period {
+		VOLUME = 0;
+		TICK = 1;
+		SECOND = 2;
+		MINUTE = 3;
+		HOUR = 4;
+		DAY = 5;
+		WEEK = 6;
+		MONTH = 7;
+		YEAR = 8;
+	}
+
 	optional sint64 instrument = 1;
 	optional sint64 timestamp = 2;
-	optional double price = 3;
-	optional double size = 4;
+	optional Period period = 3;
+	optional sint32 periodCount = 4;
+	optional sint64 openMantissa = 5;
+	optional sint32 openExponent = 6;
+	optional sint64 highMantissa = 7;
+	optional sint32 highExponent = 8;
+	optional sint64 lowMantissa = 9;
+	optional sint32 lowExponent = 10;
+	optional sint64 closeMantissa = 11;
+	optional sint32 closeExponent = 12;
+	optional sint64 midpointMantissa = 13;
+	optional sint32 midpointExponent = 14;
+	optional sint64 askMantissa = 15;
+	optional sint32 askExponent = 16;
+	optional sint64 askSizeMantissa = 17;
+	optional sint32 askSizeExponent = 18;
+	optional sint64 bidMantissa = 19;
+	optional sint32 bidExponent = 20;
+	optional sint64 bidSizeMantissa = 21;
+	optional sint32 bidSizeExponent = 22;
+	optional sint64 volumeMantissa = 23;
+	optional sint32 volumeExponent = 24;
+	optional sint64 volumeUpMantissa = 25;
+	optional sint32 volumeUpExponent = 26;
+	optional sint64 volumeDownMantissa = 27;
+	optional sint32 volumeDownExponent = 28;
+	optional sint64 tradedValueMantissa = 29;
+	optional sint32 tradedValueExponent = 30;
+	optional sint64 tradedValueUpMantissa = 31;
+	optional sint32 tradedValueUpExponent = 32;
+	optional sint64 tradedValueDownMantissa = 33;
+	optional sint32 tradedValueDownExponent = 34;
+	optional sint32 tickCount = 35;
+	optional sint64 openInterestMantissa = 36;
+	optional sint32 openInterestExponent = 37;
+
 }

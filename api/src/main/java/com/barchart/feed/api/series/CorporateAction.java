@@ -1,31 +1,36 @@
 package com.barchart.feed.api.series;
 
+import org.joda.time.DateTime;
 
-public enum CorporateAction {
-	ASSIMILATION, 
-	ATTACHMENT, 
-	BANKRUPTCIES, 
-	BONUS_ISSUE, 
-	BONUS_RIGHTS, 
-	CALLS, 
-	CAPITALIZATION, 
-	DIVIDENDS,
-	CASH_DISTRIBUTIONS,
-	CHANGE,
-	CONSENTS, 
-	CONVERTIBLE_SECURITY_ISSUE,
-	DEFAULT,
-	MEETING,
-	MERGER,
-	REORGANIZATION,
-	STOCK_SPLITS,
-	SECURITY_SEPARATION,
-	SPINOFF,
-	SUBSCRIPTION_OFFER,
-	RIGHTS_ISSUE,
-	WARRANTS_ISSUE,
-	ODD_LOT_OFFER,
-	DUTCH_AUCTION,
-	TENDER_OFFERS,
-	TERMINATION
+import com.barchart.feed.api.model.meta.id.InstrumentID;
+
+public interface CorporateAction {
+
+	/**
+	 * The instrument that this action applies to.
+	 */
+	InstrumentID instrument();
+
+	/**
+	 * The time this action took effect.
+	 */
+	DateTime timestamp();
+
+	/**
+	 * The action type.
+	 */
+	CorporateActionType type();
+
+	/**
+	 * A readable description for this action.
+	 */
+	String description();
+
+	/**
+	 * Adjust the given price based on the consequence of this corporate action.
+	 * Actions should only adjust prices for bar with timestamps inside their
+	 * effect range.
+	 */
+	Bar adjust(Bar bar);
+
 }

@@ -74,14 +74,15 @@ public class BarImpl extends DataPointImpl implements Bar {
 			final Price high, final Price low, final Price close, final Size volume, final Size openInterest) {
 
 		this(instrument, date, period, open, high, low, close, volume, null, null, null, openInterest, null, null,
-				null, null,
-				null, null, null, null);
+				null, null, null, null, null, null);
 
 	}
 
 	/**
-	 * Instantiates a new {@code BarImpl}
+	 * Instantiates a new {@code BarImpl}. Null values will be replaced with
+	 * Price.NULL or Size.NULL.
 	 *
+	 * @param instrument the {@link InstrumentID} for this bar.
 	 * @param date the {@link DateTime} of this bar.
 	 * @param period the Period interval and type of this bar.
 	 * @param open the Open {@link Price} of this bar.
@@ -112,35 +113,35 @@ public class BarImpl extends DataPointImpl implements Bar {
 		super(period, date);
 
 		this.instrument = instrument;
-		this.open = open;
-		this.high = high;
-		this.low = low;
-		this.close = close;
-		this.bid = bid;
-		this.bidSize = bidSize;
-		this.ask = ask;
-		this.askSize = askSize;
-		this.midpoint = midpoint;
-		this.volume = zeroIfNull(volume);
-		this.volumeUp = zeroIfNull(volumeUp);
-		this.volumeDown = zeroIfNull(volumeDown);
-		this.tradedValue = zeroIfNull(tradedValue);
-		this.tradedValueUp = zeroIfNull(tradedValueUp);
-		this.tradedValueDown = zeroIfNull(tradedValueDown);
-		this.tickCount = zeroIfNull(tickCount);
-		this.openInterest = openInterest;
+		this.open = maybeNull(open);
+		this.high = maybeNull(high);
+		this.low = maybeNull(low);
+		this.close = maybeNull(close);
+		this.bid = maybeNull(bid);
+		this.bidSize = maybeNull(bidSize);
+		this.ask = maybeNull(ask);
+		this.askSize = maybeNull(askSize);
+		this.midpoint = maybeNull(midpoint);
+		this.volume = maybeNull(volume);
+		this.volumeUp = maybeNull(volumeUp);
+		this.volumeDown = maybeNull(volumeDown);
+		this.tradedValue = maybeNull(tradedValue);
+		this.tradedValueUp = maybeNull(tradedValueUp);
+		this.tradedValueDown = maybeNull(tradedValueDown);
+		this.tickCount = maybeNull(tickCount);
+		this.openInterest = maybeNull(openInterest);
 
 	}
 
-	private Size zeroIfNull(final Size s) {
+	private Size maybeNull(final Size s) {
 		if (s == null)
-			return VALUES.newSize(0);
+			return Size.NULL;
 		return s;
 	}
 
-	private Price zeroIfNull(final Price p) {
+	private Price maybeNull(final Price p) {
 		if (p == null)
-			return VALUES.newPrice(0, 0);
+			return Price.NULL;
 		return p;
 	}
 
@@ -149,28 +150,28 @@ public class BarImpl extends DataPointImpl implements Bar {
 	 *
 	 * @param other
 	 */
-	public BarImpl(final BarImpl other) {
+	public BarImpl(final Bar other) {
 
-		this(other.instrument,
-				other.date,
-				other.period,
-				other.open,
-				other.high,
-				other.low,
-				other.close,
-				other.volume,
-				other.volumeUp,
-				other.volumeDown,
-				other.tickCount,
-				other.openInterest,
-				other.midpoint,
-				other.bid,
-				other.bidSize,
-				other.ask,
-				other.askSize,
-				other.tradedValue,
-				other.tradedValueUp,
-				other.tradedValueDown);
+		this(other.getInstrument(),
+				other.getDate(),
+				other.getPeriod(),
+				other.getOpen(),
+				other.getHigh(),
+				other.getLow(),
+				other.getClose(),
+				other.getVolume(),
+				other.getVolumeUp(),
+				other.getVolumeDown(),
+				other.getTickCount(),
+				other.getOpenInterest(),
+				other.getMidpoint(),
+				other.getBid(),
+				other.getBidSize(),
+				other.getAsk(),
+				other.getAskSize(),
+				other.getTradedValue(),
+				other.getTradedValueUp(),
+				other.getTradedValueDown());
 
 	}
 
@@ -357,11 +358,13 @@ public class BarImpl extends DataPointImpl implements Bar {
 	@Override
 	public <E extends Bar> void merge(final E other, final boolean advanceTime) {
 
+		// Close and Volume should *always* have values, the rest may be null
+
 		try {
-			if (high == null || other.getHigh().greaterThan(high)) {
+			if (high.isNull() || (!other.getHigh().isNull() && other.getHigh().greaterThan(high))) {
 				high = other.getHigh();
 			}
-			if (low == null || other.getLow().lessThan(low)) {
+			if (low.isNull() || (!other.getLow().isNull() && other.getLow().lessThan(low))) {
 				low = other.getLow();
 			}
 		} catch (final ArithmeticException ae) {
@@ -369,6 +372,13 @@ public class BarImpl extends DataPointImpl implements Bar {
 		}
 
 		final Price value = other.getClose().mult(other.getVolume());
+
+		if (tradedValue.isNull()) {
+			tradedValue = VALUES.newPrice(0);
+			tradedValueUp = VALUES.newPrice(0);
+			tradedValueDown = VALUES.newPrice(0);
+		}
+
 		tradedValue = tradedValue.add(value);
 
 		if (close.greaterThan(other.getClose())) {
@@ -383,14 +393,19 @@ public class BarImpl extends DataPointImpl implements Bar {
 		ask = other.getAsk();
 		askSize = other.getAskSize();
 		volume = volume.add(other.getVolume());
-		tickCount = tickCount.add(1);
+
+		if (tickCount.isNull()) {
+			tickCount = VALUES.newSize(2);
+		} else {
+			tickCount = tickCount.add(1);
+		}
 
 		// Average the open interest for multi-day bars
-		if (other.getOpenInterest() != null) {
-			if (openInterest != null) {
-				openInterest = openInterest.add(other.getOpenInterest()).div(2);
-			} else {
+		if (!other.getOpenInterest().isNull()) {
+			if (openInterest.isNull()) {
 				openInterest = other.getOpenInterest();
+			} else {
+				openInterest = openInterest.add(other.getOpenInterest()).div(2);
 			}
 		}
 
@@ -398,6 +413,7 @@ public class BarImpl extends DataPointImpl implements Bar {
 			time = other.getTime();
 			date = new DateTime(time.millisecond());
 		}
+
 	}
 
 	@Override
