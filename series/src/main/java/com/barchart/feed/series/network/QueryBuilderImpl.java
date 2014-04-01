@@ -171,8 +171,8 @@ public class QueryBuilderImpl implements QueryBuilder {
 	/**
 	 * Adds a {@link Period} (may be called more than once), to this 
 	 * query. Multiple Periods may be added to indicate different
-	 * {@link TimeFrameImpl}s needed for certain {@link Analytic}s which
-	 * where mulitple TimeFrames may be desired.
+	 * {@link TimeFrameImpl}s needed for certain {@link Analytic}s
+	 * where multiple TimeFrames may be desired.
 	 * 
 	 * @param	period 		the Period to add.
 	 * @return this {@code QueryBuilder}	
