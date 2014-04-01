@@ -1,0 +1,44 @@
+/**
+ * Copyright (C) 2011-2013 Barchart, Inc. <http://www.barchart.com/>
+ *
+ * All rights reserved. Licensed under the OSI BSD License.
+ *
+ * http://www.opensource.org/licenses/bsd-license.php
+ */
+
+// News name space.
+package com.barchart.feed.proto.buf;
+
+// Builder options.
+option java_multiple_files = true;
+option java_generate_equals_and_hash = true;
+option optimize_for = SPEED;
+
+message EndOfDayRecord {
+	optional sint64 instrument = 1;
+	optional sint64 timestamp = 2;
+	optional double open = 3;
+	optional double high = 4;
+	optional double low = 5;
+	optional double last = 6;
+	optional double midpoint = 7;
+	optional double ask = 8;
+	optional sint32 askSize = 9;
+	optional double bid = 10;
+	optional sint32 bidSize = 11;
+	optional sint64 volume = 12;
+	optional sint64 volumeUp = 13;
+	optional sint64 volumeDown = 14;
+	optional double tradedValue = 15;
+	optional double tradedValueUp = 16;
+	optional double tradedValueDown = 17;
+	optional sint32 tickCount = 18;
+	optional sint64 openInterest = 19;
+}
+
+message TickRecord {
+	optional sint64 instrument = 1;
+	optional sint64 timestamp = 2;
+	optional double price = 3;
+	optional double size = 4;
+}
