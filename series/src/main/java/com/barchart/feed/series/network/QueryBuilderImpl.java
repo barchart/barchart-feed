@@ -168,7 +168,7 @@ public class QueryBuilderImpl implements QueryBuilder {
 	@Override
 	public QueryBuilder start(final DateTime date) {
 		if(date == null) {
-			throw new IllegalArgumentException("Must specify a non null start date or not at all");
+			throw new IllegalArgumentException("Must specify a non null start date");
 		}
 		this.start = query.start = date;
 		return this;
