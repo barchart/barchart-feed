@@ -33,7 +33,7 @@ public final class InstrumentProtoBuilder {
 			.getLogger(InstrumentProtoBuilder.class);
 	
 	@SuppressWarnings("unused")
-	private static final ValueFactory factory = new ValueFactoryImpl();
+	private static final ValueFactory factory = ValueFactoryImpl.instance;
 
 	private static final BiEnumMap<Instrument.SecurityType, InstrumentType> secTypeMap = 
 			new BiEnumMap<Instrument.SecurityType, InstrumentType>(
@@ -122,7 +122,7 @@ public final class InstrumentProtoBuilder {
 		}
 
 		/* display fraction base : decimal(10) vs binary(2), etc. */
-		if (inst.displayFraction() != Fraction.NULL) {
+		if (!inst.displayFraction().isNull()) {
 			builder.setDisplayBase((int) inst.displayFraction().base());
 			builder.setDisplayExponent(inst.displayFraction().exponent());
 		}
