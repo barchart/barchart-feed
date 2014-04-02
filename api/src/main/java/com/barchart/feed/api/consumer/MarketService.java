@@ -17,7 +17,7 @@ import com.barchart.feed.api.model.meta.id.ExchangeID;
 import com.barchart.feed.api.model.meta.id.InstrumentID;
 
 public interface MarketService extends ConnectionLifecycle<MarketService>, 
-		MetadataService, SubscriptionService {
+		MetadataService, SubscriptionService, MarketSnapshotService {
 	
 	/**
 	 * 
@@ -27,11 +27,14 @@ public interface MarketService extends ConnectionLifecycle<MarketService>,
 	 */
 	<V extends MarketData<V>> ConsumerAgent register(MarketObserver<V> callback, Class<V> clazz);
 
+	/* ***** ***** MarketSnapshotService ***** ***** */
+	
 	/**
 	 * 
 	 * @param instrument
 	 * @return
 	 */
+	@Override
 	Observable<Market> snapshot(InstrumentID instrument);
 	
 	/* ***** ***** ConnectionLifecycle ***** ***** */
