@@ -30,7 +30,7 @@ import com.barchart.util.value.api.ValueFactory;
 
 public class InstrumentImpl extends InstrumentBase implements Instrument {
 	
-	private static final ValueFactory factory = ValueFactoryImpl.instance;
+	protected static final ValueFactory factory = ValueFactoryImpl.instance;
 	
 	protected volatile InstrumentDefinition def = InstrumentDefinition.getDefaultInstance();
 	protected volatile State state = State.PARTIAL;

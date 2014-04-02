@@ -16,9 +16,13 @@ class InstrumentStateImpl extends InstrumentImpl implements InstrumentState {
 	}
 	
 	@Override
-	public void process(InstrumentDefinition value) {
+	public void process(final InstrumentDefinition value) {
 		def = value;
-		// TODO update State
+		
+		if(def.hasDisplayBase()) {
+			dispFrac = factory.newFraction(def.getDisplayBase(), def.getDisplayExponent());
+		}
+		
 	}
 
 	@Override
