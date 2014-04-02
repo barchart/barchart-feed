@@ -1,0 +1,66 @@
+/**
+ * Copyright (C) 2011-2013 Barchart, Inc. <http://www.barchart.com/>
+ *
+ * All rights reserved. Licensed under the OSI BSD License.
+ *
+ * http://www.opensource.org/licenses/bsd-license.php
+ */
+package com.barchart.feed.proto.buf;
+
+option java_multiple_files = true;
+option java_generate_equals_and_hash = true;
+option optimize_for = SPEED;
+
+message TimeSeriesRecord {
+
+	enum Period {
+		VOLUME = 0;
+		TICK = 1;
+		SECOND = 2;
+		MINUTE = 3;
+		HOUR = 4;
+		DAY = 5;
+		WEEK = 6;
+		MONTH = 7;
+		YEAR = 8;
+	}
+
+	optional sint64 instrument = 1;
+	optional sint64 timestamp = 2;
+	optional Period period = 3;
+	optional sint32 periodCount = 4;
+	optional sint64 openMantissa = 5;
+	optional sint32 openExponent = 6;
+	optional sint64 highMantissa = 7;
+	optional sint32 highExponent = 8;
+	optional sint64 lowMantissa = 9;
+	optional sint32 lowExponent = 10;
+	optional sint64 closeMantissa = 11;
+	optional sint32 closeExponent = 12;
+	optional sint64 midpointMantissa = 13;
+	optional sint32 midpointExponent = 14;
+	optional sint64 askMantissa = 15;
+	optional sint32 askExponent = 16;
+	optional sint64 askSizeMantissa = 17;
+	optional sint32 askSizeExponent = 18;
+	optional sint64 bidMantissa = 19;
+	optional sint32 bidExponent = 20;
+	optional sint64 bidSizeMantissa = 21;
+	optional sint32 bidSizeExponent = 22;
+	optional sint64 volumeMantissa = 23;
+	optional sint32 volumeExponent = 24;
+	optional sint64 volumeUpMantissa = 25;
+	optional sint32 volumeUpExponent = 26;
+	optional sint64 volumeDownMantissa = 27;
+	optional sint32 volumeDownExponent = 28;
+	optional sint64 tradedValueMantissa = 29;
+	optional sint32 tradedValueExponent = 30;
+	optional sint64 tradedValueUpMantissa = 31;
+	optional sint32 tradedValueUpExponent = 32;
+	optional sint64 tradedValueDownMantissa = 33;
+	optional sint32 tradedValueDownExponent = 34;
+	optional sint32 tickCount = 35;
+	optional sint64 openInterestMantissa = 36;
+	optional sint32 openInterestExponent = 37;
+
+}
