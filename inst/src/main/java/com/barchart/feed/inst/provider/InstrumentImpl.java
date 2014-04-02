@@ -235,22 +235,6 @@ public class InstrumentImpl extends InstrumentBase implements Instrument {
 
 	@Override
 	public TimeInterval lifetime() {
-//		
-//		if(!def.hasCalendar()) {
-//			return TimeInterval.NULL;
-//		}
-//		
-//		if(!def.getCalendar().hasLifeTime()) {
-//			return TimeInterval.NULL;
-//		}
-//		
-//		final Interval i = def.getCalendar().getLifeTime();
-//		
-//		if(i.getTimeFinish() == 0) {
-//			return TimeInterval.NULL;
-//		}
-//		
-//		return factory.newTimeInterval(i.getTimeStart(), i.getTimeFinish());
 		return TimeInterval.NULL;
 	}
 
