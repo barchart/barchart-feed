@@ -35,8 +35,37 @@ public class InstrumentImpl extends InstrumentBase implements Instrument {
 	protected volatile InstrumentDefinition def = InstrumentDefinition.getDefaultInstance();
 	protected volatile State state = State.PARTIAL;
 	
+	private final SecurityType secType;
+	
 	public InstrumentImpl(final InstrumentDefinition def) {
 		this.def = def;
+		
+		if(!def.hasInstrumentType() || def.getInstrumentType() == InstrumentType.NO_INSTRUMENT) {
+			secType = SecurityType.fromCFI(CFICode());
+		} else {
+		
+			switch(def.getInstrumentType()) {
+			default:
+				secType = SecurityType.NULL_TYPE;
+				break;
+			case FOREX_INSTRUMENT:
+				secType = SecurityType.FOREX;
+				break;
+			case INDEX_INSTRUMENT:
+				secType =  SecurityType.INDEX;
+				break;
+			case EQUITY_INSTRUMENT:
+				secType =  SecurityType.EQUITY;
+				break;
+			case FUTURE_INSTRUMENT:
+				secType =  SecurityType.FUTURE;
+				break;
+			case OPTION_INSTRUMENT:
+				secType = SecurityType.OPTION;
+				break;
+			}
+		}
+		
 	}
 
 	@Override
@@ -53,26 +82,7 @@ public class InstrumentImpl extends InstrumentBase implements Instrument {
 	
 	@Override
 	public SecurityType securityType() {
-		
-		if(!def.hasInstrumentType() || 
-				def.getInstrumentType() == InstrumentType.NO_INSTRUMENT) {
-			return SecurityType.fromCFI(CFICode());
-		}
-		
-		switch(def.getInstrumentType()) {
-		default:
-			return SecurityType.NULL_TYPE;
-		case FOREX_INSTRUMENT:
-			return SecurityType.FOREX;
-		case INDEX_INSTRUMENT:
-			return SecurityType.INDEX;
-		case EQUITY_INSTRUMENT:
-			return SecurityType.EQUITY;
-		case FUTURE_INSTRUMENT:
-			return SecurityType.FUTURE;
-		case OPTION_INSTRUMENT:
-			return SecurityType.OPTION;
-		}
+		return secType;
 	}
 
 	@Override
@@ -272,6 +282,8 @@ public class InstrumentImpl extends InstrumentBase implements Instrument {
 	public Month contractDeliveryMonth() {
 		
 		switch(def.getContractMonth()) {
+			default:
+				return Month.NULL_MONTH;
 			case JANUARY:
 				return Month.JANUARY;
 			case FEBRUARY:
@@ -297,8 +309,6 @@ public class InstrumentImpl extends InstrumentBase implements Instrument {
 			case DECEMBER:
 				return Month.DECEMBER;
 		}
-		
-		return Month.NULL_MONTH;
 		
 	}
 
