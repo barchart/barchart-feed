@@ -30,10 +30,9 @@ import com.barchart.util.value.api.ValueFactory;
 
 public class InstrumentImpl extends InstrumentBase implements Instrument {
 	
-	private static final ValueFactory factory = new ValueFactoryImpl();
+	private static final ValueFactory factory = ValueFactoryImpl.instance;
 	
-	protected volatile InstrumentDefinition def = 
-			InstrumentDefinition.getDefaultInstance();
+	protected volatile InstrumentDefinition def = InstrumentDefinition.getDefaultInstance();
 	protected volatile State state = State.PARTIAL;
 	
 	public InstrumentImpl(final InstrumentDefinition def) {
@@ -217,6 +216,8 @@ public class InstrumentImpl extends InstrumentBase implements Instrument {
 		final Decimal d = def.getContractPointValue();
 		return factory.newPrice(d.getMantissa(), d.getExponent());
 	}
+	
+	protected volatile Fraction dispFrac = Fraction.NULL;
 
 	@Override
 	public Fraction displayFraction() {
@@ -225,7 +226,11 @@ public class InstrumentImpl extends InstrumentBase implements Instrument {
 			return Fraction.NULL;
 		}
 		
-		return factory.newFraction(def.getDisplayBase(), def.getDisplayExponent());
+		if(dispFrac.isNull()) {
+			dispFrac = factory.newFraction(def.getDisplayBase(), def.getDisplayExponent());
+		}
+		
+		return dispFrac;
 	}
 
 	@Override
