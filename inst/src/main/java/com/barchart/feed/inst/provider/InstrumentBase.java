@@ -20,7 +20,7 @@ import com.barchart.util.value.api.ValueFactory;
 
 public abstract class InstrumentBase implements Instrument {
 
-	protected static final ValueFactory vals = new ValueFactoryImpl();
+	protected static final ValueFactory vals = ValueFactoryImpl.instance;
 
 	@Override
 	public SecurityType securityType() {
@@ -133,9 +133,14 @@ public abstract class InstrumentBase implements Instrument {
 		return Collections.<InstrumentID> emptyList();
 	}
 	
+	protected volatile InstrumentID id = InstrumentID.NULL;
+	
 	@Override
 	public InstrumentID id() {
-		return new InstrumentID(marketGUID());
+		if(id.isNull()) {
+			id = new InstrumentID(marketGUID());
+		}
+		return id;
 	}
 	
 	@Override
