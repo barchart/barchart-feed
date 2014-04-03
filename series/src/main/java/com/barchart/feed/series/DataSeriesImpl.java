@@ -9,7 +9,6 @@ import java.util.ListIterator;
 import java.util.NoSuchElementException;
 
 import org.joda.time.DateTime;
-import org.junit.experimental.theories.DataPoints;
 
 import com.barchart.feed.api.series.DataPoint;
 import com.barchart.feed.api.series.DataSeries;
@@ -18,15 +17,15 @@ import com.barchart.feed.api.series.PeriodType;
 import com.barchart.util.value.api.Time;
 
 public class DataSeriesImpl<E extends DataPoint> implements DataSeries<E> {
-	/** All {@link DataPoints} are aggregated according to this Period */
+	/** All {@link DataPoint} are aggregated according to this Period */
 	private final Period period;
 	/** The backing data */
 	private final List<DataPointImpl> data = Collections.synchronizedList(new ArrayList<DataPointImpl>());
 
 	/**
-	 * Constructs a new {@link DataSeriesImpl} whose {@link DataPoints} adhere
-	 * to the time constraints specified.
-	 *
+	 * Constructs a new {@link DataSeriesImpl} whose {@link DataPoint} adhere to
+	 * the time constraints specified.
+	 * 
 	 * @param period
 	 */
 	public DataSeriesImpl(final Period period) {
