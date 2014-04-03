@@ -81,7 +81,7 @@ public final class TimeSeriesCodec {
 
 		if (!concise) {
 			builder.setInstrument(Long.parseLong(bar.getInstrument().id()))
-					.setTimestamp(bar.getTime().millisecond())
+					.setTimestamp(bar.getDate().getMillis())
 					.setPeriod(TimeSeriesRecord.Period.valueOf(bar.getPeriod().getPeriodType().name()))
 					.setPeriodCount(bar.getPeriod().size());
 		}

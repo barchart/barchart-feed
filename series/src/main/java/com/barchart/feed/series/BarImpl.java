@@ -1,7 +1,6 @@
 package com.barchart.feed.series;
 
 import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
 
 import com.barchart.feed.api.model.meta.id.InstrumentID;
 import com.barchart.feed.api.series.Bar;
@@ -41,8 +40,8 @@ public class BarImpl extends DataPointImpl implements Bar {
 	/**
 	 * Instantiates a new {@code BarImpl}
 	 *
-	 * @param date the {@link Time} of this bar.
-	 * @param period the {@link Period} interval and type of this bar.
+	 * @param date the {@link DateTime} of this bar.
+	 * @param period the Period interval and type of this bar.
 	 * @param open the Open {@link Price} of this bar.
 	 * @param high the High {@link Price} of this bar.
 	 * @param low the Low {@link Price} of this bar.
@@ -50,11 +49,12 @@ public class BarImpl extends DataPointImpl implements Bar {
 	 * @param volume the Volume {@link Size} of this bar.
 	 * @param openInterest the Open Interest {@link Size} of this bar.
 	 */
-	public BarImpl(final InstrumentID instrument, final Time date, final Period period, final Price open,
+	public BarImpl(final InstrumentID instrument, final Time time, final Period period, final Price open,
 			final Price high, final Price low, final Price close, final Size volume, final Size openInterest) {
 
-		this(instrument, new DateTime(date.millisecond(), DateTimeZone.forTimeZone(date.zone())), period, open, high,
-				low, close, volume, null, null, null, openInterest, null, null, null, null, null, null, null, null);
+		this(instrument, new DateTime(time.millisecond()), period, open, high, low, close, volume, null, null, null,
+				openInterest, null, null,
+				null, null, null, null, null, null);
 
 	}
 
@@ -128,7 +128,7 @@ public class BarImpl extends DataPointImpl implements Bar {
 		this.tradedValue = maybeNull(tradedValue);
 		this.tradedValueUp = maybeNull(tradedValueUp);
 		this.tradedValueDown = maybeNull(tradedValueDown);
-		this.tickCount = maybeNull(tickCount);
+		this.tickCount = tickCount == null || tickCount.isNull() ? VALUES.newSize(1) : tickCount;
 		this.openInterest = maybeNull(openInterest);
 
 	}
@@ -347,12 +347,13 @@ public class BarImpl extends DataPointImpl implements Bar {
 	}
 
 	@Override
-	public Time getTime() {
-		return time;
+	public DateTime getDate() {
+		return date;
 	}
 
-	public void setTime(final Time t) {
-		this.time = t;
+	@Override
+	public void setDate(final DateTime d) {
+		this.date = d;
 	}
 
 	@Override
@@ -381,10 +382,19 @@ public class BarImpl extends DataPointImpl implements Bar {
 
 		tradedValue = tradedValue.add(value);
 
+		if (volumeUp.isNull()) {
+			volumeUp = VALUES.newSize(0);
+			volumeDown = VALUES.newSize(0);
+		}
+
+		volume = volume.add(other.getVolume());
+
 		if (close.greaterThan(other.getClose())) {
 			tradedValueDown = tradedValueDown.add(value);
+			volumeDown = volumeDown.add(other.getVolume());
 		} else if (close.lessThan(other.getClose())) {
 			tradedValueUp = tradedValueUp.add(value);
+			volumeUp = volumeUp.add(other.getVolume());
 		}
 
 		close = other.getClose();
@@ -392,26 +402,20 @@ public class BarImpl extends DataPointImpl implements Bar {
 		bidSize = other.getBidSize();
 		ask = other.getAsk();
 		askSize = other.getAskSize();
-		volume = volume.add(other.getVolume());
 
-		if (tickCount.isNull()) {
-			tickCount = VALUES.newSize(2);
-		} else {
-			tickCount = tickCount.add(1);
-		}
+		tickCount = tickCount.add(1);
 
 		// Average the open interest for multi-day bars
 		if (!other.getOpenInterest().isNull()) {
 			if (openInterest.isNull()) {
 				openInterest = other.getOpenInterest();
 			} else {
-				openInterest = openInterest.add(other.getOpenInterest()).div(2);
+				openInterest = openInterest.add(other.getOpenInterest());
 			}
 		}
 
 		if (advanceTime) {
-			time = other.getTime();
-			date = new DateTime(time.millisecond());
+			date = new DateTime(other.getDate());
 		}
 
 	}
@@ -446,7 +450,7 @@ public class BarImpl extends DataPointImpl implements Bar {
 		result = prime * result
 				+ ((openInterest == null) ? 0 : openInterest.hashCode());
 		result = prime * result + ((period == null) ? 0 : period.hashCode());
-		result = prime * result + ((time == null) ? 0 : time.hashCode());
+		result = prime * result + ((date == null) ? 0 : date.hashCode());
 		result = prime * result + ((volume == null) ? 0 : volume.hashCode());
 		return result;
 	}
@@ -504,10 +508,10 @@ public class BarImpl extends DataPointImpl implements Bar {
 			return false;
 		if (period.getPeriodType().compareAtResolution(date, other.date) != 0)
 			return false;
-		if (time == null) {
-			if (other.time != null)
+		if (date == null) {
+			if (other.date != null)
 				return false;
-		} else if (!time.equals(other.time))
+		} else if (!date.equals(other.date))
 			return false;
 		if (volume == null) {
 			if (other.volume != null)

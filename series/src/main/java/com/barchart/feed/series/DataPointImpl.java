@@ -4,7 +4,6 @@ import org.joda.time.DateTime;
 
 import com.barchart.feed.api.series.DataPoint;
 import com.barchart.feed.api.series.Period;
-import com.barchart.util.value.ValueFactoryImpl;
 import com.barchart.util.value.api.Time;
 
 
@@ -17,8 +16,6 @@ import com.barchart.util.value.api.Time;
 public abstract class DataPointImpl implements DataPoint {
 	/** The period describing the type and units of time */
 	protected Period period;
-	/** The time index of this {@code DataPoint} */
-	protected Time time;
 	/** Immutable internal representation for efficiency (note: this value is immutable anyway)*/
 	protected DateTime date;
 
@@ -32,29 +29,7 @@ public abstract class DataPointImpl implements DataPoint {
 	 */
 	protected DataPointImpl(final Period period, final DateTime d) {
 		this.period = period;
-		this.time = ValueFactoryImpl.getInstance().newTime(d.getMillis());
 		this.date = d;
-	}
-
-	/**
-	 * Constructs a new {@code DataPoint}
-	 *
-	 * @param period the {@link Period}
-	 * @param t the {@link Time}
-	 */
-	protected DataPointImpl(final Period period, final Time t) {
-		this.period = period;
-		this.time = t;
-		this.date = new DateTime(time.millisecond());
-	}
-
-	/**
-	 * Returns the time index of this {@code DataPoint}
-	 * @return	the time index of this {@code DataPoint}
-	 */
-	@Override
-	public Time getTime() {
-		return time;
 	}
 
 	/**
@@ -62,6 +37,7 @@ public abstract class DataPointImpl implements DataPoint {
 	 *
 	 * @return
 	 */
+	@Override
 	public DateTime getDate() {
 		return date;
 	}
@@ -72,7 +48,6 @@ public abstract class DataPointImpl implements DataPoint {
 	 */
 	public void setDate(final DateTime dt) {
 		this.date = dt;
-		this.time = new ValueFactoryImpl().newTime(date.getMillis());
 	}
 
 	/**
@@ -108,7 +83,7 @@ public abstract class DataPointImpl implements DataPoint {
     public int hashCode() {
 		final int prime = 31;
         int result = 1;
-        result = prime * result + ((time == null) ?
+		result = prime * result + ((date == null) ?
         	0 : period.getPeriodType().resolutionInstant(date).hashCode());
         result = prime * result + ((period == null) ?
         	0 : period.hashCode());

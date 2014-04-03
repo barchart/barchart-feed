@@ -1,57 +1,57 @@
 package com.barchart.feed.series;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.joda.time.DateTime;
 import org.junit.Test;
 
 import com.barchart.feed.api.series.Period;
 import com.barchart.util.value.ValueFactoryImpl;
-import com.barchart.util.value.api.Time;
 
 public class SpanImplTest {
     private static final ValueFactoryImpl FACTORY = new ValueFactoryImpl();
-    
+
     @Test
     public void testUnion() {
-        Time t = FACTORY.newTime(new DateTime(2013, 12, 11, 8, 0, 0).getMillis());
-        Time t2 = FACTORY.newTime(new DateTime(2013, 12, 11, 13, 0, 0).getMillis());
-        SpanImpl newSpan = new SpanImpl(Period.ONE_HOUR, t, t2);
-        
-        Time t3 = FACTORY.newTime(new DateTime(2013, 12, 11, 12, 0, 0).getMillis());
-        Time t4 = FACTORY.newTime(new DateTime(2013, 12, 11, 16, 0, 0).getMillis());
-        SpanImpl newSpan2 = new SpanImpl(Period.ONE_HOUR, t3, t4);
-        
-        SpanImpl union = newSpan.union(newSpan2);
-        assertEquals(t, union.getTime());
-        assertEquals(t4, union.getNextTime());
+		final DateTime t = new DateTime(2013, 12, 11, 8, 0, 0);
+		final DateTime t2 = new DateTime(2013, 12, 11, 13, 0, 0);
+        final SpanImpl newSpan = new SpanImpl(Period.ONE_HOUR, t, t2);
+
+		final DateTime t3 = new DateTime(2013, 12, 11, 12, 0, 0);
+		final DateTime t4 = new DateTime(2013, 12, 11, 16, 0, 0);
+        final SpanImpl newSpan2 = new SpanImpl(Period.ONE_HOUR, t3, t4);
+
+        final SpanImpl union = newSpan.union(newSpan2);
+		assertEquals(t, union.getDate());
+		assertEquals(t4, union.getNextDate());
     }
-    
+
     @Test
     public void testIntersection() {
-        Time t = FACTORY.newTime(new DateTime(2013, 12, 11, 8, 0, 0).getMillis());
-        Time t2 = FACTORY.newTime(new DateTime(2013, 12, 11, 13, 0, 0).getMillis());
-        SpanImpl newSpan = new SpanImpl(Period.ONE_HOUR, t, t2);
-        
-        Time t3 = FACTORY.newTime(new DateTime(2013, 12, 11, 12, 0, 0).getMillis());
-        Time t4 = FACTORY.newTime(new DateTime(2013, 12, 11, 16, 0, 0).getMillis());
-        SpanImpl newSpan2 = new SpanImpl(Period.ONE_HOUR, t3, t4);
-        
-        SpanImpl inter = newSpan.intersection(newSpan2);
-        assertEquals(t3, inter.getTime());
-        assertEquals(t2, inter.getNextTime());
+		final DateTime t = new DateTime(2013, 12, 11, 8, 0, 0);
+		final DateTime t2 = new DateTime(2013, 12, 11, 13, 0, 0);
+        final SpanImpl newSpan = new SpanImpl(Period.ONE_HOUR, t, t2);
+
+		final DateTime t3 = new DateTime(2013, 12, 11, 12, 0, 0);
+		final DateTime t4 = new DateTime(2013, 12, 11, 16, 0, 0);
+        final SpanImpl newSpan2 = new SpanImpl(Period.ONE_HOUR, t3, t4);
+
+        final SpanImpl inter = newSpan.intersection(newSpan2);
+		assertEquals(t3, inter.getDate());
+		assertEquals(t2, inter.getNextDate());
     }
 
     @Test
     public void testExtendsSpan() {
-        Time t = FACTORY.newTime(new DateTime(2013, 12, 11, 8, 0, 0).getMillis());
-        Time t2 = FACTORY.newTime(new DateTime(2013, 12, 11, 13, 0, 0).getMillis());
-        SpanImpl newSpan = new SpanImpl(Period.ONE_HOUR, t, t2);
-        
-        Time t3 = FACTORY.newTime(new DateTime(2013, 12, 11, 12, 0, 0).getMillis());
-        Time t4 = FACTORY.newTime(new DateTime(2013, 12, 11, 16, 0, 0).getMillis());
-        SpanImpl newSpan2 = new SpanImpl(Period.ONE_HOUR, t3, t4);
-        
+		final DateTime t = new DateTime(2013, 12, 11, 8, 0, 0);
+		final DateTime t2 = new DateTime(2013, 12, 11, 13, 0, 0);
+        final SpanImpl newSpan = new SpanImpl(Period.ONE_HOUR, t, t2);
+
+		final DateTime t3 = new DateTime(2013, 12, 11, 12, 0, 0);
+		final DateTime t4 = new DateTime(2013, 12, 11, 16, 0, 0);
+        final SpanImpl newSpan2 = new SpanImpl(Period.ONE_HOUR, t3, t4);
+
         assertTrue(newSpan2.extendsSpan(newSpan) && newSpan.extendsSpan(newSpan2));
     }
 }

@@ -23,7 +23,7 @@ public interface Bar extends Range {
 
 	/**
 	 * Returns the close price
-	 * 
+	 *
 	 * @return the close price
 	 */
 	public Price getClose();
@@ -54,15 +54,16 @@ public interface Bar extends Range {
 	public Price getMidpoint();
 
 	/**
-	 * Returns the volume
-	 * 
+	 * Returns the volume. This will be cumulative for aggregated bars, to
+	 * obtain average OI values use getVolume().div(getTickCount()).
+	 *
 	 * @return the volume
 	 */
 	public Size getVolume();
 
 	/**
 	 * Returns the volume traded up.
-	 * 
+	 *
 	 * @return the volume traded up.
 	 */
 	public Size getVolumeUp();
@@ -99,7 +100,9 @@ public interface Bar extends Range {
 	public Size getTickCount();
 
 	/**
-	 * Returns the open interest (futures only)
+	 * Returns the total open interest (futures only). This will be cumulative
+	 * for aggregated bars, to obtain average OI values use
+	 * getOpenInterest().div(getTickCount()).
 	 *
 	 * @return the open interest
 	 */

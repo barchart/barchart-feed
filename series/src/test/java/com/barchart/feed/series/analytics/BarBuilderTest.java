@@ -23,173 +23,197 @@ import com.barchart.feed.series.network.TestHarness;
 import com.barchart.util.value.ValueFactoryImpl;
 
 public class BarBuilderTest {
-    private static final ValueFactoryImpl FACTORY = new ValueFactoryImpl();
+	private static final ValueFactoryImpl FACTORY = new ValueFactoryImpl();
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({
+			"unchecked", "rawtypes"
+	})
 	@Test
 	public void testMinuteTo5Minute() {
 		final String symbol = "ESZ13";
-        final Instrument instr = TestHarness.makeInstrument(symbol);
-        final DateTime dt2 = new DateTime(2013, 12, 10, 12, 0, 0);
-        final TimeFrameImpl tf2 = new TimeFrameImpl(new Period(PeriodType.MINUTE, 5), dt2, null);
+		final Instrument instr = TestHarness.makeInstrument(symbol);
+		final DateTime dt2 = new DateTime(2013, 12, 10, 12, 0, 0);
+		final TimeFrameImpl tf2 = new TimeFrameImpl(new Period(PeriodType.MINUTE, 5), dt2, null);
 
-        final SeriesSubscription sub2 = new SeriesSubscription("ESZ13", instr, "IO", new TimeFrameImpl[] { tf2 }, TradingWeekImpl.DEFAULT);
+		final SeriesSubscription sub2 = new SeriesSubscription("ESZ13", instr, "IO", new TimeFrameImpl[] {
+				tf2
+		}, TradingWeekImpl.DEFAULT);
 
-        final BarBuilder barBuilder = new BarBuilder(sub2);
-		barBuilder.addInputTimeSeries(BarBuilder.INPUT_KEY, new DataSeriesImpl<BarImpl>(new Period(PeriodType.MINUTE, 1)));
-		final DataSeriesImpl<BarImpl> inputSeries = (DataSeriesImpl)barBuilder.getInputTimeSeries(BarBuilder.INPUT_KEY);
+		final BarBuilder barBuilder = new BarBuilder(sub2);
+		barBuilder.addInputTimeSeries(BarBuilder.INPUT_KEY, new DataSeriesImpl<BarImpl>(
+				new Period(PeriodType.MINUTE, 1)));
+		final DataSeriesImpl<BarImpl> inputSeries =
+				(DataSeriesImpl) barBuilder.getInputTimeSeries(BarBuilder.INPUT_KEY);
 		assertNotNull(inputSeries);
 
-		barBuilder.addOutputTimeSeries(BarBuilder.OUTPUT_KEY, new DataSeriesImpl<BarImpl>(new Period(PeriodType.MINUTE, 5)));
-		final DataSeriesImpl<BarImpl> outputSeries = (DataSeriesImpl)barBuilder.getOutputTimeSeries(BarBuilder.OUTPUT_KEY);
+		barBuilder.addOutputTimeSeries(BarBuilder.OUTPUT_KEY, new DataSeriesImpl<BarImpl>(new Period(PeriodType.MINUTE,
+				5)));
+		final DataSeriesImpl<BarImpl> outputSeries =
+				(DataSeriesImpl) barBuilder.getOutputTimeSeries(BarBuilder.OUTPUT_KEY);
 		assertNotNull(outputSeries);
 		assertEquals(new Period(PeriodType.MINUTE, 5), outputSeries.getPeriod());
 
 		List<BarImpl> list = getBars();
-        final SpanImpl span = new SpanImpl(new Period(PeriodType.MINUTE, 5),
-        	FACTORY.newTime(new DateTime(2013, 12, 10, 12, 0, 0).getMillis()),
-        		FACTORY.newTime(new DateTime(2013, 12, 10, 12, 30, 0).getMillis()));
+		final SpanImpl span = new SpanImpl(new Period(PeriodType.MINUTE, 5),
+				new DateTime(2013, 12, 10, 12, 0, 0),
+				new DateTime(2013, 12, 10, 12, 30, 0));
 
-        for(int i = 0;i < list.size();i++) {
-        	inputSeries.add(list.get(i));
-        }
+		for (int i = 0; i < list.size(); i++) {
+			inputSeries.add(list.get(i));
+		}
 
-        span.setNextDate(inputSeries.get(inputSeries.size() - 1).getDate());
-        barBuilder.process(span);
+		span.setNextDate(inputSeries.get(inputSeries.size() - 1).getDate());
+		barBuilder.process(span);
 
-        assertEquals(6, outputSeries.size());
-        int mins = 5;
-        for(int i = 0;i < outputSeries.size();i++) {
-        	assertEquals(mins, outputSeries.get(i).getDate().getMinuteOfHour());
-        	mins += 5;
-        }
+		assertEquals(6, outputSeries.size());
+		int mins = 5;
+		for (int i = 0; i < outputSeries.size(); i++) {
+			assertEquals(mins, outputSeries.get(i).getDate().getMinuteOfHour());
+			mins += 5;
+		}
 
-        list = getBars2();
-        for(final BarImpl db : list) {
-        	inputSeries.add(db);
-        	span.setDate(db.getDate());
-        	span.setNextDate(db.getDate());
-        	barBuilder.process(span);
-        }
+		list = getBars2();
+		for (final BarImpl db : list) {
+			inputSeries.add(db);
+			span.setDate(db.getDate());
+			span.setNextDate(db.getDate());
+			barBuilder.process(span);
+		}
 
-        assertEquals(12, outputSeries.size());
-    }
+		assertEquals(12, outputSeries.size());
+	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({
+			"unchecked", "rawtypes"
+	})
 	@Test
 	public void testSecondsToMinutes() {
 		final String symbol = "ESZ13";
-        final Instrument instr = TestHarness.makeInstrument(symbol);
-        final DateTime dt2 = new DateTime(2013, 12, 10, 12, 0, 0);
-        final TimeFrameImpl tf2 = new TimeFrameImpl(new Period(PeriodType.MINUTE, 1), dt2, null);
+		final Instrument instr = TestHarness.makeInstrument(symbol);
+		final DateTime dt2 = new DateTime(2013, 12, 10, 12, 0, 0);
+		final TimeFrameImpl tf2 = new TimeFrameImpl(new Period(PeriodType.MINUTE, 1), dt2, null);
 
-        final SeriesSubscription sub2 = new SeriesSubscription("ESZ13", instr, "IO", new TimeFrameImpl[] { tf2 }, TradingWeekImpl.DEFAULT);
+		final SeriesSubscription sub2 = new SeriesSubscription("ESZ13", instr, "IO", new TimeFrameImpl[] {
+				tf2
+		}, TradingWeekImpl.DEFAULT);
 
-        final BarBuilder barBuilder = new BarBuilder(sub2);
-		barBuilder.addInputTimeSeries(BarBuilder.INPUT_KEY, new DataSeriesImpl<BarImpl>(new Period(PeriodType.SECOND, 1)));
-		final DataSeriesImpl<BarImpl> inputSeries = (DataSeriesImpl)barBuilder.getInputTimeSeries(BarBuilder.INPUT_KEY);
+		final BarBuilder barBuilder = new BarBuilder(sub2);
+		barBuilder.addInputTimeSeries(BarBuilder.INPUT_KEY, new DataSeriesImpl<BarImpl>(
+				new Period(PeriodType.SECOND, 1)));
+		final DataSeriesImpl<BarImpl> inputSeries =
+				(DataSeriesImpl) barBuilder.getInputTimeSeries(BarBuilder.INPUT_KEY);
 		assertNotNull(inputSeries);
 
-		barBuilder.addOutputTimeSeries(BarBuilder.OUTPUT_KEY, new DataSeriesImpl<BarImpl>(new Period(PeriodType.MINUTE, 1)));
-		final DataSeriesImpl<BarImpl> outputSeries = (DataSeriesImpl)barBuilder.getOutputTimeSeries(BarBuilder.OUTPUT_KEY);
+		barBuilder.addOutputTimeSeries(BarBuilder.OUTPUT_KEY, new DataSeriesImpl<BarImpl>(new Period(PeriodType.MINUTE,
+				1)));
+		final DataSeriesImpl<BarImpl> outputSeries =
+				(DataSeriesImpl) barBuilder.getOutputTimeSeries(BarBuilder.OUTPUT_KEY);
 		assertNotNull(outputSeries);
 		assertEquals(new Period(PeriodType.MINUTE, 1), outputSeries.getPeriod());
 
 		List<BarImpl> list = getBars3();
-        final SpanImpl span = new SpanImpl(new Period(PeriodType.SECOND, 1),
-        	FACTORY.newTime(new DateTime(2013, 12, 10, 12, 0, 0).getMillis()),
-        		FACTORY.newTime(new DateTime(2013, 12, 10, 12, 0, 0).getMillis()));
+		final SpanImpl span = new SpanImpl(new Period(PeriodType.SECOND, 1),
+				new DateTime(2013, 12, 10, 12, 0, 0),
+				new DateTime(2013, 12, 10, 12, 0, 0));
 
-        for(int i = 0;i < list.size();i++) {
-        	inputSeries.add(list.get(i));
-        }
+		for (int i = 0; i < list.size(); i++) {
+			inputSeries.add(list.get(i));
+		}
 
-        span.setNextDate(inputSeries.get(inputSeries.size() - 1).getDate());
+		span.setNextDate(inputSeries.get(inputSeries.size() - 1).getDate());
 
-        barBuilder.process(span);
+		barBuilder.process(span);
 
-        assertEquals(6, outputSeries.size());
+		assertEquals(6, outputSeries.size());
 
-        list = getBars4();
-        for(final BarImpl db : list) {
-        	inputSeries.add(db);
-        	span.setDate(db.getDate());
-        	span.setNextDate(db.getDate());
-        	barBuilder.process(span);
-        }
+		list = getBars4();
+		for (final BarImpl db : list) {
+			inputSeries.add(db);
+			span.setDate(db.getDate());
+			span.setNextDate(db.getDate());
+			barBuilder.process(span);
+		}
 
-        assertEquals(12, outputSeries.size());
-        System.out.println("output series size: " + outputSeries.size());
+		assertEquals(12, outputSeries.size());
+		System.out.println("output series size: " + outputSeries.size());
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({
+			"unchecked", "rawtypes"
+	})
 	@Test
 	public void testSecondsToHours() {
 		final String symbol = "ESZ13";
-        final Instrument instr = TestHarness.makeInstrument(symbol);
-        final DateTime dt2 = new DateTime(2013, 12, 10, 0, 0, 0);
-        final TimeFrameImpl tf2 = new TimeFrameImpl(new Period(PeriodType.HOUR, 3), dt2, null);
+		final Instrument instr = TestHarness.makeInstrument(symbol);
+		final DateTime dt2 = new DateTime(2013, 12, 10, 0, 0, 0);
+		final TimeFrameImpl tf2 = new TimeFrameImpl(new Period(PeriodType.HOUR, 3), dt2, null);
 
-        final SeriesSubscription sub2 = new SeriesSubscription("ESZ13", instr, "IO", new TimeFrameImpl[] { tf2 }, TradingWeekImpl.DEFAULT);
+		final SeriesSubscription sub2 = new SeriesSubscription("ESZ13", instr, "IO", new TimeFrameImpl[] {
+				tf2
+		}, TradingWeekImpl.DEFAULT);
 
-        final BarBuilder barBuilder = new BarBuilder(sub2);
-		barBuilder.addInputTimeSeries(BarBuilder.INPUT_KEY, new DataSeriesImpl<BarImpl>(new Period(PeriodType.SECOND, 1)));
-		final DataSeriesImpl<BarImpl> inputSeries = (DataSeriesImpl)barBuilder.getInputTimeSeries(BarBuilder.INPUT_KEY);
+		final BarBuilder barBuilder = new BarBuilder(sub2);
+		barBuilder.addInputTimeSeries(BarBuilder.INPUT_KEY, new DataSeriesImpl<BarImpl>(
+				new Period(PeriodType.SECOND, 1)));
+		final DataSeriesImpl<BarImpl> inputSeries =
+				(DataSeriesImpl) barBuilder.getInputTimeSeries(BarBuilder.INPUT_KEY);
 		assertNotNull(inputSeries);
 
-		barBuilder.addOutputTimeSeries(BarBuilder.OUTPUT_KEY, new DataSeriesImpl<BarImpl>(new Period(PeriodType.HOUR, 3)));
-		final DataSeriesImpl<BarImpl> outputSeries = (DataSeriesImpl)barBuilder.getOutputTimeSeries(BarBuilder.OUTPUT_KEY);
+		barBuilder.addOutputTimeSeries(BarBuilder.OUTPUT_KEY, new DataSeriesImpl<BarImpl>(
+				new Period(PeriodType.HOUR, 3)));
+		final DataSeriesImpl<BarImpl> outputSeries =
+				(DataSeriesImpl) barBuilder.getOutputTimeSeries(BarBuilder.OUTPUT_KEY);
 		assertNotNull(outputSeries);
 		assertEquals(new Period(PeriodType.HOUR, 3), outputSeries.getPeriod());
 
 		List<BarImpl> list = getBars5();
 		System.out.println("got " + list.size() + " bars");
-        final SpanImpl span = new SpanImpl(new Period(PeriodType.SECOND, 1),
-        	FACTORY.newTime(new DateTime(2013, 12, 10, 0, 0, 0).getMillis()),
-        		FACTORY.newTime(new DateTime(2013, 12, 10, 0, 0, 0).getMillis()));
+		final SpanImpl span = new SpanImpl(new Period(PeriodType.SECOND, 1),
+				new DateTime(2013, 12, 10, 0, 0, 0),
+				new DateTime(2013, 12, 10, 0, 0, 0));
 
-        for(int i = 0;i < list.size();i++) {
-        	inputSeries.add(list.get(i));
-        }
+		for (int i = 0; i < list.size(); i++) {
+			inputSeries.add(list.get(i));
+		}
 
-        System.out.println("added " + list.size() + " bars to inputSeries");
+		System.out.println("added " + list.size() + " bars to inputSeries");
 
-        span.setNextDate(inputSeries.get(inputSeries.size() - 1).getDate());
-        System.out.println("setNextDate to: " + inputSeries.get(inputSeries.size() - 1 ).getDate() + " --> " + span);
-        System.out.println("calling process...");
-        final Span resultSpan = barBuilder.process(span);
-        System.out.println("resultSpan = " + resultSpan);
-        System.out.println("outputSeries size = " + outputSeries.size());
-        System.out.println("process finished...");
+		span.setNextDate(inputSeries.get(inputSeries.size() - 1).getDate());
+		System.out.println("setNextDate to: " + inputSeries.get(inputSeries.size() - 1).getDate() + " --> " + span);
+		System.out.println("calling process...");
+		final Span resultSpan = barBuilder.process(span);
+		System.out.println("resultSpan = " + resultSpan);
+		System.out.println("outputSeries size = " + outputSeries.size());
+		System.out.println("process finished...");
 
-        assertEquals(2, outputSeries.size());
+		assertEquals(2, outputSeries.size());
 
-        list = getBars6();
-        for(final BarImpl db : list) {
-        	inputSeries.add(db);
-        	span.setDate(db.getDate());
-        	span.setNextDate(db.getDate());
-        	barBuilder.process(span);
-        }
+		list = getBars6();
+		for (final BarImpl db : list) {
+			inputSeries.add(db);
+			span.setDate(db.getDate());
+			span.setNextDate(db.getDate());
+			barBuilder.process(span);
+		}
 
-        assertEquals(5, outputSeries.size());
-        for(int i = 0;i < outputSeries.size();i++) {
-        	System.out.println(outputSeries.get(i));
-        }
-        System.out.println("output series size: " + outputSeries.size());
+		assertEquals(5, outputSeries.size());
+		for (int i = 0; i < outputSeries.size(); i++) {
+			System.out.println(outputSeries.get(i));
+		}
+		System.out.println("output series size: " + outputSeries.size());
 	}
 
 	private List<BarImpl> getBars() {
 		int min = 0;
 		final List<BarImpl> l = new ArrayList<BarImpl>();
-		for(int i = 0;i < 30;i++, min++) {
+		for (int i = 0; i < 30; i++, min++) {
 			final BarImpl db = new BarImpl(null, new DateTime(2013, 12, 10, 12, min, 0), Period.ONE_MINUTE,
-				FACTORY.newPrice(5),
-				FACTORY.newPrice(5 + min),
-				FACTORY.newPrice(5),
-				FACTORY.newPrice(5),
-				FACTORY.newSize(5, 0),
-				FACTORY.newSize(5, 0));
+					FACTORY.newPrice(5),
+					FACTORY.newPrice(5 + min),
+					FACTORY.newPrice(5),
+					FACTORY.newPrice(5),
+					FACTORY.newSize(5, 0),
+					FACTORY.newSize(5, 0));
 			l.add(db);
 		}
 		return l;
@@ -199,14 +223,14 @@ public class BarBuilderTest {
 		int min = 29;
 		DateTime time = new DateTime(2013, 12, 10, 12, min, 0);
 		final List<BarImpl> l = new ArrayList<BarImpl>();
-		for(int i = 0;i < 30;i++, min++) {
+		for (int i = 0; i < 30; i++, min++) {
 			final BarImpl db = new BarImpl(null, time = time.plusMinutes(1), Period.ONE_MINUTE,
-				FACTORY.newPrice(5),
-				FACTORY.newPrice(5 + min + i),
-				FACTORY.newPrice(5),
-				FACTORY.newPrice(5),
-				FACTORY.newSize(5, 0),
-				FACTORY.newSize(5, 0));
+					FACTORY.newPrice(5),
+					FACTORY.newPrice(5 + min + i),
+					FACTORY.newPrice(5),
+					FACTORY.newPrice(5),
+					FACTORY.newSize(5, 0),
+					FACTORY.newSize(5, 0));
 			l.add(db);
 		}
 		return l;
@@ -215,14 +239,14 @@ public class BarBuilderTest {
 	private List<BarImpl> getBars3() {
 		DateTime time = new DateTime(2013, 12, 10, 12, 0, 0);
 		final List<BarImpl> l = new ArrayList<BarImpl>();
-		for(int i = 0;i < 360;i++) {
+		for (int i = 0; i < 360; i++) {
 			final BarImpl db = new BarImpl(null, time = time.plusSeconds(1), new Period(PeriodType.SECOND, 1),
-				FACTORY.newPrice(5),
-				FACTORY.newPrice(5 + i),
-				FACTORY.newPrice(5),
-				FACTORY.newPrice(5),
-				FACTORY.newSize(5, 0),
-				FACTORY.newSize(5, 0));
+					FACTORY.newPrice(5),
+					FACTORY.newPrice(5 + i),
+					FACTORY.newPrice(5),
+					FACTORY.newPrice(5),
+					FACTORY.newSize(5, 0),
+					FACTORY.newSize(5, 0));
 			l.add(db);
 		}
 		return l;
@@ -231,32 +255,32 @@ public class BarBuilderTest {
 	private List<BarImpl> getBars4() {
 		DateTime time = new DateTime(2013, 12, 10, 12, 6, 0);
 		final List<BarImpl> l = new ArrayList<BarImpl>();
-		for(int i = 0;i < 360;i++) {
+		for (int i = 0; i < 360; i++) {
 			final BarImpl db = new BarImpl(null, time = time.plusSeconds(1), new Period(PeriodType.SECOND, 1),
-				FACTORY.newPrice(5),
-				FACTORY.newPrice(5 + i),
-				FACTORY.newPrice(5),
-				FACTORY.newPrice(5),
-				FACTORY.newSize(5, 0),
-				FACTORY.newSize(5, 0));
+					FACTORY.newPrice(5),
+					FACTORY.newPrice(5 + i),
+					FACTORY.newPrice(5),
+					FACTORY.newPrice(5),
+					FACTORY.newSize(5, 0),
+					FACTORY.newSize(5, 0));
 			l.add(db);
 		}
 		return l;
 	}
 
-	/////////////////
+	// ///////////////
 
 	private List<BarImpl> getBars5() {
 		DateTime time = new DateTime(2013, 12, 10, 0, 0, 0);
 		final List<BarImpl> l = new ArrayList<BarImpl>();
-		for(int i = 0;i < 32400;i++) {
+		for (int i = 0; i < 32400; i++) {
 			final BarImpl db = new BarImpl(null, time = time.plusSeconds(1), new Period(PeriodType.SECOND, 1),
-				FACTORY.newPrice(5),
-				FACTORY.newPrice(5 + i),
-				FACTORY.newPrice(5),
-				FACTORY.newPrice(5),
-				FACTORY.newSize(5, 0),
-				FACTORY.newSize(5, 0));
+					FACTORY.newPrice(5),
+					FACTORY.newPrice(5 + i),
+					FACTORY.newPrice(5),
+					FACTORY.newPrice(5),
+					FACTORY.newSize(5, 0),
+					FACTORY.newSize(5, 0));
 			l.add(db);
 		}
 		return l;
@@ -265,14 +289,14 @@ public class BarBuilderTest {
 	private List<BarImpl> getBars6() {
 		DateTime time = new DateTime(2013, 12, 10, 9, 0, 0);
 		final List<BarImpl> l = new ArrayList<BarImpl>();
-		for(int i = 0;i < 32400;i++) {
+		for (int i = 0; i < 32400; i++) {
 			final BarImpl db = new BarImpl(null, time = time.plusSeconds(1), new Period(PeriodType.SECOND, 1),
-				FACTORY.newPrice(5),
-				FACTORY.newPrice(5 + i),
-				FACTORY.newPrice(5),
-				FACTORY.newPrice(5),
-				FACTORY.newSize(5, 0),
-				FACTORY.newSize(5, 0));
+					FACTORY.newPrice(5),
+					FACTORY.newPrice(5 + i),
+					FACTORY.newPrice(5),
+					FACTORY.newPrice(5),
+					FACTORY.newSize(5, 0),
+					FACTORY.newSize(5, 0));
 			l.add(db);
 		}
 		return l;

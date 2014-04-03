@@ -103,7 +103,7 @@ public class Distributor extends Node<SeriesSubscription> implements Assembler {
 //		System.out.println("onNextMarket: " + m.instrument().symbol() + ", " + m.trade().price().asDouble() + ",  " + new SpanImpl(period, bar.getTime(), bar.getTime()));
         if(historicalDataAdded) {
             System.out.println("HISTORICAL DATA ADDED");
-		    setModifiedSpan(new SpanImpl(period, bar.getTime(), bar.getTime()), outputSubscriptions);
+			setModifiedSpan(new SpanImpl(period, bar.getDate(), bar.getDate()), outputSubscriptions);
 		}
 	}
 
@@ -127,9 +127,9 @@ public class Distributor extends Node<SeriesSubscription> implements Assembler {
 
             if(!executedOnce) {
                 executedOnce = true;
-                span = new SpanImpl(period, bar.getTime(), bar.getTime());
+				span = new SpanImpl(period, bar.getDate(), bar.getDate());
             }else{
-                span.setNextTime(bar.getTime());
+				span.setNextDate(bar.getDate());
             }
 
             historicalQueue.add(bar);
@@ -148,13 +148,12 @@ public class Distributor extends Node<SeriesSubscription> implements Assembler {
 			while(last.getMillis() >= date.getMillis())
 				date = date.plusMillis(1);
 		}
-		final Time time = valueFactory.newTime(date.getMillis());
 		last = new DateTime(date.getMillis());
 
 		final Price value = valueFactory.newPrice(Double.parseDouble(array[3]));
 		final Size volume = valueFactory.newSize(Integer.parseInt(array[4]), 0);
 
-		retVal = new BarImpl(null, time, this.period, value, value, value, value, volume, null);
+		retVal = new BarImpl(null, last, this.period, value, value, value, value, volume, null);
 
 		return retVal;
 	}
@@ -200,9 +199,9 @@ public class Distributor extends Node<SeriesSubscription> implements Assembler {
             final DataSeriesImpl<BarImpl> series = (DataSeriesImpl)getOutputTimeSeries(subscription);
             while((next = historicalQueue.poll()) != null) {
                 if(span == null) {
-                    span = new SpanImpl(subscription.getTimeFrame(0).getPeriod(), next.getTime(), next.getTime());
+					span = new SpanImpl(subscription.getTimeFrame(0).getPeriod(), next.getDate(), next.getDate());
                 }
-                span.setNextTime(next.getTime());
+				span.setNextDate(next.getDate());
                 series.add(next);
             }
 	    }else if(!dataQueue.isEmpty()) {
@@ -210,9 +209,9 @@ public class Distributor extends Node<SeriesSubscription> implements Assembler {
 	        final DataSeriesImpl<BarImpl> series = (DataSeriesImpl)getOutputTimeSeries(subscription);
 	        while((next = dataQueue.poll()) != null) {
 	            if(span == null) {
-	                span = new SpanImpl(subscription.getTimeFrame(0).getPeriod(), next.getTime(), next.getTime());
+					span = new SpanImpl(subscription.getTimeFrame(0).getPeriod(), next.getDate(), next.getDate());
 	            }
-	            span.setNextTime(next.getTime());
+				span.setNextDate(next.getDate());
 	            series.add(next);
             }
 	    }

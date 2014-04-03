@@ -8,7 +8,6 @@ import org.junit.Test;
 import com.barchart.feed.api.series.Period;
 import com.barchart.feed.api.series.PeriodType;
 import com.barchart.util.value.ValueFactoryImpl;
-import com.barchart.util.value.api.Time;
 
 public class DataSeriesImplTest {
     private static final ValueFactoryImpl FACTORY = new ValueFactoryImpl();
@@ -54,97 +53,79 @@ public class DataSeriesImplTest {
         final Period p = new Period(PeriodType.TICK, 1);
         final DataSeriesImpl<DataPointImpl> ds = new DataSeriesImpl<DataPointImpl>(p);
 
-        Time ti = FACTORY.newTime(dt.getMillis());
-		ds.insertData(new BarImpl(null, ti, p, null, null, null, null, null, null));
+		ds.insertData(new BarImpl(null, dt, p, null, null, null, null, null, null));
         assertEquals(1, ds.size());
-        assertEquals(0, ds.indexOf(ti, false));
+		assertEquals(0, ds.indexOf(dt, false));
 
-        ti = FACTORY.newTime(dt2.getMillis());
-		ds.insertData(new BarImpl(null, ti, p, null, null, null, null, null, null));
+		ds.insertData(new BarImpl(null, dt2, p, null, null, null, null, null, null));
         assertEquals(2, ds.size());
-        assertEquals(1, ds.indexOf(ti, false));
+		assertEquals(1, ds.indexOf(dt2, false));
 
-        ti = FACTORY.newTime(dt3.getMillis());
-		ds.insertData(new BarImpl(null, ti, p, null, null, null, null, null, null));
+		ds.insertData(new BarImpl(null, dt3, p, null, null, null, null, null, null));
         assertEquals(3, ds.size());
-        assertEquals(2, ds.indexOf(ti, false));
+		assertEquals(2, ds.indexOf(dt3, false));
 
-        ti = FACTORY.newTime(dt4.getMillis());
-		ds.insertData(new BarImpl(null, ti, p, null, null, null, null, null, null));
+		ds.insertData(new BarImpl(null, dt4, p, null, null, null, null, null, null));
         assertEquals(4, ds.size());
-        assertEquals(3, ds.indexOf(ti, false));
+		assertEquals(3, ds.indexOf(dt4, false));
 
-        ti = FACTORY.newTime(dt5.getMillis());
-		ds.insertData(new BarImpl(null, ti, p, null, null, null, null, null, null));
+		ds.insertData(new BarImpl(null, dt5, p, null, null, null, null, null, null));
         assertEquals(5, ds.size());
-        assertEquals(4, ds.indexOf(ti, false));
+		assertEquals(4, ds.indexOf(dt5, false));
 
-        ti = FACTORY.newTime(dt6.getMillis());
-		ds.insertData(new BarImpl(null, ti, p, null, null, null, null, null, null));
+		ds.insertData(new BarImpl(null, dt6, p, null, null, null, null, null, null));
         assertEquals(6, ds.size());
-        assertEquals(5, ds.indexOf(ti, false));
+		assertEquals(5, ds.indexOf(dt6, false));
 
-        ti = FACTORY.newTime(dt7.getMillis());
-		ds.insertData(new BarImpl(null, ti, p, null, null, null, null, null, null));
+		ds.insertData(new BarImpl(null, dt7, p, null, null, null, null, null, null));
         assertEquals(7, ds.size());
-        assertEquals(6, ds.indexOf(ti, false));
+		assertEquals(6, ds.indexOf(dt7, false));
 
-        ti = FACTORY.newTime(dt8.getMillis());
-		ds.insertData(new BarImpl(null, ti, p, null, null, null, null, null, null));
+		ds.insertData(new BarImpl(null, dt8, p, null, null, null, null, null, null));
         assertEquals(8, ds.size());
-        assertEquals(7, ds.indexOf(ti, false));
+		assertEquals(7, ds.indexOf(dt8, false));
 
-        ti = FACTORY.newTime(dt9.getMillis());
-		ds.insertData(new BarImpl(null, ti, p, null, null, null, null, null, null));
+		ds.insertData(new BarImpl(null, dt9, p, null, null, null, null, null, null));
         assertEquals(9, ds.size());
-        assertEquals(8, ds.indexOf(ti, false));
+		assertEquals(8, ds.indexOf(dt9, false));
 
-        ti = FACTORY.newTime(dt10.getMillis());
-		ds.insertData(new BarImpl(null, ti, p, null, null, null, null, null, null));
+		ds.insertData(new BarImpl(null, dt10, p, null, null, null, null, null, null));
         assertEquals(10, ds.size());
-        assertEquals(9, ds.indexOf(ti, false));
+		assertEquals(9, ds.indexOf(dt10, false));
 
-        ti = FACTORY.newTime(dt11.getMillis());
-		ds.insertData(new BarImpl(null, ti, p, null, null, null, null, null, null));
+		ds.insertData(new BarImpl(null, dt11, p, null, null, null, null, null, null));
         assertEquals(11, ds.size());
-        assertEquals(10, ds.indexOf(ti, false));
+		assertEquals(10, ds.indexOf(dt11, false));
 
-        ti = FACTORY.newTime(dt12.getMillis());
-		ds.insertData(new BarImpl(null, ti, p, null, null, null, null, null, null));
+		ds.insertData(new BarImpl(null, dt12, p, null, null, null, null, null, null));
         assertEquals(12, ds.size());
-        assertEquals(11, ds.indexOf(ti, false));
+		assertEquals(11, ds.indexOf(dt12, false));
 
-        ti = FACTORY.newTime(dt13.getMillis());
-		ds.insertData(new BarImpl(null, ti, p, null, null, null, null, null, null));
+		ds.insertData(new BarImpl(null, dt13, p, null, null, null, null, null, null));
         assertEquals(13, ds.size());
-        assertEquals(12, ds.indexOf(ti, false));
+		assertEquals(12, ds.indexOf(dt13, false));
 
-        ti = FACTORY.newTime(dt14.getMillis());
-		ds.insertData(new BarImpl(null, ti, p, null, null, null, null, null, null));
+		ds.insertData(new BarImpl(null, dt14, p, null, null, null, null, null, null));
         assertEquals(14, ds.size());
-        assertEquals(13, ds.indexOf(ti, false));
+		assertEquals(13, ds.indexOf(dt14, false));
 
-        ti = FACTORY.newTime(dt15.getMillis());
-		ds.insertData(new BarImpl(null, ti, p, null, null, null, null, null, null));
+		ds.insertData(new BarImpl(null, dt15, p, null, null, null, null, null, null));
         assertEquals(15, ds.size());
-        assertEquals(14, ds.indexOf(ti, false));
+		assertEquals(14, ds.indexOf(dt15, false));
 
-        ti = FACTORY.newTime(dt16.getMillis());
-		ds.insertData(new BarImpl(null, ti, p, null, null, null, null, null, null));
+		ds.insertData(new BarImpl(null, dt16, p, null, null, null, null, null, null));
         assertEquals(16, ds.size());
-        assertEquals(15, ds.indexOf(ti, false));
+		assertEquals(15, ds.indexOf(dt16, false));
 
         ////
 
         //Becomes index 15 and bumps the above insertion to the right
-        ti = FACTORY.newTime(t.getMillis());
-		ds.insertData(new BarImpl(null, ti, p, null, null, null, null, null, null));
+		ds.insertData(new BarImpl(null, t, p, null, null, null, null, null, null));
         assertEquals(17, ds.size());
-        assertEquals(15, ds.indexOf(ti, false));
+		assertEquals(15, ds.indexOf(t, false));
 
         //Prev dt16 now is moved to the right due to the above insertion
-        ti = FACTORY.newTime(dt16.getMillis());
-        assertEquals(16, ds.indexOf(ti, false));
+		assertEquals(16, ds.indexOf(dt16, false));
 
         System.out.println(dt);
     }

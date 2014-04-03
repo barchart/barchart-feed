@@ -16,9 +16,9 @@ import org.joda.time.convert.InstantConverter;
  */
 public enum PeriodType {
 
-	VOLUME("Tick", DateTimeComparator.getInstance(null), 1),
-
 	TICK("Tick", DateTimeComparator.getInstance(null), 1000),
+
+	// VOLUME("Tick", DateTimeComparator.getInstance(null), 1),
 
 	SECOND("Second",
 			DateTimeComparator.getInstance(
