@@ -68,8 +68,8 @@ public class QueryBuilderImpl implements QueryBuilder {
 
 	@Override
 	public DataQuery build() {
-		if(symbols.size() < 1) {
-			throw new IllegalStateException("No Symbol specified.");
+		if (instrument == null) {
+			throw new IllegalStateException("No instrument specified.");
 		}
 
 		if(periods.size() < 1) {
@@ -138,15 +138,15 @@ public class QueryBuilderImpl implements QueryBuilder {
 		return this;
 	}
 
-	
+
 	/**
-	 * Adds a {@link Period} (may be called more than once), to this 
+	 * Adds a {@link Period} (may be called more than once), to this
 	 * query. Multiple Periods may be added to indicate different
 	 * {@link TimeFrameImpl}s needed for certain {@link Analytic}s
 	 * where multiple TimeFrames may be desired.
-	 * 
+	 *
 	 * @param	period 		the Period to add.
-	 * @return this {@code QueryBuilder}	
+	 * @return this {@code QueryBuilder}
 	 */
 	@Override
 	public QueryBuilder instrument(final InstrumentID inst) {

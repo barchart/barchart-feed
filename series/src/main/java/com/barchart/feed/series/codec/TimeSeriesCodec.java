@@ -3,6 +3,7 @@ package com.barchart.feed.series.codec;
 import java.nio.ByteBuffer;
 
 import org.joda.time.DateTime;
+import org.joda.time.chrono.ISOChronology;
 
 import com.barchart.feed.api.model.meta.id.InstrumentID;
 import com.barchart.feed.api.series.Bar;
@@ -39,7 +40,7 @@ public final class TimeSeriesCodec {
 
 		return new BarImpl(
 				buf.hasInstrument() ? new InstrumentID(String.valueOf(buf.getInstrument())) : null,
-				buf.hasTimestamp() ? new DateTime(buf.getTimestamp()) : null,
+				buf.hasTimestamp() ? new DateTime(buf.getTimestamp(), ISOChronology.getInstanceUTC()) : null,
 				buf.hasPeriod() ? new Period(PeriodType.valueOf(buf.getPeriod().name()), buf.getPeriodCount()) : null,
 				buf.hasOpenMantissa() ? VALUES.newPrice(buf.getOpenMantissa(), buf.getOpenExponent()) : null,
 				buf.hasHighMantissa() ? VALUES.newPrice(buf.getHighMantissa(), buf.getHighExponent()) : null,
