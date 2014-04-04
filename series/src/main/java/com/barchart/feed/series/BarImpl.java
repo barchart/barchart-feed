@@ -5,6 +5,7 @@ import org.joda.time.DateTime;
 import com.barchart.feed.api.model.meta.id.InstrumentID;
 import com.barchart.feed.api.series.Bar;
 import com.barchart.feed.api.series.Period;
+import com.barchart.feed.api.series.PeriodType;
 import com.barchart.util.value.ValueFactoryImpl;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Size;
@@ -361,12 +362,19 @@ public class BarImpl extends DataPointImpl implements Bar {
 
 		// Close and Volume should *always* have values, the rest may be null
 
+		Price otherHigh = other.getHigh();
+		Price otherLow = other.getLow();
+
+		if (other.getPeriod().getPeriodType() == PeriodType.TICK) {
+			otherHigh = otherLow = other.getClose();
+		}
+
 		try {
-			if (high.isNull() || (!other.getHigh().isNull() && other.getHigh().greaterThan(high))) {
-				high = other.getHigh();
+			if (high.isNull() || (!otherHigh.isNull() && otherHigh.greaterThan(high))) {
+				high = otherHigh;
 			}
-			if (low.isNull() || (!other.getLow().isNull() && other.getLow().lessThan(low))) {
-				low = other.getLow();
+			if (low.isNull() || (!otherLow.isNull() && otherLow.lessThan(low))) {
+				low = otherLow;
 			}
 		} catch (final ArithmeticException ae) {
 			ae.printStackTrace();

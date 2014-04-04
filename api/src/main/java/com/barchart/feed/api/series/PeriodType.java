@@ -61,8 +61,10 @@ public enum PeriodType {
 
 	/** Display string of this {@code PeriodType} */
 	private String type;
+
 	/** Used for operations involving comparisons of time intervals */
 	private DateTimeComparator typeComparator;
+
 	/** The amount of units of this type to make the next */
 	private long unitsForNext;
 
