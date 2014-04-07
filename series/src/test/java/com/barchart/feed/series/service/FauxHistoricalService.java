@@ -18,6 +18,7 @@ import com.barchart.feed.api.series.service.HistoricalResult;
 import com.barchart.feed.api.series.service.HistoricalService;
 import com.barchart.feed.series.network.QueryBuilderImpl;
 import com.barchart.feed.series.network.SeriesSubscription;
+import com.barchart.feed.series.network.TestHarness;
 
 /**
  * Returns data for one minute query: 2013-12-10 09:00  --> 2013-12-10 11:59
@@ -33,6 +34,7 @@ public class FauxHistoricalService extends HistoricalService<HistoricalResult>{
 	/** Test Query for minutes - can be used as convenient means of constructing {@link Query} or {@link Subscription}*/
 	public static final Query DEFAULT_MINUTE_QUERY = QueryBuilderImpl.create().
 		symbol("ESZ13").
+		instrument(TestHarness.makeInstrument("ESZ13").id()).
 		start(new DateTime(2013, 12, 10, 9, 0)).
 		end(new DateTime(2013, 12, 10, 12, 0)).
 		period(Period.ONE_MINUTE).
@@ -40,6 +42,7 @@ public class FauxHistoricalService extends HistoricalService<HistoricalResult>{
 	/** Test Query for ticks - can be used as convenient means of constructing {@link Query} or {@link Subscription} */
 	public static final Query DEFAULT_TICK_QUERY = QueryBuilderImpl.create().
 		symbol("ESZ13"). 
+		instrument(TestHarness.makeInstrument("ESZ13").id()).
 		start(new DateTime(2013, 12, 10, 9, 0)).
 		end(new DateTime(2013, 12, 10, 12, 0)).
 		period(new Period(PeriodType.TICK, 1)).

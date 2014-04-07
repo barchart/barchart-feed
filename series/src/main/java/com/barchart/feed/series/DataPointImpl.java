@@ -27,7 +27,7 @@ public abstract class DataPointImpl implements DataPoint {
 	 * @param period	the {@link Period}
 	 * @param t			the {@link Time}
 	 */
-	protected DataPointImpl(final Period period, final DateTime d) {
+	protected DataPointImpl(Period period, DateTime d) {
 		this.period = period;
 		this.date = d;
 	}
@@ -46,7 +46,7 @@ public abstract class DataPointImpl implements DataPoint {
 	 * Sets the {@link DateTime} object
 	 * @param dt
 	 */
-	public void setDate(final DateTime dt) {
+	public void setDate(DateTime dt) {
 		this.date = dt;
 	}
 
@@ -72,7 +72,7 @@ public abstract class DataPointImpl implements DataPoint {
 	 * the argument {@code DataPoint}.
 	 */
 	@Override
-	public <E extends DataPoint> int compareTo(final E other) {
+	public <E extends DataPoint> int compareTo(E other) {
 		return  period.getPeriodType().compareAtResolution(date, ((DataPointImpl)other).date);
 	}
 
@@ -81,7 +81,7 @@ public abstract class DataPointImpl implements DataPoint {
 	 */
 	@Override
     public int hashCode() {
-		final int prime = 31;
+		int prime = 31;
         int result = 1;
 		result = prime * result + ((date == null) ?
         	0 : period.getPeriodType().resolutionInstant(date).hashCode());
@@ -94,14 +94,14 @@ public abstract class DataPointImpl implements DataPoint {
 	 * {@inheritDoc}
 	 */
 	@Override
-    public boolean equals(final Object obj) {
+    public boolean equals(Object obj) {
         if (this == obj)
             return true;
         if (obj == null)
             return false;
         if (getClass() != obj.getClass())
             return false;
-        final DataPointImpl other = (DataPointImpl) obj;
+        DataPointImpl other = (DataPointImpl) obj;
         if (!period.equals(other.period))
             return false;
         //Both TemporalType and Date are guaranteed non-null.

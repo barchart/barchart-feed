@@ -17,7 +17,7 @@ public class NetworkObservableImpl extends NetworkObservable {
 	protected Map<String, DataSeries<? extends DataPoint>> availablePublisherMap;
 	
 	
-	protected <E extends DataPoint> NetworkObservableImpl(final BarchartSeriesProvider.SeriesSubscribeFunc onSubscribe, 
+	protected <E extends DataPoint> NetworkObservableImpl(BarchartSeriesProvider.SeriesSubscribeFunc onSubscribe, 
     	Map<String, DataSeries<? extends DataPoint>> specifierToSeriesMap) {
 	    
 	    super(onSubscribe);

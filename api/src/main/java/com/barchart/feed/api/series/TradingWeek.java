@@ -86,27 +86,54 @@ public interface TradingWeek {
 	 *                  the two dates specified 
 	 */
 	public long getSessionMillisBetween(DateTime dt1, DateTime dt2);
+	
+	/**
+     * Returns the {@link TradingSession} containing the specified date, or 
+     * the immediately previous {@code TradingSession} after the specified {@link DateTime}.
+     * 
+     * @param date  the date on or before the returned {@link TradingSession}'s date.
+     * @return      the {@link TradingSession} containing the specified date, or 
+     *              the very next {@code TradingSession} after the specified {@link DateTime}.
+     * @see #getTradingSessionOnOrAfter(DateTime)
+     */
+    public TradingSession getTradingSessionOnOrBefore(DateTime date);
 
 	/**
 	 * Returns the {@link TradingSession} containing the specified date, or 
-	 * the very next {@code ITradingSession} after the specified {@link DateTime}.
+	 * the very next {@code TradingSession} after the specified {@link DateTime}.
 	 * 
 	 * @param date  the date on or before the returned {@link TradingSession}'s date.
 	 * @return      the {@link TradingSession} containing the specified date, or 
-	 *              the very next {@code ITradingSession} after the specified {@link DateTime}.
+	 *              the very next {@code TradingSession} after the specified {@link DateTime}.
+	 * @see #getTradingSessionOnOrBefore(DateTime)
 	 */
 	public TradingSession getTradingSessionOnOrAfter(DateTime date);
+	
+	/**
+	 * Returns the date immediately previous to the specified data that is within the 
+	 * boundaries of a {@link TradingSession} defined by this {@code TradingWeek}, using
+	 * the granularity of the specified {@link Period}
+	 * 
+	 * @param date      the date following the returned session date.
+	 * @return          the date immediately previous to the specified data that is within the 
+     *                  boundaries of a {@link TradingSession} defined by this {@code TradingWeek}, using
+     *                  the granularity of the specified {@link Period}
+     * @see #getNextSessionDate(DateTime, Period)
+	 */
+	public DateTime getPreviousSessionDate(DateTime date, Period period);
 
 	/**
 	 * Returns the date immediately following the specified date that is within
-	 * the boundaries of a {@link TradingSession} within this {@code ITradingWeek},
+	 * the boundaries of a {@link TradingSession} within this {@code TradingWeek},
 	 * using the granularity of the specified {@link Period}.
-	 * @param dt            the date which the returned date will immediately follow.
-	 * @param Period  the granularity with which to advance the specified date
-	 *                      to find the next {@link TradingSession} date.
+	 * 
+	 * @param dt       the date which the returned date will immediately follow.
+	 * @param Period   the granularity with which to advance the specified date
+	 *                 to find the next {@link TradingSession} date.
 	 * @return  the date immediately following the specified date that is within
-	 *          the boundaries of a {@link TradingSession} within this {@code ITradingWeek},
+	 *          the boundaries of a {@link TradingSession} within this {@code TradingWeek},
 	 *          using the granularity of the specified {@link Period}.
+	 * @see #getPreviousSessionDate(DateTime)
 	 */
 	public DateTime getNextSessionDate(DateTime dt, Period period);
 

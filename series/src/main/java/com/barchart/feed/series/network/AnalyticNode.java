@@ -51,7 +51,7 @@ public class AnalyticNode extends Node<SeriesSubscription> {
 	 *
 	 * @param analytic
 	 */
-	public AnalyticNode(final Analytic analytic) {
+	public AnalyticNode(Analytic analytic) {
 	    this.analytic = analytic;
 	    this.currentProcessSpan = new SpanImpl(SpanImpl.INITIAL);
 	}
@@ -66,8 +66,8 @@ public class AnalyticNode extends Node<SeriesSubscription> {
 	 * @param sub      the subscription with the first update
 	 * @param span     the first span update
 	 */
-	private void mapFirstAncestorUpdate(final SeriesSubscription sub, final SpanImpl span) {
-	    final AtomicReference<SpanImpl> ar = new AtomicReference<SpanImpl>();
+	private void mapFirstAncestorUpdate(SeriesSubscription sub, SpanImpl span) {
+	    AtomicReference<SpanImpl> ar = new AtomicReference<SpanImpl>();
         ar.set(new SpanImpl(span));
         inputSpans.put(sub, ar);
 	}
@@ -76,7 +76,7 @@ public class AnalyticNode extends Node<SeriesSubscription> {
      * Save all keyed input spans to the previous map.
      */
     private void savePreviousAncestorUpdates() {
-        for(final SeriesSubscription sub : inputSpans.keySet()) {
+        for(SeriesSubscription sub : inputSpans.keySet()) {
             AtomicReference<SpanImpl> ar = null;
             if((ar = prevInputSpans.get(sub)) == null) {
                 prevInputSpans.put(sub, ar = new AtomicReference<SpanImpl>());
@@ -95,8 +95,8 @@ public class AnalyticNode extends Node<SeriesSubscription> {
 	 * @param SeriesSubscriptions 	the List of {@link SeriesSubscription}s the ancestor node has processed.
 	 */
 	@Override
-    public <T extends Span> void updateModifiedSpan(final T s, final SeriesSubscription subscription) {
-        final SpanImpl span = (SpanImpl)s;
+    public <T extends Span> void updateModifiedSpan(final T s, SeriesSubscription subscription) {
+        SpanImpl span = (SpanImpl)s;
         System.out.println("updateModifiedSpan:  " + span);
         synchronized(inputSpans) {
             boolean wasNewForScript = false;
@@ -121,8 +121,8 @@ public class AnalyticNode extends Node<SeriesSubscription> {
     public boolean hasAllAncestorUpdates() {
         boolean hasAllUpdates = inputSpans.values().size() == getInputSubscriptions().size();
         synchronized(inputSpans) {
-            for(final SeriesSubscription sub : inputSpans.keySet()) {
-                final AtomicReference<SpanImpl> prevRef = prevInputSpans.get(sub);
+            for(SeriesSubscription sub : inputSpans.keySet()) {
+                AtomicReference<SpanImpl> prevRef = prevInputSpans.get(sub);
                 hasAllUpdates &= (prevRef == null || inputSpans.get(sub).get().extendsSpan(prevRef.get()));
             }
         }
@@ -137,8 +137,8 @@ public class AnalyticNode extends Node<SeriesSubscription> {
 		currentProcessSpan.setDate(currentProcessSpan.getNextDate());
 
 		if(span != null) {
-    		final NetworkNotificationImpl note = new NetworkNotificationImpl(analytic.getName(), span);
-    		for(final Observer<NetworkNotification> obs : observers) {
+    		NetworkNotificationImpl note = new NetworkNotificationImpl(analytic.getName(), span);
+    		for(Observer<NetworkNotification> obs : observers) {
     		    System.out.println("ON NEXT CALLED -->  " + span + ",  observer count = " + observers.size());
     		    obs.onNext(note);
     		}
@@ -158,6 +158,8 @@ public class AnalyticNode extends Node<SeriesSubscription> {
 
 	/**
 	 * Returns a List of {@link SeriesSubscriptions} that the underlying Node expects as input.
+	 * If this is a {@link BarBuilder} and there are no input mappings, one is created by 
+	 * delegating to the {@link #makeInputSubscription(SeriesSubscription)} method.
 	 *
 	 * @return	a List of expected input {@link SeriesSubscriptions}
 	 */
@@ -169,16 +171,23 @@ public class AnalyticNode extends Node<SeriesSubscription> {
 		return new ArrayList<SeriesSubscription>(inputKeyMap.keySet());
 	}
 
-	private void makeInputSubscription(final SeriesSubscription outputSubscription) {
+	/**
+	 * Called when creating {@link BarBuilder} nodes which have no input subscription. An input
+	 * subscription is created by using the specified output subscription and "stepping down" 
+	 * the {@link PeriodType} thus creating an input subscription with a lower period type. If
+	 * the output period type is {@link PeriodType#TICK}, the input subscription created will have
+	 * a specifier type of {@link NodeType#ASSEMBLER} to indicate that it is at the bottom of the
+	 * chain.
+	 * 
+	 * @param outputSubscription   this {@code Node}'s output subscription
+	 */
+	private void makeInputSubscription(SeriesSubscription outputSubscription) {
 		if(outputSubscription == null) {
 			throw new IllegalStateException("Node: BarBuilder has no output Subscription - can't create an input Subscription.");
 		}
 
 	    SeriesSubscription inputSubscription = BarBuilderNodeDescriptor.getLowerSubscription(outputSubscription);
-    	if(outputSubscription.getTimeFrames()[0].getPeriod().getPeriodType() == PeriodType.TICK) {
-    		inputSubscription = new SeriesSubscription(inputSubscription.getSymbol(), inputSubscription.getInstrument(),
-    			NodeType.ASSEMBLER.toString(), outputSubscription.getTimeFrames(), outputSubscription.getTradingWeek());
-    	}
+    	
     	inputKeyMap.put(inputSubscription, BarBuilder.INPUT_KEY);
     }
 
@@ -188,11 +197,11 @@ public class AnalyticNode extends Node<SeriesSubscription> {
 	 * @param SeriesSubscription		the SeriesSubscription acting as key for the corresponding {@link DataSeries}
 	 * @return	the output {@link DataSeries}
 	 */
-	public <E extends DataPoint> DataSeries<E> getOutputTimeSeries(final SeriesSubscription subscription) {
-	    final String key = outputSubscriptionKeyMap.get(subscription);
+	public <E extends DataPoint> DataSeries<E> getOutputTimeSeries(SeriesSubscription subscription) {
+	    String key = outputSubscriptionKeyMap.get(subscription);
 	    if(key == null) {
 	    	final StringBuilder error = new StringBuilder("Could not find key for subscription: ").append(subscription.toString()).append("\n");
-	    		for(final Map.Entry<SeriesSubscription, String> e : outputSubscriptionKeyMap.entrySet()) {
+	    		for(Map.Entry<SeriesSubscription, String> e : outputSubscriptionKeyMap.entrySet()) {
 	    			error.append("\t").append(e.toString()).append("\n");
 	    		}
 
@@ -206,7 +215,7 @@ public class AnalyticNode extends Node<SeriesSubscription> {
      * @param key  the mapping output key
      * @return the output {@link DataSeries}
      */
-	public <E extends DataPoint> DataSeries<E> getOutputTimeSeries(final String outputKey, final SeriesSubscription subscription) {
+	public <E extends DataPoint> DataSeries<E> getOutputTimeSeries(final String outputKey, SeriesSubscription subscription) {
 	    DataSeries<E> dataSeries = this.analytic.getOutputTimeSeries(outputKey);
 	    if(dataSeries == null) {
 	        dataSeries = new DataSeriesImpl<E>(subscription.getTimeFrame(0).getPeriod());
@@ -223,7 +232,7 @@ public class AnalyticNode extends Node<SeriesSubscription> {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public <E extends DataPoint> DataSeries<E> getOutputTimeSeries(final String outputKey) {
+	<E extends DataPoint> DataSeries<E> getOutputTimeSeriesForTesting(String outputKey) {
 		return (DataSeries<E>)this.analytic.getOutputTimeSeries(outputKey);
 	}
 
@@ -233,7 +242,7 @@ public class AnalyticNode extends Node<SeriesSubscription> {
 	 * @param subscription		the Subscription acting as key for the corresponding {@link DataSeries}
 	 * @param	the input {@link DataSeries}
 	 */
-	public <E extends DataPoint> void addInputTimeSeries(final SeriesSubscription subscription, final DataSeries<E> timeSeries) {
+	public <E extends DataPoint> void addInputTimeSeries(SeriesSubscription subscription, final DataSeries<E> timeSeries) {
 		this.analytic.addInputTimeSeries(inputKeyMap.get(subscription), timeSeries);
 	}
 
@@ -244,7 +253,7 @@ public class AnalyticNode extends Node<SeriesSubscription> {
 	 * @return	the input {@link DataSeries}
 	 */
 	@SuppressWarnings("unchecked")
-    public <E extends DataPoint> DataSeries<E> getInputTimeSeries(final String key) {
+    public <E extends DataPoint> DataSeries<E> getInputTimeSeries(String key) {
 		return (DataSeries<E>) this.analytic.getInputTimeSeries(key);
 	}
 
@@ -257,7 +266,7 @@ public class AnalyticNode extends Node<SeriesSubscription> {
 	 * @return 	true if so, false if not.
 	 */
 	@Override
-	public boolean isDerivableSource(final SeriesSubscription subscription) {
+	public boolean isDerivableSource(SeriesSubscription subscription) {
 	    for(final SeriesSubscription sub : outputKeyMap.values()) {
 			if(subscription.isDerivableFrom(sub)) {
 		        return true;
@@ -274,8 +283,8 @@ public class AnalyticNode extends Node<SeriesSubscription> {
      * @return                 One of this Node's derivable outputs or null.
      */
     @Override
-	public SeriesSubscription getDerivableOutputSubscription(final SeriesSubscription subscription) {
-        for(final SeriesSubscription s : outputKeyMap.values()) {
+	public SeriesSubscription getDerivableOutputSubscription(SeriesSubscription subscription) {
+        for(SeriesSubscription s : outputKeyMap.values()) {
             if(subscription.isDerivableFrom(s)) {
                 return s;
             }
@@ -289,7 +298,7 @@ public class AnalyticNode extends Node<SeriesSubscription> {
      * @param subscription
      * @param key
      */
-	public void addInputKeyMapping(final String key, final SeriesSubscription subscription) {
+	public void addInputKeyMapping(String key, SeriesSubscription subscription) {
 		inputKeyMap.put(subscription, key);
 	}
 
@@ -299,7 +308,7 @@ public class AnalyticNode extends Node<SeriesSubscription> {
      * @param subscription
      * @param key
      */
-	public void addOutputKeyMapping(final String key, final SeriesSubscription subscription) {
+	public void addOutputKeyMapping(String key, SeriesSubscription subscription) {
 		outputKeyMap.put(key, subscription);
 		outputSubscriptionKeyMap.put(subscription, key);
 	}
@@ -307,7 +316,7 @@ public class AnalyticNode extends Node<SeriesSubscription> {
 	@Override
 	public String toString() {
 	    final StringBuilder sb = new StringBuilder("AnalyticNode: ").append(analytic.getName()).append(" ");
-	    for(final SeriesSubscription ss : outputKeyMap.values()) {
+	    for(SeriesSubscription ss : outputKeyMap.values()) {
 	        sb.append(ss).append(" ");
 	    }
 	    return sb.toString();

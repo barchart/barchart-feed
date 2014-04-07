@@ -18,9 +18,9 @@ import com.barchart.util.value.api.Time;
 
 public class DataSeriesImpl<E extends DataPoint> implements DataSeries<E> {
 	/** All {@link DataPoint} are aggregated according to this Period */
-	private final Period period;
+	private Period period;
 	/** The backing data */
-	private final List<DataPointImpl> data = Collections.synchronizedList(new ArrayList<DataPointImpl>());
+	private List<DataPointImpl> data = Collections.synchronizedList(new ArrayList<DataPointImpl>());
 
 	/**
 	 * Constructs a new {@link DataSeriesImpl} whose {@link DataPoint} adhere to
@@ -28,7 +28,7 @@ public class DataSeriesImpl<E extends DataPoint> implements DataSeries<E> {
 	 * 
 	 * @param period
 	 */
-	public DataSeriesImpl(final Period period) {
+	public DataSeriesImpl(Period period) {
 		this.period = period;
 	}
 
@@ -115,7 +115,7 @@ public class DataSeriesImpl<E extends DataPoint> implements DataSeries<E> {
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public E get(final int index) {
+	public E get(int index) {
 		if (index < 0 || index >= size()) {
 			throw new IndexOutOfBoundsException(index + " < 0 || >= " + data.size());
 		}
@@ -138,8 +138,8 @@ public class DataSeriesImpl<E extends DataPoint> implements DataSeries<E> {
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public E forDate(final DateTime date) {
-		final int index = indexOf(date, true);
+	public E forDate(DateTime date) {
+		int index = indexOf(date, true);
 		if (index == -1)
 			return null;
 		return (E) data.get(index);
@@ -174,12 +174,12 @@ public class DataSeriesImpl<E extends DataPoint> implements DataSeries<E> {
 	 *         this {@code TimeSeries} or not.
 	 */
 	@Override
-	public int closestIndexOf(final Time time, final int idxLower, final int idxUpper, final boolean compareAtRes) {
+	public int closestIndexOf(Time time, int idxLower, int idxUpper, boolean compareAtRes) {
 		if (time == null)
 			return -1;
-		final DateTime date = new DateTime(time.millisecond());
+		DateTime date = new DateTime(time.millisecond());
 
-		final int half = idxLower + (idxUpper - idxLower) / 2;
+		int half = idxLower + (idxUpper - idxLower) / 2;
 		if (compareAtRes) {
 			if (period.getPeriodType().compareAtResolution(date, data.get(half).date) == 0)
 				return half;
@@ -233,14 +233,14 @@ public class DataSeriesImpl<E extends DataPoint> implements DataSeries<E> {
 	 *         Otherwise returns the index of the found date.
 	 */
 	@Override
-	public int indexOf(final DateTime date, final boolean exactOnly) {
+	public int indexOf(DateTime date, boolean exactOnly) {
 
-		final int size = size();
+		int size = size();
 		int high = size;
 		int low = 0;
 
 		if (size > 128) {
-			final int interpolatedIndex =
+			int interpolatedIndex =
 					getInterpolatedIndex(size, date.getMillis(), data.get(0).date.getMillis(),
 							data.get(size - 1).date.getMillis(), exactOnly);
 			low = Math.max(0, interpolatedIndex - 32);
@@ -263,7 +263,7 @@ public class DataSeriesImpl<E extends DataPoint> implements DataSeries<E> {
 	 * @return the interpolated start index which is the "center" of the search
 	 *         space.
 	 */
-	private int getInterpolatedIndex(final int size, final long searchMillis, final long leastMillis, final long mostMillis, final boolean isExact) {
+	private int getInterpolatedIndex(int size, long searchMillis, long leastMillis, long mostMillis, boolean isExact) {
 		int mid = (int) (((double) (searchMillis - leastMillis) / (double) (mostMillis - leastMillis)) * size);
 		if (mid < 0) {
 			mid = isExact ? 0 : -1;
@@ -304,18 +304,18 @@ public class DataSeriesImpl<E extends DataPoint> implements DataSeries<E> {
 	 *         If true, this method returns -1 if the date is not found.
 	 *         Otherwise returns the index of the found date.
 	 */
-	public int indexOf(final DateTime date, int high, int low, final boolean exactOnly) {
+	public int indexOf(DateTime date, int high, int low, boolean exactOnly) {
 
 		if (high - low > 128)
 			return indexOf(date, exactOnly);
 
-		final int size = size();
+		int size = size();
 		int mid = 0;
 		while (low <= high) {
 			mid = (high + low) / 2;
 			if (mid >= size)
 				return exactOnly ? -1 : mid;
-			final int comparison = date.compareTo(data.get(mid).date);
+			int comparison = date.compareTo(data.get(mid).date);
 			if (comparison == 0)
 				break;
 			if (low == mid && high == mid)
@@ -398,12 +398,12 @@ public class DataSeriesImpl<E extends DataPoint> implements DataSeries<E> {
 			}
 
 			@Override
-			public void set(final E e) {
+			public void set(E e) {
 				data.set(index, (DataPointImpl) e);
 			}
 
 			@Override
-			public void add(final E e) {
+			public void add(E e) {
 				data.add((DataPointImpl) e);
 			}
 		};
@@ -426,7 +426,7 @@ public class DataSeriesImpl<E extends DataPoint> implements DataSeries<E> {
 	 *
 	 * @param e the subclass of {@link DataPointImpl} to insert.
 	 */
-	public void insertData(final E e) {
+	public void insertData(E e) {
 		data.add(indexOf(e.getDate(), false), (DataPointImpl) e);
 	}
 
@@ -443,7 +443,7 @@ public class DataSeriesImpl<E extends DataPoint> implements DataSeries<E> {
 	 *             value or is otherwise malformed.
 	 */
 	@Override
-	public boolean add(final E e) {
+	public boolean add(E e) {
 		data.add((DataPointImpl) e);
 		return true;
 	}
@@ -460,7 +460,7 @@ public class DataSeriesImpl<E extends DataPoint> implements DataSeries<E> {
 	 * @param e the Object to be set.
 	 */
 	@Override
-	public void add(final int index, final E e) {
+	public void add(int index, E e) {
 		data.add(index, (DataPointImpl) e);
 	}
 
@@ -476,7 +476,7 @@ public class DataSeriesImpl<E extends DataPoint> implements DataSeries<E> {
 	 * @param e the Object to be set.
 	 */
 	@Override
-	public E set(final int index, final E e) {
+	public E set(int index, E e) {
 		data.set(index, (DataPointImpl) e);
 		return e;
 	}
@@ -493,7 +493,7 @@ public class DataSeriesImpl<E extends DataPoint> implements DataSeries<E> {
 	 */
 	@Override
 	@SuppressWarnings("unchecked")
-	public E remove(final int index) {
+	public E remove(int index) {
 		return (E) data.remove(index);
 	}
 
@@ -514,7 +514,7 @@ public class DataSeriesImpl<E extends DataPoint> implements DataSeries<E> {
 	 * @return true if the specified object was found, false if not.
 	 */
 	@Override
-	public boolean contains(final Object o) {
+	public boolean contains(Object o) {
 		return data.contains(o);
 	}
 
@@ -525,7 +525,7 @@ public class DataSeriesImpl<E extends DataPoint> implements DataSeries<E> {
 	 * @return <T> array
 	 */
 	@Override
-	public <T> T[] toArray(final T[] a) {
+	public <T> T[] toArray(T[] a) {
 		return data.toArray(a);
 	}
 
@@ -536,12 +536,12 @@ public class DataSeriesImpl<E extends DataPoint> implements DataSeries<E> {
 	 *         {@code DataSeriesImpl}
 	 */
 	@Override
-	public boolean remove(final Object o) {
+	public boolean remove(Object o) {
 		return data.remove(o);
 	}
 
 	@Override
-	public boolean containsAll(final Collection<?> c) {
+	public boolean containsAll(Collection<?> c) {
 		return false;
 	}
 
@@ -550,7 +550,7 @@ public class DataSeriesImpl<E extends DataPoint> implements DataSeries<E> {
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public boolean addAll(final Collection<? extends E> c) {
+	public boolean addAll(Collection<? extends E> c) {
 		return data.addAll((Collection<? extends DataPointImpl>) c);
 	}
 
@@ -559,7 +559,7 @@ public class DataSeriesImpl<E extends DataPoint> implements DataSeries<E> {
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public boolean addAll(final int index, final Collection<? extends E> c) {
+	public boolean addAll(int index, Collection<? extends E> c) {
 		return data.addAll(index, (Collection<? extends DataPointImpl>) c);
 	}
 
@@ -567,7 +567,7 @@ public class DataSeriesImpl<E extends DataPoint> implements DataSeries<E> {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public boolean removeAll(final Collection<?> c) {
+	public boolean removeAll(Collection<?> c) {
 		return data.removeAll(c);
 	}
 
@@ -575,7 +575,7 @@ public class DataSeriesImpl<E extends DataPoint> implements DataSeries<E> {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public boolean retainAll(final Collection<?> c) {
+	public boolean retainAll(Collection<?> c) {
 		return data.retainAll(c);
 	}
 
@@ -591,7 +591,7 @@ public class DataSeriesImpl<E extends DataPoint> implements DataSeries<E> {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public int indexOf(final Object o) {
+	public int indexOf(Object o) {
 		return data.indexOf(o);
 	}
 
@@ -599,7 +599,7 @@ public class DataSeriesImpl<E extends DataPoint> implements DataSeries<E> {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public int lastIndexOf(final Object o) {
+	public int lastIndexOf(Object o) {
 		return data.lastIndexOf(o);
 	}
 
@@ -617,7 +617,7 @@ public class DataSeriesImpl<E extends DataPoint> implements DataSeries<E> {
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public ListIterator<E> listIterator(final int index) {
+	public ListIterator<E> listIterator(int index) {
 		return (ListIterator<E>) data.listIterator(index);
 	}
 
@@ -626,7 +626,7 @@ public class DataSeriesImpl<E extends DataPoint> implements DataSeries<E> {
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<E> subList(final int fromIndex, final int toIndex) {
+	public List<E> subList(int fromIndex, int toIndex) {
 		return (List<E>) data.subList(fromIndex, toIndex);
 	}
 }

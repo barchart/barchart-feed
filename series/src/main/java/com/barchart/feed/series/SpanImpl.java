@@ -10,35 +10,34 @@ public class SpanImpl extends DataPointImpl implements Span {
 
 	private DateTime nextDate;
 
-	public static final SpanImpl INITIAL = new SpanImpl(
-			new SpanImpl(Period.DAY,
-					new DateTime(1980, 1, 1, 0, 0, 0),
-					new DateTime(1980, 1, 1, 0, 0, 0))
-			);
+	public static SpanImpl INITIAL = new SpanImpl(
+		new SpanImpl(Period.DAY,
+			new DateTime(1980, 1, 1, 0, 0, 0),
+				new DateTime(1980, 1, 1, 0, 0, 0)));
 
-	public SpanImpl(final Period period, final DateTime d, final DateTime next) {
+	public SpanImpl(Period period, DateTime d, DateTime next) {
 		super(period, d);
 		this.nextDate = next;
 	}
 
-	public SpanImpl(final SpanImpl other) {
+	public SpanImpl(SpanImpl other) {
 		super(new Period(other.period.getPeriodType(), other.period.size()), new DateTime(other.date));
 		this.nextDate = new DateTime(other.nextDate.getMillis());
 	}
 
-	public void setSpan(final SpanImpl other) {
+	public void setSpan(SpanImpl other) {
 		this.period = new Period(other.period.getPeriodType(), other.period.size());
 		this.date = new DateTime(other.date);
 		this.nextDate = new DateTime(other.nextDate.getMillis());
 	}
 
 	@Override
-	public <E extends DataPoint> int compareTo(final E other) {
+	public <E extends DataPoint> int compareTo(E other) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
-	public void setNextDate(final DateTime dt) {
+	public void setNextDate(DateTime dt) {
 		this.nextDate = dt;
 	}
 
@@ -69,12 +68,10 @@ public class SpanImpl extends DataPointImpl implements Span {
 	 */
 	@Override
 	public int hashCode() {
-		final int prime = 31;
+		int prime = 31;
 		int result = super.hashCode();
-		result = prime * result
-				+ ((nextDate == null) ? 0 : nextDate.hashCode());
-		result = prime * result
-				+ ((date == null) ? 0 : date.hashCode());
+		result = prime * result + ((nextDate == null) ? 0 : nextDate.hashCode());
+		result = prime * result + ((date == null) ? 0 : date.hashCode());
 		return result;
 	}
 
@@ -82,14 +79,14 @@ public class SpanImpl extends DataPointImpl implements Span {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public boolean equals(final Object obj) {
+	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
 		if (!super.equals(obj))
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		final SpanImpl other = (SpanImpl) obj;
+		SpanImpl other = (SpanImpl) obj;
 		if (nextDate == null) {
 			if (other.nextDate != null)
 				return false;
@@ -114,7 +111,7 @@ public class SpanImpl extends DataPointImpl implements Span {
 	 * @return true if so, false if not
 	 */
 	@Override
-	public <T extends Span> boolean extendsSpan(final T span) {
+	public <T extends Span> boolean extendsSpan(T span) {
 		return span.intersection(this) != null && ((this.date.getMillis() < span.getDate().getMillis()) ||
 				(this.nextDate.getMillis() > span.getNextDate().getMillis()));
 	}
@@ -128,7 +125,7 @@ public class SpanImpl extends DataPointImpl implements Span {
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T extends Span> T union(final T span) {
+	public <T extends Span> T union(T span) {
 
 		DateTime start = null;
 		DateTime end = null;
@@ -149,7 +146,7 @@ public class SpanImpl extends DataPointImpl implements Span {
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T extends Span> T intersection(final T span) {
+	public <T extends Span> T intersection(T span) {
 
 		if ((!(span.getDate().getMillis() < nextDate.getMillis())) &&
 				(!(date.getMillis() < span.getNextDate().getMillis()))) {

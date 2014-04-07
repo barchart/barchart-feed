@@ -125,6 +125,11 @@ public class BarBuilderNodeDescriptor implements BarBuilderDescriptor {
         SeriesSubscription sSub = new SeriesSubscription(input);
         sSub.setTimeFrames(new TimeFrameImpl[] {
             new TimeFrameImpl(next, input.getTimeFrames()[0].getStartDate(), input.getTimeFrames()[0].getEndDate()) });
+        
+        if(input.getTimeFrames()[0].getPeriod().getPeriodType() == PeriodType.TICK) {
+            sSub.setAnalyticSpecifier(NodeType.ASSEMBLER.toString());
+        }
+        
         return sSub;
     }
     

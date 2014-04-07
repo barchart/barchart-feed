@@ -350,12 +350,208 @@ public class TradingWeekImpl extends JodaWorkingWeek implements TradingWeek {
     }
     
     /**
-     * Returns the {@link TradingSessionImpl} containing the specified date, or 
+     * Returns the {@link TradingSession} containing the specified date, or 
+     * the immediately previous {@code TradingSession} after the specified {@link DateTime}.
+     * 
+     * @param date  the date on or before the returned {@link TradingSession}'s date.
+     * @return      the {@link TradingSession} containing the specified date, or 
+     *              the very next {@code TradingSession} after the specified {@link DateTime}.
+     * @see #getTradingSessionOnOrAfter(DateTime)
+     */
+    public TradingSession getTradingSessionOnOrBefore(DateTime date) {
+        if(sessions.size() == 0) {
+            throw new IllegalStateException("Trading week has no sessions configured!");
+        }
+        while(!isWorkingDay(date.toLocalDate())) {
+            date = date.minusDays(1);
+        }
+        int otherDay = date.getDayOfWeek();
+        LocalTime lt = date.toLocalTime();
+        int len = sessions.size();
+        for(int i = len - 1;i >= 0;i--) {
+            TradingSession ts = sessions.get(i);
+            if(ts.contains(date)) {
+                return ts;
+            } else if(ts.day() == otherDay) {
+               if(ts.end().isBefore(lt)) {
+                   return ts;
+               }else if(ts.start().isAfter(lt)) {
+                   return sessions.get(i == 0 ? len - 1 : i - 1);
+               }
+            }
+        }
+//        while(!isWorkingDay(date.toLocalDate())) {
+//          date = date.minusDays(1);
+//        }
+//        int otherDay = date.getDayOfWeek();
+//        LocalTime lt = date.toLocalTime();
+//        int len = sessions.size();
+//        for(int i = len - 1;i >= 0;i--) {
+//            TradingSession ts = sessions.get(i);
+//            if(ts.contains(date)) {
+//                return ts;
+//            } else if(ts.day() == otherDay) {
+//               if(ts.end().isBefore(lt)) {
+//                   return ts;
+//               }else if(ts.start().isAfter(lt)) {
+//                   return sessions.get(i == 0 ? len - 1 : i - 1);
+//               }
+//            }
+//        }
+       
+        return null;
+    }
+    
+    /**
+     * Returns the date immediately previous to the specified data that is within the 
+     * boundaries of a {@link TradingSession} defined by this {@code TradingWeek}, using
+     * the granularity of the specified {@link Period}. 
+     * 
+     * @param date      the date following the returned session date.
+     * @param period    the period specifying the granularity of date alteration.
+     * @param useSessionStart
+     * @return          the date immediately previous to the specified data that is within the 
+     *                  boundaries of a {@link TradingSession} defined by this {@code TradingWeek}, using
+     *                  the granularity of the specified {@link Period}
+     * @see #getNextSessionDate(DateTime, Period)
+     */
+    @Override
+    public DateTime getPreviousSessionDate(DateTime dt, Period period) {
+        if(dt == null) {
+            return null;
+        }
+        int interval = period.size();
+        PeriodType periodType = period.getPeriodType();
+        dt = dt.millisOfSecond().withMinimumValue();
+        TradingSession tradingSession = getTradingSessionOnOrBefore(dt);
+        boolean skip = false;
+        switch(periodType) {
+            case YEAR: {
+                dt = dt.minusYears(interval);
+                skip = true;
+            }
+            case QUARTER: {
+                if(!skip) {
+                    dt = ExtendedChronology.withPeriodStart(dt).minusMonths(3 * interval);
+                    skip = true;
+                }
+            }
+            case MONTH: {
+                if(periodType != PeriodType.QUARTER) {
+                    dt = skip ? dt.monthOfYear().withMinimumValue() : dt.minusMonths(interval); 
+                    skip = true;
+                }
+            }
+            case WEEK: {
+                if(!skip) {
+                    dt = dt.minusWeeks(interval);
+                    dt = dt.withDayOfWeek(getStartSession().day());
+                    skip = true;
+                }
+            }
+            case DAY: {
+                if(periodType != PeriodType.WEEK) {
+                    dt = skip ? dt.dayOfMonth().withMinimumValue() : dt.minusDays(interval);
+                    tradingSession = getTradingSessionOnOrBefore(dt);
+                    if(tradingSession.day() > dt.getDayOfWeek()) {
+                        dt = dt.minusDays((DateTimeConstants.SUNDAY - dt.getDayOfWeek()) + 1);
+                    }
+                    dt = dt.withDayOfWeek(tradingSession.day());
+                    skip = true;
+                }
+            }
+            case HOUR: {
+                if(skip) {
+                    LocalTime lt = tradingSession.start();
+                    dt = dt.withHourOfDay(lt.getHourOfDay());
+                }else{
+                    dt = dt.minusHours(interval);
+                    tradingSession = getTradingSessionOnOrBefore(dt);
+                    if(!tradingSession.contains(dt)) {
+                        if(tradingSession.day() > dt.getDayOfWeek()) {
+                            dt = dt.minusDays((DateTimeConstants.SUNDAY - dt.getDayOfWeek()) + 1);
+                        }
+                        dt = dt.withDayOfWeek(tradingSession.day());
+                        dt = dt.withHourOfDay(tradingSession.start().getHourOfDay());
+                    }
+                    skip = true;
+                }
+            }
+            case MINUTE: {
+                if(skip) {
+                    LocalTime lt = tradingSession.start();
+                    dt = dt.withMinuteOfHour(lt.getMinuteOfHour());
+                }else{
+                    dt = dt.minusMinutes(interval);
+                    tradingSession = getTradingSessionOnOrBefore(dt);
+                    if(!tradingSession.contains(dt)) {
+                        if(tradingSession.day() > dt.getDayOfWeek()) {
+                            dt = dt.minusDays((DateTimeConstants.SUNDAY - dt.getDayOfWeek()) + 1);
+                        }
+                        dt = dt.withDayOfWeek(tradingSession.day());
+                        LocalTime lt = tradingSession.start();
+                        dt = dt.withHourOfDay(lt.getHourOfDay()).withMinuteOfHour(lt.getMinuteOfHour());
+                    }
+                    skip = true;
+                }
+            }
+            case SECOND: {
+                if(skip) {
+                    dt = dt.withSecondOfMinute(0);
+                }else{
+                    dt = dt.plusSeconds(interval);
+                    tradingSession = getTradingSessionOnOrBefore(dt);
+                    if(!tradingSession.contains(dt)) {
+                        if(tradingSession.day() > dt.getDayOfWeek()) {
+                            dt = dt.plusDays((DateTimeConstants.SUNDAY - dt.getDayOfWeek()) + 1);
+                        }
+                        dt = dt.withDayOfWeek(tradingSession.day());
+                        LocalTime lt = tradingSession.start();
+                        dt = dt.withHourOfDay(lt.getHourOfDay()).withMinuteOfHour(lt.getMinuteOfHour());
+                        dt = dt.withSecondOfMinute(0);
+                    }
+                }
+                
+                // Guarantee new date is aligned to a business date.
+                calculator.setStartDate(dt.toLocalDate());
+                LocalDate ldt = calculator.getCurrentBusinessDate();
+                if(!ldt.isEqual(dt.toLocalDate())) {
+                    tradingSession = getTradingSessionOnOrBefore(ldt.toDateTime(dt.toLocalTime()));
+                    if(tradingSession.day() > dt.getDayOfWeek()) {
+                        dt = dt.minusDays((DateTimeConstants.SUNDAY - dt.getDayOfWeek()) + 1);
+                    }
+                    dt = dt.withDayOfWeek(tradingSession.day());
+                    LocalTime lt = tradingSession.start();
+                    dt = dt.withHourOfDay(lt.getHourOfDay()).withMinuteOfHour(lt.getMinuteOfHour()).withSecondOfMinute(0);
+                }
+                break;
+            }
+            case TICK: {
+                if(!tradingSession.contains(dt)) {
+                    tradingSession = getTradingSessionOnOrBefore(dt);
+                    if(tradingSession.day() > dt.getDayOfWeek()) {
+                        dt = dt.plusDays((DateTimeConstants.SUNDAY - dt.getDayOfWeek()) + 1);
+                    }
+                    dt = dt.withDayOfWeek(tradingSession.day());
+                    LocalTime lt = tradingSession.start();
+                    dt = dt.withHourOfDay(lt.getHourOfDay()).withMinuteOfHour(lt.getMinuteOfHour());
+                    dt = dt.withSecondOfMinute(lt.getSecondOfMinute()).withMillisOfSecond(0);
+                }
+            }
+            
+            
+        }
+        return dt;
+    }
+    
+    /**
+     * Returns the {@link TradingSession} containing the specified date, or 
      * the very next {@code TradingSession} after the specified {@link DateTime}.
      * 
-     * @param date  the date on or before the returned {@link TradingSessionImpl}'s date.
-     * @return      the {@link TradingSessionImpl} containing the specified date, or 
+     * @param date  the date on or before the returned {@link TradingSession}'s date.
+     * @return      the {@link TradingSession} containing the specified date, or 
      *              the very next {@code TradingSession} after the specified {@link DateTime}.
+     * @see #getTradingSessionOnOrBefore(DateTime)
      */
     @Override
 	public TradingSession getTradingSessionOnOrAfter(DateTime date) {
@@ -385,14 +581,16 @@ public class TradingWeekImpl extends JodaWorkingWeek implements TradingWeek {
     
     /**
      * Returns the date immediately following the specified date that is within
-     * the boundaries of a {@link TradingSessionImpl} within this {@code TradingWeek},
+     * the boundaries of a {@link TradingSession} within this {@code TradingWeek},
      * using the granularity of the specified {@link Period}.
-     * @param dt            the date which the returned date will immediately follow.
-     * @param Period  the granularity with which to advance the specified date
-     *                      to find the next {@link TradingSessionImpl} date.
+     * 
+     * @param dt       the date which the returned date will immediately follow.
+     * @param Period   the granularity with which to advance the specified date
+     *                 to find the next {@link TradingSession} date.
      * @return  the date immediately following the specified date that is within
-     *          the boundaries of a {@link TradingSessionImpl} within this {@code TradingWeek},
+     *          the boundaries of a {@link TradingSession} within this {@code TradingWeek},
      *          using the granularity of the specified {@link Period}.
+     * @see #getPreviousSessionDate(DateTime)
      */
     @Override
 	public DateTime getNextSessionDate(DateTime dt, Period period) {
@@ -432,6 +630,7 @@ public class TradingWeekImpl extends JodaWorkingWeek implements TradingWeek {
                 if(periodType != PeriodType.WEEK) {
                     dt = skip ? dt.dayOfMonth().withMinimumValue() : dt.plusDays(interval);
                     tradingSession = getTradingSessionOnOrAfter(dt);
+                    //withDayOfWeek() below won't move forward the way we think so we do this to get in range first.
                     if(tradingSession.day() < dt.getDayOfWeek()) {
                         dt = dt.plusDays((DateTimeConstants.SUNDAY - dt.getDayOfWeek()) + 1);
                     }
@@ -447,6 +646,7 @@ public class TradingWeekImpl extends JodaWorkingWeek implements TradingWeek {
                     dt = dt.plusHours(interval);
                     tradingSession = getTradingSessionOnOrAfter(dt);
                     if(!tradingSession.contains(dt)) {
+                        //withDayOfWeek() below won't move forward the way we think so we do this to get in range first.
                         if(tradingSession.day() < dt.getDayOfWeek()) {
                             dt = dt.plusDays((DateTimeConstants.SUNDAY - dt.getDayOfWeek()) + 1);
                         }
@@ -464,6 +664,7 @@ public class TradingWeekImpl extends JodaWorkingWeek implements TradingWeek {
                     dt = dt.plusMinutes(interval);
                     tradingSession = getTradingSessionOnOrAfter(dt);
                     if(!tradingSession.contains(dt)) {
+                        //withDayOfWeek() below won't move forward the way we think so we do this to get in range first.
                         if(tradingSession.day() < dt.getDayOfWeek()) {
                             dt = dt.plusDays((DateTimeConstants.SUNDAY - dt.getDayOfWeek()) + 1);
                         }
@@ -481,6 +682,7 @@ public class TradingWeekImpl extends JodaWorkingWeek implements TradingWeek {
                     dt = dt.plusSeconds(interval);
                     tradingSession = getTradingSessionOnOrAfter(dt);
                     if(!tradingSession.contains(dt)) {
+                        //withDayOfWeek() below won't move forward the way we think so we do this to get in range first.
                         if(tradingSession.day() < dt.getDayOfWeek()) {
                             dt = dt.plusDays((DateTimeConstants.SUNDAY - dt.getDayOfWeek()) + 1);
                         }
@@ -496,6 +698,7 @@ public class TradingWeekImpl extends JodaWorkingWeek implements TradingWeek {
                 LocalDate ldt = calculator.getCurrentBusinessDate();
                 if(!ldt.isEqual(dt.toLocalDate())) {
                     tradingSession = getTradingSessionOnOrAfter(ldt.toDateTime(dt.toLocalTime()));
+                    //withDayOfWeek() below won't move forward the way we think so we do this to get in range first.
                     if(tradingSession.day() < dt.getDayOfWeek()) {
                         dt = dt.plusDays((DateTimeConstants.SUNDAY - dt.getDayOfWeek()) + 1);
                     }

@@ -100,7 +100,7 @@ public class QueryBuilderImpl implements QueryBuilder {
 	}
 
 	@Override
-	public QueryBuilder customQuery(final String queryStr) {
+	public QueryBuilder customQuery(String queryStr) {
 	    if(queryStr == null || queryStr.length() < 1) {
 	        throw new IllegalArgumentException("If specified, the query cannot be empty or null.");
 	    }
@@ -111,7 +111,7 @@ public class QueryBuilderImpl implements QueryBuilder {
 	}
 
 	@Override
-	public QueryBuilder nodeType(final NodeType type) {
+	public QueryBuilder nodeType(NodeType type) {
 	    if(type == null) {
 	        throw new IllegalArgumentException("If specified, the NodeType must be non null");
 	    }
@@ -120,7 +120,7 @@ public class QueryBuilderImpl implements QueryBuilder {
 	}
 
 	@Override
-	public QueryBuilder specifier(final String specifier) {
+	public QueryBuilder specifier(String specifier) {
 		if(specifier == null || specifier.length() < 1) {
 			throw new IllegalArgumentException("If specified, the analytic specifier cannot be null, or of zero length");
 		}
@@ -129,7 +129,7 @@ public class QueryBuilderImpl implements QueryBuilder {
 	}
 
 	@Override
-	public QueryBuilder symbol(final String symbol) {
+	public QueryBuilder symbol(String symbol) {
 		if(symbol == null || symbol.length() < 1) {
 			throw new IllegalArgumentException("Symbol cannot be null, or of zero length");
 		}
@@ -149,7 +149,7 @@ public class QueryBuilderImpl implements QueryBuilder {
 	 * @return this {@code QueryBuilder}
 	 */
 	@Override
-	public QueryBuilder instrument(final InstrumentID inst) {
+	public QueryBuilder instrument(InstrumentID inst) {
 		if (inst == null) {
 			throw new IllegalArgumentException("Instrument cannot be null");
 		}
@@ -159,7 +159,7 @@ public class QueryBuilderImpl implements QueryBuilder {
 	}
 
 	@Override
-	public QueryBuilder period(final Period period) {
+	public QueryBuilder period(Period period) {
 		if(period == null) {
 			throw new IllegalArgumentException("Must specify a non null period");
 		}
@@ -169,7 +169,7 @@ public class QueryBuilderImpl implements QueryBuilder {
 	}
 
 	@Override
-	public QueryBuilder start(final DateTime date) {
+	public QueryBuilder start(DateTime date) {
 		if(date == null) {
 			throw new IllegalArgumentException("Must specify a non null start date");
 		}
@@ -178,7 +178,7 @@ public class QueryBuilderImpl implements QueryBuilder {
 	}
 
 	@Override
-	public QueryBuilder end(final DateTime date) {
+	public QueryBuilder end(DateTime date) {
 		if(date == null) {
 			throw new IllegalArgumentException("Must specify a non null end date or not at all");
 		}
@@ -187,7 +187,7 @@ public class QueryBuilderImpl implements QueryBuilder {
 	}
 
 	@Override
-	public QueryBuilder count(final int numBars) {
+	public QueryBuilder count(int numBars) {
 		if (numBars < 0) {
 			throw new IllegalArgumentException("Must specify a bar count > -1 or not at all");
 		}
@@ -196,7 +196,7 @@ public class QueryBuilderImpl implements QueryBuilder {
 	}
 
 	@Override
-	public QueryBuilder padding(final int numBars) {
+	public QueryBuilder padding(int numBars) {
 		if(numBars < 0) {
 			throw new IllegalArgumentException("Must specify a padding > -1 or not at all");
 		}
@@ -205,7 +205,7 @@ public class QueryBuilderImpl implements QueryBuilder {
 	}
 
 	@Override
-	public QueryBuilder corporateActions(final CorporateActionType... types) {
+	public QueryBuilder corporateActions(CorporateActionType... types) {
 		if (types == null || types.length == 0) {
 			throw new IllegalArgumentException("Must specify at least one action type");
 		}
@@ -215,7 +215,7 @@ public class QueryBuilderImpl implements QueryBuilder {
 	}
 
 	@Override
-	public QueryBuilder continuationPolicy(final ContinuationPolicy policy) {
+	public QueryBuilder continuationPolicy(ContinuationPolicy policy) {
 		if(policy == null) {
 			throw new IllegalArgumentException("If specified, policy must be non null");
 		}
@@ -224,7 +224,7 @@ public class QueryBuilderImpl implements QueryBuilder {
 	}
 
 	@Override
-	public QueryBuilder nearestOffset(final int offset) {
+	public QueryBuilder nearestOffset(int offset) {
 	    if(offset < 0) {
 	        throw new IllegalArgumentException("Cannot specify a negative offset");
 	    }
@@ -233,7 +233,7 @@ public class QueryBuilderImpl implements QueryBuilder {
 	}
 
 	@Override
-	public QueryBuilder volumeType(final VolumeType type) {
+	public QueryBuilder volumeType(VolumeType type) {
 	    if(type == null) {
             throw new IllegalArgumentException("If specified, VolumeType must be non null");
         }
@@ -242,7 +242,7 @@ public class QueryBuilderImpl implements QueryBuilder {
 	}
 
 	@Override
-	public QueryBuilder tradingWeek(final TradingWeek week) {
+	public QueryBuilder tradingWeek(TradingWeek week) {
         if(week == null || week.length() < 1) {
             throw new IllegalArgumentException("If specified, the TradingWeek must be non null and contain configured sessions");
         }
@@ -289,7 +289,7 @@ public class QueryBuilderImpl implements QueryBuilder {
 		}
 
 	    @Override
-		public SeriesSubscription toSubscription(final Instrument i) {
+		public SeriesSubscription toSubscription(Instrument i) {
 	        final List<Period> queryPeriods = query.getPeriods();
 	        final TimeFrameImpl[] timeFrames = new TimeFrameImpl[queryPeriods.size()];
 	        for(int idx = 0;idx < timeFrames.length;idx++) {

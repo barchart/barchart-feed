@@ -9,7 +9,7 @@ import com.barchart.util.value.api.Decimal;
 public class CalculationImpl extends DataPointImpl implements Calculation {
 	private Decimal value;
 
-	protected CalculationImpl(final Period period, final DateTime d, final Decimal value) {
+	protected CalculationImpl(Period period, DateTime d, Decimal value) {
 		super(period, d);
 
 	}
@@ -20,7 +20,7 @@ public class CalculationImpl extends DataPointImpl implements Calculation {
 	}
 
 	@Override
-	public void setValue(final double value) {
+	public void setValue(double value) {
 
 	}
 

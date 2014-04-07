@@ -39,11 +39,13 @@ import com.barchart.util.value.api.ValueFactory;
 public class Distributor extends Node<SeriesSubscription> implements Assembler {
     /** Size parameter used to distinguish a line of tick data from minute data*/
     private static final int TICK_FORMAT_LENGTH = 5;
+    /** Factory for creating value-api objects */
+    private static final ValueFactory valueFactory = ValueFactoryImpl.getInstance();
 
     /** Formatter to operate on dates as they appear in batched tick query results */
-	private final DateTimeFormatter tickFormat = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss.SSS");
+	private DateTimeFormatter tickFormat = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss.SSS");
 	/** Formatter to operate on dates as they appear in batched minute query results */
-	private final DateTimeFormatter minuteFormat = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm");
+	private DateTimeFormatter minuteFormat = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm");
 
 	/** {@link Subscription} describing this distributor's output */
 	private SeriesSubscription subscription;
@@ -56,15 +58,14 @@ public class Distributor extends Node<SeriesSubscription> implements Assembler {
 	/** The last date processed */
 	private DateTime last = null;
 	/** Monitor to synchronize historical and live updates during original load */
-	private final boolean historicalDataAdded = false;
+	private boolean historicalDataAdded = false;
 	/** Records the span of historical data received. */
-	private final SpanImpl historicalSpan = SpanImpl.INITIAL;
+	private SpanImpl historicalSpan = SpanImpl.INITIAL;
+	
 	/** Queue to synchronize updated time {@link Span}s. */
 	private ConcurrentLinkedQueue<BarImpl> dataQueue;
 	private ConcurrentLinkedQueue<BarImpl> historicalQueue;
-	/** Factory for creating value-api objects */
-	private ValueFactory valueFactory;
-
+	
 	/**
 	 * Constructs a new {@code Distributor}
 	 */
@@ -74,14 +75,13 @@ public class Distributor extends Node<SeriesSubscription> implements Assembler {
 	 * Constructs a new functional {@code Distributor}
 	 * @param subscription     the {@link SeriesSubscription} supplying needed init params.
 	 */
-	public Distributor(final SeriesSubscription subscription) {
+	public Distributor(SeriesSubscription subscription) {
 		this.subscription = subscription;
 		this.period = subscription.getTimeFrames()[0].getPeriod();
 		this.outputSubscriptions = new ArrayList<SeriesSubscription>(1);
 		this.outputSubscriptions.add(subscription);
 		this.dataQueue = new ConcurrentLinkedQueue<BarImpl>();
 		this.historicalQueue = new ConcurrentLinkedQueue<BarImpl>();
-		this.valueFactory = new ValueFactoryImpl();
 	}
 
 	/**
@@ -94,7 +94,7 @@ public class Distributor extends Node<SeriesSubscription> implements Assembler {
 	}
 
 	@Override
-	public void onNextMarket(final Market m) {
+	public void onNextMarket(Market m) {
 	    //if(true) return;
 		final BarImpl bar =
 				new BarImpl(m.instrument().id(), m.trade().time(), period, m.trade().price(), m.trade().price(), m
@@ -140,7 +140,7 @@ public class Distributor extends Node<SeriesSubscription> implements Assembler {
         //historicalDataAdded = true;
 	}
 
-	private BarImpl createBarFromTickCSV(final String[] array) {
+	private BarImpl createBarFromTickCSV(String[] array) {
 		BarImpl retVal = null;
 
 		DateTime date = tickFormat.parseDateTime(array[0]);
@@ -158,7 +158,7 @@ public class Distributor extends Node<SeriesSubscription> implements Assembler {
 		return retVal;
 	}
 
-	private BarImpl createBarFromMinuteCSV(final String[] array) {
+	private BarImpl createBarFromMinuteCSV(String[] array) {
 		BarImpl retVal = null;
 
 		DateTime date = minuteFormat.parseDateTime(array[0]);
@@ -181,7 +181,7 @@ public class Distributor extends Node<SeriesSubscription> implements Assembler {
 	}
 
 	@Override
-	protected <S extends Span> void updateModifiedSpan(final S span, final SeriesSubscription subscription) {
+	protected <S extends Span> void updateModifiedSpan(S span, final SeriesSubscription subscription) {
 		setUpdated(true);
 	}
 
@@ -233,7 +233,7 @@ public class Distributor extends Node<SeriesSubscription> implements Assembler {
 	 * Returns the output {@link DataSeries}
 	 */
 	@SuppressWarnings("unchecked")
-	public <E extends DataPoint> DataSeries<E> getOutputTimeSeries(final Subscription subscription) {
+	public <E extends DataPoint> DataSeries<E> getOutputTimeSeries(Subscription subscription) {
 		if(outputTimeSeries == null) {
 			this.outputTimeSeries = new DataSeriesImpl<BarImpl>(subscription.getTimeFrames()[0].getPeriod());
 		}
@@ -241,12 +241,12 @@ public class Distributor extends Node<SeriesSubscription> implements Assembler {
 	}
 
 	@Override
-	public boolean isDerivableSource(final SeriesSubscription subscription) {
+	public boolean isDerivableSource(SeriesSubscription subscription) {
 		return false;
 	}
 
     @Override
-    public SeriesSubscription getDerivableOutputSubscription(final SeriesSubscription subscription) {
+    public SeriesSubscription getDerivableOutputSubscription(SeriesSubscription subscription) {
         throw new UnsupportedOperationException("Assemblers do not support derivation");
     }
 

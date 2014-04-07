@@ -73,8 +73,9 @@ public enum PeriodType {
 	 *
 	 * @param type the display String
 	 * @param dtc joda time comparator
+	 * @param unitsForNext 
 	 */
-	private PeriodType(final String type, final DateTimeComparator dtc, final long unitsForNext) {
+	private PeriodType(String type, DateTimeComparator dtc, long unitsForNext) {
 		this.type = type;
 		this.typeComparator = dtc;
 		this.unitsForNext = unitsForNext;
@@ -99,7 +100,7 @@ public enum PeriodType {
 	 * @return the distance (ordinal difference) between this PeriodType and the
 	 *         PeriodType specified.
 	 */
-	public int distance(final PeriodType type) {
+	public int distance(PeriodType type) {
 		return ordinal() - type.ordinal();
 	}
 
@@ -113,14 +114,14 @@ public enum PeriodType {
 	 *         or the type equal to the maximum or minimum type.
 	 * @see #dec(PeriodType, int)
 	 */
-	public static PeriodType inc(PeriodType type, final int num) {
+	public static PeriodType inc(PeriodType type, int num) {
 		if (num == 0)
 			return type;
 		if (num < 0) {
 			return dec(type, num * -1);
 		}
 		int lev = 0;
-		final int len = values().length;
+		int len = values().length;
 		while (++lev <= num && lev <= len) {
 			type = higher(type);
 		}
@@ -137,7 +138,7 @@ public enum PeriodType {
 	 *         or the type equal to the maximum or minimum type.
 	 * @see #inc(PeriodType, int)
 	 */
-	public static PeriodType dec(PeriodType type, final int num) {
+	public static PeriodType dec(PeriodType type, int num) {
 		if (num == 0)
 			return type;
 		if (num < 0) {
@@ -159,8 +160,8 @@ public enum PeriodType {
 	 * @return the next lower type
 	 * @see #lower(PeriodType)
 	 */
-	public static PeriodType lower(final PeriodType type, final boolean skipWeeks) {
-		final PeriodType retVal = lower(type);
+	public static PeriodType lower(PeriodType type, boolean skipWeeks) {
+		PeriodType retVal = lower(type);
 		return skipWeeks && retVal == WEEK ? lower(retVal) : retVal;
 	}
 
@@ -172,8 +173,8 @@ public enum PeriodType {
 	 * @see #lower(PeriodType, boolean)
 	 * @see #higher(PeriodType)
 	 */
-	public static PeriodType lower(final PeriodType type) {
-		final int index = Math.max(0, type.ordinal() - 1);
+	public static PeriodType lower(PeriodType type) {
+		int index = Math.max(0, type.ordinal() - 1);
 		return values()[index];
 	}
 
@@ -186,8 +187,8 @@ public enum PeriodType {
 	 * @return the next higher type
 	 * @see #higher(PeriodType)
 	 */
-	public static PeriodType higher(final PeriodType type, final boolean skipWeeks) {
-		final PeriodType retVal = higher(type);
+	public static PeriodType higher(PeriodType type, boolean skipWeeks) {
+		PeriodType retVal = higher(type);
 		return skipWeeks && retVal == WEEK ? higher(retVal) : retVal;
 	}
 
@@ -199,8 +200,8 @@ public enum PeriodType {
 	 * @see #higher(PeriodType, boolean)
 	 * @see #lower(PeriodType)
 	 */
-	public static PeriodType higher(final PeriodType type) {
-		final int index = Math.min(values().length - 1, type.ordinal() + 1);
+	public static PeriodType higher(PeriodType type) {
+		int index = Math.min(values().length - 1, type.ordinal() + 1);
 		return values()[index];
 	}
 
@@ -211,8 +212,8 @@ public enum PeriodType {
 	 * @param typeString the name of the type to return.
 	 * @return the temporal type matching the specified string.
 	 */
-	public static PeriodType forString(final String typeString) {
-		for (final PeriodType tt : values()) {
+	public static PeriodType forString(String typeString) {
+		for (PeriodType tt : values()) {
 			if (tt.type.equalsIgnoreCase(typeString)) {
 				return tt;
 			}
@@ -227,7 +228,7 @@ public enum PeriodType {
 	 * @param type the {@code PeriodType} to compare.
 	 * @return true if so, false if not.
 	 */
-	public boolean isHigherThan(final PeriodType type) {
+	public boolean isHigherThan(PeriodType type) {
 		return ordinal() > type.ordinal();
 	}
 
@@ -238,7 +239,7 @@ public enum PeriodType {
 	 * @param type the {@code PeriodType} to compare.
 	 * @return true if so, false if not.
 	 */
-	public boolean isLowerThan(final PeriodType type) {
+	public boolean isLowerThan(PeriodType type) {
 		return type.ordinal() > ordinal();
 	}
 
@@ -250,7 +251,7 @@ public enum PeriodType {
 	 * @param upper the {@code PeriodType} to end with
 	 * @return the sum of the units of lower it takes to equal upper.
 	 */
-	public static long unitsBetween(PeriodType lower, final PeriodType upper) {
+	public static long unitsBetween(PeriodType lower, PeriodType upper) {
 		long sum = lower.unitsForNext;
 		while ((lower = PeriodType.inc(lower, 1)).isLowerThan(upper)) {
 			sum *= lower.unitsForNext;
@@ -304,14 +305,14 @@ public enum PeriodType {
 	 * @return a new DateTime instance whose lesser fields will be aligned to
 	 *         return
 	 */
-	public DateTime resolutionInstant(final DateTime dt) {
+	public DateTime resolutionInstant(DateTime dt) {
 		if (this == PeriodType.QUARTER) {
 			return ExtendedChronology.withPeriodStart(dt);
 		}
 
-		final InstantConverter conv = ConverterManager.getInstance().getInstantConverter(dt);
+		InstantConverter conv = ConverterManager.getInstance().getInstantConverter(dt);
 		// The below DateTime will be queried for a Chronology if it is null.
-		final Chronology lhsChrono = conv.getChronology(dt, (Chronology) null);
+		Chronology lhsChrono = conv.getChronology(dt, (Chronology) null);
 		long lhsMillis = conv.getInstantMillis(dt, lhsChrono);
 		lhsMillis =
 				typeComparator.getLowerLimit() == null ? lhsMillis : typeComparator.getLowerLimit().getField(lhsChrono)

@@ -31,7 +31,7 @@ public class BarBuilder extends AnalyticBase {
     private DateTime workingTargetDate;
 
     /** The {@link Subscription} used to determine the output {@link Period} information */
-    private final SeriesSubscription subscription;
+    private SeriesSubscription subscription;
 
 
 
@@ -45,7 +45,7 @@ public class BarBuilder extends AnalyticBase {
 	 *
 	 * @param s    the configured {@link SeriesSubscription}
 	 */
-	BarBuilder(final SeriesSubscription s) {
+	BarBuilder(SeriesSubscription s) {
 	    this.subscription = s;
 	    setName(s.toString());
 	}
@@ -69,7 +69,7 @@ public class BarBuilder extends AnalyticBase {
 	 */
 	@SuppressWarnings(value = { "unchecked", "rawtypes" })
 	@Override
-	public Span process(final Span span) {
+	public Span process(Span span) {
 	    //System.out.println(this + " processing span: " + span);
 		this.inputSpan = (SpanImpl)span;
 
@@ -105,9 +105,7 @@ public class BarBuilder extends AnalyticBase {
 				currentMergeBar = new BarImpl((BarImpl)inputSeries.get(inputStartIdx));
 				workingTargetDate = subscription.getTradingWeek().getNextSessionDate(inputSpan.getDate(), outputPeriod);
 				currentMergeBar.setDate(workingTargetDate);
-				workingSpan =
-						new SpanImpl(subscription.getTimeFrame(0).getPeriod(), inputSpan.getDate(),
-								inputSpan.getNextDate());
+				workingSpan = new SpanImpl(subscription.getTimeFrame(0).getPeriod(), inputSpan.getDate(), inputSpan.getNextDate());
 				this.workingSpan.setNextDate(workingTargetDate);
 				System.out.println("IS INIT: ADDING NEW BAR " + currentMergeBar + "   " + outputSeries.getPeriod() + "  :  span = " + this.workingSpan);
 				outputSeries.add(currentMergeBar);

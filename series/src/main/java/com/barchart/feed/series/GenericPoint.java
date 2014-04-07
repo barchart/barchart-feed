@@ -20,7 +20,7 @@ import com.barchart.util.value.api.Existential;
  */
 public abstract class GenericPoint<K, V extends Existential> extends DataPointImpl {
 
-	protected GenericPoint(final Period period, final DateTime d) {
+	protected GenericPoint(Period period, DateTime d) {
 		super(period, d);
 	}
 
@@ -34,7 +34,7 @@ public abstract class GenericPoint<K, V extends Existential> extends DataPointIm
 	 * @param key			the identifier key for the custom field
 	 * @param value			the value corresponding to the specified key
 	 */
-	public  void setValue(final K key, final V value) {
+	public  void setValue(K key, V value) {
 
 	}
 
@@ -44,13 +44,13 @@ public abstract class GenericPoint<K, V extends Existential> extends DataPointIm
 	 * @param key			the identifier key for the custom field
 	 * @return				the value corresponding to the specified key
 	 */
-	public V getValue(final K key) { return null; }
+	public V getValue(K key) { return null; }
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public <E extends DataPoint> int compareTo(final E other) {
+	public <E extends DataPoint> int compareTo(E other) {
 		return  period.getPeriodType().compareAtResolution(date, ((DataPointImpl)other).date);
 	}
 }

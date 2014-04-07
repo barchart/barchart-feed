@@ -64,7 +64,7 @@ public abstract class Node<S extends Subscription> implements Runnable {
 			(new Thread(this, this.toString())).start();
 		}
 
-		for(final Node<S> n : parentNodes) {
+		for(Node<S> n : parentNodes) {
 		    n.startUp();
 		}
 	}
@@ -78,7 +78,7 @@ public abstract class Node<S extends Subscription> implements Runnable {
             synchronized(waitLock) {
                 waitLock.notify();
             }
-        }catch(final Exception e) {
+        }catch(Exception e) {
             e.printStackTrace();
         }
 	}
@@ -114,7 +114,7 @@ public abstract class Node<S extends Subscription> implements Runnable {
 			synchronized(waitLock) {
 				waitLock.notify();
 			}
-		}catch(final Exception e) {
+		}catch(Exception e) {
 			e.printStackTrace();
 		}
 
@@ -128,7 +128,7 @@ public abstract class Node<S extends Subscription> implements Runnable {
 	 * @param node
 	 * @param subscription
 	 */
-	public void addChildNode(final Node<S> node) {
+	public void addChildNode(Node<S> node) {
 		childNodes.add(node);
 	}
 
@@ -137,7 +137,7 @@ public abstract class Node<S extends Subscription> implements Runnable {
 	 *
 	 * @param node	the {@link Node} to remove.
 	 */
-	public void removeChildNode(final Node<S> node) {
+	public void removeChildNode(Node<S> node) {
 		childNodes.remove(node);
 	}
 
@@ -159,7 +159,7 @@ public abstract class Node<S extends Subscription> implements Runnable {
      * @param node
      * @param subscription
      */
-    public void addParentNode(final Node<S> node) {
+    public void addParentNode(Node<S> node) {
     	synchronized(parentNodes) {
     		parentNodes.add(node);
     	}
@@ -170,7 +170,7 @@ public abstract class Node<S extends Subscription> implements Runnable {
 	 *
 	 * @param node	the {@link Node} to remove.
 	 */
-	public void removeParentNode(final Node<S> node) {
+	public void removeParentNode(Node<S> node) {
 		synchronized(parentNodes) {
 			childNodes.remove(node);
 		}
@@ -191,7 +191,7 @@ public abstract class Node<S extends Subscription> implements Runnable {
 	 *
 	 * @param isUpdated
 	 */
-	public void setUpdated(final boolean isUpdated) {
+	public void setUpdated(boolean isUpdated) {
 		this.isUpdated = isUpdated;
 	}
 
@@ -216,13 +216,13 @@ public abstract class Node<S extends Subscription> implements Runnable {
      * Adds an {@link Observer} to be notified of ongoing updates.
      * @param obs      the observer to be notified.
      */
-	public void addObserver(final Observer<NetworkNotification> obs) {
+	public void addObserver(Observer<NetworkNotification> obs) {
         if(obs == null) {
             throw new IllegalArgumentException("Attempt to add a null observer.");
         }
         observers.add(obs);
 
-        for(final Node<S> n : parentNodes) {
+        for(Node<S> n : parentNodes) {
             n.addDependent(obs);
         }
     }
@@ -231,13 +231,13 @@ public abstract class Node<S extends Subscription> implements Runnable {
      * Removes the specified Observer from notifications.
      * @param obs
      */
-    public void removeObserver(final Observer<NetworkNotification> obs) {
+    public void removeObserver(Observer<NetworkNotification> obs) {
         if(obs == null) {
             throw new IllegalArgumentException("Attempt to add a null observer.");
         }
         observers.remove(obs);
 
-        for(final Node<S> n : parentNodes) {
+        for(Node<S> n : parentNodes) {
             n.removeDependent(obs);
         }
 
@@ -250,8 +250,8 @@ public abstract class Node<S extends Subscription> implements Runnable {
      * Clears out all Observer references.
      */
     public void removeAllObservers() {
-    	for(final Observer<NetworkNotification> o : observers) {
-    		for(final Node<S> n : parentNodes) {
+    	for(Observer<NetworkNotification> o : observers) {
+    		for(Node<S> n : parentNodes) {
     			n.removeDependent(o);
     		}
     	}
@@ -266,7 +266,7 @@ public abstract class Node<S extends Subscription> implements Runnable {
      * @param obs      the {@link Observer} who's registration is being tested.
      * @return         true if so, false if not.
      */
-    public boolean isObserver(final Observer<NetworkNotification> obs) {
+    public boolean isObserver(Observer<NetworkNotification> obs) {
         return observers.contains(obs);
     }
 
@@ -288,13 +288,13 @@ public abstract class Node<S extends Subscription> implements Runnable {
      *
      * @param obs      the observer to be notified.
      */
-	public void addDependent(final Observer<NetworkNotification> obs) {
+	public void addDependent(Observer<NetworkNotification> obs) {
         if(obs == null) {
             throw new IllegalArgumentException("Attempt to add a null dependent.");
         }
         dependents.add(obs);
 
-        for(final Node<S> n : parentNodes) {
+        for(Node<S> n : parentNodes) {
             n.addDependent(obs);
         }
     }
@@ -303,13 +303,13 @@ public abstract class Node<S extends Subscription> implements Runnable {
      * Removes the specified dependent Observer from this node's tracking.
      * @param obs
      */
-    public void removeDependent(final Observer<NetworkNotification> obs) {
+    public void removeDependent(Observer<NetworkNotification> obs) {
         if(obs == null) {
             throw new IllegalArgumentException("Attempt to add a null observer.");
         }
         dependents.remove(obs);
 
-        for(final Node<S> n : parentNodes) {
+        for(Node<S> n : parentNodes) {
             n.removeDependent(obs);
         }
 
@@ -322,8 +322,8 @@ public abstract class Node<S extends Subscription> implements Runnable {
      * Clears out all references to this node's child node dependents.
      */
     public void removeAllDependents() {
-    	for(final Observer<NetworkNotification> o : dependents) {
-    		for(final Node<S> n : parentNodes) {
+    	for(Observer<NetworkNotification> o : dependents) {
+    		for(Node<S> n : parentNodes) {
     			n.removeDependent(o);
     		}
     	}
@@ -338,7 +338,7 @@ public abstract class Node<S extends Subscription> implements Runnable {
      * @param obs      the {@link Observer} who's dependence is being tested.
      * @return         true if so, false if not.
      */
-    public boolean isDependent(final Observer<NetworkNotification> obs) {
+    public boolean isDependent(Observer<NetworkNotification> obs) {
         return dependents.contains(obs);
     }
 
@@ -433,10 +433,10 @@ public abstract class Node<S extends Subscription> implements Runnable {
 				setUpdated(false);
 				if(hasAllAncestorUpdates()) {
 					System.out.println(this + " hasAllAncestorUpdates()");
-					final Span span = this.process();
+					Span span = this.process();
 					if(span != null) {
-						final List<S> outputs = getOutputSubscriptions();
-						for(final Node<S> nextNode : childNodes) {
+						List<S> outputs = getOutputSubscriptions();
+						for(Node<S> nextNode : childNodes) {
 							nextNode.setModifiedSpan(span, outputs);
 						}
 					}
@@ -452,7 +452,7 @@ public abstract class Node<S extends Subscription> implements Runnable {
 						}
 						System.out.println(this + " waking up " + getOutputSubscriptions().get(0));
 					}
-				}catch(final Exception e) {
+				}catch(Exception e) {
 					e.printStackTrace();
 				}
 			}

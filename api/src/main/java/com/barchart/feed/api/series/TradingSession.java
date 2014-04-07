@@ -8,47 +8,47 @@ public interface TradingSession extends Comparable<TradingSession> {
 	public int hourCount();
 
 	/**
-	 * Returns this {@code ITradingSession}'s day
+	 * Returns this {@code TradingSession}'s day
 	 * represented as an int.
-	 * @return  this {@code ITradingSession}'s day represented as an int.
+	 * @return  this {@code TradingSession}'s day represented as an int.
 	 */
 	public int day();
 
 	/**
-	 * Returns this {@code ITradingSession}'s end day
+	 * Returns this {@code TradingSession}'s end day
 	 * represented as an int.
-	 * @return  this {@code ITradingSession}'s end day
+	 * @return  this {@code TradingSession}'s end day
 	 *          represented as an int.
 	 */
 	public int endDay();
 
 	/**
-	 * Returns this {@code ITradingSession}'s start time.
-	 * @return  this {@code ITradingSession}'s start time.
+	 * Returns this {@code TradingSession}'s start time.
+	 * @return  this {@code TradingSession}'s start time.
 	 */
 	public LocalTime start();
 
 	/**
-	 * Returns this {@code ITradingSession}'s end time.
-	 * @return  this {@code ITradingSession}'s end time.
+	 * Returns this {@code TradingSession}'s end time.
+	 * @return  this {@code TradingSession}'s end time.
 	 */
 	public LocalTime end();
 
 	/**
-	 *  Returns the number of milliseconds in this ITradingSession.
-	 * @return  the number of milliseconds in this ITradingSession.
+	 *  Returns the number of milliseconds in this TradingSession.
+	 * @return  the number of milliseconds in this TradingSession.
 	 */
 	public long sessionMillis();
 
 	/**
-	 * Convenience method to return the day of week of this {@code ITradingSession}.
-	 * @return  this ITradingSession's day in string form.
+	 * Convenience method to return the day of week of this {@code TradingSession}.
+	 * @return  this TradingSession's day in string form.
 	 */
 	public String dayToString();
 
 	/**
 	 * Returns a flag indicating whether the specified date is contained
-	 * within this {@code ITradingSession}
+	 * within this {@code TradingSession}
 	 * 
 	 * @param   date  the query date.
 	 * @return  true if the specified date is within this session, false if not.
@@ -57,7 +57,7 @@ public interface TradingSession extends Comparable<TradingSession> {
 
 	/**
 	 * Implementation of the {@link Comparable} interface.
-	 * @param other the other {@code ITradingSession}
+	 * @param other the other {@code TradingSession}
 	 * @return the int comparison value.
 	 */
 	public <T extends TradingSession> int compareTo(T other);

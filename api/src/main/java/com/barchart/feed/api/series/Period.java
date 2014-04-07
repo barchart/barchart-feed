@@ -32,7 +32,7 @@ public final class Period {
 	private final PeriodType periodType;
 	private final int size;
 
-	public Period(final PeriodType periodType, final int size) {
+	public Period(PeriodType periodType, int size) {
 		this.periodType = periodType;
 		this.size = size;
 	}
@@ -43,7 +43,7 @@ public final class Period {
 	public PeriodType getPeriodType() {
 		return periodType;
 	}
-
+	
 	/**
 	 * Returns a flag indicating whether the specified comparison Period is
 	 * closer to the target Period than this Period.
@@ -52,7 +52,7 @@ public final class Period {
 	 * @param comparison   the Period competing with this Period.
 	 * @return     true if so, false if not
 	 */
-	public boolean isCloserTo(final Period target, final Period comparison) {
+	public boolean isCloserTo(Period target, Period comparison) {
 	    if(Math.abs(periodType.distance(target.getPeriodType())) <
 	        Math.abs(comparison.getPeriodType().distance(target.getPeriodType()))) {
 	        return true;
@@ -68,7 +68,7 @@ public final class Period {
 	 * @param p
 	 * @return true if so, false if not
 	 */
-	public boolean isHigherThan(final Period p) {
+	public boolean isHigherThan(Period p) {
 	    return periodType.isHigherThan(p.getPeriodType()) ||
 	        (periodType == p.periodType && size > p.size);
 	}
@@ -80,14 +80,15 @@ public final class Period {
      * @param p
      * @return  true if so, false if not
      */
-	public boolean isLowerThan(final Period p) {
+	public boolean isLowerThan(Period p) {
         return periodType.isLowerThan(p.getPeriodType()) ||
             (periodType == p.periodType && size < p.size);
     }
 
 	/**
-	 * The number of {@code Period}s contained in one bar
-	 */
+     * Returns the duration of this {@code Period}
+     * @return the duration of this {@code Period}
+     */
 	public int size() {
 		return size;
 	}
@@ -109,7 +110,7 @@ public final class Period {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public boolean equals(final Object obj) {
+	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)
@@ -123,7 +124,10 @@ public final class Period {
 			return false;
 		return true;
 	}
-
+	
+	/**
+     * {@inheritDoc}
+     */
 	@Override
 	public String toString() {
 	    return new StringBuilder(periodType.toString()).append("(").append(size).append(")").toString();
