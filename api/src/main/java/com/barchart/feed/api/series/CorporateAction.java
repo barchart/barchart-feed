@@ -1,10 +1,17 @@
 package com.barchart.feed.api.series;
 
+import java.util.UUID;
+
 import org.joda.time.DateTime;
 
 import com.barchart.feed.api.model.meta.id.InstrumentID;
 
 public interface CorporateAction {
+
+	/**
+	 * The unique id for this action.
+	 */
+	UUID id();
 
 	/**
 	 * The instrument that this action applies to.

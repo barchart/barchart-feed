@@ -1,8 +1,9 @@
 package com.barchart.feed.series.actions;
 
+import java.util.UUID;
+
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeComparator;
-import org.joda.time.DateTimeFieldType;
 
 import com.barchart.feed.api.model.meta.id.InstrumentID;
 import com.barchart.feed.api.series.Bar;
@@ -14,11 +15,18 @@ public class Dividend extends AbstractCorporateAction {
 
 	private final Price amount;
 
-	private final DateTimeComparator DAY_COMPARATOR = DateTimeComparator.getInstance(DateTimeFieldType.dayOfMonth());
-
 	public Dividend(final InstrumentID instrument_, final DateTime timestamp_, final Price amount_) {
 
 		super(instrument_, timestamp_, CorporateActionType.DIVIDEND, "Dividend distribution of " + amount_ + "/share");
+
+		amount = amount_;
+
+	}
+
+	public Dividend(final UUID id_, final InstrumentID instrument_, final DateTime timestamp_, final Price amount_) {
+
+		super(id_, instrument_, timestamp_, CorporateActionType.DIVIDEND, "Dividend distribution of " + amount_
+				+ "/share");
 
 		amount = amount_;
 
@@ -40,7 +48,9 @@ public class Dividend extends AbstractCorporateAction {
 				// Native aggregations
 
 				// Day of dividend, adjust price
-				if (DAY_COMPARATOR.compare(bar.getDate(), timestamp()) == 0) {
+				// Compare millis instead of date to ignore time zone
+				if (DateTimeComparator.getDateOnlyInstance()
+						.compare(bar.getDate().getMillis(), timestamp().getMillis()) == 0) {
 					final BarImpl b = bar instanceof BarImpl ? (BarImpl) bar : new BarImpl(bar);
 					b.setOpen(b.getOpen().add(amount));
 					b.setHigh(b.getHigh().add(amount));
