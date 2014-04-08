@@ -730,7 +730,7 @@ public class BarImpl extends DataPointImpl implements Bar {
 		if (date == null) {
 			if (other.date != null)
 				return false;
-		} else if (!date.equals(other.date))
+		} else if (!date.isEqual(other.date))
 			return false;
 		if (volume == null) {
 			if (other.volume != null)

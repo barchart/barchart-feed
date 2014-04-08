@@ -13,7 +13,6 @@ import com.barchart.feed.api.series.ContinuationPolicy;
 import com.barchart.feed.api.series.CorporateActionType;
 import com.barchart.feed.api.series.DataSeries;
 import com.barchart.feed.api.series.Period;
-import com.barchart.feed.api.series.PeriodType;
 import com.barchart.feed.api.series.TradingWeek;
 import com.barchart.feed.api.series.VolumeType;
 import com.barchart.feed.api.series.network.Analytic;
@@ -50,7 +49,7 @@ public class QueryBuilderImpl implements QueryBuilder {
 	private InstrumentID instrument;
     private final List<String> symbols = new ArrayList<String>();
     private String customQuery;
-    private DateTime start = PeriodType.DAY.resolutionInstant(new DateTime().minusDays(90));
+	private DateTime start;
     private DateTime end;
 	private final DataQuery query;
 	private final List<Period> periods = new ArrayList<Period>();
@@ -266,7 +265,7 @@ public class QueryBuilderImpl implements QueryBuilder {
 		private int padding;
 		private int nearestOffset;
 		private InstrumentID instrument;
-        private DateTime start = PeriodType.DAY.resolutionInstant(new DateTime().minusDays(90));
+		private DateTime start;
         private DateTime end;
 		private List<CorporateActionType> actions;
 	    private ContinuationPolicy policy;

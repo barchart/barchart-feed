@@ -87,43 +87,43 @@ public final class TimeSeriesCodec {
 					.setPeriodCount(bar.getPeriod().size());
 		}
 
-		if (bar.getOpen() != null)
+		if (bar.getOpen() != null && !bar.getOpen().isNull())
 			builder.setOpenMantissa(bar.getOpen().mantissa()).setOpenExponent(bar.getOpen().exponent());
-		if (bar.getHigh() != null)
+		if (bar.getHigh() != null && !bar.getHigh().isNull())
 			builder.setHighMantissa(bar.getHigh().mantissa()).setHighExponent(bar.getHigh().exponent());
-		if (bar.getLow() != null)
+		if (bar.getLow() != null && !bar.getLow().isNull())
 			builder.setLowMantissa(bar.getLow().mantissa()).setLowExponent(bar.getLow().exponent());
-		if (bar.getClose() != null)
+		if (bar.getClose() != null && !bar.getClose().isNull())
 			builder.setCloseMantissa(bar.getClose().mantissa()).setCloseExponent(bar.getClose().exponent());
-		if (bar.getVolume() != null)
+		if (bar.getVolume() != null && !bar.getVolume().isNull())
 			builder.setVolumeMantissa(bar.getVolume().mantissa()).setVolumeExponent(bar.getVolume().exponent());
-		if (bar.getVolumeUp() != null)
+		if (bar.getVolumeUp() != null && !bar.getVolumeUp().isNull())
 			builder.setVolumeUpMantissa(bar.getVolumeUp().mantissa()).setVolumeUpExponent(bar.getVolumeUp().exponent());
-		if (bar.getVolumeDown() != null)
+		if (bar.getVolumeDown() != null && !bar.getVolumeDown().isNull())
 			builder.setVolumeDownMantissa(bar.getVolumeDown().mantissa()).setVolumeDownExponent(
 					bar.getVolumeDown().exponent());
-		if (bar.getTickCount() != null)
+		if (bar.getTickCount() != null && !bar.getTickCount().isNull())
 			builder.setTickCount((int) bar.getTickCount().asDouble());
-		if (bar.getOpenInterest() != null)
+		if (bar.getOpenInterest() != null && !bar.getOpenInterest().isNull())
 			builder.setOpenInterestMantissa(bar.getOpenInterest().mantissa()).setOpenInterestExponent(
 					bar.getOpenInterest().exponent());
-		if (bar.getMidpoint() != null)
+		if (bar.getMidpoint() != null && !bar.getMidpoint().isNull())
 			builder.setMidpointMantissa(bar.getMidpoint().mantissa()).setMidpointExponent(bar.getMidpoint().exponent());
-		if (bar.getBid() != null)
+		if (bar.getBid() != null && !bar.getBid().isNull())
 			builder.setBidMantissa(bar.getBid().mantissa()).setBidExponent(bar.getBid().exponent());
-		if (bar.getBidSize() != null)
+		if (bar.getBidSize() != null && !bar.getBidSize().isNull())
 			builder.setBidSizeMantissa(bar.getBidSize().mantissa()).setBidSizeExponent(bar.getBidSize().exponent());
-		if (bar.getAsk() != null)
+		if (bar.getAsk() != null && !bar.getAsk().isNull())
 			builder.setAskMantissa(bar.getAsk().mantissa()).setAskExponent(bar.getAsk().exponent());
-		if (bar.getAskSize() != null)
+		if (bar.getAskSize() != null && !bar.getAskSize().isNull())
 			builder.setAskSizeMantissa(bar.getAskSize().mantissa()).setAskSizeExponent(bar.getAskSize().exponent());
-		if (bar.getTradedValue() != null)
+		if (bar.getTradedValue() != null && !bar.getTradedValue().isNull())
 			builder.setTradedValueMantissa(bar.getTradedValue().mantissa()).setTradedValueExponent(
 					bar.getTradedValue().exponent());
-		if (bar.getTradedValueUp() != null)
+		if (bar.getTradedValueUp() != null && !bar.getTradedValueUp().isNull())
 			builder.setTradedValueUpMantissa(bar.getTradedValueUp().mantissa()).setTradedValueUpExponent(
 					bar.getTradedValueUp().exponent());
-		if (bar.getTradedValueDown() != null)
+		if (bar.getTradedValueDown() != null && !bar.getTradedValueDown().isNull())
 			builder.setTradedValueDownMantissa(bar.getTradedValueDown().mantissa()).setTradedValueDownExponent(
 					bar.getTradedValueDown().exponent());
 
