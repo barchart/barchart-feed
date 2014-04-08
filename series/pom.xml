@@ -49,13 +49,13 @@
             <version>[1.0-SNAPSHOT,1.1-SNAPSHOT)</version>
         </dependency>
         <dependency>
-            <groupId>com.barchart.feed</groupId>
-            <artifactId>barchart-feed-ddf-instrument</artifactId>
-            <version>[4-SNAPSHOT, 5-SNAPSHOT)</version>
-        </dependency>
-        <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java</artifactId>
         </dependency>
 
         <dependency>
