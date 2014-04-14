@@ -351,26 +351,28 @@ public class TradingWeekImpl extends JodaWorkingWeek implements TradingWeek {
     
     /**
      * Returns the {@link TradingSession} containing the specified date, or 
-     * the immediately previous {@code TradingSession} after the specified {@link DateTime}.
+     * the immediately previous {@code TradingSession} to the specified {@link DateTime}.
      * 
      * @param date  the date on or before the returned {@link TradingSession}'s date.
      * @return      the {@link TradingSession} containing the specified date, or 
-     *              the very next {@code TradingSession} after the specified {@link DateTime}.
+     *              the very previous {@code TradingSession} to the specified {@link DateTime}.
      * @see #getTradingSessionOnOrAfter(DateTime)
      */
     public TradingSession getTradingSessionOnOrBefore(DateTime date) {
         if(sessions.size() == 0) {
             throw new IllegalStateException("Trading week has no sessions configured!");
         }
+        boolean decremented = false;
         while(!isWorkingDay(date.toLocalDate())) {
             date = date.minusDays(1);
+            decremented = true;
         }
         int otherDay = date.getDayOfWeek();
         LocalTime lt = date.toLocalTime();
         int len = sessions.size();
         for(int i = len - 1;i >= 0;i--) {
             TradingSession ts = sessions.get(i);
-            if(ts.contains(date)) {
+            if(ts.contains(date) || decremented) {
                 return ts;
             } else if(ts.day() == otherDay) {
                if(ts.end().isBefore(lt)) {
@@ -380,24 +382,6 @@ public class TradingWeekImpl extends JodaWorkingWeek implements TradingWeek {
                }
             }
         }
-//        while(!isWorkingDay(date.toLocalDate())) {
-//          date = date.minusDays(1);
-//        }
-//        int otherDay = date.getDayOfWeek();
-//        LocalTime lt = date.toLocalTime();
-//        int len = sessions.size();
-//        for(int i = len - 1;i >= 0;i--) {
-//            TradingSession ts = sessions.get(i);
-//            if(ts.contains(date)) {
-//                return ts;
-//            } else if(ts.day() == otherDay) {
-//               if(ts.end().isBefore(lt)) {
-//                   return ts;
-//               }else if(ts.start().isAfter(lt)) {
-//                   return sessions.get(i == 0 ? len - 1 : i - 1);
-//               }
-//            }
-//        }
        
         return null;
     }
@@ -427,31 +411,35 @@ public class TradingWeekImpl extends JodaWorkingWeek implements TradingWeek {
         boolean skip = false;
         switch(periodType) {
             case YEAR: {
-                dt = dt.minusYears(interval);
+                dt = dt.monthOfYear().withMinimumValue();
+                dt = interval > 1 ? dt.minusYears(interval) : dt;
                 skip = true;
             }
             case QUARTER: {
                 if(!skip) {
-                    dt = ExtendedChronology.withPeriodStart(dt).minusMonths(3 * interval);
+                    dt = ExtendedChronology.withPeriodStart(dt);
+                    dt = interval > 1 ? dt.minusMonths(3 * interval) : dt;
                     skip = true;
                 }
             }
             case MONTH: {
-                if(periodType != PeriodType.QUARTER) {
-                    dt = skip ? dt.monthOfYear().withMinimumValue() : dt.minusMonths(interval); 
+                if(!skip) {
+                    dt = dt.dayOfMonth().withMinimumValue();
+                    dt = interval > 1 ? dt.minusMonths(interval) : dt; 
                     skip = true;
                 }
             }
             case WEEK: {
                 if(!skip) {
-                    dt = dt.minusWeeks(interval);
                     dt = dt.withDayOfWeek(getStartSession().day());
+                    dt = interval > 1 ? dt.minusWeeks(interval) : dt;
                     skip = true;
                 }
             }
             case DAY: {
                 if(periodType != PeriodType.WEEK) {
-                    dt = skip ? dt.dayOfMonth().withMinimumValue() : dt.minusDays(interval);
+                    dt = skip ? dt.dayOfMonth().withMinimumValue().withHourOfDay(tradingSession.end().getHourOfDay()) : 
+                        tradingSession.day() < dt.getDayOfWeek() ? dt : dt.minusDays(interval);
                     tradingSession = getTradingSessionOnOrBefore(dt);
                     if(tradingSession.day() > dt.getDayOfWeek()) {
                         dt = dt.minusDays((DateTimeConstants.SUNDAY - dt.getDayOfWeek()) + 1);
@@ -462,7 +450,7 @@ public class TradingWeekImpl extends JodaWorkingWeek implements TradingWeek {
             }
             case HOUR: {
                 if(skip) {
-                    LocalTime lt = tradingSession.start();
+                    LocalTime lt = tradingSession.end();
                     dt = dt.withHourOfDay(lt.getHourOfDay());
                 }else{
                     dt = dt.minusHours(interval);
@@ -472,14 +460,14 @@ public class TradingWeekImpl extends JodaWorkingWeek implements TradingWeek {
                             dt = dt.minusDays((DateTimeConstants.SUNDAY - dt.getDayOfWeek()) + 1);
                         }
                         dt = dt.withDayOfWeek(tradingSession.day());
-                        dt = dt.withHourOfDay(tradingSession.start().getHourOfDay());
+                        dt = dt.withHourOfDay(tradingSession.end().getHourOfDay());
                     }
                     skip = true;
                 }
             }
             case MINUTE: {
                 if(skip) {
-                    LocalTime lt = tradingSession.start();
+                    LocalTime lt = tradingSession.end();
                     dt = dt.withMinuteOfHour(lt.getMinuteOfHour());
                 }else{
                     dt = dt.minusMinutes(interval);
@@ -489,7 +477,7 @@ public class TradingWeekImpl extends JodaWorkingWeek implements TradingWeek {
                             dt = dt.minusDays((DateTimeConstants.SUNDAY - dt.getDayOfWeek()) + 1);
                         }
                         dt = dt.withDayOfWeek(tradingSession.day());
-                        LocalTime lt = tradingSession.start();
+                        LocalTime lt = tradingSession.end();
                         dt = dt.withHourOfDay(lt.getHourOfDay()).withMinuteOfHour(lt.getMinuteOfHour());
                     }
                     skip = true;
@@ -506,7 +494,7 @@ public class TradingWeekImpl extends JodaWorkingWeek implements TradingWeek {
                             dt = dt.plusDays((DateTimeConstants.SUNDAY - dt.getDayOfWeek()) + 1);
                         }
                         dt = dt.withDayOfWeek(tradingSession.day());
-                        LocalTime lt = tradingSession.start();
+                        LocalTime lt = tradingSession.end();
                         dt = dt.withHourOfDay(lt.getHourOfDay()).withMinuteOfHour(lt.getMinuteOfHour());
                         dt = dt.withSecondOfMinute(0);
                     }
@@ -521,7 +509,7 @@ public class TradingWeekImpl extends JodaWorkingWeek implements TradingWeek {
                         dt = dt.minusDays((DateTimeConstants.SUNDAY - dt.getDayOfWeek()) + 1);
                     }
                     dt = dt.withDayOfWeek(tradingSession.day());
-                    LocalTime lt = tradingSession.start();
+                    LocalTime lt = tradingSession.end();
                     dt = dt.withHourOfDay(lt.getHourOfDay()).withMinuteOfHour(lt.getMinuteOfHour()).withSecondOfMinute(0);
                 }
                 break;
@@ -533,7 +521,7 @@ public class TradingWeekImpl extends JodaWorkingWeek implements TradingWeek {
                         dt = dt.plusDays((DateTimeConstants.SUNDAY - dt.getDayOfWeek()) + 1);
                     }
                     dt = dt.withDayOfWeek(tradingSession.day());
-                    LocalTime lt = tradingSession.start();
+                    LocalTime lt = tradingSession.end();
                     dt = dt.withHourOfDay(lt.getHourOfDay()).withMinuteOfHour(lt.getMinuteOfHour());
                     dt = dt.withSecondOfMinute(lt.getSecondOfMinute()).withMillisOfSecond(0);
                 }

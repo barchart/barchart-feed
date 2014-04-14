@@ -96,9 +96,9 @@ public class Distributor extends Node<SeriesSubscription> implements Assembler {
 	@Override
 	public void onNextMarket(Market m) {
 	    //if(true) return;
-		final BarImpl bar =
-				new BarImpl(m.instrument().id(), m.trade().time(), period, m.trade().price(), m.trade().price(), m
-						.trade().price(), m.trade().price(), m.trade().size(), null);
+		BarImpl bar =
+			new BarImpl(m.instrument().id(), m.trade().time(), period, m.trade().price(), m.trade().price(), m
+				.trade().price(), m.trade().price(), m.trade().size(), null);
 		dataQueue.offer(bar);
 //		System.out.println("onNextMarket: " + m.instrument().symbol() + ", " + m.trade().price().asDouble() + ",  " + new SpanImpl(period, bar.getTime(), bar.getTime()));
         if(historicalDataAdded) {
@@ -109,17 +109,17 @@ public class Distributor extends Node<SeriesSubscription> implements Assembler {
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public <T extends HistoricalResult> void onNextHistorical(final T result) {
+	public <T extends HistoricalResult> void onNextHistorical(T result) {
 //		System.out.println("onNextHistorical: ");
 
 		BarImpl bar = null;
         boolean executedOnce = false;
         SpanImpl span = null;
-        final DataSeriesImpl<BarImpl> series = (DataSeriesImpl)getOutputTimeSeries(subscription);
-        final List<String> results = result.getResult();
+        DataSeriesImpl<BarImpl> series = (DataSeriesImpl)getOutputTimeSeries(subscription);
+        List<String> results = result.getResult();
 
-        for(final String s : results) {
-            final String[] resultArray = s.split("[\\,]+");
+        for(String s : results) {
+            String[] resultArray = s.split("[\\,]+");
 
             bar = resultArray.length > TICK_FORMAT_LENGTH ?
                 createBarFromMinuteCSV(resultArray) :
@@ -150,8 +150,8 @@ public class Distributor extends Node<SeriesSubscription> implements Assembler {
 		}
 		last = new DateTime(date.getMillis());
 
-		final Price value = valueFactory.newPrice(Double.parseDouble(array[3]));
-		final Size volume = valueFactory.newSize(Integer.parseInt(array[4]), 0);
+		Price value = valueFactory.newPrice(Double.parseDouble(array[3]));
+		Size volume = valueFactory.newSize(Integer.parseInt(array[4]), 0);
 
 		retVal = new BarImpl(null, last, this.period, value, value, value, value, volume, null);
 
@@ -168,12 +168,12 @@ public class Distributor extends Node<SeriesSubscription> implements Assembler {
 		}
 		last = new DateTime(date.getMillis());
 
-		final Time time = valueFactory.newTime(date.getMillis());
-		final Price open = valueFactory.newPrice(Double.parseDouble(array[2]));
-		final Price high = valueFactory.newPrice(Double.parseDouble(array[3]));
-		final Price low = valueFactory.newPrice(Double.parseDouble(array[4]));
-		final Price close = valueFactory.newPrice(Double.parseDouble(array[5]));
-		final Size volume = valueFactory.newSize(Integer.parseInt(array[6]), 0);
+		Time time = valueFactory.newTime(date.getMillis());
+		Price open = valueFactory.newPrice(Double.parseDouble(array[2]));
+		Price high = valueFactory.newPrice(Double.parseDouble(array[3]));
+		Price low = valueFactory.newPrice(Double.parseDouble(array[4]));
+		Price close = valueFactory.newPrice(Double.parseDouble(array[5]));
+		Size volume = valueFactory.newSize(Integer.parseInt(array[6]), 0);
 
 		retVal = new BarImpl(null, time, this.period, open, high, low, close, volume, null);
 
@@ -196,7 +196,7 @@ public class Distributor extends Node<SeriesSubscription> implements Assembler {
 	    SpanImpl span = null;
 	    if(!historicalQueue.isEmpty()) {
 	        BarImpl next = null;
-            final DataSeriesImpl<BarImpl> series = (DataSeriesImpl)getOutputTimeSeries(subscription);
+            DataSeriesImpl<BarImpl> series = (DataSeriesImpl)getOutputTimeSeries(subscription);
             while((next = historicalQueue.poll()) != null) {
                 if(span == null) {
 					span = new SpanImpl(subscription.getTimeFrame(0).getPeriod(), next.getDate(), next.getDate());
@@ -206,7 +206,7 @@ public class Distributor extends Node<SeriesSubscription> implements Assembler {
             }
 	    }else if(!dataQueue.isEmpty()) {
 	        BarImpl next = null;
-	        final DataSeriesImpl<BarImpl> series = (DataSeriesImpl)getOutputTimeSeries(subscription);
+	        DataSeriesImpl<BarImpl> series = (DataSeriesImpl)getOutputTimeSeries(subscription);
 	        while((next = dataQueue.poll()) != null) {
 	            if(span == null) {
 					span = new SpanImpl(subscription.getTimeFrame(0).getPeriod(), next.getDate(), next.getDate());
@@ -257,7 +257,7 @@ public class Distributor extends Node<SeriesSubscription> implements Assembler {
 
     @Override
 	public String toString() {
-        final StringBuilder sb = new StringBuilder("Assembler: ").append(" Distributor ").append(subscription);
+        StringBuilder sb = new StringBuilder("Assembler: ").append(" Distributor ").append(subscription);
         return sb.toString();
     }
 

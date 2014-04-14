@@ -81,7 +81,7 @@ public class BarchartSeriesProvider {
 	 * @param      query       Query created using a {@link QueryBuilder}
 	 * @return     a suitable NetworkObserver
 	 */
-	public NetworkObservable fetch(final Query query) {
+	public NetworkObservable fetch(Query query) {
 		List<Instrument> instList = new ArrayList<Instrument>();
 		for(String symbol : query.getSymbols()) {
 			instList.add(feedService.lookupInstrument(symbol));//Supports multiple symbols for spreads/expressions
@@ -697,7 +697,7 @@ public class BarchartSeriesProvider {
 	    }
 	    
 	    @Override
-        public rx.Subscription onSubscribe(final Observer<? super NetworkNotification> observer) throws IllegalStateException {
+        public rx.Subscription onSubscribe(Observer<? super NetworkNotification> observer) throws IllegalStateException {
 	        @SuppressWarnings("unchecked")
             final Observer<NetworkNotification> actualObserver = (Observer<NetworkNotification>)observer;
 	        

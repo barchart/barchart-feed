@@ -172,7 +172,7 @@ public class BarchartFeedService implements SeriesFeedService {
 	 */
 	private class MarketSubject implements MarketObserver<Market> {
 		@Override
-		public void onNext(final Market v) {
+		public void onNext(Market v) {
 			if(v.change().contains(Component.TRADE)) {
 				symbolObservers.get(v.trade().instrument().id()).onNextMarket(v);
 			}

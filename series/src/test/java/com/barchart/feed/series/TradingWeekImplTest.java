@@ -5,7 +5,6 @@ import static org.junit.Assert.assertEquals;
 import java.util.Properties;
 
 import org.joda.time.DateTime;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.barchart.feed.api.series.Period;
@@ -76,32 +75,32 @@ public class TradingWeekImplTest {
         assertEquals("Saturday(08:30:00.000-15:30:00.000)", session.toString());
     }
     
-    @Ignore
+    @Test
     public void testGetPreviousSessionDate() {
-        //Test advancement to following week
+        //Test recession to preceding week
         DateTime testDate = new DateTime(2009, 5, 5, 0, 0, 0, 999);//Tuesday, May 5th
         TradingWeek tradingWeek = getTestTradingWeek(TEST3); //Trading Week includes only Tue, Wed, Thur
         Period tu = new Period(PeriodType.DAY, 1);
         DateTime previousDate = tradingWeek.getPreviousSessionDate(testDate, tu);
-        assertEquals("2009-04-30T08:30:00.000-05:00", previousDate.toString());
+        assertEquals("2009-04-30T15:30:00.000-05:00", previousDate.toString());
         
         testDate = new DateTime(2009, 5, 4, 0, 0, 0, 999);//Monday, May 4th
         previousDate = tradingWeek.getPreviousSessionDate(testDate, tu);
-        assertEquals("2009-04-30T08:30:00.000-05:00", previousDate.toString());
+        assertEquals("2009-04-30T15:30:00.000-05:00", previousDate.toString());
         
         testDate = new DateTime(2009, 5, 3, 0, 0, 0, 999);//Sunday, May 3rd
         previousDate = tradingWeek.getPreviousSessionDate(testDate, tu);
-        assertEquals("2009-04-30T08:30:00.000-05:00", previousDate.toString());
+        assertEquals("2009-04-30T15:30:00.000-05:00", previousDate.toString());
         
         testDate = new DateTime(2009, 5, 2, 0, 0, 0, 999);//Saturday, May 2nd
         previousDate = tradingWeek.getPreviousSessionDate(testDate, tu);
-        assertEquals("2009-04-30T08:30:00.000-05:00", previousDate.toString());
+        assertEquals("2009-04-30T15:30:00.000-05:00", previousDate.toString());
         
         testDate = new DateTime(2009, 5, 1, 0, 0, 0, 999);//Friday, May 1st
         previousDate = tradingWeek.getPreviousSessionDate(testDate, tu);
-        assertEquals("2009-04-30T08:30:00.000-05:00", previousDate.toString());
+        assertEquals("2009-04-30T15:30:00.000-05:00", previousDate.toString());
         
-        if(true) return;
+        //if(true) return;
         
         tradingWeek = getTestTradingWeek(TEST);
         
@@ -109,7 +108,7 @@ public class TradingWeekImplTest {
         
         tu = new Period(PeriodType.YEAR, 1);
         previousDate = tradingWeek.getPreviousSessionDate(testDate, tu);
-        assertEquals("2008-01-01T08:30:00.000-06:00", previousDate.toString());
+        assertEquals("2009-01-01T15:30:00.000-06:00", previousDate.toString());
         
         tu = new Period(PeriodType.QUARTER, 1);
         previousDate = tradingWeek.getPreviousSessionDate(testDate, tu);
