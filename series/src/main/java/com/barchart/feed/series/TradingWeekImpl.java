@@ -411,35 +411,36 @@ public class TradingWeekImpl extends JodaWorkingWeek implements TradingWeek {
         boolean skip = false;
         switch(periodType) {
             case YEAR: {
-                dt = dt.monthOfYear().withMinimumValue();
-                dt = interval > 1 ? dt.minusYears(interval) : dt;
+                dt = dt.minusYears(interval).monthOfYear().withMaximumValue();
+                dt = dt.dayOfMonth().withMaximumValue();
                 skip = true;
             }
             case QUARTER: {
                 if(!skip) {
-                    dt = ExtendedChronology.withPeriodStart(dt);
-                    dt = interval > 1 ? dt.minusMonths(3 * interval) : dt;
+                	LocalTime lt = dt.toLocalTime();
+                    dt = ExtendedChronology.withPeriodEnd(dt).minusMonths(3 * interval).dayOfMonth().withMaximumValue();
+                    dt = dt.withHourOfDay(lt.getHourOfDay()).withMinuteOfHour(lt.getMinuteOfHour()).
+                    	withSecondOfMinute(lt.getSecondOfMinute());
                     skip = true;
                 }
             }
             case MONTH: {
                 if(!skip) {
-                    dt = dt.dayOfMonth().withMinimumValue();
-                    dt = interval > 1 ? dt.minusMonths(interval) : dt; 
+                	dt = dt.minusMonths(interval);
+                    dt = dt.dayOfMonth().withMaximumValue();
                     skip = true;
                 }
             }
             case WEEK: {
                 if(!skip) {
-                    dt = dt.withDayOfWeek(getStartSession().day());
-                    dt = interval > 1 ? dt.minusWeeks(interval) : dt;
+                	dt = dt.minusWeeks(interval);
+                    dt = dt.withDayOfWeek(getEndSession().day());
                     skip = true;
                 }
             }
             case DAY: {
                 if(periodType != PeriodType.WEEK) {
-                    dt = skip ? dt.dayOfMonth().withMinimumValue().withHourOfDay(tradingSession.end().getHourOfDay()) : 
-                        tradingSession.day() < dt.getDayOfWeek() ? dt : dt.minusDays(interval);
+                    dt = skip ? dt :  dt.minusDays(interval);
                     tradingSession = getTradingSessionOnOrBefore(dt);
                     if(tradingSession.day() > dt.getDayOfWeek()) {
                         dt = dt.minusDays((DateTimeConstants.SUNDAY - dt.getDayOfWeek()) + 1);
@@ -487,7 +488,7 @@ public class TradingWeekImpl extends JodaWorkingWeek implements TradingWeek {
                 if(skip) {
                     dt = dt.withSecondOfMinute(0);
                 }else{
-                    dt = dt.plusSeconds(interval);
+                    dt = dt.minusSeconds(interval);
                     tradingSession = getTradingSessionOnOrBefore(dt);
                     if(!tradingSession.contains(dt)) {
                         if(tradingSession.day() > dt.getDayOfWeek()) {

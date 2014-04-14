@@ -242,7 +242,7 @@ public class AnalyticNode extends Node<SeriesSubscription> {
 	 * @param subscription		the Subscription acting as key for the corresponding {@link DataSeries}
 	 * @param	the input {@link DataSeries}
 	 */
-	public <E extends DataPoint> void addInputTimeSeries(SeriesSubscription subscription, final DataSeries<E> timeSeries) {
+	public <E extends DataPoint> void addInputTimeSeries(SeriesSubscription subscription, DataSeries<E> timeSeries) {
 		this.analytic.addInputTimeSeries(inputKeyMap.get(subscription), timeSeries);
 	}
 
@@ -315,7 +315,7 @@ public class AnalyticNode extends Node<SeriesSubscription> {
 
 	@Override
 	public String toString() {
-	    final StringBuilder sb = new StringBuilder("AnalyticNode: ").append(analytic.getName()).append(" ");
+	    StringBuilder sb = new StringBuilder("AnalyticNode: ").append(analytic.getName()).append(" ");
 	    for(SeriesSubscription ss : outputKeyMap.values()) {
 	        sb.append(ss).append(" ");
 	    }

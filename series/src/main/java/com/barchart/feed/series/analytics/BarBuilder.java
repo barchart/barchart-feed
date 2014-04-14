@@ -73,13 +73,13 @@ public class BarBuilder extends AnalyticBase {
 	    //System.out.println(this + " processing span: " + span);
 		this.inputSpan = (SpanImpl)span;
 
-		final DataSeriesImpl<DataPointImpl> outputSeries = (DataSeriesImpl)getOutputTimeSeries(BarBuilder.OUTPUT_KEY);
-		final DataSeriesImpl<DataPointImpl> inputSeries = (DataSeriesImpl)getInputTimeSeries(BarBuilder.INPUT_KEY);
-		final int inputStartIdx = inputSeries.indexOf(inputSpan.getDate(), false);
-		final int inputLastIdx = inputSeries.indexOf(inputSpan.getNextDate(), false);
+		DataSeriesImpl<DataPointImpl> outputSeries = (DataSeriesImpl)getOutputTimeSeries(BarBuilder.OUTPUT_KEY);
+		DataSeriesImpl<DataPointImpl> inputSeries = (DataSeriesImpl)getInputTimeSeries(BarBuilder.INPUT_KEY);
+		int inputStartIdx = inputSeries.indexOf(inputSpan.getDate(), false);
+		int inputLastIdx = inputSeries.indexOf(inputSpan.getNextDate(), false);
 
-		final Period inputPeriod = inputSeries.getPeriod();
-        final Period outputPeriod = outputSeries.getPeriod();
+		Period inputPeriod = inputSeries.getPeriod();
+        Period outputPeriod = outputSeries.getPeriod();
 
         boolean barCompleted = false;
 
@@ -114,7 +114,7 @@ public class BarBuilder extends AnalyticBase {
 			}
 
 			for(int i = wasAddedDuringInit ? inputStartIdx + 1 : inputStartIdx;i <= inputLastIdx;i++) {
-				final BarImpl currentIdxBar = (BarImpl)inputSeries.get(i);
+				BarImpl currentIdxBar = (BarImpl)inputSeries.get(i);
 				if(currentIdxBar.getDate().isAfter(workingTargetDate)) {
 					workingTargetDate = subscription.getTradingWeek().getNextSessionDate(workingTargetDate, outputPeriod);
 					currentMergeBar = new BarImpl(currentIdxBar);

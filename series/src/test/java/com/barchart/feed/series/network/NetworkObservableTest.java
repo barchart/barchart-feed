@@ -13,6 +13,7 @@ import org.joda.time.DateTime;
 import org.junit.Test;
 
 import rx.Observer;
+import rx.Subscription;
 
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.api.series.DataPoint;
@@ -43,7 +44,7 @@ public class NetworkObservableTest {
 		BarchartSeriesProvider provider = TestHarness.getTestSeriesProvider(sub);
 
 		List<Node<SeriesSubscription>> nodes = new ArrayList<Node<SeriesSubscription>>();
-		nodes.add(getTestNode(sub.toString()));
+		nodes.add(getTestNode(sub));
 		SeriesSubscribeFunc ss = provider.new SeriesSubscribeFunc(sub, nodes);
 		Map<String, DataSeries<? extends DataPoint>> map = new HashMap<String, DataSeries<? extends DataPoint>>();
 		map.put(sub.toString(), new DataSeriesImpl<DataPoint>(new Period(PeriodType.HOUR, 12)));
@@ -71,8 +72,8 @@ public class NetworkObservableTest {
 		BarchartSeriesProvider provider = TestHarness.getTestSeriesProvider(sub);
 
 		List<Node<SeriesSubscription>> nodes = new ArrayList<Node<SeriesSubscription>>();
-		nodes.add(getTestNode(sub.toString()));
-		nodes.add(getTestNode("ARBITRARY NAME"));
+		nodes.add(getTestNode(sub));
+		nodes.add(getTestNode(sub, "ARBITRARY NAME"));
 
 		SeriesSubscribeFunc ss = provider.new SeriesSubscribeFunc(sub, nodes);
 		Map<String, DataSeries<? extends DataPoint>> map = new HashMap<String, DataSeries<? extends DataPoint>>();
@@ -112,8 +113,14 @@ public class NetworkObservableTest {
 		};
 	}
 
-	private Node<SeriesSubscription> getTestNode(String name) {
-		return new AnalyticNode(new TestAnalytic(name));
+	private Node<SeriesSubscription> getTestNode(Subscription sub) {
+		return getTestNode(sub, sub.toString());
+	}
+	
+	private Node<SeriesSubscription> getTestNode(Subscription sub, String name) {
+		AnalyticNode node = new AnalyticNode(new TestAnalytic(sub.toString()));
+		//node.add
+		return new AnalyticNode(new TestAnalytic(sub.toString()));
 	}
 
 	class TestAnalytic extends AnalyticBase {

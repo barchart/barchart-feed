@@ -201,7 +201,7 @@ public class BarchartHistoricalService<T extends HistoricalResult> extends Histo
 			BufferedReader br = null;
 			try {
 				URL url = new URL(urlString);
-			    final URLConnection huc = url.openConnection();
+			    URLConnection huc = url.openConnection();
 			    huc.setUseCaches(false);
 			    br = new BufferedReader(new InputStreamReader(huc.getInputStream()));
 			}catch(Exception e) {
@@ -240,7 +240,7 @@ public class BarchartHistoricalService<T extends HistoricalResult> extends Histo
 				    queryDate = queryDate.plusDays(1);
 				}
 			}
-			catch (final IOException ioe) { ioe.printStackTrace(); }
+			catch (IOException ioe) { ioe.printStackTrace(); }
 			finally {
 				try {
 					br.close();
@@ -277,7 +277,7 @@ public class BarchartHistoricalService<T extends HistoricalResult> extends Histo
                    br.close();
                 }
             }
-            catch (final IOException ioe) { ioe.printStackTrace(); }
+            catch (IOException ioe) { ioe.printStackTrace(); }
             finally {
                 try {
                     br.close();
@@ -319,7 +319,7 @@ public class BarchartHistoricalService<T extends HistoricalResult> extends Histo
 			       br.close();
 			    }
 			}
-			catch (final IOException ioe) { ioe.printStackTrace(); }
+			catch (IOException ioe) { ioe.printStackTrace(); }
 			finally {
 				try {
 					br.close();

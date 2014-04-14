@@ -578,7 +578,7 @@ public class BarImpl extends DataPointImpl implements Bar {
             if (low.isNull() || (!otherLow.isNull() && otherLow.lessThan(low))) {
                 low = otherLow;
             }
-        } catch (final ArithmeticException ae) {
+        } catch (ArithmeticException ae) {
             ae.printStackTrace();
         }
 

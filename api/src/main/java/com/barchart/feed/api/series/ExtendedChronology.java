@@ -126,6 +126,7 @@ public final class ExtendedChronology extends AssembledChronology {
     /**
      * Returns a new {@link DateTime} whose lesser fields are adjusted to the
      * Quarter period start of the specified DateTime.
+     * <em><b>WARNING: Time fields are not preserved and are returned as 00:00:00.000</b></em>
      * @param       dt    the DateTime to be adjusted to the nearest Quarter
      * @return      the DateTime adjusted to the nearest Quarter.
      */
@@ -136,6 +137,19 @@ public final class ExtendedChronology extends AssembledChronology {
         long millis = PeriodType.QUARTER.getComparator().getLowerLimit().getField(
         	getInstance()).roundFloor(dt.getMillis());
     	return new DateTime(millis);
+    }
+    
+    /**
+     * Returns a new {@link DateTime} whose lesser fields are adjusted to the
+     * Quarter period end of the specified DateTime.
+     * <em><b>WARNING: Time fields are not preserved and are returned as 00:00:00.000</b></em>
+     * @param       dt    the DateTime to be adjusted to the nearest Quarter end
+     * @return      the DateTime adjusted to the nearest Quarter end.
+     */
+    public static DateTime withPeriodEnd(DateTime dt) {
+    	dt = withPeriodStart(dt);
+    	dt = dt.plusMonths(2).dayOfMonth().withMaximumValue();
+    	return dt;
     }
     
     // Constructors and instance variables
