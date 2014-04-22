@@ -54,55 +54,56 @@ public interface Bar extends Range {
 	public Price getMidpoint();
 
 	/**
-	 * Returns the volume. This will be cumulative for aggregated bars, to
-	 * obtain average OI values use getVolume().div(getTickCount()).
-	 *
+	 * Returns the volume. For aggregated bars this will be an average value.
+	 * 
 	 * @return the volume
 	 */
 	public Size getVolume();
 
 	/**
-	 * Returns the volume traded up.
-	 *
+	 * Returns the volume traded up. For aggregated bars this will be an average
+	 * value.
+	 * 
 	 * @return the volume traded up.
 	 */
 	public Size getVolumeUp();
 
 	/**
-	 * Returns the volume traded down.
-	 *
+	 * Returns the volume traded down. For aggregated bars this will be an
+	 * average value.
+	 * 
 	 * @return the volume traded down.
 	 */
 	public Size getVolumeDown();
 
 	/**
-	 * Returns the total traded value as the sum of all trade price * size
+	 * Returns the traded value as the sum of all trade price * size. For
+	 * aggregated bars this will be an average value.
 	 */
 	public Price getTradedValue();
 
 	/**
-	 * Returns the total positive traded value
+	 * Returns the positive traded value. For aggregated bars this will be an
+	 * average value.
 	 */
 	public Price getTradedValueUp();
 
 	/**
-	 * Returns the total negative traded value
+	 * Returns the negative traded value. For aggregated bars this will be an
+	 * average value.
 	 */
 	public Price getTradedValueDown();
 
 	/**
-	 * Returns the total number of ticks (trades) contributing to this
-	 * {@code Bar}
+	 * Returns the total number of trades contributing to this {@code Bar}
 	 *
-	 * @return the number of the ticks in this bar.
+	 * @return the number of the trades in this bar.
 	 * @see #merge(Bar, boolean)
 	 */
-	public Size getTickCount();
+	public Size getTradeCount();
 
 	/**
-	 * Returns the total open interest (futures only). This will be cumulative
-	 * for aggregated bars, to obtain average OI values use
-	 * getOpenInterest().div(getTickCount()).
+	 * Returns the average open interest (futures only).
 	 *
 	 * @return the open interest
 	 */
@@ -119,7 +120,6 @@ public interface Bar extends Range {
 	 *
 	 * @param other the other Bar to merge.
 	 * @param advanceTime true if the time should also be merged, false if not
-	 * @see #getTickCount()
 	 */
 	public <E extends Bar> void merge(E other, boolean advanceTime);
 }

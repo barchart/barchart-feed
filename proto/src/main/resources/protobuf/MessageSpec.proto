@@ -59,7 +59,7 @@ message TimeSeriesRecord {
 	optional sint32 tradedValueUpExponent = 32;
 	optional sint64 tradedValueDownMantissa = 33;
 	optional sint32 tradedValueDownExponent = 34;
-	optional sint32 tickCount = 35;
+	optional sint32 tradeCount = 35;
 	optional sint64 openInterestMantissa = 36;
 	optional sint32 openInterestExponent = 37;
 

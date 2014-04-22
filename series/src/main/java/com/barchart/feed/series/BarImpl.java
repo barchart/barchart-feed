@@ -35,8 +35,10 @@ public class BarImpl extends DataPointImpl implements Bar {
 	private Price tradedValue;
 	private Price tradedValueUp;
 	private Price tradedValueDown;
-	private Size tickCount;
+	private Size tradeCount;
 	private Size openInterest;
+
+	private int barCount = 1;
 
 	/**
 	 * Instantiates a new {@code BarImpl}
@@ -50,8 +52,8 @@ public class BarImpl extends DataPointImpl implements Bar {
 	 * @param volume       the Volume {@link Size} of this bar.
 	 * @param openInterest the Open Interest {@link Size} of this bar.
 	 */
-	public BarImpl(InstrumentID instrument, Time time, Period period, Price open,
-		Price high, Price low, Price close, Size volume, Size openInterest) {
+	public BarImpl(final InstrumentID instrument, final Time time, final Period period, final Price open,
+		final Price high, final Price low, final Price close, final Size volume, final Size openInterest) {
 
 		this(instrument, new DateTime(time.millisecond()), period, open, high, low, close, volume, null, null, null,
 			openInterest, null, null, null, null, null, null, null, null);
@@ -69,8 +71,8 @@ public class BarImpl extends DataPointImpl implements Bar {
 	 * @param volume       the Volume {@link Size} of this bar.
 	 * @param openInterest the Open Interest {@link Size} of this bar.
 	 */
-	public BarImpl(InstrumentID instrument, DateTime date, Period period, Price open,
-		Price high, Price low, Price close, Size volume, Size openInterest) {
+	public BarImpl(final InstrumentID instrument, final DateTime date, final Period period, final Price open,
+		final Price high, final Price low, final Price close, final Size volume, final Size openInterest) {
 
 		this(instrument, date, period, open, high, low, close, volume, null, null, null, openInterest, null, null,
 			null, null, null, null, null, null);
@@ -101,11 +103,11 @@ public class BarImpl extends DataPointImpl implements Bar {
 	 * @param tickCount            the number of ticks contributing to this bar.
 	 * @param openInterest         the Open Interest {@link Size} of this bar.
 	 */
-	public BarImpl(InstrumentID instrument, DateTime date, Period period, Price open,
-		Price high, Price low, Price close, Size volume, Size volumeUp,
-			Size volumeDown, Size tickCount, Size openInterest, Price midpoint,
-			    Price bid, Size bidSize, Price ask, Size askSize, Price tradedValue,
-			        Price tradedValueUp, Price tradedValueDown) {
+	public BarImpl(final InstrumentID instrument, final DateTime date, final Period period, final Price open,
+		final Price high, final Price low, final Price close, final Size volume, final Size volumeUp,
+			final Size volumeDown, final Size tickCount, final Size openInterest, final Price midpoint,
+			    final Price bid, final Size bidSize, final Price ask, final Size askSize, final Price tradedValue,
+			        final Price tradedValueUp, final Price tradedValueDown) {
 
 		super(period, date);
 
@@ -125,7 +127,7 @@ public class BarImpl extends DataPointImpl implements Bar {
 		this.tradedValue = maybeNull(tradedValue);
 		this.tradedValueUp = maybeNull(tradedValueUp);
 		this.tradedValueDown = maybeNull(tradedValueDown);
-		this.tickCount = tickCount == null || tickCount.isNull() ? VALUES.newSize(1) : tickCount;
+		this.tradeCount = tickCount == null || tickCount.isNull() ? VALUES.newSize(1) : tickCount;
 		this.openInterest = maybeNull(openInterest);
 
 	}
@@ -134,11 +136,11 @@ public class BarImpl extends DataPointImpl implements Bar {
 	 * Returns a {@link Size} object that treats null as
 	 * a Size type ({@link Size#NULL}) if the specified size is null,
 	 * otherwise this method returns the originally specified Size.
-	 * 
-	 * @param s    the Size to test 
+	 *
+	 * @param s    the Size to test
 	 * @return     the original Size specified or {@link Size#NULL}
 	 */
-	private Size maybeNull(Size s) {
+	private Size maybeNull(final Size s) {
 		if (s == null)
 			return Size.NULL;
 		return s;
@@ -148,11 +150,11 @@ public class BarImpl extends DataPointImpl implements Bar {
      * Returns a {@link Price} object that treats null as
      * a Price type ({@link Price#NULL}) if the specified price is null,
      * otherwise this method returns the originally specified Price.
-     * 
-     * @param p    the Price to test 
+     *
+     * @param p    the Price to test
      * @return     the original Size specified or {@link Price#NULL}
      */
-	private Price maybeNull(Price p) {
+	private Price maybeNull(final Price p) {
 		if (p == null)
 			return Price.NULL;
 		return p;
@@ -163,7 +165,7 @@ public class BarImpl extends DataPointImpl implements Bar {
 	 *
 	 * @param other
 	 */
-	public BarImpl(Bar other) {
+	public BarImpl(final Bar other) {
 
 		this(other.getInstrument(),
 	        other.getDate(),
@@ -175,7 +177,7 @@ public class BarImpl extends DataPointImpl implements Bar {
             other.getVolume(),
             other.getVolumeUp(),
             other.getVolumeDown(),
-            other.getTickCount(),
+            other.getTradeCount(),
             other.getOpenInterest(),
             other.getMidpoint(),
             other.getBid(),
@@ -192,14 +194,14 @@ public class BarImpl extends DataPointImpl implements Bar {
 		return instrument;
 	}
 
-	public void setInstrument(InstrumentID id) {
+	public void setInstrument(final InstrumentID id) {
 		this.instrument = id;
 	}
 
 	/**
      * Returns the {@link Period} (aggregation interval and units) of this
      * {@code TimePoint}
-     * 
+     *
      * @return  the {@link Period}
      */
 	@Override
@@ -210,10 +212,10 @@ public class BarImpl extends DataPointImpl implements Bar {
 	/**
      * Sets the {@link Period} (aggregation interval and duration units) of this
      * {@code TimePoint}
-     * 
+     *
      * @param   p the {@link Period}
      */
-	public void setPeriod(Period p) {
+	public void setPeriod(final Period p) {
 		this.period = p;
 	}
 
@@ -230,7 +232,7 @@ public class BarImpl extends DataPointImpl implements Bar {
      * Sets the open price
      * @param open  the open price
      */
-	public void setOpen(Price open) {
+	public void setOpen(final Price open) {
 		this.open = open;
 	}
 
@@ -247,7 +249,7 @@ public class BarImpl extends DataPointImpl implements Bar {
      * Sets the high price.
      * @param high  the high price.
      */
-	public void setHigh(Price high) {
+	public void setHigh(final Price high) {
 		this.high = high;
 	}
 
@@ -262,10 +264,10 @@ public class BarImpl extends DataPointImpl implements Bar {
 
 	/**
      * Sets the low price.
-     * 
+     *
      * @param low the low price
      */
-	public void setLow(Price low) {
+	public void setLow(final Price low) {
 		this.low = low;
 	}
 
@@ -282,12 +284,12 @@ public class BarImpl extends DataPointImpl implements Bar {
      * Sets the close price
      * @param close the close price
      */
-	public void setClose(Price close) {
+	public void setClose(final Price close) {
 		this.close = close;
 	}
 
 	/**
-	 * Returns the {@link Price} representing the 
+	 * Returns the {@link Price} representing the
 	 * mid point between bid and ask
 	 * @return the mid point
 	 */
@@ -297,11 +299,11 @@ public class BarImpl extends DataPointImpl implements Bar {
 	}
 
 	/**
-     * Sets the {@link Price} representing the 
+     * Sets the {@link Price} representing the
      * mid point between bid and ask
      * @param the mid point
      */
-	public void setMidpoint(Price midpoint) {
+	public void setMidpoint(final Price midpoint) {
 		this.midpoint = midpoint;
 	}
 
@@ -318,7 +320,7 @@ public class BarImpl extends DataPointImpl implements Bar {
      * Sets the bid {@link Price}
      * @param the bid {@link Price}
      */
-	public void setBid(Price bid) {
+	public void setBid(final Price bid) {
 		this.bid = bid;
 	}
 
@@ -335,7 +337,7 @@ public class BarImpl extends DataPointImpl implements Bar {
      * Sets the {@link Size} representing the bid quantity
      * @param a {@link Size} representing the bid quantity
      */
-	public void setBidSize(Size bidSize) {
+	public void setBidSize(final Size bidSize) {
 		this.bidSize = bidSize;
 	}
 
@@ -352,7 +354,7 @@ public class BarImpl extends DataPointImpl implements Bar {
      * Sets the ask {@link Price}
      * @param the ask {@link Price}
      */
-	public void setAsk(Price ask) {
+	public void setAsk(final Price ask) {
 		this.ask = ask;
 	}
 
@@ -369,7 +371,7 @@ public class BarImpl extends DataPointImpl implements Bar {
      * Sets the {@link Size} representing the ask quantity
      * @param a {@link Size} representing the ask quantity
      */
-	public void setAskSize(Size askSize) {
+	public void setAskSize(final Size askSize) {
 		this.askSize = askSize;
 	}
 
@@ -379,50 +381,67 @@ public class BarImpl extends DataPointImpl implements Bar {
      */
     @Override
     public Size getVolume() {
+
+		if (barCount > 1)
+			return volume.div(barCount);
+
         return volume;
+
     }
-    
+
     /**
      * Sets the volume
      * @param volume     the volume
      */
-    public void setVolume(Size volume) {
+    public void setVolume(final Size volume) {
         this.volume = volume;
     }
-    
+
     /**
      * Returns the volume traded up.
-     * 
+     *
      * @return the volume traded up.
      */
-    public Size getVolumeUp() {
+    @Override
+	public Size getVolumeUp() {
+
+		if (barCount > 1)
+			return volumeUp.div(barCount);
+
         return volumeUp;
+
     }
-    
+
     /**
      * Sets the volume traded up.
-     * 
+     *
      * @param the volume traded up.
      */
-    public void setVolumeUp(Size size) {
+    public void setVolumeUp(final Size size) {
         this.volumeUp = size;
     }
-    
+
     /**
      * Returns the volume traded down.
-     * 
+     *
      * @return the volume traded down.
      */
-    public Size getVolumeDown() {
+    @Override
+	public Size getVolumeDown() {
+
+		if (barCount > 1)
+			return volumeDown.div(barCount);
+
         return volumeDown;
+
     }
-    
+
     /**
      * Sets the volume traded down.
-     * 
+     *
      * @param the volume traded down.
      */
-    public void setVolumeDown(Size size) {
+    public void setVolumeDown(final Size size) {
         this.volumeDown = size;
     }
 
@@ -433,6 +452,10 @@ public class BarImpl extends DataPointImpl implements Bar {
      */
 	@Override
 	public Price getTradedValue() {
+
+		if (barCount > 1)
+			return tradedValue.div(barCount);
+
 		return tradedValue;
 	}
 
@@ -441,7 +464,7 @@ public class BarImpl extends DataPointImpl implements Bar {
      * volume multiplied by this {@code Bar}'s {@link Price}
      * @param this Bar's value
      */
-	public void setTradedValue(Price tradedValue) {
+	public void setTradedValue(final Price tradedValue) {
 		this.tradedValue = tradedValue;
 	}
 
@@ -454,6 +477,10 @@ public class BarImpl extends DataPointImpl implements Bar {
      */
 	@Override
 	public Price getTradedValueUp() {
+
+		if (barCount > 1)
+			return tradedValueUp.div(barCount);
+
 		return tradedValueUp;
 	}
 
@@ -464,7 +491,7 @@ public class BarImpl extends DataPointImpl implements Bar {
      * Bar's value.
      * @param this Bar's value traded up
      */
-	public void setTradedValueUp(Price tradedValueUp) {
+	public void setTradedValueUp(final Price tradedValueUp) {
 		this.tradedValueUp = tradedValueUp;
 	}
 
@@ -477,6 +504,10 @@ public class BarImpl extends DataPointImpl implements Bar {
      */
 	@Override
 	public Price getTradedValueDown() {
+
+		if (barCount > 1)
+			return tradedValueDown.div(barCount);
+
 		return tradedValueDown;
 	}
 
@@ -487,29 +518,32 @@ public class BarImpl extends DataPointImpl implements Bar {
      * Bar's value.
      * @param this Bar's value traded up
      */
-	public void setTradedValueDown(Price tradedValueDown) {
+	public void setTradedValueDown(final Price tradedValueDown) {
 		this.tradedValueDown = tradedValueDown;
 	}
 
 	/**
-	 * Returns the total number of trades (i.e. number of merges) 
-	 * that contributed to the current state of this bar.
-	 * @return the number of ticks between the first bar of this bar's
-	 *         period and this one.
+	 * Returns the total number of trades that contributed to the current state
+	 * of this bar.
 	 */
 	@Override
-	public Size getTickCount() {
-		return tickCount;
+	public Size getTradeCount() {
+
+		if (barCount > 1)
+			return tradeCount.div(barCount);
+
+		return tradeCount;
+
 	}
 
 	/**
-     * Sets the total number of trades (i.e. number of merges) 
+     * Sets the total number of trades (i.e. number of merges)
      * that contributed to the current state of this bar.
      * @param the number of ticks between the first bar of this bar's
      *         period and this one.
      */
-	public void setTickCount(Size size) {
-		this.tickCount = size;
+	public void setTradeCount(final Size size) {
+		this.tradeCount = size;
 	}
 
 	/**
@@ -519,7 +553,12 @@ public class BarImpl extends DataPointImpl implements Bar {
 	 */
 	@Override
 	public Size getOpenInterest() {
+
+		if (barCount > 1)
+			return openInterest.div(barCount);
+
 		return openInterest;
+
 	}
 
 	/**
@@ -527,7 +566,7 @@ public class BarImpl extends DataPointImpl implements Bar {
      * of this {@code Bar}'s period.
      * @param the total open interest
      */
-	public void setOpenInterest(Size openInterest) {
+	public void setOpenInterest(final Size openInterest) {
 		this.openInterest = openInterest;
 	}
 
@@ -539,28 +578,28 @@ public class BarImpl extends DataPointImpl implements Bar {
 	public DateTime getDate() {
 		return date;
 	}
-	
+
 	/**
      * Sets the time stamp of this Bar
      * @param this Bar's time stamp
      */
 	@Override
-	public void setDate(DateTime d) {
+	public void setDate(final DateTime d) {
 		this.date = d;
 	}
 
 	/**
 	 * Merges the specified {@link Bar} with this one, possibly updating any
-     * barrier elements (i.e. High, Low, Volume, etc) if appropriate, thus
-     * allowing the aggregation and summation of values based on those Bar
-     * values merged.
-     * 
-     * @param   other           the Bar to merge 
-     * @param   advanceTime     whether to replace this Bar's date with the 
-     *                          date of the specified Bar.
+	 * barrier elements (i.e. High, Low, Volume, etc) if appropriate, thus
+	 * allowing the aggregation and summation of values based on those Bar
+	 * values merged.
+	 *
+	 * @param other the Bar to merge
+	 * @param advanceTime whether to replace this Bar's date with the date of
+	 *            the specified Bar.
 	 */
 	@Override
-	public <E extends Bar> void merge(E other, boolean advanceTime) {
+	public <E extends Bar> void merge(final E other, final boolean advanceTime) {
 
 		// Close and Volume should *always* have values, the rest may be null
 
@@ -578,11 +617,11 @@ public class BarImpl extends DataPointImpl implements Bar {
             if (low.isNull() || (!otherLow.isNull() && otherLow.lessThan(low))) {
                 low = otherLow;
             }
-        } catch (ArithmeticException ae) {
+        } catch (final ArithmeticException ae) {
             ae.printStackTrace();
         }
 
-		Price value = other.getClose().mult(other.getVolume());
+		final Price value = other.getClose().mult(other.getVolume());
 
 		if (tradedValue.isNull()) {
 			tradedValue = VALUES.newPrice(0);
@@ -607,15 +646,21 @@ public class BarImpl extends DataPointImpl implements Bar {
 			volumeUp = volumeUp.add(other.getVolume());
 		}
 
-		close = other.getClose();
+		if (date.compareTo(other.getDate()) <= 0) {
+			close = other.getClose();
+		}
+
+		if (open == null || open.isNull()) {
+			open = other.getOpen();
+		}
+
 		bid = other.getBid();
 		bidSize = other.getBidSize();
 		ask = other.getAsk();
 		askSize = other.getAskSize();
 
-		tickCount = tickCount.add(1);
+		tradeCount = tradeCount.add(other.getTradeCount());
 
-		// Average the open interest for multi-day bars
 		if (!other.getOpenInterest().isNull()) {
 			if (openInterest.isNull()) {
 				openInterest = other.getOpenInterest();
@@ -624,8 +669,10 @@ public class BarImpl extends DataPointImpl implements Bar {
 			}
 		}
 
+		barCount++;
+
 		if (advanceTime) {
-			date = new DateTime(other.getDate());
+			date = other.getDate();
 		}
 
 	}
@@ -635,7 +682,7 @@ public class BarImpl extends DataPointImpl implements Bar {
 	 */
 	@Override
 	public String toString() {
-		StringBuilder sb = new StringBuilder();
+		final StringBuilder sb = new StringBuilder();
 		sb.append("[Bar: ").append(date)
 				.append(" o=").append(open.asDouble())
 				.append(" h=").append(high.asDouble())
@@ -654,7 +701,7 @@ public class BarImpl extends DataPointImpl implements Bar {
 	 */
 	@Override
 	public int hashCode() {
-		int prime = 31;
+		final int prime = 31;
 		int result = super.hashCode();
 		result = prime * result + ((close == null) ? 0 : close.hashCode());
 		result = prime * result + ((high == null) ? 0 : high.hashCode());
@@ -662,7 +709,7 @@ public class BarImpl extends DataPointImpl implements Bar {
 		result = prime * result + ((open == null) ? 0 : open.hashCode());
 		result = prime * result + ((volumeUp == null) ? 0 : volumeUp.hashCode());
 		result = prime * result + ((volumeDown == null) ? 0 : volumeDown.hashCode());
-		result = prime * result + ((tickCount == null) ? 0 : tickCount.hashCode());
+		result = prime * result + ((tradeCount == null) ? 0 : tradeCount.hashCode());
 		result = prime * result
 				+ ((openInterest == null) ? 0 : openInterest.hashCode());
 		result = prime * result + ((period == null) ? 0 : period.hashCode());
@@ -675,14 +722,14 @@ public class BarImpl extends DataPointImpl implements Bar {
      * {@inheritDoc}
      */
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		if (this == obj)
 			return true;
 		if (!super.equals(obj))
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		BarImpl other = (BarImpl) obj;
+		final BarImpl other = (BarImpl) obj;
 		if (close == null) {
 			if (other.close != null)
 				return false;
@@ -708,10 +755,10 @@ public class BarImpl extends DataPointImpl implements Bar {
 				return false;
 		} else if (!volumeDown.equals(other.volumeDown))
 			return false;
-		if (tickCount == null) {
-			if (other.tickCount != null)
+		if (tradeCount == null) {
+			if (other.tradeCount != null)
 				return false;
-		} else if (!tickCount.equals(other.tickCount))
+		} else if (!tradeCount.equals(other.tradeCount))
 			return false;
 		if (open == null) {
 			if (other.open != null)

@@ -50,7 +50,7 @@ public final class TimeSeriesCodec {
 				buf.hasVolumeUpMantissa() ? VALUES.newSize(buf.getVolumeUpMantissa(), buf.getVolumeExponent()) : null,
 				buf.hasVolumeDownMantissa() ? VALUES.newSize(buf.getVolumeDownMantissa(), buf.getVolumeExponent())
 						: null,
-				buf.hasTickCount() ? VALUES.newSize(buf.getTickCount()) : null,
+				buf.hasTradeCount() ? VALUES.newSize(buf.getTradeCount()) : null,
 				buf.hasOpenInterestMantissa() ? VALUES.newSize(buf.getOpenInterestMantissa(),
 						buf.getOpenInterestExponent()) : null,
 				buf.hasMidpointMantissa() ? VALUES.newPrice(buf.getMidpointMantissa(), buf.getMidpointExponent())
@@ -102,8 +102,8 @@ public final class TimeSeriesCodec {
 		if (bar.getVolumeDown() != null && !bar.getVolumeDown().isNull())
 			builder.setVolumeDownMantissa(bar.getVolumeDown().mantissa()).setVolumeDownExponent(
 					bar.getVolumeDown().exponent());
-		if (bar.getTickCount() != null && !bar.getTickCount().isNull())
-			builder.setTickCount((int) bar.getTickCount().asDouble());
+		if (bar.getTradeCount() != null && !bar.getTradeCount().isNull())
+			builder.setTradeCount((int) bar.getTradeCount().asDouble());
 		if (bar.getOpenInterest() != null && !bar.getOpenInterest().isNull())
 			builder.setOpenInterestMantissa(bar.getOpenInterest().mantissa()).setOpenInterestExponent(
 					bar.getOpenInterest().exponent());
