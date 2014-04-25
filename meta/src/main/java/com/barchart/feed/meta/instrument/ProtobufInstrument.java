@@ -383,10 +383,10 @@ public class ProtobufInstrument extends InstrumentBase implements Instrument {
 	public Price transactionPriceConversionFactor() {
 
 		if (!def.hasTransactionPriceConversionFactor()) {
-			return vals.newPrice(1);
+			return VALUES.newPrice(1);
 		}
 
-		return vals.newPrice(def.getTransactionPriceConversionFactor());
+		return VALUES.newPrice(def.getTransactionPriceConversionFactor());
 
 	}
 

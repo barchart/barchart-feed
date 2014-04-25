@@ -7,20 +7,19 @@ import java.util.Map;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
-import org.openfeed.InstrumentDefinition;
 
-import com.barchart.feed.api.model.meta.Channel;
 import com.barchart.feed.api.model.meta.Exchange;
 import com.barchart.feed.api.model.meta.Instrument;
+import com.barchart.feed.api.model.meta.id.ChannelID;
 import com.barchart.feed.api.model.meta.id.InstrumentID;
 import com.barchart.feed.api.model.meta.id.VendorID;
 import com.barchart.feed.api.model.meta.instrument.Calendar;
 import com.barchart.feed.api.model.meta.instrument.PriceFormat;
+import com.barchart.feed.api.model.meta.instrument.Schedule;
 import com.barchart.feed.api.model.meta.instrument.SpreadLeg;
 import com.barchart.feed.api.model.meta.instrument.SpreadType;
 import com.barchart.util.value.api.Fraction;
 import com.barchart.util.value.api.Price;
-import com.barchart.util.value.api.Schedule;
 import com.barchart.util.value.api.Size;
 import com.barchart.util.value.api.Time;
 import com.barchart.util.value.api.TimeInterval;
@@ -41,10 +40,7 @@ public interface InstrumentState extends Instrument, Resettable, Instrumentable 
 	LoadState loadState();
 
 	@Override
-	void process(InstrumentDefinition value);
-
-	@Override
-	InstrumentDefinition definition();
+	void process(Instrument value);
 
 	@Override
 	void reset();
@@ -187,18 +183,11 @@ public interface InstrumentState extends Instrument, Resettable, Instrumentable 
 		}
 
 		@Override
-		public void process(final InstrumentDefinition value) {
-
-		}
-
-		@Override
-		public InstrumentDefinition definition() {
-			return InstrumentDefinition.getDefaultInstance();
+		public void process(final Instrument value) {
 		}
 
 		@Override
 		public void reset() {
-
 		}
 
 		@Override
@@ -217,8 +206,8 @@ public interface InstrumentState extends Instrument, Resettable, Instrumentable 
 		}
 
 		@Override
-		public Channel channel() {
-			return Channel.NULL;
+		public ChannelID channel() {
+			return ChannelID.NULL;
 		}
 
 		@Override
@@ -283,7 +272,7 @@ public interface InstrumentState extends Instrument, Resettable, Instrumentable 
 
 		@Override
 		public OptionType optionType() {
-			return OptionType.UNKNOWN;
+			return OptionType.NULL;
 		}
 
 		@Override

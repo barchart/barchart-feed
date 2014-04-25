@@ -20,7 +20,7 @@ import com.barchart.util.value.api.ValueFactory;
 
 public abstract class InstrumentBase implements Instrument {
 
-	protected static final ValueFactory vals = ValueFactoryImpl.instance;
+	protected static final ValueFactory VALUES = ValueFactoryImpl.getInstance();
 
 	/*
 	 * Common methods
@@ -110,7 +110,7 @@ public abstract class InstrumentBase implements Instrument {
 			return TimeInterval.NULL;
 		}
 
-		return vals.newTimeInterval(
+		return VALUES.newTimeInterval(
 				start.isNull() ? 0 : start.date().getMillis(),
 				end.isNull() ? 0 : end.date().getMillis());
 
@@ -125,7 +125,7 @@ public abstract class InstrumentBase implements Instrument {
 			return Time.NULL;
 		}
 
-		return vals.newTime(event.date().getMillis());
+		return VALUES.newTime(event.date().getMillis());
 
 	}
 
