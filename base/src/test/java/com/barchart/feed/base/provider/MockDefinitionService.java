@@ -27,9 +27,9 @@ import com.barchart.util.value.ValueFactoryImpl;
 import com.barchart.util.value.api.ValueFactory;
 
 public class MockDefinitionService implements InstrumentService<CharSequence> {
-	
+
 	private static final ValueFactory factory = new ValueFactoryImpl();
-	
+
 	@SuppressWarnings("unused")
 	private static final Logger log = LoggerFactory
 			.getLogger(MockDefinitionService.class);
@@ -37,59 +37,59 @@ public class MockDefinitionService implements InstrumentService<CharSequence> {
 	public static final long INST_GUID_1 = 1;
 	public static final long INST_GUID_2 = 2;
 	public static final long INST_GUID_3 = 3;
-	
+
 	public static final String INST_SYMBOL_1 = "one";
 	public static final String INST_SYMBOL_2 = "two";
 	public static final String INST_SYMBOL_3 = "three";
-	
-	final Map<Long, Instrument> guidMap = 
+
+	final Map<Long, Instrument> guidMap =
 			new ConcurrentHashMap<Long, Instrument>();
-	final Map<String, Long> symbolMap = 
+	final Map<String, Long> symbolMap =
 			new ConcurrentHashMap<String, Long>();
-	
+
 	final ExecutorService executor = Executors.newCachedThreadPool();
-		
+
 	@SuppressWarnings("rawtypes")
 	public MockDefinitionService() {
-		
-		InstrumentDefinition.Builder builder = InstrumentDefinition.newBuilder();
-		
+
+		final InstrumentDefinition.Builder builder = InstrumentDefinition.newBuilder();
+
 		builder.setMarketId(INST_GUID_1);
 		builder.setSymbol(INST_SYMBOL_1);
 		builder.setMinimumPriceIncrement(Decimal.newBuilder().setMantissa(1).setExponent(-1).build());
 		builder.setBookDepth(10);
-		builder.setDisplayBase(10);
-		builder.setDisplayExponent(-1);
-		
+		// builder.setDisplayBase(10);
+		// builder.setDisplayExponent(-1);
+
 		guidMap.put(INST_GUID_1, InstrumentFactory.instrument(builder.buildPartial()));
 		symbolMap.put(INST_SYMBOL_1, INST_GUID_1);
-		
+
 		builder.clear();
-		
+
 		builder.setMarketId(INST_GUID_2);
 		builder.setSymbol(INST_SYMBOL_2);
 		builder.setMinimumPriceIncrement(Decimal.newBuilder().setMantissa(25).setExponent(-2).build());
 		builder.setBookDepth(10);
-		builder.setDisplayBase(10);
-		builder.setDisplayExponent(-1);
-		
+		// builder.setDisplayBase(10);
+		// builder.setDisplayExponent(-1);
+
 		guidMap.put(INST_GUID_2, InstrumentFactory.instrument(builder.buildPartial()));
 		symbolMap.put(INST_SYMBOL_2, INST_GUID_2);
-		
+
 		builder.clear();
-		
+
 		builder.setMarketId(INST_GUID_3);
 		builder.setSymbol(INST_SYMBOL_3);
 		builder.setMinimumPriceIncrement(Decimal.newBuilder().setMantissa(125).setExponent(-3).build());
 		builder.setBookDepth(10);
-		builder.setDisplayBase(10);
-		builder.setDisplayExponent(-1);
-		
+		// builder.setDisplayBase(10);
+		// builder.setDisplayExponent(-1);
+
 		guidMap.put(INST_GUID_3, InstrumentFactory.instrument(builder.buildPartial()));
 		symbolMap.put(INST_SYMBOL_3, INST_GUID_3);
-		
+
 	}
-	
+
 	@Override
 	public Instrument lookup(final CharSequence symbol) {
 		if(symbolMap.containsKey(symbol)) {
@@ -101,19 +101,19 @@ public class MockDefinitionService implements InstrumentService<CharSequence> {
 	@Override
 	public Map<CharSequence, Instrument> lookup(
 			final Collection<CharSequence> symbols) {
-		
-		final Map<CharSequence, Instrument> insts = 
+
+		final Map<CharSequence, Instrument> insts =
 				new HashMap<CharSequence, Instrument>();
-		
+
 		for(final CharSequence symbol : symbols) {
 			insts.put(symbol,lookup(symbol));
 		}
-		
+
 		return insts;
 	}
 
 	@Override
-	public Instrument lookup(InstrumentID id) {
+	public Instrument lookup(final InstrumentID id) {
 		// TODO Auto-generated method stub
 		return null;
 	}

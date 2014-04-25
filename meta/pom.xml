@@ -1,0 +1,74 @@
+<!-- Copyright (C) 2011-2013 Barchart, Inc. <http://www.barchart.com /> All 
+	rights reserved. Licensed under the OSI BSD License. http://www.opensource.org/licenses/bsd-license.php -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.barchart.base</groupId>
+		<artifactId>barchart-archon</artifactId>
+		<version>2.5.13</version>
+		<relativePath />
+	</parent>
+
+	<groupId>com.barchart.feed</groupId>
+	<artifactId>barchart-feed-meta</artifactId>
+	<version>1.0.0-SNAPSHOT</version>
+	<packaging>bundle</packaging>
+
+	<url>https://github.com/barchart/barchart-feed</url>
+
+	<issueManagement>
+		<system>github</system>
+		<url>https://github.com/barchart/barchart-feed/issues</url>
+	</issueManagement>
+
+	<scm>
+		<url>https://github.com/barchart/barchart-feed</url>
+		<connection>scm:git:git://github.com/barchart/barchart-feed.git</connection>
+		<developerConnection>scm:git:ssh://git@github.com/barchart/barchart-feed.git</developerConnection>
+		<tag>master</tag>
+	</scm>
+
+	<properties>
+	</properties>
+
+	<dependencies>
+
+		<dependency>
+			<groupId>com.barchart.feed</groupId>
+			<artifactId>barchart-feed-api</artifactId>
+			<version>[2.2.3-SNAPSHOT,3-SNAPSHOT)</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.openfeed</groupId>
+			<artifactId>openfeed</artifactId>
+			<version>[2-SNAPSHOT, 3-SNAPSHOT)</version>
+		</dependency>
+
+		<!-- Provided -->
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- Test -->
+
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-all</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+	</dependencies>
+
+</project>
