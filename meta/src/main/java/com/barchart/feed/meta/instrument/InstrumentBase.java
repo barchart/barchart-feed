@@ -173,7 +173,12 @@ public abstract class InstrumentBase implements Instrument {
 
 	@Override
 	public String timeZoneName() {
-		return timeZone().getID();
+
+		if (timeZone() != null)
+			return timeZone().getID();
+
+		return null;
+
 	}
 
 	@Override

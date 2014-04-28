@@ -1,6 +1,7 @@
 package com.barchart.feed.meta.instrument;
 
-import java.util.Collections;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -23,180 +24,209 @@ import com.barchart.util.value.api.Size;
  */
 public abstract class DefaultInstrument extends InstrumentBase {
 
-	private volatile InstrumentID id = InstrumentID.NULL;
+	protected final Map<VendorID, String> vendorSymbols = new HashMap<VendorID, String>();
+	protected final List<InstrumentID> components = new ArrayList<InstrumentID>();
+	protected final List<SpreadLeg> spreadLegs = new ArrayList<SpreadLeg>();
 
-	@Override
-	public SecurityType securityType() {
-		return SecurityType.NULL_TYPE;
-	}
+	protected final InstrumentID id;
 
-	@Override
-	public BookLiquidityType liquidityType() {
-		return BookLiquidityType.NONE;
-	}
+	protected SecurityType securityType = SecurityType.NULL_TYPE;
+	protected BookLiquidityType liquidityType = BookLiquidityType.NONE;
+	protected BookStructureType bookStructure = BookStructureType.NONE;
+	protected Size maxBookDepth = Size.NULL;
+	protected VendorID vendor = VendorID.NULL;
+	protected String description = symbol();
+	protected String CFICode = "XXXXXX";
+	protected Price tickSize = Price.NULL;
+	protected Price pointValue = Price.NULL;
+	protected Calendar calendar = Calendar.NULL;
+	protected Schedule schedule = Schedule.NULL;
+	protected String symbol = "NULL_SYMBOL";
+	protected String toString = symbol();
+	protected String currencyCode = "NULL CURRENCY";
+	protected String exchangeCode = "NULL EXCHANGE";
+	protected String instrumentGroup = null;
+	protected State state = State.PASSIVE;
+	protected ChannelID channel = ChannelID.NULL;
+	protected DateTime created = new DateTime(0);
+	protected DateTime updated = new DateTime(0);
+	protected DateTimeZone timeZone = null;
+	protected PriceFormat priceFormat = PriceFormat.NULL;
+	protected PriceFormat optionStrikePriceFormat = PriceFormat.NULL;
+	protected Price transactionPriceConversionFactor = Price.ONE;
+	protected InstrumentID underlier = InstrumentID.NULL;
+	protected Price strikePrice = Price.NULL;
+	protected OptionType optionType = OptionType.NULL;
+	protected OptionStyle optionStyle = OptionStyle.DEFAULT;
+	protected SpreadType spreadType = SpreadType.UNKNOWN;
 
-	@Override
-	public BookStructureType bookStructure() {
-		return BookStructureType.NONE;
-	}
-
-	@Override
-	public Size maxBookDepth() {
-		return Size.NULL;
-	}
-
-	@Override
-	public VendorID vendor() {
-		return VendorID.NULL;
-	}
-
-	@Override
-	public Map<VendorID, String> vendorSymbols() {
-		return Collections.emptyMap();
-	}
-
-	@Override
-	public String description() {
-		return symbol();
-	}
-
-	@Override
-	public String CFICode() {
-		return "XXXXXX";
-	}
-
-	@Override
-	public Price tickSize() {
-		return Price.NULL;
-	}
-
-	@Override
-	public Price pointValue() {
-		return Price.NULL;
-	}
-
-	@Override
-	public Price transactionPriceConversionFactor() {
-
-		// TODO This field needs to be added to the inst def proto, but in the name of time
-		// im just hacking it in here.  This logic will be moved to the xml decoder
-		if(CFICode().startsWith("F") && (symbol().startsWith("SI") || symbol().startsWith("HG"))) {
-			return VALUES.newPrice(1, -2);
-		}
-
-		if(CFICode().startsWith("F") && symbol().startsWith("J6")) {
-			return VALUES.newPrice(1, 2);
-		}
-
-		return Price.ONE;
-	}
-
-	@Override
-	public Calendar calendar() {
-		return Calendar.NULL;
-	}
-
-	@Override
-	public Schedule schedule() {
-		return Schedule.NULL;
+	protected DefaultInstrument(final InstrumentID id_) {
+		id = id_;
 	}
 
 	@Override
 	public InstrumentID id() {
-		if(id.isNull()) {
-			id = new InstrumentID(marketGUID());
-		}
 		return id;
 	}
 
 	@Override
 	public String symbol() {
-		return "NULL_SYMBOL";
+		return symbol;
 	}
 
 	@Override
-	public String toString() {
-		return symbol();
+	public SecurityType securityType() {
+		return securityType;
+	}
+
+	@Override
+	public BookLiquidityType liquidityType() {
+		return liquidityType;
+	}
+
+	@Override
+	public BookStructureType bookStructure() {
+		return bookStructure;
+	}
+
+	@Override
+	public Size maxBookDepth() {
+		return maxBookDepth;
+	}
+
+	@Override
+	public VendorID vendor() {
+		return vendor;
+	}
+
+	@Override
+	public Map<VendorID, String> vendorSymbols() {
+		return vendorSymbols;
+	}
+
+	@Override
+	public String description() {
+		return description;
 	}
 
 	@Override
 	public String currencyCode() {
-		return "NULL CURRENCY";
+		return currencyCode;
+	}
+
+	@Override
+	public String exchangeCode() {
+		return exchangeCode;
+	}
+
+	@Override
+	public String CFICode() {
+		return CFICode;
+	}
+
+	@Override
+	public Price tickSize() {
+		return tickSize;
+	}
+
+	@Override
+	public Price pointValue() {
+		return pointValue;
+	}
+
+	@Override
+	public Price transactionPriceConversionFactor() {
+		return transactionPriceConversionFactor;
+	}
+
+	@Override
+	public Calendar calendar() {
+		return calendar;
+	}
+
+	@Override
+	public Schedule schedule() {
+		return schedule;
 	}
 
 	@Override
 	public String instrumentGroup() {
-		return null;
+		return instrumentGroup;
 	}
 
 	@Override
 	public State state() {
-		return State.PASSIVE;
+		return state;
 	}
 
 	@Override
 	public ChannelID channel() {
-		return ChannelID.NULL;
+		return channel;
 	}
 
 	@Override
 	public DateTime created() {
-		return new DateTime(0);
+		return created;
 	}
 
 	@Override
 	public DateTime updated() {
-		return new DateTime(0);
+		return updated;
 	}
 
 	@Override
 	public DateTimeZone timeZone() {
-		return null;
+		return timeZone;
 	}
 
 	@Override
 	public PriceFormat priceFormat() {
-		return PriceFormat.NULL;
+		return priceFormat;
 	}
 
 	@Override
 	public PriceFormat optionStrikePriceFormat() {
-		return PriceFormat.NULL;
+		return optionStrikePriceFormat;
 	}
 
 	@Override
 	public List<InstrumentID> components() {
-		return Collections.emptyList();
+		return components;
 	}
 
 	@Override
 	public InstrumentID underlier() {
-		return InstrumentID.NULL;
+		return underlier;
 	}
 
 	@Override
 	public Price strikePrice() {
-		return Price.NULL;
+		return strikePrice;
 	}
 
 	@Override
 	public OptionType optionType() {
-		return OptionType.NULL;
+		return optionType;
 	}
 
 	@Override
 	public OptionStyle optionStyle() {
-		return OptionStyle.DEFAULT;
+		return optionStyle;
 	}
 
 	@Override
 	public SpreadType spreadType() {
-		return SpreadType.UNKNOWN;
+		return spreadType;
 	}
 
 	@Override
 	public List<SpreadLeg> spreadLegs() {
-		return Collections.emptyList();
+		return spreadLegs;
+	}
+
+	@Override
+	public String toString() {
+		return exchangeCode() + ":" + symbol();
 	}
 
 }

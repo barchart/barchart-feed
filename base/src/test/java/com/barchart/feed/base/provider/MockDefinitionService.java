@@ -14,16 +14,16 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import org.openfeed.InstrumentDefinition;
-import org.openfeed.InstrumentDefinition.Decimal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.api.model.meta.id.InstrumentID;
 import com.barchart.feed.inst.InstrumentService;
-import com.barchart.feed.inst.provider.InstrumentFactory;
+import com.barchart.feed.meta.instrument.DefaultInstrument;
 import com.barchart.util.value.ValueFactoryImpl;
+import com.barchart.util.value.api.Fraction;
+import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.ValueFactory;
 
 public class MockDefinitionService implements InstrumentService<CharSequence> {
@@ -52,47 +52,43 @@ public class MockDefinitionService implements InstrumentService<CharSequence> {
 	@SuppressWarnings("rawtypes")
 	public MockDefinitionService() {
 
-		final InstrumentDefinition.Builder builder = InstrumentDefinition.newBuilder();
-
-		builder.setMarketId(INST_GUID_1);
-		builder.setSymbol(INST_SYMBOL_1);
-		builder.setMinimumPriceIncrement(Decimal.newBuilder().setMantissa(1).setExponent(-1).build());
-		builder.setBookDepth(10);
-		// builder.setDisplayBase(10);
-		// builder.setDisplayExponent(-1);
-
-		guidMap.put(INST_GUID_1, InstrumentFactory.instrument(builder.buildPartial()));
+		final Instrument inst1 = new MockInstrument(
+				INST_GUID_1,
+				INST_SYMBOL_1,
+				factory.newPrice(1, -1),
+				10,
+				factory.newFraction(10, -1)
+				);
+		guidMap.put(INST_GUID_1, inst1);
 		symbolMap.put(INST_SYMBOL_1, INST_GUID_1);
 
-		builder.clear();
+		final Instrument inst2 = new MockInstrument(
+				INST_GUID_2,
+				INST_SYMBOL_2,
+				factory.newPrice(25, -2),
+				10,
+				factory.newFraction(10, -1)
+				);
 
-		builder.setMarketId(INST_GUID_2);
-		builder.setSymbol(INST_SYMBOL_2);
-		builder.setMinimumPriceIncrement(Decimal.newBuilder().setMantissa(25).setExponent(-2).build());
-		builder.setBookDepth(10);
-		// builder.setDisplayBase(10);
-		// builder.setDisplayExponent(-1);
-
-		guidMap.put(INST_GUID_2, InstrumentFactory.instrument(builder.buildPartial()));
+		guidMap.put(INST_GUID_2, inst2);
 		symbolMap.put(INST_SYMBOL_2, INST_GUID_2);
 
-		builder.clear();
+		final Instrument inst3 = new MockInstrument(
+				INST_GUID_3,
+				INST_SYMBOL_3,
+				factory.newPrice(125, -3),
+				10,
+				factory.newFraction(10, -1)
+				);
 
-		builder.setMarketId(INST_GUID_3);
-		builder.setSymbol(INST_SYMBOL_3);
-		builder.setMinimumPriceIncrement(Decimal.newBuilder().setMantissa(125).setExponent(-3).build());
-		builder.setBookDepth(10);
-		// builder.setDisplayBase(10);
-		// builder.setDisplayExponent(-1);
-
-		guidMap.put(INST_GUID_3, InstrumentFactory.instrument(builder.buildPartial()));
+		guidMap.put(INST_GUID_3, inst3);
 		symbolMap.put(INST_SYMBOL_3, INST_GUID_3);
 
 	}
 
 	@Override
 	public Instrument lookup(final CharSequence symbol) {
-		if(symbolMap.containsKey(symbol)) {
+		if (symbolMap.containsKey(symbol)) {
 			return guidMap.get(symbolMap.get(symbol));
 		}
 		return Instrument.NULL;
@@ -105,8 +101,8 @@ public class MockDefinitionService implements InstrumentService<CharSequence> {
 		final Map<CharSequence, Instrument> insts =
 				new HashMap<CharSequence, Instrument>();
 
-		for(final CharSequence symbol : symbols) {
-			insts.put(symbol,lookup(symbol));
+		for (final CharSequence symbol : symbols) {
+			insts.put(symbol, lookup(symbol));
 		}
 
 		return insts;
@@ -116,6 +112,29 @@ public class MockDefinitionService implements InstrumentService<CharSequence> {
 	public Instrument lookup(final InstrumentID id) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	private static class MockInstrument extends DefaultInstrument {
+
+		private final Fraction displayFraction;
+
+		private MockInstrument(final long id_, final String symbol_, final Price tickSize_, final int bookDepth_,
+				final Fraction displayFraction_) {
+
+			super(new InstrumentID(String.valueOf(id_)));
+
+			symbol = symbol_;
+			tickSize = tickSize_;
+			maxBookDepth = factory.newSize(bookDepth_);
+			displayFraction = displayFraction_;
+
+		}
+
+		@Override
+		public Fraction displayFraction() {
+			return displayFraction;
+		}
+
 	}
 
 }
