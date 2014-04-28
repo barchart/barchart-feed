@@ -11,6 +11,7 @@ import java.util.Random;
 import java.util.Set;
 
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
@@ -33,10 +34,16 @@ import com.barchart.feed.api.model.data.Trade;
 import com.barchart.feed.api.model.meta.Exchange;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.api.model.meta.Metadata;
+import com.barchart.feed.api.model.meta.id.ChannelID;
 import com.barchart.feed.api.model.meta.id.ExchangeID;
 import com.barchart.feed.api.model.meta.id.InstrumentID;
 import com.barchart.feed.api.model.meta.id.MetadataID;
 import com.barchart.feed.api.model.meta.id.VendorID;
+import com.barchart.feed.api.model.meta.instrument.Calendar;
+import com.barchart.feed.api.model.meta.instrument.PriceFormat;
+import com.barchart.feed.api.model.meta.instrument.Schedule;
+import com.barchart.feed.api.model.meta.instrument.SpreadLeg;
+import com.barchart.feed.api.model.meta.instrument.SpreadType;
 import com.barchart.feed.api.series.PeriodType;
 import com.barchart.feed.api.series.network.Query;
 import com.barchart.feed.api.series.service.HistoricalObserver;
@@ -45,7 +52,6 @@ import com.barchart.feed.series.network.SeriesSubscription;
 import com.barchart.util.value.ValueFactoryImpl;
 import com.barchart.util.value.api.Fraction;
 import com.barchart.util.value.api.Price;
-import com.barchart.util.value.api.Schedule;
 import com.barchart.util.value.api.Size;
 import com.barchart.util.value.api.Time;
 import com.barchart.util.value.api.TimeInterval;
@@ -53,45 +59,45 @@ import com.barchart.util.value.api.ValueFactory;
 
 public class FauxMarketService implements MarketService {
     private MarketObserver<Market> callback;
-    
-    private HashSet<Market.Component> staticSet = new HashSet<Market.Component>();
-    
-    private FauxHistoricalService histService;
-    
-    private Map<Instrument, SymbolTick> lastTicks = new HashMap<Instrument, SymbolTick>();
-    
-    private ValueFactory factory = new ValueFactoryImpl();
-    
+
+    private final HashSet<Market.Component> staticSet = new HashSet<Market.Component>();
+
+    private final FauxHistoricalService histService;
+
+    private final Map<Instrument, SymbolTick> lastTicks = new HashMap<Instrument, SymbolTick>();
+
+    private final ValueFactory factory = new ValueFactoryImpl();
+
     private Query lastQuery;
-    
+
     private boolean isRunning;
-    
-    private DateTimeFormatter tickFormat = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss.SSS");
-    private DateTimeFormatter minuteFormat = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm");
-    
+
+    private final DateTimeFormatter tickFormat = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss.SSS");
+    private final DateTimeFormatter minuteFormat = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm");
+
     private Thread serverThread;
-    
-    public FauxMarketService(String uname, String pword) {
+
+    public FauxMarketService(final String uname, final String pword) {
         this.histService = new FauxHistoricalService(null);
         staticSet.add(Market.Component.TRADE);
     }
-    
+
     private class HistoricalSubject implements HistoricalObserver<HistoricalResult> {
         @Override public void onCompleted() {}
-        @Override public void onError(Throwable e) {}
+        @Override public void onError(final Throwable e) {}
         @Override
-        public void onNext(HistoricalResult historicalResult) {
-            String csv = historicalResult.getResult().get(historicalResult.getResult().size() - 1);
+        public void onNext(final HistoricalResult historicalResult) {
+            final String csv = historicalResult.getResult().get(historicalResult.getResult().size() - 1);
             System.out.println("last csv = " + csv);
-            String[] csvArray = csv.split("\\,");
-            
-            SymbolTick config = new SymbolTick();
-            SeriesSubscription d = (SeriesSubscription)historicalResult.getSubscription();
+            final String[] csvArray = csv.split("\\,");
+
+            final SymbolTick config = new SymbolTick();
+            final SeriesSubscription d = (SeriesSubscription)historicalResult.getSubscription();
             config.desc = d;
-            
-            Price p = makePrice(csvArray[csvArray.length - 2]);
+
+            final Price p = makePrice(csvArray[csvArray.length - 2]);
             config.lastPrice = p;
-            
+
             DateTime tradeTime;
             if(d.getTimeFrames()[0].getPeriod().getPeriodType().isHigherThan(PeriodType.TICK)) {
                 tradeTime = minuteFormat.parseDateTime(csvArray[0]);
@@ -99,13 +105,13 @@ public class FauxMarketService implements MarketService {
                 tradeTime = tickFormat.parseDateTime(csvArray[0]);
             }
             config.lastTime = tradeTime.plusMinutes(1);
-            
+
             config.lastSize = makeSize(csvArray[csvArray.length - 1]);
-            
+
             lastTicks.put(d.getInstrument(), config);
-            
+
             isRunning = true;
-            
+
             if(serverThread == null || !serverThread.isAlive()) {
                 System.out.println("Starting Market Thread");
                 serverThread = getServerThread();
@@ -113,60 +119,61 @@ public class FauxMarketService implements MarketService {
             }
         }
     }
-    
+
     private class SymbolTick {
         private Price lastPrice;
         private DateTime lastTime;
         private Size lastSize;
         private SeriesSubscription desc;
     }
-    
+
     private Thread getServerThread() {
         return new Thread() {
             Random random = new Random();
             boolean isNeg;
-            
-            public void run() {
+
+            @Override
+			public void run() {
                 try {
                     while(isRunning) {
-                        for(Instrument i : lastTicks.keySet()) {
-                            double added = isNeg ? random.nextDouble() * -1 : random.nextDouble();
+                        for(final Instrument i : lastTicks.keySet()) {
+                            final double added = isNeg ? random.nextDouble() * -1 : random.nextDouble();
                             isNeg = !isNeg;
-                            
-                            SymbolTick lastTick = lastTicks.get(i);
-                            double newPrice = lastTick.lastPrice.asDouble() + added;
+
+                            final SymbolTick lastTick = lastTicks.get(i);
+                            final double newPrice = lastTick.lastPrice.asDouble() + added;
                             lastTick.lastPrice = makePrice("" + newPrice);
                             lastTick.lastTime = new DateTime(lastTick.lastTime.plusMillis((int)(500 * random.nextDouble())));
                             lastTick.lastSize = makeSize("" + random.nextInt(10));
-                            
-                            Market m = makeMarket(lastTick.lastTime, lastTick.desc.getInstrument(), 
+
+                            final Market m = makeMarket(lastTick.lastTime, lastTick.desc.getInstrument(),
                                 "" + lastTick.lastPrice.asDouble(), "" + lastTick.lastSize.mantissa());
-                            
+
                             callback.onNext(m);
-                            
+
                             Thread.sleep(20);
                         }
                     }
-                }catch(Exception e) {
+                }catch(final Exception e) {
                     e.printStackTrace();
                 }
             }
         };
     }
-    
-    public void preSubscribe(Query query) {
+
+    public void preSubscribe(final Query query) {
         this.lastQuery = query;
     }
-    
+
     @SuppressWarnings("unchecked")
 	@Override
-    public <V extends MarketData<V>> ConsumerAgent register(MarketObserver<V> callback, Class<V> clazz) {
+    public <V extends MarketData<V>> ConsumerAgent register(final MarketObserver<V> callback, final Class<V> clazz) {
         this.callback = (MarketObserver<Market>) callback;
-        
+
         return new ConsumerAgent() {
 
             @Override
-            public Observable<Result<Instrument>> include(String... symbols) {
+            public Observable<Result<Instrument>> include(final String... symbols) {
                 //Use the historical service to get the last price for accurate simulation.
                 if(lastQuery.hasCustomQuery()) {
                     histService.subscribe(new HistoricalSubject(), lastQuery.toSubscription(makeInstrument(symbols[0])), lastQuery);
@@ -178,7 +185,7 @@ public class FauxMarketService implements MarketService {
 
             @Override
             public Observable<Result<Instrument>> exclude(
-                    String... symbols) {
+                    final String... symbols) {
                 // TODO Auto-generated method stub
                 return null;
             }
@@ -198,23 +205,23 @@ public class FauxMarketService implements MarketService {
             @Override
             public void activate() {
                 // TODO Auto-generated method stub
-                
+
             }
 
             @Override
             public void deactivate() {
                 // TODO Auto-generated method stub
-                
+
             }
 
             @Override
             public void terminate() {
                 // TODO Auto-generated method stub
-                
+
             }
 
             @Override
-            public boolean hasMatch(Instrument instrument) {
+            public boolean hasMatch(final Instrument instrument) {
                 // TODO Auto-generated method stub
                 return false;
             }
@@ -232,72 +239,73 @@ public class FauxMarketService implements MarketService {
             }
 
             @Override
-            public void filter(Filter filter) {
+            public void filter(final Filter filter) {
                 // TODO Auto-generated method stub
-                
+
             }
 
             @Override
-            public void include(Metadata... meta) {
+            public void include(final Metadata... meta) {
                 if(meta[0] instanceof Instrument) {
                 	this.include(lastQuery.getSymbols().get(0));
                 }
             }
 
             @Override
-            public void exclude(Metadata... meta) {
+            public void exclude(final Metadata... meta) {
                 // TODO Auto-generated method stub
-                
+
             }
 
             @Override
             public void clear() {
                 // TODO Auto-generated method stub
-                
+
             }
 
 			@Override
-			public void include(MetadataID<?>... metaID) {
+			public void include(final MetadataID<?>... metaID) {
 				// TODO Auto-generated method stub
-				
+
 			}
 
 			@Override
-			public void exclude(MetadataID<?>... metaID) {
+			public void exclude(final MetadataID<?>... metaID) {
 				// TODO Auto-generated method stub
-				
+
 			}
-            
+
         };
     }
 
     @Override
-    public Observable<Market> snapshot(InstrumentID instrument) {
+    public Observable<Market> snapshot(final InstrumentID instrument) {
         // TODO Auto-generated method stub
         return null;
     }
 
     private boolean isEnabled;
     private Monitor listener;
-    private Object enableLock = new Object();
+    private final Object enableLock = new Object();
     @Override
     public void startup() {
     	(new Thread(){
-            public void run() {
+            @Override
+			public void run() {
             	if(!isEnabled) {
             		isEnabled = true;
-            		try { Thread.sleep(2000); }catch(Exception e) { e.printStackTrace(); }
+            		try { Thread.sleep(2000); }catch(final Exception e) { e.printStackTrace(); }
  	                listener.handle(com.barchart.feed.api.connection.Connection.State.CONNECTING, null);
- 	                try { Thread.sleep(2000); }catch(Exception e) { e.printStackTrace(); }
+ 	                try { Thread.sleep(2000); }catch(final Exception e) { e.printStackTrace(); }
  	                listener.handle(com.barchart.feed.api.connection.Connection.State.CONNECTED, null);
             	}
-            	
+
             	if(isEnabled) {
 	               synchronized(enableLock) {
 	            	   try {
 	            		   enableLock.wait();
 	            		   System.out.println("enable lock released");
-	            	   }catch(Exception e) {
+	            	   }catch(final Exception e) {
 	            		   e.printStackTrace();
 	            	   }
 	               }
@@ -312,7 +320,7 @@ public class FauxMarketService implements MarketService {
         synchronized(enableLock) {
         	try {
         		enableLock.notify();
-        	}catch(Exception e) {
+        	}catch(final Exception e) {
         		e.printStackTrace();
         	}
         }
@@ -324,25 +332,25 @@ public class FauxMarketService implements MarketService {
     }
 
     @Override
-    public void bindTimestampListener(TimestampListener listener) {
+    public void bindTimestampListener(final TimestampListener listener) {
         // TODO Auto-generated method stub
-        
+
     }
-    
+
     private Market makeMarket(final DateTime t, final Instrument i, final String price, final String sz) {
         return new Market() {
-            private Instrument inst = i;
-            private DateTime time = t;
-            private Price p = makePrice(price);
-            private Set<Market.Component> thisSet = staticSet;
-            private Size size = makeSize(sz);
-           
-            
+            private final Instrument inst = i;
+            private final DateTime time = t;
+            private final Price p = makePrice(price);
+            private final Set<Market.Component> thisSet = staticSet;
+            private final Size size = makeSize(sz);
+
+
             @Override
             public Instrument instrument() {
                 return inst;
             }
-            
+
             private Time getTime() {
                 return factory.newTime(time.getMillis());
             }
@@ -408,7 +416,7 @@ public class FauxMarketService implements MarketService {
                     public Time time() {
                         return getTime();
                     }
-                    
+
                 };
             }
 
@@ -447,26 +455,26 @@ public class FauxMarketService implements MarketService {
 				// TODO Auto-generated method stub
 				return null;
 			}
-            
+
         };
     }
-    
+
     private Size makeSize(final String sz) {
         return factory.newSize(Integer.parseInt(sz));
     }
-    
-    private Price makePrice(String dblStr) {
+
+    private Price makePrice(final String dblStr) {
         final double db = new BigDecimal(dblStr).setScale(2, RoundingMode.HALF_UP).doubleValue();
-        Price p = factory.newPrice(db);
-        
+        final Price p = factory.newPrice(db);
+
         return p;
     }
-    
+
     public Instrument makeInstrument(final String symbol) {
         return new Instrument() {
 
             @Override
-            public int compareTo(Instrument arg0) {
+            public int compareTo(final Instrument arg0) {
                 // TODO Auto-generated method stub
                 return 0;
             }
@@ -519,7 +527,7 @@ public class FauxMarketService implements MarketService {
             }
 
             @Override
-            public String instrumentDataVendor() {
+			public VendorID vendor() {
                 // TODO Auto-generated method stub
                 return null;
             }
@@ -624,31 +632,151 @@ public class FauxMarketService implements MarketService {
 				// TODO Auto-generated method stub
 				return null;
 			}
+
+			@Override
+			public String currencyCode() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public String instrumentGroup() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public State state() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public ChannelID channel() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public DateTime created() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public DateTime updated() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public Calendar calendar() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public Schedule schedule() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public DateTimeZone timeZone() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public PriceFormat priceFormat() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public PriceFormat optionStrikePriceFormat() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public List<InstrumentID> components() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public DateTime delivery() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public DateTime expiration() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public InstrumentID underlier() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public Price strikePrice() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public OptionType optionType() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public OptionStyle optionStyle() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public SpreadType spreadType() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public List<SpreadLeg> spreadLegs() {
+				// TODO Auto-generated method stub
+				return null;
+			}
         };
     }
 
     @Override
     public Observable<Result<Instrument>> instrument(final String... symbols) {
-        Result<Instrument> r = new Result<Instrument>() {
+        final Result<Instrument> r = new Result<Instrument>() {
             @Override public SearchContext context() { return null; }
             @Override public boolean isNull() { return false; }
-            @Override 
+            @Override
             public Map<String, List<Instrument>> results() {
-                Map<String, List<Instrument>> map = new HashMap<String, List<Instrument>>();
-                List<Instrument> l = new ArrayList<Instrument>();
-                Instrument i = makeInstrument(symbols[0]);
+                final Map<String, List<Instrument>> map = new HashMap<String, List<Instrument>>();
+                final List<Instrument> l = new ArrayList<Instrument>();
+                final Instrument i = makeInstrument(symbols[0]);
                 l.add(i);
                 map.put(symbols[0], l);
                 return map;
             }
         };
-        
+
         return Observable.from(r);
     }
-    
+
     @Override
-    public Observable<Result<Instrument>> instrument(SearchContext ctx,
-            String... symbols) {
+    public Observable<Result<Instrument>> instrument(final SearchContext ctx,
+            final String... symbols) {
         // TODO Auto-generated method stub
         return null;
     }
@@ -666,7 +794,7 @@ public class FauxMarketService implements MarketService {
     }
 
 	@Override
-	public Observable<Map<InstrumentID, Instrument>> instrument(InstrumentID... ids) {
+	public Observable<Map<InstrumentID, Instrument>> instrument(final InstrumentID... ids) {
 		// TODO Auto-generated method stub
 		return null;
 	}
