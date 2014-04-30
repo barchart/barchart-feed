@@ -63,6 +63,63 @@ public class DefaultLookupSymbol implements LookupSymbol {
 		return symbol;
 	}
 
+	public static DefaultLookupSymbol parse(final String symbol) {
+		return parse(symbol, Vendor.DEFAULT.id());
+	}
+
+	public static DefaultLookupSymbol parse(final String symbol, final VendorID defaultVendor) {
+
+		final String[] parts = symbol.split(":");
+
+		switch (parts.length) {
+
+			case 1:
+				return new DefaultLookupSymbol(
+						defaultVendor,
+						ExchangeID.NULL,
+						parts[0].toUpperCase());
+
+			case 2:
+				return new DefaultLookupSymbol(
+						defaultVendor,
+						new ExchangeID(parts[0].toUpperCase()),
+						parts[1].toUpperCase());
+
+			case 3:
+				return new DefaultLookupSymbol(
+						new VendorID(parts[0].toUpperCase()),
+						new ExchangeID(parts[1].toUpperCase()),
+						parts[2].toUpperCase());
+
+			default:
+				throw new IllegalArgumentException("Symbol format not recognized: " + symbol);
+
+		}
+
+	}
+
+	@Override
+	public boolean equals(final Object that) {
+
+		if (that instanceof LookupSymbol) {
+
+			final LookupSymbol lookup = (LookupSymbol) that;
+
+			return (lookup.vendor() == vendor || (vendor != null && vendor.equals(lookup.vendor())))
+					&& (lookup.exchange() == exchange || (exchange != null && exchange.equals(lookup.exchange())))
+					&& symbol.equals(lookup.symbol());
+
+		}
+
+		return false;
+
+	}
+
+	@Override
+	public int hashCode() {
+		return toString().hashCode();
+	}
+
 	@Override
 	public String toString() {
 		return (vendor != null ? vendor.toString() : "*") + ":"

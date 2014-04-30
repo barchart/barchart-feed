@@ -4,5 +4,5 @@ import java.util.List;
 
 import com.barchart.feed.api.model.meta.id.InstrumentID;
 
-public interface InstrumentIDResult extends LookupResult<List<InstrumentID>> {
+public interface InstrumentIDResult extends Result<LookupSymbol, List<InstrumentID>> {
 }

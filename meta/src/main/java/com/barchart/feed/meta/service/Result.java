@@ -8,12 +8,12 @@ package com.barchart.feed.meta.service;
  *
  * @param <V>
  */
-public interface LookupResult<V> {
+public interface Result<R, V> {
 
 	/**
 	 * The original query object that triggered this execution.
 	 */
-	LookupSymbol request();
+	R request();
 
 	/**
 	 * The result of an asynchronous operation, can be null. An exception should
