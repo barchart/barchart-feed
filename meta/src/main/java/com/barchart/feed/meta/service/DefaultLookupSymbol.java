@@ -76,25 +76,34 @@ public class DefaultLookupSymbol implements LookupSymbol {
 			case 1:
 				return new DefaultLookupSymbol(
 						defaultVendor,
-						ExchangeID.NULL,
+						null,
 						parts[0].toUpperCase());
 
 			case 2:
 				return new DefaultLookupSymbol(
 						defaultVendor,
-						new ExchangeID(parts[0].toUpperCase()),
+						exchange(parts[0]),
 						parts[1].toUpperCase());
 
 			case 3:
 				return new DefaultLookupSymbol(
 						new VendorID(parts[0].toUpperCase()),
-						new ExchangeID(parts[1].toUpperCase()),
+						exchange(parts[1]),
 						parts[2].toUpperCase());
 
 			default:
 				throw new IllegalArgumentException("Symbol format not recognized: " + symbol);
 
 		}
+
+	}
+
+	private static ExchangeID exchange(final String in) {
+
+		if (in == null || in.isEmpty() || "*".equals(in))
+			return null;
+
+		return new ExchangeID(in.toUpperCase());
 
 	}
 
