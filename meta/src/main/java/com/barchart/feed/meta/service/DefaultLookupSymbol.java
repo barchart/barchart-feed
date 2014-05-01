@@ -42,8 +42,8 @@ public class DefaultLookupSymbol implements LookupSymbol {
 		if (symbol_ == null)
 			throw new IllegalArgumentException("Symbol cannot be null");
 
-		vendor = vendor_;
-		exchange = exchange_;
+		vendor = vendor_ == null ? VendorID.NULL : vendor_;
+		exchange = exchange_ == null ? ExchangeID.NULL : exchange_;
 		symbol = symbol_;
 
 	}
