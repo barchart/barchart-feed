@@ -10,6 +10,8 @@ public class DefaultLookupSymbol implements LookupSymbol {
 	private final ExchangeID exchange;
 	private final String symbol;
 
+	private final String fullSymbol;
+
 	/**
 	 * Representation of a symbol on any exchange from the default data vendor.
 	 */
@@ -46,6 +48,9 @@ public class DefaultLookupSymbol implements LookupSymbol {
 		exchange = exchange_ == null ? ExchangeID.NULL : exchange_;
 		symbol = symbol_;
 
+		fullSymbol = (vendor != null ? vendor.toString() : "*") + ":"
+				+ (exchange != null ? exchange.toString() : "*") + ":"
+				+ symbol;
 	}
 
 	@Override
@@ -109,31 +114,17 @@ public class DefaultLookupSymbol implements LookupSymbol {
 
 	@Override
 	public boolean equals(final Object that) {
-
-		if (that instanceof LookupSymbol) {
-
-			final LookupSymbol lookup = (LookupSymbol) that;
-
-			return (lookup.vendor() == vendor || (vendor != null && vendor.equals(lookup.vendor())))
-					&& (lookup.exchange() == exchange || (exchange != null && exchange.equals(lookup.exchange())))
-					&& symbol.equals(lookup.symbol());
-
-		}
-
-		return false;
-
+		return that instanceof LookupSymbol && that.toString().equals(fullSymbol);
 	}
 
 	@Override
 	public int hashCode() {
-		return toString().hashCode();
+		return fullSymbol.hashCode();
 	}
 
 	@Override
 	public String toString() {
-		return (vendor != null ? vendor.toString() : "*") + ":"
-				+ (exchange != null ? exchange.toString() : "*") + ":"
-				+ symbol;
+		return fullSymbol;
 	}
 
 }
