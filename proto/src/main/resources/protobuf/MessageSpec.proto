@@ -14,53 +14,64 @@ option optimize_for = SPEED;
 message TimeSeriesRecord {
 
 	enum Period {
-		VOLUME = 0;
-		TICK = 1;
-		SECOND = 2;
-		MINUTE = 3;
-		HOUR = 4;
-		DAY = 5;
-		WEEK = 6;
-		MONTH = 7;
-		YEAR = 8;
+		VOLUME = 1;
+		TICK = 2;
+		SECOND = 3;
+		MINUTE = 4;
+		HOUR = 5;
+		DAY = 6;
+		WEEK = 7;
+		MONTH = 8;
+		YEAR = 9;
 	}
 
+	// Bar metadata (optional for storage, but should be injected after decoding)
+
 	optional sint64 instrument = 1;
-	optional sint64 timestamp = 2;
-	optional Period period = 3;
-	optional sint32 periodCount = 4;
-	optional sint64 openMantissa = 5;
-	optional sint32 openExponent = 6;
-	optional sint64 highMantissa = 7;
-	optional sint32 highExponent = 8;
-	optional sint64 lowMantissa = 9;
-	optional sint32 lowExponent = 10;
-	optional sint64 closeMantissa = 11;
-	optional sint32 closeExponent = 12;
-	optional sint64 midpointMantissa = 13;
-	optional sint32 midpointExponent = 14;
-	optional sint64 askMantissa = 15;
-	optional sint32 askExponent = 16;
-	optional sint64 askSizeMantissa = 17;
-	optional sint32 askSizeExponent = 18;
-	optional sint64 bidMantissa = 19;
-	optional sint32 bidExponent = 20;
-	optional sint64 bidSizeMantissa = 21;
-	optional sint32 bidSizeExponent = 22;
-	optional sint64 volumeMantissa = 23;
-	optional sint32 volumeExponent = 24;
-	optional sint64 volumeUpMantissa = 25;
-	optional sint32 volumeUpExponent = 26;
-	optional sint64 volumeDownMantissa = 27;
-	optional sint32 volumeDownExponent = 28;
-	optional sint64 tradedValueMantissa = 29;
-	optional sint32 tradedValueExponent = 30;
-	optional sint64 tradedValueUpMantissa = 31;
-	optional sint32 tradedValueUpExponent = 32;
-	optional sint64 tradedValueDownMantissa = 33;
-	optional sint32 tradedValueDownExponent = 34;
-	optional sint32 tradeCount = 35;
-	optional sint64 openInterestMantissa = 36;
-	optional sint32 openInterestExponent = 37;
+	optional Period period = 2;
+	optional sint32 periodCount = 3;
+
+	// Standard OHLC bar values (typically always available)
+
+	optional sint64 timestamp = 10;
+	optional sint64 openMantissa = 11;
+	optional sint32 openExponent = 12;
+	optional sint64 highMantissa = 13;
+	optional sint32 highExponent = 14;
+	optional sint64 lowMantissa = 15;
+	optional sint32 lowExponent = 16;
+	optional sint64 closeMantissa = 17;
+	optional sint32 closeExponent = 18;
+	optional sint64 volumeMantissa = 19;
+	optional sint32 volumeExponent = 20;
+	optional sint64 openInterestMantissa = 21;
+	optional sint32 openInterestExponent = 22;
+
+	// Extended field values (optional)
+
+	optional sint64 midpointMantissa = 50;
+	optional sint32 midpointExponent = 51;
+	optional sint64 askMantissa = 52;
+	optional sint32 askExponent = 53;
+	optional sint64 askSizeMantissa = 54;
+	optional sint32 askSizeExponent = 55;
+	optional sint64 bidMantissa = 56;
+	optional sint32 bidExponent = 57;
+	optional sint64 bidSizeMantissa = 58;
+	optional sint32 bidSizeExponent = 59;
+
+	// Aggregation detail fields (optional)
+
+	optional sint64 volumeUpMantissa = 100;
+	optional sint32 volumeUpExponent = 101;
+	optional sint64 volumeDownMantissa = 102;
+	optional sint32 volumeDownExponent = 103;
+	optional sint64 tradedValueMantissa = 104;
+	optional sint32 tradedValueExponent = 105;
+	optional sint64 tradedValueUpMantissa = 106;
+	optional sint32 tradedValueUpExponent = 107;
+	optional sint64 tradedValueDownMantissa = 108;
+	optional sint32 tradedValueDownExponent = 109;
+	optional sint32 tradeCount = 110;
 
 }
