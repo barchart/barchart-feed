@@ -4,7 +4,7 @@ import com.barchart.feed.api.model.meta.Vendor;
 import com.barchart.feed.api.model.meta.id.ExchangeID;
 import com.barchart.feed.api.model.meta.id.VendorID;
 
-public class DefaultLookupSymbol implements LookupSymbol {
+public class DefaultLookupSymbol implements LookupSymbol, Comparable<LookupSymbol> {
 
 	private final VendorID vendor;
 	private final ExchangeID exchange;
@@ -125,6 +125,11 @@ public class DefaultLookupSymbol implements LookupSymbol {
 	@Override
 	public String toString() {
 		return fullSymbol;
+	}
+
+	@Override
+	public int compareTo(final LookupSymbol that) {
+		return toString().compareTo(that.toString());
 	}
 
 }
