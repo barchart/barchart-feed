@@ -13,7 +13,7 @@
 
 	<groupId>com.barchart.feed</groupId>
 	<artifactId>barchart-feed-proto</artifactId>
-	<version>1.0.1-SNAPSHOT</version>
+	<version>1.0.2-SNAPSHOT</version>
 	<packaging>bundle</packaging>
 
 	<description>
