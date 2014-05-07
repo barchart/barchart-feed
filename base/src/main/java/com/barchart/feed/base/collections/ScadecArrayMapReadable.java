@@ -95,8 +95,8 @@ public abstract class ScadecArrayMapReadable<T extends ScaledDecimal<T, ?>, V>
 	}
 
 	protected final int indexFrom(final T key) {
-		assert !isBelowHead(key);
-		assert !isAboveTail(key);
+//		assert !isBelowHead(key);
+//		assert !isAboveTail(key);
 		final int index = keyCount(key, keyHead());
 		assert index >= 0;
 		assert index < size();
