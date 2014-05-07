@@ -4,11 +4,13 @@ import com.barchart.feed.api.model.meta.Vendor;
 import com.barchart.feed.api.model.meta.id.ExchangeID;
 import com.barchart.feed.api.model.meta.id.VendorID;
 
-public class DefaultLookupSymbol implements LookupSymbol {
+public class DefaultLookupSymbol implements LookupSymbol, Comparable<LookupSymbol> {
 
 	private final VendorID vendor;
 	private final ExchangeID exchange;
 	private final String symbol;
+
+	private final String fullSymbol;
 
 	/**
 	 * Representation of a symbol on any exchange from the default data vendor.
@@ -42,10 +44,13 @@ public class DefaultLookupSymbol implements LookupSymbol {
 		if (symbol_ == null)
 			throw new IllegalArgumentException("Symbol cannot be null");
 
-		vendor = vendor_;
-		exchange = exchange_;
+		vendor = vendor_ == null ? VendorID.NULL : vendor_;
+		exchange = exchange_ == null ? ExchangeID.NULL : exchange_;
 		symbol = symbol_;
 
+		fullSymbol = (vendor != null ? vendor.toString() : "*") + ":"
+				+ (exchange != null ? exchange.toString() : "*") + ":"
+				+ symbol;
 	}
 
 	@Override
@@ -76,19 +81,19 @@ public class DefaultLookupSymbol implements LookupSymbol {
 			case 1:
 				return new DefaultLookupSymbol(
 						defaultVendor,
-						ExchangeID.NULL,
+						null,
 						parts[0].toUpperCase());
 
 			case 2:
 				return new DefaultLookupSymbol(
 						defaultVendor,
-						new ExchangeID(parts[0].toUpperCase()),
+						exchange(parts[0]),
 						parts[1].toUpperCase());
 
 			case 3:
 				return new DefaultLookupSymbol(
 						new VendorID(parts[0].toUpperCase()),
-						new ExchangeID(parts[1].toUpperCase()),
+						exchange(parts[1]),
 						parts[2].toUpperCase());
 
 			default:
@@ -98,33 +103,33 @@ public class DefaultLookupSymbol implements LookupSymbol {
 
 	}
 
+	private static ExchangeID exchange(final String in) {
+
+		if (in == null || in.isEmpty() || "*".equals(in))
+			return null;
+
+		return new ExchangeID(in.toUpperCase());
+
+	}
+
 	@Override
 	public boolean equals(final Object that) {
-
-		if (that instanceof LookupSymbol) {
-
-			final LookupSymbol lookup = (LookupSymbol) that;
-
-			return (lookup.vendor() == vendor || (vendor != null && vendor.equals(lookup.vendor())))
-					&& (lookup.exchange() == exchange || (exchange != null && exchange.equals(lookup.exchange())))
-					&& symbol.equals(lookup.symbol());
-
-		}
-
-		return false;
-
+		return that instanceof LookupSymbol && that.toString().equals(fullSymbol);
 	}
 
 	@Override
 	public int hashCode() {
-		return toString().hashCode();
+		return fullSymbol.hashCode();
 	}
 
 	@Override
 	public String toString() {
-		return (vendor != null ? vendor.toString() : "*") + ":"
-				+ (exchange != null ? exchange.toString() : "*") + ":"
-				+ symbol;
+		return fullSymbol;
+	}
+
+	@Override
+	public int compareTo(final LookupSymbol that) {
+		return toString().compareTo(that.toString());
 	}
 
 }

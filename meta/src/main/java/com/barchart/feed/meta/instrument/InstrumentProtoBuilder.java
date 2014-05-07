@@ -7,6 +7,8 @@
  */
 package com.barchart.feed.meta.instrument;
 
+import java.util.Collections;
+import java.util.EnumMap;
 import java.util.Map;
 
 import org.openfeed.InstrumentDefinition;
@@ -18,7 +20,7 @@ import org.openfeed.InstrumentDefinition.InstrumentType;
 import org.openfeed.InstrumentDefinition.Symbol;
 
 import com.barchart.feed.api.model.meta.Instrument;
-import com.barchart.feed.api.model.meta.Instrument.State;
+import com.barchart.feed.api.model.meta.Instrument.SecurityType;
 import com.barchart.feed.api.model.meta.id.InstrumentID;
 import com.barchart.feed.api.model.meta.id.VendorID;
 import com.barchart.feed.api.model.meta.instrument.Event;
@@ -27,28 +29,35 @@ import com.barchart.feed.api.model.meta.instrument.SpreadLeg;
 import com.barchart.feed.api.model.meta.instrument.SpreadType;
 import com.barchart.feed.api.model.meta.instrument.TimeSpan;
 import com.barchart.util.value.api.Price;
-import com.barchart.util.value.api.Size;
 
 public final class InstrumentProtoBuilder {
 
 	private static final BiEnumMap<Instrument.SecurityType, InstrumentType> secTypeMap =
-			new BiEnumMap<Instrument.SecurityType, InstrumentType>(
+			BiEnumMap.create(
 					new Instrument.SecurityType[] {
-							Instrument.SecurityType.NULL_TYPE, Instrument.SecurityType.FOREX,
-							Instrument.SecurityType.INDEX, Instrument.SecurityType.EQUITY,
-							Instrument.SecurityType.FUTURE, Instrument.SecurityType.OPTION
+							Instrument.SecurityType.NULL_TYPE,
+							Instrument.SecurityType.FOREX,
+							Instrument.SecurityType.INDEX,
+							Instrument.SecurityType.EQUITY,
+							Instrument.SecurityType.FUTURE,
+							Instrument.SecurityType.OPTION,
+							Instrument.SecurityType.SPREAD
 					}, new InstrumentType[] {
-							InstrumentType.NO_INSTRUMENT, InstrumentType.FOREX_INSTRUMENT,
-							InstrumentType.INDEX_INSTRUMENT, InstrumentType.EQUITY_INSTRUMENT,
-							InstrumentType.FUTURE_INSTRUMENT, InstrumentType.OPTION_INSTRUMENT,
+							InstrumentType.NO_INSTRUMENT,
+							InstrumentType.FOREX_INSTRUMENT,
+							InstrumentType.INDEX_INSTRUMENT,
+							InstrumentType.EQUITY_INSTRUMENT,
+							InstrumentType.FUTURE_INSTRUMENT,
+							InstrumentType.OPTION_INSTRUMENT,
 							InstrumentType.SPREAD_INSTRUMENT
 					});
 
 	private static final BiEnumMap<Instrument.BookLiquidityType, BookLiquidity> liqidityTypeMap =
-			new BiEnumMap<Instrument.BookLiquidityType, BookLiquidity>(
+			BiEnumMap.create(
 					new Instrument.BookLiquidityType[] {
 							Instrument.BookLiquidityType.NONE,
-							Instrument.BookLiquidityType.DEFAULT, Instrument.BookLiquidityType.IMPLIED,
+							Instrument.BookLiquidityType.DEFAULT,
+							Instrument.BookLiquidityType.IMPLIED,
 							Instrument.BookLiquidityType.COMBINED
 					}, new BookLiquidity[] {
 							BookLiquidity.NO_BOOK_LIQUIDITY,
@@ -58,7 +67,7 @@ public final class InstrumentProtoBuilder {
 					});
 
 	private static final BiEnumMap<Instrument.BookStructureType, BookStructure> structTypeMap =
-			new BiEnumMap<Instrument.BookStructureType, BookStructure>(
+			BiEnumMap.create(
 					new Instrument.BookStructureType[] {
 							Instrument.BookStructureType.NONE,
 							Instrument.BookStructureType.PRICE_LEVEL,
@@ -72,7 +81,7 @@ public final class InstrumentProtoBuilder {
 					});
 
 	private static final BiEnumMap<Event.Type, EventType> eventTypeMap =
-			new BiEnumMap<Event.Type, EventType>(
+			BiEnumMap.create(
 					new Event.Type[] {
 							Event.Type.FIRST_DELIVERY_DATE,
 							Event.Type.FIRST_HOLDING_DATE,
@@ -100,7 +109,7 @@ public final class InstrumentProtoBuilder {
 					});
 
 	private static final BiEnumMap<PriceFormat.SubFormat, InstrumentDefinition.PriceFormat.SubFormat> subFormatMap =
-			new BiEnumMap<PriceFormat.SubFormat, InstrumentDefinition.PriceFormat.SubFormat>(
+			BiEnumMap.create(
 					new PriceFormat.SubFormat[] {
 							PriceFormat.SubFormat.DECIMAL,
 							PriceFormat.SubFormat.FLAT,
@@ -112,7 +121,7 @@ public final class InstrumentProtoBuilder {
 					});
 
 	private static final BiEnumMap<Instrument.OptionStyle, InstrumentDefinition.OptionStyle> optionStyleMap =
-			new BiEnumMap<Instrument.OptionStyle, InstrumentDefinition.OptionStyle>(
+			BiEnumMap.create(
 					new Instrument.OptionStyle[] {
 							Instrument.OptionStyle.DEFAULT,
 							Instrument.OptionStyle.AMERICAN,
@@ -124,7 +133,7 @@ public final class InstrumentProtoBuilder {
 					});
 
 	private static final BiEnumMap<Instrument.OptionType, InstrumentDefinition.OptionType> optionTypeMap =
-			new BiEnumMap<Instrument.OptionType, InstrumentDefinition.OptionType>(
+			BiEnumMap.create(
 					new Instrument.OptionType[] {
 							Instrument.OptionType.CALL,
 							Instrument.OptionType.PUT
@@ -134,7 +143,7 @@ public final class InstrumentProtoBuilder {
 					});
 
 	private static final BiEnumMap<SpreadType, InstrumentDefinition.SpreadType> spreadTypeMap =
-			new BiEnumMap<SpreadType, InstrumentDefinition.SpreadType>(
+			BiEnumMap.create(
 					new SpreadType[] {
 					}, new InstrumentDefinition.SpreadType[] {
 					});
@@ -151,17 +160,20 @@ public final class InstrumentProtoBuilder {
 		}
 
 		if (inst == null || inst.equals(Instrument.NULL)) {
-			return null; // Return empty instrument def
+			throw new IllegalArgumentException("Instrument cannot be null");
 		}
 
-		final InstrumentDefinition.Builder builder = InstrumentDefinition
-				.newBuilder();
+		final InstrumentDefinition.Builder builder = InstrumentDefinition.newBuilder();
 
 		/* market identifier; must be globally unique; */
-		builder.setMarketId(Long.parseLong(inst.id().id()));
+		if (!inst.id().isNull()) {
+			builder.setMarketId(Long.parseLong(inst.id().id()));
+		}
 
 		/* type of security, Forex, Equity, etc. */
-		builder.setInstrumentType(secTypeMap.getValue(inst.securityType()));
+		if (inst.securityType() != SecurityType.NULL_TYPE) {
+			builder.setInstrumentType(secTypeMap.getValue(inst.securityType()));
+		}
 
 		/* liquidy type, default / implied / combined */
 		builder.setBookLiquidity(liqidityTypeMap.getValue(inst.liquidityType()));
@@ -170,15 +182,19 @@ public final class InstrumentProtoBuilder {
 		builder.setBookStructure(structTypeMap.getValue(inst.bookStructure()));
 
 		/* book depth */
-		if (inst.maxBookDepth() != Size.NULL) {
+		if (!inst.maxBookDepth().isNull()) {
 			builder.setBookDepth((int) inst.maxBookDepth().asDouble());
 		}
 
 		/* vendor */
-		builder.setVendorId(inst.vendor().id());
+		if (!inst.vendor().isNull()) {
+			builder.setVendorId(inst.vendor().id());
+		}
 
 		/* market symbol; can be non unique; */
-		builder.setSymbol(inst.symbol());
+		if (inst.symbol() != null) {
+			builder.setSymbol(inst.symbol());
+		}
 
 		if (inst.vendorSymbols().size() > 0) {
 			for (final Map.Entry<VendorID, String> entry : inst.vendorSymbols().entrySet()) {
@@ -190,24 +206,32 @@ public final class InstrumentProtoBuilder {
 		}
 
 		/* market free style description; can be used in full text search */
-		builder.setDescription(inst.description());
+		if (inst.description() != null) {
+			builder.setDescription(inst.description());
+		}
 
 		/* stock vs future vs etc. */
-		builder.setCfiCode(inst.CFICode());
+		if (inst.CFICode() != null) {
+			builder.setCfiCode(inst.CFICode());
+		}
 
 		/* market trading currency */
-		builder.setCurrencyCode(inst.currencyCode());
+		if (inst.currencyCode() != null) {
+			builder.setCurrencyCode(inst.currencyCode());
+		}
 
 		/* market originating exchange identifier */
-		builder.setExchangeCode(inst.exchangeCode());
+		if (inst.exchangeCode() != null) {
+			builder.setExchangeCode(inst.exchangeCode());
+		}
 
 		/* price step / increment size / tick size */
-		if (inst.tickSize() != Price.NULL) {
+		if (!inst.tickSize().isNull()) {
 			builder.setMinimumPriceIncrement(build(inst.tickSize()));
 		}
 
 		/* value of a future contract / stock share */
-		if (inst.pointValue() != Price.NULL) {
+		if (!inst.pointValue().isNull()) {
 			builder.setContractPointValue(build(inst.pointValue()));
 		}
 
@@ -239,18 +263,24 @@ public final class InstrumentProtoBuilder {
 
 		}
 
-		builder.setRecordCreateTime(inst.created().getMillis());
+		if (inst.created() != null) {
+			builder.setRecordCreateTime(inst.created().getMillis());
+		}
 
-		builder.setRecordUpdateTime(inst.updated().getMillis());
+		if (inst.updated() != null) {
+			builder.setRecordUpdateTime(inst.updated().getMillis());
+		}
 
 		/* time zone name as text */
-		builder.setTimeZoneName(inst.timeZone().getID());
+		if (inst.timeZone() != null) {
+			builder.setTimeZoneName(inst.timeZone().getID());
+		}
 
 		for (final InstrumentID id : inst.components()) {
 			builder.addComponentId(Long.parseLong(id.id()));
 		}
 
-		builder.setState(inst.state() == State.ACTIVE
+		builder.setState(inst.state() == Instrument.State.ACTIVE
 				? InstrumentDefinition.State.ACTIVE_STATE
 				: InstrumentDefinition.State.PASSIVE_STATE);
 
@@ -284,8 +314,10 @@ public final class InstrumentProtoBuilder {
 					.build());
 		}
 
-		builder.setTransactionPriceConversionFactor(
-				(int) inst.transactionPriceConversionFactor().asDouble());
+		if (!inst.transactionPriceConversionFactor().isNull()) {
+			builder.setTransactionPriceConversionFactor(
+					(int) inst.transactionPriceConversionFactor().asDouble());
+		}
 
 		if (!inst.strikePrice().isNull()) {
 			builder.setOptionStrike(build(inst.strikePrice()));
@@ -307,7 +339,8 @@ public final class InstrumentProtoBuilder {
 		}
 
 		if (!inst.spreadType().isNull()) {
-			builder.setSpreadType(spreadTypeMap.getValue(inst.spreadType()));
+			// TODO update spread mappings
+			// builder.setSpreadType(spreadTypeMap.getValue(inst.spreadType()));
 		}
 
 		return builder.build();
@@ -316,21 +349,85 @@ public final class InstrumentProtoBuilder {
 
 	private static class BiEnumMap<K extends Enum<K>, V extends Enum<V>> {
 
-		private final K[] keys;
-		private final V[] vals;
+		private final Map<K, V> keyMap;
+		private final Map<V, K> valMap;
 
-		public BiEnumMap(final K[] keys, final V[] vals) {
-			this.keys = keys;
-			this.vals = vals;
+		protected BiEnumMap(final Map<K, V> keyMap, final Map<V, K> valMap) {
+			this.keyMap = keyMap;
+			this.valMap = valMap;
+		}
+
+		protected BiEnumMap(final Class<K> keyType, final Class<V> valType) {
+			this.keyMap = new EnumMap<K, V>(keyType);
+			this.valMap = new EnumMap<V, K>(valType);
+		}
+
+		public static <K extends Enum<K>, V extends Enum<V>> BiEnumMap<K, V> create(final Class<K> keyType,
+				final Class<V> valType) {
+			return create(keyType, valType, 0);
+		}
+
+		public static <K extends Enum<K>, V extends Enum<V>> BiEnumMap<K, V> create(
+				final Class<K> keyType, final Class<V> valType, final int offset) {
+			return create(keyType, valType, keyType.getEnumConstants(), valType.getEnumConstants(), offset);
+		}
+
+		public static <K extends Enum<K>, V extends Enum<V>> BiEnumMap<K, V> create(final K[] keys, final V[] vals) {
+			return create(keys, vals, 0);
+		}
+
+		@SuppressWarnings("unchecked")
+		public static <K extends Enum<K>, V extends Enum<V>> BiEnumMap<K, V> create(final K[] keys, final V[] vals,
+				final int offset) {
+
+			if (keys.length != vals.length - offset) {
+				throw new IndexOutOfBoundsException("Enum sets are not the same size");
+			}
+
+			if (keys.length == 0 || vals.length == 0) {
+				return new EmptyBiEnumMap<K, V>();
+			}
+
+			return create((Class<K>) keys[0].getClass(),
+					(Class<V>) vals[0].getClass(), keys, vals, offset);
+
+		}
+
+		private static <K extends Enum<K>, V extends Enum<V>> BiEnumMap<K, V> create(
+				final Class<K> keyType, final Class<V> valType, final K[] keys, final V[] vals, final int offset) {
+
+			if (keys.length != vals.length - offset) {
+				throw new IndexOutOfBoundsException("Enum sets are not the same size");
+			}
+
+			final int start = offset < 0 ? -offset : 0;
+
+			final BiEnumMap<K, V> map = new BiEnumMap<K, V>(keyType, valType);
+
+			for (int i = start; i < keys.length; i++) {
+				map.keyMap.put(keys[i], vals[i + offset]);
+				map.valMap.put(vals[i + offset], keys[i]);
+			}
+
+			return map;
+
 		}
 
 		public V getValue(final K key) {
-			return vals[key.ordinal()];
+			return keyMap.get(key);
 		}
 
 		@SuppressWarnings("unused")
 		public K getKey(final V val) {
-			return keys[val.ordinal()];
+			return valMap.get(val);
+		}
+
+		private static class EmptyBiEnumMap<K extends Enum<K>, V extends Enum<V>> extends BiEnumMap<K, V> {
+
+			public EmptyBiEnumMap() {
+				super(Collections.<K, V> emptyMap(), Collections.<V, K> emptyMap());
+			}
+
 		}
 
 	}

@@ -93,6 +93,7 @@ public interface Instrument extends Comparable<Instrument>, Metadata {
 		EQUITY("E"), //
 		FUTURE("F"), //
 		OPTION("O"), //
+		SPREAD("FC"), // Invalid CFI code, won't match things
 		;
 
 		private final String cfi;

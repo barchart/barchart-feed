@@ -3,7 +3,7 @@ package com.barchart.feed.series.codec;
 import java.nio.ByteBuffer;
 
 import org.joda.time.DateTime;
-import org.joda.time.chrono.ISOChronology;
+import org.joda.time.DateTimeZone;
 
 import com.barchart.feed.api.model.meta.id.InstrumentID;
 import com.barchart.feed.api.series.Bar;
@@ -23,24 +23,38 @@ public final class TimeSeriesCodec {
 	}
 
 	/**
-	 * Create from protobuf message.
+	 * Create from protobuf message using UTC timezone.
 	 */
 	public static BarImpl fromProtobuf(final ByteBuffer buf) {
+		return fromProtobuf(buf, DateTimeZone.UTC);
+	}
+
+	/**
+	 * Create from protobuf message using the specified timezone.
+	 */
+	public static BarImpl fromProtobuf(final ByteBuffer buf, final DateTimeZone zone) {
 		try {
-			return fromProtobuf(TimeSeriesRecord.parseFrom(buf.array()));
+			return fromProtobuf(TimeSeriesRecord.parseFrom(buf.array()), zone);
 		} catch (final InvalidProtocolBufferException e) {
 			throw new RuntimeException(e);
 		}
 	}
 
 	/**
-	 * Create from protobuf message.
+	 * Create from protobuf message using UTC timezone.
 	 */
 	public static BarImpl fromProtobuf(final TimeSeriesRecord buf) {
+		return fromProtobuf(buf, DateTimeZone.UTC);
+	}
+
+	/**
+	 * Create from protobuf message using the specified timezone.
+	 */
+	public static BarImpl fromProtobuf(final TimeSeriesRecord buf, final DateTimeZone zone) {
 
 		return new BarImpl(
 				buf.hasInstrument() ? new InstrumentID(String.valueOf(buf.getInstrument())) : null,
-				buf.hasTimestamp() ? new DateTime(buf.getTimestamp(), ISOChronology.getInstanceUTC()) : null,
+				buf.hasTimestamp() ? new DateTime(buf.getTimestamp(), zone) : null,
 				buf.hasPeriod() ? new Period(PeriodType.valueOf(buf.getPeriod().name()), buf.getPeriodCount()) : null,
 				buf.hasOpenMantissa() ? VALUES.newPrice(buf.getOpenMantissa(), buf.getOpenExponent()) : null,
 				buf.hasHighMantissa() ? VALUES.newPrice(buf.getHighMantissa(), buf.getHighExponent()) : null,
