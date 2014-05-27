@@ -6,12 +6,12 @@
 		<groupId>com.barchart.base</groupId>
 		<artifactId>barchart-archon</artifactId>
 		<version>2.6.24</version>
-		<relativePath/>
+		<relativePath />
 	</parent>  
   
   <artifactId>barchart-feed-series</artifactId>
   <groupId>com.barchart.feed</groupId>
-  <version>1.0.1-SNAPSHOT</version>
+  <version>1.0.5-SNAPSHOT</version>
   <packaging>bundle</packaging>
   
   	<scm>
@@ -38,19 +38,17 @@
     </build>
 
     <dependencies>
+    
         <dependency>
             <groupId>com.barchart.feed</groupId>
             <artifactId>barchart-feed-api</artifactId>
             <version>[2.2-SNAPSHOT,3-SNAPSHOT)</version>
         </dependency>
+        
         <dependency>
             <groupId>com.barchart.feed</groupId>
             <artifactId>barchart-feed-proto</artifactId>
             <version>[1.0-SNAPSHOT,1.1-SNAPSHOT)</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
         </dependency>
 
         <dependency>
@@ -58,21 +56,6 @@
             <artifactId>protobuf-java</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-core</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-        </dependency>
-        
-        <dependency>
-            <groupId>com.barchart.util</groupId>
-            <artifactId>barchart-util-test</artifactId>
-        </dependency>
-        
         <dependency>
           <groupId>net.objectlab.kit</groupId>
           <artifactId>datecalc-common</artifactId>
@@ -86,9 +69,28 @@
         </dependency>
         
         <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <scope>test</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.barchart.util</groupId>
+            <artifactId>barchart-util-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        
+        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>
         </dependency>
+        
     </dependencies>
 </project>
