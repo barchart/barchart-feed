@@ -7,7 +7,7 @@ public interface Available extends Metadata {
 
 		@Override
 		public MetaType type() {
-			return MetaType.AVAILABLE;
+			throw new UnsupportedOperationException();
 		}
 		
 		@Override
@@ -17,12 +17,12 @@ public interface Available extends Metadata {
 
 		@Override
 		public String description() {
-			return "NULL AVAILABLE";
+			throw new UnsupportedOperationException();
 		}
 		
 		@Override
 		public String toString() {
-			return "NULL AVAILABLE";
+			throw new UnsupportedOperationException();
 		}
 
 	};

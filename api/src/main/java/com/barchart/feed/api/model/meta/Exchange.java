@@ -48,27 +48,27 @@ public interface Exchange extends Metadata {
 
 		@Override
 		public MetaType type() {
-			return MetaType.EXCHANGE;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public ExchangeID id() {
-			return ExchangeID.NULL;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public String mic() {
-			return null;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public String countryCode() {
-			return null;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public String currencyCode() {
-			return null;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
@@ -78,27 +78,27 @@ public interface Exchange extends Metadata {
 
 		@Override
 		public DateTimeZone timeZone() {
-			return null;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public String timeZoneName() {
-			return "NULL TIME ZONE";
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public String description() {
-			return "NULL EXCHANGE";
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public String toString() {
-			return "NULL EXCHANGE";
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public int standardDelay() {
-			return 0;
+			throw new UnsupportedOperationException();
 		}
 
 	};

@@ -7,7 +7,7 @@ public interface Group extends Metadata {
 		
 		@Override
 		public MetaType type() {
-			return MetaType.GROUP;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
@@ -17,12 +17,12 @@ public interface Group extends Metadata {
 
 		@Override
 		public String description() {
-			return "NULL GROUP";
+			throw new UnsupportedOperationException();
 		}
 		
 		@Override
 		public String toString() {
-			return "NULL GROUP";
+			throw new UnsupportedOperationException();
 		}
 		
 	};

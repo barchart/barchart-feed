@@ -1,6 +1,5 @@
 package com.barchart.feed.api.model.meta;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -437,7 +436,7 @@ public interface Instrument extends Comparable<Instrument>, Metadata {
 
 		@Override
 		public MetaType type() {
-			return MetaType.INSTRUMENT;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
@@ -447,232 +446,232 @@ public interface Instrument extends Comparable<Instrument>, Metadata {
 
 		@Override
 		public int compareTo(final Instrument o) {
-			return 0;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public String marketGUID() {
-			return "NULL_GUID";
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public SecurityType securityType() {
-			return SecurityType.NULL_TYPE;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public BookLiquidityType liquidityType() {
-			return BookLiquidityType.NONE;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public BookStructureType bookStructure() {
-			return BookStructureType.NONE;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Size maxBookDepth() {
-			return Size.NULL;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public VendorID vendor() {
-			return VendorID.NULL;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Map<VendorID, String> vendorSymbols() {
-			return Collections.<VendorID, String> emptyMap();
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public String symbol() {
-			return "NULL SYMBOL";
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public String description() {
-			return "NULL INSTRUMENT";
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public String CFICode() {
-			return "NULL CFICode";
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Exchange exchange() {
-			return null;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public String exchangeCode() {
-			return "NULL EXCHANGE";
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Price tickSize() {
-			return Price.NULL;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Price pointValue() {
-			return Price.NULL;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Price transactionPriceConversionFactor() {
-			return Price.NULL;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Fraction displayFraction() {
-			return Fraction.NULL;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public TimeInterval lifetime() {
-			return TimeInterval.NULL;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Schedule marketHours() {
-			return Schedule.NULL;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Month contractDeliveryMonth() {
-			return Month.NULL_MONTH;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public long timeZoneOffset() {
-			return 0;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public String timeZoneName() {
-			return "NULL TIMEZONE";
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public List<InstrumentID> componentLegs() {
-			return Collections.<InstrumentID> emptyList();
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public InstrumentID id() {
-			return InstrumentID.NULL;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public String toString() {
-			return "NULL_INSTRUMENT";
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Time contractExpire() {
-			return Time.NULL;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public String currencyCode() {
-			return null;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public String instrumentGroup() {
-			return null;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public State state() {
-			return null;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public ChannelID channel() {
-			return ChannelID.NULL;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public DateTime created() {
-			return null;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public DateTime updated() {
-			return null;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Calendar calendar() {
-			return null;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Schedule schedule() {
-			return null;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public DateTimeZone timeZone() {
-			return null;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public PriceFormat priceFormat() {
-			return null;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public PriceFormat optionStrikePriceFormat() {
-			return null;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public List<InstrumentID> components() {
-			return null;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public DateTime delivery() {
-			return null;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public DateTime expiration() {
-			return null;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public InstrumentID underlier() {
-			return null;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Price strikePrice() {
-			return null;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public OptionType optionType() {
-			return null;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public OptionStyle optionStyle() {
-			return null;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public List<SpreadLeg> spreadLegs() {
-			return null;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public SpreadType spreadType() {
-			return null;
+			throw new UnsupportedOperationException();
 		}
 
 	};

@@ -8,7 +8,7 @@ public interface Channel extends Metadata {
 
 		@Override
 		public MetaType type() {
-			return MetaType.CHANNEL;
+			throw new UnsupportedOperationException();
 		}
 		
 		
@@ -19,12 +19,12 @@ public interface Channel extends Metadata {
 
 		@Override
 		public String description() {
-			return "NULL CHANNEL";
+			throw new UnsupportedOperationException();
 		}
 		
 		@Override
 		public String toString() {
-			return "NULL CHANNEL";
+			throw new UnsupportedOperationException();
 		}
 		
 	};
