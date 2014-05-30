@@ -77,6 +77,8 @@ public abstract class InstrumentBase implements Instrument {
 
 	@Override
 	public int compareTo(final Instrument o) {
+		if (o.isNull())
+			return 1;
 		return id().compareTo(o.id());
 	}
 
