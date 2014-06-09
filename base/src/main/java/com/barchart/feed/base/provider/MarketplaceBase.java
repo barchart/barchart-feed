@@ -101,8 +101,7 @@ public abstract class MarketplaceBase<Message extends MarketMessage> implements
 		return agent.userAgent();
 	}
 
-	private class BaseAgent<V extends MarketData<V>> implements
-			FrameworkAgent<V>, Agent {
+	private class BaseAgent<V extends MarketData<V>> implements FrameworkAgent<V>, Agent {
 
 		private final Class<V> clazz;
 		private final MDGetter<V> getter;
