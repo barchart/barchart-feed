@@ -39,7 +39,7 @@ public class Dividend extends AbstractCorporateAction {
 	@Override
 	public Bar adjust(final Bar bar) {
 
-		switch(bar.getPeriod().getPeriodType()) {
+		switch (bar.getPeriod().getPeriodType()) {
 
 			case TICK:
 			case MINUTE:
@@ -52,11 +52,16 @@ public class Dividend extends AbstractCorporateAction {
 				if (DateTimeComparator.getDateOnlyInstance()
 						.compare(bar.getDate().getMillis(), timestamp().getMillis()) == 0) {
 					final BarImpl b = bar instanceof BarImpl ? (BarImpl) bar : new BarImpl(bar);
-					b.setOpen(b.getOpen().add(amount));
-					b.setHigh(b.getHigh().add(amount));
-					b.setLow(b.getLow().add(amount));
-					b.setClose(b.getClose().add(amount));
-					b.setMidpoint(b.getMidpoint().add(amount));
+					if (!b.getOpen().isNull())
+						b.setOpen(b.getOpen().add(amount));
+					if (!b.getHigh().isNull())
+						b.setHigh(b.getHigh().add(amount));
+					if (!b.getLow().isNull())
+						b.setLow(b.getLow().add(amount));
+					if (!b.getClose().isNull())
+						b.setClose(b.getClose().add(amount));
+					if (!b.getMidpoint().isNull())
+						b.setMidpoint(b.getMidpoint().add(amount));
 					return b;
 				}
 

@@ -554,7 +554,7 @@ public class BarImpl extends DataPointImpl implements Bar {
 	@Override
 	public Size getOpenInterest() {
 
-		if (barCount > 1)
+		if (barCount > 1 && !openInterest.isNull())
 			return openInterest.div(barCount);
 
 		return openInterest;

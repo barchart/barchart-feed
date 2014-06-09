@@ -59,11 +59,16 @@ public class StockSplit extends AbstractCorporateAction {
 				if (DateTimeComparator.getDateOnlyInstance()
 						.compare(bar.getDate().getMillis(), timestamp().getMillis()) < 0) {
 					final BarImpl b = bar instanceof BarImpl ? (BarImpl) bar : new BarImpl(bar);
-					b.setOpen(b.getOpen().mult(after).div(before).round(6));
-					b.setHigh(b.getHigh().mult(after).div(before).round(6));
-					b.setLow(b.getLow().mult(after).div(before).round(6));
-					b.setClose(b.getClose().mult(after).div(before).round(6));
-					b.setMidpoint(b.getMidpoint().mult(after).div(before).round(6));
+					if (!b.getOpen().isNull())
+						b.setOpen(b.getOpen().mult(after).div(before).round(6));
+					if (!b.getHigh().isNull())
+						b.setHigh(b.getHigh().mult(after).div(before).round(6));
+					if (!b.getLow().isNull())
+						b.setLow(b.getLow().mult(after).div(before).round(6));
+					if (!b.getClose().isNull())
+						b.setClose(b.getClose().mult(after).div(before).round(6));
+					if (!b.getMidpoint().isNull())
+						b.setMidpoint(b.getMidpoint().mult(after).div(before).round(6));
 					return b;
 				}
 
