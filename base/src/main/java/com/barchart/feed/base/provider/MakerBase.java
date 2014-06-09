@@ -424,6 +424,11 @@ public abstract class MakerBase<Message extends MarketMessage> implements
 
 		final Price priceStep = instrument.tickSize();
 
+		if(priceStep.isNull()) {
+			log.error("priceStep.isNull(");
+			return false;
+		}
+		
 		if (priceStep.isZero()) {
 			log.error("priceStep.isZero()");
 			return false;

@@ -14,7 +14,7 @@ import com.barchart.util.value.api.ValueFactory;
 
 public final class ValueConverter {
 
-	private static final ValueFactory factory = new ValueFactoryImpl();
+	private static final ValueFactory factory = ValueFactoryImpl.instance;
 	
 	public static Price price(final PriceValue value) {
 		if(value.isNull()) {

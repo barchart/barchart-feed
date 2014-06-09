@@ -98,8 +98,8 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 	/* ***** ***** Consumer Agent ***** ***** */
 
 	@Override
-	public <V extends MarketData<V>> ConsumerAgent register(
-			final MarketObserver<V> callback, final Class<V> clazz) {
+	public <V extends MarketData<V>> ConsumerAgent register(final MarketObserver<V> callback, 
+			final Class<V> clazz) {
 
 		final MDGetter<V> getter = MarketDataGetters.get(clazz);
 
@@ -114,8 +114,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		return agent.consumerAgent();
 	}
 
-	private class BaseAgent<V extends MarketData<V>> implements
-			FrameworkAgent<V>, ConsumerAgent {
+	private class BaseAgent<V extends MarketData<V>> implements FrameworkAgent<V>, ConsumerAgent {
 
 		private final Class<V> clazz;
 		private final MDGetter<V> getter;
