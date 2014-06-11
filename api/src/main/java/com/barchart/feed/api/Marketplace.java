@@ -1,11 +1,14 @@
 package com.barchart.feed.api;
 
-import java.io.File;
-import java.util.concurrent.ExecutorService;
+import java.util.Map;
+
+import rx.Observable;
 
 import com.barchart.feed.api.connection.Connection;
-import com.barchart.feed.api.connection.ConnectionLifecycle;
+import com.barchart.feed.api.connection.Subscription;
 import com.barchart.feed.api.connection.TimestampListener;
+import com.barchart.feed.api.consumer.ConsumerAgent;
+import com.barchart.feed.api.consumer.MarketService;
 import com.barchart.feed.api.model.data.Book;
 import com.barchart.feed.api.model.data.Cuvol;
 import com.barchart.feed.api.model.data.Market;
@@ -13,41 +16,13 @@ import com.barchart.feed.api.model.data.MarketData;
 import com.barchart.feed.api.model.data.Trade;
 import com.barchart.feed.api.model.meta.Exchange;
 import com.barchart.feed.api.model.meta.Instrument;
+import com.barchart.feed.api.model.meta.id.ExchangeID;
 import com.barchart.feed.api.model.meta.id.InstrumentID;
 
-public interface Marketplace extends ConnectionLifecycle<Marketplace> {
-	
-	interface Builder {
-		
-		Builder username(String username);
-		
-		Builder password(String password);
-		
-		Builder executor(ExecutorService executor);
-		
-		Builder localDatabaseFolder(File dbFolder);
-		
-		Builder useLocalDatabase();
-		
-		Marketplace build();
-		
-	}
-	
-	// Consider delay meta
-	
-	/* ***** ***** Snapshot Provider ***** ***** */
-	
-	Market snapshot(Instrument instrument);
-	
-	Market snapshot(InstrumentID instID);
-	
-	Market snapshot(String symbol);
-	
-	/* ***** ***** Helper subscribe methods ***** ***** */
-	
-	<V extends MarketData<V>> Agent newAgent(Class<V> clazz, MarketObserver<V> callback);
+public interface Marketplace extends MarketService {
 
-	/** FIXME document */
+	/* ***** ***** Shortcut/Helpter Methods ***** ***** */
+	
 	<V extends MarketData<V>> Agent subscribe(Class<V> clazz,
 			MarketObserver<V> callback, String... symbols);
 
@@ -56,7 +31,7 @@ public interface Marketplace extends ConnectionLifecycle<Marketplace> {
 
 	<V extends MarketData<V>> Agent subscribe(Class<V> clazz,
 			MarketObserver<V> callback, Exchange... exchanges);
-
+	
 	/**
 	 * Fires on ALL
 	 * 
@@ -93,6 +68,36 @@ public interface Marketplace extends ConnectionLifecycle<Marketplace> {
 	 */
 	Agent subscribeCuvol(MarketObserver<Cuvol> cuvol, String... symbols);
 	
+	
+	 <V extends MarketData<V>> Agent newAgent(Class<V> dataType, MarketObserver<V> callback);
+	
+	/* ***** ***** Snapshot Provider ***** ***** */
+	
+	Market snapshot(Instrument instrument);
+	
+	Market snapshot(String symbol);
+	
+	/* ***** ***** MarketService ***** ***** */
+	
+	/**
+	 * 
+	 * @param callback
+	 * @param clazz
+	 * @return
+	 */
+	@Override
+	<V extends MarketData<V>> ConsumerAgent register(MarketObserver<V> callback, Class<V> clazz);
+
+	/* ***** ***** MarketSnapshotService ***** ***** */
+	
+	/**
+	 * 
+	 * @param instrument
+	 * @return
+	 */
+	@Override
+	Observable<Market> snapshot(InstrumentID instrument);
+	
 	/* ***** ***** ConnectionLifecycle ***** ***** */
 
 	@Override
@@ -113,7 +118,7 @@ public interface Marketplace extends ConnectionLifecycle<Marketplace> {
 
 	/**
 	 * Applications which require time-stamp or heart-beat messages from the
-	 * data server instantiate a DDF_TimestampListener and bind it to the
+	 * data server instantiate a TimestampListener and bind it to the
 	 * client.
 	 * 
 	 * @param listener
@@ -121,4 +126,39 @@ public interface Marketplace extends ConnectionLifecycle<Marketplace> {
 	@Override
 	void bindTimestampListener(TimestampListener listener);
 
+	/* ***** ***** MetadataService ***** ***** */
+	
+	/**
+	 * 
+	 * @param ids
+	 * @return
+	 */
+	@Override
+	Observable<Map<InstrumentID, Instrument>> instrument(InstrumentID... ids);
+	
+	/**
+	 * 
+	 * @param symbols
+	 * @return
+	 */
+	@Override
+	Observable<Result<Instrument>> instrument(String... symbols);
+	
+	/**
+	 * 
+	 * @param ctx
+	 * @param symbols
+	 * @return
+	 */
+	@Override
+	Observable<Result<Instrument>> instrument(SearchContext ctx, String... symbols);
+	
+	/* ***** ***** SubscriptionService ***** ***** */
+	
+	@Override
+	Map<InstrumentID, Subscription<Instrument>> instruments();
+	
+	@Override
+	Map<ExchangeID, Subscription<Exchange>> exchanges();
+	
 }

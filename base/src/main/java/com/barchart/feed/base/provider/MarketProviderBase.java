@@ -16,8 +16,8 @@ import org.slf4j.LoggerFactory;
 import rx.Observable;
 import rx.functions.Func1;
 
-import com.barchart.feed.api.Agent;
 import com.barchart.feed.api.MarketObserver;
+import com.barchart.feed.api.Agent;
 import com.barchart.feed.api.connection.Connection.Monitor;
 import com.barchart.feed.api.connection.Subscription;
 import com.barchart.feed.api.connection.TimestampListener;
@@ -111,10 +111,10 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 
 		attachAgent(agent);
 
-		return agent.consumerAgent();
+		return agent.agent();
 	}
 
-	private class BaseAgent<V extends MarketData<V>> implements FrameworkAgent<V>, ConsumerAgent {
+	protected class BaseAgent<V extends MarketData<V>> implements FrameworkAgent<V>, Agent {
 
 		private final Class<V> clazz;
 		private final MDGetter<V> getter;
@@ -166,12 +166,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		}
 
 		@Override
-		public Agent userAgent() {
-			throw new UnsupportedOperationException();
-		}
-
-		@Override
-		public ConsumerAgent consumerAgent() {
+		public Agent agent() {
 			return this;
 		}
 
@@ -496,7 +491,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		}
 
 		@Override
-		public void include(final MetadataID<?>... metaID) {
+		public synchronized void include(final MetadataID<?>... metaID) {
 
 			final List<InstrumentID> ids = new ArrayList<InstrumentID>();
 
@@ -574,7 +569,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		}
 
 		@Override
-		public void exclude(final MetadataID<?>... metaID) {
+		public synchronized void exclude(final MetadataID<?>... metaID) {
 
 			final List<InstrumentID> ids = new ArrayList<InstrumentID>();
 
@@ -621,6 +616,16 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 
 			agentHandler.updateAgent(this);
 
+		}
+
+		@Override
+		public void includeSymbol(final String... symbols) {
+			include(symbols).toBlockingObservable().first();
+		}
+
+		@Override
+		public void excludeSymbol(final String... symbols) {
+			exclude(symbols).toBlockingObservable().first();
 		}
 
 	}  // END BASE AGENT

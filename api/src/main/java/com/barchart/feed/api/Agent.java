@@ -1,22 +1,25 @@
 package com.barchart.feed.api;
 
-import com.barchart.feed.api.consumer.AgentLifecycle;
+import rx.Observable;
+
+import com.barchart.feed.api.consumer.ConsumerAgent;
+import com.barchart.feed.api.consumer.MetadataService.Result;
 import com.barchart.feed.api.filter.Filter;
-import com.barchart.feed.api.filter.FilterUpdatable;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.api.model.meta.Metadata;
+import com.barchart.feed.api.model.meta.id.MetadataID;
 
 /**
- * 
+ * General agent for users, adds include/exclude w/o Rx.  Should not be used by platform. 
  */
-public interface Agent extends AgentLifecycle, FilterUpdatable, Filter {
+public interface Agent extends ConsumerAgent {
 
 	/**
 	 * Subscribes to and attaches agent to provided symbols.
 	 * 
 	 * @param symbols
 	 */
-	void include(String... symbols);
+	void includeSymbol(String... symbols);
 	
 	/**
 	 * Unsubscribes and detaches agent from provided symbols. Performs
@@ -24,7 +27,27 @@ public interface Agent extends AgentLifecycle, FilterUpdatable, Filter {
 	 * 
 	 * @param symbols
 	 */
-	void exclude(String... symbols);
+	void excludeSymbol(String... symbols);
+	
+	
+	/* ***** ***** ConsumerAgent ***** ***** */
+	
+	/**
+	 * Subscribes to and attaches agent to provided symbols.
+	 * 
+	 * @param symbols
+	 */
+	@Override
+	Observable<Result<Instrument>> include(String... symbols);
+	
+	/**
+	 * Unsubscribes and detaches agent from provided symbols. Performs
+	 * instrument lookup.
+	 * 
+	 * @param symbols
+	 */
+	@Override
+	Observable<Result<Instrument>> exclude(String... symbols);
 	
 	/* ***** ***** Lifecycle ***** ***** */
 	
@@ -60,7 +83,7 @@ public interface Agent extends AgentLifecycle, FilterUpdatable, Filter {
 	 */
 	@Override
 	void terminate();
-
+	
 	/* ***** ***** Filter ***** ***** */
 	
 	/**
@@ -68,7 +91,7 @@ public interface Agent extends AgentLifecycle, FilterUpdatable, Filter {
 	 */
 	@Override
 	boolean hasMatch(Instrument instrument);
-	
+
 	/**
 	 * Resolved filter in the LDAP format http://www.ietf.org/rfc/rfc1960.txt.
 	 */
@@ -95,7 +118,11 @@ public interface Agent extends AgentLifecycle, FilterUpdatable, Filter {
 	 * @param instruments
 	 */
 	@Override
+	@Deprecated
 	void include(Metadata... meta);
+	
+	@Override
+	void include(MetadataID<?>... metaID);
 
 	/**
 	 * Unsubscribes and detaches agent from provided instruments
@@ -103,11 +130,16 @@ public interface Agent extends AgentLifecycle, FilterUpdatable, Filter {
 	 * @param instruments
 	 */
 	@Override
+	@Deprecated
 	void exclude(Metadata... meta);
+	
+	@Override
+	void exclude(MetadataID<?>... metaID);
 
 	/**
 	 * Unsubscribes agent from all instruments
 	 */
 	@Override
 	void clear();
+	
 }
