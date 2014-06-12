@@ -684,14 +684,14 @@ public class BarImpl extends DataPointImpl implements Bar {
 	public String toString() {
 		final StringBuilder sb = new StringBuilder();
 		sb.append("[Bar: ").append(date)
-				.append(" o=").append(open.asDouble())
-				.append(" h=").append(high.asDouble())
-				.append(" l=").append(low.asDouble())
-				.append(" c=").append(close.asDouble())
-				.append(" v=").append((int) volume.asDouble())
-				.append(" vup=").append((int) volumeUp.asDouble())
-				.append(" vdwn=").append((int) volumeDown.asDouble())
-				.append(" oi=").append((int) openInterest.asDouble())
+				.append(" o=").append(open.toString())
+				.append(" h=").append(high.toString())
+				.append(" l=").append(low.toString())
+				.append(" c=").append(close.toString())
+				.append(" v=").append(volume.toString())
+				.append(" vup=").append(volumeUp.toString())
+				.append(" vdwn=").append(volumeDown.toString())
+				.append(" oi=").append(openInterest.toString())
 				.append("]");
 		return sb.toString();
 	}
