@@ -226,7 +226,7 @@ public final class Symbology {
 			}
 			
 			/* Option */
-			if(symbol.matches(".+\\d(C|P|D|Q)$")) {
+			if(symbol.matches(".+\\d([C-Z])$")) {
 				
 				/* Already in correct format */
 				if(symbol.contains("|")) {
@@ -248,8 +248,14 @@ public final class Symbology {
 				final char mon = symbol.charAt(pIndex);
 				ExpireMonth sMon = ExpireMonth.fromCode(mon);
 				ExpireMonth nowMon = ExpireMonth.fromCode(MONTH);
-				final String y = (sMon.value >= nowMon.value) ? String.valueOf(YEAR) :
-					String.valueOf(YEAR+1);
+				int year = (int)symbol.substring(len - 1).charAt(0);
+				String y = String.valueOf(YEAR);
+				boolean isCall;
+				if((isCall = (year > 67 && year < 80)) || (year > 80 && year < 91)) { //C == 67, P == 80
+					y = String.valueOf( YEAR + (isCall ? year - 67 : year - 80) );
+				}else{
+					y = String.valueOf(sMon.code < nowMon.code ? YEAR + 1 : YEAR);
+				}
 				
 				final StringBuilder sb = new StringBuilder();
 				
@@ -258,7 +264,7 @@ public final class Symbology {
 				sb.append("|"); // pipe
 				sb.append(price);
 				
-				if(symbol.matches(".+(C|D)$")) {
+				if(symbol.matches(".+([C-O])$")) {
 					return sb.append("C").toString();
 				} else {
 					return sb.append("P").toString();
@@ -305,7 +311,8 @@ public final class Symbology {
 	}
 
 	public static void main(final String[] args) {
-		
+		System.out.println("" + ((int)'D') + "  " + ((int)'P') + "  " + ((int)'Q') + "  " + ((int)'Z'));
+		System.out.println("" + ((char)67));
 	}
 	
 }
