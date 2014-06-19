@@ -9,6 +9,10 @@ public final class Symbology {
 
 	private static final Logger log = LoggerFactory.getLogger(Symbology.class);
 	
+	private static final int C = 67;
+	private static final int P = 80;
+	private static final int Zplus1 = 91;
+	
 	private Symbology() {
 		
 	}
@@ -251,8 +255,8 @@ public final class Symbology {
 				int year = (int)symbol.substring(len - 1).charAt(0);
 				String y = String.valueOf(YEAR);
 				boolean isCall;
-				if((isCall = (year > 67 && year < 80)) || (year > 80 && year < 91)) { //C == 67, P == 80
-					y = String.valueOf( YEAR + (isCall ? year - 67 : year - 80) );
+				if((isCall = (year > C && year < P)) || (year > P && year < Zplus1)) { //C == 67, P == 80
+					y = String.valueOf( YEAR + (isCall ? year - C : year - P) );
 				}else{
 					y = String.valueOf(sMon.code < nowMon.code ? YEAR + 1 : YEAR);
 				}
