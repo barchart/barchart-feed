@@ -255,9 +255,10 @@ public final class Symbology {
 				int year = (int)symbol.substring(len - 1).charAt(0);
 				String y = String.valueOf(YEAR);
 				boolean isCall;
+				
 				if((isCall = (year > C && year < P)) || (year > P && year < Zplus1)) { //C == 67, P == 80
 					y = String.valueOf( YEAR + (isCall ? year - C : year - P) );
-				}else{
+				} else {
 					y = String.valueOf(sMon.code < nowMon.code ? YEAR + 1 : YEAR);
 				}
 				
