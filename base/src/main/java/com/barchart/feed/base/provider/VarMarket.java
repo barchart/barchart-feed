@@ -293,8 +293,6 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 	@Override
 	public final Market freeze() {
 
-		// log.info("### freeze!");
-
 		final DefMarket that = new DefMarket(instrument);
 
 		final Value<?>[] source = this.valueArray;

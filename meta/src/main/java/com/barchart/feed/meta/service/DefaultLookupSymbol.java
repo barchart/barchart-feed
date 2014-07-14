@@ -41,8 +41,8 @@ public class DefaultLookupSymbol implements LookupSymbol, Comparable<LookupSymbo
 	 */
 	public DefaultLookupSymbol(final VendorID vendor_, final ExchangeID exchange_, final String symbol_) {
 
-		if (symbol_ == null)
-			throw new IllegalArgumentException("Symbol cannot be null");
+		if (symbol_ == null || symbol_.isEmpty())
+			throw new IllegalArgumentException("Symbol cannot be empty");
 
 		vendor = vendor_ == null ? VendorID.NULL : vendor_;
 		exchange = exchange_ == null ? ExchangeID.NULL : exchange_;
