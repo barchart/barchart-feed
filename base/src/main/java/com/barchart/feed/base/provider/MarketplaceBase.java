@@ -20,8 +20,11 @@ import com.barchart.feed.base.sub.SubscriptionHandler;
 public abstract class MarketplaceBase<Message extends MarketMessage> extends MarketProviderBase<Message> 
 		 implements Marketplace {
 
-	protected MarketplaceBase(final MarketFactory factory, final MetadataService metaService,
+	protected MarketplaceBase(
+			final MarketFactory factory, 
+			final MetadataService metaService,
 			final SubscriptionHandler handler) {
+		
 		super(factory, metaService, handler);
 	}
 	
