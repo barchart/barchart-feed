@@ -30,7 +30,7 @@
 		<url>https://github.com/barchart/barchart-feed</url>
 		<connection>scm:git:git://github.com/barchart/barchart-feed.git</connection>
 		<developerConnection>scm:git:ssh://git@github.com/barchart/barchart-feed.git</developerConnection>
-		<tag>barchart-feed-1.3.34</tag>
+		<tag>HEAD</tag>
 	</scm>
 
 	<properties>
