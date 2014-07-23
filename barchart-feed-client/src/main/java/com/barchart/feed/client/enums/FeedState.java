@@ -15,6 +15,6 @@ package com.barchart.feed.client.enums;
  */
 public enum FeedState {
 
-	LOGGED_OUT, ATTEMPTING_LOGIN, LOGGED_IN;
+	LOGGED_OUT, ATTEMPTING_LOGIN, LOGGED_IN, LOCKED_OUT;
 
 }
