@@ -32,9 +32,12 @@ class DefCuvol extends NulCuvol {
 	
 	private final Time updated;
 
-	DefCuvol(final Instrument instrument, final SizeValue[] entries, 
-			final PriceValue priceFirst, final PriceValue priceStep,
-			final Time updated, final Cuvol.Entry entry) {
+	DefCuvol(final Instrument instrument, 
+			final SizeValue[] entries, 
+			final PriceValue priceFirst, 
+			final PriceValue priceStep,
+			final Time updated, 
+			final Cuvol.Entry entry) {
 
 		assert entries != null;
 		assert priceFirst != null;

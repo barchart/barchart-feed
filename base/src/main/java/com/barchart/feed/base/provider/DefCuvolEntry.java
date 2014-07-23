@@ -86,7 +86,13 @@ public class DefCuvolEntry extends ValueFreezer<MarketCuvolEntry> implements
 
 	@Override
 	public Size size() {
-		return ValueConverter.size(size);
+		
+		final Size s = ValueConverter.size(size);
+		if(s.isNull()) {
+			return Size.ZERO;
+		}
+		return s;
+		
 	}
 
 }

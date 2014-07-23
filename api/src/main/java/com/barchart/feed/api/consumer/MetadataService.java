@@ -8,6 +8,7 @@ import rx.Observable;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.api.model.meta.Metadata;
 import com.barchart.feed.api.model.meta.id.InstrumentID;
+import com.barchart.feed.api.model.meta.id.VendorID;
 import com.barchart.util.value.api.Existential;
 
 public interface MetadataService {
@@ -31,10 +32,17 @@ public interface MetadataService {
 	 */
 	interface SearchContext extends Existential {
 		
+		VendorID vendorID();
+		
 		@Override
 		boolean isNull();
 		
 		static SearchContext NULL = new SearchContext() {
+			
+			@Override
+			public VendorID vendorID() {
+				throw new UnsupportedOperationException();
+			}
 			
 			@Override
 			public boolean isNull() {

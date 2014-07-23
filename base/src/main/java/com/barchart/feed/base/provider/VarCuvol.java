@@ -105,8 +105,12 @@ public final class VarCuvol extends NulCuvol implements MarketDoCuvol {
 			entries[k] = volume.freeze();
 		}
 
-		final DefCuvol that = new DefCuvol(instrument, entries, 
-				priceFirst(), priceStep(), ValueConverter.time(timeLast), 
+		final DefCuvol that = new DefCuvol(
+				instrument, 
+				entries, 
+				priceFirst(), 
+				priceStep(), 
+				ValueConverter.time(timeLast), 
 				entryLast);
 
 		return that;
