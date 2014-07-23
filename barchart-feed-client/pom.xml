@@ -14,7 +14,7 @@
 	<parent>
 		<groupId>com.barchart.feed</groupId>
 		<artifactId>barchart-feed</artifactId>
-		<version>1.3.34-SNAPSHOT</version>
+		<version>1.3.35-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>barchart-feed-client</artifactId>
