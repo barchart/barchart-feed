@@ -10,7 +10,7 @@
 
 	<groupId>com.barchart.feed</groupId>
 	<artifactId>barchart-feed</artifactId>
-	<version>1.3.32-SNAPSHOT</version>
+	<version>1.3.33-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<modules>
@@ -30,7 +30,7 @@
 		<url>https://github.com/barchart/barchart-feed</url>
 		<connection>scm:git:git://github.com/barchart/barchart-feed.git</connection>
 		<developerConnection>scm:git:ssh://git@github.com/barchart/barchart-feed.git</developerConnection>
-		<tag>HEAD</tag>
+		<tag>barchart-feed-1.3.32</tag>
 	</scm>
 
 	<properties>
