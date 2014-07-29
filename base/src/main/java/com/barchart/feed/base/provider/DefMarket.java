@@ -157,6 +157,11 @@ public class DefMarket extends NulMarket {
 			return price;
 		}
 		
+		@Override
+		public boolean isNull() {
+			return false;
+		}
+		
 	}
 	
 }

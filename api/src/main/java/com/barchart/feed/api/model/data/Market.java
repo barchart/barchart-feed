@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.Set;
 
 import com.barchart.feed.api.model.meta.Instrument;
+import com.barchart.util.value.api.Existential;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Time;
 
@@ -73,7 +74,7 @@ public interface Market extends MarketData<Market> {
 //	 */
 //	MarketState marketState();
 	
-	interface LastPrice {
+	interface LastPrice extends Existential {
 		
 		/**
 		 * In order of lowest to highest priority
@@ -108,13 +109,25 @@ public interface Market extends MarketData<Market> {
 		
 		Price price();
 		
+		@Override
+		boolean isNull();
+		
 		LastPrice NULL = new LastPrice() {
 
 			@Override
-			public Source source() {return Source.NULL;}
+			public Source source() {
+				throw new UnsupportedOperationException("Null Last Price");
+			}
 
 			@Override
-			public Price price() {return Price.NULL;}
+			public Price price() {
+				throw new UnsupportedOperationException("Null Last Price");
+			}
+			
+			@Override
+			public boolean isNull() {
+				return true;
+			}
 			
 		};
 		
