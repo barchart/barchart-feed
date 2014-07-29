@@ -1034,7 +1034,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		public Void runSafe(final MarketDo market, final Message message) {
 			make(message, market);
 			market.fireEvents();
-					market.fireCallbacks();
+			market.fireCallbacks();
 			return null;
 		}
 	};
