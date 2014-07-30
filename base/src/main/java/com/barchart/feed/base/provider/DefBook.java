@@ -11,6 +11,7 @@ import static com.barchart.feed.base.provider.MarketConst.NULL_BOOK_ENTRY;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -259,6 +260,15 @@ public class DefBook extends ValueFreezer<MarketBook> implements MarketBook {
 		}
 		
 		Collections.addAll(result, e);
+		
+		/* Clean out bad entries */
+		final Iterator<Entry> iter = result.iterator();
+		while(iter.hasNext()) {
+			final Entry en = iter.next();
+			if(en == null || en.isNull() || en.size().isNull() || en.price().isNull()) {
+				iter.remove();
+			}
+		}
 		
 		return Collections.unmodifiableList(result);
 		
