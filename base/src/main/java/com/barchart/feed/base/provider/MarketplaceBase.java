@@ -151,8 +151,15 @@ public abstract class MarketplaceBase<Message extends MarketMessage> extends Mar
 	}
 	
 	@Override
-	public <V extends MarketData<V>> Agent newAgent(Class<V> dataType, MarketObserver<V> callback) {
-		return null;
+	public <V extends MarketData<V>> Agent newAgent(final Class<V> dataType, final MarketObserver<V> callback) {
+		
+		final MDGetter<V> getter = MarketDataGetters.get(dataType);
+		
+		final FrameworkAgent<V> agent = new BaseAgent<V>(this, dataType, getter, callback);
+		
+		attachAgent(agent);
+		
+		return agent.agent();
 	}
 	
 	@Override
