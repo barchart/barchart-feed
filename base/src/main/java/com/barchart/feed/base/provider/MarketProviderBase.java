@@ -311,14 +311,16 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 
 		@Override
 		public synchronized Observable<Result<Instrument>> include(final String... symbols) {
-
-			return metaService.instrument(symbols).flatMap(
-
-				new Func1<Result<Instrument>, Observable<Result<Instrument>>>() {
+			
+			new RuntimeException().printStackTrace();
+			
+			return metaService.instrument(symbols)
+					
+				.flatMap(new Func1<Result<Instrument>, Observable<Result<Instrument>>>() {
 
 					@Override
 					public Observable<Result<Instrument>> call(final Result<Instrument> result) {
-
+						
 						final Map<String, List<Instrument>> instMap = result.results();
 						final Set<String> newInterests = new HashSet<String>();
 
