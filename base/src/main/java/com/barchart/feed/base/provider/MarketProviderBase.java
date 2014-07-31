@@ -312,8 +312,6 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		@Override
 		public synchronized Observable<Result<Instrument>> include(final String... symbols) {
 			
-			new RuntimeException().printStackTrace();
-			
 			return metaService.instrument(symbols)
 					
 				.flatMap(new Func1<Result<Instrument>, Observable<Result<Instrument>>>() {
