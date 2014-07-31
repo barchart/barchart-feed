@@ -179,10 +179,10 @@ public final class Symbology {
 
 	}
 	
-	private static final int YEAR;
-	private static final char MONTH;
-	private static final int PREV_DECADE;
-	private static final int NEXT_DECADE;
+	private static volatile int YEAR;
+	private static volatile char MONTH;
+	private static volatile int PREV_DECADE;
+	private static volatile int NEXT_DECADE;
 	
 	static {
 		final DateTime now = new DateTime();
@@ -191,6 +191,15 @@ public final class Symbology {
 		NEXT_DECADE = ((YEAR / 10) + 1) * 10;
 		MONTH = ExpireMonth.fromDateTime(now).code;
 		
+	}
+	
+	/* This allows historic data's short symbols to be parsed to the correct
+	 * long version as if it was when the data was created  */
+	public static void setMonthYear(final ExpireMonth month, final int year) {
+		MONTH = month.code;
+		YEAR = year;
+		PREV_DECADE = YEAR / 10 * 10;
+		NEXT_DECADE = ((YEAR / 10) + 1) * 10;
 	}
 	
 	/* ***** ***** Symbol Formatting ***** ***** */
