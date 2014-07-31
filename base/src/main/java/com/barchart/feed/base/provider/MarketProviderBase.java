@@ -949,6 +949,8 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 	@Override
 	public void make(final Message message) {
 
+		log.debug("{}", message);
+		
 		final Instrument instrument = message.getInstrument();
 
 		if (!isValid(instrument)) {
@@ -964,7 +966,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 			market = marketMap.get(instrument.id());
 		}
 
-		market.runSafe(safeMake, message);
+		market.runSafe(safeMake, message);  
 
 		/* Below is a hack to keep the subscriptions updated */
 		/* If a new market is created, a new subscription is made,

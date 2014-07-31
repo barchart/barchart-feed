@@ -162,6 +162,11 @@ public class DefMarket extends NulMarket {
 			return false;
 		}
 		
+		@Override
+		public String toString() {
+			return source + " " + price;
+		}
+		
 	}
 	
 }
