@@ -16,8 +16,8 @@ import org.slf4j.LoggerFactory;
 import rx.Observable;
 import rx.functions.Func1;
 
-import com.barchart.feed.api.MarketObserver;
 import com.barchart.feed.api.Agent;
+import com.barchart.feed.api.MarketObserver;
 import com.barchart.feed.api.connection.Connection.Monitor;
 import com.barchart.feed.api.connection.Subscription;
 import com.barchart.feed.api.connection.TimestampListener;
@@ -98,7 +98,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 	/* ***** ***** Consumer Agent ***** ***** */
 
 	@Override
-	public <V extends MarketData<V>> ConsumerAgent register(final MarketObserver<V> callback, 
+	public <V extends MarketData<V>> ConsumerAgent register(final MarketObserver<V> callback,
 			final Class<V> clazz) {
 
 		final MDGetter<V> getter = MarketDataGetters.get(clazz);
@@ -1095,7 +1095,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 
 		final Price priceStep = instrument.tickSize();
 
-		if (priceStep.isZero()) {
+		if (priceStep.isNull() || priceStep.isZero()) {
 			log.error("priceStep.isZero()");
 			return false;
 		}
