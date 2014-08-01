@@ -949,8 +949,6 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 	@Override
 	public void make(final Message message) {
 
-		log.debug("{}", message);
-		
 		final Instrument instrument = message.getInstrument();
 
 		if (!isValid(instrument)) {
