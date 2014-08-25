@@ -76,10 +76,10 @@ public final class HistoricalCodec {
 			if (entry.hasType()) {
 				Price p = entry.hasPriceMantissa() ? VALUES.newPrice(
 						entry.getPriceMantissa(), entry.getPriceExponent())
-						: null;
+						: Price.NULL;
 				Size s = entry.hasSizeMantissa() ? VALUES.newSize(
 						entry.getSizeMantissa(), entry.getSizeExponent())
-						: null;
+						: Size.NULL;
 				switch (entry.getType()) {
 				case ASK:
 					bar.setAsk(p);
