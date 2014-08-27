@@ -129,7 +129,7 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 		if(!agent.hasMatch(instrument())) {
 			return;
 		}
-		
+
 		agentSet.put(agent, new Boolean(false));
 		
 		switch(agent.agentType()) {
@@ -424,7 +424,7 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 		// Check for new trading session
 		if (currDate.asMillisUTC() < date.asMillisUTC()) {
 
-			log.debug("New session: old=" + currDate + "; new=" + date);
+			// log.debug("New session: old=" + currDate + "; new=" + date);
 
 			// Roll values to previous
 			prev.copy(bar);

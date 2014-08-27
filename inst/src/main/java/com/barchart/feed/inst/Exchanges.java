@@ -259,7 +259,6 @@ public final class Exchanges {
 	public static Exchange fromCode(final String code) {
 
 		if(codes.containsKey(code)) {
-
 			return codes.get(code);
 		} else {
 			return Exchange.NULL;

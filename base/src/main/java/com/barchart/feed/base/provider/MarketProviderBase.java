@@ -88,8 +88,10 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 	private final ConcurrentMap<ExchangeID, Subscription<Exchange>> exchSubs =
 			new ConcurrentHashMap<ExchangeID, Subscription<Exchange>>();
 
-	protected MarketProviderBase(final MarketFactory factory, final MetadataService metaService,
+	protected MarketProviderBase(final MarketFactory factory, 
+			final MetadataService metaService,
 			final SubscriptionHandler handler) {
+		
 		this.factory = factory;
 		this.metaService = metaService;
 		subHandler = handler;
@@ -216,6 +218,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		 */
 		private class DefaultFilter implements Filter {
 
+			@SuppressWarnings("deprecation")
 			@Override
 			public boolean hasMatch(final Instrument instrument) {
 				/* Work bottom up on the hierarchy */
@@ -237,7 +240,6 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 				}
 
 				if (instrument.exchange().isNull()) {
-					// TODO FIXME
 					log.debug("Exchange is NULL for " + instrument.symbol() + " "
 							+ instrument.exchangeCode());
 					return false;
@@ -773,11 +775,11 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 	/* ***** ***** Agent Lifecycle Methods ***** ***** */
 	@Override
 	public void attachAgent(final FrameworkAgent<?> agent) {
-
+		
 		if (agents.containsKey(agent)) {
-
+			
 			updateAgent(agent);
-
+			
 		} else {
 
 			agents.put(agent, new Boolean(false));
@@ -1072,7 +1074,6 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 	protected boolean isValid(final MarketDo market) {
 
 		if (market == null) {
-			log.debug("market == null");
 			return false;
 		}
 
