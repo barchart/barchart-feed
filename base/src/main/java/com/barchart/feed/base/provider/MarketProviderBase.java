@@ -1096,14 +1096,12 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		final Price priceStep = instrument.tickSize();
 
 		if (priceStep.isNull() || priceStep.isZero()) {
-			log.error("priceStep.isZero()");
 			return false;
 		}
 
 		final Fraction fraction = instrument.displayFraction();
 
 		if(fraction == null || fraction.isNull()) {
-			log.error("fraction.isNull()");
 			return false;
 		}
 
