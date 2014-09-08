@@ -1,6 +1,5 @@
 package com.barchart.feed.api.model.meta.instrument;
 
-import java.util.Collections;
 import java.util.List;
 
 import com.barchart.feed.api.model.meta.instrument.Event.Type;
@@ -26,12 +25,12 @@ public interface Calendar extends Existential {
 
 		@Override
 		public List<Event> events() {
-			return Collections.emptyList();
+			throw new UnsupportedOperationException("NULL Calendar");
 		}
 
 		@Override
 		public Event event(final Type type) {
-			return Event.NULL;
+			throw new UnsupportedOperationException("NULL Calendar");
 		}
 
 		@Override

@@ -17,12 +17,12 @@ public interface TimeSpan extends Existential {
 
 		@Override
 		public DateTime start() {
-			return null;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public DateTime stop() {
-			return null;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override

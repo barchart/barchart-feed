@@ -99,32 +99,32 @@ public interface PriceFormat extends Existential {
 
 		@Override
 		public int denominator() {
-			return 0;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public int precision() {
-			return 0;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public boolean fractional() {
-			return false;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public int subDenominator() {
-			return 0;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public int subPrecision() {
-			return 0;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public SubFormat subFormat() {
-			return SubFormat.FLAT;
+			throw new UnsupportedOperationException();
 		}
 
 	};

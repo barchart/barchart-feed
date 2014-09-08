@@ -70,17 +70,17 @@ public interface Event extends Existential {
 
 		@Override
 		public Type type() {
-			return Type.UNKNOWN;
+			throw new UnsupportedOperationException("NULL Event");
 		}
 
 		@Override
 		public String description() {
-			return "NULL EVENT";
+			throw new UnsupportedOperationException("NULL Event");
 		}
 
 		@Override
 		public DateTime date() {
-			return new DateTime(0);
+			throw new UnsupportedOperationException("NULL Event");
 		}
 
 	};

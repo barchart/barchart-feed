@@ -20,117 +20,117 @@ public interface Schedule extends List<TimeSpan>, Existential {
 
 		@Override
 		public int size() {
-			return 0;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public boolean isEmpty() {
-			return false;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public boolean contains(final Object o) {
-			return false;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Iterator<TimeSpan> iterator() {
-			return null;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Object[] toArray() {
-			return null;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public <T> T[] toArray(final T[] a) {
-			return null;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public boolean add(final TimeSpan e) {
-			return false;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public boolean remove(final Object o) {
-			return false;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public boolean containsAll(final Collection<?> c) {
-			return false;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public boolean addAll(final Collection<? extends TimeSpan> c) {
-			return false;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public boolean addAll(final int index, final Collection<? extends TimeSpan> c) {
-			return false;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public boolean removeAll(final Collection<?> c) {
-			return false;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public boolean retainAll(final Collection<?> c) {
-			return false;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public void clear() {
-
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public TimeSpan get(final int index) {
-			return TimeSpan.NULL;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public TimeSpan set(final int index, final TimeSpan element) {
-			return TimeSpan.NULL;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public void add(final int index, final TimeSpan element) {
-
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public TimeSpan remove(final int index) {
-			return TimeSpan.NULL;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public int indexOf(final Object o) {
-			return 0;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public int lastIndexOf(final Object o) {
-			return 0;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public ListIterator<TimeSpan> listIterator() {
-			return null;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public ListIterator<TimeSpan> listIterator(final int index) {
-			return null;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public List<TimeSpan> subList(final int fromIndex, final int toIndex) {
-			return null;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
@@ -140,7 +140,7 @@ public interface Schedule extends List<TimeSpan>, Existential {
 
 		@Override
 		public boolean isOpen(final DateTime instant) {
-			return false;
+			throw new UnsupportedOperationException();
 		}
 
 	};
