@@ -2,7 +2,6 @@ package com.barchart.feed.meta.instrument;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -17,6 +16,7 @@ import com.barchart.feed.api.model.meta.instrument.PriceFormat;
 import com.barchart.feed.api.model.meta.instrument.Schedule;
 import com.barchart.feed.api.model.meta.instrument.SpreadLeg;
 import com.barchart.feed.api.model.meta.instrument.SpreadType;
+import com.barchart.util.common.collections.strict.StrictHashMap;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Size;
 
@@ -25,7 +25,7 @@ import com.barchart.util.value.api.Size;
  */
 public abstract class DefaultInstrument extends InstrumentBase {
 
-	protected final Map<VendorID, String> vendorSymbols = new HashMap<VendorID, String>();
+	protected final Map<VendorID, String> vendorSymbols = new StrictHashMap<VendorID, String>(VendorID.class);
 	protected final List<InstrumentID> components = new ArrayList<InstrumentID>();
 	protected final List<SpreadLeg> spreadLegs = new ArrayList<SpreadLeg>();
 
