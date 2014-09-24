@@ -337,7 +337,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 								/* We have to use an alternate symbol for options */
 								final String symbol = i.symbol();
 								if(symbol.contains("|")) {
-									newInterests.add(i.vendorSymbols().get(VendorID.BARCHART));
+									newInterests.add(i.vendorSymbols().get(VendorID.BARCHART_SHORT));
 								} else {
 									newInterests.add(formatForJERQ(i.symbol()));
 								}
@@ -396,7 +396,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 								 */
 								final String symbol = i.symbol();
 								if(symbol.contains("|")) {
-									oldInterests.add(i.vendorSymbols().get(VendorID.BARCHART));
+									oldInterests.add(i.vendorSymbols().get(VendorID.BARCHART_SHORT));
 								} else {
 									oldInterests.add(formatForJERQ(i.symbol()));
 								}
@@ -468,7 +468,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 					/* We have to use an alternate symbol for options */
 					final String symbol = i.symbol();
 					if(symbol.contains("|")) {
-						newInterests.add(i.vendorSymbols().get(VendorID.BARCHART));
+						newInterests.add(i.vendorSymbols().get(VendorID.BARCHART_SHORT));
 					} else {
 						newInterests.add(formatForJERQ(i.symbol()));
 					}
@@ -546,7 +546,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 					/* We have to use an alternate symbol for options */
 					final String symbol = i.symbol();
 					if(symbol.contains("|")) {
-						oldInterests.add(i.vendorSymbols().get(VendorID.BARCHART));
+						oldInterests.add(i.vendorSymbols().get(VendorID.BARCHART_SHORT));
 					} else {
 						oldInterests.add(formatForJERQ(i.symbol()));
 					}

@@ -17,8 +17,11 @@ public class VendorID extends Identifier<String, VendorID> {
 		
 	};
 	
+	/* Commonly used IDs */
 	public static final VendorID BARCHART = new VendorID("BARCHART");
-	
 	public static final VendorID BARCHART_HISTORICAL = new VendorID("BARCHART_HISTORICAL");
+	public static final VendorID BARCHART_SHORT = new VendorID("BARCHART_SHORT");
+	public static final VendorID CQG = new VendorID("CQG");
+	public static final VendorID OEC = new VendorID("OEC");
 
 }

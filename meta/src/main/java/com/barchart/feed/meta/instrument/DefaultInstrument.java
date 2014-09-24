@@ -1,6 +1,7 @@
 package com.barchart.feed.meta.instrument;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -101,7 +102,7 @@ public abstract class DefaultInstrument extends InstrumentBase {
 
 	@Override
 	public Map<VendorID, String> vendorSymbols() {
-		return vendorSymbols;
+		return Collections.<VendorID, String> unmodifiableMap(vendorSymbols);
 	}
 
 	@Override
@@ -191,7 +192,7 @@ public abstract class DefaultInstrument extends InstrumentBase {
 
 	@Override
 	public List<InstrumentID> components() {
-		return components;
+		return Collections.<InstrumentID> unmodifiableList(components);
 	}
 
 	@Override
@@ -221,7 +222,7 @@ public abstract class DefaultInstrument extends InstrumentBase {
 
 	@Override
 	public List<SpreadLeg> spreadLegs() {
-		return spreadLegs;
+		return Collections.<SpreadLeg> unmodifiableList(spreadLegs);
 	}
 
 	@Override
