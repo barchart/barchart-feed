@@ -200,7 +200,13 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 			}
 
 			for (final Instrument i : incInsts) {
-				interests.add(i.symbol());
+				
+				String symbol = i.symbol();
+				if(symbol.contains("|")) {
+					symbol = i.vendorSymbols().get(VendorID.BARCHART_SHORT);
+				}
+				
+				interests.add(symbol);
 			}
 
 			return interests;
