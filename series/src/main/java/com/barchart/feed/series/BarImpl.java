@@ -24,6 +24,7 @@ public class BarImpl extends DataPointImpl implements Bar {
 	private Price high;
 	private Price low;
 	private Price close;
+	private Size lastSize;
 	private Price midpoint;
 	private Price bid;
 	private Size bidSize;
@@ -177,6 +178,7 @@ public class BarImpl extends DataPointImpl implements Bar {
 		this.high = maybeNull(high);
 		this.low = maybeNull(low);
 		this.close = maybeNull(close);
+		this.lastSize = Size.NULL;
 		this.bid = maybeNull(bid);
 		this.bidSize = maybeNull(bidSize);
 		this.ask = maybeNull(ask);
@@ -351,6 +353,20 @@ public class BarImpl extends DataPointImpl implements Bar {
 	 */
 	public void setClose(final Price close) {
 		this.close = close;
+	}
+
+	@Override
+	public Size getLastSize() {
+		return lastSize;
+	}
+
+	/**
+	 * Sets the close price
+	 *
+	 * @param close the close price
+	 */
+	public void setLastSize(final Size lastSize) {
+		this.lastSize = lastSize;
 	}
 
 	/**
