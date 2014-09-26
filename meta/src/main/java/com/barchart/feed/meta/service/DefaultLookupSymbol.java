@@ -48,8 +48,8 @@ public class DefaultLookupSymbol implements LookupSymbol, Comparable<LookupSymbo
 		exchange = exchange_ == null ? ExchangeID.NULL : exchange_;
 		symbol = symbol_;
 
-		fullSymbol = (vendor != null ? vendor.toString() : "*") + ":"
-				+ (exchange != null ? exchange.toString() : "*") + ":"
+		fullSymbol = (!vendor.isNull() ? vendor.toString() : "*") + ":"
+				+ (!exchange.isNull() ? exchange.toString() : "*") + ":"
 				+ symbol;
 	}
 

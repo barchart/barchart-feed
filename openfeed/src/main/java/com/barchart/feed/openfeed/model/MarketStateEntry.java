@@ -41,7 +41,7 @@ public class MarketStateEntry {
 	/**
 	 * Construct a new wrapper with the given message or builder.
 	 */
-	public MarketStateEntry(MarketEntryOrBuilder message_) {
+	public MarketStateEntry(final MarketEntryOrBuilder message_) {
 		message = message_;
 	}
 
@@ -137,12 +137,14 @@ public class MarketStateEntry {
 	 */
 	public DateTime timestamp() {
 
-		if (timestamp == null) {
+		if (timestamp == null && message.hasTimeStamp()) {
 
-			DateTimeValue dt = ProtoDateUtil.fromDecimalDateTime(message.getTimeStamp());
+			final DateTimeValue dt = ProtoDateUtil.fromDecimalDateTime(message.getTimeStamp());
 
-			timestamp = new DateTime(dt.getYear(), dt.getMonth(), dt.getDay(), dt.getHour(), dt.getMinute(),
-					dt.getSecond(), dt.getMillis(), ISOChronology.getInstanceUTC());
+			if (dt != null) {
+				timestamp = new DateTime(dt.getYear(), dt.getMonth(), dt.getDay(), dt.getHour(), dt.getMinute(),
+						dt.getSecond(), dt.getMillis(), ISOChronology.getInstanceUTC());
+			}
 
 		}
 
@@ -170,7 +172,7 @@ public class MarketStateEntry {
 	public MarketStateEntry timestamp(final long timestamp) {
 		return timestamp(new DateTime(timestamp, ISOChronology.getInstanceUTC()));
 	}
-	
+
 	/**
 	 * The trade date / session this entry applies to.
 	 */
@@ -178,7 +180,7 @@ public class MarketStateEntry {
 
 		if (tradeDate == null) {
 
-			DateOnlyValue dv = ProtoDateUtil.fromDecimalDateOnly(message.getTradeDate());
+			final DateOnlyValue dv = ProtoDateUtil.fromDecimalDateOnly(message.getTradeDate());
 
 			tradeDate = new LocalDate(dv.getYear(), dv.getMonth(), dv.getDay());
 
@@ -189,20 +191,20 @@ public class MarketStateEntry {
 	}
 
 	public MarketStateEntry tradeDate(final LocalDate tradeDate) {
-		
+
 		builder().setTradeDate(ProtoDateUtil.intoDecimalDateOnly(tradeDate.getYear(),
 				tradeDate.getMonthOfYear(), tradeDate.getDayOfMonth()));
-		
+
 		this.tradeDate = tradeDate;
-		
+
 		return this;
-		
+
 	}
 
 	public MarketStateEntry tradeDate(final long timestamp) {
 		return tradeDate(new LocalDate(timestamp, ISOChronology.getInstanceUTC()));
 	}
-	
+
 	/**
 	 * The entry price.
 	 */
