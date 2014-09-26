@@ -1,6 +1,8 @@
 package com.barchart.feed.openfeed.model;
 
 import org.joda.time.DateTime;
+import org.openfeed.AggregationPeriod;
+import org.openfeed.MarketEntry;
 import org.openfeed.MarketEntry.Type;
 import org.openfeed.MarketHistoricalSnapshotOrBuilder;
 
@@ -13,6 +15,9 @@ import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Size;
 
 public class MarketHistoricalStateBar extends MarketHistoricalState implements Bar {
+
+	private int barCount = 1;
+	private Period period;
 
 	/**
 	 * Construct a new wrapper with a mutable message builder.
@@ -30,37 +35,60 @@ public class MarketHistoricalStateBar extends MarketHistoricalState implements B
 
 	@Override
 	public Price getHigh() {
-		return entry(Type.HIGH).price();
+		return price(Type.HIGH);
 	}
 
 	@Override
 	public Price getLow() {
-		return entry(Type.LOW).price();
+		return price(Type.LOW);
 	}
 
 	@Override
 	public DateTime getDate() {
-		return entry(Type.TIME).timestamp();
+		return timestamp(Type.TIME);
 	}
 
 	@Override
 	public Period getPeriod() {
-		
-		switch (aggregation()) {
-			case MINUTE:
-				return new Period(PeriodType.MINUTE, periodCount());
-			case DAY:
-				return new Period(PeriodType.DAY, periodCount());
-			case WEEK:
-				return new Period(PeriodType.WEEK, periodCount());
-			case MONTH:
-				return new Period(PeriodType.MONTH, periodCount());
-			case YEAR:
-				return new Period(PeriodType.YEAR, periodCount());
+
+		if (period == null) {
+
+			switch (aggregation()) {
+				case MINUTE:
+					period = new Period(PeriodType.MINUTE, periodCount());
+					break;
+				case DAY:
+					period = new Period(PeriodType.DAY, periodCount());
+					break;
+				case WEEK:
+					period = new Period(PeriodType.WEEK, periodCount());
+					break;
+				case MONTH:
+					period = new Period(PeriodType.MONTH, periodCount());
+					break;
+				case YEAR:
+					period = new Period(PeriodType.YEAR, periodCount());
+					break;
+				default:
+					period = Period.DAY;
+			}
+
 		}
-		
-		return Period.DAY;
-		
+
+		return period;
+
+	}
+
+	@Override
+	public MarketHistoricalState aggregation(final AggregationPeriod ap) {
+		period = null;
+		return super.aggregation(ap);
+	}
+
+	@Override
+	public MarketHistoricalState periodCount(final int count) {
+		period = null;
+		return super.periodCount(count);
 	}
 
 	@Override
@@ -70,94 +98,280 @@ public class MarketHistoricalStateBar extends MarketHistoricalState implements B
 
 	@Override
 	public Price getOpen() {
-		return entry(Type.OPEN).price();
+		return price(Type.OPEN);
 	}
 
 	@Override
 	public Price getClose() {
-		return entry(Type.CLOSE).price();
+		return price(Type.CLOSE);
 	}
 
 	@Override
 	public Size getLastSize() {
-		return entry(Type.CLOSE).size();
+		return size(Type.CLOSE);
 	}
 
 	@Override
 	public Price getBid() {
-		return entry(Type.BID).price();
+		return price(Type.BID);
 	}
 
 	@Override
 	public Size getBidSize() {
-		return entry(Type.BID).size();
+		return size(Type.BID);
 	}
 
 	@Override
 	public Price getAsk() {
-		return entry(Type.ASK).price();
+		return price(Type.ASK);
 	}
 
 	@Override
 	public Size getAskSize() {
-		return entry(Type.ASK).size();
+		return size(Type.ASK);
 	}
 
 	@Override
 	public Price getMidpoint() {
-		return entry(Type.MIDPOINT).price();
+		return price(Type.MIDPOINT);
 	}
 
 	@Override
 	public Size getVolume() {
-		return entry(Type.VOLUME).size();
+		return avgSize(Type.VOLUME, barCount);
 	}
 
 	@Override
 	public Size getVolumeUp() {
-		return entry(Type.VOLUME_UP).size();
+		return avgSize(Type.VOLUME_UP, barCount);
 	}
 
 	@Override
 	public Size getVolumeDown() {
-		return entry(Type.VOLUME_DOWN).size();
+		return avgSize(Type.VOLUME_DOWN, barCount);
 	}
 
 	@Override
 	public Price getTradedValue() {
-		return entry(Type.TRADED_VALUE).price();
+		return avgPrice(Type.TRADED_VALUE, barCount);
 	}
 
 	@Override
 	public Price getTradedValueUp() {
-		return entry(Type.TRADED_VALUE_UP).price();
+		return avgPrice(Type.TRADED_VALUE_UP, barCount);
 	}
 
 	@Override
 	public Price getTradedValueDown() {
-		return entry(Type.TRADED_VALUE_DOWN).price();
+		return avgPrice(Type.TRADED_VALUE_DOWN, barCount);
 	}
 
 	@Override
 	public Size getTradeCount() {
-		return entry(Type.TRADES).size();
+		return avgSize(Type.TRADES, barCount);
 	}
 
 	@Override
 	public Size getOpenInterest() {
-		return entry(Type.INTEREST).size();
+		return avgSize(Type.INTEREST, barCount);
 	}
 
 	@Override
-	public <E extends Bar> void merge(E other, boolean advanceTime) {
-		// TODO
-		throw new UnsupportedOperationException();
+	public <E extends Bar> void merge(final E other, final boolean advanceTime) {
+
+		// Close and Volume should *always* have values, the rest may be null
+
+		Price open = price(Type.OPEN);
+		Price close = price(Type.CLOSE);
+		Size openInterest = size(Type.INTEREST);
+
+		Price otherHigh = other.getHigh();
+		Price otherLow = other.getLow();
+		final Size otherVolume = other.getVolume();
+		final Price otherValue = other.getClose().mult(otherVolume);
+
+		if (other.getPeriod().getPeriodType() == PeriodType.TICK) {
+			otherHigh = otherLow = other.getClose();
+		}
+
+		try {
+
+			final MarketStateEntry high = entry(Type.HIGH);
+
+			if (high == null) {
+				entry(new MarketStateEntry().type(MarketEntry.Type.HIGH).price(otherHigh));
+			} else if (high.price().isNull() || (!otherHigh.isNull() && otherHigh.greaterThan(high.price()))) {
+				high.price(otherHigh);
+			}
+
+			final MarketStateEntry low = entry(Type.LOW);
+
+			if (low == null) {
+				entry(new MarketStateEntry().type(MarketEntry.Type.LOW).price(otherLow));
+			} else if (low.price().isNull() || (!otherLow.isNull() && otherLow.lessThan(low.price()))) {
+				low.price(otherLow);
+			}
+
+		} catch (final ArithmeticException ae) {
+			ae.printStackTrace();
+		}
+
+		add(Type.VOLUME, otherVolume);
+		add(Type.TRADED_VALUE, otherValue);
+
+		if (close.greaterThan(other.getClose())) {
+			add(Type.TRADED_VALUE_DOWN, otherValue);
+			add(Type.VOLUME_DOWN, otherVolume);
+		} else if (close.lessThan(other.getClose())) {
+			add(Type.TRADED_VALUE_UP, otherValue);
+			add(Type.VOLUME_UP, otherVolume);
+		}
+
+		if (getDate().compareTo(other.getDate()) <= 0) {
+			close = other.getClose();
+			ensure(Type.CLOSE).price(close).size(other.getLastSize());
+		}
+
+		if (open.isNull()) {
+			open = other.getOpen();
+			ensure(MarketEntry.Type.OPEN).price(open);
+		}
+
+		ensure(MarketEntry.Type.BID).price(other.getBid()).size(other.getBidSize());
+		ensure(MarketEntry.Type.ASK).price(other.getAsk()).size(other.getAskSize());
+		add(MarketEntry.Type.TRADES, other.getTradeCount());
+
+		if (!other.getOpenInterest().isNull()) {
+			if (openInterest.isNull()) {
+				openInterest = other.getOpenInterest();
+				ensure(MarketEntry.Type.INTEREST).size(openInterest);
+			} else {
+				add(MarketEntry.Type.INTEREST, openInterest);
+			}
+		}
+
+		barCount++;
+
+		if (advanceTime) {
+			ensure(Type.TIME).timestamp(other.getDate());
+		}
+
+	}
+
+	private MarketStateEntry ensure(final MarketEntry.Type type) {
+
+		MarketStateEntry entry = entry(type);
+
+		if (entry == null) {
+			entry = new MarketStateEntry().type(type);
+			entry(entry);
+		}
+
+		return entry;
+
+	}
+
+	private MarketStateEntry add(final MarketEntry.Type type, final Price price) {
+
+		if (!price.isNull() && !price.isZero()) {
+
+			final MarketStateEntry entry = ensure(type);
+
+			if (entry.price().isNull() || entry.price().isZero()) {
+				entry.price(price);
+			} else {
+				entry.price().add(price);
+			}
+
+			return entry;
+
+		}
+
+		return entry(type);
+
+	}
+
+	private MarketStateEntry add(final MarketEntry.Type type, final Size size) {
+
+		if (!size.isNull() && !size.isZero()) {
+
+			final MarketStateEntry entry = ensure(type);
+
+			if (entry.size().isNull() || entry.size().isZero()) {
+				entry.size(size);
+			} else {
+				entry.size().add(size);
+			}
+
+			return entry;
+
+		}
+
+		return entry(type);
+
+	}
+
+	private Price price(final MarketEntry.Type type) {
+
+		final MarketStateEntry entry = entry(type);
+
+		if (entry != null) {
+			return entry.price();
+		}
+
+		return Price.NULL;
+
+	}
+
+	private Size size(final MarketEntry.Type type) {
+
+		final MarketStateEntry entry = entry(type);
+
+		if (entry != null) {
+			return entry.size();
+		}
+
+		return Size.NULL;
+
+	}
+
+	private DateTime timestamp(final MarketEntry.Type type) {
+
+		final MarketStateEntry entry = entry(type);
+
+		if (entry != null) {
+			return entry.timestamp();
+		}
+
+		return null;
+
+	}
+
+	private Price avgPrice(final MarketEntry.Type type, final int count) {
+
+		final Price p = price(type);
+
+		if (!p.isNull() && barCount > 1)
+			return p.div(count);
+
+		return p;
+
+	}
+
+	private Size avgSize(final MarketEntry.Type type, final int count) {
+
+		final Size s = size(type);
+
+		if (!s.isNull() && barCount > 1)
+			return s.div(count);
+
+		return s;
+
 	}
 
 	@Override
-	public <E extends DataPoint> int compareTo(E other) {
-		// TODO
-		throw new UnsupportedOperationException();
+	public <E extends DataPoint> int compareTo(final E other) {
+		return getPeriod().getPeriodType().compareAtResolution(getDate(), other.getDate());
 	}
 
 }
