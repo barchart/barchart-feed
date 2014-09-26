@@ -7,21 +7,14 @@
 	<parent>
 		<groupId>com.barchart.base</groupId>
 		<artifactId>barchart-archon</artifactId>
-		<version>2.6.29</version>
+		<version>2.6.31</version>
 		<relativePath />
 	</parent>
 
+	<artifactId>barchart-feed-openfeed</artifactId>
 	<groupId>com.barchart.feed</groupId>
-	<artifactId>barchart-feed-meta</artifactId>
-	<version>1.0.10-SNAPSHOT</version>
+	<version>1.0.3-SNAPSHOT</version>
 	<packaging>bundle</packaging>
-
-	<url>https://github.com/barchart/barchart-feed</url>
-
-	<issueManagement>
-		<system>github</system>
-		<url>https://github.com/barchart/barchart-feed/issues</url>
-	</issueManagement>
 
 	<scm>
 		<url>https://github.com/barchart/barchart-feed</url>
@@ -30,45 +23,53 @@
 		<tag>master</tag>
 	</scm>
 
-	<properties>
-	</properties>
-
 	<dependencies>
 
 		<dependency>
 			<groupId>com.barchart.feed</groupId>
 			<artifactId>barchart-feed-api</artifactId>
-			<version>[2.2.3-SNAPSHOT,3-SNAPSHOT)</version>
+			<version>[2.3,2.4-SNAPSHOT)</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.barchart.feed</groupId>
+			<artifactId>barchart-feed-series</artifactId>
+			<version>[1.0,1.1-SNAPSHOT)</version>
+		</dependency>
+		
+		<dependency>
+		   	<groupId>org.openfeed</groupId>
+		   	<artifactId>openfeed</artifactId>
+			<version>[2.1.6-SNAPSHOT,2.2-SNAPSHOT)</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.barchart.util</groupId>
+			<artifactId>barchart-util-value</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.barchart.util</groupId>
+			<artifactId>barchart-util-common</artifactId>
 		</dependency>
 
 		<dependency>
-			<groupId>org.openfeed</groupId>
-			<artifactId>openfeed</artifactId>
-			<version>[2-SNAPSHOT, 3-SNAPSHOT)</version>
+			<groupId>joda-time</groupId>
+			<artifactId>joda-time</artifactId>
 		</dependency>
-
-		<!-- Provided -->
-
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<scope>provided</scope>
-		</dependency>
-
-		<!-- Test -->
-
-		<dependency>
-			<groupId>ch.qos.logback</groupId>
-			<artifactId>logback-classic</artifactId>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-all</artifactId>
-			<scope>test</scope>
-		</dependency>
-
+		
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <scope>test</scope>
+        </dependency>
+        
 	</dependencies>
 
 </project>

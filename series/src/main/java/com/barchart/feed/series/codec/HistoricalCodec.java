@@ -64,20 +64,20 @@ public final class HistoricalCodec {
 	public static BarImpl fromProtobuf(final MarketHistoricalSnapshot buf,
 			final DateTimeZone zone) {
 
-		BarImpl bar = new BarImpl(buf.hasBaseMarketId() ? new InstrumentID(
+		final BarImpl bar = new BarImpl(buf.hasBaseMarketId() ? new InstrumentID(
 				String.valueOf(buf.getBaseMarketId())) : null,
 				buf.hasBaseTimeStamp() ? new DateTime(buf.getBaseTimeStamp(),
 						zone) : null, buf.hasAggregation() ? new Period(
 						PeriodType.valueOf(buf.getAggregation().name()),
 						buf.getPeriodCount()) : null);
 
-		List<MarketEntry> entryList = buf.getEntryList();
-		for (MarketEntry entry : entryList) {
+		final List<MarketEntry> entryList = buf.getEntryList();
+		for (final MarketEntry entry : entryList) {
 			if (entry.hasType()) {
-				Price p = entry.hasPriceMantissa() ? VALUES.newPrice(
+				final Price p = entry.hasPriceMantissa() ? VALUES.newPrice(
 						entry.getPriceMantissa(), entry.getPriceExponent())
 						: Price.NULL;
-				Size s = entry.hasSizeMantissa() ? VALUES.newSize(
+				final Size s = entry.hasSizeMantissa() ? VALUES.newSize(
 						entry.getSizeMantissa(), entry.getSizeExponent())
 						: Size.NULL;
 				switch (entry.getType()) {
@@ -91,6 +91,7 @@ public final class HistoricalCodec {
 					break;
 				case CLOSE:
 					bar.setClose(p);
+						bar.setLastSize(s);
 					break;
 				case HIGH:
 					bar.setHigh(p);
@@ -181,10 +182,14 @@ public final class HistoricalCodec {
 					.setType(MarketEntry.Type.LOW));
 		}
 		if (bar.getClose() != null && !bar.getClose().isNull()) {
-			builder.addEntry(MarketEntry.newBuilder()
+			final MarketEntry.Builder entryBuilder = MarketEntry.newBuilder()
 					.setPriceMantissa(bar.getClose().mantissa())
-					.setPriceExponent(bar.getClose().exponent())
-					.setType(MarketEntry.Type.CLOSE));
+					.setPriceExponent(bar.getClose().exponent());
+			if (bar.getLastSize() != null && !bar.getLastSize().isNull()) {
+				entryBuilder.setSizeMantissa(bar.getLastSize().mantissa())
+						.setSizeExponent(bar.getLastSize().exponent());
+			}
+			builder.addEntry(entryBuilder.setType(MarketEntry.Type.CLOSE));
 		}
 		if (bar.getVolume() != null && !bar.getVolume().isNull()) {
 			builder.addEntry(MarketEntry.newBuilder()
@@ -223,7 +228,7 @@ public final class HistoricalCodec {
 					.setType(MarketEntry.Type.MIDPOINT));
 		}
 		if (bar.getBid() != null && !bar.getBid().isNull()) {
-			MarketEntry.Builder entryBuilder = MarketEntry.newBuilder()
+			final MarketEntry.Builder entryBuilder = MarketEntry.newBuilder()
 					.setPriceMantissa(bar.getBid().mantissa())
 					.setPriceExponent(bar.getBid().exponent());
 			if (bar.getBidSize() != null && !bar.getBidSize().isNull()) {
@@ -233,7 +238,7 @@ public final class HistoricalCodec {
 			builder.addEntry(entryBuilder.setType(MarketEntry.Type.BID));
 		}
 		if (bar.getAsk() != null && !bar.getAsk().isNull()) {
-			MarketEntry.Builder entryBuilder = MarketEntry.newBuilder()
+			final MarketEntry.Builder entryBuilder = MarketEntry.newBuilder()
 					.setPriceMantissa(bar.getAsk().mantissa())
 					.setPriceExponent(bar.getAsk().exponent());
 			if (bar.getAskSize() != null && !bar.getAskSize().isNull()) {

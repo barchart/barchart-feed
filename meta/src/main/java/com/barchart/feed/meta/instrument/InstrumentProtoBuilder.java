@@ -289,7 +289,7 @@ public final class InstrumentProtoBuilder {
 		}
 
 		if (!inst.underlier().isNull()) {
-			builder.addComponentId(Long.parseLong(inst.underlier().id()));
+			builder.setUnderlyingMarketId(Long.parseLong(inst.underlier().id()));
 		}
 
 		if (!inst.priceFormat().isNull()) {

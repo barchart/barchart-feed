@@ -29,6 +29,11 @@ public interface Bar extends Range {
 	public Price getClose();
 
 	/**
+	 * Returns the ask size at close.
+	 */
+	public Size getLastSize();
+
+	/**
 	 * Returns the bid price at close.
 	 */
 	public Price getBid();
@@ -55,7 +60,7 @@ public interface Bar extends Range {
 
 	/**
 	 * Returns the volume. For aggregated bars this will be an average value.
-	 * 
+	 *
 	 * @return the volume
 	 */
 	public Size getVolume();
@@ -63,7 +68,7 @@ public interface Bar extends Range {
 	/**
 	 * Returns the volume traded up. For aggregated bars this will be an average
 	 * value.
-	 * 
+	 *
 	 * @return the volume traded up.
 	 */
 	public Size getVolumeUp();
@@ -71,7 +76,7 @@ public interface Bar extends Range {
 	/**
 	 * Returns the volume traded down. For aggregated bars this will be an
 	 * average value.
-	 * 
+	 *
 	 * @return the volume traded down.
 	 */
 	public Size getVolumeDown();
