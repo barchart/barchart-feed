@@ -93,10 +93,6 @@ public class MarketHistoricalStateBar extends MarketHistoricalState implements B
 		return entry(Type.BID).size();
 	}
 
-	public DateTime getBidTime() {
-		return entry(Type.BID).timestamp();
-	}
-
 	@Override
 	public Price getAsk() {
 		return entry(Type.ASK).price();
@@ -105,10 +101,6 @@ public class MarketHistoricalStateBar extends MarketHistoricalState implements B
 	@Override
 	public Size getAskSize() {
 		return entry(Type.ASK).size();
-	}
-
-	public DateTime getAskTime() {
-		return entry(Type.ASK).timestamp();
 	}
 
 	@Override
