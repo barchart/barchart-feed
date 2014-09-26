@@ -12,7 +12,10 @@ public class SubBase implements SubCommand {
 	private final String interest;
 	private final SubCommand.Type type;
 	
-	SubBase(final String interest, SubCommand.Type type, final Set<SubscriptionType> types) {
+	SubBase(
+			final String interest, 
+			final SubCommand.Type type, 
+			final Set<SubscriptionType> types) {
 		
 		if(interest == null || types == null || types.isEmpty()) {
 			throw new IllegalArgumentException();

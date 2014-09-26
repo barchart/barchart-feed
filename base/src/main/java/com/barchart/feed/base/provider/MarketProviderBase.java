@@ -2,6 +2,7 @@ package com.barchart.feed.base.provider;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -52,9 +53,11 @@ import com.barchart.feed.base.participant.FrameworkAgentLifecycleHandler;
 import com.barchart.feed.base.provider.MarketDataGetters.MDGetter;
 import com.barchart.feed.base.state.enums.MarketStateEntry;
 import com.barchart.feed.base.sub.SubCommand;
+import com.barchart.feed.base.sub.SubCommand.Type;
 import com.barchart.feed.base.sub.SubscriptionHandler;
 import com.barchart.feed.base.sub.SubscriptionType;
 import com.barchart.feed.base.values.api.Value;
+import com.barchart.feed.inst.Exchanges;
 import com.barchart.util.value.api.Fraction;
 import com.barchart.util.value.api.Price;
 
@@ -328,7 +331,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 					public Observable<Result<Instrument>> call(final Result<Instrument> result) {
 						
 						final Map<String, List<Instrument>> instMap = result.results();
-						final Set<String> newInterests = new HashSet<String>();
+						final Map<String, Type> newInterests = new HashMap<String, Type>();
 
 						for (final Entry<String, List<Instrument>> e : instMap.entrySet()) {
 
@@ -343,9 +346,9 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 								/* We have to use an alternate symbol for options */
 								final String symbol = i.symbol();
 								if(symbol.contains("|")) {
-									newInterests.add(i.vendorSymbols().get(VendorID.BARCHART_SHORT));
+									newInterests.put(i.vendorSymbols().get(VendorID.BARCHART_SHORT), Type.INSTRUMENT);
 								} else {
-									newInterests.add(formatForJERQ(i.symbol()));
+									newInterests.put(formatForJERQ(i.symbol()), Type.INSTRUMENT);
 								}
 
 							} else {
@@ -385,7 +388,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 					public Observable<Result<Instrument>> call(final Result<Instrument> result) {
 
 						final Map<String, List<Instrument>> instMap = result.results();
-						final Set<String> oldInterests = new HashSet<String>();
+						final Map<String, Type> oldInterests = new HashMap<String, Type>();
 
 						for (final Entry<String, List<Instrument>> e : instMap.entrySet()) {
 
@@ -402,9 +405,9 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 								 */
 								final String symbol = i.symbol();
 								if(symbol.contains("|")) {
-									oldInterests.add(i.vendorSymbols().get(VendorID.BARCHART_SHORT));
+									oldInterests.put(i.vendorSymbols().get(VendorID.BARCHART_SHORT), Type.INSTRUMENT);
 								} else {
-									oldInterests.add(formatForJERQ(i.symbol()));
+									oldInterests.put(formatForJERQ(i.symbol()), Type.INSTRUMENT);
 								}
 
 							} else {
@@ -451,7 +454,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		@Deprecated
 		public synchronized void include(final Metadata... meta) {
 
-			final Set<String> newInterests = new HashSet<String>();
+			final Map<String, Type> newInterests = new HashMap<String, Type>();
 
 			for(final Metadata m : meta) {
 
@@ -474,16 +477,16 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 					/* We have to use an alternate symbol for options */
 					final String symbol = i.symbol();
 					if(symbol.contains("|")) {
-						newInterests.add(i.vendorSymbols().get(VendorID.BARCHART_SHORT));
+						newInterests.put(i.vendorSymbols().get(VendorID.BARCHART_SHORT), Type.INSTRUMENT);
 					} else {
-						newInterests.add(formatForJERQ(i.symbol()));
+						newInterests.put(formatForJERQ(i.symbol()), Type.INSTRUMENT);
 					}
 
 					continue;
 				case EXCHANGE:
 					incExchanges.add((Exchange)m);
 					exExchanges.remove(m);
-					newInterests.add(((Exchange)m).id().toString());
+					newInterests.put(((Exchange)m).id().toString(), Type.EXCHANGE);
 				}
 
 			}
@@ -499,39 +502,50 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		}
 
 		@Override
-		public synchronized void include(final MetadataID<?>... metaID) {
+		public synchronized void include(final MetadataID<?>... metaIDs) {
 
-			final List<InstrumentID> ids = new ArrayList<InstrumentID>();
+			final List<InstrumentID> instIDs = new ArrayList<InstrumentID>();
+			final List<Metadata> metas = new ArrayList<Metadata>();
 
-			for(final MetadataID<?> m : metaID) {
-
-				if(m.metaType() == MetaType.INSTRUMENT) {
-					ids.add((InstrumentID) m);
+			for(final MetadataID<?> m : metaIDs) {
+				
+				switch(m.metaType()) {
+				default:
+					throw new IllegalArgumentException("Unsupported Metadata Type " + m.metaType());
+				case INSTRUMENT:
+					instIDs.add((InstrumentID) m);
+					break;
+				case EXCHANGE:
+					final Exchange e = Exchanges.fromID((ExchangeID)m);
+					if(e.isNull()) {
+						log.warn("Attempted to include invalid exchange ID " + ((ExchangeID)m).id());
+					} else {
+						metas.add(e);
+					}
+					break;
 				}
 
 			}
 
 			final Map<InstrumentID, Instrument> iMap = metaService.instrument(
-					ids.toArray(new InstrumentID[0])).toBlockingObservable().single();
-
-			final List<Instrument> insts = new ArrayList<Instrument>();
+					instIDs.toArray(new InstrumentID[0])).toBlockingObservable().single();
 
 			for(final Entry<InstrumentID, Instrument> e : iMap.entrySet()) {
 				if(!e.getValue().isNull()) {
-					insts.add(e.getValue());
+					metas.add(e.getValue());
 				}
 			}
 
-			include(insts.toArray(new Instrument[0]));
+			include(metas.toArray(new Metadata[0]));
 		}
 
 		@Override
 		@Deprecated
-		public synchronized void exclude(final Metadata... meta) {
+		public synchronized void exclude(final Metadata... metas) {
 
-			final Set<String> oldInterests = new HashSet<String>();
+			final Map<String, Type> oldInterests = new HashMap<String, Type>();
 
-			for(final Metadata m : meta) {
+			for(final Metadata m : metas) {
 
 				if(m == null || m.isNull()) {
 					continue;
@@ -552,16 +566,16 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 					/* We have to use an alternate symbol for options */
 					final String symbol = i.symbol();
 					if(symbol.contains("|")) {
-						oldInterests.add(i.vendorSymbols().get(VendorID.BARCHART_SHORT));
+						oldInterests.put(i.vendorSymbols().get(VendorID.BARCHART_SHORT), Type.INSTRUMENT);
 					} else {
-						oldInterests.add(formatForJERQ(i.symbol()));
+						oldInterests.put(formatForJERQ(i.symbol()), Type.INSTRUMENT);
 					}
 
 					continue;
 				case EXCHANGE:
 					exExchanges.add((Exchange)m);
 					incExchanges.remove(m);
-					oldInterests.add(((Exchange)m).id().toString());
+					oldInterests.put(((Exchange)m).id().toString(), Type.EXCHANGE);
 				}
 
 			}
@@ -659,7 +673,10 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		return agg;
 	}
 
-	private SubCommand subscribe(final FrameworkAgent<?> agent, final String symbol) {
+	private SubCommand subscribe(
+			final FrameworkAgent<?> agent, 
+			final String symbol, 
+			final Type type) {
 
 		synchronized(instToAgentsMap) {
 
@@ -675,7 +692,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 			instToAgentsMap.get(symbol).add(agent);
 
 			if (!stuffToAdd.isEmpty()) {
-				return new SubBase(symbol, SubCommand.Type.INSTRUMENT, stuffToAdd);
+				return new SubBase(symbol, type, stuffToAdd);
 			} else {
 				return SubCommand.NULL;
 			}
@@ -683,12 +700,12 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		}
 	}
 
-	private Set<SubCommand> subscribe(final FrameworkAgent<?> agent, final Set<String> symbols) {
+	private Set<SubCommand> subscribe(final FrameworkAgent<?> agent, final Map<String, Type> symbols) {
 
 		final Set<SubCommand> newSubs = new HashSet<SubCommand>();
 
-		for (final String symbol : symbols) {
-			final SubCommand sub = subscribe(agent, symbol);
+		for (final Entry<String, SubCommand.Type> e : symbols.entrySet()) {
+			final SubCommand sub = subscribe(agent, e.getKey(), e.getValue());
 			if (!sub.isNull()) {
 				newSubs.add(sub);
 			}
@@ -697,7 +714,10 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		return newSubs;
 	}
 
-	private SubCommand unsubscribe(final FrameworkAgent<?> agent, final String symbol) {
+	private SubCommand unsubscribe(
+			final FrameworkAgent<?> agent, 
+			final String symbol, 
+			final Type type) {
 
 		synchronized(instToAgentsMap) {
 
@@ -722,12 +742,12 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 	}
 
 	private synchronized Set<SubCommand> unsubscribe(final FrameworkAgent<?> agent,
-			final Set<String> symbols) {
+			final Map<String, Type> symbols) {
 
 		final Set<SubCommand> newSubs = new HashSet<SubCommand>();
 
-		for (final String interest : symbols) {
-			final SubCommand sub = unsubscribe(agent, interest);
+		for (final Entry<String,Type> interest : symbols.entrySet()) {
+			final SubCommand sub = unsubscribe(agent, interest.getKey(), interest.getValue());
 			if (!sub.isNull()) {
 				newSubs.add(sub);
 			}
@@ -736,8 +756,15 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		return newSubs;
 	}
 
+	// TODO Handle Exchanges As Well
 	private Set<SubCommand> unsubscribeAll(final FrameworkAgent<?> agent) {
-		return unsubscribe(agent, agent.interests());
+		final Map<String, Type> symMap = new HashMap<String, Type>();
+		
+		for(final String s : agent.interests()) {
+			symMap.put(s, Type.INSTRUMENT);
+		}
+		
+		return unsubscribe(agent, symMap);
 	}
 
 	class RefEqualsList<T> extends ArrayList<T> {
