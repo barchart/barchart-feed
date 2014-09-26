@@ -32,7 +32,7 @@ public class MarketStateEntry {
 	private Size size = null;
 
 	/**
-	 * Construct a new wrapper with a wrapped message builder.
+	 * Construct a new wrapper with a mutable message builder.
 	 */
 	public MarketStateEntry() {
 		this(MarketEntry.newBuilder());

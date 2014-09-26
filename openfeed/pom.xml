@@ -32,6 +32,12 @@
 		</dependency>
 		
 		<dependency>
+			<groupId>com.barchart.feed</groupId>
+			<artifactId>barchart-feed-series</artifactId>
+			<version>[1.0,1.1-SNAPSHOT)</version>
+		</dependency>
+		
+		<dependency>
 		   	<groupId>org.openfeed</groupId>
 		   	<artifactId>openfeed</artifactId>
 			<version>[2.1.6-SNAPSHOT,2.2-SNAPSHOT)</version>

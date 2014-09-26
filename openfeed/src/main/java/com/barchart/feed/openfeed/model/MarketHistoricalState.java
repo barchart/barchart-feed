@@ -11,14 +11,15 @@ import java.util.NoSuchElementException;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.chrono.ISOChronology;
+import org.openfeed.AggregationPeriod;
 import org.openfeed.EntryGroup;
 import org.openfeed.MarketEntry;
 import org.openfeed.MarketEntry.Descriptor;
 import org.openfeed.MarketEntry.Type;
 import org.openfeed.MarketEntryOrBuilder;
-import org.openfeed.MarketSnapshot;
-import org.openfeed.MarketSnapshot.Builder;
-import org.openfeed.MarketSnapshotOrBuilder;
+import org.openfeed.MarketHistoricalSnapshot;
+import org.openfeed.MarketHistoricalSnapshot.Builder;
+import org.openfeed.MarketHistoricalSnapshotOrBuilder;
 import org.openfeed.util.datetime.DateOnlyValue;
 import org.openfeed.util.datetime.DateTimeValue;
 import org.openfeed.util.datetime.ProtoDateUtil;
@@ -28,9 +29,9 @@ import org.openfeed.util.datetime.ProtoDateUtil;
  * 
  * TODO This should be moved into barchart-feed at some point
  */
-public class MarketState {
+public class MarketHistoricalState {
 
-	private MarketSnapshotOrBuilder message;
+	private MarketHistoricalSnapshotOrBuilder message;
 	private Entries entries;
 	private DateTime timestamp;
 	private LocalDate tradeDate;
@@ -38,14 +39,14 @@ public class MarketState {
 	/**
 	 * Construct a new wrapper with a mutable message builder.
 	 */
-	public MarketState() {
-		this(MarketSnapshot.newBuilder());
+	public MarketHistoricalState() {
+		this(MarketHistoricalSnapshot.newBuilder());
 	}
 
 	/**
 	 * Construct a new wrapper with the given message or builder.
 	 */
-	public MarketState(final MarketSnapshotOrBuilder message_) {
+	public MarketHistoricalState(final MarketHistoricalSnapshotOrBuilder message_) {
 		message = message_;
 		entries = new Entries();
 	}
@@ -54,10 +55,10 @@ public class MarketState {
 	 * Build an immutable protobuf message from the current message or builder. If the underlying message was already
 	 * built, it will be returned instead of copied.
 	 */
-	public MarketSnapshot message() {
+	public MarketHistoricalSnapshot message() {
 
-		if (message instanceof MarketSnapshot)
-			return (MarketSnapshot) message;
+		if (message instanceof MarketHistoricalSnapshot)
+			return (MarketHistoricalSnapshot) message;
 
 		return builder().build();
 
@@ -84,7 +85,7 @@ public class MarketState {
 		return message.getBaseMarketId();
 	}
 
-	public MarketState id(final long id) {
+	public MarketHistoricalState id(final long id) {
 		builder().setBaseMarketId(id);
 		return this;
 	}
@@ -93,7 +94,7 @@ public class MarketState {
 		return message.getBaseSequence();
 	}
 
-	public MarketState sequence(final long sequence) {
+	public MarketHistoricalState sequence(final long sequence) {
 		builder().setBaseSequence(sequence);
 		return this;
 	}
@@ -116,7 +117,7 @@ public class MarketState {
 
 	}
 
-	public MarketState timestamp(final DateTime timestamp) {
+	public MarketHistoricalState timestamp(final DateTime timestamp) {
 
 		builder().setBaseTimeStamp(ProtoDateUtil.intoDecimalDateTime(
 				timestamp.getYear(),
@@ -133,7 +134,7 @@ public class MarketState {
 
 	}
 
-	public MarketState timestamp(final long timestamp) {
+	public MarketHistoricalState timestamp(final long timestamp) {
 		return timestamp(new DateTime(timestamp, ISOChronology.getInstanceUTC()));
 	}
 	
@@ -154,7 +155,7 @@ public class MarketState {
 
 	}
 
-	public MarketState tradeDate(final LocalDate tradeDate) {
+	public MarketHistoricalState tradeDate(final LocalDate tradeDate) {
 
 		builder().setBaseTradeDate(ProtoDateUtil.intoDecimalDateOnly(tradeDate.getYear(),
 				tradeDate.getMonthOfYear(), tradeDate.getDayOfMonth()));
@@ -165,7 +166,7 @@ public class MarketState {
 
 	}
 
-	public MarketState tradeDate(final long timestamp) {
+	public MarketHistoricalState tradeDate(final long timestamp) {
 		return tradeDate(new LocalDate(timestamp, ISOChronology.getInstanceUTC()));
 	}
 	
@@ -176,7 +177,7 @@ public class MarketState {
 		return message.getBasePriceExponent();
 	}
 
-	public MarketState priceExponent(final int exponent) {
+	public MarketHistoricalState priceExponent(final int exponent) {
 		builder().setBasePriceExponent(exponent);
 		return this;
 	}
@@ -188,7 +189,7 @@ public class MarketState {
 		return message.getBaseSizeExponent();
 	}
 
-	public MarketState sizeExponent(final int exponent) {
+	public MarketHistoricalState sizeExponent(final int exponent) {
 		builder().setBaseSizeExponent(exponent);
 		return this;
 	}
@@ -200,7 +201,7 @@ public class MarketState {
 		return message.getLastUpdateSequence();
 	}
 
-	public MarketState lastUpdateSequence(final long sequence) {
+	public MarketHistoricalState lastUpdateSequence(final long sequence) {
 		builder().setLastUpdateSequence(sequence);
 		return this;
 	}
@@ -212,20 +213,32 @@ public class MarketState {
 		return message.getTotalExpectedEntries();
 	}
 
-	public MarketState expectedEntries(final int expected) {
+	public MarketHistoricalState expectedEntries(final int expected) {
 		builder().setTotalExpectedEntries(expected);
 		return this;
 	}
 
 	/**
-	 * The session group for this snapshot.
+	 * The aggregation period for this bar.
 	 */
-	public EntryGroup group() {
-		return message.getEntryGroup();
+	public AggregationPeriod aggregation() {
+		return message.getAggregation();
 	}
 
-	public MarketState group(final EntryGroup group) {
-		builder().setEntryGroup(group);
+	public MarketHistoricalState aggregation(final AggregationPeriod period) {
+		builder().setAggregation(period);
+		return this;
+	}
+
+	/**
+	 * The aggregation period for this bar.
+	 */
+	public int periodCount() {
+		return message.getPeriodCount();
+	}
+
+	public MarketHistoricalState periodCount(final int count) {
+		builder().setPeriodCount(count);
 		return this;
 	}
 
@@ -267,7 +280,7 @@ public class MarketState {
 	/**
 	 * Add a market entry to the snapshot.
 	 */
-	public MarketState entry(final MarketStateEntry entry) {
+	public MarketHistoricalState entry(final MarketStateEntry entry) {
 
 		MarketEntryOrBuilder eob = entry.message;
 
