@@ -29,6 +29,7 @@
 		<module>meta</module>
 		<module>inst</module>
 		<module>series</module>
+		<module>openfeed</module>
 		<module>proto</module>
 	</modules>
 
