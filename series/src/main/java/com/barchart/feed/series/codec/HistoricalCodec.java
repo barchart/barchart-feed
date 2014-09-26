@@ -33,6 +33,8 @@ public final class HistoricalCodec {
 
 	/**
 	 * Create from protobuf message using UTC timezone.
+	 *
+	 * TODO return MarketHistoricalStateBar instead
 	 */
 	public static BarImpl fromProtobuf(final ByteBuffer buf) {
 		return fromProtobuf(buf, DateTimeZone.UTC);
@@ -40,6 +42,8 @@ public final class HistoricalCodec {
 
 	/**
 	 * Create from protobuf message using the specified timezone.
+	 *
+	 * TODO return MarketHistoricalStateBar instead
 	 */
 	public static BarImpl fromProtobuf(final ByteBuffer buf,
 			final DateTimeZone zone) {
@@ -53,6 +57,8 @@ public final class HistoricalCodec {
 
 	/**
 	 * Create from protobuf message using UTC timezone.
+	 *
+	 * TODO return MarketHistoricalStateBar instead
 	 */
 	public static BarImpl fromProtobuf(final MarketHistoricalSnapshot buf) {
 		return fromProtobuf(buf, DateTimeZone.UTC);
@@ -60,6 +66,8 @@ public final class HistoricalCodec {
 
 	/**
 	 * Create from protobuf message using the specified timezone.
+	 *
+	 * TODO return MarketHistoricalStateBar instead
 	 */
 	public static BarImpl fromProtobuf(final MarketHistoricalSnapshot buf,
 			final DateTimeZone zone) {
@@ -150,6 +158,8 @@ public final class HistoricalCodec {
 	 */
 	public static MarketHistoricalSnapshot toProtobuf(final Bar bar,
 			final boolean concise) {
+
+		// TODO if MarketHistoricalStateBar, just return internal protobuf
 
 		final MarketHistoricalSnapshot.Builder builder = MarketHistoricalSnapshot
 				.newBuilder();
