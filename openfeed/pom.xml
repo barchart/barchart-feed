@@ -13,14 +13,14 @@
 
 	<artifactId>barchart-feed-openfeed</artifactId>
 	<groupId>com.barchart.feed</groupId>
-	<version>1.0.3</version>
+	<version>1.0.4-SNAPSHOT</version>
 	<packaging>bundle</packaging>
 
 	<scm>
 		<url>https://github.com/barchart/barchart-feed</url>
 		<connection>scm:git:git://github.com/barchart/barchart-feed.git</connection>
 		<developerConnection>scm:git:ssh://git@github.com/barchart/barchart-feed.git</developerConnection>
-		<tag>barchart-feed-openfeed-1.0.3</tag>
+		<tag>master</tag>
 	</scm>
 
 	<dependencies>
