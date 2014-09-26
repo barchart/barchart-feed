@@ -23,6 +23,9 @@ import org.openfeed.util.datetime.DateOnlyValue;
 import org.openfeed.util.datetime.DateTimeValue;
 import org.openfeed.util.datetime.ProtoDateUtil;
 
+import com.barchart.util.value.api.Price;
+import com.barchart.util.value.api.Size;
+
 /**
  * Wrapper around a MarketSnapshot protobuf message to for simpler usage and more efficient repeated field access.
  *
@@ -324,6 +327,80 @@ public class MarketHistoricalState {
 		entries.add(entry);
 
 		return this;
+
+	}
+
+	// Shortcut methods
+
+	public Price price(final MarketEntry.Type type) {
+
+		final MarketStateEntry entry = entry(type);
+
+		if (entry != null) {
+			return entry.price();
+		}
+
+		return Price.NULL;
+
+	}
+
+	public Price price(final MarketEntry.Type type, final MarketEntry.Descriptor descriptor) {
+
+		final MarketStateEntry entry = entry(type, descriptor);
+
+		if (entry != null) {
+			return entry.price();
+		}
+
+		return Price.NULL;
+
+	}
+
+	public Size size(final MarketEntry.Type type) {
+
+		final MarketStateEntry entry = entry(type);
+
+		if (entry != null) {
+			return entry.size();
+		}
+
+		return Size.NULL;
+
+	}
+
+	public Size size(final MarketEntry.Type type, final MarketEntry.Descriptor descriptor) {
+
+		final MarketStateEntry entry = entry(type, descriptor);
+
+		if (entry != null) {
+			return entry.size();
+		}
+
+		return Size.NULL;
+
+	}
+
+	public DateTime timestamp(final MarketEntry.Type type) {
+
+		final MarketStateEntry entry = entry(type);
+
+		if (entry != null) {
+			return entry.timestamp();
+		}
+
+		return null;
+
+	}
+
+	public DateTime timestamp(final MarketEntry.Type type, final MarketEntry.Descriptor descriptor) {
+
+		final MarketStateEntry entry = entry(type, descriptor);
+
+		if (entry != null) {
+			return entry.timestamp();
+		}
+
+		return null;
 
 	}
 

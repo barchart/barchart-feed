@@ -45,7 +45,7 @@ public class MarketHistoricalStateBar extends MarketHistoricalState implements B
 
 	@Override
 	public DateTime getDate() {
-		return timestamp(Type.TIME);
+		return timestamp();
 	}
 
 	@Override
@@ -295,42 +295,6 @@ public class MarketHistoricalStateBar extends MarketHistoricalState implements B
 		}
 
 		return entry(type);
-
-	}
-
-	private Price price(final MarketEntry.Type type) {
-
-		final MarketStateEntry entry = entry(type);
-
-		if (entry != null) {
-			return entry.price();
-		}
-
-		return Price.NULL;
-
-	}
-
-	private Size size(final MarketEntry.Type type) {
-
-		final MarketStateEntry entry = entry(type);
-
-		if (entry != null) {
-			return entry.size();
-		}
-
-		return Size.NULL;
-
-	}
-
-	private DateTime timestamp(final MarketEntry.Type type) {
-
-		final MarketStateEntry entry = entry(type);
-
-		if (entry != null) {
-			return entry.timestamp();
-		}
-
-		return null;
 
 	}
 
