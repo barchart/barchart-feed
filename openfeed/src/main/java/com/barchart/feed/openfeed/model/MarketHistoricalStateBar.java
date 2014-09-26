@@ -229,22 +229,22 @@ public class MarketHistoricalStateBar extends MarketHistoricalState implements B
 
 		if (getDate().compareTo(other.getDate()) <= 0) {
 			close = other.getClose();
-			ensure(Type.CLOSE).price(close).size(other.getLastSize());
+			entryOrNew(Type.CLOSE).price(close).size(other.getLastSize());
 		}
 
 		if (open.isNull()) {
 			open = other.getOpen();
-			ensure(MarketEntry.Type.OPEN).price(open);
+			entryOrNew(MarketEntry.Type.OPEN).price(open);
 		}
 
-		ensure(MarketEntry.Type.BID).price(other.getBid()).size(other.getBidSize());
-		ensure(MarketEntry.Type.ASK).price(other.getAsk()).size(other.getAskSize());
+		entryOrNew(MarketEntry.Type.BID).price(other.getBid()).size(other.getBidSize());
+		entryOrNew(MarketEntry.Type.ASK).price(other.getAsk()).size(other.getAskSize());
 		add(MarketEntry.Type.TRADES, other.getTradeCount());
 
 		if (!other.getOpenInterest().isNull()) {
 			if (openInterest.isNull()) {
 				openInterest = other.getOpenInterest();
-				ensure(MarketEntry.Type.INTEREST).size(openInterest);
+				entryOrNew(MarketEntry.Type.INTEREST).size(openInterest);
 			} else {
 				add(MarketEntry.Type.INTEREST, openInterest);
 			}
@@ -253,21 +253,8 @@ public class MarketHistoricalStateBar extends MarketHistoricalState implements B
 		barCount++;
 
 		if (advanceTime) {
-			ensure(Type.TIME).timestamp(other.getDate());
+			entryOrNew(Type.TIME).timestamp(other.getDate());
 		}
-
-	}
-
-	private MarketStateEntry ensure(final MarketEntry.Type type) {
-
-		MarketStateEntry entry = entry(type);
-
-		if (entry == null) {
-			entry = new MarketStateEntry().type(type);
-			entry(entry);
-		}
-
-		return entry;
 
 	}
 
@@ -275,7 +262,7 @@ public class MarketHistoricalStateBar extends MarketHistoricalState implements B
 
 		if (!price.isNull() && !price.isZero()) {
 
-			final MarketStateEntry entry = ensure(type);
+			final MarketStateEntry entry = entryOrNew(type);
 
 			if (entry.price().isNull() || entry.price().isZero()) {
 				entry.price(price);
@@ -295,7 +282,7 @@ public class MarketHistoricalStateBar extends MarketHistoricalState implements B
 
 		if (!size.isNull() && !size.isZero()) {
 
-			final MarketStateEntry entry = ensure(type);
+			final MarketStateEntry entry = entryOrNew(type);
 
 			if (entry.size().isNull() || entry.size().isZero()) {
 				entry.size(size);

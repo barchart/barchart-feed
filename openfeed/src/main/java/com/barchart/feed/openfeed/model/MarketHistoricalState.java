@@ -251,6 +251,22 @@ public class MarketHistoricalState {
 	/**
 	 * Get the first market entry with the specified type.
 	 */
+	public MarketStateEntry entryOrNew(final MarketEntry.Type type) {
+
+		MarketStateEntry entry = entries.one(type);
+
+		if (entry == null) {
+			entry = new MarketStateEntry().type(type);
+			entries.add(entry);
+		}
+
+		return entry;
+
+	}
+
+	/**
+	 * Get the first market entry with the specified type.
+	 */
 	public MarketStateEntry entry(final MarketEntry.Type type) {
 		return entries.one(type);
 	}
@@ -260,6 +276,22 @@ public class MarketHistoricalState {
 	 */
 	public List<MarketStateEntry> entries(final MarketEntry.Type type) {
 		return entries.all(type);
+	}
+
+	/**
+	 * Get the first market entry with the specified type.
+	 */
+	public MarketStateEntry entryOrNew(final MarketEntry.Type type, final MarketEntry.Descriptor descriptor) {
+
+		MarketStateEntry entry = entries.one(type, descriptor);
+
+		if (entry == null) {
+			entry = new MarketStateEntry().type(type).addDescriptor(descriptor);
+			entries.add(entry);
+		}
+
+		return entry;
+
 	}
 
 	/**
