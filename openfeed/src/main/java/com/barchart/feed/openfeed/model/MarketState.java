@@ -15,7 +15,6 @@ import org.openfeed.EntryGroup;
 import org.openfeed.MarketEntry;
 import org.openfeed.MarketEntry.Descriptor;
 import org.openfeed.MarketEntry.Type;
-import org.openfeed.MarketEntryOrBuilder;
 import org.openfeed.MarketSnapshot;
 import org.openfeed.MarketSnapshot.Builder;
 import org.openfeed.MarketSnapshotOrBuilder;
@@ -25,13 +24,13 @@ import org.openfeed.util.datetime.ProtoDateUtil;
 
 /**
  * Wrapper around a MarketSnapshot protobuf message to for simpler usage and more efficient repeated field access.
- * 
+ *
  * TODO This should be moved into barchart-feed at some point
  */
 public class MarketState {
 
-	private MarketSnapshotOrBuilder message;
-	private Entries entries;
+	private final MarketSnapshotOrBuilder message;
+	private final Entries entries;
 	private DateTime timestamp;
 	private LocalDate tradeDate;
 
@@ -59,7 +58,19 @@ public class MarketState {
 		if (message instanceof MarketSnapshot)
 			return (MarketSnapshot) message;
 
-		return builder().build();
+		final MarketSnapshot.Builder builder = builder();
+
+		builder.clearEntry();
+
+		for (final MarketStateEntry entry : entries) {
+			if (entry.message instanceof MarketEntry.Builder) {
+				builder().addEntry((MarketEntry.Builder) entry.message);
+			} else if (entry.message instanceof MarketEntry) {
+				builder().addEntry((MarketEntry) entry.message);
+			}
+		}
+
+		return builder.build();
 
 	}
 
@@ -105,7 +116,7 @@ public class MarketState {
 
 		if (timestamp == null) {
 
-			DateTimeValue dt = ProtoDateUtil.fromDecimalDateTime(message.getBaseTimeStamp());
+			final DateTimeValue dt = ProtoDateUtil.fromDecimalDateTime(message.getBaseTimeStamp());
 
 			timestamp = new DateTime(dt.getYear(), dt.getMonth(), dt.getDay(), dt.getHour(), dt.getMinute(),
 					dt.getSecond(), dt.getMillis(), ISOChronology.getInstanceUTC());
@@ -136,7 +147,7 @@ public class MarketState {
 	public MarketState timestamp(final long timestamp) {
 		return timestamp(new DateTime(timestamp, ISOChronology.getInstanceUTC()));
 	}
-	
+
 	/**
 	 * The trade date for this message.
 	 */
@@ -144,7 +155,7 @@ public class MarketState {
 
 		if (tradeDate == null) {
 
-			DateOnlyValue dv = ProtoDateUtil.fromDecimalDateOnly(message.getBaseTradeDate());
+			final DateOnlyValue dv = ProtoDateUtil.fromDecimalDateOnly(message.getBaseTradeDate());
 
 			tradeDate = new LocalDate(dv.getYear(), dv.getMonth(), dv.getDay());
 
@@ -168,7 +179,7 @@ public class MarketState {
 	public MarketState tradeDate(final long timestamp) {
 		return tradeDate(new LocalDate(timestamp, ISOChronology.getInstanceUTC()));
 	}
-	
+
 	/**
 	 * The default price exponent.
 	 */
@@ -268,19 +279,8 @@ public class MarketState {
 	 * Add a market entry to the snapshot.
 	 */
 	public MarketState entry(final MarketStateEntry entry) {
-
-		MarketEntryOrBuilder eob = entry.message;
-
-		if (eob instanceof MarketEntry.Builder) {
-			builder().addEntry((MarketEntry.Builder) eob);
-		} else if (eob instanceof MarketEntry) {
-			builder().addEntry((MarketEntry) eob);
-		}
-
 		entries.add(entry);
-
 		return this;
-
 	}
 
 	protected class Entries implements Iterable<MarketStateEntry> {
@@ -289,11 +289,12 @@ public class MarketState {
 				new EnumMap<Type, List<MarketStateEntry>>(Type.class);
 
 		protected Entries() {
-			for (MarketEntry entry : message.getEntryList()) {
+			for (final MarketEntry entry : message.getEntryList()) {
 				add(new MarketStateEntry(entry));
 			}
 		}
 
+		@Override
 		public Iterator<MarketStateEntry> iterator() {
 
 			final Iterator<List<MarketStateEntry>> allIter = entries.values().iterator();
@@ -314,7 +315,7 @@ public class MarketState {
 					if (next == null)
 						throw new NoSuchElementException();
 
-					MarketStateEntry current = next;
+					final MarketStateEntry current = next;
 
 					if (entryIter.hasNext()) {
 						next = entryIter.next();
@@ -338,7 +339,7 @@ public class MarketState {
 
 		}
 
-		protected void add(MarketStateEntry wrapper) {
+		protected void add(final MarketStateEntry wrapper) {
 
 			List<MarketStateEntry> list = entries.get(wrapper.type());
 
@@ -351,7 +352,7 @@ public class MarketState {
 
 		}
 
-		public MarketStateEntry one(Type type) {
+		public MarketStateEntry one(final Type type) {
 
 			if (entries.containsKey(type)) {
 				return entries.get(type).get(0);
@@ -361,7 +362,7 @@ public class MarketState {
 
 		}
 
-		public List<MarketStateEntry> all(Type type) {
+		public List<MarketStateEntry> all(final Type type) {
 
 			if (entries.containsKey(type)) {
 				return entries.get(type);
@@ -371,10 +372,10 @@ public class MarketState {
 
 		}
 
-		public MarketStateEntry one(Type type, Descriptor descriptor) {
+		public MarketStateEntry one(final Type type, final Descriptor descriptor) {
 
 			if (entries.containsKey(type)) {
-				for (MarketStateEntry wrapper : entries.get(type)) {
+				for (final MarketStateEntry wrapper : entries.get(type)) {
 					if (wrapper.descriptors().contains(descriptor))
 						return wrapper;
 				}
@@ -384,12 +385,12 @@ public class MarketState {
 
 		}
 
-		public List<MarketStateEntry> all(Type type, Descriptor descriptor) {
+		public List<MarketStateEntry> all(final Type type, final Descriptor descriptor) {
 
-			List<MarketStateEntry> wrappers = new ArrayList<MarketStateEntry>();
+			final List<MarketStateEntry> wrappers = new ArrayList<MarketStateEntry>();
 
 			if (entries.containsKey(type)) {
-				for (MarketStateEntry wrapper : entries.get(type)) {
+				for (final MarketStateEntry wrapper : entries.get(type)) {
 					if (wrapper.descriptors().contains(descriptor))
 						wrappers.add(wrapper);
 				}

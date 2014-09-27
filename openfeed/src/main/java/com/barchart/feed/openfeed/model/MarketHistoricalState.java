@@ -15,7 +15,6 @@ import org.openfeed.AggregationPeriod;
 import org.openfeed.MarketEntry;
 import org.openfeed.MarketEntry.Descriptor;
 import org.openfeed.MarketEntry.Type;
-import org.openfeed.MarketEntryOrBuilder;
 import org.openfeed.MarketHistoricalSnapshot;
 import org.openfeed.MarketHistoricalSnapshot.Builder;
 import org.openfeed.MarketHistoricalSnapshotOrBuilder;
@@ -62,7 +61,19 @@ public class MarketHistoricalState {
 		if (message instanceof MarketHistoricalSnapshot)
 			return (MarketHistoricalSnapshot) message;
 
-		return builder().build();
+		final MarketHistoricalSnapshot.Builder builder = builder();
+
+		builder.clearEntry();
+
+		for (final MarketStateEntry entry : entries) {
+			if (entry.message instanceof MarketEntry.Builder) {
+				builder().addEntry((MarketEntry.Builder) entry.message);
+			} else if (entry.message instanceof MarketEntry) {
+				builder().addEntry((MarketEntry) entry.message);
+			}
+		}
+
+		return builder.build();
 
 	}
 
@@ -290,7 +301,7 @@ public class MarketHistoricalState {
 
 		if (entry == null) {
 			entry = new MarketStateEntry().type(type).addDescriptor(descriptor);
-			entries.add(entry);
+			entry(entry);
 		}
 
 		return entry;
@@ -315,19 +326,8 @@ public class MarketHistoricalState {
 	 * Add a market entry to the snapshot.
 	 */
 	public MarketHistoricalState entry(final MarketStateEntry entry) {
-
-		final MarketEntryOrBuilder eob = entry.message;
-
-		if (eob instanceof MarketEntry.Builder) {
-			builder().addEntry((MarketEntry.Builder) eob);
-		} else if (eob instanceof MarketEntry) {
-			builder().addEntry((MarketEntry) eob);
-		}
-
 		entries.add(entry);
-
 		return this;
-
 	}
 
 	// Shortcut methods
