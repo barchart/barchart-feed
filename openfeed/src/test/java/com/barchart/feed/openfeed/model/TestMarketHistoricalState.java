@@ -1,6 +1,5 @@
 package com.barchart.feed.openfeed.model;
 
-import org.junit.Test;
 import org.openfeed.MarketEntry;
 import org.openfeed.MarketHistoricalSnapshot;
 
@@ -11,7 +10,6 @@ public class TestMarketHistoricalState {
 
 	private static final ValueFactory V = ValueFactoryImpl.getInstance();
 
-	@Test
 	public void testTimestamp() throws Exception {
 
 		final MarketHistoricalState state = new MarketHistoricalState();
@@ -30,7 +28,6 @@ public class TestMarketHistoricalState {
 
 	}
 
-	@Test
 	public void testNewEntry() throws Exception {
 
 		final MarketHistoricalState state = new MarketHistoricalState();
