@@ -132,14 +132,16 @@ public class MarketHistoricalState {
 
 	public MarketHistoricalState timestamp(final DateTime timestamp) {
 
+		final DateTime utc = timestamp.toDateTime(ISOChronology.getInstanceUTC());
+
 		builder().setBaseTimeStamp(ProtoDateUtil.intoDecimalDateTime(
-				timestamp.getYear(),
-				timestamp.getMonthOfYear(),
-				timestamp.getDayOfMonth(),
-				timestamp.getHourOfDay(),
-				timestamp.getMinuteOfHour(),
-				timestamp.getSecondOfMinute(),
-				timestamp.getMillisOfSecond()));
+				utc.getYear(),
+				utc.getMonthOfYear(),
+				utc.getDayOfMonth(),
+				utc.getHourOfDay(),
+				utc.getMinuteOfHour(),
+				utc.getSecondOfMinute(),
+				utc.getMillisOfSecond()));
 
 		this.timestamp = timestamp;
 
