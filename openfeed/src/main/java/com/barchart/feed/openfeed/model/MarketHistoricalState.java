@@ -422,8 +422,17 @@ public class MarketHistoricalState {
 
 			return new Iterator<MarketStateEntry>() {
 
-				Iterator<MarketStateEntry> entryIter = allIter.next().iterator();
-				MarketStateEntry next = entryIter.next();
+				Iterator<MarketStateEntry> entryIter = null;
+				MarketStateEntry next = null;
+
+				{
+					if (allIter.hasNext()) {
+						entryIter = allIter.next().iterator();
+						while (!entryIter.hasNext() && allIter.hasNext())
+							entryIter = allIter.next().iterator();
+						next = entryIter.hasNext() ? entryIter.next() : null;
+					}
+				}
 
 				@Override
 				public boolean hasNext() {
@@ -442,7 +451,13 @@ public class MarketHistoricalState {
 						next = entryIter.next();
 					} else if (allIter.hasNext()) {
 						entryIter = allIter.next().iterator();
-						next = entryIter.next();
+						while (!entryIter.hasNext() && allIter.hasNext())
+							entryIter = allIter.next().iterator();
+						if (entryIter.hasNext()) {
+							next = entryIter.next();
+						} else {
+							next = null;
+						}
 					} else {
 						next = null;
 					}
