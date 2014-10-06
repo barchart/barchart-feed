@@ -132,14 +132,16 @@ public class MarketHistoricalState {
 
 	public MarketHistoricalState timestamp(final DateTime timestamp) {
 
+		final DateTime utc = timestamp.toDateTime(ISOChronology.getInstanceUTC());
+
 		builder().setBaseTimeStamp(ProtoDateUtil.intoDecimalDateTime(
-				timestamp.getYear(),
-				timestamp.getMonthOfYear(),
-				timestamp.getDayOfMonth(),
-				timestamp.getHourOfDay(),
-				timestamp.getMinuteOfHour(),
-				timestamp.getSecondOfMinute(),
-				timestamp.getMillisOfSecond()));
+				utc.getYear(),
+				utc.getMonthOfYear(),
+				utc.getDayOfMonth(),
+				utc.getHourOfDay(),
+				utc.getMinuteOfHour(),
+				utc.getSecondOfMinute(),
+				utc.getMillisOfSecond()));
 
 		this.timestamp = timestamp;
 
@@ -422,8 +424,17 @@ public class MarketHistoricalState {
 
 			return new Iterator<MarketStateEntry>() {
 
-				Iterator<MarketStateEntry> entryIter = allIter.next().iterator();
-				MarketStateEntry next = entryIter.next();
+				Iterator<MarketStateEntry> entryIter = null;
+				MarketStateEntry next = null;
+
+				{
+					if (allIter.hasNext()) {
+						entryIter = allIter.next().iterator();
+						while (!entryIter.hasNext() && allIter.hasNext())
+							entryIter = allIter.next().iterator();
+						next = entryIter.hasNext() ? entryIter.next() : null;
+					}
+				}
 
 				@Override
 				public boolean hasNext() {
@@ -442,7 +453,13 @@ public class MarketHistoricalState {
 						next = entryIter.next();
 					} else if (allIter.hasNext()) {
 						entryIter = allIter.next().iterator();
-						next = entryIter.next();
+						while (!entryIter.hasNext() && allIter.hasNext())
+							entryIter = allIter.next().iterator();
+						if (entryIter.hasNext()) {
+							next = entryIter.next();
+						} else {
+							next = null;
+						}
 					} else {
 						next = null;
 					}
