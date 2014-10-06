@@ -91,11 +91,6 @@ public interface Connection {
 	}
 
 	/**
-	 * Session bound to the connection.
-	 */
-	Session session();
-
-	/**
 	 * Terminate the connection. Terminated connection can not be used again.
 	 */
 	void terminate();
