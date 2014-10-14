@@ -627,7 +627,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 			for(final SubCommand s : subsToUnsub) {
 				sb.append(s.interest()).append(" ");
 			}
-			log.debug("{}", sb.toString());
+			log.debug(sb.toString());
 
 			subHandler.unsubscribe(unsubscribeAll(this));
 
@@ -905,8 +905,6 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 	@Override
 	public boolean register(final Instrument instrument) {
 
-		log.debug("Registering {}", instrument.symbol());
-
 		if (!isValid(instrument)) {
 			return false;
 		}
@@ -983,13 +981,13 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 
 	@Override
 	public void make(final Message message) {
-
+		
 		final Instrument instrument = message.getInstrument();
 
 		if (!isValid(instrument)) {
 			return;
 		}
-
+		
 		MarketDo market = marketMap.get(instrument.id());
 
 		final boolean valid = isValid(market);
@@ -1021,13 +1019,12 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		}
 
 		if(!valid) {
-			log.debug("Adding Subscription to map for {}", instrument.symbol());
 			varSubs.put(instrument.id(), new VarSubscription(instrument, lense));
 			defSubs.put(instrument.id(), varSubs.get(instrument.id()));
 		}
 
 		varSubs.get(instrument.id()).setLense(lense);
-
+		
 	}
 
 	private class VarSubscription implements Subscription<Instrument> {
@@ -1121,15 +1118,15 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 			log.error("instrument == null");
 			return false;
 		}
-
+		
 		if (instrument.isNull()) {
 			log.error("instrument.isNull()");
 			return false;
 		}
+		
+		final Price tickSize = instrument.tickSize();
 
-		final Price priceStep = instrument.tickSize();
-
-		if (priceStep.isNull() || priceStep.isZero()) {
+		if (tickSize.isNull() || tickSize.isZero()) {
 			return false;
 		}
 
