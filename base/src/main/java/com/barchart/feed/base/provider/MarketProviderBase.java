@@ -989,14 +989,14 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		}
 		
 		MarketDo market = marketMap.get(instrument.id());
-
+		
 		final boolean valid = isValid(market);
 
 		if(!valid) {
 			register(instrument);
 			market = marketMap.get(instrument.id());
 		}
-
+		
 		market.runSafe(safeMake, message);  
 
 		/* Below is a hack to keep the subscriptions updated */
@@ -1107,6 +1107,10 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 			return false;
 		}
 
+		if (market.instrument().isNull()) {
+			return false;
+		}
+		
 		return true;
 
 	}

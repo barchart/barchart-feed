@@ -341,6 +341,11 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 			trade = new VarTrade(instrument);
 			set(TRADE, trade);
 		}
+		
+		// TRADE NOT NULL HERE
+		if(get(TRADE).isNull()) {
+			new RuntimeException().printStackTrace();
+		}
 
 		return (MarketDoTrade) trade;
 

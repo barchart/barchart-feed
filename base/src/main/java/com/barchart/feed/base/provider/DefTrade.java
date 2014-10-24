@@ -29,11 +29,20 @@ class DefTrade extends NulTrade {
 	protected final Instrument instrument;
 
 	DefTrade(final Instrument instrument) {
+		
+		if(instrument.isNull()) {
+			throw new IllegalArgumentException("Instrument cannot be NULL");
+		}
+		
 		this.instrument = instrument;
 		this.valueArray = new Value<?>[ARRAY_SIZE];
 	}
 
 	DefTrade(final Instrument instrument, final Value<?>[] valueArray) {
+		
+		if(instrument.isNull()) {
+			throw new IllegalArgumentException("Instrument cannot be NULL");
+		}
 
 		assert valueArray != null;
 		assert valueArray.length == ARRAY_SIZE;
