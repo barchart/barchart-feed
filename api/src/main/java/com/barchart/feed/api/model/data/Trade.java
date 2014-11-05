@@ -1,6 +1,5 @@
 package com.barchart.feed.api.model.data;
 
-import java.util.Collections;
 import java.util.Set;
 
 import com.barchart.feed.api.model.meta.Instrument;
@@ -101,47 +100,47 @@ public interface Trade extends MarketData<Trade>, Tuple {
 		
 		@Override
 		public Session session() {
-			return Session.NULL;
+			throw new UnsupportedOperationException();
 		}
 		
 		@Override
 		public Set<TradeType> types() {
-			return Collections.singleton(TradeType.NULL_TRADE_TYPE);
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Instrument instrument() {
-			return Instrument.NULL;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Time updated() {
-			return Time.NULL;
-		}
-
-		@Override
-		public boolean isNull() {
-			return true;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Price price() {
-			return Price.NULL;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Size size() {
-			return Size.NULL;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Time time() {
-			return Time.NULL;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public String toString() {
-			return "NULL TRADE";
+			throw new UnsupportedOperationException();
+		}
+		
+		@Override
+		public boolean isNull() {
+			return true;
 		}
 
 	};

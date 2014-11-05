@@ -1,6 +1,5 @@
 package com.barchart.feed.api.model.data;
 
-import java.util.Collections;
 import java.util.Set;
 
 import com.barchart.feed.api.model.ChangeSet;
@@ -121,12 +120,12 @@ public interface Session extends MarketData<Session>, SessionData,
 
 		@Override
 		public Instrument instrument() {
-			return Instrument.NULL;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Time updated() {
-			return Time.NULL;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
@@ -136,67 +135,67 @@ public interface Session extends MarketData<Session>, SessionData,
 
 		@Override
 		public Price open() {
-			return Price.NULL;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Price high() {
-			return Price.NULL;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Price low() {
-			return Price.NULL;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Price close() {
-			return Price.NULL;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Price settle() {
-			return Price.NULL;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Size volume() {
-			return Size.NULL;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Size interest() {
-			return Size.NULL;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Time timeOpened() {
-			return Time.NULL;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Time timeClosed() {
-			return Time.NULL;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Bool isSettled() {
-			return Bool.NULL;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public String toString() {
-			return "NULL_SESSION";
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Price previousClose() {
-			return Price.NULL;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Set<Component> change() {
-			return Collections.<Component> emptySet();
+			throw new UnsupportedOperationException();
 		}
 
 	};

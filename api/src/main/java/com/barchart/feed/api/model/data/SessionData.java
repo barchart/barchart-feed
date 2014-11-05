@@ -1,11 +1,12 @@
 package com.barchart.feed.api.model.data;
 
 import com.barchart.util.value.api.Bool;
+import com.barchart.util.value.api.Existential;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Size;
 import com.barchart.util.value.api.Time;
 
-public interface SessionData {
+public interface SessionData extends Existential {
 
 	// TODO Review for later
 	interface Settle extends Comparable<Settle> {
@@ -70,67 +71,75 @@ public interface SessionData {
 	Time timeClosed();
 
 	Time updated();
+	
+	@Override
+	boolean isNull();
 
 	public static final SessionData NULL = new SessionData() {
 
 		@Override
 		public Price open() {
-			return Price.NULL;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Price high() {
-			return Price.NULL;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Price low() {
-			return Price.NULL;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Price close() {
-			return Price.NULL;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Price previousClose() {
-			return Price.NULL;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Price settle() {
-			return Price.NULL;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Bool isSettled() {
-			return null;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Size volume() {
-			return Size.NULL;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Size interest() {
-			return Size.NULL;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Time timeOpened() {
-			return Time.NULL;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Time timeClosed() {
-			return Time.NULL;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Time updated() {
-			return Time.NULL;
+			throw new UnsupportedOperationException();
+		}
+		
+		@Override
+		public boolean isNull() {
+			return true;
 		}
 
 	};

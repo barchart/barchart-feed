@@ -40,12 +40,12 @@ public interface Book extends MarketData<Book>, ChangeSet<Book.Component> {
 
 			@Override
 			public Entry bid() {
-				return Entry.NULL;
+				throw new UnsupportedOperationException();
 			}
 
 			@Override
 			public Entry ask() {
-				return Entry.NULL;
+				throw new UnsupportedOperationException();
 			}
 
 			@Override
@@ -55,7 +55,7 @@ public interface Book extends MarketData<Book>, ChangeSet<Book.Component> {
 			
 			@Override
 			public String toString() {
-				return "NULL_BOOK_TOP";
+				throw new UnsupportedOperationException();
 			}
 
 		};
@@ -210,12 +210,12 @@ public interface Book extends MarketData<Book>, ChangeSet<Book.Component> {
 
 		@Override
 		public Instrument instrument() {
-			return Instrument.NULL;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Time updated() {
-			return Time.NULL;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
@@ -225,27 +225,27 @@ public interface Book extends MarketData<Book>, ChangeSet<Book.Component> {
 
 		@Override
 		public Top top() {
-			return Top.NULL;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public List<Entry> entryList(final Side side) {
-			return new ArrayList<Entry>();
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Entry lastBookUpdate() {
-			return Entry.NULL;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public String toString() {
-			return "NULL BOOK";
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Set<Component> change() {
-			return Collections.emptySet();
+			throw new UnsupportedOperationException();
 		}
 
 	};

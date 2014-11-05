@@ -1059,8 +1059,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 
 	}
 
-	protected MarketSafeRunner<Void, Message> safeMake =
-			new MarketSafeRunner<Void, Message>() {
+	protected MarketSafeRunner<Void, Message> safeMake = new MarketSafeRunner<Void, Message>() {
 
 		@Override
 		public Void runSafe(final MarketDo market, final Message message) {
@@ -1134,6 +1133,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 			return false;
 		}
 
+		@SuppressWarnings("deprecation")
 		final Fraction fraction = instrument.displayFraction();
 
 		if(fraction == null || fraction.isNull()) {

@@ -1,6 +1,5 @@
 package com.barchart.feed.api.model.data;
 
-import java.util.Collections;
 import java.util.Set;
 
 import com.barchart.feed.api.model.ChangeSet;
@@ -33,17 +32,17 @@ public interface BookSet extends MarketData<BookSet>, ChangeSet<Book.Type> {
 
 		@Override
 		public Book book(Type type) {
-			return Book.NULL;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Instrument instrument() {
-			return Instrument.NULL;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Time updated() {
-			return Time.NULL;
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
@@ -53,12 +52,12 @@ public interface BookSet extends MarketData<BookSet>, ChangeSet<Book.Type> {
 		
 		@Override
 		public String toString() {
-			return "NULL BOOK SET";
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Set<Type> change() {
-			return Collections.emptySet();
+			throw new UnsupportedOperationException();
 		}
 		
 	};

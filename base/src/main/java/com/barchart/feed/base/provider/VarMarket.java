@@ -292,7 +292,7 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 	/** do not set self reference on freeze */
 	@Override
 	public final Market freeze() {
-
+		
 		final DefMarket that = new DefMarket(instrument);
 
 		final Value<?>[] source = this.valueArray;
@@ -342,11 +342,6 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 			set(TRADE, trade);
 		}
 		
-		// TRADE NOT NULL HERE
-		if(get(TRADE).isNull()) {
-			new RuntimeException().printStackTrace();
-		}
-
 		return (MarketDoTrade) trade;
 
 	}

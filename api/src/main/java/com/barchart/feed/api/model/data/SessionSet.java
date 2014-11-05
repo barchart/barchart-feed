@@ -1,6 +1,5 @@
 package com.barchart.feed.api.model.data;
 
-import java.util.Collections;
 import java.util.Set;
 
 import com.barchart.feed.api.model.ChangeSet;
@@ -32,22 +31,34 @@ public interface SessionSet extends MarketData<SessionSet>, ChangeSet<Type> {
 	SessionSet NULL = new SessionSet() {
 
 		@Override
-		public SessionData session(Type type) {	return SessionData.NULL;}
+		public SessionData session(Type type) {
+			throw new UnsupportedOperationException();
+		}
 
 		@Override
-		public Instrument instrument() {return Instrument.NULL;}
+		public Instrument instrument() {
+			throw new UnsupportedOperationException();
+		}
 
 		@Override
-		public Time updated() {return Time.NULL;}
+		public Time updated() {
+			throw new UnsupportedOperationException();
+		}
 
 		@Override
-		public boolean isNull() {return true;}
+		public boolean isNull() {
+			return true;
+		}
 		
 		@Override
-		public String toString() {return "NULL_SESSION_SET";}
+		public String toString() {
+			throw new UnsupportedOperationException();
+		}
 
 		@Override
-		public Set<Type> change() {return Collections.<Type> emptySet();}
+		public Set<Type> change() {
+			throw new UnsupportedOperationException();
+		}
 		
 	};
 }

@@ -1,6 +1,5 @@
 package com.barchart.feed.api.model.data;
 
-import java.util.Collections;
 import java.util.Set;
 
 import com.barchart.feed.api.model.meta.Instrument;
@@ -151,40 +150,64 @@ public interface Market extends MarketData<Market> {
 	Market NULL = new Market() {
 
 		@Override
-		public Instrument instrument() {return Instrument.NULL;}
+		public Instrument instrument() {
+			throw new UnsupportedOperationException();
+		}
 
 		@Override
-		public Time updated() {return Time.NULL;}
+		public Time updated() {
+			throw new UnsupportedOperationException();
+		}
 
 		@Override
-		public Trade trade() {return Trade.NULL;}
+		public Trade trade() {
+			throw new UnsupportedOperationException();
+		}
 
 		@Override
-		public Book book() {return Book.NULL;}
+		public Book book() {
+			throw new UnsupportedOperationException();
+		}
 
 		@Override
-		public BookSet bookSet() {return BookSet.NULL;}
+		public BookSet bookSet() {
+			throw new UnsupportedOperationException();
+		}
 
 		@Override
-		public Cuvol cuvol() {return Cuvol.NULL;}
+		public Cuvol cuvol() {
+			throw new UnsupportedOperationException();
+		}
 
 		@Override
-		public Session session() {return Session.NULL;}
+		public Session session() {
+			throw new UnsupportedOperationException();
+		}
 
 		@Override
-		public SessionSet sessionSet() {return SessionSet.NULL;}
+		public SessionSet sessionSet() {
+			throw new UnsupportedOperationException();
+		}
 
 		@Override
-		public boolean isNull() {return true;}
+		public boolean isNull() {
+			return true;
+		}
 		
 		@Override
-		public String toString() {return "NULL_MARKET";}
+		public String toString() {
+			throw new UnsupportedOperationException();
+		}
 
 		@Override
-		public Set<Component> change() {return Collections.<Component> emptySet();}
+		public Set<Component> change() {
+			throw new UnsupportedOperationException();
+		}
 		
 		@Override
-		public LastPrice lastPrice() {return LastPrice.NULL;}
+		public LastPrice lastPrice() {
+			throw new UnsupportedOperationException();
+		}
 
 	};
 

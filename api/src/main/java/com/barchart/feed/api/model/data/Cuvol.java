@@ -25,22 +25,22 @@ public interface Cuvol extends MarketData<Cuvol> {
 
 			@Override
 			public Price price() {
-				return Price.NULL;
+				throw new UnsupportedOperationException();
 			}
 
 			@Override
 			public Size size() {
-				return Size.NULL;
+				throw new UnsupportedOperationException();
 			}
 
 			@Override
 			public int place() {
-				return 0;
+				throw new UnsupportedOperationException();
 			}
 			
 			@Override
 			public String toString() {
-				return "NULL CUVOL ENTRY";
+				throw new UnsupportedOperationException();
 			}
 
 			@Override
