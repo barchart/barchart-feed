@@ -12,8 +12,7 @@ import com.barchart.util.value.api.Time;
 /**
  * document object and primitive
  */
-public interface Session extends MarketData<Session>, SessionData, 
-		ChangeSet<Session.Component> {
+public interface Session extends MarketData<Session>, SessionData, ChangeSet<Session.Component> {
 
 	/**
 	 * Last changed session item.
@@ -129,11 +128,6 @@ public interface Session extends MarketData<Session>, SessionData,
 		}
 
 		@Override
-		public boolean isNull() {
-			return true;
-		}
-
-		@Override
 		public Price open() {
 			throw new UnsupportedOperationException();
 		}
@@ -196,6 +190,11 @@ public interface Session extends MarketData<Session>, SessionData,
 		@Override
 		public Set<Component> change() {
 			throw new UnsupportedOperationException();
+		}
+		
+		@Override
+		public boolean isNull() {
+			return true;
 		}
 
 	};

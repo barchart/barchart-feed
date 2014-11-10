@@ -24,9 +24,9 @@ import com.barchart.util.common.anno.NotMutable;
 
 @NotMutable
 /** represents O-H-L-C market bar fields */
-public final class MarketBarField<V extends Value<V>> extends
-		ParaEnumBase<V, MarketBarField<V>> implements
-		BitSetEnum<MarketBarField<?>> {
+public final class MarketBarField<V extends Value<V>> 
+		extends ParaEnumBase<V, MarketBarField<V>> 
+		implements BitSetEnum<MarketBarField<?>> {
 
 	// ##################################
 
