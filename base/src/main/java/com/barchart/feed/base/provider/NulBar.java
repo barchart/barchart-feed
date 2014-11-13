@@ -8,8 +8,13 @@
 package com.barchart.feed.base.provider;
 
 import java.util.Collections;
+import java.util.EnumMap;
+import java.util.EnumSet;
+import java.util.Map;
 import java.util.Set;
 
+import com.barchart.feed.api.model.data.parameter.Param;
+import com.barchart.feed.api.model.data.parameter.ParamMap;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.bar.api.MarketBar;
 import com.barchart.feed.base.bar.enums.MarketBarField;
@@ -127,6 +132,49 @@ public class NulBar extends ValueFreezer<MarketBar> implements MarketBar {
 	@Override
 	public Set<Component> change() {
 		return Collections.emptySet();
+	}
+
+	@Override
+	public ParamMap parameters() {
+		return parameters;
+	}
+	
+	protected ParamMapImpl parameters = new ParamMapImpl();
+	
+	protected class ParamMapImpl implements ParamMap {
+		
+		protected final Map<Param, ValueGetter<?>> params = new EnumMap<Param, ValueGetter<?>>(Param.class);
+
+		@SuppressWarnings("unchecked")
+		@Override
+		public <V> V get(final Param param) {
+			
+			if(!params.containsKey(param)) {
+				throw new IllegalArgumentException("Parameter " + param + " not in map");
+			}
+			
+			return (V) params.get(param).get();
+		}
+
+		@Override
+		public boolean has(Param param) {
+			return params.containsKey(param);
+		}
+
+		@Override
+		public synchronized Set<Param> keySet() {
+			return EnumSet.<Param> copyOf(params.keySet());
+		}
+
+		@Override
+		public boolean isNull() {
+			return false;
+		}
+		
+	}
+	
+	protected interface ValueGetter<V> {
+		V get();
 	}
 
 }

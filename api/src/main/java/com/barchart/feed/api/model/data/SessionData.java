@@ -1,5 +1,6 @@
 package com.barchart.feed.api.model.data;
 
+import com.barchart.feed.api.model.data.parameter.ParamMap;
 import com.barchart.util.value.api.Bool;
 import com.barchart.util.value.api.Existential;
 import com.barchart.util.value.api.Price;
@@ -72,6 +73,8 @@ public interface SessionData extends Existential {
 
 	Time updated();
 	
+	ParamMap parameters();
+	
 	@Override
 	boolean isNull();
 
@@ -134,6 +137,11 @@ public interface SessionData extends Existential {
 
 		@Override
 		public Time updated() {
+			throw new UnsupportedOperationException();
+		}
+		
+		@Override
+		public ParamMap parameters() {
 			throw new UnsupportedOperationException();
 		}
 		

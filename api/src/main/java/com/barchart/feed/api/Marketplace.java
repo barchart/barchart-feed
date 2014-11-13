@@ -21,7 +21,7 @@ import com.barchart.feed.api.model.meta.id.InstrumentID;
 
 public interface Marketplace extends MarketService {
 
-	/* ***** ***** Shortcut/Helpter Methods ***** ***** */
+	/* ***** ***** Shortcut/Helper Methods ***** ***** */
 	
 	<V extends MarketData<V>> Agent subscribe(Class<V> clazz,
 			MarketObserver<V> callback, String... symbols);

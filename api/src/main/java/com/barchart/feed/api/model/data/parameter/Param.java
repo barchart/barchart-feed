@@ -1,13 +1,12 @@
 package com.barchart.feed.api.model.data.parameter;
 
 import com.barchart.util.value.api.Price;
-import com.barchart.util.value.api.Size;
 
 public enum Param {
 	
 	SESSION_VWAP(Price.class),
 	
-	TEST_SIZE(Size.class)
+	NULL(Void.class)
 	
 	;
 	

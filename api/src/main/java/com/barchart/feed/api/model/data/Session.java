@@ -3,6 +3,7 @@ package com.barchart.feed.api.model.data;
 import java.util.Set;
 
 import com.barchart.feed.api.model.ChangeSet;
+import com.barchart.feed.api.model.data.parameter.ParamMap;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.util.value.api.Bool;
 import com.barchart.util.value.api.Price;
@@ -115,6 +116,9 @@ public interface Session extends MarketData<Session>, SessionData, ChangeSet<Ses
 	@Override
 	Time timeClosed();
 	
+	@Override
+	ParamMap parameters();
+	
 	public static final Session NULL = new Session() {
 
 		@Override
@@ -189,6 +193,11 @@ public interface Session extends MarketData<Session>, SessionData, ChangeSet<Ses
 
 		@Override
 		public Set<Component> change() {
+			throw new UnsupportedOperationException();
+		}
+		
+		@Override
+		public ParamMap parameters() {
 			throw new UnsupportedOperationException();
 		}
 		

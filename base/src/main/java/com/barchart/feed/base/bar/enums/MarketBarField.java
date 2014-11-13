@@ -57,6 +57,8 @@ public final class MarketBarField<V extends Value<V>>
 	 * year, month, day should be treated as local market trade date
 	 */
 	public static final MarketBarField<TimeValue> TRADE_DATE = NEW(NULL_TIME); // 10
+	
+	public static final MarketBarField<PriceValue> VWAP = NEW(NULL_PRICE); // 11
 
 	// ##################################
 

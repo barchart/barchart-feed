@@ -361,7 +361,7 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 
 	protected final MarketDoCuvol loadCuvol() {
 
-		if(instrument.tickSize().mantissa() == 0) {
+		if(instrument.tickSize().isNull()) {
 			return MarketDoCuvol.NULL;
 		}
 

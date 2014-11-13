@@ -59,7 +59,6 @@ import com.barchart.feed.base.sub.SubscriptionType;
 import com.barchart.feed.base.values.api.Value;
 import com.barchart.feed.inst.Exchanges;
 import com.barchart.util.value.api.Fraction;
-import com.barchart.util.value.api.Price;
 
 public abstract class MarketProviderBase<Message extends MarketMessage>
 		implements MarketService, MarketMakerProvider<Message>,
@@ -978,6 +977,12 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 	}
 
 	// ######################## Make ########################
+	
+	private static final ConcurrentMap<String, String> failedInsts = 
+			new ConcurrentHashMap<String, String>();
+	
+	private static final ConcurrentMap<String, String> fixedInsts = 
+			new ConcurrentHashMap<String, String>();
 
 	@Override
 	public void make(final Message message) {
@@ -985,7 +990,16 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		final Instrument instrument = message.getInstrument();
 
 		if (!isValid(instrument)) {
+			if(fixedInsts.containsKey(instrument.symbol())) {
+				//log.error("WE HAVE COME FULL CIRCLE");
+			}
+			failedInsts.putIfAbsent(instrument.symbol(), instrument.symbol());
 			return;
+		}
+		
+		if(failedInsts.containsKey(instrument.symbol()) && !fixedInsts.containsKey(instrument.symbol())) {
+			fixedInsts.putIfAbsent(instrument.symbol(), instrument.symbol());
+			//log.debug("Instrument that failed now passes = {}  -  {}", instrument.symbol(), failedInsts.size() - fixedInsts.size());
 		}
 		
 		MarketDo market = marketMap.get(instrument.id());
@@ -1114,7 +1128,6 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 
 	}
 
-
 	protected boolean isValid(final Instrument instrument) {
 
 		if (instrument == null) {
@@ -1127,16 +1140,11 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 			return false;
 		}
 		
-		final Price tickSize = instrument.tickSize();
-
-		if (tickSize.isNull() || tickSize.isZero()) {
-			return false;
-		}
-
 		@SuppressWarnings("deprecation")
 		final Fraction fraction = instrument.displayFraction();
 
 		if(fraction == null || fraction.isNull()) {
+			log.error("Fraction is null");
 			return false;
 		}
 

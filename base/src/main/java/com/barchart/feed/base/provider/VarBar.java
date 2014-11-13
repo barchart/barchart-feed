@@ -9,13 +9,16 @@ package com.barchart.feed.base.provider;
 
 import java.util.EnumSet;
 
+import com.barchart.feed.api.model.data.parameter.Param;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.bar.api.MarketBar;
 import com.barchart.feed.base.bar.api.MarketDoBar;
 import com.barchart.feed.base.bar.enums.MarketBarField;
+import com.barchart.feed.base.values.api.PriceValue;
 import com.barchart.feed.base.values.api.Value;
 import com.barchart.util.common.anno.Mutable;
 import com.barchart.util.common.anno.ThreadSafe;
+import com.barchart.util.value.api.Price;
 
 @Mutable
 @ThreadSafe
@@ -67,6 +70,29 @@ public final class VarBar extends DefBar implements MarketDoBar {
 			changeSet.add(Component.INTEREST);
 			break;
 		}
+		
+		if(field.equals(MarketBarField.VWAP)) {
+			
+			if(!parameters.has(Param.SESSION_VWAP)) {
+				
+				parameters.params.put(Param.SESSION_VWAP, new ValueGetter<Price>() {
+
+					@Override
+					public Price get() {
+						
+						final PriceValue vwap = VarBar.this.get(MarketBarField.VWAP);
+						
+						if(vwap.isNull()) {
+							return Price.NULL;
+						}
+						
+						return ValueConverter.price(vwap);
+					}
+					
+				});
+			}
+			
+		}
 
 	}
 
@@ -85,6 +111,7 @@ public final class VarBar extends DefBar implements MarketDoBar {
 		set(MarketBarField.IS_SETTLED, source.get(MarketBarField.IS_SETTLED));
 		set(MarketBarField.BAR_TIME, source.get(MarketBarField.BAR_TIME));
 		set(MarketBarField.TRADE_DATE, source.get(MarketBarField.TRADE_DATE));
+		set(MarketBarField.VWAP, source.get(MarketBarField.VWAP));
 
 	}
 
@@ -98,7 +125,7 @@ public final class VarBar extends DefBar implements MarketDoBar {
 	@Override
 	public final DefBar freeze() {
 
-		final DefBar that = new DefBar(instrument, EnumSet.copyOf(changeSet));
+		final DefBar that = new DefBar(instrument, EnumSet.copyOf(changeSet), parameters);
 
 		final int size = ARRAY_SIZE;
 

@@ -276,9 +276,17 @@ public class MockMarket extends VarMarket {
 	}
 
 	@Override
-	public void setSnapshot(final TimeValue tradeDate, final PriceValue open, final PriceValue high,
-			final PriceValue low, final PriceValue close,
-			final PriceValue settle, final PriceValue previousSettle, final SizeValue volume, final SizeValue interest,
+	public void setSnapshot(
+			final TimeValue tradeDate, 
+			final PriceValue open, 
+			final PriceValue high,
+			final PriceValue low, 
+			final PriceValue close,
+			final PriceValue settle, 
+			final PriceValue previousSettle, 
+			final SizeValue volume, 
+			final SizeValue interest,
+			final PriceValue vwap,
 			final BooleanValue isSettled,
 			final TimeValue barTime) {
 
@@ -305,6 +313,8 @@ public class MockMarket extends VarMarket {
 			bar.set(MarketBarField.VOLUME, volume);
 		if (interest != null)
 			bar.set(MarketBarField.INTEREST, interest);
+		if (vwap != null) 
+			bar.set(MarketBarField.VWAP, vwap);
 		if (isSettled != null)
 			bar.set(MarketBarField.IS_SETTLED, isSettled);
 		if (barTime != null)

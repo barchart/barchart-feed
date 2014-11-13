@@ -78,14 +78,29 @@ public interface MarketDo extends Market, FrameworkAgentLifecycleHandler {
 	 * fields are null, they will be ignored instead of being nulled out (this
 	 * does not include fields is isNull() == true).
 	 */
-	void setSnapshot(TimeValue tradeDate, PriceValue open, PriceValue high, PriceValue low, PriceValue close,
-			PriceValue settle, PriceValue previousSettle, SizeValue volume, SizeValue interest,
-			BooleanValue isSettled, TimeValue barTime);
+	void setSnapshot(
+			TimeValue tradeDate, 
+			PriceValue open, 
+			PriceValue high, 
+			PriceValue low, 
+			PriceValue close,
+			PriceValue settle, 
+			PriceValue previousSettle, 
+			SizeValue volume, 
+			SizeValue interest,
+			PriceValue vwap,
+			BooleanValue isSettled, 
+			TimeValue barTime);
 
 	/**  */
-	void setTrade(MarketTradeType type, MarketTradeSession session,
-			MarketTradeSequencing sequencing, PriceValue price, SizeValue size,
-			TimeValue time, TimeValue date);
+	void setTrade(
+			MarketTradeType type, 
+			MarketTradeSession session,
+			MarketTradeSequencing sequencing, 
+			PriceValue price, 
+			SizeValue size,
+			TimeValue time, 
+			TimeValue date);
 
 	//
 

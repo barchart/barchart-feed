@@ -29,14 +29,22 @@ class DefBar extends NulBar {
 		this.instrument = instrument;
 		this.changeSet = changeSet;
 	}
+	
+	DefBar(final Instrument instrument, final Set<Component> changeSet, final ParamMapImpl params) {
+		valueArray = new Value<?>[ARRAY_SIZE];
+		this.instrument = instrument;
+		this.changeSet = changeSet;
+		parameters = params;
+	}
 
 	DefBar(final Instrument instrument, final Value<?>[] valueArray,
-			final Set<Component> changeSet) {
+			final Set<Component> changeSet, final ParamMapImpl params) {
 		assert valueArray != null;
 		assert valueArray.length == ARRAY_SIZE;
 		this.valueArray = valueArray;
 		this.instrument = instrument;
 		this.changeSet = changeSet;
+		parameters = params;
 	}
 
 	@SuppressWarnings("unchecked")
