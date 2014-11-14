@@ -138,7 +138,7 @@ public final class HistoricalCodec {
 					bar.setVolumeUp(s);
 					break;
 				default:
-					logger.warn("Unsupported entry type: ", entry.getType());
+						logger.trace("Unsupported entry type: ", entry.getType());
 					break;
 				}
 			}
