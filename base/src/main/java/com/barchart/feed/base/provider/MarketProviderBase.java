@@ -978,28 +978,13 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 
 	// ######################## Make ########################
 	
-	private static final ConcurrentMap<String, String> failedInsts = 
-			new ConcurrentHashMap<String, String>();
-	
-	private static final ConcurrentMap<String, String> fixedInsts = 
-			new ConcurrentHashMap<String, String>();
-
 	@Override
 	public void make(final Message message) {
 		
 		final Instrument instrument = message.getInstrument();
 
 		if (!isValid(instrument)) {
-			if(fixedInsts.containsKey(instrument.symbol())) {
-				//log.error("WE HAVE COME FULL CIRCLE");
-			}
-			failedInsts.putIfAbsent(instrument.symbol(), instrument.symbol());
 			return;
-		}
-		
-		if(failedInsts.containsKey(instrument.symbol()) && !fixedInsts.containsKey(instrument.symbol())) {
-			fixedInsts.putIfAbsent(instrument.symbol(), instrument.symbol());
-			//log.debug("Instrument that failed now passes = {}  -  {}", instrument.symbol(), failedInsts.size() - fixedInsts.size());
 		}
 		
 		MarketDo market = marketMap.get(instrument.id());
