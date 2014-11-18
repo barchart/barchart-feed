@@ -894,7 +894,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 	}
 
 	@Override
-	public Observable<Result<Instrument>> instrument(final SearchContext ctx,
+	public Observable<Result<Instrument>> instrument(final SearchContext ctx, 
 			final String... symbols) {
 		return metaService.instrument(ctx, symbols);
 	}
