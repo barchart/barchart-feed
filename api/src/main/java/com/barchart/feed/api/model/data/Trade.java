@@ -82,6 +82,8 @@ public interface Trade extends MarketData<Trade>, Tuple {
 	
 	Session session();
 	
+	Sequence sequence();
+	
 	Set<TradeType> types();
 	
 	@Override
@@ -100,6 +102,11 @@ public interface Trade extends MarketData<Trade>, Tuple {
 		
 		@Override
 		public Session session() {
+			throw new UnsupportedOperationException();
+		}
+		
+		@Override
+		public Sequence sequence() {
 			throw new UnsupportedOperationException();
 		}
 		

@@ -89,6 +89,11 @@ class DefTrade extends NulTrade {
 	}
 	
 	@Override
+	public Sequence sequence() {
+		return get(MarketTradeField.SEQUENCING).asSequence();
+	}
+	
+	@Override
 	public Set<TradeType> types() {
 		return Collections.singleton(get(MarketTradeField.TYPE).asType());
 	}

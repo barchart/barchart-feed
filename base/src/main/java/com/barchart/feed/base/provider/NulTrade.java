@@ -59,6 +59,11 @@ public class NulTrade extends ValueFreezer<MarketTrade> implements MarketTrade {
 	}
 	
 	@Override
+	public Sequence sequence() {
+		return Sequence.NULL;
+	}
+	
+	@Override
 	public Set<TradeType> types() {
 		return Collections.singleton(TradeType.NULL_TRADE_TYPE);
 	}
