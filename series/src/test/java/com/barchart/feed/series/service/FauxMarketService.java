@@ -417,6 +417,12 @@ public class FauxMarketService implements MarketService {
                         return getTime();
                     }
 
+					@Override
+					public Sequence sequence() {
+						// TODO Auto-generated method stub
+						return null;
+					}
+
                 };
             }
 
