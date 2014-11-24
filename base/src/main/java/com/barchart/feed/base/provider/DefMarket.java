@@ -48,8 +48,10 @@ public class DefMarket extends NulMarket {
 		EnumSet.noneOf(Component.class);
 
 	public DefMarket(final Instrument instrument) {
+		
 		this.instrument = instrument;
 		valueArray = new Value<?>[ARRAY_SIZE];
+		
 	}
 
 	@SuppressWarnings("unchecked")

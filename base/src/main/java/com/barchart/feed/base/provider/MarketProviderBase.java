@@ -338,6 +338,11 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 							final Instrument i = e.getValue().get(0);
 
 							if (!i.isNull()) {
+								
+								/* Try to fire a snapshot if instrument is not already included*/
+								if(!incInsts.contains(i)) {
+									fireSnapshot(i.id());
+								}
 
 								exInsts.remove(i);
 								incInsts.add(i);
@@ -374,6 +379,25 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 
 			);
 
+		}
+		
+		@SuppressWarnings("unchecked")
+		private void fireSnapshot(final InstrumentID id) {
+			
+			if(!marketMap.containsKey(id)) {
+				log.warn("InstID {} not in market map", id);
+			}
+			
+			final Market market = marketMap.get(id);
+			
+			final MarketData<V> data = getter.get(market);
+			
+			if(data.isNull()) {
+				return;
+			}
+			
+			callback.onNext((V) data);
+			
 		}
 
 		@Override
@@ -978,14 +1002,40 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 
 	// ######################## Make ########################
 	
+//	private final ConcurrentMap<String, AtomicInteger> invalids = new ConcurrentHashMap<String, AtomicInteger>();
+//	private final ConcurrentMap<String, String> revalids = new ConcurrentHashMap<String, String>();
+//	private volatile long time = System.currentTimeMillis();
+	
 	@Override
 	public void make(final Message message) {
 		
 		final Instrument instrument = message.getInstrument();
 
 		if (!isValid(instrument)) {
+			
+			// Delete
+//			if(!invalids.containsKey(instrument.symbol())) {
+//				invalids.putIfAbsent(instrument.symbol(), new AtomicInteger(0));
+//			}
+//			
+//			invalids.get(instrument.symbol()).incrementAndGet();
+			////
+			
 			return;
 		}
+		
+		// Delete
+//		if(invalids.containsKey(instrument.symbol())
+//				&& !revalids.containsKey(instrument.symbol())) {
+//			revalids.putIfAbsent(instrument.symbol(), instrument.symbol());
+//		}
+//		
+//		if(System.currentTimeMillis() - time >= 5000) {
+//			log.debug("Invaids = {}", invalids.size() - revalids.size());
+//			time += 5000;
+//		}
+		
+		////
 		
 		MarketDo market = marketMap.get(instrument.id());
 		
@@ -1031,8 +1081,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		private final Instrument inst;
 		private Subscription.Lense lense;
 
-		VarSubscription(final Instrument inst,
-			final Subscription.Lense lense) {
+		VarSubscription(final Instrument inst, final Subscription.Lense lense) {
 			this.inst = inst;
 			this.lense = lense;
 		}
@@ -1124,6 +1173,11 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 			log.error("instrument.isNull()");
 			return false;
 		}
+		
+		// DELETE
+//		if(instrument.tickSize().isNull()) {
+//			return false;
+//		}
 		
 		@SuppressWarnings("deprecation")
 		final Fraction fraction = instrument.displayFraction();
