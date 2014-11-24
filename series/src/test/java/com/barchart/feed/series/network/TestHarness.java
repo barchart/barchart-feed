@@ -137,6 +137,12 @@ public class TestHarness {
                         return getTime();
                     }
 
+					@Override
+					public Sequence sequence() {
+						// TODO Auto-generated method stub
+						return null;
+					}
+
                 };
             }
 
