@@ -386,9 +386,15 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 			
 			if(!marketMap.containsKey(id)) {
 				log.warn("InstID {} not in market map", id);
+				return;
 			}
 			
 			final Market market = marketMap.get(id);
+			
+			if(market == null) {
+				log.error("Should not happen");
+				return;
+			}
 			
 			final MarketData<V> data = getter.get(market);
 			
@@ -1002,40 +1008,14 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 
 	// ######################## Make ########################
 	
-//	private final ConcurrentMap<String, AtomicInteger> invalids = new ConcurrentHashMap<String, AtomicInteger>();
-//	private final ConcurrentMap<String, String> revalids = new ConcurrentHashMap<String, String>();
-//	private volatile long time = System.currentTimeMillis();
-	
 	@Override
 	public void make(final Message message) {
 		
 		final Instrument instrument = message.getInstrument();
 
 		if (!isValid(instrument)) {
-			
-			// Delete
-//			if(!invalids.containsKey(instrument.symbol())) {
-//				invalids.putIfAbsent(instrument.symbol(), new AtomicInteger(0));
-//			}
-//			
-//			invalids.get(instrument.symbol()).incrementAndGet();
-			////
-			
 			return;
 		}
-		
-		// Delete
-//		if(invalids.containsKey(instrument.symbol())
-//				&& !revalids.containsKey(instrument.symbol())) {
-//			revalids.putIfAbsent(instrument.symbol(), instrument.symbol());
-//		}
-//		
-//		if(System.currentTimeMillis() - time >= 5000) {
-//			log.debug("Invaids = {}", invalids.size() - revalids.size());
-//			time += 5000;
-//		}
-		
-		////
 		
 		MarketDo market = marketMap.get(instrument.id());
 		
