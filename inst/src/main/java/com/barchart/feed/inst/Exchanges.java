@@ -91,7 +91,7 @@ public final class Exchanges {
 		names.put("FUND", temp);
 		codes.put("F", temp);
 
-		temp = new ExchangeImpl("ICE", "L", CHI);
+		temp = new ExchangeImpl("ICE EU", "L", CHI);
 		names.put("ICE", temp);
 		names.put("ICE_EU", temp);
 		codes.put("L", temp);
@@ -102,35 +102,35 @@ public final class Exchanges {
 		names.put("Index_NO_DOW_NO_SP", temp);
 		codes.put("I", temp);
 
-		temp = new ExchangeImpl("IDX_CFE", "r", CHI);
+		temp = new ExchangeImpl("IDX CBOE", "r", CHI);
 		names.put("IDX_CFE", temp);
 		names.put("INDEX_CFE", temp);
 		names.put("INDEX-CFE", temp);
 		codes.put("r", temp);
 
-		temp = new ExchangeImpl("IDX_DOW", "O", NY);
+		temp = new ExchangeImpl("IDX DOW", "O", NY);
 		names.put("IDX_DOW", temp);
 		names.put("INDEX_DOW", temp);
 		names.put("INDEX-DOW", temp);
 		codes.put("O", temp);
 
-		temp = new ExchangeImpl("IDX_NQ", "i", NY);
+		temp = new ExchangeImpl("IDX NQ", "i", NY);
 		names.put("IDX_NQ", temp);
 		names.put("INDEX_NQ", temp);
 		codes.put("i", temp);
 
-		temp = new ExchangeImpl("IDX_NY", "z", NY);
+		temp = new ExchangeImpl("IDX NY", "z", NY);
 		names.put("IDX_NY", temp);
 		names.put("INDEX-NY", temp);
 		codes.put("z", temp);
 
-		temp = new ExchangeImpl("IDX_RL", "x", NY);
+		temp = new ExchangeImpl("IDX RL", "x", NY);
 		names.put("IDX_RL", temp);
 		names.put("INDEX_RL", temp);
 		names.put("INDEX-RL", temp);
 		codes.put("x", temp);
 
-		temp = new ExchangeImpl("IDX_SP", "P", NY);
+		temp = new ExchangeImpl("IDX SP", "P", NY);
 		names.put("IDX_SP", temp);
 		names.put("INDEX_SP", temp);
 		names.put("INDEX-SP", temp);
@@ -149,7 +149,7 @@ public final class Exchanges {
 		names.put("INDEX-DJ3", temp);
 		codes.put("o", temp);
 
-		temp = new ExchangeImpl("INDEX-EN", "k", NY);
+		temp = new ExchangeImpl("EURONEXT", "k", NY);
 		names.put("INDEX-EN", temp);
 		names.put("PSI", temp);
 		names.put("AMSTR", temp);
@@ -173,7 +173,7 @@ public final class Exchanges {
 		names.put("LME", temp);
 		codes.put("1", temp);
 
-		temp = new ExchangeImpl("MATIF", "h", CHI);
+		temp = new ExchangeImpl("EURONEXT", "h", CHI);
 		names.put("MATIF", temp);
 		codes.put("h", temp);
 
@@ -191,7 +191,7 @@ public final class Exchanges {
 		names.put("NYSE_Metals", temp);
 		codes.put("Y", temp);
 
-		temp = new ExchangeImpl("ICEFI", "C", CHI);
+		temp = new ExchangeImpl("ICE US", "C", CHI);
 		names.put("ICEFI", temp);
 		names.put("ICEUS", temp);
 		names.put("ICE_US", temp);
@@ -232,7 +232,7 @@ public final class Exchanges {
 		names.put("TSX-V", temp);
 		codes.put("V", temp);
 
-		temp = new ExchangeImpl("WPG", "W", CHI);
+		temp = new ExchangeImpl("ICE CA", "W", CHI);
 		names.put("WPG", temp);
 		names.put("WCE", temp);
 		names.put("ICECA", temp);
