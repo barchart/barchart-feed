@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 
 import rx.Observable;
 import rx.functions.Func1;
+import rx.subjects.PublishSubject;
 
 import com.barchart.feed.api.Agent;
 import com.barchart.feed.api.MarketObserver;
@@ -58,6 +59,7 @@ import com.barchart.feed.base.sub.SubscriptionHandler;
 import com.barchart.feed.base.sub.SubscriptionType;
 import com.barchart.feed.base.values.api.Value;
 import com.barchart.feed.inst.Exchanges;
+import com.barchart.util.common.collections.strict.StrictConcurrentHashMap;
 import com.barchart.util.value.api.Fraction;
 
 public abstract class MarketProviderBase<Message extends MarketMessage>
@@ -785,7 +787,6 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		return newSubs;
 	}
 
-	// TODO Handle Exchanges As Well
 	private Set<SubCommand> unsubscribeAll(final FrameworkAgent<?> agent) {
 		final Map<String, Type> symMap = new HashMap<String, Type>();
 		
@@ -898,15 +899,39 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 	}
 
 	// ######################## // ########################
+	
+	private final ConcurrentMap<InstrumentID, PublishSubject<Market>> awaitingSnaps = 
+			new StrictConcurrentHashMap<InstrumentID, PublishSubject<Market>>(InstrumentID.class);
+	
+	private final ConsumerAgent snapshotAgent = register(new MarketObserver<Market>() {
+
+			@Override
+			public void onNext(final Market v) {
+				/* Does nothing */
+			}
+			
+		}, Market.class);
 
 	@Override
-	public Observable<Market> snapshot(final InstrumentID instID) {
+	public synchronized Observable<Market> snapshot(final InstrumentID instID) {
 
 		if(marketMap.containsKey(instID)) {
+			
 			final Market market = marketMap.get(instID).freeze();
 			return Observable.just(market);
+			
 		} else {
-			return Observable.just(Market.NULL);
+			
+			if(!awaitingSnaps.containsKey(instID)) {
+				
+				final PublishSubject<Market> sub = PublishSubject.<Market> create();
+				awaitingSnaps.putIfAbsent(instID, sub);
+				
+				snapshotAgent.include(instID);
+				
+			}
+			
+			return awaitingSnaps.get(instID);
 		}
 
 	}
@@ -1027,6 +1052,20 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		}
 		
 		market.runSafe(safeMake, message);  
+		
+		/* Check if any subject are awaiting snapshots 
+		 * Check if session is null because first message for FUTURES will be CUVOL 
+		 * and won't have snapshot info 
+		 */
+		if(!market.session().isNull()
+				&& awaitingSnaps.containsKey(instrument.id())) {
+			
+			final PublishSubject<Market> sub = awaitingSnaps.remove(instrument.id());
+			
+			sub.onNext(market.freeze());
+			sub.onCompleted();
+			
+		}
 
 		/* Below is a hack to keep the subscriptions updated */
 		/* If a new market is created, a new subscription is made,
@@ -1037,11 +1076,9 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		/* If the state hasn't been set, this will mark it as Delayed,
 		 * and we're not updating */
 		Subscription.Lense lense;
-		if(market.get(MarketField.STATE).contains(
-				MarketStateEntry.IS_PUBLISH_REALTIME)) {
+		if(market.get(MarketField.STATE).contains(MarketStateEntry.IS_PUBLISH_REALTIME)) {
 			lense = Subscription.Lense.REALTIME;
-		} else if(market.get(MarketField.STATE).contains(
-				MarketStateEntry.IS_PUBLISH_DELAYED)) {
+		} else if(market.get(MarketField.STATE).contains(MarketStateEntry.IS_PUBLISH_DELAYED)) {
 			lense = Subscription.Lense.DELAYED;
 		} else {
 			lense = Subscription.Lense.NULL;
@@ -1153,11 +1190,6 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 			log.error("instrument.isNull()");
 			return false;
 		}
-		
-		// DELETE
-//		if(instrument.tickSize().isNull()) {
-//			return false;
-//		}
 		
 		@SuppressWarnings("deprecation")
 		final Fraction fraction = instrument.displayFraction();
