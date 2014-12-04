@@ -140,10 +140,25 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 
 		private Filter filter = new DefaultFilter();
 
-		BaseAgent(final FrameworkAgentLifecycleHandler agentHandler,
-				final Class<V> clazz, final MDGetter<V> getter,
+		BaseAgent(
+				final FrameworkAgentLifecycleHandler agentHandler,
+				final Class<V> clazz, 
+				final MDGetter<V> getter,
 				final MarketObserver<V> callback) {
-
+			
+			if(agentHandler == null) {
+				throw new IllegalArgumentException("Agent Handler cannot be null");
+			}
+			if(clazz == null) {
+				throw new IllegalArgumentException("Class cannot be null");
+			}
+			if(getter == null) {
+				throw new IllegalArgumentException("Market data getter cannot be null");
+			}
+			if(callback == null) {
+				throw new IllegalArgumentException("Callback cannot be null");
+			}
+			
 			this.agentHandler = agentHandler;
 			this.clazz = clazz;
 			this.getter = getter;
