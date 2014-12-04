@@ -8,6 +8,8 @@ import org.joda.time.DateTimeZone;
 import org.openfeed.AggregationPeriod;
 import org.openfeed.MarketEntry;
 import org.openfeed.MarketHistoricalSnapshot;
+import org.openfeed.util.datetime.DateTimeValue;
+import org.openfeed.util.datetime.ProtoDateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -72,10 +74,22 @@ public final class HistoricalCodec {
 	public static BarImpl fromProtobuf(final MarketHistoricalSnapshot buf,
 			final DateTimeZone zone) {
 
+		DateTime dt = null;
+		if (buf.hasBaseTimeStamp()) {
+			DateTimeValue dtv = ProtoDateUtil.fromDecimalDateTime(buf.getBaseTimeStamp());
+			dt = new DateTime(dtv.getYear(),
+					dtv.getMonth(),
+					dtv.getDay(),
+					dtv.getHour(),
+					dtv.getMinute(),
+					dtv.getSecond(),
+					dtv.getMillis(),
+					zone);
+		}
+
 		final BarImpl bar = new BarImpl(buf.hasBaseMarketId() ? new InstrumentID(
 				String.valueOf(buf.getBaseMarketId())) : null,
-				buf.hasBaseTimeStamp() ? new DateTime(buf.getBaseTimeStamp(),
-						zone) : null, buf.hasAggregation() ? new Period(
+				dt, buf.hasAggregation() ? new Period(
 						PeriodType.valueOf(buf.getAggregation().name()),
 						buf.getPeriodCount()) : null);
 
