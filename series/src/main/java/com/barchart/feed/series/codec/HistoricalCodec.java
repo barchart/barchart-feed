@@ -74,7 +74,8 @@ public final class HistoricalCodec {
 
 		final BarImpl bar = new BarImpl(buf.hasBaseMarketId() ? new InstrumentID(
 				String.valueOf(buf.getBaseMarketId())) : null,
-				buf.hasBaseTimeStamp() ? ProtoDateUtil.fromDecimalDateTimeToJoda(buf.getBaseTimeStamp()) : null,
+				buf.hasBaseTimeStamp() ? ProtoDateUtil.fromDecimalDateTimeToJoda(buf
+						.getBaseTimeStamp(), zone) : null,
 						buf.hasAggregation() ? new Period(PeriodType.valueOf(buf.getAggregation().name()), buf
 								.getPeriodCount()) : null);
 
@@ -169,7 +170,7 @@ public final class HistoricalCodec {
 			.setAggregation(
 					AggregationPeriod.valueOf(bar.getPeriod()
 							.getPeriodType().name()))
-					.setPeriodCount(bar.getPeriod().size());
+							.setPeriodCount(bar.getPeriod().size());
 		}
 
 		if (bar.getOpen() != null && !bar.getOpen().isNull()) {
