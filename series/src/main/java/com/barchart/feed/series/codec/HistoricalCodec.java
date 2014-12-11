@@ -3,11 +3,11 @@ package com.barchart.feed.series.codec;
 import java.nio.ByteBuffer;
 import java.util.List;
 
-import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.openfeed.AggregationPeriod;
 import org.openfeed.MarketEntry;
 import org.openfeed.MarketHistoricalSnapshot;
+import org.openfeed.util.datetime.ProtoDateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -74,10 +74,10 @@ public final class HistoricalCodec {
 
 		final BarImpl bar = new BarImpl(buf.hasBaseMarketId() ? new InstrumentID(
 				String.valueOf(buf.getBaseMarketId())) : null,
-				buf.hasBaseTimeStamp() ? new DateTime(buf.getBaseTimeStamp(),
-						zone) : null, buf.hasAggregation() ? new Period(
-						PeriodType.valueOf(buf.getAggregation().name()),
-						buf.getPeriodCount()) : null);
+				buf.hasBaseTimeStamp() ? ProtoDateUtil.fromDecimalDateTimeToJoda(buf
+						.getBaseTimeStamp(), zone) : null,
+						buf.hasAggregation() ? new Period(PeriodType.valueOf(buf.getAggregation().name()), buf
+								.getPeriodCount()) : null);
 
 		final List<MarketEntry> entryList = buf.getEntryList();
 		for (final MarketEntry entry : entryList) {
@@ -85,62 +85,62 @@ public final class HistoricalCodec {
 				final Price p = entry.hasPriceMantissa() ? VALUES.newPrice(
 						entry.getPriceMantissa(), entry.getPriceExponent())
 						: Price.NULL;
-				final Size s = entry.hasSizeMantissa() ? VALUES.newSize(
-						entry.getSizeMantissa(), entry.getSizeExponent())
-						: Size.NULL;
-				switch (entry.getType()) {
-				case ASK:
-					bar.setAsk(p);
-					bar.setAskSize(s);
-					break;
-				case BID:
-					bar.setBid(p);
-					bar.setBidSize(s);
-					break;
-				case CLOSE:
-					bar.setClose(p);
-						bar.setLastSize(s);
-					break;
-				case HIGH:
-					bar.setHigh(p);
-					break;
-				case LOW:
-					bar.setLow(p);
-					break;
-				case INTEREST:
-					bar.setOpenInterest(s);
-					break;
-				case MIDPOINT:
-					bar.setMidpoint(p);
-					break;
-				case OPEN:
-					bar.setOpen(p);
-					break;
-				case TRADE:
-					bar.setTradeCount(s);
-					break;
-				case TRADED_VALUE:
-					bar.setTradedValue(p);
-					break;
-				case TRADED_VALUE_DOWN:
-					bar.setTradedValueDown(p);
-					break;
-				case TRADED_VALUE_UP:
-					bar.setTradedValueUp(p);
-					break;
-				case VOLUME:
-					bar.setVolume(s);
-					break;
-				case VOLUME_DOWN:
-					bar.setVolumeDown(s);
-					break;
-				case VOLUME_UP:
-					bar.setVolumeUp(s);
-					break;
-				default:
-						logger.trace("Unsupported entry type: ", entry.getType());
-					break;
-				}
+						final Size s = entry.hasSizeMantissa() ? VALUES.newSize(
+								entry.getSizeMantissa(), entry.getSizeExponent())
+								: Size.NULL;
+								switch (entry.getType()) {
+									case ASK:
+										bar.setAsk(p);
+										bar.setAskSize(s);
+										break;
+									case BID:
+										bar.setBid(p);
+										bar.setBidSize(s);
+										break;
+									case CLOSE:
+										bar.setClose(p);
+										bar.setLastSize(s);
+										break;
+									case HIGH:
+										bar.setHigh(p);
+										break;
+									case LOW:
+										bar.setLow(p);
+										break;
+									case INTEREST:
+										bar.setOpenInterest(s);
+										break;
+									case MIDPOINT:
+										bar.setMidpoint(p);
+										break;
+									case OPEN:
+										bar.setOpen(p);
+										break;
+									case TRADE:
+										bar.setTradeCount(s);
+										break;
+									case TRADED_VALUE:
+										bar.setTradedValue(p);
+										break;
+									case TRADED_VALUE_DOWN:
+										bar.setTradedValueDown(p);
+										break;
+									case TRADED_VALUE_UP:
+										bar.setTradedValueUp(p);
+										break;
+									case VOLUME:
+										bar.setVolume(s);
+										break;
+									case VOLUME_DOWN:
+										bar.setVolumeDown(s);
+										break;
+									case VOLUME_UP:
+										bar.setVolumeUp(s);
+										break;
+									default:
+										logger.trace("Unsupported entry type: ", entry.getType());
+										break;
+								}
 			}
 		}
 
@@ -166,11 +166,11 @@ public final class HistoricalCodec {
 
 		if (!concise) {
 			builder.setBaseMarketId(Long.parseLong(bar.getInstrument().id()))
-					.setBaseTimeStamp(bar.getDate().getMillis())
-					.setAggregation(
-							AggregationPeriod.valueOf(bar.getPeriod()
-									.getPeriodType().name()))
-					.setPeriodCount(bar.getPeriod().size());
+			.setBaseTimeStamp(ProtoDateUtil.fromJodaDateTimeToDecimalDateTime(bar.getDate()))
+			.setAggregation(
+					AggregationPeriod.valueOf(bar.getPeriod()
+							.getPeriodType().name()))
+							.setPeriodCount(bar.getPeriod().size());
 		}
 
 		if (bar.getOpen() != null && !bar.getOpen().isNull()) {
@@ -197,7 +197,7 @@ public final class HistoricalCodec {
 					.setPriceExponent(bar.getClose().exponent());
 			if (bar.getLastSize() != null && !bar.getLastSize().isNull()) {
 				entryBuilder.setSizeMantissa(bar.getLastSize().mantissa())
-						.setSizeExponent(bar.getLastSize().exponent());
+				.setSizeExponent(bar.getLastSize().exponent());
 			}
 			builder.addEntry(entryBuilder.setType(MarketEntry.Type.CLOSE));
 		}
@@ -243,7 +243,7 @@ public final class HistoricalCodec {
 					.setPriceExponent(bar.getBid().exponent());
 			if (bar.getBidSize() != null && !bar.getBidSize().isNull()) {
 				entryBuilder.setSizeMantissa(bar.getBidSize().mantissa())
-						.setSizeExponent(bar.getBidSize().exponent());
+				.setSizeExponent(bar.getBidSize().exponent());
 			}
 			builder.addEntry(entryBuilder.setType(MarketEntry.Type.BID));
 		}
@@ -253,7 +253,7 @@ public final class HistoricalCodec {
 					.setPriceExponent(bar.getAsk().exponent());
 			if (bar.getAskSize() != null && !bar.getAskSize().isNull()) {
 				entryBuilder.setSizeMantissa(bar.getAskSize().mantissa())
-						.setSizeExponent(bar.getAskSize().exponent());
+				.setSizeExponent(bar.getAskSize().exponent());
 			}
 			builder.addEntry(entryBuilder.setType(MarketEntry.Type.ASK));
 		}
