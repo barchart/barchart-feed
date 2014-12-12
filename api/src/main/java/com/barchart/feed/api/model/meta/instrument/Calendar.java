@@ -21,7 +21,10 @@ public interface Calendar extends Existential {
 	 */
 	Event event(Event.Type type);
 
-	static Calendar NULL = new Calendar() {
+	@Override
+	boolean isNull();
+	
+	Calendar NULL = new Calendar() {
 
 		@Override
 		public List<Event> events() {
