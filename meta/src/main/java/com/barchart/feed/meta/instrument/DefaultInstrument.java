@@ -13,6 +13,7 @@ import com.barchart.feed.api.model.meta.id.ChannelID;
 import com.barchart.feed.api.model.meta.id.InstrumentID;
 import com.barchart.feed.api.model.meta.id.VendorID;
 import com.barchart.feed.api.model.meta.instrument.Calendar;
+import com.barchart.feed.api.model.meta.instrument.ModifiableCalendar;
 import com.barchart.feed.api.model.meta.instrument.PriceFormat;
 import com.barchart.feed.api.model.meta.instrument.Schedule;
 import com.barchart.feed.api.model.meta.instrument.SpreadLeg;
@@ -40,7 +41,7 @@ public abstract class DefaultInstrument extends InstrumentBase {
 	protected String CFICode = "XXXXXX";
 	protected Price tickSize = Price.NULL;
 	protected Price pointValue = Price.NULL;
-	protected Calendar calendar = Calendar.NULL;
+	protected ModifiableCalendar calendar = new DefaultCalendar();
 	protected Schedule schedule = Schedule.NULL;
 	protected String symbol = "NULL_SYMBOL";
 	protected String toString = symbol();
