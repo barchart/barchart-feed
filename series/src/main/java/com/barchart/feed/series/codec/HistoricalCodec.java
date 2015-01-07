@@ -3,6 +3,7 @@ package com.barchart.feed.series.codec;
 import java.nio.ByteBuffer;
 import java.util.List;
 
+import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.openfeed.AggregationPeriod;
 import org.openfeed.MarketEntry;
@@ -165,12 +166,14 @@ public final class HistoricalCodec {
 				.newBuilder();
 
 		if (!concise) {
+			// base time stamp is always UTC format
 			builder.setBaseMarketId(Long.parseLong(bar.getInstrument().id()))
-			.setBaseTimeStamp(ProtoDateUtil.fromJodaDateTimeToDecimalDateTime(bar.getDate()))
-			.setAggregation(
-					AggregationPeriod.valueOf(bar.getPeriod()
-							.getPeriodType().name()))
-							.setPeriodCount(bar.getPeriod().size());
+					.setBaseTimeStamp(ProtoDateUtil.fromJodaDateTimeToDecimalDateTime(
+							new DateTime(bar.getDate(), DateTimeZone.UTC)))
+					.setAggregation(
+							AggregationPeriod.valueOf(bar.getPeriod()
+									.getPeriodType().name()))
+					.setPeriodCount(bar.getPeriod().size());
 		}
 
 		if (bar.getOpen() != null && !bar.getOpen().isNull()) {
