@@ -27,10 +27,9 @@ import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Size;
 
 // JavaSize this = 8(obj) 4 * 1(byte) + 4(priceRef) + 4(sizeRef) = 24
-public class DefBookEntry extends ValueFreezer<MarketBookEntry> implements
-		MarketDoBookEntry {
+public class DefBookEntry extends ValueFreezer<MarketBookEntry> implements MarketDoBookEntry {
 	
-	private static final ValueFactory factory = new ValueFactoryImpl();
+	private static final ValueFactory factory = ValueFactoryImpl.instance;
 
 	private final static byte nulAct = NOOP.ord;
 	private final static byte nulSide = Book.Side.NULL.ord;
@@ -48,9 +47,13 @@ public class DefBookEntry extends ValueFreezer<MarketBookEntry> implements
 	private final PriceValue price;
 	private final SizeValue size;
 	
-	public DefBookEntry(final MarketBookAction act, 
-			final Book.Side side, final Book.Type type, final int place, 
-			final PriceValue price,	final SizeValue size) throws ArithmeticException {
+	public DefBookEntry(
+			final MarketBookAction act, 
+			final Book.Side side, 
+			final Book.Type type, 
+			final int place, 
+			final PriceValue price,	
+			final SizeValue size) throws ArithmeticException {
 
 		this.ordAct = (act == null ? nulAct : act.ord);
 		this.ordSide = (side == null ? nulSide : side.ord);
@@ -91,7 +94,7 @@ public class DefBookEntry extends ValueFreezer<MarketBookEntry> implements
 	@Override
 	public Price price() {
 		
-		if(price == null) {
+		if(price == null || price.isNull()) {
 			return Price.NULL;
 		} else {
 			return factory.newPrice(price.mantissa(), price.exponent());
@@ -100,7 +103,7 @@ public class DefBookEntry extends ValueFreezer<MarketBookEntry> implements
 
 	@Override
 	public final SizeValue sizeValue() {
-		return (size == null) ? NULL_SIZE : size;
+		return (size == null || size.isNull()) ? NULL_SIZE : size;
 	}
 	
 	@Override
@@ -138,8 +141,7 @@ public class DefBookEntry extends ValueFreezer<MarketBookEntry> implements
 	}
 
 	static {
-		final DefBookEntry entry = new DefBookEntry(null, null, null, 0, null,
-				null);
+		final DefBookEntry entry = new DefBookEntry(null, null, null, 0, null, null);
 		checkNull(entry.act());
 		checkNull(entry.side());
 		checkNull(entry.type());
