@@ -6,9 +6,9 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>com.barchart.proto</groupId>
-		<artifactId>barchart-proto-buf-archon</artifactId>
-		<version>1.0.10</version>
+		<groupId>com.barchart.base</groupId>
+		<artifactId>barchart-archon</artifactId>
+		<version>3.0.7</version>
 		<relativePath />
 	</parent>
 
