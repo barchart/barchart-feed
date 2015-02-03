@@ -15,13 +15,14 @@ import com.barchart.feed.base.collections.BitSetEnum;
 public enum MarketStateEntry implements BitSetEnum<MarketStateEntry> {
 
 	/**
-	 * @deprecated IS_SETTLED should be inferred from the values in 
+	 * @deprecated IS_SETTLED should be inferred from the values in
 	 * the CURRENT and PREVIOUS bars.
 	 */
 	@Deprecated IS_SETTLED,        	// Generic Settled Flag
+	IS_PUBLISH_REALTIME_SNAPSHOT, // Publishing Realtime, or Other
 	IS_PUBLISH_REALTIME,  			// Publishing Realtime, or Other
 	IS_PUBLISH_DELAYED,
-	
+
 	;
 
 	private static final Logger log = LoggerFactory
