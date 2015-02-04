@@ -6,34 +6,34 @@ import com.barchart.util.value.api.Existential;
 public interface Subscription<T extends Metadata> extends Existential {
 
 	enum Lense {
-		NULL, REALTIME, DELAYED, REPLAY
+		NULL, REALTIME, DELAYED, SNAPSHOT, REPLAY
 	}
-	
+
 	Lense lense();
-	
+
 	/**
-	 * 
+	 *
 	 * @return The meta-data object this subscription is for.
 	 */
 	T metadata();
-	
+
 	@Override
 	boolean isNull();
-	
+
 //	Time subscribed(); // ?? Name
-	
+
 //	Set<Class<? extends MarketData<?>>> dataTypes();
-	
+
 //	/**
 //	 * @return The time delay in seconds of this subscription, 0 = realtime
 //	 */
 //	int delay();
-//	
+//
 //	/**
 //	 * @return The frequency in seconds of snapshot messages
 //	 */
 //	int snapshotFrequency();
-	
+
 //	- Update frequency (every message, snapshots every 10 seconds, etc)
-	
+
 }
