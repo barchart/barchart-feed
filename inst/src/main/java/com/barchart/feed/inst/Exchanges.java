@@ -40,6 +40,7 @@ public final class Exchanges {
 		names.put("BATS", temp);
 		names.put("Fix_Me_X", temp);
 		codes.put("X", temp);
+		codes.put("y", temp);
 
 		temp = new ExchangeImpl("BMF", "2", CHI);
 		names.put("BMF", temp);
@@ -265,15 +266,15 @@ public final class Exchanges {
 		}
 
 	}
-	
+
 	public static Exchange fromID(final ExchangeID id) {
-		
+
 		if(codes.containsKey(id.id())) {
 			return codes.get(id.id());
 		} else {
 			return Exchange.NULL;
 		}
-		
+
 	}
 
 	private static class ExchangeImpl implements Exchange {
@@ -283,7 +284,7 @@ public final class Exchanges {
 		private final ExchangeID id;
 
 		ExchangeImpl(
-				final String desc, 
+				final String desc,
 				final String code,
 				final String zone) {
 
