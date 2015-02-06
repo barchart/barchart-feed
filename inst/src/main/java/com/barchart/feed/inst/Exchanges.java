@@ -30,6 +30,7 @@ public final class Exchanges {
 		Exchange temp = new ExchangeImpl("AMEX", "A", NY);
 		names.put("AMEX", temp);
 		codes.put("A", temp);
+		codes.put("a", temp);
 
 		temp = new ExchangeImpl("ASX", "v", CHI);
 		names.put("ASX", temp);
@@ -52,6 +53,7 @@ public final class Exchanges {
 		names.put("CBOTM", temp);
 		names.put("CME_CBOT", temp);
 		codes.put("B", temp);
+		codes.put("b", temp);
 
 		temp = new ExchangeImpl("CFE", "R", CHI);
 		names.put("CFE", temp);
@@ -68,6 +70,7 @@ public final class Exchanges {
 		names.put("WEA", temp);
 		names.put("GBLX", temp);
 		codes.put("M", temp);
+		codes.put("m", temp);
 
 		temp = new ExchangeImpl("CNSX", "4", CHI);
 		names.put("CNSX", temp);
@@ -186,6 +189,7 @@ public final class Exchanges {
 		names.put("NASDAQ", temp);
 		names.put("NTDS", temp);
 		codes.put("Q", temp);
+		codes.put("q", temp);
 
 		temp = new ExchangeImpl("NLIF", "Y", CHI);
 		names.put("NLIF", temp);
@@ -208,6 +212,7 @@ public final class Exchanges {
 		temp = new ExchangeImpl("NYSE", "N", NY);
 		names.put("NYSE", temp);
 		codes.put("N", temp);
+		codes.put("n", temp);
 
 		temp = new ExchangeImpl("OTCBB", "D", NY);
 		names.put("OTCBB", temp);
@@ -218,6 +223,7 @@ public final class Exchanges {
 		names.put("PINKSHEETS", temp);
 		names.put("OTHER OTC", temp);
 		codes.put("U", temp);
+		codes.put("u", temp);
 
 		temp = new ExchangeImpl("RATES", "6", CHI);
 		names.put("RATES", temp);
