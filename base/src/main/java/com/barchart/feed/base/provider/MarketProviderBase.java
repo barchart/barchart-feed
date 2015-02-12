@@ -946,7 +946,10 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 
 			}
 
-			return awaitingSnaps.get(instID);
+			// For expired symbols we block forever here, because JERQ doesn't indicate failure.
+			// Need a timeout or something...
+			//return awaitingSnaps.get(instID);
+			return Observable.just(Market.NULL);
 		}
 
 	}
