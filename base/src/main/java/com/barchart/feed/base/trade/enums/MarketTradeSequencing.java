@@ -49,6 +49,7 @@ public enum MarketTradeSequencing implements Value<MarketTradeSequencing> {
 		case NORMAL:
 			return Trade.Sequence.NORMAL;
 		case UNSEQUENCED:
+		case UNSEQUENCED_VOLUME:
 			return Trade.Sequence.UNSEQUENCED;
 		}
 
