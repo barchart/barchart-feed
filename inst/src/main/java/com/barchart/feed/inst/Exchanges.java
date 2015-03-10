@@ -43,11 +43,6 @@ public final class Exchanges {
 		codes.put("X", temp);
 		codes.put("y", temp);
 
-		temp = new ExchangeImpl("BMF", "2", CHI);
-		names.put("BMF", temp);
-		names.put("Fix_Me_2", temp);
-		codes.put("2", temp);
-
 		temp = new ExchangeImpl("CBOT", "B", CHI);
 		names.put("CBOT", temp);
 		names.put("CBOTM", temp);
@@ -71,10 +66,6 @@ public final class Exchanges {
 		names.put("GBLX", temp);
 		codes.put("M", temp);
 		codes.put("m", temp);
-
-		temp = new ExchangeImpl("CNSX", "4", CHI);
-		names.put("CNSX", temp);
-		codes.put("4", temp);
 
 		temp = new ExchangeImpl("COMEX", "E", CHI);
 		names.put("COMEX", temp);
@@ -145,10 +136,6 @@ public final class Exchanges {
 		names.put("INDEX-TSX", temp);
 		codes.put("c", temp);
 
-		temp = new ExchangeImpl("IFUND", "5", NY);
-		names.put("IFUND", temp);
-		codes.put("5", temp);
-
 		temp = new ExchangeImpl("INDEX-DJ3", "o", NY);
 		names.put("INDEX-DJ3", temp);
 		codes.put("o", temp);
@@ -172,10 +159,6 @@ public final class Exchanges {
 		temp = new ExchangeImpl("LIFFE", "t", CHI);
 		names.put("LIFFE", temp);
 		codes.put("t", temp);
-
-		temp = new ExchangeImpl("LME", "1", CHI);
-		names.put("LME", temp);
-		codes.put("1", temp);
 
 		temp = new ExchangeImpl("EURONEXT", "h", CHI);
 		names.put("MATIF", temp);
@@ -225,10 +208,6 @@ public final class Exchanges {
 		codes.put("U", temp);
 		codes.put("u", temp);
 
-		temp = new ExchangeImpl("RATES", "6", CHI);
-		names.put("RATES", temp);
-		codes.put("6", temp);
-
 		temp = new ExchangeImpl("TSX", "S", CHI);
 		names.put("TSX", temp);
 		names.put("Fix_Me_S", temp);
@@ -244,7 +223,38 @@ public final class Exchanges {
 		names.put("WCE", temp);
 		names.put("ICECA", temp);
 		codes.put("W", temp);
+		
+		// Y - Montreal Futures Exchange
+		// ! - Special Exchange
+		
+		// LME Select
+		temp = new ExchangeImpl("LME", "1", CHI);
+		names.put("LME", temp);
+		codes.put("1", temp);
+		
+		temp = new ExchangeImpl("BMF", "2", CHI);
+		names.put("BMF", temp);
+		names.put("Fix_Me_2", temp);
+		codes.put("2", temp);
+		
+		// 3 -  London Metals Exchange (LME)
+		
+		temp = new ExchangeImpl("CNSX", "4", CHI);
+		names.put("CNSX", temp);
+		codes.put("4", temp);
+		
+		// Canadian Mutual Funds
+		temp = new ExchangeImpl("IFUND", "5", NY);
+		names.put("IFUND", temp);
+		codes.put("5", temp);
 
+		temp = new ExchangeImpl("RATES", "6", CHI);
+		names.put("RATES", temp);
+		codes.put("6", temp);
+
+		// 7 - Economic Values
+		// 8 - BM&FBOVESPA Equities
+		
 	}
 
 
