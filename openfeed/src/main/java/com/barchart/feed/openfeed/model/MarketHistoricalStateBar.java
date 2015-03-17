@@ -14,7 +14,7 @@ import com.barchart.feed.api.series.PeriodType;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Size;
 
-public class MarketHistoricalStateBar extends MarketHistoricalState implements Bar {
+public class MarketHistoricalStateBar extends MarketHistoricalState implements Bar, Comparable<Bar> {
 
 	private int barCount = 1;
 	private Period period;
@@ -302,8 +302,9 @@ public class MarketHistoricalStateBar extends MarketHistoricalState implements B
 
 		final Price p = price(type);
 
-		if (!p.isNull() && barCount > 1)
+		if (!p.isNull() && barCount > 1) {
 			return p.div(count);
+		}
 
 		return p;
 
@@ -313,8 +314,9 @@ public class MarketHistoricalStateBar extends MarketHistoricalState implements B
 
 		final Size s = size(type);
 
-		if (!s.isNull() && barCount > 1)
+		if (!s.isNull() && barCount > 1) {
 			return s.div(count);
+		}
 
 		return s;
 
@@ -323,6 +325,15 @@ public class MarketHistoricalStateBar extends MarketHistoricalState implements B
 	@Override
 	public <E extends DataPoint> int compareTo(final E other) {
 		return getPeriod().getPeriodType().compareAtResolution(getDate(), other.getDate());
+	}
+
+	@Override
+	public int compareTo(Bar o) {
+		int ret = this.getDate().compareTo(o.getDate());
+		if (ret == 0) {
+			ret = this.toString().compareTo(o.toString());
+		}
+		return ret;
 	}
 
 }
