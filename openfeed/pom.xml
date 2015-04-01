@@ -40,7 +40,7 @@
 		<dependency>
 		   	<groupId>org.openfeed</groupId>
 		   	<artifactId>openfeed</artifactId>
-			<version>[2.1.6-SNAPSHOT,3-SNAPSHOT)</version>
+			<version>[2.1.6-SNAPSHOT,3.1-SNAPSHOT)</version>
 		</dependency>
 		
 		<dependency>

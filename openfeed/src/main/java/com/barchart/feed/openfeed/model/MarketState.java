@@ -55,8 +55,9 @@ public class MarketState {
 	 */
 	public MarketSnapshot message() {
 
-		if (message instanceof MarketSnapshot)
+		if (message instanceof MarketSnapshot) {
 			return (MarketSnapshot) message;
+		}
 
 		final MarketSnapshot.Builder builder = builder();
 
@@ -92,20 +93,11 @@ public class MarketState {
 	 * Globally unique market identifier.
 	 */
 	public long id() {
-		return message.getBaseMarketId();
+		return message.getMarketId();
 	}
 
 	public MarketState id(final long id) {
-		builder().setBaseMarketId(id);
-		return this;
-	}
-
-	public long sequence() {
-		return message.getBaseSequence();
-	}
-
-	public MarketState sequence(final long sequence) {
-		builder().setBaseSequence(sequence);
+		builder().setMarketId(id);
 		return this;
 	}
 
@@ -116,7 +108,7 @@ public class MarketState {
 
 		if (timestamp == null) {
 
-			final DateTimeValue dt = ProtoDateUtil.fromDecimalDateTime(message.getBaseTimeStamp());
+			final DateTimeValue dt = ProtoDateUtil.fromDecimalDateTime(message.getTimeStamp());
 
 			timestamp = new DateTime(dt.getYear(), dt.getMonth(), dt.getDay(), dt.getHour(), dt.getMinute(),
 					dt.getSecond(), dt.getMillis(), ISOChronology.getInstanceUTC());
@@ -129,7 +121,7 @@ public class MarketState {
 
 	public MarketState timestamp(final DateTime timestamp) {
 
-		builder().setBaseTimeStamp(ProtoDateUtil.intoDecimalDateTime(
+		builder().setTimeStamp(ProtoDateUtil.intoDecimalDateTime(
 				timestamp.getYear(),
 				timestamp.getMonthOfYear(),
 				timestamp.getDayOfMonth(),
@@ -155,7 +147,7 @@ public class MarketState {
 
 		if (tradeDate == null) {
 
-			final DateOnlyValue dv = ProtoDateUtil.fromDecimalDateOnly(message.getBaseTradeDate());
+			final DateOnlyValue dv = ProtoDateUtil.fromDecimalDateOnly(message.getTradeDate());
 
 			tradeDate = new LocalDate(dv.getYear(), dv.getMonth(), dv.getDay());
 
@@ -167,7 +159,7 @@ public class MarketState {
 
 	public MarketState tradeDate(final LocalDate tradeDate) {
 
-		builder().setBaseTradeDate(ProtoDateUtil.intoDecimalDateOnly(tradeDate.getYear(),
+		builder().setTradeDate(ProtoDateUtil.intoDecimalDateOnly(tradeDate.getYear(),
 				tradeDate.getMonthOfYear(), tradeDate.getDayOfMonth()));
 
 		this.tradeDate = tradeDate;
@@ -178,30 +170,6 @@ public class MarketState {
 
 	public MarketState tradeDate(final long timestamp) {
 		return tradeDate(new LocalDate(timestamp, ISOChronology.getInstanceUTC()));
-	}
-
-	/**
-	 * The default price exponent.
-	 */
-	public long priceExponent() {
-		return message.getBasePriceExponent();
-	}
-
-	public MarketState priceExponent(final int exponent) {
-		builder().setBasePriceExponent(exponent);
-		return this;
-	}
-
-	/**
-	 * The default size exponent.
-	 */
-	public long sizeExponent() {
-		return message.getBaseSizeExponent();
-	}
-
-	public MarketState sizeExponent(final int exponent) {
-		builder().setBaseSizeExponent(exponent);
-		return this;
 	}
 
 	/**
@@ -312,8 +280,9 @@ public class MarketState {
 				@Override
 				public MarketStateEntry next() {
 
-					if (next == null)
+					if (next == null) {
 						throw new NoSuchElementException();
+					}
 
 					final MarketStateEntry current = next;
 
@@ -376,8 +345,9 @@ public class MarketState {
 
 			if (entries.containsKey(type)) {
 				for (final MarketStateEntry wrapper : entries.get(type)) {
-					if (wrapper.descriptors().contains(descriptor))
+					if (wrapper.descriptors().contains(descriptor)) {
 						return wrapper;
+					}
 				}
 			}
 
@@ -391,8 +361,9 @@ public class MarketState {
 
 			if (entries.containsKey(type)) {
 				for (final MarketStateEntry wrapper : entries.get(type)) {
-					if (wrapper.descriptors().contains(descriptor))
+					if (wrapper.descriptors().contains(descriptor)) {
 						wrappers.add(wrapper);
+					}
 				}
 			}
 
