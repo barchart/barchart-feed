@@ -336,4 +336,9 @@ public class MarketHistoricalStateBar extends MarketHistoricalState implements B
 		return ret;
 	}
 
+	@Override
+	public Price getSettlement() {
+		return price(Type.SETTLE);
+	}
+
 }

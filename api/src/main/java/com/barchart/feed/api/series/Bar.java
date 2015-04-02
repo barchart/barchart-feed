@@ -29,6 +29,13 @@ public interface Bar extends Range {
 	public Price getClose();
 
 	/**
+	 * Returns the settlement price
+	 * 
+	 * @return the settlement price
+	 */
+	public Price getSettlement();
+
+	/**
 	 * Returns the ask size at close.
 	 */
 	public Size getLastSize();

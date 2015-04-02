@@ -24,6 +24,7 @@ public class BarImpl extends DataPointImpl implements Bar {
 	private Price high;
 	private Price low;
 	private Price close;
+	private Price settlement;
 	private Size lastSize;
 	private Price midpoint;
 	private Price bid;
@@ -54,7 +55,7 @@ public class BarImpl extends DataPointImpl implements Bar {
 
 		this(instrument, date, period, null, null, null, null, null, null,
 				null, null, null, null, null, null, null, null, null, null,
-				null);
+				null, null);
 	}
 
 	/**
@@ -83,7 +84,7 @@ public class BarImpl extends DataPointImpl implements Bar {
 			final Size openInterest) {
 
 		this(instrument, new DateTime(time.millisecond()), period, open, high,
-				low, close, volume, null, null, null, openInterest, null, null,
+				low, close, null, volume, null, null, null, openInterest, null, null,
 				null, null, null, null, null, null);
 	}
 
@@ -112,7 +113,7 @@ public class BarImpl extends DataPointImpl implements Bar {
 			final Price low, final Price close, final Size volume,
 			final Size openInterest) {
 
-		this(instrument, date, period, open, high, low, close, volume, null,
+		this(instrument, date, period, open, high, low, close, null, volume, null,
 				null, null, openInterest, null, null, null, null, null, null,
 				null, null);
 	}
@@ -164,7 +165,7 @@ public class BarImpl extends DataPointImpl implements Bar {
 	 */
 	public BarImpl(final InstrumentID instrument, final DateTime date,
 			final Period period, final Price open, final Price high,
-			final Price low, final Price close, final Size volume,
+			final Price low, final Price close, final Price settlement, final Size volume,
 			final Size volumeUp, final Size volumeDown, final Size tickCount,
 			final Size openInterest, final Price midpoint, final Price bid,
 			final Size bidSize, final Price ask, final Size askSize,
@@ -178,6 +179,7 @@ public class BarImpl extends DataPointImpl implements Bar {
 		this.high = maybeNull(high);
 		this.low = maybeNull(low);
 		this.close = maybeNull(close);
+		this.settlement = maybeNull(settlement);
 		this.lastSize = Size.NULL;
 		this.bid = maybeNull(bid);
 		this.bidSize = maybeNull(bidSize);
@@ -236,7 +238,7 @@ public class BarImpl extends DataPointImpl implements Bar {
 	public BarImpl(final Bar other) {
 
 		this(other.getInstrument(), other.getDate(), other.getPeriod(), other
-				.getOpen(), other.getHigh(), other.getLow(), other.getClose(),
+				.getOpen(), other.getHigh(), other.getLow(), other.getClose(), other.getSettlement(),
 				other.getVolume(), other.getVolumeUp(), other.getVolumeDown(),
 				other.getTradeCount(), other.getOpenInterest(), other
 						.getMidpoint(), other.getBid(), other.getBidSize(),
@@ -929,6 +931,14 @@ public class BarImpl extends DataPointImpl implements Bar {
 			return false;
 		}
 		return true;
+	}
+
+	public Price getSettlement() {
+		return settlement;
+	}
+
+	public void setSettlement(Price settlement) {
+		this.settlement = settlement;
 	}
 
 }
