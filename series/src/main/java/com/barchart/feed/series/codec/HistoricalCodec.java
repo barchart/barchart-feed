@@ -108,6 +108,9 @@ public final class HistoricalCodec {
 									case LOW:
 										bar.setLow(p);
 										break;
+					case SETTLE:
+						bar.setSettlement(p);
+						break;
 									case INTEREST:
 										bar.setOpenInterest(s);
 										break;
@@ -193,6 +196,12 @@ public final class HistoricalCodec {
 					.setPriceMantissa(bar.getLow().mantissa())
 					.setPriceExponent(bar.getLow().exponent())
 					.setType(MarketEntry.Type.LOW));
+		}
+		if (bar.getSettlement() != null && !bar.getSettlement().isNull()) {
+			builder.addEntry(MarketEntry.newBuilder()
+					.setPriceMantissa(bar.getSettlement().mantissa())
+					.setPriceExponent(bar.getSettlement().exponent())
+					.setType(MarketEntry.Type.SETTLE));
 		}
 		if (bar.getClose() != null && !bar.getClose().isNull()) {
 			final MarketEntry.Builder entryBuilder = MarketEntry.newBuilder()
