@@ -42,6 +42,8 @@ public class BarImpl extends DataPointImpl implements Bar {
 
 	private int barCount = 1;
 
+	private DateTime setLastTradeDay;
+
 	/**
 	 * Instantiates a new {@code BarImpl}
 	 *
@@ -933,12 +935,22 @@ public class BarImpl extends DataPointImpl implements Bar {
 		return true;
 	}
 
+	@Override
 	public Price getSettlement() {
 		return settlement;
 	}
 
 	public void setSettlement(Price settlement) {
 		this.settlement = settlement;
+	}
+
+	public void setLastTradeDay(DateTime d) {
+		this.setLastTradeDay = d;
+	}
+
+	@Override
+	public DateTime getLastTradeDay() {
+		return setLastTradeDay;
 	}
 
 }

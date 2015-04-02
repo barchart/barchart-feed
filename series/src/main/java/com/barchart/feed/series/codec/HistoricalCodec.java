@@ -101,6 +101,8 @@ public final class HistoricalCodec {
 									case CLOSE:
 										bar.setClose(p);
 										bar.setLastSize(s);
+						DateTime d = entry.hasTimeStamp() ? new DateTime(entry.getTimeStamp(), zone) : null;
+						bar.setLastTradeDay(d);
 										break;
 									case HIGH:
 										bar.setHigh(p);
@@ -210,6 +212,9 @@ public final class HistoricalCodec {
 			if (bar.getLastSize() != null && !bar.getLastSize().isNull()) {
 				entryBuilder.setSizeMantissa(bar.getLastSize().mantissa())
 				.setSizeExponent(bar.getLastSize().exponent());
+			}
+			if (bar.getLastTradeDay() != null) {
+				entryBuilder.setTimeStamp(bar.getLastTradeDay().getMillis());
 			}
 			builder.addEntry(entryBuilder.setType(MarketEntry.Type.CLOSE));
 		}
