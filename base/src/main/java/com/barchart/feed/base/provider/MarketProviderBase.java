@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -380,14 +381,16 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 							}
 
 						}
-
-						agentHandler.updateAgent(BaseAgent.this);
+						
+						// agentHandler.updateAgent(BaseAgent.this);
 
 						final Set<SubCommand> newSubs = subscribe(BaseAgent.this, newInterests);
 						if (!newSubs.isEmpty()) {
 							log.debug("Sending new subs to sub handler");
 							subHandler.subscribe(newSubs);
 						}
+						
+						agentHandler.updateAgent(BaseAgent.this);
 
 						return Observable.just(result);
 					}
@@ -425,14 +428,14 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 
 		@Override
 		public synchronized Observable<Result<Instrument>> exclude(final String... symbols) {
-
+			
 			return metaService.instrument(symbols).flatMap(
 
 				new Func1<Result<Instrument>, Observable<Result<Instrument>>>() {
 
 					@Override
 					public Observable<Result<Instrument>> call(final Result<Instrument> result) {
-
+						
 						final Map<String, List<Instrument>> instMap = result.results();
 						final Map<String, Type> oldInterests = new HashMap<String, Type>();
 
@@ -446,9 +449,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 								incInsts.remove(i);
 								exInsts.add(i);
 
-								/* We have to use an alternate symbol for options
-								 * ...rolls eyes...
-								 */
+								/* Use an alternate symbol for options */
 								final String symbol = i.symbol();
 								if(symbol.contains("|")) {
 									oldInterests.put(i.vendorSymbols().get(VendorID.BARCHART_SHORT), Type.INSTRUMENT);
@@ -467,13 +468,15 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 
 						}
 
-						agentHandler.updateAgent(BaseAgent.this);
-
+						// agentHandler.updateAgent(BaseAgent.this);
+						
 						final Set<SubCommand> oldSubs = unsubscribe(BaseAgent.this, oldInterests);
 						if (!oldSubs.isEmpty()) {
 							log.debug("Sending new unsubs to sub handler");
 							subHandler.unsubscribe(oldSubs);
 						}
+						
+						agentHandler.updateAgent(BaseAgent.this);
 
 						return Observable.just(result);
 					}
@@ -883,6 +886,8 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 			}
 
 		}
+		
+		cleanSubscriptions();
 
 	}
 
@@ -898,9 +903,40 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		for (final Entry<InstrumentID, MarketDo> e : marketMap.entrySet()) {
 			e.getValue().detachAgent(agent);
 		}
+		
+		cleanSubscriptions();
 
 	}
-
+	
+	private void cleanSubscriptions() {
+		
+		final Map<String, SubCommand> feedSubs = subHandler.subscriptions();
+		
+		for(final Iterator<Entry<InstrumentID, Subscription<Instrument>>> iter = defSubs.entrySet().iterator();
+				iter.hasNext(); ) {
+			
+			final Entry<InstrumentID, Subscription<Instrument>> entry = iter.next();
+			
+			final Instrument inst = metaService.instrument(entry.getKey())
+					.toBlockingObservable()
+					.first()
+					.get(entry.getKey());
+			
+			String symbol = inst.symbol();
+			if(symbol.contains("|")) {
+				symbol = inst.vendorSymbols().get(VendorID.BARCHART_SHORT);
+			} else {
+				symbol = formatForJERQ(symbol);
+			}
+			
+			if(!feedSubs.containsKey(symbol)) {
+				iter.remove();
+			} 
+			
+		}
+		
+	}
+	
 	/* ***** ***** SubscriptionService ***** ***** */
 
 	@Override

@@ -1,5 +1,6 @@
 package com.barchart.feed.base.sub;
 
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Future;
 
@@ -11,4 +12,6 @@ public interface SubscriptionHandler {
 	Future<Boolean> unsubscribe(SubCommand subscription);
 	Future<Boolean> unsubscribe(Set<SubCommand> subscriptions);
 
+	Map<String, SubCommand> subscriptions();
+	
 }
