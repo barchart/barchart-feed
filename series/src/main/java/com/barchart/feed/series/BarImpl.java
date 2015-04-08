@@ -24,6 +24,7 @@ public class BarImpl extends DataPointImpl implements Bar {
 	private Price high;
 	private Price low;
 	private Price close;
+	private Price settlement;
 	private Size lastSize;
 	private Price midpoint;
 	private Price bid;
@@ -41,6 +42,8 @@ public class BarImpl extends DataPointImpl implements Bar {
 
 	private int barCount = 1;
 
+	private DateTime setLastTradeDay;
+
 	/**
 	 * Instantiates a new {@code BarImpl}
 	 *
@@ -54,7 +57,7 @@ public class BarImpl extends DataPointImpl implements Bar {
 
 		this(instrument, date, period, null, null, null, null, null, null,
 				null, null, null, null, null, null, null, null, null, null,
-				null);
+				null, null);
 	}
 
 	/**
@@ -83,7 +86,7 @@ public class BarImpl extends DataPointImpl implements Bar {
 			final Size openInterest) {
 
 		this(instrument, new DateTime(time.millisecond()), period, open, high,
-				low, close, volume, null, null, null, openInterest, null, null,
+				low, close, null, volume, null, null, null, openInterest, null, null,
 				null, null, null, null, null, null);
 	}
 
@@ -112,59 +115,61 @@ public class BarImpl extends DataPointImpl implements Bar {
 			final Price low, final Price close, final Size volume,
 			final Size openInterest) {
 
-		this(instrument, date, period, open, high, low, close, volume, null,
+		this(instrument, date, period, open, high, low, close, null, volume, null,
 				null, null, openInterest, null, null, null, null, null, null,
 				null, null);
 	}
 
 	/**
-	 * Instantiates a new {@code BarImpl}. Null values will be replaced with
-	 * Price.NULL or Size.NULL.
+	 * Instantiates a new {@code BarImpl}
 	 *
-	 * @param instrument
-	 *            the {@link InstrumentID} for this bar.
-	 * @param date
-	 *            the {@link DateTime} of this bar.
-	 * @param period
-	 *            the Period interval and type of this bar.
-	 * @param open
-	 *            the Open {@link Price} of this bar.
-	 * @param high
-	 *            the High {@link Price} of this bar.
-	 * @param low
-	 *            the Low {@link Price} of this bar.
-	 * @param close
-	 *            the Close {@link Price} of this bar.
-	 * @param midpoint
-	 *            the midpoint {@link Price} of this bar.
-	 * @param bid
-	 *            the bid {@link Price} at close of this bar.
-	 * @param bidSize
-	 *            the bid {@link Size} at close of this bar.
-	 * @param ask
-	 *            the ask {@link Price} at close of this bar.
-	 * @param askSize
-	 *            the ask {@link Size} at close of this bar.
-	 * @param volume
-	 *            the Volume {@link Size} of this bar.
-	 * @param volumeUp
-	 *            the Volume traded up {@link Size} of this bar.
-	 * @param volumeDown
-	 *            the Volume traded down {@link Size} of this bar.
-	 * @param tradedValue
-	 *            the traded value {@link Price} of this bar.
-	 * @param tradeValueUp
-	 *            the positive traded value {@link Price} of this bar.
-	 * @param tradeValueDown
-	 *            the negative traded value {@link Price} of this bar.
-	 * @param tickCount
-	 *            the number of ticks contributing to this bar.
-	 * @param openInterest
-	 *            the Open Interest {@link Size} of this bar.
+	 * @param date the {@link DateTime} of this bar.
+	 * @param period the Period interval and type of this bar.
+	 * @param open the Open {@link Price} of this bar.
+	 * @param high the High {@link Price} of this bar.
+	 * @param low the Low {@link Price} of this bar.
+	 * @param close the Close {@link Price} of this bar.
+	 * @param settle the Settle {@link Price} of this bar.
+	 * @param volume the Volume {@link Size} of this bar.
+	 * @param openInterest the Open Interest {@link Size} of this bar.
 	 */
 	public BarImpl(final InstrumentID instrument, final DateTime date,
 			final Period period, final Price open, final Price high,
-			final Price low, final Price close, final Size volume,
+			final Price low, final Price close, final Price settle, final Size volume,
+			final Size openInterest) {
+
+		this(instrument, date, period, open, high, low, close, settle, volume, null,
+				null, null, openInterest, null, null, null, null, null, null,
+				null, null);
+	}
+
+	/**
+	 * Instantiates a new {@code BarImpl}. Null values will be replaced with Price.NULL or Size.NULL.
+	 *
+	 * @param instrument the {@link InstrumentID} for this bar.
+	 * @param date the {@link DateTime} of this bar.
+	 * @param period the Period interval and type of this bar.
+	 * @param open the Open {@link Price} of this bar.
+	 * @param high the High {@link Price} of this bar.
+	 * @param low the Low {@link Price} of this bar.
+	 * @param close the Close {@link Price} of this bar.
+	 * @param midpoint the midpoint {@link Price} of this bar.
+	 * @param bid the bid {@link Price} at close of this bar.
+	 * @param bidSize the bid {@link Size} at close of this bar.
+	 * @param ask the ask {@link Price} at close of this bar.
+	 * @param askSize the ask {@link Size} at close of this bar.
+	 * @param volume the Volume {@link Size} of this bar.
+	 * @param volumeUp the Volume traded up {@link Size} of this bar.
+	 * @param volumeDown the Volume traded down {@link Size} of this bar.
+	 * @param tradedValue the traded value {@link Price} of this bar.
+	 * @param tradeValueUp the positive traded value {@link Price} of this bar.
+	 * @param tradeValueDown the negative traded value {@link Price} of this bar.
+	 * @param tickCount the number of ticks contributing to this bar.
+	 * @param openInterest the Open Interest {@link Size} of this bar.
+	 */
+	public BarImpl(final InstrumentID instrument, final DateTime date,
+			final Period period, final Price open, final Price high,
+			final Price low, final Price close, final Price settlement, final Size volume,
 			final Size volumeUp, final Size volumeDown, final Size tickCount,
 			final Size openInterest, final Price midpoint, final Price bid,
 			final Size bidSize, final Price ask, final Size askSize,
@@ -178,6 +183,7 @@ public class BarImpl extends DataPointImpl implements Bar {
 		this.high = maybeNull(high);
 		this.low = maybeNull(low);
 		this.close = maybeNull(close);
+		this.settlement = maybeNull(settlement);
 		this.lastSize = Size.NULL;
 		this.bid = maybeNull(bid);
 		this.bidSize = maybeNull(bidSize);
@@ -192,7 +198,7 @@ public class BarImpl extends DataPointImpl implements Bar {
 		this.tradedValueDown = maybeNull(tradedValueDown);
 		this.tradeCount = tickCount == null || tickCount.isNull() ? VALUES
 				.newSize(1) : tickCount;
-		this.openInterest = maybeNull(openInterest);
+				this.openInterest = maybeNull(openInterest);
 
 	}
 
@@ -236,10 +242,10 @@ public class BarImpl extends DataPointImpl implements Bar {
 	public BarImpl(final Bar other) {
 
 		this(other.getInstrument(), other.getDate(), other.getPeriod(), other
-				.getOpen(), other.getHigh(), other.getLow(), other.getClose(),
+				.getOpen(), other.getHigh(), other.getLow(), other.getClose(), other.getSettlement(),
 				other.getVolume(), other.getVolumeUp(), other.getVolumeDown(),
 				other.getTradeCount(), other.getOpenInterest(), other
-						.getMidpoint(), other.getBid(), other.getBidSize(),
+				.getMidpoint(), other.getBid(), other.getBidSize(),
 				other.getAsk(), other.getAskSize(), other.getTradedValue(),
 				other.getTradedValueUp(), other.getTradedValueDown());
 	}
@@ -803,12 +809,12 @@ public class BarImpl extends DataPointImpl implements Bar {
 	public String toString() {
 		final StringBuilder sb = new StringBuilder();
 		sb.append("[Bar: ").append(date).append(" o=").append(open.toString())
-				.append(" h=").append(high.toString()).append(" l=")
-				.append(low.toString()).append(" c=").append(close.toString())
-				.append(" v=").append(volume.toString()).append(" vup=")
-				.append(volumeUp.toString()).append(" vdwn=")
-				.append(volumeDown.toString()).append(" oi=")
-				.append(openInterest.toString()).append("]");
+		.append(" h=").append(high.toString()).append(" l=")
+		.append(low.toString()).append(" c=").append(close.toString())
+		.append(" v=").append(volume.toString()).append(" vup=")
+		.append(volumeUp.toString()).append(" vdwn=")
+		.append(volumeDown.toString()).append(" oi=")
+		.append(openInterest.toString()).append("]");
 		return sb.toString();
 	}
 
@@ -929,6 +935,24 @@ public class BarImpl extends DataPointImpl implements Bar {
 			return false;
 		}
 		return true;
+	}
+
+	@Override
+	public Price getSettlement() {
+		return settlement;
+	}
+
+	public void setSettlement(Price settlement) {
+		this.settlement = settlement;
+	}
+
+	public void setLastTradeDay(DateTime d) {
+		this.setLastTradeDay = d;
+	}
+
+	@Override
+	public DateTime getLastTradeDay() {
+		return setLastTradeDay;
 	}
 
 }

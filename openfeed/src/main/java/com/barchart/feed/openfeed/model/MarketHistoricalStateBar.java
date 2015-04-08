@@ -336,4 +336,14 @@ public class MarketHistoricalStateBar extends MarketHistoricalState implements B
 		return ret;
 	}
 
+	@Override
+	public Price getSettlement() {
+		return price(Type.SETTLE);
+	}
+
+	@Override
+	public DateTime getLastTradeDay() {
+		return timestamp(Type.CLOSE);
+	}
+
 }

@@ -1,5 +1,7 @@
 package com.barchart.feed.api.series;
 
+import org.joda.time.DateTime;
+
 import com.barchart.feed.api.model.meta.id.InstrumentID;
 import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.Size;
@@ -27,6 +29,13 @@ public interface Bar extends Range {
 	 * @return the close price
 	 */
 	public Price getClose();
+
+	/**
+	 * Returns the settlement price
+	 *
+	 * @return the settlement price
+	 */
+	public Price getSettlement();
 
 	/**
 	 * Returns the ask size at close.
@@ -113,6 +122,13 @@ public interface Bar extends Range {
 	 * @return the open interest
 	 */
 	public Size getOpenInterest();
+
+	/**
+	 * Returns the day of last trade for the option. This is not expiration day
+	 *
+	 * @return
+	 */
+	public DateTime getLastTradeDay();
 
 	/**
 	 * Merges the specified <@code Bar> with this one, possibly updating any

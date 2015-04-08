@@ -51,8 +51,9 @@ public class MarketStateEntry {
 	 */
 	public MarketEntry message() {
 
-		if (message instanceof MarketEntry)
+		if (message instanceof MarketEntry) {
 			return (MarketEntry) message;
+		}
 
 		return builder().build();
 
@@ -154,16 +155,18 @@ public class MarketStateEntry {
 
 	public MarketStateEntry timestamp(final DateTime timestamp) {
 
-		builder().setTimeStamp(ProtoDateUtil.intoDecimalDateTime(
-				timestamp.getYear(),
-				timestamp.getMonthOfYear(),
-				timestamp.getDayOfMonth(),
-				timestamp.getHourOfDay(),
-				timestamp.getMinuteOfHour(),
-				timestamp.getSecondOfMinute(),
-				timestamp.getMillisOfSecond()));
+		if (timestamp != null) {
+			builder().setTimeStamp(ProtoDateUtil.intoDecimalDateTime(
+					timestamp.getYear(),
+					timestamp.getMonthOfYear(),
+					timestamp.getDayOfMonth(),
+					timestamp.getHourOfDay(),
+					timestamp.getMinuteOfHour(),
+					timestamp.getSecondOfMinute(),
+					timestamp.getMillisOfSecond()));
 
-		this.timestamp = timestamp;
+			this.timestamp = timestamp;
+		}
 
 		return this;
 
