@@ -6,6 +6,7 @@ import com.barchart.feed.api.model.meta.Metadata.MetaType;
 
 public class InstrumentID extends MetadataID<InstrumentID> {
 
+	@Deprecated
 	public InstrumentID(final String id) {
 		super(id, InstrumentID.class);
 	}
@@ -14,7 +15,7 @@ public class InstrumentID extends MetadataID<InstrumentID> {
 		super(String.valueOf(id), InstrumentID.class);
 	}
 
-	public static final InstrumentID NULL = new InstrumentID("NULL_INSTRUMENT_ID") {
+	public static final InstrumentID NULL = new InstrumentID(Long.MIN_VALUE) {
 
 		@Override
 		public boolean isNull() {

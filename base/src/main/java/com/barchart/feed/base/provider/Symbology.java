@@ -324,9 +324,4 @@ public final class Symbology {
 		
 	}
 
-	public static void main(final String[] args) {
-		System.out.println("" + ((int)'D') + "  " + ((int)'P') + "  " + ((int)'Q') + "  " + ((int)'Z'));
-		System.out.println("" + ((char)67));
-	}
-	
 }
