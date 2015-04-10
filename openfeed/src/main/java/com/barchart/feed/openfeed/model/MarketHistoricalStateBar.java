@@ -3,6 +3,7 @@ package com.barchart.feed.openfeed.model;
 import org.joda.time.DateTime;
 import org.openfeed.AggregationPeriod;
 import org.openfeed.MarketEntry;
+import org.openfeed.MarketEntry.Descriptor;
 import org.openfeed.MarketEntry.Type;
 import org.openfeed.MarketHistoricalSnapshotOrBuilder;
 
@@ -344,6 +345,24 @@ public class MarketHistoricalStateBar extends MarketHistoricalState implements B
 	@Override
 	public DateTime getLastTradeDay() {
 		return timestamp(Type.CLOSE);
+	}
+
+	@Override
+	public Price getGreeks(GREEK_TYPE type) {
+		switch (type) {
+			case DELTA:
+				return price(Type.COMPUTED, Descriptor.OPTION_DELTA);
+			case GAMMA:
+				return price(Type.COMPUTED, Descriptor.OPTION_GAMMA);
+			case THETA:
+				return price(Type.COMPUTED, Descriptor.OPTION_THETA);
+			case VEGA:
+				return price(Type.COMPUTED, Descriptor.OPTION_VEGA);
+			case RHO:
+				return price(Type.COMPUTED, Descriptor.OPTION_RHO);
+			default:
+				return Price.NULL;
+		}
 	}
 
 }
