@@ -43,6 +43,11 @@ public class BarImpl extends DataPointImpl implements Bar {
 	private int barCount = 1;
 
 	private DateTime setLastTradeDay;
+	private Price delta;
+	private Price theta;
+	private Price gamma;
+	private Price vega;
+	private Price rho;
 
 	/**
 	 * Instantiates a new {@code BarImpl}
@@ -953,6 +958,45 @@ public class BarImpl extends DataPointImpl implements Bar {
 	@Override
 	public DateTime getLastTradeDay() {
 		return setLastTradeDay;
+	}
+
+	public void setGreeks(GREEK_TYPE type, Price value) {
+		switch (type) {
+			case DELTA:
+				delta = value;
+				break;
+			case GAMMA:
+				gamma = value;
+				break;
+			case THETA:
+				theta = value;
+				break;
+			case VEGA:
+				vega = value;
+				break;
+			case RHO:
+				rho = value;
+				break;
+			default:
+		}
+	}
+
+	@Override
+	public Price getGreeks(GREEK_TYPE type) {
+		switch (type) {
+			case DELTA:
+				return delta;
+			case GAMMA:
+				return gamma;
+			case THETA:
+				return theta;
+			case VEGA:
+				return vega;
+			case RHO:
+				return rho;
+			default:
+				return Price.NULL;
+		}
 	}
 
 }

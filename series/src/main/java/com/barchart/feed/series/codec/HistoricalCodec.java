@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.api.model.meta.id.InstrumentID;
 import com.barchart.feed.api.series.Bar;
+import com.barchart.feed.api.series.Bar.GREEK_TYPE;
 import com.barchart.feed.api.series.Period;
 import com.barchart.feed.api.series.PeriodType;
 import com.barchart.feed.series.BarImpl;
@@ -101,8 +102,8 @@ public final class HistoricalCodec {
 									case CLOSE:
 										bar.setClose(p);
 										bar.setLastSize(s);
-						DateTime d = entry.hasTimeStamp() ? new DateTime(entry.getTimeStamp(), zone) : null;
-						bar.setLastTradeDay(d);
+										final DateTime d = entry.hasTimeStamp() ? new DateTime(entry.getTimeStamp(), zone) : null;
+										bar.setLastTradeDay(d);
 										break;
 									case HIGH:
 										bar.setHigh(p);
@@ -110,9 +111,9 @@ public final class HistoricalCodec {
 									case LOW:
 										bar.setLow(p);
 										break;
-					case SETTLE:
-						bar.setSettlement(p);
-						break;
+									case SETTLE:
+										bar.setSettlement(p);
+										break;
 									case INTEREST:
 										bar.setOpenInterest(s);
 										break;
@@ -143,6 +144,26 @@ public final class HistoricalCodec {
 									case VOLUME_UP:
 										bar.setVolumeUp(s);
 										break;
+									case COMPUTED:
+										switch (entry.getDescriptor(0)) {
+											case OPTION_DELTA:
+												bar.setGreeks(GREEK_TYPE.DELTA, p);
+								break;
+							case OPTION_GAMMA:
+								bar.setGreeks(GREEK_TYPE.DELTA, p);
+								break;
+							case OPTION_THETA:
+								bar.setGreeks(GREEK_TYPE.DELTA, p);
+								break;
+							case OPTION_VEGA:
+								bar.setGreeks(GREEK_TYPE.DELTA, p);
+								break;
+							case OPTION_RHO:
+								bar.setGreeks(GREEK_TYPE.DELTA, p);
+								break;
+											default:
+
+										}
 									default:
 										logger.trace("Unsupported entry type: ", entry.getType());
 										break;
@@ -173,12 +194,12 @@ public final class HistoricalCodec {
 		if (!concise) {
 			// base time stamp is always UTC format
 			builder.setBaseMarketId(Long.parseLong(bar.getInstrument().id()))
-					.setBaseTimeStamp(ProtoDateUtil.fromJodaDateTimeToDecimalDateTime(
-							new DateTime(bar.getDate(), DateTimeZone.UTC)))
+			.setBaseTimeStamp(ProtoDateUtil.fromJodaDateTimeToDecimalDateTime(
+					new DateTime(bar.getDate(), DateTimeZone.UTC)))
 					.setAggregation(
 							AggregationPeriod.valueOf(bar.getPeriod()
 									.getPeriodType().name()))
-					.setPeriodCount(bar.getPeriod().size());
+									.setPeriodCount(bar.getPeriod().size());
 		}
 
 		if (bar.getOpen() != null && !bar.getOpen().isNull()) {
@@ -294,7 +315,28 @@ public final class HistoricalCodec {
 					.setType(MarketEntry.Type.TRADED_VALUE_DOWN));
 		}
 
+		greeks(bar, builder);
+
 		return builder.build();
 
+	}
+
+	private static void greeks(Bar bar, MarketHistoricalSnapshot.Builder builder) {
+
+		entry(bar.getGreeks(GREEK_TYPE.DELTA), builder, MarketEntry.Type.COMPUTED, MarketEntry.Descriptor.OPTION_DELTA);
+		entry(bar.getGreeks(GREEK_TYPE.GAMMA), builder, MarketEntry.Type.COMPUTED, MarketEntry.Descriptor.OPTION_GAMMA);
+		entry(bar.getGreeks(GREEK_TYPE.THETA), builder, MarketEntry.Type.COMPUTED, MarketEntry.Descriptor.OPTION_THETA);
+		entry(bar.getGreeks(GREEK_TYPE.VEGA), builder, MarketEntry.Type.COMPUTED, MarketEntry.Descriptor.OPTION_VEGA);
+		entry(bar.getGreeks(GREEK_TYPE.RHO), builder, MarketEntry.Type.COMPUTED, MarketEntry.Descriptor.OPTION_RHO);
+
+	}
+
+	private static void entry(Price p, MarketHistoricalSnapshot.Builder builder, MarketEntry.Type t, MarketEntry.Descriptor d) {
+		if (p != null && !p.isNull()) {
+			builder.addEntry(MarketEntry.newBuilder()
+					.setPriceMantissa(p.mantissa())
+					.setPriceExponent(p.exponent())
+					.setType(t).addDescriptor(d));
+		}
 	}
 }

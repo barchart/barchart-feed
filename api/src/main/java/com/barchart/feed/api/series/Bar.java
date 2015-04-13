@@ -11,6 +11,10 @@ import com.barchart.util.value.api.Size;
  */
 public interface Bar extends Range {
 
+	public enum GREEK_TYPE {
+		DELTA, THETA, GAMMA, VEGA, RHO
+	}
+
 	/**
 	 * Return the instrument ID for this bar.
 	 */
@@ -131,13 +135,18 @@ public interface Bar extends Range {
 	public DateTime getLastTradeDay();
 
 	/**
-	 * Merges the specified <@code Bar> with this one, possibly updating any
-	 * barrier elements (i.e. High, Low, etc) given the underlying type. Used
-	 * for aggregating information based on {@link PeriodType}
+	 * Returns the greek per requested type
 	 *
-	 * Returns a boolean indicating whether this time point should be closed -
-	 * refusing any subsequent merges. If this Bar should be closed, this method
-	 * returns true, false if not.
+	 * @return
+	 */
+	public Price getGreeks(GREEK_TYPE type);
+
+	/**
+	 * Merges the specified <@code Bar> with this one, possibly updating any barrier elements (i.e. High, Low, etc)
+	 * given the underlying type. Used for aggregating information based on {@link PeriodType}
+	 *
+	 * Returns a boolean indicating whether this time point should be closed - refusing any subsequent merges. If this
+	 * Bar should be closed, this method returns true, false if not.
 	 *
 	 * @param other the other Bar to merge.
 	 * @param advanceTime true if the time should also be merged, false if not
