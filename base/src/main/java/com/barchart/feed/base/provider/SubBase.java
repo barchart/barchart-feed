@@ -3,6 +3,7 @@ package com.barchart.feed.base.provider;
 import java.util.EnumSet;
 import java.util.Set;
 
+import com.barchart.feed.api.model.meta.Metadata;
 import com.barchart.feed.base.sub.SubCommand;
 import com.barchart.feed.base.sub.SubscriptionType;
 
@@ -10,11 +11,11 @@ public class SubBase implements SubCommand {
 	
 	private final Set<SubscriptionType> subTypes;
 	private final String interest;
-	private final SubCommand.Type type;
+	private final Metadata.MetaType type;
 	
 	SubBase(
 			final String interest, 
-			final SubCommand.Type type, 
+			final Metadata.MetaType type, 
 			final Set<SubscriptionType> types) {
 		
 		if(interest == null || types == null || types.isEmpty()) {
@@ -27,7 +28,7 @@ public class SubBase implements SubCommand {
 	}
 
 	@Override
-	public Type type() {
+	public Metadata.MetaType metaType() {
 		return type;
 	}
 	

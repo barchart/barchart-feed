@@ -6,9 +6,9 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import com.barchart.feed.api.model.meta.Metadata;
 import com.barchart.feed.base.participant.FrameworkAgent;
 import com.barchart.feed.base.sub.SubCommand;
-import com.barchart.feed.base.sub.SubCommand.Type;
 import com.barchart.feed.base.sub.SubscriptionType;
 
 /*
@@ -50,7 +50,7 @@ public class SubManager {
 		stuffToAdd.removeAll(aggregate(interest));
 		
 		if(!stuffToAdd.isEmpty()) {
-			return new SubBase(interest, Type.INSTRUMENT, stuffToAdd);
+			return new SubBase(interest, Metadata.MetaType.INSTRUMENT, stuffToAdd);
 		} else {
 			return SubCommand.NULL;
 		}
@@ -92,7 +92,7 @@ public class SubManager {
 		stuffToRemove.removeAll(aggregate(interest));
 		
 		if(!stuffToRemove.isEmpty()) {
-			return new SubBase(interest, Type.INSTRUMENT, stuffToRemove);
+			return new SubBase(interest, Metadata.MetaType.INSTRUMENT, stuffToRemove);
 		} else {
 			return SubCommand.NULL;
 		}

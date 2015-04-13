@@ -41,8 +41,7 @@ public enum SubscriptionType {
 	 * This is a rough approx.  Probably going to be problems, given that JERQ can't 
 	 * actually do some of what we're thinking.
 	 */
-	public static <V extends MarketData<V>> Set<SubscriptionType> mapMarketEvent(
-			final Class<V> clazz) {
+	public static <V extends MarketData<V>> Set<SubscriptionType> mapMarketEvent(final Class<V> clazz) {
 		
 		final Set<SubscriptionType> result = EnumSet.noneOf(SubscriptionType.class);
 		
@@ -70,7 +69,6 @@ public enum SubscriptionType {
 		} else {
 			log.warn("Unknown class type {}", clazz.getName());
 		}
-		
 		
 		return result;
 		

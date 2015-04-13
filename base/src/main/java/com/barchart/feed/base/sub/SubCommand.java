@@ -2,16 +2,14 @@ package com.barchart.feed.base.sub;
 
 import java.util.Set;
 
+import com.barchart.feed.api.model.meta.Metadata;
+
 /**
  * Subscription are for either instruments or exchanges
  */
 public interface SubCommand {
 	
-	enum Type {
-		NULL, INSTRUMENT, EXCHANGE
-	}
-	
-	Type type();
+	Metadata.MetaType metaType();
 
 	boolean isNull();
 	
@@ -25,8 +23,8 @@ public interface SubCommand {
 	public static SubCommand NULL = new SubCommand() {
 
 		@Override
-		public Type type() {
-			return Type.NULL;
+		public Metadata.MetaType metaType() {
+			return Metadata.MetaType.NULL;
 		}
 		
 		@Override
