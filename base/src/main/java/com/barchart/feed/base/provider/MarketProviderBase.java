@@ -387,8 +387,6 @@ public abstract class MarketProviderBase<M extends MarketMessage>
 
 						}
 						
-						// agentHandler.updateAgent(BaseAgent.this);
-
 						final Set<SubCommand> newSubs = subscribe(newInterests);
 						if (!newSubs.isEmpty()) {
 							log.debug("Sending new subs to sub handler");
@@ -473,8 +471,6 @@ public abstract class MarketProviderBase<M extends MarketMessage>
 
 						}
 
-						// agentHandler.updateAgent(BaseAgent.this);
-						
 						final Set<SubCommand> oldSubs = unsubscribe(oldInterests);
 						if (!oldSubs.isEmpty()) {
 							log.debug("Sending new unsubs to sub handler");
@@ -705,18 +701,6 @@ public abstract class MarketProviderBase<M extends MarketMessage>
 		
 		private Set<SubCommand> subscribe(final Map<String, MetaType> symbols) {
 
-			// 
-			System.out.println("SUBSCRIBE **************");
-			new RuntimeException().printStackTrace();
-			
-			final StringBuilder sb = new StringBuilder();
-			for(final Entry<String, MetaType> e : symbols.entrySet()) {
-				sb.append(e.getKey()).append(" ");
-			}
-			System.out.println("******************  " + sb.toString());
-			//
-			
-			
 			final Set<SubCommand> newSubs = new HashSet<SubCommand>();
 
 			for (final Entry<String, Metadata.MetaType> e : symbols.entrySet()) {
@@ -735,18 +719,6 @@ public abstract class MarketProviderBase<M extends MarketMessage>
 		}
 		
 		private Set<SubCommand> unsubscribe(final Map<String, MetaType> symbols) {
-			
-			// 
-			System.out.println("UNSUBSCRIBE **************");
-			new RuntimeException().printStackTrace();
-			
-			final StringBuilder sb = new StringBuilder();
-			for(final Entry<String, MetaType> e : symbols.entrySet()) {
-				sb.append(e.getKey()).append(" ");
-			}
-			System.out.println("******************  " + sb.toString());
-			// 
-			
 			
 			final Set<SubCommand> newSubs = new HashSet<SubCommand>();
 
