@@ -100,8 +100,9 @@ public abstract class MarketProviderBase<M extends MarketMessage>
 		this.factory = factory;
 		this.metaService = metaService;
 		subHandler = handler;
+		
 	}
-
+	
 	/* ***** ***** Consumer Agent ***** ***** */
 
 	@Override
@@ -700,6 +701,16 @@ public abstract class MarketProviderBase<M extends MarketMessage>
 		/* ***** ***** ***** Begin Helper Methods ***** ***** ***** */
 		
 		private Set<SubCommand> subscribe(final Map<String, MetaType> symbols) {
+			
+			System.out.println("SUBSCRIBE **************");
+			new RuntimeException().printStackTrace();
+						
+			final StringBuilder sb = new StringBuilder();
+			for(final Entry<String, MetaType> e : symbols.entrySet()) {
+				sb.append(e.getKey()).append(" ");
+			}
+			System.out.println("******************  " + sb.toString());
+			//
 
 			final Set<SubCommand> newSubs = new HashSet<SubCommand>();
 
@@ -719,6 +730,16 @@ public abstract class MarketProviderBase<M extends MarketMessage>
 		}
 		
 		private Set<SubCommand> unsubscribe(final Map<String, MetaType> symbols) {
+			
+			System.out.println("UNSUBSCRIBE **************");
+			new RuntimeException().printStackTrace();
+						
+			final StringBuilder sb = new StringBuilder();
+			for(final Entry<String, MetaType> e : symbols.entrySet()) {
+				sb.append(e.getKey()).append(" ");
+			}
+			System.out.println("******************  " + sb.toString());
+			//
 			
 			final Set<SubCommand> newSubs = new HashSet<SubCommand>();
 
@@ -815,6 +836,22 @@ public abstract class MarketProviderBase<M extends MarketMessage>
 			stuffToAdd.removeAll(aggregate(formatSymbol));
 
 			instToAgentsMap.get(formatSymbol).add(agent);
+			
+			// DELETE ME
+			StringBuilder sb = new StringBuilder();
+			for(final Entry<String, List<FrameworkAgent<?>>> e : instToAgentsMap.entrySet()) {
+				sb.append(e.getKey())
+				.append(" ")
+				.append(e.getValue().size())
+				.append("\n");
+			}
+			System.out.println("SUB MAP \n" + sb.toString());
+			System.out.println("***************************");
+			sb = new StringBuilder();
+			for(final Entry<InstrumentID, Subscription<Instrument>> e : defSubs.entrySet()) {
+				sb.append(e.getValue().metadata().symbol()).append("\n");
+			}
+			System.out.println("DEF SUB MAP \n" + sb.toString());
 
 			if (!stuffToAdd.isEmpty()) {
 				return new SubBase(formatForJERQ(formatSymbol), type, stuffToAdd);
@@ -845,6 +882,22 @@ public abstract class MarketProviderBase<M extends MarketMessage>
 
 			final Set<SubscriptionType> stuffToRemove = EnumSet.copyOf(oldSubs);
 			stuffToRemove.removeAll(aggregate(formatSymbol));
+			
+			// DELETE ME
+			StringBuilder sb = new StringBuilder();
+			for(final Entry<String, List<FrameworkAgent<?>>> e : instToAgentsMap.entrySet()) {
+				sb.append(e.getKey())
+				.append(" ")
+				.append(e.getValue().size())
+				.append("\n");
+			}
+			System.out.println("SUB MAP \n" + sb.toString());
+			System.out.println("***************************");
+			sb = new StringBuilder();
+			for(final Entry<InstrumentID, Subscription<Instrument>> e : defSubs.entrySet()) {
+				sb.append(e.getValue().metadata().symbol()).append("\n");
+			}
+			System.out.println("DEF SUB MAP \n" + sb.toString());
 
 			if (!stuffToRemove.isEmpty()) {
 				return new SubBase(formatForJERQ(formatSymbol), Metadata.MetaType.INSTRUMENT, stuffToRemove);
@@ -947,6 +1000,7 @@ public abstract class MarketProviderBase<M extends MarketMessage>
 			
 		}
 		
+		/* Check for subs to remove */
 		for(final Iterator<Entry<InstrumentID, Subscription<Instrument>>> iter = defSubs.entrySet().iterator();
 				iter.hasNext(); ) {
 			
@@ -967,6 +1021,8 @@ public abstract class MarketProviderBase<M extends MarketMessage>
 			} 
 			
 		}
+		
+		/* Check for subs to add */
 		
 	}
 	
@@ -1176,7 +1232,10 @@ public abstract class MarketProviderBase<M extends MarketMessage>
 			lense = Subscription.Lense.NULL;
 		}
 
-		if(!valid) {
+		if(!valid || !defSubs.containsKey(instrument.id())) {
+			
+			System.out.println("ADDING {} TO DEF SUB MAP " + instrument.symbol());
+			
 			varSubs.put(instrument.id(), new VarSubscription(instrument, lense));
 			defSubs.put(instrument.id(), varSubs.get(instrument.id()));
 		}
