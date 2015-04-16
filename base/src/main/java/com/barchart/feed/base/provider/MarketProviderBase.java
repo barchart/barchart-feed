@@ -373,6 +373,7 @@ public abstract class MarketProviderBase<M extends MarketMessage>
 
 								/* We have to use an alternate symbol for options */
 								final String symbol = i.symbol();
+								
 								if(symbol.contains("|")) {
 									newInterests.put(i.vendorSymbols().get(VendorID.BARCHART_SHORT), MetaType.INSTRUMENT);
 								} else {
@@ -532,6 +533,7 @@ public abstract class MarketProviderBase<M extends MarketMessage>
 
 					/* We have to use an alternate symbol for options */
 					final String symbol = i.symbol();
+					
 					if(symbol.contains("|")) {
 						newInterests.put(i.vendorSymbols().get(VendorID.BARCHART_SHORT), MetaType.INSTRUMENT);
 					} else {
@@ -804,21 +806,19 @@ public abstract class MarketProviderBase<M extends MarketMessage>
 
 		synchronized(instToAgentsMap) {
 			
-			final String formatSymbol = Symbology.formatSymbol(symbol);
-			
 			final Set<SubscriptionType> newSubs = SubscriptionType.mapMarketEvent(agent.type());
 
-			if (!instToAgentsMap.containsKey(formatSymbol) && !newSubs.isEmpty()) {
-				instToAgentsMap.put(formatSymbol, new ArrayList<FrameworkAgent<?>>());
+			if (!instToAgentsMap.containsKey(symbol) && !newSubs.isEmpty()) {
+				instToAgentsMap.put(symbol, new ArrayList<FrameworkAgent<?>>());
 			}
 
 			final Set<SubscriptionType> stuffToAdd = EnumSet.copyOf(newSubs);
-			stuffToAdd.removeAll(aggregate(formatSymbol));
+			stuffToAdd.removeAll(aggregate(symbol));
 
-			instToAgentsMap.get(formatSymbol).add(agent);
+			instToAgentsMap.get(symbol).add(agent);
 			
 			if (!stuffToAdd.isEmpty()) {
-				return new SubBase(formatForJERQ(formatSymbol), type, stuffToAdd);
+				return new SubBase(formatForJERQ(symbol), type, stuffToAdd);
 			} else {
 				return SubCommand.NULL;
 			}
@@ -833,22 +833,20 @@ public abstract class MarketProviderBase<M extends MarketMessage>
 
 		synchronized(instToAgentsMap) {
 			
-			final String formatSymbol = Symbology.formatSymbol(symbol);
-			
 			final Set<SubscriptionType> oldSubs = SubscriptionType.mapMarketEvent(agent.type());
 
-			if(instToAgentsMap.containsKey(formatSymbol)){
-				instToAgentsMap.get(formatSymbol).remove(agent);
-				if(instToAgentsMap.get(formatSymbol).isEmpty()) {
-					instToAgentsMap.remove(formatSymbol);
+			if(instToAgentsMap.containsKey(symbol)){
+				instToAgentsMap.get(symbol).remove(agent);
+				if(instToAgentsMap.get(symbol).isEmpty()) {
+					instToAgentsMap.remove(symbol);
 				}
 			}
 
 			final Set<SubscriptionType> stuffToRemove = EnumSet.copyOf(oldSubs);
-			stuffToRemove.removeAll(aggregate(formatSymbol));
+			stuffToRemove.removeAll(aggregate(symbol));
 			
 			if (!stuffToRemove.isEmpty()) {
-				return new SubBase(formatForJERQ(formatSymbol), Metadata.MetaType.INSTRUMENT, stuffToRemove);
+				return new SubBase(formatForJERQ(symbol), Metadata.MetaType.INSTRUMENT, stuffToRemove);
 			} else {
 				return SubCommand.NULL;
 			}
@@ -1148,8 +1146,7 @@ public abstract class MarketProviderBase<M extends MarketMessage>
 		 * Check if session is null because first message for FUTURES will be CUVOL
 		 * and won't have snapshot info
 		 */
-		if(!market.session().isNull()
-				&& awaitingSnaps.containsKey(instrument.id())) {
+		if(!market.session().isNull() && awaitingSnaps.containsKey(instrument.id())) {
 
 			final PublishSubject<Market> sub = awaitingSnaps.remove(instrument.id());
 			
