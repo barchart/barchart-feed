@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -12,7 +11,6 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -63,8 +61,8 @@ import com.barchart.feed.inst.Exchanges;
 import com.barchart.util.common.collections.strict.StrictConcurrentHashMap;
 import com.barchart.util.value.api.Fraction;
 
-public abstract class MarketProviderBase<M extends MarketMessage>
-		implements MarketService, MarketMakerProvider<M>,
+public abstract class MarketProviderBase<Message extends MarketMessage>
+		implements MarketService, MarketMakerProvider<Message>,
 		FrameworkAgentLifecycleHandler {
 
 	protected static final Logger log = LoggerFactory.getLogger(
@@ -330,7 +328,7 @@ public abstract class MarketProviderBase<M extends MarketMessage>
 		public synchronized void terminate() {
 
 			/* Unsubscribe to all */
-			subHandler.unsubscribe(unsubscribeAll());
+			subHandler.unsubscribe(unsubscribeAll(this));
 
 			state = State.TERMINATED;
 			agentHandler.detachAgent(this);
@@ -339,7 +337,7 @@ public abstract class MarketProviderBase<M extends MarketMessage>
 
 		@Override
 		public synchronized Observable<Result<Instrument>> include(final String... symbols) {
-			
+
 			return metaService.instrument(symbols)
 
 				.flatMap(new Func1<Result<Instrument>, Observable<Result<Instrument>>>() {
@@ -356,11 +354,6 @@ public abstract class MarketProviderBase<M extends MarketMessage>
 							final Instrument i = e.getValue().get(0);
 
 							if (!i.isNull()) {
-								
-								/* Ignore including expired instruments */
-								if(isExpired(i)) {
-									continue;
-								}
 
 								/* Try to fire a snapshot if instrument is not already included*/
 								if(!incInsts.contains(i)) {
@@ -386,14 +379,14 @@ public abstract class MarketProviderBase<M extends MarketMessage>
 							}
 
 						}
-						
-						final Set<SubCommand> newSubs = subscribe(newInterests);
+
+						agentHandler.updateAgent(BaseAgent.this);
+
+						final Set<SubCommand> newSubs = subscribe(BaseAgent.this, newInterests);
 						if (!newSubs.isEmpty()) {
 							log.debug("Sending new subs to sub handler");
 							subHandler.subscribe(newSubs);
 						}
-						
-						agentHandler.updateAgent(BaseAgent.this);
 
 						return Observable.just(result);
 					}
@@ -431,14 +424,14 @@ public abstract class MarketProviderBase<M extends MarketMessage>
 
 		@Override
 		public synchronized Observable<Result<Instrument>> exclude(final String... symbols) {
-			
+
 			return metaService.instrument(symbols).flatMap(
 
 				new Func1<Result<Instrument>, Observable<Result<Instrument>>>() {
 
 					@Override
 					public Observable<Result<Instrument>> call(final Result<Instrument> result) {
-						
+
 						final Map<String, List<Instrument>> instMap = result.results();
 						final Map<String, MetaType> oldInterests = new HashMap<String, MetaType>();
 
@@ -452,7 +445,9 @@ public abstract class MarketProviderBase<M extends MarketMessage>
 								incInsts.remove(i);
 								exInsts.add(i);
 
-								/* Use an alternate symbol for options */
+								/* We have to use an alternate symbol for options
+								 * ...rolls eyes...
+								 */
 								final String symbol = i.symbol();
 								if(symbol.contains("|")) {
 									oldInterests.put(i.vendorSymbols().get(VendorID.BARCHART_SHORT), MetaType.INSTRUMENT);
@@ -471,13 +466,13 @@ public abstract class MarketProviderBase<M extends MarketMessage>
 
 						}
 
-						final Set<SubCommand> oldSubs = unsubscribe(oldInterests);
+						agentHandler.updateAgent(BaseAgent.this);
+
+						final Set<SubCommand> oldSubs = unsubscribe(BaseAgent.this, oldInterests);
 						if (!oldSubs.isEmpty()) {
 							log.debug("Sending new unsubs to sub handler");
 							subHandler.unsubscribe(oldSubs);
 						}
-						
-						agentHandler.updateAgent(BaseAgent.this);
 
 						return Observable.just(result);
 					}
@@ -520,12 +515,7 @@ public abstract class MarketProviderBase<M extends MarketMessage>
 				case INSTRUMENT:
 
 					final Instrument i = (Instrument)m;
-					
-					/* Ignore including expired instruments */
-					if(isExpired(i)) {
-						break;
-					}
-					
+
 					incInsts.add(i);
 					exInsts.remove(i);
 
@@ -548,7 +538,7 @@ public abstract class MarketProviderBase<M extends MarketMessage>
 
 			agentHandler.updateAgent(this);
 
-			final Set<SubCommand> newSubs = subscribe(newInterests);
+			final Set<SubCommand> newSubs = subscribe(this, newInterests);
 			if (!newSubs.isEmpty()) {
 				log.debug("Sending new subs to sub handler");
 				subHandler.subscribe(newSubs);
@@ -637,7 +627,7 @@ public abstract class MarketProviderBase<M extends MarketMessage>
 
 			agentHandler.updateAgent(this);
 
-			final Set<SubCommand> oldSubs = unsubscribe(oldInterests);
+			final Set<SubCommand> oldSubs = unsubscribe(this, oldInterests);
 			if (!oldSubs.isEmpty()) {
 				log.debug("Sending new unsubs to sub handler");
 				subHandler.unsubscribe(oldSubs);
@@ -676,7 +666,15 @@ public abstract class MarketProviderBase<M extends MarketMessage>
 		@Override
 		public synchronized void clear() {
 
-			subHandler.unsubscribe(unsubscribeAll());
+			/* Unsubscribe to all */
+			final Set<SubCommand> subsToUnsub = unsubscribeAll(this);
+			final StringBuilder sb = new StringBuilder().append("UNSUB ******** ");
+			for(final SubCommand s : subsToUnsub) {
+				sb.append(s.interest()).append(" ");
+			}
+			log.debug(sb.toString());
+
+			subHandler.unsubscribe(unsubscribeAll(this));
 
 			incInsts.clear();
 			exInsts.clear();
@@ -696,89 +694,9 @@ public abstract class MarketProviderBase<M extends MarketMessage>
 		public void excludeSymbol(final String... symbols) {
 			exclude(symbols).toBlockingObservable().first();
 		}
-		
-		/* ***** ***** ***** Begin Helper Methods ***** ***** ***** */
-		
-		private Set<SubCommand> subscribe(final Map<String, MetaType> symbols) {
-<<<<<<< HEAD
-			
-=======
 
->>>>>>> parent of 4ac2729... Adding subscriptions back in if not present on market update
-			final Set<SubCommand> newSubs = new HashSet<SubCommand>();
+	}  // END BASE AGENT
 
-			for (final Entry<String, Metadata.MetaType> e : symbols.entrySet()) {
-				
-				final SubCommand sub = MarketProviderBase.this.subscribe(
-						BaseAgent.this, 
-						e.getKey(), /* Symbol */ 
-						e.getValue()); /* MetaType */
-				
-				if (!sub.isNull()) {
-					newSubs.add(sub);
-				}
-			}
-
-			return newSubs;
-		}
-		
-		private Set<SubCommand> unsubscribe(final Map<String, MetaType> symbols) {
-			
-			final Set<SubCommand> newSubs = new HashSet<SubCommand>();
-
-			for (final Entry<String,MetaType> interest : symbols.entrySet()) {
-				
-				final SubCommand sub = MarketProviderBase.this.unsubscribe(
-						BaseAgent.this, 
-						interest.getKey(), /* Symbol */
-						interest.getValue()); /* MetaType */
-				
-				if (!sub.isNull()) {
-					newSubs.add(sub);
-				}
-			}
-
-			return newSubs;
-		}
-		
-		private Set<SubCommand> unsubscribeAll() {
-			
-			final Map<String, MetaType> symMap = new HashMap<String, MetaType>();
-
-			for(final String s : interests()) {
-				symMap.put(s, MetaType.INSTRUMENT);
-			}
-
-			return unsubscribe(symMap);
-		}
-
-	}  
-
-	/* ***** ***** ***** End Base Agent ***** ***** ***** */
-	
-	private boolean isExpired(final Instrument inst) {
-		
-		final DateTime expire = inst.expiration();
-		
-		if(expire == null) {
-			return false;
-		}
-		
-		final DateTime current = new DateTime();
-		
-		if(current.compareTo(expire) > 0) {
-			
-			log.debug("Instrument {} is expired.  Expire {} - Current {}",
-					inst.symbol(),
-					expire,
-					current);
-			
-			return true;
-		} else {
-			return false;
-		}
-		
-	}
 
 	/* ***** ***** Subscription Aggregation Methods ***** ***** */
 
@@ -806,31 +724,39 @@ public abstract class MarketProviderBase<M extends MarketMessage>
 			final MetaType type) {
 
 		synchronized(instToAgentsMap) {
-			
-			final String formatSymbol = Symbology.formatSymbol(symbol);
-			
+
 			final Set<SubscriptionType> newSubs = SubscriptionType.mapMarketEvent(agent.type());
 
-			if (!instToAgentsMap.containsKey(formatSymbol) && !newSubs.isEmpty()) {
-				instToAgentsMap.put(formatSymbol, new ArrayList<FrameworkAgent<?>>());
+			if (!instToAgentsMap.containsKey(symbol) && !newSubs.isEmpty()) {
+				instToAgentsMap.put(symbol, new ArrayList<FrameworkAgent<?>>());
 			}
 
 			final Set<SubscriptionType> stuffToAdd = EnumSet.copyOf(newSubs);
-			stuffToAdd.removeAll(aggregate(formatSymbol));
+			stuffToAdd.removeAll(aggregate(symbol));
 
-			instToAgentsMap.get(formatSymbol).add(agent);
-<<<<<<< HEAD
-			
-=======
+			instToAgentsMap.get(symbol).add(agent);
 
->>>>>>> parent of 4ac2729... Adding subscriptions back in if not present on market update
 			if (!stuffToAdd.isEmpty()) {
-				return new SubBase(formatForJERQ(formatSymbol), type, stuffToAdd);
+				return new SubBase(symbol, type, stuffToAdd);
 			} else {
 				return SubCommand.NULL;
 			}
 
 		}
+	}
+
+	private Set<SubCommand> subscribe(final FrameworkAgent<?> agent, final Map<String, MetaType> symbols) {
+
+		final Set<SubCommand> newSubs = new HashSet<SubCommand>();
+
+		for (final Entry<String, MetaType> e : symbols.entrySet()) {
+			final SubCommand sub = subscribe(agent, e.getKey(), e.getValue());
+			if (!sub.isNull()) {
+				newSubs.add(sub);
+			}
+		}
+
+		return newSubs;
 	}
 
 	private SubCommand unsubscribe(
@@ -839,29 +765,62 @@ public abstract class MarketProviderBase<M extends MarketMessage>
 			final MetaType type) {
 
 		synchronized(instToAgentsMap) {
-			
-			final String formatSymbol = Symbology.formatSymbol(symbol);
-			
+
 			final Set<SubscriptionType> oldSubs = SubscriptionType.mapMarketEvent(agent.type());
 
-			if(instToAgentsMap.containsKey(formatSymbol)){
-				instToAgentsMap.get(formatSymbol).remove(agent);
-				if(instToAgentsMap.get(formatSymbol).isEmpty()) {
-					instToAgentsMap.remove(formatSymbol);
+			if(instToAgentsMap.containsKey(symbol)){
+				instToAgentsMap.get(symbol).remove(agent);
+				if(instToAgentsMap.get(symbol).isEmpty()) {
+					instToAgentsMap.remove(symbol);
 				}
 			}
 
 			final Set<SubscriptionType> stuffToRemove = EnumSet.copyOf(oldSubs);
-			stuffToRemove.removeAll(aggregate(formatSymbol));
-<<<<<<< HEAD
-			
-=======
+			stuffToRemove.removeAll(aggregate(symbol));
 
->>>>>>> parent of 4ac2729... Adding subscriptions back in if not present on market update
 			if (!stuffToRemove.isEmpty()) {
-				return new SubBase(formatForJERQ(formatSymbol), Metadata.MetaType.INSTRUMENT, stuffToRemove);
+				return new SubBase(symbol, MetaType.INSTRUMENT, stuffToRemove);
 			} else {
 				return SubCommand.NULL;
+			}
+		}
+	}
+
+	private synchronized Set<SubCommand> unsubscribe(final FrameworkAgent<?> agent,
+			final Map<String, MetaType> symbols) {
+
+		final Set<SubCommand> newSubs = new HashSet<SubCommand>();
+
+		for (final Entry<String,MetaType> interest : symbols.entrySet()) {
+			final SubCommand sub = unsubscribe(agent, interest.getKey(), interest.getValue());
+			if (!sub.isNull()) {
+				newSubs.add(sub);
+			}
+		}
+
+		return newSubs;
+	}
+
+	private Set<SubCommand> unsubscribeAll(final FrameworkAgent<?> agent) {
+		final Map<String, MetaType> symMap = new HashMap<String, MetaType>();
+
+		for(final String s : agent.interests()) {
+			symMap.put(s, MetaType.INSTRUMENT);
+		}
+
+		return unsubscribe(agent, symMap);
+	}
+
+	class RefEqualsList<T> extends ArrayList<T> {
+
+		private static final long serialVersionUID = -7398964176380704808L;
+
+		@Override
+		public boolean equals(final Object o) {
+			if(this == o) {
+				return true;
+			} else {
+				return false;
 			}
 		}
 	}
@@ -923,8 +882,6 @@ public abstract class MarketProviderBase<M extends MarketMessage>
 			}
 
 		}
-		
-		cleanSubscriptions();
 
 	}
 
@@ -940,48 +897,9 @@ public abstract class MarketProviderBase<M extends MarketMessage>
 		for (final Entry<InstrumentID, MarketDo> e : marketMap.entrySet()) {
 			e.getValue().detachAgent(agent);
 		}
-		
-		cleanSubscriptions();
 
 	}
-	
-	private void cleanSubscriptions() {
-		
-		final Map<String, SubCommand> feedSubs = subHandler.subscriptions();
-		
-		for(final Entry<String, SubCommand> e : feedSubs.entrySet()) {
-			
-			final StringBuilder sb = new StringBuilder();
 
-			for(final SubscriptionType st : e.getValue().types()) {
-				sb.append(st.name()).append(",");
-			}
-			
-		}
-		
-		for(final Iterator<Entry<InstrumentID, Subscription<Instrument>>> iter = defSubs.entrySet().iterator();
-				iter.hasNext(); ) {
-			
-			final Entry<InstrumentID, Subscription<Instrument>> entry = iter.next();
-			
-			final Instrument inst = metaService.instrument(entry.getKey())
-					.toBlockingObservable()
-					.first()
-					.get(entry.getKey());
-			
-			String symbol = Symbology.formatSymbol(inst.symbol());
-			if(symbol.contains("|")) { 
-				symbol = inst.vendorSymbols().get(VendorID.BARCHART_SHORT);
-			} 
-			
-			if(!feedSubs.containsKey(symbol)) {
-				iter.remove();
-			} 
-			
-		}
-		
-	}
-	
 	/* ***** ***** SubscriptionService ***** ***** */
 
 	@Override
@@ -1003,7 +921,7 @@ public abstract class MarketProviderBase<M extends MarketMessage>
 
 			@Override
 			public void onNext(final Market v) {
-				
+				/* Does nothing */
 			}
 
 		}, Market.class);
@@ -1029,7 +947,7 @@ public abstract class MarketProviderBase<M extends MarketMessage>
 
 			// For expired symbols we block forever here, because JERQ doesn't indicate failure.
 			// Need a timeout or something...
-			// return awaitingSnaps.get(instID);
+			//return awaitingSnaps.get(instID);
 			return Observable.just(Market.NULL);
 		}
 
@@ -1133,7 +1051,7 @@ public abstract class MarketProviderBase<M extends MarketMessage>
 	// ######################## Make ########################
 
 	@Override
-	public void make(final M message) {
+	public void make(final Message message) {
 
 		final Instrument instrument = message.getInstrument();
 
@@ -1160,12 +1078,9 @@ public abstract class MarketProviderBase<M extends MarketMessage>
 				&& awaitingSnaps.containsKey(instrument.id())) {
 
 			final PublishSubject<Market> sub = awaitingSnaps.remove(instrument.id());
-			
+
 			sub.onNext(market.freeze());
 			sub.onCompleted();
-			
-			/* Unsubscribe to instrument */
-			snapshotAgent.exclude(market.instrument().id());
 
 		}
 
@@ -1188,11 +1103,7 @@ public abstract class MarketProviderBase<M extends MarketMessage>
 			lense = Subscription.Lense.NULL;
 		}
 
-<<<<<<< HEAD
-		if(!valid || !defSubs.containsKey(instrument.id())) {
-=======
 		if(!valid) {
->>>>>>> parent of 4ac2729... Adding subscriptions back in if not present on market update
 			varSubs.put(instrument.id(), new VarSubscription(instrument, lense));
 			defSubs.put(instrument.id(), varSubs.get(instrument.id()));
 		}
@@ -1232,10 +1143,10 @@ public abstract class MarketProviderBase<M extends MarketMessage>
 
 	}
 
-	protected MarketSafeRunner<Void, M> safeMake = new MarketSafeRunner<Void, M>() {
+	protected MarketSafeRunner<Void, Message> safeMake = new MarketSafeRunner<Void, Message>() {
 
 		@Override
-		public Void runSafe(final MarketDo market, final M message) {
+		public Void runSafe(final MarketDo market, final Message message) {
 			make(message, market);
 			market.fireEvents();
 			market.fireCallbacks();
@@ -1243,7 +1154,7 @@ public abstract class MarketProviderBase<M extends MarketMessage>
 		}
 	};
 
-	protected abstract void make(M message, MarketDo market);
+	protected abstract void make(Message message, MarketDo market);
 
 	// ######################## Take ########################
 
@@ -1340,7 +1251,7 @@ public abstract class MarketProviderBase<M extends MarketMessage>
 
 	@Override
 	public synchronized final void copyTo(
-			final MarketMakerProvider<M> maker,
+			final MarketMakerProvider<Message> maker,
 			final MarketField<?>... fields) {
 		throw new UnsupportedOperationException("TODO");
 	}
