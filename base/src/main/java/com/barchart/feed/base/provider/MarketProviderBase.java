@@ -100,9 +100,8 @@ public abstract class MarketProviderBase<M extends MarketMessage>
 		this.factory = factory;
 		this.metaService = metaService;
 		subHandler = handler;
-		
 	}
-	
+
 	/* ***** ***** Consumer Agent ***** ***** */
 
 	@Override
@@ -701,7 +700,11 @@ public abstract class MarketProviderBase<M extends MarketMessage>
 		/* ***** ***** ***** Begin Helper Methods ***** ***** ***** */
 		
 		private Set<SubCommand> subscribe(final Map<String, MetaType> symbols) {
+<<<<<<< HEAD
 			
+=======
+
+>>>>>>> parent of 4ac2729... Adding subscriptions back in if not present on market update
 			final Set<SubCommand> newSubs = new HashSet<SubCommand>();
 
 			for (final Entry<String, Metadata.MetaType> e : symbols.entrySet()) {
@@ -816,7 +819,11 @@ public abstract class MarketProviderBase<M extends MarketMessage>
 			stuffToAdd.removeAll(aggregate(formatSymbol));
 
 			instToAgentsMap.get(formatSymbol).add(agent);
+<<<<<<< HEAD
 			
+=======
+
+>>>>>>> parent of 4ac2729... Adding subscriptions back in if not present on market update
 			if (!stuffToAdd.isEmpty()) {
 				return new SubBase(formatForJERQ(formatSymbol), type, stuffToAdd);
 			} else {
@@ -846,7 +853,11 @@ public abstract class MarketProviderBase<M extends MarketMessage>
 
 			final Set<SubscriptionType> stuffToRemove = EnumSet.copyOf(oldSubs);
 			stuffToRemove.removeAll(aggregate(formatSymbol));
+<<<<<<< HEAD
 			
+=======
+
+>>>>>>> parent of 4ac2729... Adding subscriptions back in if not present on market update
 			if (!stuffToRemove.isEmpty()) {
 				return new SubBase(formatForJERQ(formatSymbol), Metadata.MetaType.INSTRUMENT, stuffToRemove);
 			} else {
@@ -948,7 +959,6 @@ public abstract class MarketProviderBase<M extends MarketMessage>
 			
 		}
 		
-		/* Check for subs to remove */
 		for(final Iterator<Entry<InstrumentID, Subscription<Instrument>>> iter = defSubs.entrySet().iterator();
 				iter.hasNext(); ) {
 			
@@ -969,8 +979,6 @@ public abstract class MarketProviderBase<M extends MarketMessage>
 			} 
 			
 		}
-		
-		/* Check for subs to add */
 		
 	}
 	
@@ -1180,7 +1188,11 @@ public abstract class MarketProviderBase<M extends MarketMessage>
 			lense = Subscription.Lense.NULL;
 		}
 
+<<<<<<< HEAD
 		if(!valid || !defSubs.containsKey(instrument.id())) {
+=======
+		if(!valid) {
+>>>>>>> parent of 4ac2729... Adding subscriptions back in if not present on market update
 			varSubs.put(instrument.id(), new VarSubscription(instrument, lense));
 			defSubs.put(instrument.id(), varSubs.get(instrument.id()));
 		}
