@@ -11,6 +11,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -355,6 +356,11 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 
 							if (!i.isNull()) {
 
+								/* Ignore including expired instruments */
+								if(isExpired(i)) {
+									continue;
+								}
+								
 								/* Try to fire a snapshot if instrument is not already included*/
 								if(!incInsts.contains(i)) {
 									fireSnapshot(i.id());
@@ -516,6 +522,11 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 
 					final Instrument i = (Instrument)m;
 
+					/* Ignore including expired instruments */
+					if(isExpired(i)) {
+						break;
+					}
+					
 					incInsts.add(i);
 					exInsts.remove(i);
 
@@ -668,11 +679,6 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 
 			/* Unsubscribe to all */
 			final Set<SubCommand> subsToUnsub = unsubscribeAll(this);
-			final StringBuilder sb = new StringBuilder().append("UNSUB ******** ");
-			for(final SubCommand s : subsToUnsub) {
-				sb.append(s.interest()).append(" ");
-			}
-			log.debug(sb.toString());
 
 			subHandler.unsubscribe(unsubscribeAll(this));
 
@@ -697,6 +703,29 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 
 	}  // END BASE AGENT
 
+	private boolean isExpired(final Instrument inst) {
+				
+		final DateTime expire = inst.expiration();
+		
+		if(expire == null) {
+			return false;
+		}
+	
+		final DateTime current = new DateTime();
+		
+		if(current.compareTo(expire) > 0) {
+			
+			log.debug("Instrument {} is expired.  Expire {} - Current {}",
+					inst.symbol(),
+					expire,
+					current);
+			
+			return true;
+		} else {
+			return false;
+		}
+				
+	}
 
 	/* ***** ***** Subscription Aggregation Methods ***** ***** */
 
@@ -928,7 +957,15 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 
 	@Override
 	public synchronized Observable<Market> snapshot(final InstrumentID instID) {
-
+		
+		/* Validate inst ID, ignore if expired or unknown */
+		final Instrument inst = metaService.instrument(instID)
+				.toBlockingObservable().first().get(instID);
+		
+		if(inst.isNull() || isExpired(inst)) {
+			return Observable.just(Market.NULL);
+		}
+		
 		if(marketMap.containsKey(instID)) {
 
 			final Market market = marketMap.get(instID).freeze();
@@ -944,10 +981,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 				snapshotAgent.include(instID);
 
 			}
-
-			// For expired symbols we block forever here, because JERQ doesn't indicate failure.
-			// Need a timeout or something...
-			//return awaitingSnaps.get(instID);
+			
 			return Observable.just(Market.NULL);
 		}
 
