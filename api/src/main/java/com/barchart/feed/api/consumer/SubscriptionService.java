@@ -14,7 +14,5 @@ public interface SubscriptionService {
 	
 	Map<ExchangeID, Subscription<Exchange>> exchanges();
 	
-	//  Add subscribe / unsubscribe
-	
 	
 }

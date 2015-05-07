@@ -94,11 +94,11 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 
 	protected MarketProviderBase(final MarketFactory factory,
 			final MetadataService metaService,
-			final SubscriptionHandler handler) {
+			final SubscriptionHandler subHandler) {
 
 		this.factory = factory;
 		this.metaService = metaService;
-		subHandler = handler;
+		this.subHandler = subHandler;
 	}
 
 	/* ***** ***** Consumer Agent ***** ***** */
@@ -940,6 +940,11 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 	public Map<ExchangeID, Subscription<Exchange>> exchanges() {
 		return exchSubs;
 	}
+	
+	@Override
+	public int numberOfSubscriptions() {
+		return subHandler.subscriptions().size();
+	}
 
 	// ######################## // ########################
 
@@ -1108,8 +1113,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		 * Check if session is null because first message for FUTURES will be CUVOL
 		 * and won't have snapshot info
 		 */
-		if(!market.session().isNull()
-				&& awaitingSnaps.containsKey(instrument.id())) {
+		if(!market.session().isNull() && awaitingSnaps.containsKey(instrument.id())) {
 
 			final PublishSubject<Market> sub = awaitingSnaps.remove(instrument.id());
 

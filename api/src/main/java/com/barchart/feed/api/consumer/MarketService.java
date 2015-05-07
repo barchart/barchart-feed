@@ -100,4 +100,13 @@ public interface MarketService extends ConnectionLifecycle<MarketService>,
 	@Override
 	Map<ExchangeID, Subscription<Exchange>> exchanges();
 	
+	/**
+	 * This method is a hack, as the feed subs and the market service subs are different.
+	 * This allows Trader to see the actual number of subs, not just the ones the market 
+	 * service has seen.
+	 * 
+	 * @return
+	 */
+	int numberOfSubscriptions();
+	
 }

@@ -183,5 +183,5 @@ public abstract class MarketplaceBase<Message extends MarketMessage> extends Mar
 		
 		return snapshot(inst);
 	}
-
+	
 }
