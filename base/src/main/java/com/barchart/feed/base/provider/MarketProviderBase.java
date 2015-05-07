@@ -1097,7 +1097,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		if (!isValid(instrument)) {
 			return;
 		}
-
+		
 		MarketDo market = marketMap.get(instrument.id());
 
 		final boolean valid = isValid(market);
