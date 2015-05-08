@@ -678,8 +678,6 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		public synchronized void clear() {
 
 			/* Unsubscribe to all */
-			final Set<SubCommand> subsToUnsub = unsubscribeAll(this);
-
 			subHandler.unsubscribe(unsubscribeAll(this));
 
 			incInsts.clear();
@@ -1098,13 +1096,15 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 			return;
 		}
 		
-		MarketDo market = marketMap.get(instrument.id());
+		final InstrumentID instID = instrument.id();
+		
+		MarketDo market = marketMap.get(instID);
 
 		final boolean valid = isValid(market);
 
 		if(!valid) {
 			register(instrument);
-			market = marketMap.get(instrument.id());
+			market = marketMap.get(instID);
 		}
 
 		market.runSafe(safeMake, message);
@@ -1113,12 +1113,14 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		 * Check if session is null because first message for FUTURES will be CUVOL
 		 * and won't have snapshot info
 		 */
-		if(!market.session().isNull() && awaitingSnaps.containsKey(instrument.id())) {
+		if(!market.session().isNull() && awaitingSnaps.containsKey(instID)) {
 
-			final PublishSubject<Market> sub = awaitingSnaps.remove(instrument.id());
+			final PublishSubject<Market> sub = awaitingSnaps.remove(instID);
 
 			sub.onNext(market.freeze());
 			sub.onCompleted();
+			
+			snapshotAgent.exclude(instID);
 
 		}
 
@@ -1142,11 +1144,11 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		}
 
 		if(!valid) {
-			varSubs.put(instrument.id(), new VarSubscription(instrument, lense));
-			defSubs.put(instrument.id(), varSubs.get(instrument.id()));
+			varSubs.put(instID, new VarSubscription(instrument, lense));
+			defSubs.put(instID, varSubs.get(instrument.id()));
 		}
 
-		varSubs.get(instrument.id()).setLense(lense);
+		varSubs.get(instID).setLense(lense);
 
 	}
 
