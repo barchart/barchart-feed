@@ -161,4 +161,7 @@ public interface Marketplace extends MarketService {
 	@Override
 	Map<ExchangeID, Subscription<Exchange>> exchanges();
 	
+	@Override
+	int numberOfSubscriptions();
+	
 }
