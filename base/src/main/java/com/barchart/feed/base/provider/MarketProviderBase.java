@@ -598,7 +598,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		@Override
 		@Deprecated
 		public synchronized void exclude(final Metadata... metas) {
-
+			
 			final Map<String, MetaType> oldInterests = new HashMap<String, MetaType>();
 
 			for(final Metadata m : metas) {
@@ -615,7 +615,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 				case INSTRUMENT:
 
 					final Instrument i = (Instrument)m;
-
+					
 					exInsts.add(i);
 					incInsts.remove(i);
 
@@ -635,9 +635,9 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 				}
 
 			}
-
+			
 			agentHandler.updateAgent(this);
-
+			
 			final Set<SubCommand> oldSubs = unsubscribe(this, oldInterests);
 			if (!oldSubs.isEmpty()) {
 				log.debug("Sending new unsubs to sub handler");
@@ -813,7 +813,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		}
 	}
 
-	private synchronized Set<SubCommand> unsubscribe(final FrameworkAgent<?> agent,
+	private Set<SubCommand> unsubscribe(final FrameworkAgent<?> agent,
 			final Map<String, MetaType> symbols) {
 
 		final Set<SubCommand> newSubs = new HashSet<SubCommand>();
@@ -1115,6 +1115,8 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		 */
 		if(!market.session().isNull() && awaitingSnaps.containsKey(instID)) {
 
+			log.debug("Removing {} ", instrument.symbol());
+			
 			final PublishSubject<Market> sub = awaitingSnaps.remove(instID);
 
 			sub.onNext(market.freeze());
