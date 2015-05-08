@@ -1115,8 +1115,6 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		 */
 		if(!market.session().isNull() && awaitingSnaps.containsKey(instID)) {
 
-			log.debug("Removing {} ", instrument.symbol());
-			
 			final PublishSubject<Market> sub = awaitingSnaps.remove(instID);
 
 			sub.onNext(market.freeze());
