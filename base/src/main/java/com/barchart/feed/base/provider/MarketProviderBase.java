@@ -451,9 +451,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 								incInsts.remove(i);
 								exInsts.add(i);
 
-								/* We have to use an alternate symbol for options
-								 * ...rolls eyes...
-								 */
+								/* We have to use an alternate symbol for options */
 								final String symbol = i.symbol();
 								if(symbol.contains("|")) {
 									oldInterests.put(i.vendorSymbols().get(VendorID.BARCHART_SHORT), MetaType.INSTRUMENT);
