@@ -9,6 +9,7 @@ import com.barchart.feed.api.filter.Filter;
 import com.barchart.feed.api.filter.FilterUpdatable;
 import com.barchart.feed.api.model.data.Market;
 import com.barchart.feed.api.model.data.MarketData;
+import com.barchart.feed.api.model.meta.id.MetadataID;
 
 public interface FrameworkAgent<V extends MarketData<V>> extends AgentLifecycle, FilterUpdatable, Filter  {
 
@@ -26,6 +27,6 @@ public interface FrameworkAgent<V extends MarketData<V>> extends AgentLifecycle,
 
 	V data(Market market);
 
-	Set<String> interests();
+	Set<MetadataID<?>> subscriptionIDs();
 
 }

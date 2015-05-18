@@ -3,11 +3,14 @@ package com.barchart.feed.base.sub;
 import java.util.Set;
 
 import com.barchart.feed.api.model.meta.Metadata;
+import com.barchart.feed.api.model.meta.id.MetadataID;
 
 /**
  * Subscription are for either instruments or exchanges
  */
 public interface SubCommand {
+	
+	MetadataID<?> interestID();
 	
 	Metadata.MetaType metaType();
 
@@ -17,15 +20,10 @@ public interface SubCommand {
 	void addTypes(Set<SubscriptionType> types);
 	void removeTypes(Set<SubscriptionType> types);
 	
-	String interest();
-	String encode();
+	String typeString();
 	
+	@SuppressWarnings("rawtypes")
 	public static SubCommand NULL = new SubCommand() {
-
-		@Override
-		public Metadata.MetaType metaType() {
-			return Metadata.MetaType.NULL;
-		}
 		
 		@Override
 		public boolean isNull() {
@@ -33,30 +31,35 @@ public interface SubCommand {
 		}
 
 		@Override
-		public Set<SubscriptionType> types() {
-			return null;
-		}
-
-		@Override
-		public void addTypes(Set<SubscriptionType> types) {
-			
-		}
-
-		@Override
-		public void removeTypes(Set<SubscriptionType> types) {
-			
-		}
-
-		@Override
-		public String encode() {
-			return null;
-		}
-
-		@Override
-		public String interest() {
-			return null;
+		public Metadata.MetaType metaType() {
+			throw new UnsupportedOperationException();
 		}
 		
+		@Override
+		public Set<SubscriptionType> types() {
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
+		public void addTypes(Set types) {
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
+		public void removeTypes(Set types) {
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
+		public MetadataID<?> interestID() {
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
+		public String typeString() {
+			throw new UnsupportedOperationException();
+		}
+
 	};
 	
 }
