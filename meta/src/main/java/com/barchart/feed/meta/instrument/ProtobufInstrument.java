@@ -78,7 +78,7 @@ public class ProtobufInstrument extends InstrumentBase implements Instrument {
 
 	@Override
 	public InstrumentID id() {
-		return new InstrumentID(String.valueOf(def.getMarketId()));
+		return new InstrumentID(def.getMarketId());
 	}
 
 	@Override
@@ -455,7 +455,7 @@ public class ProtobufInstrument extends InstrumentBase implements Instrument {
 		final List<InstrumentID> components = new ArrayList<InstrumentID>();
 
 		for (final long id : def.getComponentIdList()) {
-			components.add(new InstrumentID(String.valueOf(id)));
+			components.add(new InstrumentID(id));
 		}
 
 		return components;
@@ -468,7 +468,7 @@ public class ProtobufInstrument extends InstrumentBase implements Instrument {
 		if (!def.hasUnderlyingMarketId())
 			return InstrumentID.NULL;
 
-		return new InstrumentID(String.valueOf(def.getUnderlyingMarketId()));
+		return new InstrumentID(def.getUnderlyingMarketId());
 
 	}
 
@@ -542,7 +542,7 @@ public class ProtobufInstrument extends InstrumentBase implements Instrument {
 		final List<SpreadLeg> legs = new ArrayList<SpreadLeg>();
 
 		for (final InstrumentDefinition.SpreadLeg leg : def.getSpreadLegList()) {
-			legs.add(new DefaultSpreadLeg(new InstrumentID(String.valueOf(leg.getMarketId())), leg.getRatio()));
+			legs.add(new DefaultSpreadLeg(new InstrumentID(leg.getMarketId()), leg.getRatio()));
 		}
 
 		return legs;

@@ -246,8 +246,8 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 			@SuppressWarnings("deprecation")
 			@Override
 			public boolean hasMatch(final Instrument instrument) {
+				
 				/* Work bottom up on the hierarchy */
-
 				if(incUnknown.contains(instrument.symbol())) {
 					return true;
 				}
