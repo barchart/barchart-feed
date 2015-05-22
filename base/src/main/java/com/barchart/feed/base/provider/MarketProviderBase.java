@@ -981,6 +981,8 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 
 				snapshotAgent.include(instID);
 
+				return sub;
+				
 			}
 			
 			return Observable.just(Market.NULL);
