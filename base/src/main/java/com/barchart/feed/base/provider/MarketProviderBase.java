@@ -91,8 +91,9 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 	// Not implemented
 	private final ConcurrentMap<ExchangeID, Subscription<Exchange>> exchSubs =
 			new ConcurrentHashMap<ExchangeID, Subscription<Exchange>>();
-
-	protected MarketProviderBase(final MarketFactory factory,
+	
+	protected MarketProviderBase(
+			final MarketFactory factory,
 			final MetadataService metaService,
 			final SubscriptionHandler subHandler) {
 
@@ -100,7 +101,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		this.metaService = metaService;
 		this.subHandler = subHandler;
 	}
-
+	
 	/* ***** ***** Consumer Agent ***** ***** */
 
 	@Override
@@ -942,8 +943,13 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		return subHandler.subscriptions().size();
 	}
 
-	// ######################## // ########################
-
+	/* ***** ***** Snapshot Service ***** ***** */
+	
+	private static final int SNAPSHOT_TIMEOUT_SECS = 7; 
+	
+	private final TimeoutCache<InstrumentID> timeoutCache = 
+			new TimeoutCache<InstrumentID>(SNAPSHOT_TIMEOUT_SECS);
+	
 	private final ConcurrentMap<InstrumentID, PublishSubject<Market>> awaitingSnaps =
 			new StrictConcurrentHashMap<InstrumentID, PublishSubject<Market>>(InstrumentID.class);
 
@@ -980,7 +986,31 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 				awaitingSnaps.putIfAbsent(instID, sub);
 
 				snapshotAgent.include(instID);
+				
+				timeoutCache.put(instID, new Runnable() {
 
+					@Override
+					public void run() {
+						
+						/* If not interrupted yet, timeout snapshot request,
+						 * remove from awaiting */
+						final PublishSubject<Market> sub = awaitingSnaps.remove(instID);
+						
+						/* Send null Market and complete */
+						if(sub != null) {
+							sub.onNext(Market.NULL);
+							sub.onCompleted();
+						}
+						
+						/* Remove subscription from snapshot agent */
+						snapshotAgent.exclude(instID);
+						
+						log.warn("Snpashot request for {} timed out", inst.symbol());
+						
+					}
+					
+				});
+				
 				return sub;
 				
 			}
@@ -989,7 +1019,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		}
 
 	}
-
+	
 	// ######################## // ########################
 
 	@Override
@@ -1121,6 +1151,9 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 			sub.onCompleted();
 			
 			snapshotAgent.exclude(instID);
+			
+			/* Remove timeout future and cancel it */
+			timeoutCache.remove(instID);
 
 		}
 
