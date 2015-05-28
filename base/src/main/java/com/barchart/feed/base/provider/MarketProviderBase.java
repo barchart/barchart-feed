@@ -89,7 +89,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 	// Not implemented
 	private final ConcurrentMap<ExchangeID, Subscription<Exchange>> exchSubs =
 			new ConcurrentHashMap<ExchangeID, Subscription<Exchange>>();
-	
+
 	protected MarketProviderBase(
 			final MarketFactory factory,
 			final MetadataService metaService,
@@ -354,7 +354,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 									continue;
 								}
 								
-								/* Try to fire a snapshot if instrument is not already included*/
+								/* Try to fire a snapshot if instrument is not already included */
 								if(!incInsts.contains(i)) {
 									fireSnapshot(i.id());
 								}
@@ -649,6 +649,8 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 
 		@Override
 		public synchronized void clear() {
+			
+			log.debug("CLEAR CALLED");
 
 			/* Unsubscribe to all */
 			subHandler.unsubscribe(unsubscribeAll(this));
@@ -771,6 +773,8 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 				newSubs.add(sub);
 			}
 		}
+		
+		log.debug("NEW SUBS TO UNSUBSCRIBE {}", newSubs.size());
 
 		return newSubs;
 	}
@@ -795,20 +799,6 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 				return new SubBase(instID, stuffToRemove);
 			} else {
 				return SubCommand.NULL;
-			}
-		}
-	}
-
-	class RefEqualsList<T> extends ArrayList<T> {
-
-		private static final long serialVersionUID = -7398964176380704808L;
-
-		@Override
-		public boolean equals(final Object o) {
-			if(this == o) {
-				return true;
-			} else {
-				return false;
 			}
 		}
 	}

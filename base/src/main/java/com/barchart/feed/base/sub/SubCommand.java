@@ -22,7 +22,6 @@ public interface SubCommand {
 	
 	String typeString();
 	
-	@SuppressWarnings("rawtypes")
 	public static SubCommand NULL = new SubCommand() {
 		
 		@Override
@@ -41,12 +40,12 @@ public interface SubCommand {
 		}
 
 		@Override
-		public void addTypes(Set types) {
+		public void addTypes(Set<SubscriptionType> types) {
 			throw new UnsupportedOperationException();
 		}
 
 		@Override
-		public void removeTypes(Set types) {
+		public void removeTypes(Set<SubscriptionType> types) {
 			throw new UnsupportedOperationException();
 		}
 
