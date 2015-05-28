@@ -5,6 +5,7 @@ import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -138,6 +139,8 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		private final Set<String> exUnknown = new HashSet<String>();
 
 		private Filter filter = new DefaultFilter();
+		
+		private final String id = UUID.randomUUID().toString();
 
 		BaseAgent(
 				final FrameworkAgentLifecycleHandler agentHandler,
@@ -157,11 +160,13 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 			if(callback == null) {
 				throw new IllegalArgumentException("Callback cannot be null");
 			}
-
+			
 			this.agentHandler = agentHandler;
 			this.clazz = clazz;
 			this.getter = getter;
 			this.callback = callback;
+			
+			log.debug("Constructor called for {}", id);
 
 		}
 
@@ -258,8 +263,6 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 				}
 
 				if (instrument.exchange().isNull()) {
-					log.debug("Exchange is NULL for " + instrument.symbol() + " "
-							+ instrument.exchangeCode());
 					return false;
 				}
 
@@ -321,8 +324,10 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		@Override
 		public synchronized void terminate() {
 
+			log.debug("Terminate called for {}", id);
+			
 			/* Unsubscribe to all */
-			subHandler.unsubscribe(unsubscribeAll(this));
+			clear();
 
 			state = State.TERMINATED;
 			agentHandler.detachAgent(this);
@@ -527,7 +532,6 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 
 			final Set<SubCommand> newSubs = subscribe(this, newInterests);
 			if (!newSubs.isEmpty()) {
-				log.debug("Sending new subs to sub handler");
 				subHandler.subscribe(newSubs);
 			}
 
@@ -650,10 +654,10 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		@Override
 		public synchronized void clear() {
 			
-			log.debug("CLEAR CALLED");
-
+			log.debug("Clear Called for {}", id);
+			
 			/* Unsubscribe to all */
-			subHandler.unsubscribe(unsubscribeAll(this));
+			subHandler.unsubscribe(unsubscribe(this, subscriptionIDs()));
 
 			incInsts.clear();
 			exInsts.clear();
@@ -664,10 +668,6 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 
 		}
 
-		private Set<SubCommand> unsubscribeAll(final FrameworkAgent<?> agent) {
-			return unsubscribe(agent, agent.subscriptionIDs());
-		}
-		
 		@Override
 		public void includeSymbol(final String... symbols) {
 			include(symbols).toBlockingObservable().first();
@@ -706,6 +706,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 
 	/* ***** ***** Subscription Aggregation Methods ***** ***** */
 
+	// TODO Use Table
 	private final Map<MetadataID<?>, List<FrameworkAgent<?>>> metaToAgentsMap =
 			new ConcurrentHashMap<MetadataID<?>, List<FrameworkAgent<?>>>();
 
@@ -716,7 +717,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		if (!metaToAgentsMap.containsKey(interest)) {
 			return agg;
 		}
-
+		
 		for (final FrameworkAgent<?> agent : metaToAgentsMap.get(interest)) {
 			agg.addAll(SubscriptionType.mapMarketEvent(agent.type()));
 		}
@@ -751,7 +752,11 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 			final Set<SubscriptionType> stuffToAdd = EnumSet.copyOf(newSubs);
 			stuffToAdd.removeAll(aggregate(metaID));
 
-			metaToAgentsMap.get(metaID).add(agent);
+			final List<FrameworkAgent<?>> agents = metaToAgentsMap.get(metaID);
+			
+			if(!agents.contains(agent)) {
+				metaToAgentsMap.get(metaID).add(agent);
+			}
 
 			if (!stuffToAdd.isEmpty()) {
 				return new SubBase(metaID, stuffToAdd);
@@ -764,7 +769,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 
 	private Set<SubCommand> unsubscribe(final FrameworkAgent<?> agent, 
 			final Set<MetadataID<?>> ids) {
-
+		
 		final Set<SubCommand> newSubs = new HashSet<SubCommand>();
 
 		for (final MetadataID<?> id : ids) {
@@ -774,8 +779,6 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 			}
 		}
 		
-		log.debug("NEW SUBS TO UNSUBSCRIBE {}", newSubs.size());
-
 		return newSubs;
 	}
 
@@ -786,7 +789,9 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 			final Set<SubscriptionType> oldSubs = SubscriptionType.mapMarketEvent(agent.type());
 
 			if(metaToAgentsMap.containsKey(instID)){
+				
 				metaToAgentsMap.get(instID).remove(agent);
+				
 				if(metaToAgentsMap.get(instID).isEmpty()) {
 					metaToAgentsMap.remove(instID);
 				}
@@ -798,6 +803,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 			if (!stuffToRemove.isEmpty()) {
 				return new SubBase(instID, stuffToRemove);
 			} else {
+				aggregate(instID);
 				return SubCommand.NULL;
 			}
 		}
@@ -812,7 +818,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 			updateAgent(agent);
 
 		} else {
-
+			
 			agents.put(agent, new Boolean(false));
 
 			for (final Entry<InstrumentID, MarketDo> e : marketMap.entrySet()) {
@@ -919,6 +925,10 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 
 					@Override
 					public void run() {
+						
+						if(!awaitingSnaps.containsKey(instID)) {
+							return;
+						}
 						
 						/* If not interrupted yet, timeout snapshot request,
 						 * remove from awaiting */
