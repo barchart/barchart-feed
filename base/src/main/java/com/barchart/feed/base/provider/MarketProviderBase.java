@@ -140,8 +140,6 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 
 		private Filter filter = new DefaultFilter();
 		
-		private final String id = UUID.randomUUID().toString();
-
 		BaseAgent(
 				final FrameworkAgentLifecycleHandler agentHandler,
 				final Class<V> clazz,
@@ -166,8 +164,6 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 			this.getter = getter;
 			this.callback = callback;
 			
-			log.debug("Constructor called for {}", id);
-
 		}
 
 		@Override
@@ -324,8 +320,6 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		@Override
 		public synchronized void terminate() {
 
-			log.debug("Terminate called for {}", id);
-			
 			/* Unsubscribe to all */
 			clear();
 
@@ -653,8 +647,6 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 
 		@Override
 		public synchronized void clear() {
-			
-			log.debug("Clear Called for {}", id);
 			
 			/* Unsubscribe to all */
 			subHandler.unsubscribe(unsubscribe(this, subscriptionIDs()));
