@@ -7,10 +7,21 @@ import com.barchart.feed.api.filter.FilterUpdatable;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.api.model.meta.Metadata;
 import com.barchart.feed.api.model.meta.id.MetadataID;
+import com.barchart.util.common.identifier.Identifier;
 
 
 public interface ConsumerAgent extends FilterUpdatable, Filter, AgentLifecycle {
+	
+	class AgentID extends Identifier<String, AgentID> {
 
+		public AgentID(String id) {
+			super(id, AgentID.class);
+		}
+		
+	}
+	
+	AgentID agentID();
+	
 	/**
 	 * Subscribes to and attaches agent to provided symbols.
 	 * 

@@ -140,6 +140,8 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 
 		private Filter filter = new DefaultFilter();
 		
+		private final AgentID id = new AgentID(UUID.randomUUID().toString());
+		
 		BaseAgent(
 				final FrameworkAgentLifecycleHandler agentHandler,
 				final Class<V> clazz,
@@ -191,6 +193,11 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 			return this;
 		}
 
+		@Override
+		public AgentID agentID() {
+			return id;
+		}
+		
 		/* ***** ***** Framework Methods ***** ***** */
 
 		@Override
