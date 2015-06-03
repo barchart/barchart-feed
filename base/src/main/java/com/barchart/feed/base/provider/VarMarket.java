@@ -68,7 +68,6 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 	private final ConcurrentMap<FrameworkAgent<?>, Boolean> agentSet =
 			new ConcurrentHashMap<FrameworkAgent<?>, Boolean>();
 	
-	// NEW
 	protected final Set<FrameworkAgent<com.barchart.feed.api.model.data.Market>> marketAgents = 
 			new HashSet<FrameworkAgent<com.barchart.feed.api.model.data.Market>>();
 	protected final Set<FrameworkAgent<Trade>> tradeAgents = new HashSet<FrameworkAgent<Trade>>();
@@ -118,6 +117,21 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 		/** set self reference */
 		set(MARKET, this);
 
+	}
+	
+	@Override
+	public void destroy() {
+		agentSet.clear();
+		marketAgents.clear();
+		tradeAgents.clear();
+		bookAgents.clear();
+		cuvolAgents.clear();
+		sessionAgents.clear();
+		marketCmds.clear();
+		tradeCmds.clear();
+		bookCmds.clear();
+		cuvolCmds.clear();
+		sessionCmds.clear();
 	}
 
 	/* ***** ***** Agent Lifecycle ***** ***** */

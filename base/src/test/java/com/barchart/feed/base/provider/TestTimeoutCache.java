@@ -18,9 +18,11 @@ public class TestTimeoutCache {
 		
 		final List<InstrumentID> ids = new ArrayList<InstrumentID>();
 		
-		for(int i = 0; i <1000; i++) {
+		for(int i = 0; i <10000; i++) {
 			ids.add(new InstrumentID(i));
 		}
+		
+		Thread.sleep(10000);
 		
 		for(final InstrumentID id : ids) {
 			cache.put(id, new Runnable() {
@@ -48,7 +50,7 @@ public class TestTimeoutCache {
 		
 		final List<InstrumentID> ids = new ArrayList<InstrumentID>();
 		
-		for(int i = 0; i <1000; i++) {
+		for(int i = 0; i <10000; i++) {
 			ids.add(new InstrumentID(i));
 		}
 		

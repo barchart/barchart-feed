@@ -2,8 +2,9 @@ package com.barchart.feed.base.participant;
 
 import java.util.Set;
 
-import com.barchart.feed.api.MarketObserver;
 import com.barchart.feed.api.Agent;
+import com.barchart.feed.api.AgentID;
+import com.barchart.feed.api.MarketObserver;
 import com.barchart.feed.api.consumer.AgentLifecycle;
 import com.barchart.feed.api.filter.Filter;
 import com.barchart.feed.api.filter.FilterUpdatable;
@@ -20,6 +21,8 @@ public interface FrameworkAgent<V extends MarketData<V>> extends AgentLifecycle,
 	AgentType agentType();
 	
 	Agent agent();
+	
+	AgentID id(); 
 	
 	Class<V> type();
 

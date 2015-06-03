@@ -5,9 +5,9 @@ import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -20,6 +20,7 @@ import rx.functions.Func1;
 import rx.subjects.PublishSubject;
 
 import com.barchart.feed.api.Agent;
+import com.barchart.feed.api.AgentID;
 import com.barchart.feed.api.MarketObserver;
 import com.barchart.feed.api.connection.Connection.Monitor;
 import com.barchart.feed.api.connection.Subscription;
@@ -166,6 +167,9 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 			this.getter = getter;
 			this.callback = callback;
 			
+			// DELETE
+			log.debug("NEW AGENT {}", id);
+			
 		}
 
 		@Override
@@ -194,7 +198,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		}
 
 		@Override
-		public AgentID agentID() {
+		public AgentID id() {
 			return id;
 		}
 		
@@ -327,12 +331,19 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		@Override
 		public synchronized void terminate() {
 
+			log.debug("TERMINATE AGENT {}", id);
+			
 			/* Unsubscribe to all */
-			clear();
+			subHandler.unsubscribe(unsubscribe(this, subscriptionIDs()));
+
+			incInsts.clear();
+			exInsts.clear();
+			incExchanges.clear();
+			exExchanges.clear();
 
 			state = State.TERMINATED;
 			agentHandler.detachAgent(this);
-
+			
 		}
 
 		@Override
@@ -706,8 +717,8 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 	/* ***** ***** Subscription Aggregation Methods ***** ***** */
 
 	// TODO Use Table
-	private final Map<MetadataID<?>, List<FrameworkAgent<?>>> metaToAgentsMap =
-			new ConcurrentHashMap<MetadataID<?>, List<FrameworkAgent<?>>>();
+	private final Map<MetadataID<?>, Map<AgentID, FrameworkAgent<?>>> metaToAgentsMap =
+			new ConcurrentHashMap<MetadataID<?>, Map<AgentID, FrameworkAgent<?>>>();
 
 	private Set<SubscriptionType> aggregate(final MetadataID<?> interest) {
 
@@ -717,7 +728,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 			return agg;
 		}
 		
-		for (final FrameworkAgent<?> agent : metaToAgentsMap.get(interest)) {
+		for (final FrameworkAgent<?> agent : metaToAgentsMap.get(interest).values()) {
 			agg.addAll(SubscriptionType.mapMarketEvent(agent.type()));
 		}
 
@@ -745,16 +756,17 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 			final Set<SubscriptionType> newSubs = SubscriptionType.mapMarketEvent(agent.type());
 
 			if (!metaToAgentsMap.containsKey(metaID) && !newSubs.isEmpty()) {
-				metaToAgentsMap.put(metaID, new ArrayList<FrameworkAgent<?>>());
+				metaToAgentsMap.put(metaID, new StrictConcurrentHashMap<AgentID, 
+						FrameworkAgent<?>>(AgentID.class));
 			}
 
 			final Set<SubscriptionType> stuffToAdd = EnumSet.copyOf(newSubs);
 			stuffToAdd.removeAll(aggregate(metaID));
 
-			final List<FrameworkAgent<?>> agents = metaToAgentsMap.get(metaID);
+			final Map<AgentID, FrameworkAgent<?>> agents = metaToAgentsMap.get(metaID);
 			
-			if(!agents.contains(agent)) {
-				metaToAgentsMap.get(metaID).add(agent);
+			if(!agents.containsKey(agent.id())) {
+				metaToAgentsMap.get(metaID).put(agent.id(), agent);
 			}
 
 			if (!stuffToAdd.isEmpty()) {
@@ -787,13 +799,19 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 			
 			final Set<SubscriptionType> oldSubs = SubscriptionType.mapMarketEvent(agent.type());
 
-			if(metaToAgentsMap.containsKey(instID)){
+			if(metaToAgentsMap.containsKey(instID)) {
 				
-				metaToAgentsMap.get(instID).remove(agent);
+				metaToAgentsMap.get(instID).remove(agent.id());
 				
 				if(metaToAgentsMap.get(instID).isEmpty()) {
 					metaToAgentsMap.remove(instID);
+					
+					final Instrument inst = metaService.instrument((InstrumentID) instID)
+							.toBlockingObservable().first().get(instID);
+					
+					unregister(inst);
 				}
+				
 			}
 
 			final Set<SubscriptionType> stuffToRemove = EnumSet.copyOf(oldSubs);
@@ -825,6 +843,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 			}
 
 		}
+		
 	}
 
 	@Override
@@ -846,17 +865,32 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 
 	@Override
 	public void detachAgent(final FrameworkAgent<?> agent) {
-
+		
 		if (!agents.containsKey(agent)) {
 			return;
 		}
 
+		log.debug("DETACH AGENT {}", agent.id());
+		
 		agents.remove(agent);
 
 		for (final Entry<InstrumentID, MarketDo> e : marketMap.entrySet()) {
 			e.getValue().detachAgent(agent);
 		}
-
+		
+		// DELETE
+		for(final Map<AgentID, FrameworkAgent<?>> map : metaToAgentsMap.values()) {
+			
+			if(!map.containsKey(agent.id())) {
+				continue;
+			}
+			
+			if(map.remove(agent.id()) != null) {
+				log.warn("AGENT STILL IN MAP");
+			}
+			
+		}
+		
 	}
 
 	/* ***** ***** SubscriptionService ***** ***** */
@@ -1020,13 +1054,15 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		final boolean wasRemoved = (market != null);
 
 		if (wasRemoved) {
-
+			
 			for (final FrameworkAgent<?> agent : agents.keySet()) {
-				marketMap.get(instrument.id()).detachAgent(agent);
+				market.detachAgent(agent);
 			}
 
 			symbolMap.remove(instrument.symbol());
 
+			market.destroy();
+			
 		} else {
 			log.warn("was not registered : {}", instrument);
 		}

@@ -32,6 +32,11 @@ import com.barchart.util.common.anno.Mutable;
 
 @Mutable
 public interface MarketDo extends Market, FrameworkAgentLifecycleHandler {
+	
+	/**
+	 * Prepares Market for garbage collection, removes all references to agents
+	 */
+	void destroy();
 
 	/* OLD EVENTS */
 
@@ -111,8 +116,7 @@ public interface MarketDo extends Market, FrameworkAgentLifecycleHandler {
 	/* RUN SAFE */
 
 	/** run task inside exclusive market context */
-	public <Result, Param> Result runSafe(MarketSafeRunner<Result, Param> task,
-			Param param);
+	public <Result, Param> Result runSafe(MarketSafeRunner<Result, Param> task, Param param);
 
 	//
 
