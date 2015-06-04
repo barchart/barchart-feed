@@ -100,6 +100,34 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		this.factory = factory;
 		this.metaService = metaService;
 		this.subHandler = subHandler;
+		
+		final Thread marketRefresher = new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				
+				while(true) {
+					
+					try {
+						Thread.sleep(3000);
+					} catch (final InterruptedException e) {
+						log.warn("Market refresher interrupted");
+						break;
+					}
+					
+					for(final MarketDo m : marketMap.values()) {
+						m.refresh();
+					}
+					
+				}
+				
+			}
+			
+		});
+		
+		marketRefresher.setDaemon(true);
+		marketRefresher.start();
+		
 	}
 	
 	/* ***** ***** Consumer Agent ***** ***** */
@@ -148,7 +176,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 				final Class<V> clazz,
 				final MDGetter<V> getter,
 				final MarketObserver<V> callback) {
-
+			
 			if(agentHandler == null) {
 				throw new IllegalArgumentException("Agent Handler cannot be null");
 			}

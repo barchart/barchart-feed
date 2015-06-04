@@ -324,4 +324,10 @@ public class MockMarket extends VarMarket {
 
 	}
 
+	@Override
+	public void refresh() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

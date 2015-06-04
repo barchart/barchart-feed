@@ -39,6 +39,8 @@ public interface MarketDo extends Market, FrameworkAgentLifecycleHandler {
 	void destroy();
 
 	/* OLD EVENTS */
+	
+	void refresh();
 
 	void fireEvents();
 
