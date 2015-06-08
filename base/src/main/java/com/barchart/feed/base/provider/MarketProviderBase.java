@@ -195,9 +195,6 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 			this.getter = getter;
 			this.callback = callback;
 			
-			// DELETE
-			log.debug("NEW AGENT {}", id);
-			
 		}
 
 		@Override

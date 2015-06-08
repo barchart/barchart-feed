@@ -18,7 +18,9 @@ import com.barchart.feed.api.model.data.parameter.ParamMap;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.bar.api.MarketBar;
 import com.barchart.feed.base.bar.enums.MarketBarField;
+import com.barchart.feed.base.values.api.BooleanValue;
 import com.barchart.feed.base.values.api.Value;
+import com.barchart.feed.base.values.provider.ValueConst;
 import com.barchart.feed.base.values.provider.ValueFreezer;
 import com.barchart.util.common.anno.NotMutable;
 import com.barchart.util.value.api.Bool;
@@ -28,7 +30,7 @@ import com.barchart.util.value.api.Time;
 
 @NotMutable
 public class NulBar extends ValueFreezer<MarketBar> implements MarketBar {
-
+	
 	@Override
 	public <V extends Value<V>> V get(final MarketBarField<V> field) {
 
@@ -116,7 +118,14 @@ public class NulBar extends ValueFreezer<MarketBar> implements MarketBar {
 
 	@Override
 	public Bool isSettled() {
-		return ValueConverter.bool(get(MarketBarField.IS_SETTLED));
+		
+		final BooleanValue isSettled = get(MarketBarField.IS_SETTLED);
+		
+		if(isSettled.isNull()) {
+			return ValueConverter.bool(ValueConst.FALSE_BOOLEAN);
+		}
+		
+		return ValueConverter.bool(isSettled);
 	}
 
 	@Override
