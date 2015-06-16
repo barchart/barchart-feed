@@ -169,13 +169,14 @@ public abstract class MarketplaceBase<Message extends MarketMessage> extends Mar
 			return marketMap.get(instrument.id()).freeze();
 		}
 		
-		return Market.NULL;  // throw IAR or ISE?
+		return snapshot(instrument.id()).toBlockingObservable().first(); 
 	}
 	
 	@Override
 	public Market snapshot(final String symbol) {
 		
-		final Instrument inst = instrument(symbol).toBlockingObservable().first().results().get(symbol).get(0);
+		final Instrument inst = instrument(symbol).toBlockingObservable()
+				.first().results().get(symbol).get(0);
 		
 		if(inst.isNull()) {
 			return Market.NULL;

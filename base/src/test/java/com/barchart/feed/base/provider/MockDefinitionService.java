@@ -28,7 +28,7 @@ import com.barchart.util.value.api.ValueFactory;
 
 public class MockDefinitionService implements InstrumentService<CharSequence> {
 
-	private static final ValueFactory factory = new ValueFactoryImpl();
+	private static final ValueFactory factory = ValueFactoryImpl.instance;
 
 	@SuppressWarnings("unused")
 	private static final Logger log = LoggerFactory
@@ -49,7 +49,6 @@ public class MockDefinitionService implements InstrumentService<CharSequence> {
 
 	final ExecutorService executor = Executors.newCachedThreadPool();
 
-	@SuppressWarnings("rawtypes")
 	public MockDefinitionService() {
 
 		final Instrument inst1 = new MockInstrument(
@@ -121,7 +120,7 @@ public class MockDefinitionService implements InstrumentService<CharSequence> {
 		private MockInstrument(final long id_, final String symbol_, final Price tickSize_, final int bookDepth_,
 				final Fraction displayFraction_) {
 
-			super(new InstrumentID(String.valueOf(id_)));
+			super(new InstrumentID(id_));
 
 			symbol = symbol_;
 			tickSize = tickSize_;

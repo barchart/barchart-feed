@@ -171,6 +171,7 @@ public final class Exchanges {
 		temp = new ExchangeImpl("NASDAQ", "Q", NY);
 		names.put("NASDAQ", temp);
 		names.put("NTDS", temp);
+		names.put("XNAS", temp);
 		codes.put("Q", temp);
 		codes.put("q", temp);
 

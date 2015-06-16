@@ -10,6 +10,7 @@ package com.barchart.feed.base.provider;
 import java.util.EnumSet;
 import java.util.Set;
 
+import org.joda.time.DateTimeZone;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,6 +25,7 @@ import com.barchart.feed.api.model.data.SessionSet;
 import com.barchart.feed.api.model.data.Trade;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.market.enums.MarketField;
+import com.barchart.feed.base.values.api.TimeValue;
 import com.barchart.feed.base.values.api.Value;
 import com.barchart.util.common.anno.NotMutable;
 import com.barchart.util.value.api.Price;

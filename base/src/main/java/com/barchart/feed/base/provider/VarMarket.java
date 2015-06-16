@@ -293,7 +293,8 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 		return reg != null;
 	}
 
-	protected final <T extends Value<T>> void set(final MarketField<T> field,
+	// REMOVE PUBLIC
+	public final <T extends Value<T>> void set(final MarketField<T> field,
 			final T value) {
 
 		assert field != null;
