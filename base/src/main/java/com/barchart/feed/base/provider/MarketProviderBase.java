@@ -654,7 +654,6 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 			
 			final Set<SubCommand> oldSubs = unsubscribe(this, oldInterests);
 			if (!oldSubs.isEmpty()) {
-				log.debug("Sending new unsubs to sub handler");
 				subHandler.unsubscribe(oldSubs);
 			}
 
@@ -1123,6 +1122,8 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		if (!isValid(instrument)) {
 			return;
 		}
+		
+		//log.debug(message.getTime().toString());
 		
 		final InstrumentID instID = instrument.id();
 		
