@@ -161,6 +161,15 @@ public final class HistoricalCodec {
 							case OPTION_RHO:
 								bar.setGreeks(GREEK_TYPE.RHO, p);
 								break;
+							case OPTION_HISTORICAL_TWENTY_DAY_VOLATILITY:
+								bar.setHistoricalVolatility(p);
+								break;
+							case OPTION_THEORETICAL_PRICE:
+								bar.setTheoreticalPrice(p);
+								break;
+							case OPTION_IMPLIED_VOLATILITY:
+								bar.setImpliedVolatility(p);
+								break;
 											default:
 
 										}
@@ -315,19 +324,26 @@ public final class HistoricalCodec {
 					.setType(MarketEntry.Type.TRADED_VALUE_DOWN));
 		}
 
-		greeks(bar, builder);
+		options(bar, builder);
 
 		return builder.build();
 
 	}
 
-	private static void greeks(Bar bar, MarketHistoricalSnapshot.Builder builder) {
+	private static void options(Bar bar, MarketHistoricalSnapshot.Builder builder) {
 
 		entry(bar.getGreeks(GREEK_TYPE.DELTA), builder, MarketEntry.Type.COMPUTED, MarketEntry.Descriptor.OPTION_DELTA);
 		entry(bar.getGreeks(GREEK_TYPE.GAMMA), builder, MarketEntry.Type.COMPUTED, MarketEntry.Descriptor.OPTION_GAMMA);
 		entry(bar.getGreeks(GREEK_TYPE.THETA), builder, MarketEntry.Type.COMPUTED, MarketEntry.Descriptor.OPTION_THETA);
 		entry(bar.getGreeks(GREEK_TYPE.VEGA), builder, MarketEntry.Type.COMPUTED, MarketEntry.Descriptor.OPTION_VEGA);
 		entry(bar.getGreeks(GREEK_TYPE.RHO), builder, MarketEntry.Type.COMPUTED, MarketEntry.Descriptor.OPTION_RHO);
+
+		entry(bar.getHistoricalVolatility(), builder, MarketEntry.Type.COMPUTED,
+				MarketEntry.Descriptor.OPTION_HISTORICAL_TWENTY_DAY_VOLATILITY);
+		entry(bar.getImpliedVolatility(), builder, MarketEntry.Type.COMPUTED,
+				MarketEntry.Descriptor.OPTION_IMPLIED_VOLATILITY);
+		entry(bar.getTheoreticalPrice(), builder, MarketEntry.Type.COMPUTED,
+				MarketEntry.Descriptor.OPTION_THEORETICAL_PRICE);
 
 	}
 

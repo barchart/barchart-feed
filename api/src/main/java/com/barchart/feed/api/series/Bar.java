@@ -141,6 +141,12 @@ public interface Bar extends Range {
 	 */
 	public Price getGreeks(GREEK_TYPE type);
 
+	public Price getHistoricalVolatility();
+
+	public Price getImpliedVolatility();
+
+	public Price getTheoreticalPrice();
+
 	/**
 	 * Merges the specified <@code Bar> with this one, possibly updating any barrier elements (i.e. High, Low, etc)
 	 * given the underlying type. Used for aggregating information based on {@link PeriodType}
