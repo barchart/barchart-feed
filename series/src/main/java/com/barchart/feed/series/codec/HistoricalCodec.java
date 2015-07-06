@@ -150,16 +150,16 @@ public final class HistoricalCodec {
 												bar.setGreeks(GREEK_TYPE.DELTA, p);
 								break;
 							case OPTION_GAMMA:
-								bar.setGreeks(GREEK_TYPE.DELTA, p);
+								bar.setGreeks(GREEK_TYPE.GAMMA, p);
 								break;
 							case OPTION_THETA:
-								bar.setGreeks(GREEK_TYPE.DELTA, p);
+								bar.setGreeks(GREEK_TYPE.THETA, p);
 								break;
 							case OPTION_VEGA:
-								bar.setGreeks(GREEK_TYPE.DELTA, p);
+								bar.setGreeks(GREEK_TYPE.VEGA, p);
 								break;
 							case OPTION_RHO:
-								bar.setGreeks(GREEK_TYPE.DELTA, p);
+								bar.setGreeks(GREEK_TYPE.RHO, p);
 								break;
 											default:
 
