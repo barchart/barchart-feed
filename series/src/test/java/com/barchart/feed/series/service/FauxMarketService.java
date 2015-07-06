@@ -17,6 +17,7 @@ import org.joda.time.format.DateTimeFormatter;
 
 import rx.Observable;
 
+import com.barchart.feed.api.AgentID;
 import com.barchart.feed.api.MarketObserver;
 import com.barchart.feed.api.connection.Connection.Monitor;
 import com.barchart.feed.api.connection.TimestampListener;
@@ -273,6 +274,12 @@ public class FauxMarketService implements MarketService {
 			public void exclude(final MetadataID<?>... metaID) {
 				// TODO Auto-generated method stub
 
+			}
+
+			@Override
+			public AgentID id() {
+				// TODO Auto-generated method stub
+				return null;
 			}
 
         };
@@ -803,5 +810,11 @@ public class FauxMarketService implements MarketService {
 	public Observable<Map<InstrumentID, Instrument>> instrument(final InstrumentID... ids) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public int numberOfSubscriptions() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }
