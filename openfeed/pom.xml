@@ -13,7 +13,7 @@
 
 	<artifactId>barchart-feed-openfeed</artifactId>
 	<groupId>com.barchart.feed</groupId>
-	<version>1.0.12-SNAPSHOT</version>
+	<version>1.0.14-SNAPSHOT</version>
 	<packaging>bundle</packaging>
 
 	<scm>

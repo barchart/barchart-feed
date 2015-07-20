@@ -48,6 +48,9 @@ public class BarImpl extends DataPointImpl implements Bar {
 	private Price gamma;
 	private Price vega;
 	private Price rho;
+	private Price hv;
+	private Price iv;
+	private Price theoretical;
 
 	/**
 	 * Instantiates a new {@code BarImpl}
@@ -997,6 +1000,33 @@ public class BarImpl extends DataPointImpl implements Bar {
 			default:
 				return Price.NULL;
 		}
+	}
+
+	@Override
+	public Price getHistoricalVolatility() {
+		return hv;
+	}
+
+	public void setHistoricalVolatility(Price p) {
+		hv = p;
+	}
+
+	@Override
+	public Price getImpliedVolatility() {
+		return iv;
+	}
+
+	public void setImpliedVolatility(Price p) {
+		iv = p;
+	}
+
+	@Override
+	public Price getTheoreticalPrice() {
+		return theoretical;
+	}
+
+	public void setTheoreticalPrice(Price p) {
+		theoretical = p;
 	}
 
 }
