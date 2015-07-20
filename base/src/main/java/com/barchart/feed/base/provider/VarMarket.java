@@ -143,7 +143,7 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 		if(!agent.hasMatch(instrument())) {
 			return;
 		}
-
+		
 		agentSet.put(agent, new Boolean(false));
 		
 		switch(agent.agentType()) {

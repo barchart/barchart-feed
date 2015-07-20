@@ -27,9 +27,10 @@ public final class Exchanges {
 		names.put(NULL_NAME, Exchange.NULL);
 		codes.put(NULL_CODE, Exchange.NULL);
 
-		Exchange temp = new ExchangeImpl("AMEX", "A", NY);
+		Exchange temp = new ExchangeImpl("AMEX", "A;a", NY);
 		names.put("AMEX", temp);
 		codes.put("A", temp);
+		codes.put("A;a", temp);
 		codes.put("a", temp);
 
 		temp = new ExchangeImpl("ASX", "v", CHI);
@@ -37,11 +38,12 @@ public final class Exchanges {
 		names.put("Fix_Me_V", temp);
 		codes.put("v", temp);
 
-		temp = new ExchangeImpl("BATS", "X", NY);
+		temp = new ExchangeImpl("BATS", "X;y", NY);
 		names.put("BATS", temp);
 		names.put("Fix_Me_X", temp);
 		codes.put("X", temp);
 		codes.put("y", temp);
+		codes.put("X;y", temp);
 
 		temp = new ExchangeImpl("CBOT", "B", CHI);
 		names.put("CBOT", temp);
@@ -168,11 +170,12 @@ public final class Exchanges {
 		names.put("MGEX", temp);
 		codes.put("G", temp);
 
-		temp = new ExchangeImpl("NASDAQ", "Q", NY);
+		temp = new ExchangeImpl("NASDAQ", "Q;q", NY);
 		names.put("NASDAQ", temp);
 		names.put("NTDS", temp);
 		names.put("XNAS", temp);
 		codes.put("Q", temp);
+		codes.put("Q;q", temp);
 		codes.put("q", temp);
 
 		temp = new ExchangeImpl("NLIF", "Y", CHI);
@@ -193,9 +196,10 @@ public final class Exchanges {
 		names.put("NYMI", temp);
 		codes.put("J", temp);
 
-		temp = new ExchangeImpl("NYSE", "N", NY);
+		temp = new ExchangeImpl("NYSE", "N;n", NY);
 		names.put("NYSE", temp);
 		codes.put("N", temp);
+		codes.put("N;n", temp);
 		codes.put("n", temp);
 
 		temp = new ExchangeImpl("OTCBB", "D", NY);
@@ -275,7 +279,7 @@ public final class Exchanges {
 	}
 
 	public static Exchange fromCode(final String code) {
-
+		
 		if(codes.containsKey(code)) {
 			return codes.get(code);
 		} else {
@@ -318,7 +322,7 @@ public final class Exchanges {
 
 		@Override
 		public boolean isNull() {
-			return false;  // TODO FIXME
+			return false;  
 		}
 
 		@Override
