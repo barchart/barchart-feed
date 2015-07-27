@@ -386,10 +386,10 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 
 						for (final Entry<String, List<Instrument>> e : instMap.entrySet()) {
 
-							/* Currently assuming we're only getting one inst back */
-							final Instrument i = e.getValue().get(0);
-
-							if (!i.isNull()) {
+							if (!e.getValue().isEmpty() && !e.getValue().get(0).isNull()) {
+								
+								/* Currently assuming we're only getting one inst back */
+								final Instrument i = e.getValue().get(0);
 
 								/* Ignore including expired instruments */
 								if(isExpired(i)) {
