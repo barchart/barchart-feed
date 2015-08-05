@@ -386,7 +386,6 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 
 						for (final Entry<String, List<Instrument>> e : instMap.entrySet()) {
 
-							// TODO Figure out why "EADSF.BZ" was returning empty
 							if (!e.getValue().isEmpty() && !e.getValue().get(0).isNull()) {
 								
 								/* Currently assuming we're only getting one inst back */
