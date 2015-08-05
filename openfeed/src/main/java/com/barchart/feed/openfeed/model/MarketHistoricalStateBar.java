@@ -380,4 +380,9 @@ public class MarketHistoricalStateBar extends MarketHistoricalState implements B
 		return price(Type.COMPUTED, Descriptor.OPTION_THEORETICAL_PRICE);
 	}
 
+	@Override
+	public Price getUnderlying() {
+		return price(Type.UNDERLYING);
+	}
+
 }
