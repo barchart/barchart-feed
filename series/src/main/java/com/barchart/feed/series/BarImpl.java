@@ -51,6 +51,7 @@ public class BarImpl extends DataPointImpl implements Bar {
 	private Price hv;
 	private Price iv;
 	private Price theoretical;
+	private Price underlying;
 
 	/**
 	 * Instantiates a new {@code BarImpl}
@@ -1027,6 +1028,15 @@ public class BarImpl extends DataPointImpl implements Bar {
 
 	public void setTheoreticalPrice(Price p) {
 		theoretical = p;
+	}
+
+	@Override
+	public Price getUnderlying() {
+		return underlying;
+	}
+
+	public void setUnderlyingPrice(Price p) {
+		underlying = p;
 	}
 
 }

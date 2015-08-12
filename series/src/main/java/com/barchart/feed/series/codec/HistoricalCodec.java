@@ -144,6 +144,9 @@ public final class HistoricalCodec {
 									case VOLUME_UP:
 										bar.setVolumeUp(s);
 										break;
+					case UNDERLYING:
+						bar.setUnderlyingPrice(p);
+						break;
 									case COMPUTED:
 										switch (entry.getDescriptor(0)) {
 											case OPTION_DELTA:
@@ -222,6 +225,12 @@ public final class HistoricalCodec {
 					.setPriceMantissa(bar.getHigh().mantissa())
 					.setPriceExponent(bar.getHigh().exponent())
 					.setType(MarketEntry.Type.HIGH));
+		}
+		if (bar.getUnderlying() != null && !bar.getUnderlying().isNull()) {
+			builder.addEntry(MarketEntry.newBuilder()
+					.setPriceMantissa(bar.getUnderlying().mantissa())
+					.setPriceExponent(bar.getUnderlying().exponent())
+					.setType(MarketEntry.Type.UNDERLYING));
 		}
 		if (bar.getLow() != null && !bar.getLow().isNull()) {
 			builder.addEntry(MarketEntry.newBuilder()

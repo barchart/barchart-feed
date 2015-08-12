@@ -147,6 +147,8 @@ public interface Bar extends Range {
 
 	public Price getTheoreticalPrice();
 
+	public Price getUnderlying();
+
 	/**
 	 * Merges the specified <@code Bar> with this one, possibly updating any barrier elements (i.e. High, Low, etc)
 	 * given the underlying type. Used for aggregating information based on {@link PeriodType}
