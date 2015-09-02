@@ -602,8 +602,6 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 
 			final Map<InstrumentID, Instrument> iMap = metaService.instrument(
 					instIDs.toArray(new InstrumentID[0])).toBlockingObservable().single();
-			
-			System.out.println("iMap: " + iMap);
 
 			for(final Entry<InstrumentID, Instrument> e : iMap.entrySet()) {
 				if(!e.getValue().isNull()) {
