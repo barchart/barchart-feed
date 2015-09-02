@@ -305,7 +305,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 				if (exExchanges.contains(instrument.exchange())) {
 					return false;
 				}
-
+				
 				return false;
 			}
 
@@ -386,10 +386,10 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 
 						for (final Entry<String, List<Instrument>> e : instMap.entrySet()) {
 
-							/* Currently assuming we're only getting one inst back */
-							final Instrument i = e.getValue().get(0);
-
-							if (!i.isNull()) {
+							if (!e.getValue().isEmpty() && !e.getValue().get(0).isNull()) {
+								
+								/* Currently assuming we're only getting one inst back */
+								final Instrument i = e.getValue().get(0);
 
 								/* Ignore including expired instruments */
 								if(isExpired(i)) {
@@ -550,7 +550,6 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 					
 					incInsts.add(i);
 					exInsts.remove(i);
-
 					newInterests.add(i.id());
 
 					continue;
@@ -561,6 +560,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 					incExchanges.add(e);
 					exExchanges.remove(e);
 					newInterests.add(e.id());
+					
 				}
 
 			}
@@ -656,7 +656,6 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 			
 			final Set<SubCommand> oldSubs = unsubscribe(this, oldInterests);
 			if (!oldSubs.isEmpty()) {
-				log.debug("Sending new unsubs to sub handler");
 				subHandler.unsubscribe(oldSubs);
 			}
 
@@ -897,25 +896,10 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 			return;
 		}
 
-		log.debug("DETACH AGENT {}", agent.id());
-		
 		agents.remove(agent);
 
 		for (final Entry<InstrumentID, MarketDo> e : marketMap.entrySet()) {
 			e.getValue().detachAgent(agent);
-		}
-		
-		// DELETE
-		for(final Map<AgentID, FrameworkAgent<?>> map : metaToAgentsMap.values()) {
-			
-			if(!map.containsKey(agent.id())) {
-				continue;
-			}
-			
-			if(map.remove(agent.id()) != null) {
-				log.warn("AGENT STILL IN MAP");
-			}
-			
 		}
 		
 	}
@@ -1126,6 +1110,8 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 			return;
 		}
 		
+		//log.debug(message.getTime().toString());
+		
 		final InstrumentID instID = instrument.id();
 		
 		MarketDo market = marketMap.get(instID);
@@ -1136,7 +1122,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 			register(instrument);
 			market = marketMap.get(instID);
 		}
-
+		
 		market.runSafe(safeMake, message);
 
 		/* Check if any subject are awaiting snapshots
@@ -1225,6 +1211,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 			market.fireCallbacks();
 			return null;
 		}
+		
 	};
 
 	protected abstract void make(Message message, MarketDo market);

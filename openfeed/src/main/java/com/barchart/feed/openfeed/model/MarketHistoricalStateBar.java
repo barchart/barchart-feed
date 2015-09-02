@@ -365,4 +365,24 @@ public class MarketHistoricalStateBar extends MarketHistoricalState implements B
 		}
 	}
 
+	@Override
+	public Price getHistoricalVolatility() {
+		return price(Type.COMPUTED, Descriptor.OPTION_HISTORICAL_TWENTY_DAY_VOLATILITY);
+	}
+
+	@Override
+	public Price getImpliedVolatility() {
+		return price(Type.COMPUTED, Descriptor.OPTION_IMPLIED_VOLATILITY);
+	}
+
+	@Override
+	public Price getTheoreticalPrice() {
+		return price(Type.COMPUTED, Descriptor.OPTION_THEORETICAL_PRICE);
+	}
+
+	@Override
+	public Price getUnderlying() {
+		return price(Type.UNDERLYING);
+	}
+
 }
