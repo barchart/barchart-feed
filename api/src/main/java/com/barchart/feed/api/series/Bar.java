@@ -95,8 +95,21 @@ public interface Bar extends Range {
 	public Size getVolumeDown();
 
 	/**
-	 * Returns the traded value as the sum of all trade price * size. For
-	 * aggregated bars this will be an average value.
+	 * Returns the calls volume of the underlying
+	 *
+	 * @return the volume
+	 */
+	public Size getCallsVolume();
+
+	/**
+	 * Returns the puts volume of the underlying
+	 *
+	 * @return the volume
+	 */
+	public Size getPutsVolume();
+
+	/**
+	 * Returns the traded value as the sum of all trade price * size. For aggregated bars this will be an average value.
 	 */
 	public Price getTradedValue();
 
@@ -126,6 +139,20 @@ public interface Bar extends Range {
 	 * @return the open interest
 	 */
 	public Size getOpenInterest();
+
+	/**
+	 * Returns all the calls open interest (underlying).
+	 *
+	 * @return the open interest
+	 */
+	public Size getCallsOpenInterest();
+
+	/**
+	 * Returns all the puts open interest (underlying).
+	 *
+	 * @return the open interest
+	 */
+	public Size getPutsOpenInterest();
 
 	/**
 	 * Returns the day of last trade for the option. This is not expiration day

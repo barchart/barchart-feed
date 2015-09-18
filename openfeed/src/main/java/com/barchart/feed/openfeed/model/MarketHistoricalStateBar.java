@@ -385,4 +385,24 @@ public class MarketHistoricalStateBar extends MarketHistoricalState implements B
 		return price(Type.UNDERLYING);
 	}
 
+	@Override
+	public Size getCallsVolume() {
+		return size(Type.COMPUTED, Descriptor.UL_CALLS_VOLUME);
+	}
+
+	@Override
+	public Size getPutsVolume() {
+		return size(Type.COMPUTED, Descriptor.UL_PUTS_VOLUME);
+	}
+
+	@Override
+	public Size getCallsOpenInterest() {
+		return size(Type.COMPUTED, Descriptor.UL_CALLS_OPEN_INTERESTS);
+	}
+
+	@Override
+	public Size getPutsOpenInterest() {
+		return size(Type.COMPUTED, Descriptor.UL_PUTS_OPEN_INTERESTS);
+	}
+
 }

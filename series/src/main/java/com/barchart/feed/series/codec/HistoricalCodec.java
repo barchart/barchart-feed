@@ -84,73 +84,71 @@ public final class HistoricalCodec {
 		final List<MarketEntry> entryList = buf.getEntryList();
 		for (final MarketEntry entry : entryList) {
 			if (entry.hasType()) {
-				final Price p = entry.hasPriceMantissa() ? VALUES.newPrice(
-						entry.getPriceMantissa(), entry.getPriceExponent())
-						: Price.NULL;
-						final Size s = entry.hasSizeMantissa() ? VALUES.newSize(
-								entry.getSizeMantissa(), entry.getSizeExponent())
-								: Size.NULL;
-								switch (entry.getType()) {
-									case ASK:
-										bar.setAsk(p);
-										bar.setAskSize(s);
-										break;
-									case BID:
-										bar.setBid(p);
-										bar.setBidSize(s);
-										break;
-									case CLOSE:
-										bar.setClose(p);
-										bar.setLastSize(s);
-										final DateTime d = entry.hasTimeStamp() ? new DateTime(entry.getTimeStamp(), zone) : null;
-										bar.setLastTradeDay(d);
-										break;
-									case HIGH:
-										bar.setHigh(p);
-										break;
-									case LOW:
-										bar.setLow(p);
-										break;
-									case SETTLE:
-										bar.setSettlement(p);
-										break;
-									case INTEREST:
-										bar.setOpenInterest(s);
-										break;
-									case MIDPOINT:
-										bar.setMidpoint(p);
-										break;
-									case OPEN:
-										bar.setOpen(p);
-										break;
-									case TRADE:
-										bar.setTradeCount(s);
-										break;
-									case TRADED_VALUE:
-										bar.setTradedValue(p);
-										break;
-									case TRADED_VALUE_DOWN:
-										bar.setTradedValueDown(p);
-										break;
-									case TRADED_VALUE_UP:
-										bar.setTradedValueUp(p);
-										break;
-									case VOLUME:
-										bar.setVolume(s);
-										break;
-									case VOLUME_DOWN:
-										bar.setVolumeDown(s);
-										break;
-									case VOLUME_UP:
-										bar.setVolumeUp(s);
-										break;
+				final Price p = entry.hasPriceMantissa() ? VALUES
+						.newPrice(entry.getPriceMantissa(), entry.getPriceExponent()) : Price.NULL;
+				final Size s = entry.hasSizeMantissa() ? VALUES
+						.newSize(entry.getSizeMantissa(), entry.getSizeExponent()) : Size.NULL;
+				switch (entry.getType()) {
+					case ASK:
+						bar.setAsk(p);
+						bar.setAskSize(s);
+						break;
+					case BID:
+						bar.setBid(p);
+						bar.setBidSize(s);
+						break;
+					case CLOSE:
+						bar.setClose(p);
+						bar.setLastSize(s);
+						final DateTime d = entry.hasTimeStamp() ? new DateTime(entry.getTimeStamp(), zone) : null;
+						bar.setLastTradeDay(d);
+						break;
+					case HIGH:
+						bar.setHigh(p);
+						break;
+					case LOW:
+						bar.setLow(p);
+						break;
+					case SETTLE:
+						bar.setSettlement(p);
+						break;
+					case INTEREST:
+						bar.setOpenInterest(s);
+						break;
+					case MIDPOINT:
+						bar.setMidpoint(p);
+						break;
+					case OPEN:
+						bar.setOpen(p);
+						break;
+					case TRADE:
+						bar.setTradeCount(s);
+						break;
+					case TRADED_VALUE:
+						bar.setTradedValue(p);
+						break;
+					case TRADED_VALUE_DOWN:
+						bar.setTradedValueDown(p);
+						break;
+					case TRADED_VALUE_UP:
+						bar.setTradedValueUp(p);
+						break;
+					case VOLUME:
+						bar.setVolume(s);
+						break;
+					case VOLUME_DOWN:
+						bar.setVolumeDown(s);
+						break;
+					case VOLUME_UP:
+						bar.setVolumeUp(s);
+						break;
 					case UNDERLYING:
 						bar.setUnderlyingPrice(p);
 						break;
-									case COMPUTED:
-										switch (entry.getDescriptor(0)) {
-											case OPTION_DELTA:
-												bar.setGreeks(GREEK_TYPE.DELTA, p);
+					case COMPUTED:
+						switch (entry.getDescriptor(0)) {
+							case OPTION_DELTA:
+								bar.setGreeks(GREEK_TYPE.DELTA, p);
 								break;
 							case OPTION_GAMMA:
 								bar.setGreeks(GREEK_TYPE.GAMMA, p);
@@ -173,13 +171,25 @@ public final class HistoricalCodec {
 							case OPTION_IMPLIED_VOLATILITY:
 								bar.setImpliedVolatility(p);
 								break;
-											default:
+							case UL_CALLS_VOLUME:
+								bar.setCallsVolume(s);
+								break;
+							case UL_PUTS_VOLUME:
+								bar.setPutsVolume(s);
+								break;
+							case UL_CALLS_OPEN_INTERESTS:
+								bar.setCallsOpenInterest(s);
+								break;
+							case UL_PUTS_OPEN_INTERESTS:
+								bar.setPutsOpenInterest(s);
+								break;
+							default:
 
-										}
-									default:
-										logger.trace("Unsupported entry type: ", entry.getType());
-										break;
-								}
+						}
+					default:
+						logger.trace("Unsupported entry type: ", entry.getType());
+						break;
+				}
 			}
 		}
 
@@ -354,6 +364,13 @@ public final class HistoricalCodec {
 		entry(bar.getTheoreticalPrice(), builder, MarketEntry.Type.COMPUTED,
 				MarketEntry.Descriptor.OPTION_THEORETICAL_PRICE);
 
+		entry(bar.getCallsVolume(), builder, MarketEntry.Type.COMPUTED, MarketEntry.Descriptor.UL_CALLS_VOLUME);
+		entry(bar.getCallsOpenInterest(), builder, MarketEntry.Type.COMPUTED,
+				MarketEntry.Descriptor.UL_CALLS_OPEN_INTERESTS);
+		entry(bar.getPutsVolume(), builder, MarketEntry.Type.COMPUTED, MarketEntry.Descriptor.UL_PUTS_VOLUME);
+		entry(bar.getPutsOpenInterest(), builder, MarketEntry.Type.COMPUTED,
+				MarketEntry.Descriptor.UL_PUTS_OPEN_INTERESTS);
+
 	}
 
 	private static void entry(Price p, MarketHistoricalSnapshot.Builder builder, MarketEntry.Type t, MarketEntry.Descriptor d) {
@@ -361,6 +378,16 @@ public final class HistoricalCodec {
 			builder.addEntry(MarketEntry.newBuilder()
 					.setPriceMantissa(p.mantissa())
 					.setPriceExponent(p.exponent())
+					.setType(t).addDescriptor(d));
+		}
+	}
+
+	private static void entry(Size s, MarketHistoricalSnapshot.Builder builder, MarketEntry.Type t,
+			MarketEntry.Descriptor d) {
+		if (s != null && !s.isNull()) {
+			builder.addEntry(MarketEntry.newBuilder()
+					.setSizeMantissa(s.mantissa())
+					.setSizeExponent(s.exponent())
 					.setType(t).addDescriptor(d));
 		}
 	}

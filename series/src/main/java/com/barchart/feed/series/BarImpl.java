@@ -53,6 +53,14 @@ public class BarImpl extends DataPointImpl implements Bar {
 	private Price theoretical;
 	private Price underlying;
 
+	private Size callsVl;
+
+	private Size putsVl;
+
+	private Size callsOI;
+
+	private Size putsOI;
+
 	/**
 	 * Instantiates a new {@code BarImpl}
 	 *
@@ -1037,6 +1045,42 @@ public class BarImpl extends DataPointImpl implements Bar {
 
 	public void setUnderlyingPrice(Price p) {
 		underlying = p;
+	}
+
+	@Override
+	public Size getCallsVolume() {
+		return callsVl;
+	}
+
+	public void setCallsVolume(Size s) {
+		callsVl = s;
+	}
+
+	@Override
+	public Size getPutsVolume() {
+		return putsVl;
+	}
+
+	public void setPutsVolume(Size s) {
+		putsVl = s;
+	}
+
+	@Override
+	public Size getCallsOpenInterest() {
+		return callsOI;
+	}
+
+	public void setCallsOpenInterest(Size s) {
+		callsOI = s;
+	}
+
+	@Override
+	public Size getPutsOpenInterest() {
+		return putsOI;
+	}
+
+	public void setPutsOpenInterest(Size s) {
+		putsOI = s;
 	}
 
 }
