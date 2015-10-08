@@ -63,8 +63,12 @@ public interface InstrumentService {
 	Observable<InstrumentID> options(InstrumentID underlier);
 
 	/**
-	 * Resolve a query result of InstrumentIDs into the full Instrument
-	 * definitions.
+	 * Get all options for the specified roots as of the given historical date.
+	 */
+	Observable<Instrument> options(DateTime date, String... roots);
+
+	/**
+	 * Resolve a query result of InstrumentIDs into the full Instrument definitions.
 	 */
 	Observable<Instrument> resolve(Observable<InstrumentID> observable);
 
