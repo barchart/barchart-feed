@@ -101,6 +101,40 @@ public class QueryBuilderImpl implements QueryBuilder {
 
 	}
 
+	@Override
+	public DataQuery buildWithoutInstrument() {
+
+		if (periods.size() < 1) {
+			periods.add(Period.DAY);
+		}
+
+		if (analyticSpecifier == null || nodeType == null) {
+			nodeType = NodeType.IO;
+			analyticSpecifier = NodeType.IO.toString();
+		} else if (analyticSpecifier != null && nodeType == null) {
+			nodeType = NodeType.forString(analyticSpecifier);
+
+		}
+
+		return new DataQuery(
+				customQuery,
+				nodeType,
+				analyticSpecifier,
+				new ArrayList<String>(symbols),
+				new ArrayList<Period>(periods),
+				count,
+				padding,
+				nearestOffset,
+				instrument,
+				start,
+				end,
+				new ArrayList<CorporateActionType>(actions),
+				policy,
+				volumeType,
+				tradingWeek);
+
+	}
+
 	/**
 	 * Returns a new instance of {@link QueryBuilder}
 	 *

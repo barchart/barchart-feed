@@ -40,6 +40,13 @@ public interface QueryBuilder {
 	public Query build();
 
 	/**
+	 * allow no instrument - for query all commodity options
+	 * 
+	 * @return
+	 */
+	public Query buildWithoutInstrument();
+
+	/**
 	 * Provides a way to pass in a custom url to the historical data feed. This
 	 * query string will be checked and used in place of the typical string
 	 * being used, such that data with extended filtering may be obtained.
@@ -140,7 +147,7 @@ public interface QueryBuilder {
 
 	/**
 	 * Sets the {@link ContinuationPolicy} for futures charts
-	 * 
+	 *
 	 * @param the {@link ContinuationPolicy}
 	 * @return this {@code IQueryBuilder}
 	 */
