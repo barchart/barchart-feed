@@ -32,6 +32,12 @@ Barchart Feed Protocol.
 		<tag>master</tag>
 	</scm>
 
+  <properties>
+	<!-- Allows both protoc 2.5 and 2.6.1 exist with the build system. -->
+    <protocCommand>protoc25</protocCommand>
+  </properties>
+  
+  
 	<!-- FIXME, new 2.6.0 release breaks compile -->
 	<!-- change range in barchart-archon -->
 	<dependencies>
