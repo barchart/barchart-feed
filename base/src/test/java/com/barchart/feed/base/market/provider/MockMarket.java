@@ -40,6 +40,7 @@ import com.barchart.feed.base.book.api.MarketDoBookEntry;
 import com.barchart.feed.base.book.enums.UniBookResult;
 import com.barchart.feed.base.cuvol.api.MarketDoCuvol;
 import com.barchart.feed.base.cuvol.api.MarketDoCuvolEntry;
+import com.barchart.feed.base.market.api.MarketMessage;
 import com.barchart.feed.base.provider.VarMarket;
 import com.barchart.feed.base.state.enums.MarketStateEntry;
 import com.barchart.feed.base.trade.api.MarketDoTrade;
@@ -64,8 +65,7 @@ public class MockMarket extends VarMarket {
 	}
 
 	@Override
-	public void setBookUpdate(final MarketDoBookEntry entry,
-			final TimeValue time) {
+	public void setBookUpdate(final MarketDoBookEntry entry, final TimeValue time) {
 
 		assert entry != null && time != null;
 
@@ -91,8 +91,7 @@ public class MockMarket extends VarMarket {
 	}
 
 	@Override
-	public void setBookSnapshot(final MarketDoBookEntry[] entries,
-			final TimeValue time) {
+	public void setBookSnapshot(final MarketDoBookEntry[] entries, final TimeValue time) {
 		assert entries != null;
 		assert time != null;
 
@@ -127,8 +126,7 @@ public class MockMarket extends VarMarket {
 	}
 
 	@Override
-	public void setCuvolUpdate(final MarketDoCuvolEntry entry,
-			final TimeValue time) {
+	public void setCuvolUpdate(final MarketDoCuvolEntry entry, final TimeValue time) {
 
 		assert entry != null && time != null;
 
@@ -139,8 +137,7 @@ public class MockMarket extends VarMarket {
 	}
 
 	@Override
-	public void setCuvolSnapshot(final MarketDoCuvolEntry[] entries,
-			final TimeValue time) {
+	public void setCuvolSnapshot(final MarketDoCuvolEntry[] entries, final TimeValue time) {
 
 		assert entries != null && time != null;
 
@@ -173,10 +170,9 @@ public class MockMarket extends VarMarket {
 	}
 
 	@Override
-	public void setTrade(final MarketTradeType type,
-			final MarketTradeSession session,
-			final MarketTradeSequencing sequencing, final PriceValue price,
-			final SizeValue size, final TimeValue time, final TimeValue date) {
+	public void setTrade(final MarketTradeType type, final MarketTradeSession session,
+			final MarketTradeSequencing sequencing, final PriceValue price, final SizeValue size, final TimeValue time,
+			final TimeValue date) {
 
 		assert type != null;
 		assert price != null;
@@ -208,8 +204,7 @@ public class MockMarket extends VarMarket {
 
 	}
 
-	private final void makeCuvol(final PriceValue price, final SizeValue size,
-			final TimeValue time) {
+	private final void makeCuvol(final PriceValue price, final SizeValue size, final TimeValue time) {
 
 		final MarketDoCuvol cuvol = loadCuvol();
 
@@ -219,9 +214,8 @@ public class MockMarket extends VarMarket {
 
 	}
 
-	private final void applyTradeToBar(final MarketBarType type,
-			final PriceValue price, final SizeValue size, final TimeValue time,
-			final TimeValue date) {
+	private final void applyTradeToBar(final MarketBarType type, final PriceValue price, final SizeValue size,
+			final TimeValue time, final TimeValue date) {
 
 		final MarketDoBar bar = loadBar(type.field);
 
@@ -276,18 +270,9 @@ public class MockMarket extends VarMarket {
 	}
 
 	@Override
-	public void setSnapshot(
-			final TimeValue tradeDate, 
-			final PriceValue open, 
-			final PriceValue high,
-			final PriceValue low, 
-			final PriceValue close,
-			final PriceValue settle, 
-			final PriceValue previousSettle, 
-			final SizeValue volume, 
-			final SizeValue interest,
-			final PriceValue vwap,
-			final BooleanValue isSettled,
+	public void setSnapshot(final TimeValue tradeDate, final PriceValue open, final PriceValue high,
+			final PriceValue low, final PriceValue close, final PriceValue settle, final PriceValue previousSettle,
+			final SizeValue volume, final SizeValue interest, final PriceValue vwap, final BooleanValue isSettled,
 			final TimeValue barTime) {
 
 		final MarketBarType type = ensureBar(tradeDate);
@@ -313,7 +298,7 @@ public class MockMarket extends VarMarket {
 			bar.set(MarketBarField.VOLUME, volume);
 		if (interest != null)
 			bar.set(MarketBarField.INTEREST, interest);
-		if (vwap != null) 
+		if (vwap != null)
 			bar.set(MarketBarField.VWAP, vwap);
 		if (isSettled != null)
 			bar.set(MarketBarField.IS_SETTLED, isSettled);
@@ -327,7 +312,19 @@ public class MockMarket extends VarMarket {
 	@Override
 	public void refresh() {
 		// TODO Auto-generated method stub
-		
+
+	}
+
+	@Override
+	public void setLastDDFMessage(MarketMessage message) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public MarketMessage getLastDDFMessage() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

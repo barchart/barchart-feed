@@ -18,6 +18,7 @@ import com.barchart.feed.api.model.data.SessionSet;
 import com.barchart.feed.api.model.data.Trade;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.market.api.Market;
+import com.barchart.feed.base.market.api.MarketMessage;
 import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.feed.base.values.api.Value;
 import com.barchart.feed.base.values.provider.ValueFreezer;
@@ -26,6 +27,8 @@ import com.barchart.util.value.api.Time;
 
 @NotMutable
 class NulMarket extends ValueFreezer<Market> implements Market {
+
+	protected MarketMessage lastDDFMessage;
 
 	@Override
 	public <V extends Value<V>> V get(final MarketField<V> field) {
@@ -39,6 +42,9 @@ class NulMarket extends ValueFreezer<Market> implements Market {
 	public final String toString() {
 
 		final StringBuilder text = new StringBuilder(4 * 1024);
+		if (lastDDFMessage != null) {
+			text.append("DDF: " + lastDDFMessage + "\n");
+		}
 
 		for (final MarketField<?> field : MarketField.values()) {
 
@@ -47,8 +53,7 @@ class NulMarket extends ValueFreezer<Market> implements Market {
 			}
 
 			text.append(SEPARATOR);
-			text.append(String.format(" %3d %s \n", field.ordinal(),
-					field.name()));
+			text.append(String.format(" %3d %s \n", field.ordinal(), field.name()));
 			text.append(get(field));
 			text.append("\n");
 
@@ -91,7 +96,7 @@ class NulMarket extends ValueFreezer<Market> implements Market {
 	public Session session() {
 		return Session.NULL;
 	}
-	
+
 	@Override
 	public SessionSet sessionSet() {
 		return SessionSet.NULL;
@@ -111,10 +116,21 @@ class NulMarket extends ValueFreezer<Market> implements Market {
 	public Set<Component> change() {
 		return Collections.<Component> emptySet();
 	}
-	
+
 	@Override
 	public LastPrice lastPrice() {
 		return LastPrice.NULL;
 	}
-	
+
+	@Override
+	public MarketMessage getLastDDFMessage() {
+		return lastDDFMessage;
+	}
+
+	@Override
+	public void setLastDDFMessage(MarketMessage ddf) {
+		lastDDFMessage = ddf;
+
+	}
+
 }

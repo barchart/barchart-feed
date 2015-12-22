@@ -32,14 +32,14 @@ import com.barchart.util.common.anno.Mutable;
 
 @Mutable
 public interface MarketDo extends Market, FrameworkAgentLifecycleHandler {
-	
+
 	/**
 	 * Prepares Market for garbage collection, removes all references to agents
 	 */
 	void destroy();
 
 	/* OLD EVENTS */
-	
+
 	void refresh();
 
 	void fireEvents();
@@ -85,34 +85,18 @@ public interface MarketDo extends Market, FrameworkAgentLifecycleHandler {
 	 * fields are null, they will be ignored instead of being nulled out (this
 	 * does not include fields is isNull() == true).
 	 */
-	void setSnapshot(
-			TimeValue tradeDate, 
-			PriceValue open, 
-			PriceValue high, 
-			PriceValue low, 
-			PriceValue close,
-			PriceValue settle, 
-			PriceValue previousSettle, 
-			SizeValue volume, 
-			SizeValue interest,
-			PriceValue vwap,
-			BooleanValue isSettled, 
-			TimeValue barTime);
+	void setSnapshot(TimeValue tradeDate, PriceValue open, PriceValue high, PriceValue low, PriceValue close,
+			PriceValue settle, PriceValue previousSettle, SizeValue volume, SizeValue interest, PriceValue vwap,
+			BooleanValue isSettled, TimeValue barTime);
 
 	/**  */
-	void setTrade(
-			MarketTradeType type, 
-			MarketTradeSession session,
-			MarketTradeSequencing sequencing, 
-			PriceValue price, 
-			SizeValue size,
-			TimeValue time, 
-			TimeValue date);
+	void setTrade(MarketTradeType type, MarketTradeSession session, MarketTradeSequencing sequencing, PriceValue price,
+			SizeValue size, TimeValue time, TimeValue date);
 
 	//
 
 	void setState(MarketStateEntry entry, boolean isOn);
-	
+
 	void fireCallbacks();
 
 	/* RUN SAFE */
@@ -134,8 +118,18 @@ public interface MarketDo extends Market, FrameworkAgentLifecycleHandler {
 	 * Note that if a session is rolled, the current session will have all null
 	 * values, and the caller is responsible for properly initializing it.
 	 *
-	 * @param date The trading session date
+	 * @param date
+	 *            The trading session date
 	 */
 	MarketBarType ensureBar(TimeValue date);
 
+	/**
+	 * Saves the last DDF Message processed, used for error logging only.
+	 * 
+	 * @param message
+	 *            DDF Message
+	 */
+	void setLastDDFMessage(MarketMessage message);
+
+	MarketMessage getLastDDFMessage();
 }

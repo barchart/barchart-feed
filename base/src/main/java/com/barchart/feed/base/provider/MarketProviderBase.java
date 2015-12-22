@@ -15,10 +15,6 @@ import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import rx.Observable;
-import rx.functions.Func1;
-import rx.subjects.PublishSubject;
-
 import com.barchart.feed.api.Agent;
 import com.barchart.feed.api.AgentID;
 import com.barchart.feed.api.MarketObserver;
@@ -62,79 +58,72 @@ import com.barchart.feed.inst.Exchanges;
 import com.barchart.util.common.collections.strict.StrictConcurrentHashMap;
 import com.barchart.util.value.api.Fraction;
 
-public abstract class MarketProviderBase<Message extends MarketMessage>
-		implements MarketService, MarketMakerProvider<Message>,
-		FrameworkAgentLifecycleHandler {
+import rx.Observable;
+import rx.functions.Func1;
+import rx.subjects.PublishSubject;
 
-	protected static final Logger log = LoggerFactory.getLogger(
-			MarketProviderBase.class);
+public abstract class MarketProviderBase<Message extends MarketMessage>
+		implements MarketService, MarketMakerProvider<Message>, FrameworkAgentLifecycleHandler {
+
+	protected static final Logger log = LoggerFactory.getLogger(MarketProviderBase.class);
 
 	protected final MarketFactory factory;
 	protected final MetadataService metaService;
 	protected final SubscriptionHandler subHandler;
 
-	protected final ConcurrentMap<InstrumentID, MarketDo> marketMap =
-			new ConcurrentHashMap<InstrumentID, MarketDo>();
+	protected final ConcurrentMap<InstrumentID, MarketDo> marketMap = new ConcurrentHashMap<InstrumentID, MarketDo>();
 
-	protected final ConcurrentMap<String, InstrumentID> symbolMap =
-			new ConcurrentHashMap<String, InstrumentID>();
+	protected final ConcurrentMap<String, InstrumentID> symbolMap = new ConcurrentHashMap<String, InstrumentID>();
 
-	private final ConcurrentMap<FrameworkAgent<?>, Boolean> agents =
-			new ConcurrentHashMap<FrameworkAgent<?>, Boolean>();
+	private final ConcurrentMap<FrameworkAgent<?>, Boolean> agents = new ConcurrentHashMap<FrameworkAgent<?>, Boolean>();
 
-	private final ConcurrentMap<InstrumentID, Subscription<Instrument>> defSubs =
-			new ConcurrentHashMap<InstrumentID, Subscription<Instrument>>();
+	private final ConcurrentMap<InstrumentID, Subscription<Instrument>> defSubs = new ConcurrentHashMap<InstrumentID, Subscription<Instrument>>();
 
-	private final ConcurrentMap<InstrumentID, VarSubscription> varSubs =
-			new ConcurrentHashMap<InstrumentID, VarSubscription>();
+	private final ConcurrentMap<InstrumentID, VarSubscription> varSubs = new ConcurrentHashMap<InstrumentID, VarSubscription>();
 
 	// Not implemented
-	private final ConcurrentMap<ExchangeID, Subscription<Exchange>> exchSubs =
-			new ConcurrentHashMap<ExchangeID, Subscription<Exchange>>();
+	private final ConcurrentMap<ExchangeID, Subscription<Exchange>> exchSubs = new ConcurrentHashMap<ExchangeID, Subscription<Exchange>>();
 
-	protected MarketProviderBase(
-			final MarketFactory factory,
-			final MetadataService metaService,
+	protected MarketProviderBase(final MarketFactory factory, final MetadataService metaService,
 			final SubscriptionHandler subHandler) {
 
 		this.factory = factory;
 		this.metaService = metaService;
 		this.subHandler = subHandler;
-		
+
 		final Thread marketRefresher = new Thread(new Runnable() {
 
 			@Override
 			public void run() {
-				
-				while(true) {
-					
+
+				while (true) {
+
 					try {
 						Thread.sleep(3000);
 					} catch (final InterruptedException e) {
 						log.warn("Market refresher interrupted");
 						break;
 					}
-					
-					for(final MarketDo m : marketMap.values()) {
+
+					for (final MarketDo m : marketMap.values()) {
 						m.refresh();
 					}
-					
+
 				}
-				
+
 			}
-			
+
 		});
-		
+
 		marketRefresher.setDaemon(true);
 		marketRefresher.start();
-		
+
 	}
-	
+
 	/* ***** ***** Consumer Agent ***** ***** */
 
 	@Override
-	public <V extends MarketData<V>> ConsumerAgent register(final MarketObserver<V> callback,
-			final Class<V> clazz) {
+	public <V extends MarketData<V>> ConsumerAgent register(final MarketObserver<V> callback, final Class<V> clazz) {
 
 		final MDGetter<V> getter = MarketDataGetters.get(clazz);
 
@@ -168,50 +157,47 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		private final Set<String> exUnknown = new HashSet<String>();
 
 		private Filter filter = new DefaultFilter();
-		
+
 		private final AgentID id = new AgentID(UUID.randomUUID().toString());
-		
-		BaseAgent(
-				final FrameworkAgentLifecycleHandler agentHandler,
-				final Class<V> clazz,
-				final MDGetter<V> getter,
+
+		BaseAgent(final FrameworkAgentLifecycleHandler agentHandler, final Class<V> clazz, final MDGetter<V> getter,
 				final MarketObserver<V> callback) {
-			
-			if(agentHandler == null) {
+
+			if (agentHandler == null) {
 				throw new IllegalArgumentException("Agent Handler cannot be null");
 			}
-			if(clazz == null) {
+			if (clazz == null) {
 				throw new IllegalArgumentException("Class cannot be null");
 			}
-			if(getter == null) {
+			if (getter == null) {
 				throw new IllegalArgumentException("Market data getter cannot be null");
 			}
-			if(callback == null) {
+			if (callback == null) {
 				throw new IllegalArgumentException("Callback cannot be null");
 			}
-			
+
 			this.agentHandler = agentHandler;
 			this.clazz = clazz;
 			this.getter = getter;
 			this.callback = callback;
-			
+
 		}
 
 		@Override
 		public AgentType agentType() {
-			if(clazz == Market.class) {
+			if (clazz == Market.class) {
 				return AgentType.MARKET;
 			}
-			if(clazz == Trade.class) {
+			if (clazz == Trade.class) {
 				return AgentType.TRADE;
 			}
-			if(clazz == Book.class) {
+			if (clazz == Book.class) {
 				return AgentType.BOOK;
 			}
-			if(clazz == Session.class) {
+			if (clazz == Session.class) {
 				return AgentType.SESSION;
 			}
-			if(clazz == Cuvol.class) {
+			if (clazz == Cuvol.class) {
 				return AgentType.CUVOL;
 			}
 			throw new IllegalStateException("Unknown Agent Type");
@@ -226,7 +212,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		public AgentID id() {
 			return id;
 		}
-		
+
 		/* ***** ***** Framework Methods ***** ***** */
 
 		@Override
@@ -247,17 +233,17 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 
 		@Override
 		public Set<MetadataID<?>> subscriptionIDs() {
-			
+
 			final Set<MetadataID<?>> subIDs = new HashSet<MetadataID<?>>();
-			
+
 			for (final Exchange e : incExchanges) {
 				subIDs.add(e.id());
 			}
-			
-			for(final Instrument i : incInsts) {
+
+			for (final Instrument i : incInsts) {
 				subIDs.add(i.id());
 			}
-			
+
 			return subIDs;
 		}
 
@@ -276,13 +262,13 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 			@SuppressWarnings("deprecation")
 			@Override
 			public boolean hasMatch(final Instrument instrument) {
-				
+
 				/* Work bottom up on the hierarchy */
-				if(incUnknown.contains(instrument.symbol())) {
+				if (incUnknown.contains(instrument.symbol())) {
 					return true;
 				}
 
-				if(exUnknown.contains(instrument.symbol())) {
+				if (exUnknown.contains(instrument.symbol())) {
 					return false;
 				}
 
@@ -305,7 +291,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 				if (exExchanges.contains(instrument.exchange())) {
 					return false;
 				}
-				
+
 				return false;
 			}
 
@@ -336,7 +322,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		@Override
 		public void activate() {
 
-			if(state == State.TERMINATED) {
+			if (state == State.TERMINATED) {
 				return;
 			}
 
@@ -346,7 +332,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		@Override
 		public void deactivate() {
 
-			if(state == State.TERMINATED) {
+			if (state == State.TERMINATED) {
 				return;
 			}
 
@@ -357,7 +343,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		public synchronized void terminate() {
 
 			log.debug("TERMINATE AGENT {}", id);
-			
+
 			/* Unsubscribe to all */
 			subHandler.unsubscribe(unsubscribe(this, subscriptionIDs()));
 
@@ -368,7 +354,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 
 			state = State.TERMINATED;
 			agentHandler.detachAgent(this);
-			
+
 		}
 
 		@Override
@@ -376,57 +362,65 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 
 			return metaService.instrument(symbols)
 
-				.flatMap(new Func1<Result<Instrument>, Observable<Result<Instrument>>>() {
+					.flatMap(new Func1<Result<Instrument>, Observable<Result<Instrument>>>() {
 
-					@Override
-					public Observable<Result<Instrument>> call(final Result<Instrument> result) {
+						@Override
+						public Observable<Result<Instrument>> call(final Result<Instrument> result) {
 
-						final Map<String, List<Instrument>> instMap = result.results();
-						final Set<MetadataID<?>> newInterests = new HashSet<MetadataID<?>>();
+							final Map<String, List<Instrument>> instMap = result.results();
+							final Set<MetadataID<?>> newInterests = new HashSet<MetadataID<?>>();
 
-						for (final Entry<String, List<Instrument>> e : instMap.entrySet()) {
+							for (final Entry<String, List<Instrument>> e : instMap.entrySet()) {
 
-							if (!e.getValue().isEmpty() && !e.getValue().get(0).isNull()) {
-								
-								/* Currently assuming we're only getting one inst back */
-								final Instrument i = e.getValue().get(0);
+								if (!e.getValue().isEmpty() && !e.getValue().get(0).isNull()) {
 
-								/* Ignore including expired instruments */
-								if(isExpired(i)) {
-									continue;
+									/*
+									 * Currently assuming we're only getting one
+									 * inst back
+									 */
+									final Instrument i = e.getValue().get(0);
+
+									/* Ignore including expired instruments */
+									if (isExpired(i)) {
+										continue;
+									}
+
+									/*
+									 * Try to fire a snapshot if instrument is
+									 * not already included
+									 */
+									if (!incInsts.contains(i)) {
+										fireSnapshot(i.id());
+									}
+
+									exInsts.remove(i);
+									incInsts.add(i);
+
+									newInterests.add(i.id());
+
+								} else {
+									/*
+									 * For all failed lookups, store symbol and
+									 * attempt to match in the hasMatch method.
+									 */
+									incUnknown.add(e.getKey().toString());
+									exUnknown.remove(e.getKey().toString());
 								}
-								
-								/* Try to fire a snapshot if instrument is not already included */
-								if(!incInsts.contains(i)) {
-									fireSnapshot(i.id());
-								}
 
-								exInsts.remove(i);
-								incInsts.add(i);
-
-								newInterests.add(i.id());
-								
-							} else {
-								/* For all failed lookups, store symbol and attempt to match
-								 * in the hasMatch method. */
-								incUnknown.add(e.getKey().toString());
-								exUnknown.remove(e.getKey().toString());
 							}
 
+							agentHandler.updateAgent(BaseAgent.this);
+
+							final Set<SubCommand> newSubs = subscribe(BaseAgent.this, newInterests);
+							if (!newSubs.isEmpty()) {
+								log.debug("Sending new subs to sub handler");
+								subHandler.subscribe(newSubs);
+							}
+
+							return Observable.just(result);
 						}
 
-						agentHandler.updateAgent(BaseAgent.this);
-
-						final Set<SubCommand> newSubs = subscribe(BaseAgent.this, newInterests);
-						if (!newSubs.isEmpty()) {
-							log.debug("Sending new subs to sub handler");
-							subHandler.subscribe(newSubs);
-						}
-
-						return Observable.just(result);
 					}
-
-				}
 
 			);
 
@@ -435,21 +429,21 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		@SuppressWarnings("unchecked")
 		private void fireSnapshot(final InstrumentID id) {
 
-			if(!marketMap.containsKey(id)) {
+			if (!marketMap.containsKey(id)) {
 				log.warn("InstID {} not in market map", id);
 				return;
 			}
 
 			final Market market = marketMap.get(id);
 
-			if(market == null) {
+			if (market == null) {
 				log.error("Should not happen");
 				return;
 			}
 
 			final MarketData<V> data = getter.get(market);
 
-			if(data.isNull()) {
+			if (data.isNull()) {
 				return;
 			}
 
@@ -462,49 +456,52 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 
 			return metaService.instrument(symbols).flatMap(
 
-				new Func1<Result<Instrument>, Observable<Result<Instrument>>>() {
+					new Func1<Result<Instrument>, Observable<Result<Instrument>>>() {
 
-					@Override
-					public Observable<Result<Instrument>> call(final Result<Instrument> result) {
+						@Override
+						public Observable<Result<Instrument>> call(final Result<Instrument> result) {
 
-						final Map<String, List<Instrument>> instMap = result.results();
-						final Set<MetadataID<?>> oldInterests = new HashSet<MetadataID<?>>();
+							final Map<String, List<Instrument>> instMap = result.results();
+							final Set<MetadataID<?>> oldInterests = new HashSet<MetadataID<?>>();
 
-						for (final Entry<String, List<Instrument>> e : instMap.entrySet()) {
+							for (final Entry<String, List<Instrument>> e : instMap.entrySet()) {
 
-							/* Currently assuming we're only getting one inst back */
-							final Instrument i = e.getValue().get(0);
-
-							if (!i.isNull()) {
-
-								incInsts.remove(i);
-								exInsts.add(i);
-
-								oldInterests.add(i.id());
-
-							} else {
 								/*
-								 * For all failed lookups, store symbol and attempt to match
-								 * in the hasMatch method.
+								 * Currently assuming we're only getting one
+								 * inst back
 								 */
-								incUnknown.remove(e.getKey().toString());
-								exUnknown.add(e.getKey().toString());
+								final Instrument i = e.getValue().get(0);
+
+								if (!i.isNull()) {
+
+									incInsts.remove(i);
+									exInsts.add(i);
+
+									oldInterests.add(i.id());
+
+								} else {
+									/*
+									 * For all failed lookups, store symbol and
+									 * attempt to match in the hasMatch method.
+									 */
+									incUnknown.remove(e.getKey().toString());
+									exUnknown.add(e.getKey().toString());
+								}
+
 							}
 
+							agentHandler.updateAgent(BaseAgent.this);
+
+							final Set<SubCommand> oldSubs = unsubscribe(BaseAgent.this, oldInterests);
+							if (!oldSubs.isEmpty()) {
+								log.debug("Sending new unsubs to sub handler");
+								subHandler.unsubscribe(oldSubs);
+							}
+
+							return Observable.just(result);
 						}
 
-						agentHandler.updateAgent(BaseAgent.this);
-
-						final Set<SubCommand> oldSubs = unsubscribe(BaseAgent.this, oldInterests);
-						if (!oldSubs.isEmpty()) {
-							log.debug("Sending new unsubs to sub handler");
-							subHandler.unsubscribe(oldSubs);
-						}
-
-						return Observable.just(result);
 					}
-
-				}
 
 			);
 
@@ -528,39 +525,39 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 
 			final Set<MetadataID<?>> newInterests = new HashSet<MetadataID<?>>();
 
-			for(final Metadata m : meta) {
+			for (final Metadata m : meta) {
 
-				if(m == null || m.isNull()) {
+				if (m == null || m.isNull()) {
 					continue;
 				}
 
-				switch(m.type()) {
+				switch (m.type()) {
 
 				default:
 					// Ignore
 					continue;
 				case INSTRUMENT:
 
-					final Instrument i = (Instrument)m;
+					final Instrument i = (Instrument) m;
 
 					/* Ignore including expired instruments */
-					if(isExpired(i)) {
+					if (isExpired(i)) {
 						break;
 					}
-					
+
 					incInsts.add(i);
 					exInsts.remove(i);
 					newInterests.add(i.id());
 
 					continue;
 				case EXCHANGE:
-					
-					final Exchange e = (Exchange)m;
-					
+
+					final Exchange e = (Exchange) m;
+
 					incExchanges.add(e);
 					exExchanges.remove(e);
 					newInterests.add(e.id());
-					
+
 				}
 
 			}
@@ -580,18 +577,18 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 			final List<InstrumentID> instIDs = new ArrayList<InstrumentID>();
 			final List<Metadata> metas = new ArrayList<Metadata>();
 
-			for(final MetadataID<?> m : metaIDs) {
+			for (final MetadataID<?> m : metaIDs) {
 
-				switch(m.metaType()) {
+				switch (m.metaType()) {
 				default:
 					throw new IllegalArgumentException("Unsupported Metadata Type " + m.metaType());
 				case INSTRUMENT:
 					instIDs.add((InstrumentID) m);
 					break;
 				case EXCHANGE:
-					final Exchange e = Exchanges.fromID((ExchangeID)m);
-					if(e.isNull()) {
-						log.warn("Attempted to include invalid exchange ID " + ((ExchangeID)m).id());
+					final Exchange e = Exchanges.fromID((ExchangeID) m);
+					if (e.isNull()) {
+						log.warn("Attempted to include invalid exchange ID " + ((ExchangeID) m).id());
 					} else {
 						metas.add(e);
 					}
@@ -600,58 +597,58 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 
 			}
 
-			final Map<InstrumentID, Instrument> iMap = metaService.instrument(
-					instIDs.toArray(new InstrumentID[0])).toBlockingObservable().single();
+			final Map<InstrumentID, Instrument> iMap = metaService.instrument(instIDs.toArray(new InstrumentID[0]))
+					.toBlockingObservable().single();
 
-			for(final Entry<InstrumentID, Instrument> e : iMap.entrySet()) {
-				if(!e.getValue().isNull()) {
+			for (final Entry<InstrumentID, Instrument> e : iMap.entrySet()) {
+				if (!e.getValue().isNull()) {
 					metas.add(e.getValue());
 				}
 			}
 
 			include(metas.toArray(new Metadata[0]));
 		}
-		
+
 		@Override
 		@Deprecated
 		public synchronized void exclude(final Metadata... metas) {
-			
+
 			final Set<MetadataID<?>> oldInterests = new HashSet<MetadataID<?>>();
 
-			for(final Metadata m : metas) {
+			for (final Metadata m : metas) {
 
-				if(m == null || m.isNull()) {
+				if (m == null || m.isNull()) {
 					continue;
 				}
 
-				switch(m.type()) {
+				switch (m.type()) {
 
 				default:
 					// Ignore
 					continue;
 				case INSTRUMENT:
 
-					final Instrument i = (Instrument)m;
-					
+					final Instrument i = (Instrument) m;
+
 					exInsts.add(i);
 					incInsts.remove(i);
 
 					oldInterests.add(i.id());
-					
+
 					continue;
 				case EXCHANGE:
-					
-					final Exchange e = (Exchange)m;
-					
+
+					final Exchange e = (Exchange) m;
+
 					exExchanges.add(e);
 					incExchanges.remove(m);
 					oldInterests.add(e.id());
 				}
 
 			}
-			
+
 			agentHandler.updateAgent(this);
-			
+
 			final Set<SubCommand> oldSubs = unsubscribe(this, oldInterests);
 			if (!oldSubs.isEmpty()) {
 				subHandler.unsubscribe(oldSubs);
@@ -664,21 +661,21 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 
 			final List<InstrumentID> ids = new ArrayList<InstrumentID>();
 
-			for(final MetadataID<?> m : metaID) {
+			for (final MetadataID<?> m : metaID) {
 
-				if(m.metaType() == MetaType.INSTRUMENT) {
+				if (m.metaType() == MetaType.INSTRUMENT) {
 					ids.add((InstrumentID) m);
 				}
 
 			}
 
-			final Map<InstrumentID, Instrument> iMap = metaService.instrument(
-					ids.toArray(new InstrumentID[0])).toBlockingObservable().single();
+			final Map<InstrumentID, Instrument> iMap = metaService.instrument(ids.toArray(new InstrumentID[0]))
+					.toBlockingObservable().single();
 
 			final List<Instrument> insts = new ArrayList<Instrument>();
 
-			for(final Entry<InstrumentID, Instrument> e : iMap.entrySet()) {
-				if(!e.getValue().isNull()) {
+			for (final Entry<InstrumentID, Instrument> e : iMap.entrySet()) {
+				if (!e.getValue().isNull()) {
 					insts.add(e.getValue());
 				}
 			}
@@ -689,7 +686,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 
 		@Override
 		public synchronized void clear() {
-			
+
 			/* Unsubscribe to all */
 			subHandler.unsubscribe(unsubscribe(this, subscriptionIDs()));
 
@@ -712,37 +709,33 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 			exclude(symbols).toBlockingObservable().first();
 		}
 
-	}  // END BASE AGENT
+	} // END BASE AGENT
 
 	private boolean isExpired(final Instrument inst) {
-				
+
 		final DateTime expire = inst.expiration();
-		
-		if(expire == null) {
+
+		if (expire == null) {
 			return false;
 		}
-	
+
 		final DateTime current = new DateTime();
-		
-		if(current.compareTo(expire) > 0) {
-			
-			log.debug("Instrument {} is expired.  Expire {} - Current {}",
-					inst.symbol(),
-					expire,
-					current);
-			
+
+		if (current.compareTo(expire) > 0) {
+
+			log.debug("Instrument {} is expired.  Expire {} - Current {}", inst.symbol(), expire, current);
+
 			return true;
 		} else {
 			return false;
 		}
-				
+
 	}
 
 	/* ***** ***** Subscription Aggregation Methods ***** ***** */
 
 	// TODO Use Table
-	private final Map<MetadataID<?>, Map<AgentID, FrameworkAgent<?>>> metaToAgentsMap =
-			new ConcurrentHashMap<MetadataID<?>, Map<AgentID, FrameworkAgent<?>>>();
+	private final Map<MetadataID<?>, Map<AgentID, FrameworkAgent<?>>> metaToAgentsMap = new ConcurrentHashMap<MetadataID<?>, Map<AgentID, FrameworkAgent<?>>>();
 
 	private Set<SubscriptionType> aggregate(final MetadataID<?> interest) {
 
@@ -751,7 +744,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		if (!metaToAgentsMap.containsKey(interest)) {
 			return agg;
 		}
-		
+
 		for (final FrameworkAgent<?> agent : metaToAgentsMap.get(interest).values()) {
 			agg.addAll(SubscriptionType.mapMarketEvent(agent.type()));
 		}
@@ -772,24 +765,23 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 
 		return newSubs;
 	}
-	
+
 	private SubCommand subscribe(final FrameworkAgent<?> agent, final MetadataID<?> metaID) {
 
-		synchronized(metaToAgentsMap) {
+		synchronized (metaToAgentsMap) {
 
 			final Set<SubscriptionType> newSubs = SubscriptionType.mapMarketEvent(agent.type());
 
 			if (!metaToAgentsMap.containsKey(metaID) && !newSubs.isEmpty()) {
-				metaToAgentsMap.put(metaID, new StrictConcurrentHashMap<AgentID, 
-						FrameworkAgent<?>>(AgentID.class));
+				metaToAgentsMap.put(metaID, new StrictConcurrentHashMap<AgentID, FrameworkAgent<?>>(AgentID.class));
 			}
 
 			final Set<SubscriptionType> stuffToAdd = EnumSet.copyOf(newSubs);
 			stuffToAdd.removeAll(aggregate(metaID));
 
 			final Map<AgentID, FrameworkAgent<?>> agents = metaToAgentsMap.get(metaID);
-			
-			if(!agents.containsKey(agent.id())) {
+
+			if (!agents.containsKey(agent.id())) {
 				metaToAgentsMap.get(metaID).put(agent.id(), agent);
 			}
 
@@ -802,9 +794,8 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		}
 	}
 
-	private Set<SubCommand> unsubscribe(final FrameworkAgent<?> agent, 
-			final Set<MetadataID<?>> ids) {
-		
+	private Set<SubCommand> unsubscribe(final FrameworkAgent<?> agent, final Set<MetadataID<?>> ids) {
+
 		final Set<SubCommand> newSubs = new HashSet<SubCommand>();
 
 		for (final MetadataID<?> id : ids) {
@@ -813,29 +804,29 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 				newSubs.add(sub);
 			}
 		}
-		
+
 		return newSubs;
 	}
 
 	private SubCommand unsubscribe(final FrameworkAgent<?> agent, final MetadataID<?> instID) {
 
-		synchronized(metaToAgentsMap) {
-			
+		synchronized (metaToAgentsMap) {
+
 			final Set<SubscriptionType> oldSubs = SubscriptionType.mapMarketEvent(agent.type());
 
-			if(metaToAgentsMap.containsKey(instID)) {
-				
+			if (metaToAgentsMap.containsKey(instID)) {
+
 				metaToAgentsMap.get(instID).remove(agent.id());
-				
-				if(metaToAgentsMap.get(instID).isEmpty()) {
+
+				if (metaToAgentsMap.get(instID).isEmpty()) {
 					metaToAgentsMap.remove(instID);
-					
-					final Instrument inst = metaService.instrument((InstrumentID) instID)
-							.toBlockingObservable().first().get(instID);
-					
+
+					final Instrument inst = metaService.instrument((InstrumentID) instID).toBlockingObservable().first()
+							.get(instID);
+
 					unregister(inst);
 				}
-				
+
 			}
 
 			final Set<SubscriptionType> stuffToRemove = EnumSet.copyOf(oldSubs);
@@ -859,7 +850,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 			updateAgent(agent);
 
 		} else {
-			
+
 			agents.put(agent, new Boolean(false));
 
 			for (final Entry<InstrumentID, MarketDo> e : marketMap.entrySet()) {
@@ -867,7 +858,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 			}
 
 		}
-		
+
 	}
 
 	@Override
@@ -889,7 +880,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 
 	@Override
 	public void detachAgent(final FrameworkAgent<?> agent) {
-		
+
 		if (!agents.containsKey(agent)) {
 			return;
 		}
@@ -899,7 +890,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		for (final Entry<InstrumentID, MarketDo> e : marketMap.entrySet()) {
 			e.getValue().detachAgent(agent);
 		}
-		
+
 	}
 
 	/* ***** ***** SubscriptionService ***** ***** */
@@ -913,93 +904,93 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 	public Map<ExchangeID, Subscription<Exchange>> exchanges() {
 		return exchSubs;
 	}
-	
+
 	@Override
 	public int numberOfSubscriptions() {
 		return subHandler.subscriptions().size();
 	}
 
 	/* ***** ***** Snapshot Service ***** ***** */
-	
-	private static final int SNAPSHOT_TIMEOUT_SECS = 7; 
-	
-	private final TimeoutCache<InstrumentID> timeoutCache = 
-			new TimeoutCache<InstrumentID>(SNAPSHOT_TIMEOUT_SECS);
-	
-	private final ConcurrentMap<InstrumentID, PublishSubject<Market>> awaitingSnaps =
-			new StrictConcurrentHashMap<InstrumentID, PublishSubject<Market>>(InstrumentID.class);
+
+	private static final int SNAPSHOT_TIMEOUT_SECS = 7;
+
+	private final TimeoutCache<InstrumentID> timeoutCache = new TimeoutCache<InstrumentID>(SNAPSHOT_TIMEOUT_SECS);
+
+	private final ConcurrentMap<InstrumentID, PublishSubject<Market>> awaitingSnaps = new StrictConcurrentHashMap<InstrumentID, PublishSubject<Market>>(
+			InstrumentID.class);
 
 	private final ConsumerAgent snapshotAgent = register(new MarketObserver<Market>() {
 
-			@Override
-			public void onNext(final Market v) {
-				/* Does nothing */
-			}
+		@Override
+		public void onNext(final Market v) {
+			/* Does nothing */
+		}
 
-		}, Market.class);
+	}, Market.class);
 
 	@Override
 	public synchronized Observable<Market> snapshot(final InstrumentID instID) {
-		
+
 		/* Validate inst ID, ignore if expired or unknown */
-		final Instrument inst = metaService.instrument(instID)
-				.toBlockingObservable().first().get(instID);
-		
-		if(inst.isNull() || isExpired(inst)) {
+		final Instrument inst = metaService.instrument(instID).toBlockingObservable().first().get(instID);
+
+		if (inst.isNull() || isExpired(inst)) {
 			return Observable.just(Market.NULL);
 		}
-		
-		if(marketMap.containsKey(instID)) {
+
+		if (marketMap.containsKey(instID)) {
 
 			final Market market = marketMap.get(instID).freeze();
 			return Observable.just(market);
 
 		} else {
 
-			if(!awaitingSnaps.containsKey(instID)) {
+			if (!awaitingSnaps.containsKey(instID)) {
 
 				final PublishSubject<Market> sub = PublishSubject.<Market> create();
 				awaitingSnaps.putIfAbsent(instID, sub);
 
 				snapshotAgent.include(instID);
-				
+
 				timeoutCache.put(instID, new Runnable() {
 
 					@Override
 					public void run() {
-						
-						if(!awaitingSnaps.containsKey(instID)) {
+
+						if (!awaitingSnaps.containsKey(instID)) {
 							return;
 						}
-						
-						/* If not interrupted yet, timeout snapshot request,
-						 * remove from awaiting */
+
+						/*
+						 * If not interrupted yet, timeout snapshot request,
+						 * remove from awaiting
+						 */
 						final PublishSubject<Market> sub = awaitingSnaps.remove(instID);
-						
+
 						/* Send null Market and complete */
-						if(sub != null) {
+						if (sub != null) {
 							sub.onNext(Market.NULL);
 							sub.onCompleted();
 						}
-						
+
 						/* Remove subscription from snapshot agent */
 						snapshotAgent.exclude(instID);
-						
+
 						log.warn("Snpashot request for {} timed out", inst.symbol());
-						
+
 					}
-					
+
 				});
-				
+
 				return sub;
-				
+
 			}
-			
+
 			return Observable.just(Market.NULL);
 		}
 
 	}
-	
+
 	// ######################## // ########################
 
 	@Override
@@ -1013,8 +1004,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 	}
 
 	@Override
-	public Observable<Result<Instrument>> instrument(final SearchContext ctx,
-			final String... symbols) {
+	public Observable<Result<Instrument>> instrument(final SearchContext ctx, final String... symbols) {
 		return metaService.instrument(ctx, symbols);
 	}
 
@@ -1063,7 +1053,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		final boolean wasRemoved = (market != null);
 
 		if (wasRemoved) {
-			
+
 			for (final FrameworkAgent<?> agent : agents.keySet()) {
 				market.detachAgent(agent);
 			}
@@ -1071,7 +1061,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 			symbolMap.remove(instrument.symbol());
 
 			market.destroy();
-			
+
 		} else {
 			log.warn("was not registered : {}", instrument);
 		}
@@ -1107,52 +1097,57 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		if (!isValid(instrument)) {
 			return;
 		}
-		
-		//log.debug(message.getTime().toString());
-		
+
+		// log.debug(message.getTime().toString());
+
 		final InstrumentID instID = instrument.id();
-		
+
 		MarketDo market = marketMap.get(instID);
 
 		final boolean valid = isValid(market);
 
-		if(!valid) {
+		if (!valid) {
 			register(instrument);
 			market = marketMap.get(instID);
 		}
-		
+
 		market.runSafe(safeMake, message);
 
-		/* Check if any subject are awaiting snapshots
-		 * Check if session is null because first message for FUTURES will be CUVOL
-		 * and won't have snapshot info
+		/*
+		 * Check if any subject are awaiting snapshots Check if session is null
+		 * because first message for FUTURES will be CUVOL and won't have
+		 * snapshot info
 		 */
-		if(!market.session().isNull() && awaitingSnaps.containsKey(instID)) {
+		if (!market.session().isNull() && awaitingSnaps.containsKey(instID)) {
 
 			final PublishSubject<Market> sub = awaitingSnaps.remove(instID);
 
 			sub.onNext(market.freeze());
 			sub.onCompleted();
-			
+
 			snapshotAgent.exclude(instID);
-			
+
 			/* Remove timeout future and cancel it */
 			timeoutCache.remove(instID);
 
 		}
 
 		/* Below is a hack to keep the subscriptions updated */
-		/* If a new market is created, a new subscription is made,
-		 * but it needs the State enum from market which should
-		 * get set on the first market snapshot, which is why
-		 * this comes after the above safeRun update of the message */
+		/*
+		 * If a new market is created, a new subscription is made, but it needs
+		 * the State enum from market which should get set on the first market
+		 * snapshot, which is why this comes after the above safeRun update of
+		 * the message
+		 */
 
-		/* If the state hasn't been set, this will mark it as Delayed,
-		 * and we're not updating */
+		/*
+		 * If the state hasn't been set, this will mark it as Delayed, and we're
+		 * not updating
+		 */
 		Subscription.Lense lense;
-		if(market.get(MarketField.STATE).contains(MarketStateEntry.IS_PUBLISH_REALTIME)) {
+		if (market.get(MarketField.STATE).contains(MarketStateEntry.IS_PUBLISH_REALTIME)) {
 			lense = Subscription.Lense.REALTIME;
-		} else if(market.get(MarketField.STATE).contains(MarketStateEntry.IS_PUBLISH_DELAYED)) {
+		} else if (market.get(MarketField.STATE).contains(MarketStateEntry.IS_PUBLISH_DELAYED)) {
 			lense = Subscription.Lense.DELAYED;
 		} else if (market.get(MarketField.STATE).contains(MarketStateEntry.IS_PUBLISH_REALTIME_SNAPSHOT)) {
 			lense = Subscription.Lense.SNAPSHOT;
@@ -1160,7 +1155,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 			lense = Subscription.Lense.NULL;
 		}
 
-		if(!valid) {
+		if (!valid) {
 			varSubs.put(instID, new VarSubscription(instrument, lense));
 			defSubs.put(instID, varSubs.get(instrument.id()));
 		}
@@ -1204,12 +1199,13 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 
 		@Override
 		public Void runSafe(final MarketDo market, final Message message) {
+			market.setLastDDFMessage(message);
 			make(message, market);
 			market.fireEvents();
 			market.fireCallbacks();
 			return null;
 		}
-		
+
 	};
 
 	protected abstract void make(Message message, MarketDo market);
@@ -1218,8 +1214,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <S extends Instrument, V extends Value<V>> V take(final S instrument,
-			final MarketField<V> field) {
+	public <S extends Instrument, V extends Value<V>> V take(final S instrument, final MarketField<V> field) {
 
 		final MarketDo market = marketMap.get(instrument.id());
 
@@ -1230,12 +1225,10 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		return (V) market.runSafe(safeTake, field);
 	}
 
-	private final MarketSafeRunner<Value<?>, MarketField<?>> safeTake =
-			new MarketSafeRunner<Value<?>, MarketField<?>>() {
+	private final MarketSafeRunner<Value<?>, MarketField<?>> safeTake = new MarketSafeRunner<Value<?>, MarketField<?>>() {
 
 		@Override
-		public Value<?> runSafe(final MarketDo market,
-				final MarketField<?> field) {
+		public Value<?> runSafe(final MarketDo market, final MarketField<?> field) {
 			return market.get(field).freeze();
 		}
 	};
@@ -1271,7 +1264,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 		@SuppressWarnings("deprecation")
 		final Fraction fraction = instrument.displayFraction();
 
-		if(fraction == null || fraction.isNull()) {
+		if (fraction == null || fraction.isNull()) {
 			log.error("Fraction is null");
 			return false;
 		}
@@ -1308,9 +1301,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 	}
 
 	@Override
-	public synchronized final void copyTo(
-			final MarketMakerProvider<Message> maker,
-			final MarketField<?>... fields) {
+	public synchronized final void copyTo(final MarketMakerProvider<Message> maker, final MarketField<?>... fields) {
 		throw new UnsupportedOperationException("TODO");
 	}
 

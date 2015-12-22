@@ -13,9 +13,12 @@ import com.barchart.util.common.anno.NotMutable;
 
 /** represents complete market */
 @NotMutable
-public interface Market extends Value<Market>, 
-		com.barchart.feed.api.model.data.Market {
+public interface Market extends Value<Market>, com.barchart.feed.api.model.data.Market {
 
 	<V extends Value<V>> V get(MarketField<V> field);
+
+	void setLastDDFMessage(MarketMessage ddf);
+
+	MarketMessage getLastDDFMessage();
 
 }

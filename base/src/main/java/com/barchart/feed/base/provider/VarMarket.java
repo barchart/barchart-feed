@@ -65,46 +65,43 @@ import com.barchart.util.common.anno.ThreadSafe;
 @ThreadSafe(rule = "must use runSafe()")
 public abstract class VarMarket extends DefMarket implements MarketDo {
 
-	private final ConcurrentMap<FrameworkAgent<?>, Boolean> agentSet =
-			new ConcurrentHashMap<FrameworkAgent<?>, Boolean>();
-	
-	protected final Set<FrameworkAgent<com.barchart.feed.api.model.data.Market>> marketAgents = 
-			new HashSet<FrameworkAgent<com.barchart.feed.api.model.data.Market>>();
+	private final ConcurrentMap<FrameworkAgent<?>, Boolean> agentSet = new ConcurrentHashMap<FrameworkAgent<?>, Boolean>();
+
+	protected final Set<FrameworkAgent<com.barchart.feed.api.model.data.Market>> marketAgents = new HashSet<FrameworkAgent<com.barchart.feed.api.model.data.Market>>();
 	protected final Set<FrameworkAgent<Trade>> tradeAgents = new HashSet<FrameworkAgent<Trade>>();
 	protected final Set<FrameworkAgent<Book>> bookAgents = new HashSet<FrameworkAgent<Book>>();
 	protected final Set<FrameworkAgent<Cuvol>> cuvolAgents = new HashSet<FrameworkAgent<Cuvol>>();
 	protected final Set<FrameworkAgent<Session>> sessionAgents = new HashSet<FrameworkAgent<Session>>();
-	
+
 	public static class Command<T extends MarketData<T>> {
-		
+
 		public enum CType {
 			ADD, REMOVE
 		}
-		
+
 		private final CType t;
 		private final FrameworkAgent<T> agent;
-		
+
 		public Command(final CType t, final FrameworkAgent<T> agent) {
 			this.t = t;
 			this.agent = agent;
 		}
-		
+
 		public CType type() {
 			return t;
 		}
-		
+
 		public FrameworkAgent<T> agent() {
 			return agent;
 		}
 	}
-	
-	protected final Queue<Command<com.barchart.feed.api.model.data.Market>> marketCmds =
-			new ConcurrentLinkedQueue<Command<com.barchart.feed.api.model.data.Market>>();
+
+	protected final Queue<Command<com.barchart.feed.api.model.data.Market>> marketCmds = new ConcurrentLinkedQueue<Command<com.barchart.feed.api.model.data.Market>>();
 	protected final Queue<Command<Trade>> tradeCmds = new ConcurrentLinkedQueue<Command<Trade>>();
 	protected final Queue<Command<Book>> bookCmds = new ConcurrentLinkedQueue<Command<Book>>();
 	protected final Queue<Command<Cuvol>> cuvolCmds = new ConcurrentLinkedQueue<Command<Cuvol>>();
 	protected final Queue<Command<Session>> sessionCmds = new ConcurrentLinkedQueue<Command<Session>>();
-	
+
 	// @SuppressWarnings("unused")
 	private static final Logger log = LoggerFactory.getLogger(VarMarket.class);
 
@@ -118,7 +115,7 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 		set(MARKET, this);
 
 	}
-	
+
 	@Override
 	public void destroy() {
 		agentSet.clear();
@@ -139,77 +136,77 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void attachAgent(final FrameworkAgent<?> agent) {
-		
-		if(!agent.hasMatch(instrument())) {
+
+		if (!agent.hasMatch(instrument())) {
 			return;
 		}
-		
+
 		agentSet.put(agent, new Boolean(false));
-		
-		switch(agent.agentType()) {
-			case MARKET:
-				marketCmds.add(new Command<com.barchart.feed.api.model.data.Market>(CType.ADD, 
-						(FrameworkAgent<com.barchart.feed.api.model.data.Market>) agent));
-				break;
-			case BOOK:
-				bookCmds.add(new Command<Book>(CType.ADD, (FrameworkAgent<Book>) agent));
-				break;
-			case TRADE:
-				tradeCmds.add(new Command<Trade>(CType.ADD, (FrameworkAgent<Trade>) agent));
-				break;
-			case CUVOL:
-				cuvolCmds.add(new Command<Cuvol>(CType.ADD, (FrameworkAgent<Cuvol>) agent));
-				break;
-			case SESSION:
-				sessionCmds.add(new Command<Session>(CType.ADD, (FrameworkAgent<Session>) agent));
-				break;
+
+		switch (agent.agentType()) {
+		case MARKET:
+			marketCmds.add(new Command<com.barchart.feed.api.model.data.Market>(CType.ADD,
+					(FrameworkAgent<com.barchart.feed.api.model.data.Market>) agent));
+			break;
+		case BOOK:
+			bookCmds.add(new Command<Book>(CType.ADD, (FrameworkAgent<Book>) agent));
+			break;
+		case TRADE:
+			tradeCmds.add(new Command<Trade>(CType.ADD, (FrameworkAgent<Trade>) agent));
+			break;
+		case CUVOL:
+			cuvolCmds.add(new Command<Cuvol>(CType.ADD, (FrameworkAgent<Cuvol>) agent));
+			break;
+		case SESSION:
+			sessionCmds.add(new Command<Session>(CType.ADD, (FrameworkAgent<Session>) agent));
+			break;
 		}
 
 	}
 
 	@Override
 	public void updateAgent(final FrameworkAgent<?> agent) {
-		
-		if(!agentSet.containsKey(agent)) {
+
+		if (!agentSet.containsKey(agent)) {
 			attachAgent(agent);
 			return;
 		}
-		
-		if(!agent.hasMatch(instrument())) {
+
+		if (!agent.hasMatch(instrument())) {
 			detachAgent(agent);
 		}
 
 	}
 
-	@SuppressWarnings({"unchecked"})
+	@SuppressWarnings({ "unchecked" })
 	@Override
 	public void detachAgent(final FrameworkAgent<?> agent) {
 
-		if(!agentSet.containsKey(agent)) {
+		if (!agentSet.containsKey(agent)) {
 			return;
 		}
-		
+
 		agentSet.remove(agent);
-		
-		switch(agent.agentType()) {
-			case MARKET:
-				marketCmds.add(new Command<com.barchart.feed.api.model.data.Market>(CType.REMOVE, 
-						(FrameworkAgent<com.barchart.feed.api.model.data.Market>) agent));
-				break;
-			case BOOK:
-				bookCmds.add(new Command<Book>(CType.REMOVE, (FrameworkAgent<Book>) agent));
-				break;
-			case TRADE:
-				tradeCmds.add(new Command<Trade>(CType.REMOVE, (FrameworkAgent<Trade>) agent));
-				break;
-			case CUVOL:
-				cuvolCmds.add(new Command<Cuvol>(CType.REMOVE, (FrameworkAgent<Cuvol>) agent));
-				break;
-			case SESSION:
-				sessionCmds.add(new Command<Session>(CType.REMOVE, (FrameworkAgent<Session>) agent));
-				break;
+
+		switch (agent.agentType()) {
+		case MARKET:
+			marketCmds.add(new Command<com.barchart.feed.api.model.data.Market>(CType.REMOVE,
+					(FrameworkAgent<com.barchart.feed.api.model.data.Market>) agent));
+			break;
+		case BOOK:
+			bookCmds.add(new Command<Book>(CType.REMOVE, (FrameworkAgent<Book>) agent));
+			break;
+		case TRADE:
+			tradeCmds.add(new Command<Trade>(CType.REMOVE, (FrameworkAgent<Trade>) agent));
+			break;
+		case CUVOL:
+			cuvolCmds.add(new Command<Cuvol>(CType.REMOVE, (FrameworkAgent<Cuvol>) agent));
+			break;
+		case SESSION:
+			sessionCmds.add(new Command<Session>(CType.REMOVE, (FrameworkAgent<Session>) agent));
+			break;
 		}
-		
+
 	}
 
 	//
@@ -293,8 +290,7 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 		return reg != null;
 	}
 
-	protected final <T extends Value<T>> void set(final MarketField<T> field,
-			final T value) {
+	protected final <T extends Value<T>> void set(final MarketField<T> field, final T value) {
 
 		assert field != null;
 		assert value != null;
@@ -306,8 +302,10 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 	/** do not set self reference on freeze */
 	@Override
 	public final Market freeze() {
-		
+
 		final DefMarket that = new DefMarket(instrument);
+		// For logging
+		that.setLastDDFMessage(getLastDDFMessage());
 
 		final Value<?>[] source = this.valueArray;
 		final Value<?>[] target = that.valueArray;
@@ -335,8 +333,8 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 	}
 
 	@Override
-	public synchronized final <Result, Param> Result runSafe(
-			final MarketSafeRunner<Result, Param> task, final Param param) {
+	public synchronized final <Result, Param> Result runSafe(final MarketSafeRunner<Result, Param> task,
+			final Param param) {
 
 		return task.runSafe(this, param);
 
@@ -355,7 +353,7 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 			trade = new VarTrade(instrument);
 			set(TRADE, trade);
 		}
-		
+
 		return (MarketDoTrade) trade;
 
 	}
@@ -375,7 +373,7 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 
 	protected final MarketDoCuvol loadCuvol() {
 
-		if(instrument.tickSize().isNull()) {
+		if (instrument.tickSize().isNull()) {
 			return MarketDoCuvol.NULL;
 		}
 
@@ -383,11 +381,10 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 
 		if (cuvol.isFrozen()) {
 
-			final PriceValue priceStep = ValueBuilder.newPrice(
-					instrument.tickSize().mantissa(),
+			final PriceValue priceStep = ValueBuilder.newPrice(instrument.tickSize().mantissa(),
 					instrument.tickSize().exponent());
 
-			if(priceStep.mantissa() == 0) {
+			if (priceStep.mantissa() == 0) {
 				System.out.println();
 			}
 
@@ -475,8 +472,7 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 
 	}
 
-	protected final static SizeValue LIMIT = ValueBuilder
-			.newSize(MarketBook.ENTRY_LIMIT);
+	protected final static SizeValue LIMIT = ValueBuilder.newSize(MarketBook.ENTRY_LIMIT);
 
 	// XXX make final
 	protected MarketDoBook loadBook() {
@@ -486,8 +482,8 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 		if (book.isFrozen()) {
 
 			Book.Type type = null;
-			switch(instrument.liquidityType()) {
-			default :
+			switch (instrument.liquidityType()) {
+			default:
 				type = Book.Type.NONE;
 				break;
 			case NONE:
@@ -507,8 +503,7 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 			final SizeValue size = LIMIT; // inst.get(BOOK_SIZE);
 
 			// ValueConverter
-			final PriceValue step = ValueBuilder.newPrice(
-					instrument.tickSize().mantissa(),
+			final PriceValue step = ValueBuilder.newPrice(instrument.tickSize().mantissa(),
 					instrument.tickSize().exponent());
 
 			final VarBook varBook = new VarBook(instrument, type, size, step);
@@ -529,9 +524,8 @@ public abstract class VarMarket extends DefMarket implements MarketDo {
 
 	protected final boolean isValidPrice(final PriceValue price) {
 
-		//TODO Value Converter
-		final PriceValue priceStep = ValueBuilder.newPrice(
-				instrument.tickSize().mantissa(),
+		// TODO Value Converter
+		final PriceValue priceStep = ValueBuilder.newPrice(instrument.tickSize().mantissa(),
 				instrument.tickSize().exponent());
 
 		if (!price.equalsScale(priceStep)) {
