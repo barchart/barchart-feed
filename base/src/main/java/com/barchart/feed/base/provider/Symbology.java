@@ -222,6 +222,11 @@ public final class Symbology {
 				return "";
 			}
 			
+			/* see 577ccb726f1a45835366a7761d1204f7509eac31 in barchart-platform */
+			if( symbol.contains("/")){
+				return "";
+			}
+			
 			final int len = symbol.length();
 			
 			if(len < 3) {
