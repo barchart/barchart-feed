@@ -101,16 +101,18 @@
 
 	</dependencies>
 
-	<reporting>
+	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
-				<configuration>
-					<skip>true</skip>
-					<stylesheetfile>${basedir}/src/site/stylesheet.css</stylesheetfile>
-				</configuration>
+				<executions>
+					<execution>
+						<phase>none</phase>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
-	</reporting>
+	</build>
+
 </project>
