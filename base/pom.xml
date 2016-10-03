@@ -1,6 +1,7 @@
 <!-- Copyright (C) 2011-2013 Barchart, Inc. <http://www.barchart.com /> All 
 	rights reserved. Licensed under the OSI BSD License. http://www.opensource.org/licenses/bsd-license.php -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
 
@@ -38,19 +39,31 @@
 			<groupId>com.barchart.feed</groupId>
 			<artifactId>barchart-feed-api</artifactId>
 			<version>[2.2.3-SNAPSHOT,3-SNAPSHOT)</version>
+			<exclusions>
+				<exclusion>
+					<groupId>joda-time</groupId>
+					<artifactId>joda-time</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 		<!-- DELETE ME -->
-		<dependency>
-			<groupId>com.barchart.util</groupId>
-			<artifactId>barchart-util-common</artifactId>
-			<version>[1-SNAPSHOT,2-SNAPSHOT)</version>
-		</dependency>
+		<!-- <dependency> -->
+		<!-- <groupId>com.barchart.util</groupId> -->
+		<!-- <artifactId>barchart-util-common</artifactId> -->
+		<!-- <version>[1-SNAPSHOT,2-SNAPSHOT)</version> -->
+		<!-- </dependency> -->
 
 		<dependency>
 			<groupId>com.barchart.feed</groupId>
 			<artifactId>barchart-feed-inst</artifactId>
 			<version>[2.0.9-SNAPSHOT, 3-SNAPSHOT)</version>
+			<exclusions>
+				<exclusion>
+					<groupId>joda-time</groupId>
+					<artifactId>joda-time</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 		<dependency>
@@ -96,6 +109,12 @@
 			<artifactId>wicket-objectsizeof-agent</artifactId>
 			<version>1.4.1</version>
 			<scope>test</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>joda-time</groupId>
+			<artifactId>joda-time</artifactId>
+			<version>[2.3,2.4-SNAPSHOT)</version>
 		</dependency>
 
 	</dependencies>
