@@ -719,7 +719,7 @@ public abstract class MarketProviderBase<Message extends MarketMessage>
 			return false;
 		}
 
-		final DateTime current = new DateTime();
+		final DateTime current = new DateTime().minusDays(3);
 
 		if (current.compareTo(expire) > 0) {
 
