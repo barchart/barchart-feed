@@ -223,8 +223,14 @@ public final class Symbology {
 			}
 			
 			/* see 577ccb726f1a45835366a7761d1204f7509eac31 in barchart-platform */
-			if( symbol.contains("/")){
+			if(symbol.contains("/")){
 				return "";
+			}
+			
+			/* Forex Forward Rate and others (EURDKK.H or EURGBP.5 or AAPL.BZ) */
+			/* the options and futures regex logic is pretty greedy */
+			if(symbol.contains(".")) {
+				return symbol;
 			}
 			
 			final int len = symbol.length();
@@ -241,6 +247,11 @@ public final class Symbology {
 			/*  Spot index */
 			if(symbol.endsWith("Y0")) {
 				return symbol.replace("Y0", "Y2000");
+			}
+			
+			/* this does not work */
+			if(symbol.matches("\\.+([A-Z0-9])")){
+				return symbol;
 			}
 			
 			/* Option */
